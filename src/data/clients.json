@@ -1,0 +1,120 @@
+[
+    {
+        "id": 1,
+        "name": "Benjamin Cooper",
+        "avatar": "https://avatars.githubusercontent.com/u/6078720?s=60&v=4",    
+        "status": "Active",
+        "added": "2023-10-10",
+        "dateOfBirth": "1990-01-01",
+        "diagnoses": ["None", "Sick", "Nice person"],
+        "lastUpdate": "2023-10-10",
+        "about": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
+        "assignments": [
+            {
+                "id": "1",
+                "title": "Assignment 1",
+                "sent": "2023-05-12",
+                "status": "Done",
+                "lastUpdate": "2023-05-12"                
+            },
+            {
+                "id": "2",
+                "title": "Assignment 2",
+                "sent": "2023-05-12",
+                "status": "Done",
+                "lastUpdate": "2023-05-12"
+            }
+        ],
+        "notes": [
+            {
+                "id": "1",
+                "title": "Note 1",
+                "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
+                "date": "2023-05-12",
+                "owner": "Benjamin Cooper",
+                "tags": ["tag1"]
+            }, 
+            {
+                "id": "2",
+                "title": "Note 2",
+                "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
+                "date": "2023-06-12",
+                "owner": "user",
+                "tags": ["tag2"]
+            }
+        ],
+        "chatHistory": [
+            {
+                "messageId": "1",
+                "sender": "Benjamin Cooper",
+                "content": "Hi I got problem with mindfulness and I am very happy",
+                "date": "2023-10-23 12:00:00"
+            },
+            {
+                "messageId": "2",
+                "sender": "user",
+                "content": "Hi Benjamin, what's your problem with mindfulness?",
+                "date": "2023-10-23 13:00:00"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "name": "Sophia Reynolds",
+        "avatar": "https://avatars.githubusercontent.com/u/6078720?s=60&v=4",    
+        "status": "Active",
+        "added": "2023-10-10",
+        "dateOfBirth": "1990-01-01",
+        "diagnoses": ["None"],
+        "lastUpdate": "2023-10-10",
+        "about": "This is Sophia Reynolds's profile",
+        "assignments": [
+            {
+                "id": "1",
+                "title": "Assignment 1",
+                "sent": "2023-05-12",
+                "status": "Done",
+                "lastUpdate": "2023-05-12"                
+            },
+            {
+                "id": "2",
+                "title": "Assignment 2",
+                "sent": "2023-05-12",
+                "status": "Done",
+                "lastUpdate": "2023-05-12"
+            }
+        ],
+        "notes": [
+            {
+                "id": "1",
+                "title": "Note 1",
+                "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
+                "date": "2023-05-12",
+                "owner": "user",
+                "tags": ["tag2"]
+            },
+            {
+                "id": "2",
+                "title": "Note 2",
+                "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
+                "date": "2023-06-12",
+                "owner": "Sophia Reynolds",
+                "tags": ["tag1"]
+            }
+        ],
+        "chatHistory": [
+            {
+                "messageId": "1",
+                "sender": "Sophia Reynolds",
+                "content": "Hi I got problem with mindfulness and I am very saaad",
+                "date": "2023-10-23 12:00:00"
+            },
+            {
+                "messageId": "2",
+                "sender": "user",
+                "content": "Hi Sophia, what's your problem with mindfulness?",
+                "date": "2023-10-23 13:00:00"
+            }
+        ]
+    }
+]

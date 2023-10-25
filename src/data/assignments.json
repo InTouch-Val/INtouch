@@ -1,0 +1,50 @@
+[
+    {
+        "id": 1,
+        "title": "Learning to fly",
+        "author": "Jane Claus",
+        "status": "expansion",
+        "type": "exercise",
+        "modified": "2023-10-10",
+        "popularity": 12345,
+        "favorite": false,
+        "language": "en",
+        "archived": false
+    },
+    {
+        "id": 2,
+        "title": "Mindfulness is the key",
+        "author": "Jane Claus",
+        "status": "in progress",
+        "type": "lesson",
+        "modified": "2023-10-11",
+        "popularity": 54321,
+        "favorite": true,
+        "language": "ru",
+        "archived": false
+    },
+    {
+        "id": 3,
+        "title": "Gratitude will make you feel better",
+        "author": "Jane Claus",
+        "status": "publish",
+        "type": "metaphor",
+        "modified": "2023-11-10",
+        "popularity": 5432,
+        "favorite": true,
+        "language": "en",
+        "archived": false
+    },
+    {
+        "id": 4,
+        "title": "Constatly repeat to yourself that you are not alone",
+        "author": "Jane Claus",
+        "status": "publish",
+        "type": "metaphor",
+        "modified": "2023-11-10",
+        "popularity": 123,
+        "favorite": true,
+        "language": "en",
+        "archived": true
+    }
+]
