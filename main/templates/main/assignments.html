@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>Library</h1>
-    <p><a href="">Add activity</a></p>
+    <p><a href="{% url 'add-assignment' %}">Add activity</a></p>
     <a href="{% url 'library' %}">Library</a>
     <a href="{% url 'favorites' %}">Favorites</a>
     <a href="{% url 'trash' %}">Trash</a>

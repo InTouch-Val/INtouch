@@ -64,6 +64,18 @@ def change_category_assignments(request, pk):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
+class AddAssignments(CreateView):
+    form_class = AddAssignmentForm
+    template_name = 'main/add_assignment.html'
+    success_url = reverse_lazy('library')
+
+    def form_valid(self, form):
+        assignment = form.save(commit=False)
+        assignment.author = Doctor.objects.get(user=self.request.user)
+        assignment.save()
+        return redirect('library')
+
+
 class Community(ListView):
     model = User
     template_name = 'main/community.html'
