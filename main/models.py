@@ -3,9 +3,14 @@ from django.db import models
 
 
 class User(AbstractUser):
+    USER_TYPE = (
+        ('doctor', 'Doctor'),
+        ('client', 'Client'),
+    )
     birth_date = models.DateField(null=True)
     update_date = models.DateField(auto_now=True)
     profile = models.TextField()
+    user_type = models.CharField(max_length=100, choices=USER_TYPE, default='doctor')
 
 
 class Doctor(models.Model):
