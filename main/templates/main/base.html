@@ -5,6 +5,8 @@
     <title>Title</title>
 </head>
 <body>
-    <h1>Hello!</h1>
+    <a href="{% url 'clients' %}">Clients</a>
+    <a href="{% url 'library' %}">Assignments</a>
+    {% block content %}{% endblock %}
 </body>
 </html>

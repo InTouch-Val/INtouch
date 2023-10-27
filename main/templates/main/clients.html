@@ -1,0 +1,10 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+    <h1>Clients</h1>
+    {% for client in clients %}
+        <p>Name: {{ client.user.username }}</p>
+        <p>Status: {{ client.status }}</p>
+        <p>Added: {{ client.user.date_joined }}</p>
+    {% endfor %}
+{% endblock %}

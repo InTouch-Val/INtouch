@@ -1,0 +1,15 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+    <h1>Library</h1>
+    <a href="{% url 'library' %}">Library</a>
+    <a href="{% url 'favorites' %}">Favorites</a>
+    <a href="{% url 'trash' %}">Trash</a>
+    {% for assignment in assignments %}
+        <p>{{ assignment.title }}</p>
+        <p>{{ assignment.author.user }}</p>
+        <p>{{ assignment.status }}</p>
+        <p>{{ assignment.assignment_type }}</p>
+        <p>{{ assignment.update_date }}</p><br>
+    {% endfor %}
+{% endblock %}

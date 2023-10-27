@@ -5,7 +5,7 @@ from django.db import models
 class User(AbstractUser):
     birth_date = models.DateField(null=True)
     update_date = models.DateField(auto_now=True)
-    about_me = models.TextField()
+    profile = models.TextField()
 
 
 class Doctor(models.Model):
@@ -15,10 +15,11 @@ class Doctor(models.Model):
         return self.user.username
 
 
-class Patient(models.Model):
+class Client(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True)
     diagnosis = models.CharField(max_length=100, blank=True)
+    status = models.BooleanField(default=True)
 
     def __str__(self):
         return self.user.username
