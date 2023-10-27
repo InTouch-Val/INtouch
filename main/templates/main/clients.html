@@ -5,6 +5,6 @@
     {% for client in clients %}
         <p>Name: {{ client.user.username }}</p>
         <p>Status: {{ client.status }}</p>
-        <p>Added: {{ client.user.date_joined }}</p>
+        <p>Added: {{ client.user.date_joined }}</p><br>
     {% endfor %}
 {% endblock %}

@@ -41,17 +41,14 @@ class Assignment(models.Model):
         ('publish', 'publish'),
         ('expansion', 'expansion'),
     )
-    CATEGORY_LIST = (
-        ('favorites', 'Favorites'),
-        ('trash', 'Trash'),
-        ('library', 'Library')
-    )
     title = models.CharField(max_length=100)
     update_date = models.DateField(auto_now=True)
     author = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True)
+    executor = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True)
     assignment_type = models.CharField(max_length=100, choices=TYPE_LIST)
     status = models.CharField(max_length=100, choices=STATUS_LIST)
-    category = models.CharField(max_length=100, choices=CATEGORY_LIST, default='library')
+    favorites = models.BooleanField(default=False)
+    trash = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

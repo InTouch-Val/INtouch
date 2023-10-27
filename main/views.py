@@ -30,7 +30,7 @@ class AssignmentsLibrary(ListView):
     context_object_name = 'assignments'
 
     def get_queryset(self):
-        queryset = Assignment.objects.filter(Q(author__user__pk=self.request.user.pk) & Q(category='library'))
+        queryset = Assignment.objects.filter(author__user__pk=self.request.user.pk)
         return queryset
 
 
@@ -40,7 +40,7 @@ class AssignmentsFavorites(ListView):
     context_object_name = 'assignments'
 
     def get_queryset(self):
-        queryset = Assignment.objects.filter(Q(author__user__pk=self.request.user.pk) & Q(category='favorites'))
+        queryset = Assignment.objects.filter(Q(author__user__pk=self.request.user.pk) & Q(favorites=True))
         return queryset
 
 
@@ -50,8 +50,18 @@ class AssignmentsTrash(ListView):
     context_object_name = 'assignments'
 
     def get_queryset(self):
-        queryset = Assignment.objects.filter(Q(author__user__pk=self.request.user.pk) & Q(category='trash'))
+        queryset = Assignment.objects.filter(Q(author__user__pk=self.request.user.pk) & Q(trash=True))
         return queryset
+
+
+def change_category_assignments(request, pk):
+    assignment = Assignment.objects.get(pk=pk)
+    if assignment.favorites:
+        assignment.favorites = False
+    else:
+        assignment.favorites = True
+    assignment.save()
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 class Community(ListView):

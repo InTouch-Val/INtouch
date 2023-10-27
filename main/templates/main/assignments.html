@@ -2,6 +2,7 @@
 
 {% block content %}
     <h1>Library</h1>
+    <p><a href="">Add activity</a></p>
     <a href="{% url 'library' %}">Library</a>
     <a href="{% url 'favorites' %}">Favorites</a>
     <a href="{% url 'trash' %}">Trash</a>
@@ -10,6 +11,8 @@
         <p>{{ assignment.author.user }}</p>
         <p>{{ assignment.status }}</p>
         <p>{{ assignment.assignment_type }}</p>
-        <p>{{ assignment.update_date }}</p><br>
+        <p>{{ assignment.update_date }}</p>
+        <p>{{ assignment.favorites }}</p>
+        <a href="{% url 'change' assignment.pk %}">favorites</a><br>
     {% endfor %}
 {% endblock %}
