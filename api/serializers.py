@@ -6,8 +6,10 @@ from main.models import *
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'user_type', 'username', 'password', 'birth_date', 'profile')
-        extra_kwargs = {'password': {'write_only': True}}
+        fields = ('id', 'user_type', 'username', 'password', 'birth_date', 'profile', 'add_date', 'update_date')
+        extra_kwargs = {
+            'password': {'write_only': True},
+        }
 
     def create(self, validated_data):
         user = User.objects.create_user(
@@ -39,4 +41,10 @@ class DoctorSerializer(serializers.ModelSerializer):
 class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assignment
+        fields = '__all__'
+
+
+class MassageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Massage
         fields = '__all__'

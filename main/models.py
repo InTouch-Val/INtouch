@@ -8,7 +8,8 @@ class User(AbstractUser):
         ('client', 'Client'),
     )
     birth_date = models.DateField(null=True)
-    update_date = models.DateField(auto_now=True)
+    update_date = models.DateTimeField(auto_now=True)
+    add_date = models.DateTimeField(auto_now_add=True)
     profile = models.TextField(blank=True)
     user_type = models.CharField(max_length=100, choices=USER_TYPE)
 
@@ -52,3 +53,19 @@ class Assignment(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Massage(models.Model):
+    author = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='sent_massages')
+    recipient = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='received_massages')
+    massage = models.TextField()
+    post_date = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
