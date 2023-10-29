@@ -2,6 +2,7 @@
     {
       "chatId": 1,
       "name": "John Doe",
+      "avatar": "https://i122.fastpic.org/big/2023/1026/41/8686eb54497049a412f177da74c46741.png",
       "lastMessageRead": true,
       "messages": [
         {
@@ -30,6 +31,7 @@
     {
       "chatId": 2,
       "name": "Alice Smith",
+      "avatar": "https://i122.fastpic.org/big/2023/1026/41/8686eb54497049a412f177da74c46741.png",
       "lastMessageRead": false,
       "messages": [
         {

@@ -4,42 +4,53 @@ import App from './components/App.jsx';
 import {
   createBrowserRouter,
   RouterProvider,
-} from "react-router-dom";
+} from 'react-router-dom';
 import ErrorPage from './components/error-page.jsx';
 import ClientPage from './routes/client-page.jsx';
-import ClientDetailPage from "./components/client-details-page.jsx";
+import ClientDetailPage from './components/client-details-page.jsx';
 import AssignmentsPage from './routes/assignments-page.jsx';
-import CommunityPage from './routes/community-page.jsx';
+import CommunityPage from './routes/community-page.jsx'; 
+import Chat from './components/Chat.jsx';
+import StoragePage from './routes/storage.jsx';
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <App/>,
-    errorElement: <ErrorPage/>,
+    path: '/',
+    element: <App />,
+    errorElement: <ErrorPage />,
     children: [
       {
-        path: "/clients",
-        element: <ClientPage/>,
+        path: '/clients',
+        element: <ClientPage />,
       },
       {
-        path: "/clients/:id",
-        element: <ClientDetailPage/>,
+        path: '/clients/:id',
+        element: <ClientDetailPage />,
       },
       {
-        path: "/assignments",
-        element: <AssignmentsPage/>,
+        path: '/assignments',
+        element: <AssignmentsPage />,
       },
       {
-        path: "/community",
-        element: <CommunityPage/>
+        path: '/community',
+        element: <CommunityPage />,
+        children: [
+          {
+            path: ':chatId',
+            element: <Chat />, // Добавляем маршрут для чата
+          },
+        ],
+      },
+      {
+        path: '/storage',
+        element: <StoragePage />, 
       }
-    ]
+    ],
   },
-])
-
+]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <RouterProvider router={router} />
   </React.StrictMode>
-)
+);

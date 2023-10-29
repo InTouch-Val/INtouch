@@ -5,6 +5,7 @@
   color: #656565;
 }
 
+
 .first-row {
   display: flex;
   justify-content: space-between;
@@ -44,7 +45,6 @@ h1{
   display: flex;
   flex: 70%;
 }
-
 .search-input {
   flex: 1;
   padding: 3px;

@@ -1,7 +1,12 @@
 import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Chat = ({ chatHistory, newMessage, setNewMessage, sendMessage, clientAvatar }) => {
     const userAvatar = "https://yt3.ggpht.com/ytc/AKedOLS-kQc4UMbZacpN7VbKRiVHnYJaRKbTaKu6SSMojw=s88-c-k-c0x00ffffff-no-rj"
+    const navigate = useNavigate();
+  const location = useLocation();
+  const { chatId } = location.state;
+
   return (
     <div className="chat-container">
       <div className="chat-history">

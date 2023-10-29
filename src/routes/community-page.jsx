@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import communityData from '../data/community.json';
+import { Link } from 'react-router-dom'; // Добавляем импорт Link
 
 function CommunityPage() {
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Функция для фильтрации диалогов по имени собеседника
   const filteredChats = communityData.filter((chat) =>
     chat.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -35,7 +35,13 @@ function CommunityPage() {
             {filteredChats.map((chat) => (
               <tr key={chat.chatId}>
                 <td className="user-cell">
-                  {chat.name}
+                <Link
+                    to={`/community/${chat.chatId}`} // Изменяем путь на /community/:chatId
+                    state={{ chatId: chat.chatId }} // Передаем параметры маршрута
+                  >
+                    <img src={chat.avatar} alt={chat.name} className="avatar" />
+                    {chat.name}
+                  </Link>
                 </td>
                 <td>{chat.messages[chat.messages.length - 1].text}</td>
                 <td>{formatDate(chat.messages[chat.messages.length - 1].timestamp)}</td>
@@ -49,7 +55,6 @@ function CommunityPage() {
 }
 
 function formatDate(timestamp) {
-  // Простейшая логика форматирования даты, здесь можно улучшить
   const currentDate = new Date();
   const messageDate = new Date(timestamp);
   const diffDays = Math.floor((currentDate - messageDate) / (1000 * 60 * 60 * 24));
