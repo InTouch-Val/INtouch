@@ -34,17 +34,15 @@ const router = createBrowserRouter([
       {
         path: '/community',
         element: <CommunityPage />,
-        children: [
-          {
-            path: ':chatId',
-            element: <Chat />, // Добавляем маршрут для чата
-          },
-        ],
+      },
+      {
+        path: '/community/:chatId',
+        element: <Chat />, // Добавляем маршрут для чата
       },
       {
         path: '/storage',
         element: <StoragePage />, 
-      }
+      },
     ],
   },
 ]);

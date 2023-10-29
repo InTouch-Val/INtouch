@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import communityData from '../data/community.json';
-import { Link } from 'react-router-dom'; // Добавляем импорт Link
+import { Link } from 'react-router-dom'; 
+import "../css/community.css"
 
 function CommunityPage() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -36,8 +37,8 @@ function CommunityPage() {
               <tr key={chat.chatId}>
                 <td className="user-cell">
                 <Link
-                    to={`/community/${chat.chatId}`} // Изменяем путь на /community/:chatId
-                    state={{ chatId: chat.chatId }} // Передаем параметры маршрута
+                    to={`/community/${chat.chatId}`} 
+                    state={{ chatId: chat.chatId }} 
                   >
                     <img src={chat.avatar} alt={chat.name} className="avatar" />
                     {chat.name}

@@ -2,13 +2,13 @@
     {
         "id": 1,
         "name": "Benjamin Cooper",
-        "avatar": "https://avatars.githubusercontent.com/u/6078720?s=60&v=4",    
+        "avatar": "https://i122.fastpic.org/big/2023/1026/41/8686eb54497049a412f177da74c46741.png",    
         "status": "Active",
         "added": "2023-10-10",
         "dateOfBirth": "1990-01-01",
         "diagnoses": ["None", "Sick", "Nice person"],
         "lastUpdate": "2023-10-10",
-        "about": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
+        "about": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem", 
         "assignments": [
             {
                 "id": "1",
@@ -47,21 +47,21 @@
             {
                 "messageId": "1",
                 "sender": "Benjamin Cooper",
-                "content": "Hi I got problem with mindfulness and I am very happy",
-                "date": "2023-10-23 12:00:00"
+                "text": "Hi I got problem with mindfulness and I am very happy",
+                "timestamp": "2023-10-23 12:00:00"
             },
             {
                 "messageId": "2",
                 "sender": "user",
-                "content": "Hi Benjamin, what's your problem with mindfulness?",
-                "date": "2023-10-23 13:00:00"
+                "text": "Hi Benjamin, what's your problem with mindfulness?",
+                "timestamp": "2023-10-23 13:00:00"
             }
         ]
     },
     {
         "id": 2,
         "name": "Sophia Reynolds",
-        "avatar": "https://avatars.githubusercontent.com/u/6078720?s=60&v=4",    
+        "avatar": "https://i122.fastpic.org/big/2023/1026/41/8686eb54497049a412f177da74c46741.png",    
         "status": "Active",
         "added": "2023-10-10",
         "dateOfBirth": "1990-01-01",
@@ -88,7 +88,7 @@
             {
                 "id": "1",
                 "title": "Note 1",
-                "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
+                "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
                 "date": "2023-05-12",
                 "owner": "user",
                 "tags": ["tag2"]
@@ -106,14 +106,14 @@
             {
                 "messageId": "1",
                 "sender": "Sophia Reynolds",
-                "content": "Hi I got problem with mindfulness and I am very saaad",
-                "date": "2023-10-23 12:00:00"
+                "text": "Hi I got problem with mindfulness and I am very saaad",
+                "timestamp": "2023-10-23 12:00:00"
             },
             {
                 "messageId": "2",
                 "sender": "user",
-                "content": "Hi Sophia, what's your problem with mindfulness?",
-                "date": "2023-10-23 13:00:00"
+                "text": "Hi Sophia, what's your problem with mindfulness?",
+                "timestamp": "2023-10-23 13:00:00"
             }
         ]
     }

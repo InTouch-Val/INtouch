@@ -4,8 +4,6 @@
   padding: 20px;
   color: #656565;
 }
-
-
 .first-row {
   display: flex;
   justify-content: space-between;
@@ -122,4 +120,67 @@ th {
 tr {
   border-bottom: 1px solid #000000;
   background-color: #ffffff;
+}
+
+/*CLIENTS DETAIL PART*/
+.client-detail-page{
+  padding: 10px 30px;
+}
+.client-detail-page h2{
+  font-weight: 500;
+  font-size: 36px;
+}
+.client-detail-page header{
+  display: flex;
+  align-items: center;
+  color: #656565;
+  margin-bottom: -20px;
+}
+.client-detail-page header img{
+  width: 46px;
+  height: 46px;
+}
+
+.profile-tab{
+  background-color: #fff;
+  padding: 20px 15px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.6);
+} 
+
+.profile-tab h3{
+  margin: 0;
+  color: #417D88;
+  font-weight: 600;
+}
+.profile-tab p{
+  margin: 10px 0;
+  font-weight: 500;
+  color: #656565;
+}
+
+.tabs button{
+  width: 20%;
+  background-color: transparent;
+  color: #656565;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 15px 0;
+  border: none;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #417D88;
+  font-family: "Montserrat", sans-serif;
+}
+
+.tabs button.active{
+  font-weight: 700;
+  border-bottom: 4px solid #417D88;
+  color: #417D88;
+}
+
+.tabs button:hover{
+  color: #417D88;
+  cursor: pointer;
 }

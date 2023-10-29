@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import Chat from './Chat' 
 import Assignments from './Assignments';
 import Notes from './Notes';
+import "../css/clients.css"
 
 const ClientDetailPage = () => {
     const { id } = useParams(); 
@@ -40,8 +41,8 @@ const ClientDetailPage = () => {
     return (
         <div className='client-detail-page'>
             <header>
-                <img src={client.avatar} alt={client.name} className='avatar' />
-                <h3>{client.name}</h3>
+                <img src={client.avatar} alt={client.name} className='avatar' style={{"width": "46px"}} />
+                <h2>{client.name}</h2>
             </header>
             <div className='tabs'>
                 <button className={activeTab === 'profile'? 'active' : ''} onClick={switchToProfileTab}>Profile</button>
@@ -53,16 +54,16 @@ const ClientDetailPage = () => {
             {/*Profile Tab View */}
             {activeTab === 'profile' && (
                 <div className='profile-tab'>
-                    <h2>Date Of Birth</h2>
+                    <h3>Date Of Birth</h3>
                     <p>{client.dateOfBirth}</p>
 
-                    <h2>Diagnosis</h2>
+                    <h3>Diagnosis</h3>
                     <p>{client.diagnoses.join(', ')}</p>
 
-                    <h2>Last Update</h2>
+                    <h3>Last Update</h3>
                     <p>{client.lastUpdate}</p>
 
-                    <h2>About Client</h2>
+                    <h3>About Client</h3>
                     <p>{client.about}</p>
                 </div>
             )}
