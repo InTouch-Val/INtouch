@@ -2,26 +2,32 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-class CustomUser(AbstractUser):
-    TYPE_CHOICES = (
+class User(AbstractUser):
+    USER_TYPE = (
         ('doctor', 'Doctor'),
-        ('patient', 'Patient'),
+        ('client', 'Client'),
     )
-    name = models.CharField(max_length=100)
-    birth_date = models.DateField()
+    birth_date = models.DateField(null=True)
     update_date = models.DateField(auto_now=True)
-    about_me = models.TextField()
-    user_type = models.CharField(choices=TYPE_CHOICES)
+    profile = models.TextField(blank=True)
+    user_type = models.CharField(max_length=100, choices=USER_TYPE)
 
 
 class Doctor(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
 
 
-class Patient(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+class Client(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True)
-    diagnosis = models.CharField(max_length=100)
+    diagnosis = models.CharField(max_length=100, blank=True)
+    status = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.user.username
 
 
 class Assignment(models.Model):
@@ -37,6 +43,12 @@ class Assignment(models.Model):
     )
     title = models.CharField(max_length=100)
     update_date = models.DateField(auto_now=True)
-    author = models.CharField(max_length=100)
-    assignment_type = models.CharField(choices=TYPE_LIST)
-    status = models.CharField(choices=STATUS_LIST)
+    author = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True)
+    executor = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True)
+    assignment_type = models.CharField(max_length=100, choices=TYPE_LIST)
+    status = models.CharField(max_length=100, choices=STATUS_LIST)
+    favorites = models.BooleanField(default=False)
+    trash = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title
