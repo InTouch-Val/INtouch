@@ -17,3 +17,8 @@ class ClientViewSet(viewsets.ModelViewSet):
 class DoctorViewSet(viewsets.ModelViewSet):
     queryset = Doctor.objects.all()
     serializer_class = DoctorSerializer
+
+
+class AssignmentViewSet(viewsets.ModelViewSet):
+    queryset = Assignment.objects.all()
+    serializer_class = AssignmentSerializer
