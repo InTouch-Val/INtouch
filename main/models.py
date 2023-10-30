@@ -3,15 +3,11 @@ from django.db import models
 
 
 class User(AbstractUser):
-    USER_TYPE = (
-        ('doctor', 'Doctor'),
-        ('client', 'Client'),
-    )
     birth_date = models.DateField(null=True)
     update_date = models.DateTimeField(auto_now=True)
     add_date = models.DateTimeField(auto_now_add=True)
     profile = models.TextField(blank=True)
-    user_type = models.CharField(max_length=100, choices=USER_TYPE)
+    accept_policy = models.BooleanField(default=False)
 
 
 class Doctor(models.Model):

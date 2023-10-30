@@ -7,7 +7,7 @@ from .models import *
 class RegisterUserForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('user_type', 'username', 'password1', 'password2', 'birth_date', 'profile')
+        fields = ('username', 'password1', 'password2', 'birth_date', 'profile')
 
 
 class AddAssignmentForm(forms.ModelForm):
