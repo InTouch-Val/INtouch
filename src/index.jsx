@@ -12,6 +12,8 @@ import AssignmentsPage from './routes/assignments-page.jsx';
 import CommunityPage from './routes/community-page.jsx'; 
 import Chat from './components/Chat.jsx';
 import StoragePage from './routes/storage.jsx';
+import RegistrationForm from './components/registration-page.jsx';
+import LoginPage from './components/login-page.jsx';
 
 const router = createBrowserRouter([
   {
@@ -45,6 +47,16 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/registration",
+    element: <RegistrationForm />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/login',
+    element: <LoginPage />,
+    errorElement: <ErrorPage />,
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
