@@ -1,25 +1,48 @@
+from django.core.validators import RegexValidator
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 
 from main.models import *
 
 
 class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField(
+        write_only=True,
+        validators=[
+            RegexValidator(
+                regex='^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$',
+                message='The password must contain at least 8 characters, '
+                        'including letters and numbers.'
+            )
+        ]
+    )
     confirm_password = serializers.CharField(write_only=True)
+    email = serializers.EmailField(
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
+
     class Meta:
         model = User
-        fields = ('id', 'first_name', 'last_name', 'email', 'password', 'confirm_password', 'accept_policy')
+        fields = (
+            'id',
+            'first_name',
+            'last_name',
+            'email',
+            'password',
+            'confirm_password',
+            'accept_policy'
+        )
 
     def validate(self, attrs):
         if attrs['password'] != attrs['confirm_password']:
             raise serializers.ValidationError("Passwords do not match")
-        if attrs['accept_policy'] == False:
+        if not attrs['accept_policy']:
             raise serializers.ValidationError("Accept with company policy")
         return attrs
 
     def create(self, validated_data):
         user = User.objects.create_user(
-            username=validated_data['first_name'] + ' ' + validated_data['last_name'],
+            username=f"{validated_data['first_name']} {validated_data['last_name']}",
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],
             email=validated_data['email'],
