@@ -22,3 +22,8 @@ class DoctorViewSet(viewsets.ModelViewSet):
 class AssignmentViewSet(viewsets.ModelViewSet):
     queryset = Assignment.objects.all()
     serializer_class = AssignmentSerializer
+
+
+class MassageViewSet(viewsets.ModelViewSet):
+    queryset = Massage.objects.all()
+    serializer_class = MassageSerializer

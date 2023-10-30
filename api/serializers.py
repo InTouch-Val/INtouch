@@ -4,23 +4,28 @@ from main.models import *
 
 
 class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+    confirm_password = serializers.CharField(write_only=True)
     class Meta:
         model = User
-        fields = ('id', 'user_type', 'username', 'password', 'birth_date', 'profile')
-        extra_kwargs = {'password': {'write_only': True}}
+        fields = ('id', 'first_name', 'last_name', 'email', 'password', 'confirm_password', 'accept_policy')
+
+    def validate(self, attrs):
+        if attrs['password'] != attrs['confirm_password']:
+            raise serializers.ValidationError("Passwords do not match")
+        if attrs['accept_policy'] == False:
+            raise serializers.ValidationError("Accept with company policy")
+        return attrs
 
     def create(self, validated_data):
         user = User.objects.create_user(
-            username=validated_data['username'],
+            username=validated_data['first_name'] + ' ' + validated_data['last_name'],
+            first_name=validated_data['first_name'],
+            last_name=validated_data['last_name'],
+            email=validated_data['email'],
             password=validated_data['password'],
-            user_type=validated_data['user_type'],
-            birth_date=validated_data['birth_date'],
-            profile=validated_data['profile'],
+            accept_policy=validated_data['accept_policy'],
         )
-        if user.user_type == 'doctor':
-            Doctor.objects.create(user=user)
-        else:
-            Client.objects.create(user=user)
         return user
 
 
@@ -39,4 +44,10 @@ class DoctorSerializer(serializers.ModelSerializer):
 class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assignment
+        fields = '__all__'
+
+
+class MassageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Massage
         fields = '__all__'
