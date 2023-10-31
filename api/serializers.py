@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate
 from django.core.validators import RegexValidator
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
@@ -74,3 +75,26 @@ class MassageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Massage
         fields = '__all__'
+
+
+class EmailLoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField()
+
+    def validate(self, attrs):
+        email = attrs.get('email')
+        password = attrs.get('password')
+
+        if email and password:
+            user = User.objects.get(email=email)
+
+            if user:
+                if not user.is_active:
+                    raise serializers.ValidationError('Пользователь неактивен')
+            else:
+                raise serializers.ValidationError('Неверные email или пароль')
+        else:
+            raise serializers.ValidationError('Email и пароль обязательны')
+
+        attrs['user'] = user
+        return attrs
