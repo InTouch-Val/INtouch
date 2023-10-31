@@ -49,8 +49,3 @@ class LogoutView(APIView):
     def get(self, request):
         logout(request)
         return Response({'detail': 'User logged out successfully'})
-
-# def logout_user(request):
-#     logout(request)
-#     data = {'message': 'User logged out successfully'}
-#     return JsonResponse(data)
