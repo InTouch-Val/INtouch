@@ -15,5 +15,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('drf-auth/', include('rest_framework.urls')),
     path('login/', EmailLoginView.as_view(), name='login'),
-    path('logout/', logout_user, name='logout'),
+    path('logout/', LogoutView.as_view(), name='logout'),
 ]
