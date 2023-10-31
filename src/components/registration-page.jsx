@@ -44,10 +44,25 @@ const RegistrationForm = () => {
       return;
     }
 
+    // Преобразование полей для отправки на сервер
+    const requestData = {
+      first_name: formData.firstName,
+      last_name: formData.lastName,
+      email: formData.email,
+      password: formData.password,
+      confirm_password: formData.confirmPassword,
+      accept_policy: formData.acceptPolicy,
+    };
+
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/v1/users/', formData);
+      const response = await axios.post('http://127.0.0.1:8000/api/v1/users/', requestData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      });
       console.log(response.data);
-      // Возможно, вам нужно выполнить дополнительные действия после успешной регистрации.
+      
     } catch (error) {
       console.error('Registration error:', error);
       setError('Registration failed. Please try again.');
@@ -57,7 +72,7 @@ const RegistrationForm = () => {
   return (
     <div className='registration-page'>
       <form className='registration-form' onSubmit={handleSubmit}>
-      <img src="https://i122.fastpic.org/big/2023/1030/7b/1e679a924edf77196513a8491eb5f37b.jpg" width="160px" border="0" />
+        <img src="https://i122.fastpic.org/big/2023/1030/7b/1e679a924edf77196513a8491eb5f37b.jpg" width="160px" border="0" />
         <input
           type="text"
           name="firstName"
