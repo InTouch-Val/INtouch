@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Outlet, NavLink } from "react-router-dom"; // Заменили Link на NavLink
 import "../css/app.css";
+import { useUser } from "../service/UserContext";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { userData } = useUser();
 
   return (
     <div className="app-container">
@@ -15,7 +17,7 @@ function App() {
             alt="Something"
           />
           <h3>
-            Jane <br /> Claus
+            {userData.name} <br /> {userData.surname}
           </h3>
         </div>
         <div className="menu upper">
