@@ -42,7 +42,10 @@ class EmailLoginView(APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         login(request, user)
-        return Response({'detail': 'Authorization successful'})
+        return Response({
+            'detail': 'Authorization successful',
+            'user': user.pk
+        })
 
 
 class LogoutView(APIView):
