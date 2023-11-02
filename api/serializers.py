@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate
+from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMultiAlternatives
 from django.core.validators import RegexValidator
@@ -62,7 +63,7 @@ class UserSerializer(serializers.ModelSerializer):
         token = default_token_generator.make_token(user)
         activation_url = reverse_lazy('confirm_email', kwargs={'pk': user.pk, 'token': token})
         current_site = 'http://127.0.0.1:8000'
-        html_message = render_to_string('main/confirm_mail.html', {'url': activation_url, 'domen': current_site})
+        html_message = render_to_string('registration/confirm_mail.html', {'url': activation_url, 'domen': current_site})
         message = strip_tags(html_message)
         mail = EmailMultiAlternatives(
             'Подтвердите свой электронный адрес',
@@ -113,4 +114,19 @@ class EmailLoginSerializer(serializers.Serializer):
         else:
             raise serializers.ValidationError('Incorrect email or password')
         attrs['user'] = user
+        return attrs
+
+
+class PasswordResetSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate_email(self, value):
+        PasswordResetForm(data={'email': value}).is_valid()
+        return value
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    password = serializers.CharField()
+    def validate(self, attrs):
+        password = attrs.get('password')
         return attrs
