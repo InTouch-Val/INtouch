@@ -157,11 +157,11 @@ CORS_ALLOW_METHODS = [
     'OPTIONS',
 ]
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.mailgun.org'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'postmaster@sandbox38de0f82b1c543aebbd984518bad4c17.mailgun.org'
-EMAIL_HOST_PASSWORD = '84825f7ffc9ff692b088e190c9d0f095-3e508ae1-32387e02'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_HOST = 'smtp.mailgun.org'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'postmaster@sandbox38de0f82b1c543aebbd984518bad4c17.mailgun.org'
+# EMAIL_HOST_PASSWORD = '84825f7ffc9ff692b088e190c9d0f095-3e508ae1-32387e02'
 
 SESSION_COOKIE_AGE = 86400
 SESSION_SAVE_EVERY_REQUEST = True

@@ -61,7 +61,7 @@ class UserSerializer(serializers.ModelSerializer):
             is_active=False,
         )
         token = default_token_generator.make_token(user)
-        activation_url = reverse_lazy('confirm_email', kwargs={'pk': user.pk, 'token': token})
+        activation_url = f'/api/v1/confirm-email/{user.pk}/{token}/'
         current_site = 'http://127.0.0.1:8000'
         html_message = render_to_string('registration/confirm_mail.html', {'url': activation_url, 'domen': current_site})
         message = strip_tags(html_message)
