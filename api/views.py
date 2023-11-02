@@ -1,6 +1,7 @@
 from django.contrib.auth import login, logout
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
+from django.utils.http import urlsafe_base64_decode
 from rest_framework import generics, viewsets
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import authentication_classes
@@ -52,3 +53,15 @@ class LogoutView(APIView):
     def get(self, request):
         logout(request)
         return Response({'detail': 'User logged out successfully'})
+
+
+class UserConfirmEmailView(APIView):
+    def get(self, request, pk, token):
+        user = User.objects.get(pk=pk)
+        if user and default_token_generator.check_token(user, token):
+            user.is_active = True
+            user.save()
+            login(request, user)
+            return Response({'detail': 'Account activated successfully'})
+        else:
+            return Response({'detail': 'Account not activated'})

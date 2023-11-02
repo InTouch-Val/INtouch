@@ -16,4 +16,5 @@ urlpatterns = [
     path('drf-auth/', include('rest_framework.urls')),
     path('login/', EmailLoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
+    path('confirm-email/<int:pk><str:token>/', UserConfirmEmailView.as_view(), name='confirm_email'),
 ]

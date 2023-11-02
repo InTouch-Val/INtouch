@@ -1,9 +1,17 @@
 from django.contrib.auth import authenticate
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import EmailMultiAlternatives
 from django.core.validators import RegexValidator
+from django.template.loader import render_to_string
+from django.urls import reverse_lazy
+from django.utils.encoding import force_bytes
+from django.utils.html import strip_tags
+from django.utils.http import urlsafe_base64_encode
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 from main.models import *
+# from .token import expiring_token_generator
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -49,7 +57,21 @@ class UserSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
             password=validated_data['password'],
             accept_policy=validated_data['accept_policy'],
+            is_active=False,
         )
+        token = default_token_generator.make_token(user)
+        activation_url = reverse_lazy('confirm_email', kwargs={'pk': user.pk, 'token': token})
+        current_site = 'http://127.0.0.1:8000'
+        html_message = render_to_string('main/confirm_mail.html', {'url': activation_url, 'domen': current_site})
+        message = strip_tags(html_message)
+        mail = EmailMultiAlternatives(
+            'Подтвердите свой электронный адрес',
+            message,
+            'postmaster@sandbox38de0f82b1c543aebbd984518bad4c17.mailgun.org',
+            [user.email],
+        )
+        mail.attach_alternative(html_message, 'text/html')
+        mail.send()
         return user
 
 
@@ -84,7 +106,7 @@ class EmailLoginSerializer(serializers.Serializer):
     def validate(self, attrs):
         email = attrs.get('email')
         password = attrs.get('password')
-        user = User.objects.get(username=email)
+        user = authenticate(username=email, password=password)
         if user:
             if not user.is_active:
                 raise serializers.ValidationError('User is not active')
