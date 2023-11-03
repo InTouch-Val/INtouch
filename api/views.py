@@ -58,7 +58,7 @@ class UserConfirmEmailView(APIView):
             user.is_active = True
             user.save()
             login(request, user)
-            return Response(status=302, headers={'Location': 'http://localhost:3000/clients/'})
+            return Response(status=302, headers={'Location': 'http://localhost:3000/confirm-email-success/'})
         else:
             return Response({'detail': 'Account not activated'})
 
