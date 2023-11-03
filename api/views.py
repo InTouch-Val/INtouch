@@ -1,5 +1,5 @@
 from django.contrib.auth import login, logout
-from django.urls import reverse
+from django.urls import reverse_lazy
 from rest_framework import generics, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -58,7 +58,7 @@ class UserConfirmEmailView(APIView):
             user.is_active = True
             user.save()
             login(request, user)
-            return Response({'detail': 'Account activated successfully'})
+            return Response(status=302, headers={'Location': 'http://localhost:3000/clients/'})
         else:
             return Response({'detail': 'Account not activated'})
 
@@ -96,7 +96,7 @@ class PasswordResetConfirmView(generics.GenericAPIView):
         user = User.objects.get(pk=pk)
         if user and default_token_generator.check_token(user, token):
             login(request, user)
-            return Response({'detail': 'Password reset successfully'})
+            return Response(status=302, headers={'Location': 'http://localhost:3000/set_new_password/'})
         else:
             return Response({'detail': 'Password not reset'})
 
