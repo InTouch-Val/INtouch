@@ -70,7 +70,7 @@ class UserSerializer(serializers.ModelSerializer):
         mail = EmailMultiAlternatives(
             'Подтвердите свой электронный адрес',
             message,
-            'postmaster@sandbox38de0f82b1c543aebbd984518bad4c17.mailgun.org',
+            'iw.sitnikoff@yandex.ru',
             [user.email],
         )
         mail.attach_alternative(html_message, 'text/html')
