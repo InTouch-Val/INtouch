@@ -1,14 +1,6 @@
 from django.contrib.auth import login, logout
-from django.contrib.auth.views import PasswordResetView
-from django.core.mail import send_mail
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect
 from django.urls import reverse
-from django.utils.http import urlsafe_base64_decode
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics, viewsets
-from rest_framework.authentication import SessionAuthentication
-from rest_framework.decorators import authentication_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -78,11 +70,16 @@ class PasswordResetRequestView(APIView):
         email = serializer.validated_data['email']
         user = User.objects.get(email=email)
         token = default_token_generator.make_token(user)
-        url = reverse_lazy('password_reset_confirm', kwargs={'pk': user.pk, 'token': token})
+        url = reverse_lazy(
+            'password_reset_confirm',
+            kwargs={'pk': user.pk, 'token': token}
+        )
         current_site = 'http://127.0.0.1:8000'
-        html_message = render_to_string('registration/password_reset.html', {'url': url, 'domen': current_site})
+        html_message = render_to_string(
+            'registration/password_reset.html',
+            {'url': url, 'domen': current_site}
+        )
         message = strip_tags(html_message)
-        print(message)
         mail = EmailMultiAlternatives(
             'Сброс пароля',
             message,
@@ -110,5 +107,4 @@ class PasswordResetCompleteView(APIView):
         new_password = request.data.get('new_password')
         user.set_password(new_password)
         user.save()
-
         return Response({'message': 'Password changed successfully'})
