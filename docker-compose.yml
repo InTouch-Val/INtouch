@@ -1,8 +1,31 @@
 version: "3.5"
 services:
-  app:
+  django:
     image: django-app
     build:
       context: .
+    container_name: djangoapp
+    restart: always
     ports:
       - "8000:8000"
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
+    networks:
+      - myNetwork
+
+  node:
+    build:
+      context: ./frontend
+    container_name: reactapp
+    restart: always
+    ports:
+      - 3000:3000
+    command: npm start
+    depends_on:
+      - django
+    networks:
+      - myNetwork
+
+networks:
+  myNetwork:
+    driver: bridge
