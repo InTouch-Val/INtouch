@@ -11,9 +11,6 @@ from rest_framework.validators import UniqueValidator
 from main.models import *
 
 
-# from .token import expiring_token_generator
-
-
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True,
@@ -78,12 +75,6 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class ClientSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Client
-        fields = '__all__'
-
-
 class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assignment
@@ -134,5 +125,25 @@ class ChangePasswordSerializer(serializers.Serializer):
     )
 
     def validate(self, attrs):
-        password = attrs.get('password')
+        new_password = attrs.get('new_password')
         return attrs
+
+
+class AddClientSerializer(serializers.Serializer):
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    email = serializers.EmailField(
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
+
+    def validate(self, attrs):
+        first_name = attrs.get('first_name')
+        last_name = attrs.get('last_name')
+        email = attrs.get('email')
+        return attrs
+
+
+class ClientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Client
+        fields = '__all__'
