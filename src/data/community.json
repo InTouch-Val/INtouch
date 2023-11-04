@@ -1,0 +1,54 @@
+[
+    {
+      "chatId": 1,
+      "name": "John Doe",
+      "avatar": "https://i122.fastpic.org/big/2023/1026/41/8686eb54497049a412f177da74c46741.png",
+      "lastMessageRead": true,
+      "messages": [
+        {
+          "messageId": 1,
+          "sender": "John Doe",
+          "text": "Hello there!",
+          "timestamp": "2023-10-24T10:00:00",
+          "read": true
+        },
+        {
+          "messageId": 2,
+          "sender": "User",
+          "text": "Hi John, how are you?",
+          "timestamp": "2023-10-24T10:05:00",
+          "read": true
+        },
+        {
+          "messageId": 3,
+          "sender": "John Doe",
+          "text": "I'm doing great, thanks for asking!",
+          "timestamp": "2023-10-24T10:10:00",
+          "read": true
+        }
+      ]
+    },
+    {
+      "chatId": 2,
+      "name": "Alice Smith",
+      "avatar": "https://i122.fastpic.org/big/2023/1026/41/8686eb54497049a412f177da74c46741.png",
+      "lastMessageRead": false,
+      "messages": [
+        {
+          "messageId": 1,
+          "sender": "User",
+          "text": "Hi Alice, how's your day?",
+          "timestamp": "2023-10-24T11:00:00",
+          "read": false
+        },
+        {
+          "messageId": 2,
+          "sender": "Alice Smith",
+          "text": "It's going well, thanks!",
+          "timestamp": "2023-10-24T11:05:00",
+          "read": false
+        }
+      ]
+    }
+  ]
+  
