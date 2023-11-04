@@ -64,18 +64,6 @@ def change_category_assignments(request, pk):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
-class AddAssignments(CreateView):
-    form_class = AddAssignmentForm
-    template_name = 'main/add_assignment.html'
-    success_url = reverse_lazy('library')
-
-    def form_valid(self, form):
-        assignment = form.save(commit=False)
-        assignment.author = Doctor.objects.get(user=self.request.user)
-        assignment.save()
-        return redirect('library')
-
-
 class Community(ListView):
     model = User
     template_name = 'main/community.html'
@@ -84,21 +72,6 @@ class Community(ListView):
     def get_queryset(self):
         queryset = User.objects.exclude(username=self.request.user.username)
         return queryset
-
-
-class RegisterUser(CreateView):
-    form_class = RegisterUserForm
-    template_name = 'main/register.html'
-    success_url = reverse_lazy('login')
-
-    def form_valid(self, form):
-        user = form.save()
-        if user.user_type == 'doctor':
-            Doctor.objects.create(user=user)
-        else:
-            Client.objects.create(user=user)
-        login(self.request, user)
-        return redirect('index')
 
 
 class LoginUser(LoginView):

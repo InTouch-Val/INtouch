@@ -84,12 +84,6 @@ class ClientSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class DoctorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Doctor
-        fields = '__all__'
-
-
 class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assignment

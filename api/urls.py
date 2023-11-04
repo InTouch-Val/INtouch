@@ -5,7 +5,6 @@ from .views import *
 
 router = routers.DefaultRouter()
 router.register('clients', ClientViewSet, basename='clients')
-router.register('doctors', DoctorViewSet, basename='doctors')
 router.register('users', UserViewSet, basename='users')
 router.register('assignments', AssignmentViewSet, basename='assignments')
 router.register('massage', MassageViewSet, basename='massage')
