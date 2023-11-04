@@ -8,7 +8,7 @@ class User(AbstractUser):
     add_date = models.DateTimeField(auto_now_add=True)
     profile = models.TextField(blank=True)
     accept_policy = models.BooleanField(default=False)
-    assignments = models.ManyToManyField('Assignment')
+    assignments = models.ManyToManyField('Assignment', blank=True)
 
     def __str__(self):
         return self.username
@@ -24,13 +24,14 @@ class Client(models.Model):
 
 class Assignment(models.Model):
     title = models.CharField(max_length=100)
+    text = models.TextField()
     update_date = models.DateField(auto_now=True)
     add_date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     assignment_type = models.CharField(max_length=100)
     status = models.CharField(max_length=100)
     tags = models.CharField(max_length=255)
-    comments = models.ManyToManyField('Comment')
+    comments = models.ManyToManyField('Comment', blank=True)
 
     def __str__(self):
         return self.title

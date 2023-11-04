@@ -141,3 +141,5 @@ class AddClientView(APIView):
 class ClientListView(generics.ListAPIView):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
+
+

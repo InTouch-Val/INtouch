@@ -36,7 +36,11 @@ class UserSerializer(serializers.ModelSerializer):
             'email',
             'password',
             'confirm_password',
-            'accept_policy'
+            'accept_policy',
+            'birth_date',
+            'date_joined',
+            'update_date',
+            'assignments',
         )
 
     def validate(self, attrs):
@@ -79,6 +83,18 @@ class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assignment
         fields = '__all__'
+
+    def create(self, validated_data):
+        validated_data['author'] = self.context['request'].user
+        assignment = Assignment.objects.create(
+            title=validated_data['title'],
+            text=validated_data['text'],
+            assignment_type=validated_data['assignment_type'],
+            status=validated_data['status'],
+            tags=validated_data['tags'],
+            author=validated_data['author'],
+        )
+        return assignment
 
 
 class MassageSerializer(serializers.ModelSerializer):

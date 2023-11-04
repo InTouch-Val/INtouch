@@ -18,4 +18,5 @@ POST: api/v1/password/reset/complete/
 POST: api/v1/users/add/  
 Стандартная схема подтверждения по email  
 Получение клиентов(user - ссылка на самого пользователя, doctor - ссылка на пользователя, являющегося доктором)  
-GET: api/v1/users/
+GET: api/v1/users/  
+Создание задачи, поля: title, text, assignment_type, status, tags
