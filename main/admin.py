@@ -5,6 +5,5 @@ from .models import *
 
 
 admin.site.register(User, UserAdmin)
-admin.site.register(Doctor)
 admin.site.register(Client)
 admin.site.register(Assignment)

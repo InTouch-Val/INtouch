@@ -11,9 +11,6 @@ from rest_framework.validators import UniqueValidator
 from main.models import *
 
 
-# from .token import expiring_token_generator
-
-
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True,
@@ -39,7 +36,11 @@ class UserSerializer(serializers.ModelSerializer):
             'email',
             'password',
             'confirm_password',
-            'accept_policy'
+            'accept_policy',
+            'birth_date',
+            'date_joined',
+            'update_date',
+            'assignments',
         )
 
     def validate(self, attrs):
@@ -70,7 +71,7 @@ class UserSerializer(serializers.ModelSerializer):
         mail = EmailMultiAlternatives(
             'Подтвердите свой электронный адрес',
             message,
-            'postmaster@sandbox38de0f82b1c543aebbd984518bad4c17.mailgun.org',
+            'iw.sitnikoff@yandex.ru',
             [user.email],
         )
         mail.attach_alternative(html_message, 'text/html')
@@ -78,22 +79,22 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class ClientSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Client
-        fields = '__all__'
-
-
-class DoctorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Doctor
-        fields = '__all__'
-
-
 class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assignment
         fields = '__all__'
+
+    def create(self, validated_data):
+        validated_data['author'] = self.context['request'].user
+        assignment = Assignment.objects.create(
+            title=validated_data['title'],
+            text=validated_data['text'],
+            assignment_type=validated_data['assignment_type'],
+            status=validated_data['status'],
+            tags=validated_data['tags'],
+            author=validated_data['author'],
+        )
+        return assignment
 
 
 class MassageSerializer(serializers.ModelSerializer):
@@ -128,8 +129,37 @@ class PasswordResetSerializer(serializers.Serializer):
 
 
 class ChangePasswordSerializer(serializers.Serializer):
-    password = serializers.CharField()
+    new_password = serializers.CharField(
+        write_only=True,
+        validators=[
+            RegexValidator(
+                regex='^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$',
+                message='The password must contain at least 8 characters, '
+                        'including letters and numbers.'
+            )
+        ]
+    )
 
     def validate(self, attrs):
-        password = attrs.get('password')
+        new_password = attrs.get('new_password')
         return attrs
+
+
+class AddClientSerializer(serializers.Serializer):
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    email = serializers.EmailField(
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
+
+    def validate(self, attrs):
+        first_name = attrs.get('first_name')
+        last_name = attrs.get('last_name')
+        email = attrs.get('email')
+        return attrs
+
+
+class ClientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Client
+        fields = '__all__'

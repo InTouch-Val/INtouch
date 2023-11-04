@@ -1,5 +1,5 @@
 from django.contrib.auth import login, logout
-from django.urls import reverse
+from django.urls import reverse_lazy
 from rest_framework import generics, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -11,16 +11,6 @@ from .serializers import *
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
-
-class ClientViewSet(viewsets.ModelViewSet):
-    queryset = Client.objects.all()
-    serializer_class = ClientSerializer
-
-
-class DoctorViewSet(viewsets.ModelViewSet):
-    queryset = Doctor.objects.all()
-    serializer_class = DoctorSerializer
 
 
 class AssignmentViewSet(viewsets.ModelViewSet):
@@ -58,7 +48,7 @@ class UserConfirmEmailView(APIView):
             user.is_active = True
             user.save()
             login(request, user)
-            return Response({'detail': 'Account activated successfully'})
+            return Response(status=302, headers={'Location': 'http://localhost:3000/confirm-email-success/'})
         else:
             return Response({'detail': 'Account not activated'})
 
@@ -96,15 +86,60 @@ class PasswordResetConfirmView(generics.GenericAPIView):
         user = User.objects.get(pk=pk)
         if user and default_token_generator.check_token(user, token):
             login(request, user)
-            return Response({'detail': 'Password reset successfully'})
+            return Response(status=302, headers={'Location': 'http://localhost:3000/set_new_password/'})
         else:
             return Response({'detail': 'Password not reset'})
 
 
 class PasswordResetCompleteView(APIView):
     def post(self, request):
+        serializer = ChangePasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        new_password = serializer.validated_data['new_password']
         user = request.user
-        new_password = request.data.get('new_password')
         user.set_password(new_password)
         user.save()
         return Response({'message': 'Password changed successfully'})
+
+
+class AddClientView(APIView):
+    def post(self, request):
+        serializer = AddClientSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        first_name = serializer.validated_data['first_name']
+        last_name = serializer.validated_data['last_name']
+        email = serializer.validated_data['email']
+        user = User.objects.create_user(
+            username=email,
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            password='g12332113',
+            accept_policy=True,
+            is_active=False,
+        )
+        client = Client.objects.create(user=user, doctor=request.user)
+        token = default_token_generator.make_token(user)
+        activation_url = f'/api/v1/confirm-email/{user.pk}/{token}/'
+        current_site = 'http://127.0.0.1:8000'
+        html_message = render_to_string(
+            'registration/confirm_mail.html',
+            {'url': activation_url, 'domen': current_site}
+        )
+        message = strip_tags(html_message)
+        mail = EmailMultiAlternatives(
+            'Подтвердите свой электронный адрес',
+            message,
+            'iw.sitnikoff@yandex.ru',
+            [user.email],
+        )
+        mail.attach_alternative(html_message, 'text/html')
+        mail.send()
+        return Response("Confirm email sent.")
+
+
+class ClientListView(generics.ListAPIView):
+    queryset = Client.objects.all()
+    serializer_class = ClientSerializer
+
+

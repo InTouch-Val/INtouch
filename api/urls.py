@@ -4,8 +4,6 @@ from rest_framework import routers
 from .views import *
 
 router = routers.DefaultRouter()
-router.register('clients', ClientViewSet, basename='clients')
-router.register('doctors', DoctorViewSet, basename='doctors')
 router.register('users', UserViewSet, basename='users')
 router.register('assignments', AssignmentViewSet, basename='assignments')
 router.register('massage', MassageViewSet, basename='massage')
@@ -15,6 +13,8 @@ urlpatterns = [
     path('drf-auth/', include('rest_framework.urls')),
     path('login/', EmailLoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
+    path('clients/', ClientListView.as_view(), name='clients'),
+    path('clients/add/', AddClientView.as_view(), name='add_client'),
     path(
         'confirm-email/<int:pk>/<str:token>/',
         UserConfirmEmailView.as_view(),
