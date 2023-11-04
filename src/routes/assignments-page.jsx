@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import assignmentsData from '../data/assignments.json';
 import "../css/assignments.css";
+import AssignmentTile from '../components/AssignmentTile';
 
 const tagColors = {
   tag1: 'brown',
@@ -17,9 +18,16 @@ function AssignmentsPage() {
   const [filterTags, setFilterTags] = useState('all');
   const [filterLanguage, setFilterLanguage] = useState('all');
   const [filterDate, setFilterDate] = useState('all');
+  const [assignments, setAssignments] = useState(assignmentsData);
 
   const toggleFavorite = (assignmentId) => {
-    // Implement logic to toggle the favorite status of an assignment
+    const updatedAssignments = assignments.map((assignment) => {
+      if (assignment.id === assignmentId) {
+        return { ...assignment, favorite: !assignment.favorite };
+      }
+      return assignment;
+    });
+    setAssignments(updatedAssignments);
   };
 
   return (
@@ -36,10 +44,10 @@ function AssignmentsPage() {
           Library
         </button>
         <button
-          className={activeTab === 'favorites'? 'active' : ''}
-          onClick={() => setActiveTab('favorites')}
+          className={activeTab === 'my-list'? 'active' : ''}
+          onClick={() => setActiveTab('my-list')}
         >
-            Favorites
+            My List
         </button>
         <button
           className={activeTab === 'archive' ? 'active' : ''}
@@ -93,111 +101,25 @@ function AssignmentsPage() {
         </select>
       </div>
       {activeTab === 'library' && (
-        <div className="assignments-list">
-        <table>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Author</th>
-              <th>Status</th>
-              <th>Type</th>
-              <th>Modified</th>
-              <th>Popularity</th>
-              <th>Favorite</th>
-            </tr>
-          </thead>
-          <tbody>
-            {assignmentsData.filter((assignment) => !assignment.archived).map((assignment) => (
-              <tr key={assignment.id}>
-                <td>{assignment.title}</td>
-                <td>{assignment.author}</td>
-                <td>{assignment.status}</td>
-                <td>{assignment.type}</td>
-                <td>{assignment.modified}</td>
-                <td>{assignment.popularity}</td>
-                <td>
-                  <button
-                    className={
-                      assignment.favorite
-                        ? 'favorite-button selected'
-                        : 'favorite-button'
-                    }
-                    onClick={() => toggleFavorite(assignment.id)}
-                  >
-                    &#10084;
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+        <div className='assignment-grid'>
+           {assignments.filter((assignment) => !assignment.archived).map((assignment) => (
+            <AssignmentTile key={assignment.id} assignment={assignment} onFavoriteToggle={toggleFavorite} />
+        ))}
+        </div>
       )}
-      {activeTab === 'favorites' && (
-        <div className="assignments-list">
-        <table>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Author</th>
-              <th>Status</th>
-              <th>Type</th>
-              <th>Modified</th>
-              <th>Activities</th>
-            </tr>
-          </thead>
-          <tbody>
-            {assignmentsData
-              .filter((assignment) => assignment.favorite && !assignment.archived)
-              .map((assignment) => (
-                <tr key={assignment.id}>
-                  <td>{assignment.title}</td>
-                  <td>{assignment.author}</td>
-                  <td>{assignment.status}</td>
-                  <td>{assignment.type}</td>
-                  <td>{assignment.modified}</td>
-                  <td>
-                    <button className="activity-button">Publish</button>
-                    <button className="activity-button">Edit</button>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
+      {activeTab === 'my-list' && (
+        <div className='assignment-grid'>
+        {assignments.filter((assignment) => !assignment.archived && assignment.favorite).map((assignment) => (
+         <AssignmentTile key={assignment.id} assignment={assignment} onFavoriteToggle={toggleFavorite} />
+     ))}
+     </div>
       )}
       {activeTab === 'archive' && (
-        <div className="assignments-list">
-        <table>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Author</th>
-              <th>Status</th>
-              <th>Type</th>
-              <th>Modified</th>
-              <th>Activities</th>
-            </tr>
-          </thead>
-          <tbody>
-            {assignmentsData
-              .filter((assignment) => assignment.archived)
-              .map((assignment) => (
-                <tr key={assignment.id}>
-                  <td>{assignment.title}</td>
-                  <td>{assignment.author}</td>
-                  <td>{assignment.status}</td>
-                  <td>{assignment.type}</td>
-                  <td>{assignment.modified}</td>
-                  <td>
-                    <button className="activity-button">Restore</button>
-                    <button className="activity-button">Permanently Delete</button>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
+        <div className='assignment-grid'>
+        {assignments.filter((assignment) => assignment.archived).map((assignment) => (
+         <AssignmentTile key={assignment.id} assignment={assignment} onFavoriteToggle={toggleFavorite} />
+     ))}
+     </div>
       )}
     </div>
   );

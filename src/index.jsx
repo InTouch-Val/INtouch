@@ -15,6 +15,8 @@ import StoragePage from './routes/storage.jsx';
 import RegistrationForm from './components/registration-page.jsx';
 import LoginPage from './components/login-page.jsx';
 import SettingsPage from './routes/settings-page.jsx';
+import ConfirmEmailSuccess from './service/confirm-email-success.jsx';
+import SetNewUserPassword from './service/set-new-user-password.jsx';
 
 const router = createBrowserRouter([
   {
@@ -60,6 +62,16 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <LoginPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/confirm-email-success",
+    element: <ConfirmEmailSuccess />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/set-new-user-password",
+    element: <SetNewUserPassword />,
     errorElement: <ErrorPage />,
   }
 ]);
