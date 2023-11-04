@@ -98,8 +98,10 @@ class PasswordResetConfirmView(generics.GenericAPIView):
 
 class PasswordResetCompleteView(APIView):
     def post(self, request):
+        serializer = PasswordResetSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        new_password = serializer.validated_data['new_password']
         user = request.user
-        new_password = request.data.get('new_password')
         user.set_password(new_password)
         user.save()
         return Response({'message': 'Password changed successfully'})

@@ -14,8 +14,9 @@ class User(AbstractUser):
         return self.username
 
 
-class Client(User):
-    doctor = models.ForeignKey(User, on_delete=models.CASCADE)
+class Client(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
+    doctor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='doctor')
 
     def __str__(self):
         return self.user.username
@@ -28,6 +29,7 @@ class Assignment(models.Model):
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     assignment_type = models.CharField(max_length=100)
     status = models.CharField(max_length=100)
+    tags = models.CharField(max_length=255)
     comments = models.ManyToManyField('Comment')
 
     def __str__(self):

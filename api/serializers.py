@@ -122,7 +122,16 @@ class PasswordResetSerializer(serializers.Serializer):
 
 
 class ChangePasswordSerializer(serializers.Serializer):
-    password = serializers.CharField()
+    new_password = serializers.CharField(
+        write_only=True,
+        validators=[
+            RegexValidator(
+                regex='^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$',
+                message='The password must contain at least 8 characters, '
+                        'including letters and numbers.'
+            )
+        ]
+    )
 
     def validate(self, attrs):
         password = attrs.get('password')
