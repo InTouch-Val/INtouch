@@ -46,9 +46,9 @@ const ClientDetailPage = () => {
             </header>
             <div className='tabs'>
                 <button className={activeTab === 'profile'? 'active' : ''} onClick={switchToProfileTab}>Profile</button>
-                <button className={activeTab === 'chat'? 'active' : ''} onClick={switchToChatTab}>Chat</button>
+                {/* <button className={activeTab === 'chat'? 'active' : ''} onClick={switchToChatTab}>Chat</button> */}
                 <button className={activeTab === 'assignments'? 'active' : ''} onClick={switchToAssignmentsTab}>Assignments</button>
-                <button className={activeTab ==='stats'? 'active' : ''} onClick={switchToStatsTab}>Stats</button>
+                {/* <button className={activeTab ==='stats'? 'active' : ''} onClick={switchToStatsTab}>Stats</button> */}
                 <button className={activeTab === 'notes'? 'active' : ''} onClick={switchToNotesTab}>Notes</button>
             </div>
             {/*Profile Tab View */}

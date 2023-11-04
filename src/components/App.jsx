@@ -1,11 +1,37 @@
-import React, { useState } from "react";
-import { Outlet, NavLink } from "react-router-dom"; // Заменили Link на NavLink
+import React, { useState, useEffect } from "react";
+import { Outlet, NavLink, useNavigate } from "react-router-dom"; // Заменили Link на NavLink
 import "../css/app.css";
-import { useUser } from "../service/UserContext";
+import axios from "axios";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const { userData } = useUser();
+  const navigate = useNavigate();
+  const [userDetails, setUserDetails] = useState(null);
+
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      axios.get(`http://127.0.0.1:8000/api/v1/users/${userId}/`)
+        .then(response => {
+          setUserDetails({
+            first_name: response.data.first_name,
+            last_name: response.data.last_name,
+          });
+        })
+        .catch(error => {
+          console.error('Error getting User Data:', error);
+          localStorage.removeItem('userId');
+          navigate('/login');
+        });
+    } else {
+      navigate('/login'); // Редирект на страницу логина, если userId нет в localStorage
+    }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('userId');
+    setUserDetails(null);
+    navigate('/login');
+  };
 
   return (
     <div className="app-container">
@@ -17,7 +43,7 @@ function App() {
             alt="Something"
           />
           <h3>
-            {userData.name} <br /> {userData.surname}
+            {userDetails ? `${userDetails.first_name} ${userDetails.last_name}` : 'Loading...'}
           </h3>
         </div>
         <div className="menu upper">
@@ -38,11 +64,11 @@ function App() {
                   Community
                 </NavLink>
               </li>
-              <li>
+              {/* <li>
                 <NavLink to={`/storage`} activeClassName="active">
                   Storage
                 </NavLink>
-              </li>
+              </li> */}
             </ul>
           </nav>
         </div>
@@ -54,15 +80,15 @@ function App() {
                   Settings
                 </NavLink>
               </li>
-              <li>
+              {/* <li>
                 <NavLink to={`/support`} activeClassName="active">
                   Support
                 </NavLink>
-              </li>
+              </li> */}
               <li>
-                <NavLink to={`/logout`} activeClassName="active">
+                <a onClick={handleLogout}>
                   Logout
-                </NavLink>
+                </a>
               </li>
             </ul>
           </nav>

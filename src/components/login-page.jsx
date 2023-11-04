@@ -1,13 +1,11 @@
 import { useState } from 'react';
-import { useUser } from '../service/UserContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import '../css/registration.css';
 
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { setUserData } = useUser();
   const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
 
@@ -27,29 +25,22 @@ function LoginPage() {
           withCredentials: true,
       } );
 
-      if (response.status === 400) {
+      if (response.status === 200) {
+        localStorage.setItem('userId', response.data.user);
+        navigate('/');
+      } else {
         setError("Something went wrong. Please try again");
       }
 
-      if (response.status === 200) {
-        setError('');
-        setUserData({name: "Hahaha", surname: "Hehehe"});
-        console.log(response);
-        navigate('/');
-      }
-
     } catch (error) {
-      if (error.response) {
-        setError(error.response.data.message);
-      } else {
+        const message = error.response?.data.message || 'An error occurred while logging in.';
+        setError(message);
         console.error('Login error:', error);
-        setError('An error occurred while logging in.');
-      }
     }
   };
 
   const handleForgotPassword = () => {
-    
+    // TODO: handle forgot password
   };
 
   return (
@@ -78,6 +69,7 @@ function LoginPage() {
                 Forgot password
             </button>
         </div>
+        <p>Don't have an account? Register one <Link to={"/registration"}>here</Link></p>
         {error && <div className='error-message'>{error}</div>}
       </form>
     </div>

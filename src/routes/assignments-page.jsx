@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import assignmentsData from '../data/assignments.json';
+import "../css/assignments.css";
 
 const tagColors = {
   tag1: 'brown',
@@ -25,7 +26,7 @@ function AssignmentsPage() {
     <div className="assignments-page">
       <header>
         <h1>Assignments</h1>
-        <button className="create-assignment-button">Create Assignment</button>
+        <button className="add-assignment-button">Add Assignment</button>
       </header>
       <div className="tabs">
         <button
@@ -70,13 +71,12 @@ function AssignmentsPage() {
           <option value="all">All Types</option>
           {/* Add type options here */}
         </select>
-        <select
+        {/* <select
           value={filterTags}
           onChange={(e) => setFilterTags(e.target.value)}
         >
           <option value="all">All Tags</option>
-          {/* Add tag options here */}
-        </select>
+        </select> */}
         <select
           value={filterLanguage}
           onChange={(e) => setFilterLanguage(e.target.value)}

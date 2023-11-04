@@ -1,20 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App.jsx';
-import { UserProvider } from './service/UserContext.js';
 import {
   createBrowserRouter,
   RouterProvider,
 } from 'react-router-dom';
 import ErrorPage from './components/error-page.jsx';
 import ClientPage from './routes/client-page.jsx';
-import ClientDetailPage from './components/client-details-page.jsx';
+import ClientDetailPage from './components/ClientsDetailsPage.jsx';
 import AssignmentsPage from './routes/assignments-page.jsx';
 import CommunityPage from './routes/community-page.jsx'; 
 import Chat from './components/Chat.jsx';
 import StoragePage from './routes/storage.jsx';
 import RegistrationForm from './components/registration-page.jsx';
 import LoginPage from './components/login-page.jsx';
+import SettingsPage from './routes/settings-page.jsx';
 
 const router = createBrowserRouter([
   {
@@ -38,14 +38,18 @@ const router = createBrowserRouter([
         path: '/community',
         element: <CommunityPage />,
       },
-      {
-        path: '/community/:chatId',
-        element: <Chat />, // Добавляем маршрут для чата
-      },
+      // {
+      //   path: '/community/:chatId',
+      //   element: <Chat />, 
+      // },
       {
         path: '/storage',
         element: <StoragePage />, 
       },
+      {
+        path: '/settings',
+        element: <SettingsPage />,
+      }
     ],
   },
   {
@@ -62,8 +66,6 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <UserProvider>
       <RouterProvider router={router} />
-    </UserProvider>
   </React.StrictMode>
 );

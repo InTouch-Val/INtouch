@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import '../css/registration.css';
 
@@ -13,6 +14,7 @@ const RegistrationForm = () => {
   });
 
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -62,6 +64,7 @@ const RegistrationForm = () => {
         withCredentials: true,
       });
       console.log(response.data);
+      navigate('/login');
       
     } catch (error) {
       console.error('Registration error:', error);
@@ -72,7 +75,7 @@ const RegistrationForm = () => {
   return (
     <div className='registration-page'>
       <form className='registration-form' onSubmit={handleSubmit}>
-        <img src="https://i122.fastpic.org/big/2023/1030/7b/1e679a924edf77196513a8491eb5f37b.jpg" width="160px" border="0" />
+        <img src="https://i122.fastpic.org/big/2023/1030/7b/1e679a924edf77196513a8491eb5f37b.jpg" width="140px" border="0" />
         <input
           type="text"
           name="firstName"
@@ -125,6 +128,7 @@ const RegistrationForm = () => {
           I agree with the terms and conditions
         </label>
         <button type="submit">Register</button>
+        <p>Already have an account? <Link to={"/login"}>Log in</Link></p>
         {error && <p className="error-message">{error}</p>}
       </form>
     </div>

@@ -24,10 +24,14 @@
     font-family: "Montserrat", sans-serif;
     width: 50%; /* Заполните доступное пространство внутри контейнера */
     padding: 8px;
-    margin: 5px;
+    margin: 10px;
     border-radius: 10px;
     box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.6);
     border: none;
+  }
+
+  .registration-form input:focus{
+    box-shadow: 0 0 3px #666;
   }
   
   .registration-form label {
@@ -42,9 +46,13 @@
     border: none;
     border-radius: 10px;
     padding: 5px 10px;
-    margin: 5px;
+    margin: 20px 10px 5px 10px;
     width: 100px;
     height: 30px;
+  }
+
+  .registration-form label{
+    font-size: 12px;
   }
   
   .registration-form button:hover {

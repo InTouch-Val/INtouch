@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import '../css/assignments.css';
-import './AddAssignment'
 import AddAssignment from './AddAssignment';
 
 function Assignments({ clientAssignments }) {
@@ -27,7 +25,8 @@ function Assignments({ clientAssignments }) {
       <header className="first-row">
         <h1>Assignments</h1>
         <button className="add-assignment-button"
-        >Add Assignment</button>
+        >Add Assignment
+        </button>
       </header>
       <div className="search-filters">
         <form className="search">

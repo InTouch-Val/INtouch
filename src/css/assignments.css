@@ -1,0 +1,49 @@
+.assignments-page{
+    padding: 35px;
+    color: #656565;
+}
+
+.assignments-page header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.assignments-page h1{
+    font-size: 36px;
+}
+
+.add-assignment-button{
+    background-color: #417D88;
+    height: 29px;
+    width: 198px;
+    border-radius: 50px;
+    color: #fff;
+    font-family: "Montserrat", sans-serif;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.assignments-page .tabs button{
+    width: 33%;
+}
+
+.search-bar{
+    margin-bottom: 10px;
+}
+
+.filter-dropdowns {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px; /* space below the filters */
+}
+
+.filter-dropdowns select {
+    width: 18%; /* distribute space between dropdowns */
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid #D0D1D6; /* border color */
+    font-size: 14px;
+}
