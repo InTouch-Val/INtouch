@@ -1,8 +1,9 @@
 from django.contrib.auth import login, logout
 from django.urls import reverse_lazy
-from rest_framework import generics, viewsets
+from rest_framework import generics, viewsets, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import *
 from .serializers import *
@@ -26,13 +27,25 @@ class MassageViewSet(viewsets.ModelViewSet):
 class EmailLoginView(APIView):
     def post(self, request):
         serializer = EmailLoginSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        login(request, user)
-        return Response({
-            'detail': 'Authorization successful',
-            'user': user.pk
-        })
+        if serializer.is_valid():
+            user = authenticate(
+                request,
+                username=serializer.validated_data.get('email'),
+                password=serializer.validated_data.get('password')
+            )
+            if user:
+                refresh = RefreshToken.for_user(user)
+                token = {
+                    'refresh': str(refresh),
+                    'access': str(refresh.access_token),
+                }
+                return Response(token, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Invalid credentials'},
+                                status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
 
 
 class LogoutView(APIView):
@@ -47,8 +60,10 @@ class UserConfirmEmailView(APIView):
         if user and default_token_generator.check_token(user, token):
             user.is_active = True
             user.save()
-            login(request, user)
-            return Response(status=302, headers={'Location': f'http://localhost:3000/confirm-email-success?id={user.pk}'})
+            refresh = RefreshToken.for_user(user)
+            return Response(status=302, headers={
+                'Location': f'http://localhost:3000/confirm-email-success?auth={str(refresh.access_token)}'
+            })
         else:
             return Response({'detail': 'Account not activated'})
 
@@ -86,7 +101,8 @@ class PasswordResetConfirmView(generics.GenericAPIView):
         user = User.objects.get(pk=pk)
         if user and default_token_generator.check_token(user, token):
             login(request, user)
-            return Response(status=302, headers={'Location': 'http://localhost:3000/set_new_password/'})
+            return Response(status=302, headers={
+                'Location': 'http://localhost:3000/set_new_password/'})
         else:
             return Response({'detail': 'Password not reset'})
 
@@ -141,5 +157,3 @@ class AddClientView(APIView):
 class ClientListView(generics.ListAPIView):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
-
-
