@@ -48,12 +48,6 @@ class EmailLoginView(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
 
-class LogoutView(APIView):
-    def get(self, request):
-        logout(request)
-        return Response({'detail': 'User logged out successfully'})
-
-
 class UserConfirmEmailView(APIView):
     def get(self, request, pk, token):
         user = User.objects.get(pk=pk)
@@ -122,35 +116,11 @@ class AddClientView(APIView):
     def post(self, request):
         serializer = AddClientSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        first_name = serializer.validated_data['first_name']
-        last_name = serializer.validated_data['last_name']
-        email = serializer.validated_data['email']
-        user = User.objects.create_user(
-            username=email,
-            first_name=first_name,
-            last_name=last_name,
-            email=email,
-            password='g12332113',
-            accept_policy=True,
-            is_active=False,
+        user = serializer.save()
+        client = Client.objects.create(
+            user=user,
+            doctor_id=serializer.validated_data['doctor_id']
         )
-        client = Client.objects.create(user=user, doctor=request.user)
-        token = default_token_generator.make_token(user)
-        activation_url = f'/api/v1/confirm-email/{user.pk}/{token}/'
-        current_site = 'http://127.0.0.1:8000'
-        html_message = render_to_string(
-            'registration/confirm_mail.html',
-            {'url': activation_url, 'domen': current_site}
-        )
-        message = strip_tags(html_message)
-        mail = EmailMultiAlternatives(
-            'Подтвердите свой электронный адрес',
-            message,
-            'iw.sitnikoff@yandex.ru',
-            [user.email],
-        )
-        mail.attach_alternative(html_message, 'text/html')
-        mail.send()
         return Response("Confirm email sent.")
 
 

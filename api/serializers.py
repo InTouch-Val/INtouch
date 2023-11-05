@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
@@ -145,18 +147,45 @@ class ChangePasswordSerializer(serializers.Serializer):
         return attrs
 
 
-class AddClientSerializer(serializers.Serializer):
+class AddClientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email', 'doctor_id']
+
     first_name = serializers.CharField()
     last_name = serializers.CharField()
     email = serializers.EmailField(
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
+    doctor_id = serializers.IntegerField()
 
-    def validate(self, attrs):
-        first_name = attrs.get('first_name')
-        last_name = attrs.get('last_name')
-        email = attrs.get('email')
-        return attrs
+    def create(self, validated_data):
+        user = User.objects.create(
+            username=validated_data['email'],
+            first_name=validated_data['first_name'],
+            last_name=validated_data['last_name'],
+            email=validated_data['email'],
+            password=uuid.uuid4(),
+            accept_policy=True,
+            is_active=True,
+        )
+        token = default_token_generator.make_token(user)
+        activation_url = f'/api/v1/confirm-email/{user.pk}/{token}/'
+        current_site = 'http://127.0.0.1:8000'
+        html_message = render_to_string(
+            'registration/confirm_mail.html',
+            {'url': activation_url, 'domen': current_site}
+        )
+        message = strip_tags(html_message)
+        mail = EmailMultiAlternatives(
+            'Подтвердите свой электронный адрес',
+            message,
+            'iw.sitnikoff@yandex.ru',
+            [user.email],
+        )
+        mail.attach_alternative(html_message, 'text/html')
+        mail.send()
+        return user
 
 
 class ClientSerializer(serializers.ModelSerializer):
