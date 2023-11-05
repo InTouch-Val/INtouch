@@ -8,7 +8,7 @@ from django.utils.html import strip_tags
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from main.models import *
+from .models import *
 
 
 class UserSerializer(serializers.ModelSerializer):
