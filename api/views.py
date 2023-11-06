@@ -14,11 +14,6 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 
-class AssignmentViewSet(viewsets.ModelViewSet):
-    queryset = Assignment.objects.all()
-    serializer_class = AssignmentSerializer
-
-
 class MassageViewSet(viewsets.ModelViewSet):
     queryset = Massage.objects.all()
     serializer_class = MassageSerializer
@@ -127,3 +122,13 @@ class AddClientView(APIView):
 class ClientListView(generics.ListAPIView):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
+
+
+class AddAssignmentView(generics.CreateAPIView):
+    queryset = Assignment.objects.all()
+    serializer_class = AddAssignmentSerializer
+
+
+class ListAssignmentView(generics.ListAPIView):
+    queryset = Assignment.objects.all()
+    serializer_class = ListAssignmentSerializer

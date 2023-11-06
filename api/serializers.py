@@ -192,3 +192,21 @@ class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
         fields = '__all__'
+
+
+class AddAssignmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Assignment
+        fields = ['title', 'text', 'assignment_type', 'tags', 'language', 'author_id']
+
+    author_id = serializers.IntegerField()
+
+    def create(self, validated_data):
+        assignment = Assignment.objects.create(**validated_data)
+        return assignment
+
+
+class ListAssignmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Assignment
+        fields = '__all__'

@@ -9,7 +9,7 @@ from .views import *
 
 router = routers.DefaultRouter()
 router.register('users', UserViewSet, basename='users')
-router.register('assignments', AssignmentViewSet, basename='assignments')
+# router.register('assignments', AssignmentViewSet, basename='assignments')
 router.register('massage', MassageViewSet, basename='massage')
 
 urlpatterns = [
@@ -18,6 +18,8 @@ urlpatterns = [
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('login/', EmailLoginView.as_view(), name='login'),
+    path('assignments/', ListAssignmentView.as_view(), name='list_assignment'),
+    path('assignments/add/', AddAssignmentView.as_view(), name='add_assignment'),
     path('clients/', ClientListView.as_view(), name='clients'),
     path('clients/add/', AddClientView.as_view(), name='add_client'),
     path(

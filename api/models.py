@@ -31,7 +31,19 @@ class Assignment(models.Model):
     assignment_type = models.CharField(max_length=100)
     status = models.CharField(max_length=100)
     tags = models.CharField(max_length=255)
+    language = models.CharField(max_length=100)
+    like = models.IntegerField(default=0)
+    share = models.IntegerField(default=0)
     comments = models.ManyToManyField('Comment', blank=True)
+
+    def like(self):
+        self.like += 1
+        self.save()
+
+    def dislike(self):
+        if self.likes > 0:
+            self.likes -= 1
+            self.save()
 
     def __str__(self):
         return self.title
