@@ -131,4 +131,20 @@ class AddAssignmentView(generics.CreateAPIView):
 
 class ListAssignmentView(generics.ListAPIView):
     queryset = Assignment.objects.all()
-    serializer_class = ListAssignmentSerializer
+    serializer_class = AssignmentSerializer
+
+
+class AssignmentLikeView(APIView):
+    def get(self, request, pk):
+        assignment = Assignment.objects.get(pk=pk)
+        assignment.like()
+        assignment.save()
+        return Response({'detail': 'Like.'})
+
+
+class AssignmentDislikeView(APIView):
+    def get(self, request, pk):
+        assignment = Assignment.objects.get(pk=pk)
+        assignment.dislike()
+        assignment.save()
+        return Response({'detail': 'Dislike.'})

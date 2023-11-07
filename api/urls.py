@@ -20,6 +20,8 @@ urlpatterns = [
     path('login/', EmailLoginView.as_view(), name='login'),
     path('assignments/', ListAssignmentView.as_view(), name='list_assignment'),
     path('assignments/add/', AddAssignmentView.as_view(), name='add_assignment'),
+    path('assignments/<pk>/like/', AssignmentLikeView.as_view(), name='like'),
+    path('assignments/<pk>/dislike/', AssignmentDislikeView.as_view(), name='dislike'),
     path('clients/', ClientListView.as_view(), name='clients'),
     path('clients/add/', AddClientView.as_view(), name='add_client'),
     path(

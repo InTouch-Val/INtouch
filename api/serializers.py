@@ -81,24 +81,6 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class AssignmentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Assignment
-        fields = '__all__'
-
-    def create(self, validated_data):
-        validated_data['author'] = self.context['request'].user
-        assignment = Assignment.objects.create(
-            title=validated_data['title'],
-            text=validated_data['text'],
-            assignment_type=validated_data['assignment_type'],
-            status=validated_data['status'],
-            tags=validated_data['tags'],
-            author=validated_data['author'],
-        )
-        return assignment
-
-
 class MassageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Massage
@@ -206,7 +188,7 @@ class AddAssignmentSerializer(serializers.ModelSerializer):
         return assignment
 
 
-class ListAssignmentSerializer(serializers.ModelSerializer):
+class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assignment
         fields = '__all__'
