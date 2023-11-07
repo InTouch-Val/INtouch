@@ -17,9 +17,13 @@ POST: api/v1/clients/add/
 GET: api/v1/clients/  
 ##### Задачи
 Создание задачи, поля: title, text, assignment_type, tags, language, author_id  
-POST: api/v1/assignments/add/
+POST: api/v1/assignments/add/  
 Список задач  
-GET: api/v1/assignments/
+GET: api/v1/assignments/  
+Добавление задачи в MyList(pk - id задачи, user_pk - id юзера)  
+GET: api/v1/assignments/<int:pk>/<int:user_pk>/add/  
+Удаление задачи из MyList  
+GET: api/v1/assignments/<int:pk>/<int:user_pk>/delete/  
 Лайк  
 GET: api/v1/assignments/<id>/like/  
 Дислайк  

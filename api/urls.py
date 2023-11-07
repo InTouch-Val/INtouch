@@ -20,6 +20,16 @@ urlpatterns = [
     path('login/', EmailLoginView.as_view(), name='login'),
     path('assignments/', ListAssignmentView.as_view(), name='list_assignment'),
     path('assignments/add/', AddAssignmentView.as_view(), name='add_assignment'),
+    path(
+        'assignments/<int:pk>/<int:user_pk>/add/',
+        AssignmentAddUserMyListView.as_view(),
+        name='assignment_add_user'
+    ),
+    path(
+        'assignments/<int:pk>/<int:user_pk>/delete/',
+        AssignmentDeleteUserMyListView.as_view(),
+        name='assignment_delete_user'
+    ),
     path('assignments/<pk>/like/', AssignmentLikeView.as_view(), name='like'),
     path('assignments/<pk>/dislike/', AssignmentDislikeView.as_view(), name='dislike'),
     path('clients/', ClientListView.as_view(), name='clients'),
