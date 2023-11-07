@@ -49,9 +49,8 @@ class UserConfirmEmailView(APIView):
         if user and default_token_generator.check_token(user, token):
             user.is_active = True
             user.save()
-            refresh = RefreshToken.for_user(user)
             return Response(status=302, headers={
-                'Location': f'http://localhost:3000/confirm-email-success?auth={str(refresh.access_token)}'
+                'Location': f'http://localhost:3000/confirm-email-success/'
             })
         else:
             return Response({'detail': 'Account not activated'})
