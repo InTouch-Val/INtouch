@@ -1,4 +1,3 @@
-from django.contrib.auth import login, logout
 from django.urls import reverse_lazy
 from rest_framework import generics, viewsets, status
 from rest_framework.response import Response
@@ -19,38 +18,17 @@ class MassageViewSet(viewsets.ModelViewSet):
     serializer_class = MassageSerializer
 
 
-class EmailLoginView(APIView):
-    def post(self, request):
-        serializer = EmailLoginSerializer(data=request.data)
-        if serializer.is_valid():
-            user = authenticate(
-                request,
-                username=serializer.validated_data.get('email'),
-                password=serializer.validated_data.get('password')
-            )
-            if user:
-                refresh = RefreshToken.for_user(user)
-                token = {
-                    'refresh': str(refresh),
-                    'access': str(refresh.access_token),
-                }
-                return Response(token, status=status.HTTP_200_OK)
-            else:
-                return Response({'error': 'Invalid credentials'},
-                                status=status.HTTP_401_UNAUTHORIZED)
-        else:
-            return Response(serializer.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
-
-
 class UserConfirmEmailView(APIView):
     def get(self, request, pk, token):
         user = User.objects.get(pk=pk)
         if user and default_token_generator.check_token(user, token):
             user.is_active = True
             user.save()
-            return Response(status=302, headers={
-                'Location': f'http://localhost:3000/confirm-email-success/'
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'detail': 'Account activated',
+                'access_token': str(refresh.access_token),
+                'refresh_token': str(refresh)
             })
         else:
             return Response({'detail': 'Account not activated'})
@@ -88,7 +66,6 @@ class PasswordResetConfirmView(generics.GenericAPIView):
     def get(self, request, pk, token):
         user = User.objects.get(pk=pk)
         if user and default_token_generator.check_token(user, token):
-            login(request, user)
             return Response(status=302, headers={
                 'Location': 'http://localhost:3000/set_new_password/'})
         else:

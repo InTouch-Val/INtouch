@@ -9,7 +9,6 @@ from .views import *
 
 router = routers.DefaultRouter()
 router.register('users', UserViewSet, basename='users')
-# router.register('assignments', AssignmentViewSet, basename='assignments')
 router.register('massage', MassageViewSet, basename='massage')
 
 urlpatterns = [
@@ -17,7 +16,11 @@ urlpatterns = [
     path('drf-auth/', include('rest_framework.urls')),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('login/', EmailLoginView.as_view(), name='login'),
+    path(
+        'confirm-email/<int:pk>/<str:token>/',
+        UserConfirmEmailView.as_view(),
+        name='confirm_email'
+    ),
     path('assignments/', ListAssignmentView.as_view(), name='list_assignment'),
     path('assignments/add/', AddAssignmentView.as_view(), name='add_assignment'),
     path(
@@ -34,11 +37,6 @@ urlpatterns = [
     path('assignments/<pk>/dislike/', AssignmentDislikeView.as_view(), name='dislike'),
     path('clients/', ClientListView.as_view(), name='clients'),
     path('clients/add/', AddClientView.as_view(), name='add_client'),
-    path(
-        'confirm-email/<int:pk>/<str:token>/',
-        UserConfirmEmailView.as_view(),
-        name='confirm_email'
-    ),
     path(
         'password/reset/',
         PasswordResetRequestView.as_view(),

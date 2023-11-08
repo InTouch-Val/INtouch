@@ -12,7 +12,6 @@ POST: api/v1/users/
 POST: api/v1/login/
 Добавление клиента, поля: first_name, last_name, email, doctor_id(id пользователя, который добавляет клиента)  
 POST: api/v1/clients/add/  
-Стандартная схема подтверждения по email  
 Получение клиентов(user - ссылка на самого пользователя, doctor - ссылка на пользователя, являющегося доктором)  
 GET: api/v1/clients/  
 ##### Задачи

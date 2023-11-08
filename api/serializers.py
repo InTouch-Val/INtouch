@@ -63,8 +63,8 @@ class UserSerializer(serializers.ModelSerializer):
             is_active=False,
         )
         token = default_token_generator.make_token(user)
-        activation_url = f'/api/v1/confirm-email/{user.pk}/{token}/'
-        current_site = 'http://127.0.0.1:8000'
+        activation_url = f'/activate/{user.pk}/{token}/'
+        current_site = 'http://127.0.0.1:3000'
         html_message = render_to_string(
             'registration/confirm_mail.html',
             {'url': activation_url, 'domen': current_site}
@@ -86,10 +86,6 @@ class MassageSerializer(serializers.ModelSerializer):
         model = Massage
         fields = '__all__'
 
-
-class EmailLoginSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-    password = serializers.CharField()
 
     def validate(self, attrs):
         email = attrs.get('email')
@@ -149,7 +145,7 @@ class AddClientSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
             password=uuid.uuid4(),
             accept_policy=True,
-            is_active=True,
+            is_active=False,
         )
         token = default_token_generator.make_token(user)
         activation_url = f'/api/v1/confirm-email/{user.pk}/{token}/'
