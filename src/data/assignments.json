@@ -21,7 +21,7 @@
         "modified": "2023-10-11",
         "popularity": 54321,
         "favorite": true,
-        "language": "ru",
+        "language": "es",
         "archived": false,
         "image": "https://img.freepik.com/free-photo/african-american-man-working-open-air-man-suit-sunglasses-with-beard-using-laptop-sitting-terrace-rooftops-working-manager-technology-concept_74855-25538.jpg?w=996&t=st=1699115767~exp=1699116367~hmac=faae800901f163a8fd70b67e0491464e8607530a2acfc76ee66c52d9ef71420a"
     },
@@ -34,7 +34,7 @@
         "modified": "2023-11-10",
         "popularity": 5432,
         "favorite": true,
-        "language": "en",
+        "language": "it",
         "archived": false,
         "image": "https://img.freepik.com/free-photo/african-american-man-working-open-air-man-suit-sunglasses-with-beard-using-laptop-sitting-terrace-rooftops-working-manager-technology-concept_74855-25538.jpg?w=996&t=st=1699115767~exp=1699116367~hmac=faae800901f163a8fd70b67e0491464e8607530a2acfc76ee66c52d9ef71420a"
     },
@@ -47,7 +47,7 @@
         "modified": "2023-11-10",
         "popularity": 123,
         "favorite": false,
-        "language": "en",
+        "language": "fr",
         "archived": true,
         "image": "https://img.freepik.com/free-photo/african-american-man-working-open-air-man-suit-sunglasses-with-beard-using-laptop-sitting-terrace-rooftops-working-manager-technology-concept_74855-25538.jpg?w=996&t=st=1699115767~exp=1699116367~hmac=faae800901f163a8fd70b67e0491464e8607530a2acfc76ee66c52d9ef71420a"
     },

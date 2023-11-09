@@ -159,16 +159,6 @@ CORS_ALLOW_METHODS = [
     'OPTIONS',
 ]
 
-<<<<<<< HEAD
-
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
-# EMAIL_HOST = 'localhost'
-# EMAIL_PORT = 25
-# EMAIL_HOST_USER = 'aaa@yandex.ru'
-# EMAIL_HOST_PASSWORD = '20qwDFbnKL16'
-# EMAIL_USE_SSL = True
-=======
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_HOST = 'smtp.yandex.ru'
@@ -179,4 +169,3 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 SESSION_COOKIE_AGE = 86400
 SESSION_SAVE_EVERY_REQUEST = True
->>>>>>> 7315f0fe8fbc441825edc19943ab01934ba7fcf2

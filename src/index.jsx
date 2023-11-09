@@ -17,6 +17,7 @@ import LoginPage from './components/login-page.jsx';
 import SettingsPage from './routes/settings-page.jsx';
 import ConfirmEmailSuccess from './service/confirm-email-success.jsx';
 import SetNewUserPassword from './service/set-new-user-password.jsx';
+import AddAssignment from "./components/AddAssignment.jsx"
 
 const router = createBrowserRouter([
   {
@@ -51,7 +52,11 @@ const router = createBrowserRouter([
       {
         path: '/settings',
         element: <SettingsPage />,
-      }
+      },
+      {
+        path: "/add-assignment",
+        element: <AddAssignment/>
+      } 
     ],
   },
   {

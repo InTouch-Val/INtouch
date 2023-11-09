@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import {useNavigate} from "react-router-dom"
 import assignmentsData from '../data/assignments.json';
 import "../css/assignments.css";
 import AssignmentTile from '../components/AssignmentTile';
 
-const tagColors = {
-  tag1: 'brown',
-  tag2: 'blue',
-  tag3: 'cyan',
-  tag4: 'gray',
-};
+// const tagColors = {
+//   tag1: 'brown',
+//   tag2: 'blue',
+//   tag3: 'cyan',
+//   tag4: 'gray',
+// };
 
 function AssignmentsPage() {
   const [activeTab, setActiveTab] = useState('library');
@@ -18,23 +19,64 @@ function AssignmentsPage() {
   const [filterTags, setFilterTags] = useState('all');
   const [filterLanguage, setFilterLanguage] = useState('all');
   const [filterDate, setFilterDate] = useState('all');
-  const [assignments, setAssignments] = useState(assignmentsData);
+  const [filteredAssignments, setFilteredAssignments] = useState(assignmentsData);
+
+  const navigate = useNavigate()
 
   const toggleFavorite = (assignmentId) => {
-    const updatedAssignments = assignments.map((assignment) => {
+    const updatedAssignments = filteredAssignments.map((assignment) => {
       if (assignment.id === assignmentId) {
         return { ...assignment, favorite: !assignment.favorite };
       }
       return assignment;
     });
-    setAssignments(updatedAssignments);
+    setFilteredAssignments(updatedAssignments);
+  };
+
+  
+
+  useEffect(() => {
+    let updatedAssignments = assignmentsData;
+
+    if (searchTerm) {
+      updatedAssignments = updatedAssignments.filter((assignment) =>
+        assignment.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+
+    // Example for filterStatus (assuming you have a status property in your assignment data)
+    if (filterStatus !== 'all') {
+      updatedAssignments = updatedAssignments.filter((assignment) =>
+        assignment.status === filterStatus
+      );
+    }
+
+    if(filterType !== 'all'){
+      updatedAssignments = updatedAssignments.filter((assignment) =>
+        assignment.type === filterType
+      );
+    }
+
+    if(filterLanguage !== 'all'){
+      updatedAssignments = updatedAssignments.filter((assignment) =>
+        assignment.language === filterLanguage
+      )
+    }
+
+    setFilteredAssignments(updatedAssignments);
+  }, [searchTerm, filterStatus, filterType, filterTags, filterLanguage, filterDate]);
+   
+
+  const handleAddAssignment = () => {
+    navigate("/add-assignment");
   };
 
   return (
     <div className="assignments-page">
       <header>
         <h1>Assignments</h1>
-        <button className="add-assignment-button">Add Assignment</button>
+        <button className="add-assignment-button" onClick={handleAddAssignment}>Add Assignment</button>
       </header>
       <div className="tabs">
         <button
@@ -77,20 +119,26 @@ function AssignmentsPage() {
           onChange={(e) => setFilterType(e.target.value)}
         >
           <option value="all">All Types</option>
-          {/* Add type options here */}
+          <option value="lesson">Lessons</option>
+          <option value="exercise">Exercises</option>
+          <option value="metaphor">Metaphors</option>
         </select>
-        {/* <select
+        <select
           value={filterTags}
           onChange={(e) => setFilterTags(e.target.value)}
         >
           <option value="all">All Tags</option>
-        </select> */}
+        </select>
         <select
           value={filterLanguage}
           onChange={(e) => setFilterLanguage(e.target.value)}
         >
           <option value="all">All Languages</option>
-          {/* Add language options here */}
+          <option value="en">English</option>
+          <option value="es">Spanish</option>
+          <option value="fr">French</option>
+          <option value="ge">German</option>
+          <option value="it">Italian</option>
         </select>
         <select
           value={filterDate}
@@ -102,21 +150,21 @@ function AssignmentsPage() {
       </div>
       {activeTab === 'library' && (
         <div className='assignment-grid'>
-           {assignments.filter((assignment) => !assignment.archived).map((assignment) => (
-            <AssignmentTile key={assignment.id} assignment={assignment} onFavoriteToggle={toggleFavorite} />
-        ))}
-        </div>
+        {filteredAssignments.filter((assignment) => !assignment.archived).map((assignment) => (
+         <AssignmentTile key={assignment.id} assignment={assignment} onFavoriteToggle={toggleFavorite} />
+     ))}
+     </div>
       )}
       {activeTab === 'my-list' && (
         <div className='assignment-grid'>
-        {assignments.filter((assignment) => !assignment.archived && assignment.favorite).map((assignment) => (
+        {filteredAssignments.filter((assignment) => !assignment.archived && assignment.favorite).map((assignment) => (
          <AssignmentTile key={assignment.id} assignment={assignment} onFavoriteToggle={toggleFavorite} />
      ))}
      </div>
       )}
       {activeTab === 'archive' && (
         <div className='assignment-grid'>
-        {assignments.filter((assignment) => assignment.archived).map((assignment) => (
+        {filteredAssignments.filter((assignment) => assignment.archived).map((assignment) => (
          <AssignmentTile key={assignment.id} assignment={assignment} onFavoriteToggle={toggleFavorite} />
      ))}
      </div>

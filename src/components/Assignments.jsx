@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import AddAssignment from './AddAssignment';
 
 function Assignments({ clientAssignments }) {
   const [searchTerm, setSearchTerm] = useState('');

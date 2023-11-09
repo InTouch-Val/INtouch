@@ -59,11 +59,11 @@ function App() {
                   Assignments
                 </NavLink>
               </li>
-              <li>
+              {/* <li>
                 <NavLink to={`/community`} activeClassName="active">
                   Community
                 </NavLink>
-              </li>
+              </li> */}
               {/* <li>
                 <NavLink to={`/storage`} activeClassName="active">
                   Storage
