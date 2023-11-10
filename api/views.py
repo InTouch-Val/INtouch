@@ -2,7 +2,7 @@ from django.urls import reverse_lazy
 from rest_framework import generics, viewsets, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 
 from .models import *
 from .serializers import *
@@ -11,6 +11,12 @@ from .serializers import *
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class UserDetailsView(APIView):
+    def get(self, request, token):
+        decoded_token = AccessToken(token)
+        return Response({"user_id": decoded_token['user_id']})
 
 
 class MassageViewSet(viewsets.ModelViewSet):
