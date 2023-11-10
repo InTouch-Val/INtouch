@@ -16,7 +16,7 @@ urlpatterns = [
     path('drf-auth/', include('rest_framework.urls')),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('get_user/<str:token>/', UserDetailsView.as_view(), name='user_details'),
+    path('get-user/<str:token>/', UserDetailsView.as_view(), name='user_details'),
     path(
         'confirm-email/<int:pk>/<str:token>/',
         UserConfirmEmailView.as_view(),
