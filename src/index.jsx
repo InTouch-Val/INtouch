@@ -18,6 +18,7 @@ import SettingsPage from './routes/settings-page.jsx';
 import ConfirmEmailSuccess from './service/confirm-email-success.jsx';
 import SetNewUserPassword from './service/set-new-user-password.jsx';
 import AddAssignment from "./components/AddAssignment.jsx"
+import ActivateUserPage from './service/activate-user-page.jsx';
 
 const router = createBrowserRouter([
   {
@@ -77,6 +78,11 @@ const router = createBrowserRouter([
   {
     path: "/set-new-user-password",
     element: <SetNewUserPassword />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/activate/:userId/:userToken",  // Routing for activating profile
+    element: <ActivateUserPage />,
     errorElement: <ErrorPage />,
   }
 ]);

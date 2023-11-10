@@ -14,11 +14,11 @@ function LoginPage() {
 
     try {
         const requestData = {
-            email: credentials.email.trim(),
+            username: credentials.email.trim(),
             password: credentials.password.trim(),
         }
 
-      const response = await axios.post('http://127.0.0.1:8000/api/v1/login/', requestData, {
+      const response = await axios.post('http://127.0.0.1:8000/api/v1/token/', requestData, {
         headers: {
             'Content-Type': 'application/json',
           },
@@ -26,7 +26,9 @@ function LoginPage() {
       } );
 
       if (response.status === 200) {
-        localStorage.setItem('userId', response.data.user);
+        //console.log(response.data)
+        localStorage.setItem('accessToken', response.data.access);
+        localStorage.setItem('refreshToken', response.data.refresh);
         navigate('/');
       } else {
         setError("Something went wrong. Please try again");

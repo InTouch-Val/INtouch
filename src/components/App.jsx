@@ -8,27 +8,30 @@ function App() {
   const [userDetails, setUserDetails] = useState(null);
 
   useEffect(() => {
-    const userId = localStorage.getItem('userId');
-    if (userId) {
-      axios.get(`http://127.0.0.1:8000/api/v1/users/${userId}/`)
+    const accessToken = localStorage.getItem('accessToken');
+
+    if (accessToken) {
+      axios.get(`http://127.0.0.1:8000/api/v1/get-user/${accessToken}`)
         .then(response => {
           setUserDetails({
-            first_name: response.data.first_name,
-            last_name: response.data.last_name,
+            first_name: response.data[0].first_name,
+            last_name: response.data[0].last_name,
           });
         })
         .catch(error => {
           console.error('Error getting User Data:', error);
-          localStorage.removeItem('userId');
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
           navigate('/login');
         });
     } else {
-      navigate('/login'); // Редирект на страницу логина, если userId нет в localStorage
+      navigate('/login');
     }
   }, [navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem('userId');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
     setUserDetails(null);
     navigate('/login');
   };
