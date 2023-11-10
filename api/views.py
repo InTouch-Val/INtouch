@@ -13,10 +13,14 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 
-class UserDetailsView(APIView):
-    def get(self, request, token):
+class UserDetailsView(generics.ListAPIView):
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        token = self.kwargs['token']
         decoded_token = AccessToken(token)
-        return Response({"user_id": decoded_token['user_id']})
+        queryset = User.objects.filter(pk=int(decoded_token['user_id']))
+        return queryset
 
 
 class MassageViewSet(viewsets.ModelViewSet):
