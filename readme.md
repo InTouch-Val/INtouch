@@ -15,20 +15,14 @@ GET: api/v1/confirm-email/<pk>/<token>/
 POST: api/v1/token/
 Обновление access токена, поле: refresh  
 POST: api/v1/token/refresh/  
+Получение пользователя  
+GET: api/v1/get-user/<token>/  
 Добавление клиента, поля: first_name, last_name, email, doctor_id(id пользователя, который добавляет клиента)  
 POST: api/v1/clients/add/  
 Получение клиентов(user - ссылка на самого пользователя, doctor - ссылка на пользователя, являющегося доктором)  
 GET: api/v1/clients/  
 ##### Задачи
-Создание задачи, поля: title, text, assignment_type, tags, language, author_id  
+Создание задачи, поля: title, text, assignment_type, tags, language, blocks[question, choice_replies[reply, reply ...]]  
 POST: api/v1/assignments/add/  
 Список задач  
-GET: api/v1/assignments/  
-Добавление задачи в MyList(pk - id задачи, user_pk - id юзера)  
-GET: api/v1/assignments/<pk>/<user_pk>/add/  
-Удаление задачи из MyList  
-GET: api/v1/assignments/<pk>/<user_pk>/delete/  
-Лайк  
-GET: api/v1/assignments/<id>/like/  
-Дислайк  
-GET: api/v1/assignments/<id>/dislike/  
+GET: api/v1/assignments/

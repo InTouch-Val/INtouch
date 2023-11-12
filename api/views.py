@@ -110,14 +110,14 @@ class ClientListView(generics.ListAPIView):
     serializer_class = ClientSerializer
 
 
-class AddAssignmentView(generics.CreateAPIView):
-    queryset = Assignment.objects.all()
-    serializer_class = AddAssignmentSerializer
-
-
-class ListAssignmentView(generics.ListAPIView):
-    queryset = Assignment.objects.all()
-    serializer_class = AssignmentSerializer
+# class AddAssignmentView(generics.CreateAPIView):
+#     queryset = Assignment.objects.all()
+#     serializer_class = AddAssignmentSerializer
+#
+#
+# class ListAssignmentView(generics.ListAPIView):
+#     queryset = Assignment.objects.all()
+#     serializer_class = AssignmentSerializer
 
 
 class AssignmentLikeView(APIView):
@@ -150,3 +150,13 @@ class AssignmentDeleteUserMyListView(APIView):
         user = User.objects.get(pk=user_pk)
         user.assignments.remove(assignment)
         return Response({'detail': 'Assignment deleted successfully.'})
+
+
+class AddAssignmentView(generics.CreateAPIView):
+    queryset = Assignment.objects.all()
+    serializer_class = AddAssignmentSerializer
+
+
+class ListAssignmentView(generics.ListAPIView):
+    queryset = Assignment.objects.all()
+    serializer_class = AssignmentSerializer

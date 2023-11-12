@@ -34,6 +34,7 @@ class Assignment(models.Model):
     language = models.CharField(max_length=100)
     share = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
+    blocks = models.ManyToManyField('Block', related_name='blocks', blank=True, null=True)
     comments = models.ManyToManyField('Comment', blank=True)
 
     def like(self):
@@ -47,6 +48,18 @@ class Assignment(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Block(models.Model):
+    assignment = models.ForeignKey('Assignment', on_delete=models.CASCADE)
+    question = models.CharField(max_length=250)
+    reply = models.TextField(blank=True)
+    choice_replies = models.ManyToManyField('BlockChoice', blank=True, related_name='block_choices')
+
+
+class BlockChoice(models.Model):
+    block = models.ForeignKey('Block', on_delete=models.CASCADE)
+    reply = models.CharField(max_length=100)
 
 
 class Comment(models.Model):

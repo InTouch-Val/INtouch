@@ -22,8 +22,8 @@ urlpatterns = [
         UserConfirmEmailView.as_view(),
         name='confirm_email'
     ),
-    path('assignments/', ListAssignmentView.as_view(), name='list_assignment'),
     path('assignments/add/', AddAssignmentView.as_view(), name='add_assignment'),
+    path('assignments/', ListAssignmentView.as_view(), name='assignments'),
     path(
         'assignments/<int:pk>/<int:user_pk>/add/',
         AssignmentAddUserMyListView.as_view(),
