@@ -208,7 +208,7 @@ class AddBlockSerializer(serializers.ModelSerializer):
     choice_replies = AddBlockChoiceSerializer(many=True, required=False)
     class Meta:
         model = Block
-        fields = ['question', 'choice_replies']
+        fields = ['question', 'type', 'choice_replies']
 
     def create(self, validated_data):
         choice_replies_data = validated_data.pop('choice_replies', [])

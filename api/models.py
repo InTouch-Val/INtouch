@@ -53,6 +53,7 @@ class Assignment(models.Model):
 class Block(models.Model):
     assignment = models.ForeignKey('Assignment', on_delete=models.CASCADE)
     question = models.CharField(max_length=250)
+    type = models.CharField(max_length=100)
     reply = models.TextField(blank=True)
     choice_replies = models.ManyToManyField('BlockChoice', blank=True, related_name='block_choices')
 

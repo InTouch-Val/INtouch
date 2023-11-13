@@ -22,7 +22,7 @@ POST: api/v1/clients/add/
 Получение клиентов(user - ссылка на самого пользователя, doctor - ссылка на пользователя, являющегося доктором)  
 GET: api/v1/clients/  
 ##### Задачи
-Создание задачи, поля: title, text, assignment_type, tags, language, blocks[question, choice_replies[reply, reply ...]]  
+Создание задачи, поля: title, text, assignment_type, tags, language, blocks[question, type, choice_replies[reply, reply ...]]  
 POST: api/v1/assignments/add/  
 Список задач  
 GET: api/v1/assignments/
