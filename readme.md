@@ -17,6 +17,14 @@ POST: api/v1/token/
 POST: api/v1/token/refresh/  
 Получение пользователя  
 GET: api/v1/get-user/<token>/  
+Сброс пароля, поле: email  
+POST: api/v1/password/reset/  
+Переход по ссылке из письма на 127.0.0.1:3000/reset-password/<pk>/<token>/  
+Обработка данного запроса на фронте, ответный запрос на api  
+GET: api/v1/password/reset/confirm/<pk>/<token>/  
+Возвращается два токена, происходит авторизация  
+Отправляется запрос смены пароля с полем: new_password  
+POST: api/v1/password/reset/complete/  
 Добавление клиента, поля: first_name, last_name, email, doctor_id(id пользователя, который добавляет клиента)  
 POST: api/v1/clients/add/  
 Получение клиентов(user - ссылка на самого пользователя, doctor - ссылка на пользователя, являющегося доктором)  

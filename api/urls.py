@@ -9,7 +9,6 @@ from .views import *
 
 router = routers.DefaultRouter()
 router.register('users', UserViewSet, basename='users')
-router.register('massage', MassageViewSet, basename='massage')
 
 urlpatterns = [
     path('', include(router.urls)),

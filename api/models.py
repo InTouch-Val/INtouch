@@ -61,6 +61,7 @@ class Block(models.Model):
 class BlockChoice(models.Model):
     block = models.ForeignKey('Block', on_delete=models.CASCADE)
     reply = models.CharField(max_length=100)
+    checked = models.BooleanField(default=False)
 
 
 class Comment(models.Model):

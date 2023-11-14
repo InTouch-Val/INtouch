@@ -23,11 +23,6 @@ class UserDetailsView(generics.ListAPIView):
         return queryset
 
 
-class MassageViewSet(viewsets.ModelViewSet):
-    queryset = Massage.objects.all()
-    serializer_class = MassageSerializer
-
-
 class UserConfirmEmailView(APIView):
     def get(self, request, pk, token):
         user = User.objects.get(pk=pk)
@@ -51,11 +46,8 @@ class PasswordResetRequestView(APIView):
         email = serializer.validated_data['email']
         user = User.objects.get(email=email)
         token = default_token_generator.make_token(user)
-        url = reverse_lazy(
-            'password_reset_confirm',
-            kwargs={'pk': user.pk, 'token': token}
-        )
-        current_site = 'http://127.0.0.1:8000'
+        url = f'/reset-password/{user.pk}/{token}/'
+        current_site = 'http://127.0.0.1:3000'
         html_message = render_to_string(
             'registration/password_reset.html',
             {'url': url, 'domen': current_site}
@@ -64,7 +56,7 @@ class PasswordResetRequestView(APIView):
         mail = EmailMultiAlternatives(
             'Сброс пароля',
             message,
-            'postmaster@sandbox38de0f82b1c543aebbd984518bad4c17.mailgun.org',
+            'iw.sitnikoff@yandex.ru',
             [email],
         )
         mail.attach_alternative(html_message, 'text/html')
@@ -76,8 +68,12 @@ class PasswordResetConfirmView(generics.GenericAPIView):
     def get(self, request, pk, token):
         user = User.objects.get(pk=pk)
         if user and default_token_generator.check_token(user, token):
-            return Response(status=302, headers={
-                'Location': 'http://localhost:3000/set_new_password/'})
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'detail': 'Password reset successful',
+                'access_token': str(refresh.access_token),
+                'refresh_token': str(refresh)
+            })
         else:
             return Response({'detail': 'Password not reset'})
 
@@ -87,10 +83,14 @@ class PasswordResetCompleteView(APIView):
         serializer = ChangePasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         new_password = serializer.validated_data['new_password']
-        user = request.user
-        user.set_password(new_password)
-        user.save()
-        return Response({'message': 'Password changed successfully'})
+        token = request.headers.get('Authorization').split(' ')[1]
+        user = User.objects.get(pk=AccessToken(token)['user_id'])
+        if user:
+            user.set_password(new_password)
+            user.save()
+            return Response({'message': 'Password changed successfully'})
+        else:
+            return Response({'message': 'Password not changed'})
 
 
 class AddClientView(APIView):
@@ -108,16 +108,6 @@ class AddClientView(APIView):
 class ClientListView(generics.ListAPIView):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
-
-
-# class AddAssignmentView(generics.CreateAPIView):
-#     queryset = Assignment.objects.all()
-#     serializer_class = AddAssignmentSerializer
-#
-#
-# class ListAssignmentView(generics.ListAPIView):
-#     queryset = Assignment.objects.all()
-#     serializer_class = AssignmentSerializer
 
 
 class AssignmentLikeView(APIView):

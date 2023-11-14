@@ -81,25 +81,6 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class MassageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Massage
-        fields = '__all__'
-
-
-    def validate(self, attrs):
-        email = attrs.get('email')
-        password = attrs.get('password')
-        user = authenticate(username=email, password=password)
-        if user:
-            if not user.is_active:
-                raise serializers.ValidationError('User is not active')
-        else:
-            raise serializers.ValidationError('Incorrect email or password')
-        attrs['user'] = user
-        return attrs
-
-
 class PasswordResetSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
