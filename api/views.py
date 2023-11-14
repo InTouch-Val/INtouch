@@ -1,5 +1,6 @@
 from django.urls import reverse_lazy
 from rest_framework import generics, viewsets, status
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
@@ -101,6 +102,29 @@ class PasswordResetCompleteView(APIView):
             return Response({'message': 'Password changed successfully'})
         else:
             return Response({'message': 'Password not changed'})
+
+
+@api_view(['GET'])
+def user_delete_hard(request):
+    token = request.headers.get('Authorization').split(' ')[1]
+    user = User.objects.get(pk=AccessToken(token)['user_id'])
+    if user:
+        user.delete()
+        return Response({'message': 'User deleted successfully'})
+    else:
+        return Response({'message': 'User not found'})
+
+
+@api_view(['GET'])
+def user_delete_soft(request):
+    token = request.headers.get('Authorization').split(' ')[1]
+    user = User.objects.get(pk=AccessToken(token)['user_id'])
+    if user:
+        user.is_active = False
+        user.save()
+        return Response({'message': 'User deactivated successfully'})
+    else:
+        return Response({'message': 'User not found'})
 
 
 class AddClientView(APIView):

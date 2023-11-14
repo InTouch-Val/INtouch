@@ -21,6 +21,23 @@ urlpatterns = [
         UserConfirmEmailView.as_view(),
         name='confirm_email'
     ),
+    path(
+        'password/reset/',
+        PasswordResetRequestView.as_view(),
+        name='password_reset'
+    ),
+    path(
+        'password/reset/confirm/<int:pk>/<str:token>/',
+        PasswordResetConfirmView.as_view(),
+        name='password_reset_confirm'
+    ),
+    path(
+        'password/reset/complete/',
+        PasswordResetCompleteView.as_view(),
+        name='password_reset_complete'
+    ),
+    path('user/delete/', user_delete_hard, name='user_delete'),
+    path('user/deactivate/', user_delete_soft, name='user_deactivate'),
     path('assignments/add/', AddAssignmentView.as_view(), name='add_assignment'),
     path('assignments/', ListAssignmentView.as_view(), name='assignments'),
     path(
@@ -37,19 +54,4 @@ urlpatterns = [
     path('assignments/<pk>/dislike/', AssignmentDislikeView.as_view(), name='dislike'),
     path('clients/', ClientListView.as_view(), name='clients'),
     path('clients/add/', AddClientView.as_view(), name='add_client'),
-    path(
-        'password/reset/',
-        PasswordResetRequestView.as_view(),
-        name='password_reset'
-    ),
-    path(
-        'password/reset/confirm/<int:pk>/<str:token>/',
-        PasswordResetConfirmView.as_view(),
-        name='password_reset_confirm'
-    ),
-    path(
-        'password/reset/complete/',
-        PasswordResetCompleteView.as_view(),
-        name='password_reset_complete'
-    )
 ]
