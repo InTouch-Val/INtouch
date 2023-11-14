@@ -67,11 +67,11 @@ class UserSerializer(serializers.ModelSerializer):
         current_site = 'http://127.0.0.1:3000'
         html_message = render_to_string(
             'registration/confirm_mail.html',
-            {'url': activation_url, 'domen': current_site}
+            {'url': activation_url, 'domen': current_site, 'name': user.first_name}
         )
         message = strip_tags(html_message)
         mail = EmailMultiAlternatives(
-            'Подтвердите свой электронный адрес',
+            'Confirmation of Your Account Registration on INtouch',
             message,
             'iw.sitnikoff@yandex.ru',
             [user.email],

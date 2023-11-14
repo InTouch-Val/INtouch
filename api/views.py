@@ -30,6 +30,16 @@ class UserConfirmEmailView(APIView):
             user.is_active = True
             user.save()
             refresh = RefreshToken.for_user(user)
+            html_message = render_to_string('registration/welcome_mail.html')
+            message = strip_tags(html_message)
+            mail = EmailMultiAlternatives(
+                'Welcome to INtouch!',
+                message,
+                'iw.sitnikoff@yandex.ru',
+                [user.email],
+            )
+            mail.attach_alternative(html_message, 'text/html')
+            mail.send()
             return Response({
                 'detail': 'Account activated',
                 'access_token': str(refresh.access_token),
@@ -50,11 +60,11 @@ class PasswordResetRequestView(APIView):
         current_site = 'http://127.0.0.1:3000'
         html_message = render_to_string(
             'registration/password_reset.html',
-            {'url': url, 'domen': current_site}
+            {'url': url, 'domen': current_site, 'name': user.first_name}
         )
         message = strip_tags(html_message)
         mail = EmailMultiAlternatives(
-            'Сброс пароля',
+            'Password Reset for INtouch Account',
             message,
             'iw.sitnikoff@yandex.ru',
             [email],
