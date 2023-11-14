@@ -83,9 +83,6 @@ function Assignments({ clientAssignments }) {
           </tbody>
         </table>
       </div>
-      <div className='pagination'>
-        {/*Buttons for pagination*/}
-      </div>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {useNavigate} from "react-router-dom"
 import assignmentsData from '../data/assignments.json';
 import "../css/assignments.css";
+import axios from 'axios';
 import AssignmentTile from '../components/AssignmentTile';
 
 // const tagColors = {
@@ -19,7 +20,8 @@ function AssignmentsPage() {
   const [filterTags, setFilterTags] = useState('all');
   const [filterLanguage, setFilterLanguage] = useState('all');
   const [filterDate, setFilterDate] = useState('all');
-  const [filteredAssignments, setFilteredAssignments] = useState(assignmentsData);
+
+  const [filteredAssignments, setFilteredAssignments] = useState([])  //useState(assignmentsData);
 
   const navigate = useNavigate()
 
@@ -33,7 +35,20 @@ function AssignmentsPage() {
     setFilteredAssignments(updatedAssignments);
   };
 
-  
+  useEffect(() => {
+    const fetchAssignments = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/api/v1/assignments/')
+        console.log(response)
+        setFilteredAssignments(response.data)
+      }
+      catch (error){
+        console.error('Error fetching assignments', error)
+        navigate("/")
+      }
+    }
+    fetchAssignments()
+  }, [navigate])
 
   useEffect(() => {
     let updatedAssignments = assignmentsData;
@@ -44,8 +59,6 @@ function AssignmentsPage() {
       );
     }
 
-
-    // Example for filterStatus (assuming you have a status property in your assignment data)
     if (filterStatus !== 'all') {
       updatedAssignments = updatedAssignments.filter((assignment) =>
         assignment.status === filterStatus
