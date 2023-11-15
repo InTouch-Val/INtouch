@@ -7,10 +7,32 @@ function App() {
   const navigate = useNavigate();
   const [userDetails, setUserDetails] = useState(null);
 
+  const updateTokens = async () => {
+    try {
+      const refreshToken = localStorage.getItem('refreshToken');
+      if (!refreshToken) {
+        throw new Error("No refresh token available");
+      }
+      const response = await axios.post('http://127.0.0.1:8000/api/v1/token/refresh/', {
+        refresh: refreshToken,
+      });
+  
+      const { access: newAccessToken, refresh: newRefreshToken } = response.data;
+      localStorage.setItem('accessToken', newAccessToken);
+      localStorage.setItem('refreshToken', newRefreshToken);
+      return newAccessToken;
+    } catch (error) {
+      console.error('Error updating tokens:', error);
+      handleLogout(); 
+    }
+  };
+
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
 
-    if (accessToken) {
+    if (!accessToken) {
+      updateTokens();
+    } else {
       axios.get(`http://127.0.0.1:8000/api/v1/get-user/${accessToken}`)
         .then(response => {
           setUserDetails({
@@ -19,13 +41,13 @@ function App() {
           });
         })
         .catch(error => {
-          console.error('Error getting User Data:', error);
-          localStorage.removeItem('accessToken');
-          localStorage.removeItem('refreshToken');
-          navigate('/login');
+          if (error.response && error.response.status === 401) {
+            updateTokens()
+          } else {
+            console.error('Error getting User Data:', error);
+            handleLogout(); 
+          }
         });
-    } else {
-      navigate('/login');
     }
   }, [navigate]);
 

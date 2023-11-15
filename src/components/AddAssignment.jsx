@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react'
+import React, {useState} from 'react'
 import { EditorState } from 'draft-js';
 import axios from 'axios';
 import AssignmentBlock from '../service/assignment-blocks';
@@ -18,6 +18,9 @@ const AddAssignment = () => {
   const [tags, setTags] = useState('');
 
   const [blocks, setBlocks] = useState([]);
+  const [successMessage, setSuccessMessage] = useState(false)
+
+  const navigate = useNavigate()
 
 
   const handleSubmit = async (e) => {
@@ -49,8 +52,6 @@ const AddAssignment = () => {
     language: language
   };
 
-  console.log(requestData)
-
   try {
     const response = await axios.post('http://127.0.0.1:8000/api/v1/assignments/add/', requestData, {
       headers: {
@@ -58,7 +59,10 @@ const AddAssignment = () => {
         'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
       }
     });
-    console.log(response.data); 
+    setSuccessMessage(true)
+    setTimeout(() => {
+      navigate('/assignments')
+    }, 2500)
   } catch (error) {
     console.error("Error creating assignment ", error);
   }
@@ -100,12 +104,13 @@ const AddAssignment = () => {
 
   return (
     <div className='assignments-page'>
+      {successMessage && <div className='success-message'>Assignment created succesfully</div>}
       <header>
         <h1>Add Assignment</h1>
         {blocks.length > 0 ? <button className='add-assignment-button' onClick={handleSubmit}>Save Assignment</button> : <></>}
       </header>
       <div className='add-assignment-body'>
-        <form onSubmit={handleSubmit} ref={formRef} className="form-creator">
+        <form onSubmit={handleSubmit} className="form-creator">
           <div className='form-title'>
             <input
               type='text'

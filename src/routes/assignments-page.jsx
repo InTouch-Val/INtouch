@@ -46,7 +46,7 @@ function AssignmentsPage() {
         console.error('Error fetching assignments', error)
         navigate("/")
       }
-    }
+  }
     fetchAssignments()
   }, [navigate])
 
