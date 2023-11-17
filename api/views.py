@@ -1,6 +1,8 @@
 from django.urls import reverse_lazy
 from rest_framework import generics, viewsets, status
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
@@ -182,5 +184,6 @@ class AddAssignmentView(generics.CreateAPIView):
 
 
 class ListAssignmentView(generics.ListAPIView):
+    permission_classes = (IsAuthenticated, )
     queryset = Assignment.objects.all()
     serializer_class = AssignmentSerializer

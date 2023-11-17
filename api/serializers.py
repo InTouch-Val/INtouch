@@ -207,6 +207,7 @@ class AddBlockSerializer(serializers.ModelSerializer):
 
 class AddAssignmentSerializer(serializers.ModelSerializer):
     blocks = AddBlockSerializer(many=True, required=False)
+    tags = serializers.CharField(required=False)
     class Meta:
         model = Assignment
         fields = [
