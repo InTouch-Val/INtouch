@@ -28,10 +28,6 @@ h1{
   font-size: 16px;
   cursor: pointer;
 }
-.add-client-button::before{
-  content: url("https://i122.fastpic.org/big/2023/1025/31/132c637b2029a93255b76c650b212231.png");
-}
-
 
 .search-filters {
   display: flex;

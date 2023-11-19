@@ -23,7 +23,8 @@ function ClientPage() {
     <div className='clients-page'>
       <header className='first-row'>
         <h1>Clients</h1>
-        <button className='add-client-button'> Add Client</button>
+        <button className='add-client-button'>
+<i class='fa fa-user-plus' style={{color: "white", width: "24px"}}></i> Add Client</button>
       </header>
       <div className='search-filters'>
         <form className='search'>

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import '../css/chat.css';
 
 const Chat = ({ chatHistory, newMessage, setNewMessage, sendMessage, clientAvatar }) => {
     const userAvatar = "https://yt3.ggpht.com/ytc/AKedOLS-kQc4UMbZacpN7VbKRiVHnYJaRKbTaKu6SSMojw=s88-c-k-c0x00ffffff-no-rj"

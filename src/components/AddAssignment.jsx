@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import { EditorState } from 'draft-js';
-import axios from 'axios';
+import API from '../service/axios';
 import AssignmentBlock from '../service/assignment-blocks';
 import { useNavigate } from 'react-router-dom';
 import "../css/assignments.css"
@@ -53,16 +53,17 @@ const AddAssignment = () => {
   };
 
   try {
-    const response = await axios.post('http://127.0.0.1:8000/api/v1/assignments/add/', requestData, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-      }
-    });
-    setSuccessMessage(true)
-    setTimeout(() => {
-      navigate('/assignments')
-    }, 2500)
+    const response = await API.post('assignments/add/', requestData);
+    console.log(response);
+    if(response.status == 201){
+      setSuccessMessage(true)
+      setTimeout(() => {
+        navigate('/assignments')
+      }, 2000)
+    }
+    if(response.status == 400){
+
+    }
   } catch (error) {
     console.error("Error creating assignment ", error);
   }
@@ -126,14 +127,19 @@ const AddAssignment = () => {
               placeholder="Give a brief description..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              required
             />
           </div>
           <div className='form-settings'>
               <div className="form-setting">
                 <label>Type</label>
                 <select value={type} onChange={(e) => setType(e.target.value)}>
-                  <option value="lesson">Lessons</option>
-                  <option value="exercise">Exercises</option>
+                  <option value="lesson">Lesson</option>
+                  <option value="exercise">Exercise</option>
+                  <option value="metaphor">Essay</option>
+                  <option value="study">Study</option>
+                  <option value="quiz">Quiz</option>
+                  <option value="methology">Methodology</option>
                   <option value="metaphor">Metaphors</option>
                 </select>
           </div>
@@ -165,10 +171,13 @@ const AddAssignment = () => {
             />
           ))}
         </form>
-        <div className='block-buttons'>
-          <button type="button" onClick={() => addBlock('text')}>Add Text Block</button>
-          <button type="button" onClick={() => addBlock('multiple')}>Add Multiple Choice Block</button>
-          <button type="button" onClick={() => addBlock('single')}>Add Single Choice Block</button>
+        <div className='block-buttons-container'>
+          <div className='block-buttons'>
+            <button title="Add Text Block" type="button" onClick={() => addBlock('text')}>  <span class="material-symbols-outlined">text_fields</span></button>
+            <button title="Add Multiple Choice Block" type="button" onClick={() => addBlock('multiple')}>  <span class="material-symbols-outlined">select_check_box</span> </button>
+            <button title="Add Single Choice Block" type="button" onClick={() => addBlock('single')}>  <span class="material-symbols-outlined">radio_button_checked</span> </button>
+            <button title='Add Range Question Block' type='button' onClick={() => addBlock('range')}></button>
+          </div>
         </div>
       </div>
     </div>

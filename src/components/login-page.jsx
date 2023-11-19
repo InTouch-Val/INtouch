@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import API from '../service/axios';
 import '../css/registration.css';
 
 
@@ -13,27 +13,20 @@ function LoginPage() {
     e.preventDefault();
 
     try {
-        const requestData = {
-            username: credentials.email.trim(),
-            password: credentials.password.trim(),
-        }
+      const requestData = {
+          username: credentials.email.trim(),
+          password: credentials.password.trim(),
+      }
 
-      const response = await axios.post('http://127.0.0.1:8000/api/v1/token/', requestData, {
-        headers: {
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true,
-      } );
+      const response = await API.post('token/', requestData);
 
       if (response.status === 200) {
-        //console.log(response.data)
         localStorage.setItem('accessToken', response.data.access);
         localStorage.setItem('refreshToken', response.data.refresh);
         navigate('/');
       } else {
         setError("Something went wrong. Please try again");
       }
-
     } catch (error) {
         const message = error.response?.data.message || 'An error occurred while logging in.';
         setError(message);

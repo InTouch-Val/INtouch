@@ -32,7 +32,7 @@ const AssignmentTile = ({ assignment, onFavoriteToggle }) => {
           }
           onClick={() => onFavoriteToggle(assignment.id)}
         >
-          {assignment.favorite ? <><span dangerouslySetInnerHTML={{ __html: "&#10084;" }} /> In My List</> : <><span dangerouslySetInnerHTML={{ __html: "&#10084;" }} /> Add to List</>}
+          {assignment.favorite ? <><i class='fa fa-bookmark'></i> In My List</> : <><i class='fa fa-bookmark'></i> Add to List</>}
         </button>
       </div>
     </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {useNavigate} from "react-router-dom"
 import assignmentsData from '../data/assignments.json';
 import "../css/assignments.css";
-import axios from 'axios';
+import API from '../service/axios';
 import AssignmentTile from '../components/AssignmentTile';
 
 // const tagColors = {
@@ -15,7 +15,6 @@ import AssignmentTile from '../components/AssignmentTile';
 function AssignmentsPage() {
   const [activeTab, setActiveTab] = useState('library');
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState('all');
   const [filterType, setFilterType] = useState('all');
   const [filterTags, setFilterTags] = useState('all');
   const [filterLanguage, setFilterLanguage] = useState('all');
@@ -38,7 +37,7 @@ function AssignmentsPage() {
   useEffect(() => {
     const fetchAssignments = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/v1/assignments/')
+        const response = await API.get('assignments/')
         console.log(response)
         setFilteredAssignments(response.data)
       }
@@ -59,12 +58,6 @@ function AssignmentsPage() {
       );
     }
 
-    if (filterStatus !== 'all') {
-      updatedAssignments = updatedAssignments.filter((assignment) =>
-        assignment.status === filterStatus
-      );
-    }
-
     if(filterType !== 'all'){
       updatedAssignments = updatedAssignments.filter((assignment) =>
         assignment.type === filterType
@@ -78,7 +71,7 @@ function AssignmentsPage() {
     }
 
     setFilteredAssignments(updatedAssignments);
-  }, [searchTerm, filterStatus, filterType, filterTags, filterLanguage, filterDate]);
+  }, [searchTerm, filterType, filterTags, filterLanguage, filterDate]);
    
 
   const handleAddAssignment = () => {
@@ -89,7 +82,7 @@ function AssignmentsPage() {
     <div className="assignments-page">
       <header>
         <h1>Assignments</h1>
-        <button className="add-assignment-button" onClick={handleAddAssignment}>Add Assignment</button>
+        <button className="add-assignment-button" onClick={handleAddAssignment}> Add Assignment</button>
       </header>
       <div className="tabs">
         <button
@@ -104,12 +97,6 @@ function AssignmentsPage() {
         >
             My List
         </button>
-        <button
-          className={activeTab === 'archive' ? 'active' : ''}
-          onClick={() => setActiveTab('archive')}
-        >
-            Archive
-        </button>
       </div>
       <div className="search-bar">
         <input
@@ -121,19 +108,16 @@ function AssignmentsPage() {
       </div>
       <div className="filter-dropdowns">
         <select
-          value={filterStatus}
-          onChange={(e) => setFilterStatus(e.target.value)}
-        >
-          <option value="all">All Status</option>
-          {/* Add status options here */}
-        </select>
-        <select
           value={filterType}
           onChange={(e) => setFilterType(e.target.value)}
         >
           <option value="all">All Types</option>
-          <option value="lesson">Lessons</option>
-          <option value="exercise">Exercises</option>
+          <option value="lesson">Lesson</option>
+          <option value="exercise">Exercise</option>
+          <option value="metaphor">Essay</option>
+          <option value="study">Study</option>
+          <option value="quiz">Quiz</option>
+          <option value="methology">Methodology</option>
           <option value="metaphor">Metaphors</option>
         </select>
         <select
@@ -171,13 +155,6 @@ function AssignmentsPage() {
       {activeTab === 'my-list' && (
         <div className='assignment-grid'>
         {filteredAssignments.filter((assignment) => !assignment.archived && assignment.favorite).map((assignment) => (
-         <AssignmentTile key={assignment.id} assignment={assignment} onFavoriteToggle={toggleFavorite} />
-     ))}
-     </div>
-      )}
-      {activeTab === 'archive' && (
-        <div className='assignment-grid'>
-        {filteredAssignments.filter((assignment) => assignment.archived).map((assignment) => (
          <AssignmentTile key={assignment.id} assignment={assignment} onFavoriteToggle={toggleFavorite} />
      ))}
      </div>

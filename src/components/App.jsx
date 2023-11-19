@@ -1,39 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Outlet, NavLink, useNavigate } from "react-router-dom"; // Заменили Link на NavLink
 import "../css/app.css";
-import axios from "axios";
+import API from "../service/axios";
 
 function App() {
   const navigate = useNavigate();
   const [userDetails, setUserDetails] = useState(null);
 
-  const updateTokens = async () => {
-    try {
-      const refreshToken = localStorage.getItem('refreshToken');
-      if (!refreshToken) {
-        throw new Error("No refresh token available");
-      }
-      const response = await axios.post('http://127.0.0.1:8000/api/v1/token/refresh/', {
-        refresh: refreshToken,
-      });
-  
-      const { access: newAccessToken, refresh: newRefreshToken } = response.data;
-      localStorage.setItem('accessToken', newAccessToken);
-      localStorage.setItem('refreshToken', newRefreshToken);
-      return newAccessToken;
-    } catch (error) {
-      console.error('Error updating tokens:', error);
-      handleLogout(); 
-    }
-  };
-
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
-
-    if (!accessToken) {
-      updateTokens();
-    } else {
-      axios.get(`http://127.0.0.1:8000/api/v1/get-user/${accessToken}`)
+    if (accessToken) {
+      API.get(`get-user/${accessToken}`)
         .then(response => {
           setUserDetails({
             first_name: response.data[0].first_name,
@@ -41,13 +18,11 @@ function App() {
           });
         })
         .catch(error => {
-          if (error.response && error.response.status === 401) {
-            updateTokens()
-          } else {
-            console.error('Error getting User Data:', error);
-            handleLogout(); 
-          }
+          console.error('Error getting User Data:', error);
+          handleLogout();
         });
+    } else {
+      navigate('/login');
     }
   }, [navigate]);
 
@@ -76,7 +51,7 @@ function App() {
             <ul>
               <li>
                 <NavLink to={`/clients`} activeClassName="active">
-                  Clients
+                <i class='fa fa-address-card'></i> Clients
                 </NavLink>
               </li>
               <li>

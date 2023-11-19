@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react'
 import clientsData from '../data/clients.json'
 import { useParams } from "react-router-dom";
 import Chat from './Chat' 
-import Assignments from './Assignments';
 import Notes from './Notes';
 import "../css/clients.css"
 
@@ -15,9 +14,7 @@ const ClientDetailPage = () => {
     const [newMessage, setNewMessage] = useState('');
 
     const switchToProfileTab = () => { setActiveTab("profile")}
-    const switchToChatTab = () => { setActiveTab("chat")}
     const switchToAssignmentsTab = () => { setActiveTab("assignments")}
-    const switchToStatsTab = () => { setActiveTab("stats")}
     const switchToNotesTab = () => { setActiveTab("notes")}
 
     const sendMessage = () => {
@@ -82,11 +79,9 @@ const ClientDetailPage = () => {
             {/*Assignments Tab View */}
             {activeTab === 'assignments' && (
                 <div className='assignments-tab'>
-                    <Assignments clientAssignments={client.assignments} />
+                    
                 </div>
             )}
-            {/*Stats Tab View */}
-            {/*TODO: Add Stats Tab View*/}
             {/*Notes Tab View */}
             {activeTab === 'notes' && (
                 <div className='notes-tab'>

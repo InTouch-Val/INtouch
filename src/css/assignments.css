@@ -27,7 +27,7 @@
 }
 
 .assignments-page .tabs button{
-    width: 33%;
+    width: 50%;
 }
 
 .search-bar{
@@ -39,6 +39,19 @@
     justify-content: space-between;
     margin-bottom: 20px; /* space below the filters */
 }
+.block-buttons-container {
+  display: flex;
+  justify-content: center; /* Центрируем блок кнопок */
+  align-items: center;
+  align-self: center;
+  margin-top: 20px;
+  background-color: #fff; /* Фоновый цвет */
+  padding: 10px 20px; /* Вертикальный и горизонтальный отступ */
+  border-radius: 6px; /* Скругление углов */
+  box-shadow: 0px 0px 3px 1px #D7E4E773; /* Тень блока */
+  width: max-content; /* Ширина блока по содержимому */
+}
+
 
 .filter-dropdowns select {
     width: 18%; 
@@ -121,15 +134,17 @@
   }
   .block-buttons {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px; /* Adjust as needed for spacing */
-}
-.block-buttons button{
+    gap: 10px; /* Расстояние между кнопками */
+  }
+  
+  .block-buttons button {
     font-family: "Montserrat", sans-serif;
-    margin: 5px; /* Adds space between buttons */
-    padding: 10px 15px; 
-}
+    padding: 10px 15px; /* Паддинги для кнопок */
+    border: none;
+    border-radius: 4px; /* Скругление углов кнопок */
+    cursor: pointer;
+    transition: background-color 0.3s; /* Плавность перехода цвета */
+  }
 .success-message {
     position: fixed;
     top: 20px;
@@ -141,6 +156,9 @@
     border-radius: 5px;
     z-index: 1000;
     animation: slideIn 0.5s ease forwards, fadeOut 0.5s 1.5s forwards; 
+  }
+  .material-symbols-outlined{
+    color: #656565;
   }
 
   @keyframes slideIn {
