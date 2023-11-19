@@ -184,6 +184,6 @@ class AddAssignmentView(generics.CreateAPIView):
 
 
 class ListAssignmentView(generics.ListAPIView):
-    permission_classes = (IsAuthenticated, )
+    # permission_classes = (IsAuthenticated, )
     queryset = Assignment.objects.all()
     serializer_class = AssignmentSerializer
