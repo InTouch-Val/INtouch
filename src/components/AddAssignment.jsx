@@ -176,7 +176,7 @@ const AddAssignment = () => {
             <button title="Add Text Block" type="button" onClick={() => addBlock('text')}>  <span class="material-symbols-outlined">text_fields</span></button>
             <button title="Add Multiple Choice Block" type="button" onClick={() => addBlock('multiple')}>  <span class="material-symbols-outlined">select_check_box</span> </button>
             <button title="Add Single Choice Block" type="button" onClick={() => addBlock('single')}>  <span class="material-symbols-outlined">radio_button_checked</span> </button>
-            <button title='Add Range Question Block' type='button' onClick={() => addBlock('range')}></button>
+            <button title='Add Range Question Block' type='button' onClick={() => addBlock('range')}><span class="material-icons">linear_scale</span></button>
           </div>
         </div>
       </div>

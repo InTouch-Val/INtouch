@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// Создаем экземпляр axios с базовой конфигурацией
 const API = axios.create({
   baseURL: 'http://127.0.0.1:8000/api/v1/',
   headers: {
@@ -8,26 +7,34 @@ const API = axios.create({
   }
 });
 
-// Функция для обновления токенов
-async function refreshTokens() {
-  try {
-    const refreshToken = localStorage.getItem('refreshToken');
-    if (!refreshToken) {
-      throw new Error("No refresh token available");
+let isRefreshing = false;
+let failedRequestsQueue = [];
+
+const processQueue = (error, token = null) => {
+  failedRequestsQueue.forEach(prom => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token);
     }
-    const response = await axios.post('http://127.0.0.1:8000/api/v1/token/refresh/', { refresh: refreshToken });
-    console.log(response);
-    const { access: newAccessToken, refresh: newRefreshToken } = response.data;
-    localStorage.setItem('accessToken', newAccessToken);
-    localStorage.setItem('refreshToken', newRefreshToken);
-    return newAccessToken;
-  } catch (error) {
-    console.error('Error updating tokens:', error);
-    // Обработка ошибки (например, перенаправление на страницу входа)
+  });
+
+  failedRequestsQueue = [];
+};
+
+async function refreshTokens() {
+  const refreshToken = localStorage.getItem('refreshToken');
+  if (!refreshToken) {
+    throw new Error("No refresh token available");
   }
+  const response = await axios.post('http://127.0.0.1:8000/api/v1/token/refresh/', { refresh: refreshToken });
+  const { access: newAccessToken, refresh: newRefreshToken } = response.data;
+  localStorage.setItem('accessToken', newAccessToken);
+  localStorage.setItem('refreshToken', newRefreshToken);
+  API.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
+  return newAccessToken;
 }
 
-// Интерсептор запросов
 API.interceptors.request.use(
   config => {
     const accessToken = localStorage.getItem('accessToken');
@@ -41,17 +48,39 @@ API.interceptors.request.use(
   }
 );
 
-// Интерсептор ответов
 API.interceptors.response.use(
   response => response,
   async error => {
     const originalRequest = error.config;
     if (error.response.status === 401 && !originalRequest._retry) {
+      if (isRefreshing) {
+        return new Promise(function(resolve, reject) {
+          failedRequestsQueue.push({ resolve, reject });
+        })
+        .then(token => {
+          originalRequest.headers['Authorization'] = 'Bearer ' + token;
+          return API(originalRequest);
+        })
+        .catch(err => {
+          return Promise.reject(err);
+        });
+      }
+
       originalRequest._retry = true;
-      const newAccessToken = await refreshTokens();
-      originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-      return API(originalRequest);
+      isRefreshing = true;
+
+      try {
+        const newAccessToken = await refreshTokens();
+        processQueue(null, newAccessToken);
+        return API(originalRequest);
+      } catch (refreshError) {
+        processQueue(refreshError, null);
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
     }
+
     return Promise.reject(error);
   }
 );

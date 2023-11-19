@@ -38,7 +38,7 @@ function AssignmentsPage() {
     const fetchAssignments = async () => {
       try {
         const response = await API.get('assignments/')
-        console.log(response)
+        console.log(response, localStorage.getItem('accessToken'))
         setFilteredAssignments(response.data)
       }
       catch (error){
