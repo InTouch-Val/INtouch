@@ -61,6 +61,7 @@ class UserConfirmEmailView(APIView):
 
 
 class PasswordResetRequestView(APIView):
+    permission_classes = (AllowAny,)
     def post(self, request):
         serializer = PasswordResetSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -86,6 +87,7 @@ class PasswordResetRequestView(APIView):
 
 
 class PasswordResetConfirmView(generics.GenericAPIView):
+    permission_classes = (AllowAny,)
     def get(self, request, pk, token):
         user = User.objects.get(pk=pk)
         if user and default_token_generator.check_token(user, token):
