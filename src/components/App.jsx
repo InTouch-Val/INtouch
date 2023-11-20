@@ -10,7 +10,7 @@ function App() {
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
     if (accessToken) {
-      API.get(`get-user/${accessToken}`)
+      API.get(`get-user/`)
         .then(response => {
           setUserDetails({
             first_name: response.data[0].first_name,
