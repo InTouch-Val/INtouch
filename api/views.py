@@ -1,4 +1,5 @@
 from django.urls import reverse_lazy
+from django.core.exceptions import PermissionDenied
 from rest_framework import generics, viewsets, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view
@@ -6,6 +7,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
+from rest_framework_simplejwt.exceptions import TokenError
 
 from .models import *
 from .serializers import *
@@ -21,8 +23,12 @@ class UserDetailsView(generics.ListAPIView):
     serializer_class = UserSerializer
 
     def get_queryset(self):
-        token = self.kwargs['token']
-        decoded_token = AccessToken(token)
+        token = self.request.headers.get('Authorization').split(' ')[1]
+        try:
+            decoded_token = AccessToken(token)
+        except TokenError:
+            raise PermissionDenied('Invalid token')
+
         queryset = User.objects.filter(pk=int(decoded_token['user_id']))
         return queryset
 
