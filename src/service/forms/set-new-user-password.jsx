@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import API from '../axios';
 
 const SetNewUserPassword = ({ accessToken }) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+
+  const navigate = useNavigate()
 
   const validatePassword = () => {
     if (password.length < 8) {
@@ -34,6 +37,9 @@ const SetNewUserPassword = ({ accessToken }) => {
 
         if (response.status === 200) {
           setError('Password set successfully!');
+          setTimeout(() => {
+            navigate('/login')
+          }, 1500)
         }
       } catch (error) {
         console.error('Error resetting password:', error);

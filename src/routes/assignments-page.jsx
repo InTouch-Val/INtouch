@@ -12,12 +12,41 @@ function AssignmentsPage() {
   const [sortMethod, setSortMethod] = useState('date_asc');
   const [assignments, setAssignments] = useState([]); 
   const [filteredAssignments, setFilteredAssignments] = useState([]); 
+  const [userFavorites, setUserFavorites] = useState([]);
+
 
     const navigate = useNavigate();
 
-    const toggleFavorite = (assignmentId) => {
-        // TODO
+    const toggleFavorite = async (assignmentId) => {
+        const isFavorite = userFavorites.includes(assignmentId)
+        try{
+          if(isFavorite) {
+            await API.get(`assignments/delete-list/${assignmentId}`)
+          }
+          else{
+            await API.get(`assignments/add-list/${assignmentId}`)
+          }
+          setUserFavorites(prev => 
+            isFavorite ? prev.filter(id => id != assignmentId) : [...prev, assignmentId]
+            )
+        }
+        catch(error){
+          console.error("Error toggling favorites: " + error)
+        }
     };
+
+    useEffect(() => {
+      const fetchUserFavorites = async () => {
+        try{
+          const response = await API.get('get-user/')
+          setUserFavorites(response.data[0].assignments)
+        }
+        catch(error){
+          console.errror("Error fetching user favorites: " + error)
+        }
+      }
+      fetchUserFavorites()
+    }, [])
 
     useEffect(() => {
       const fetchAssignments = async () => {
@@ -157,16 +186,28 @@ function AssignmentsPage() {
       </div>
       {activeTab === 'library' && (
         <div className='assignment-grid'>
-        {filteredAssignments.filter((assignment) => !assignment.archived).map((assignment) => (
-         <AssignmentTile key={assignment.id} assignment={assignment} onFavoriteToggle={toggleFavorite} />
+        {filteredAssignments.map((assignment) => (
+         <AssignmentTile 
+            key={assignment.id} 
+            assignment={assignment} 
+            onFavoriteToggle={toggleFavorite} 
+            isFavorite={userFavorites.includes(assignment.id)} 
+         />
      ))}
      </div>
       )}
       {activeTab === 'my-list' && (
         <div className='assignment-grid'>
-        {filteredAssignments.filter((assignment) => !assignment.archived && assignment.favorite).map((assignment) => (
-         <AssignmentTile key={assignment.id} assignment={assignment} onFavoriteToggle={toggleFavorite} />
-     ))}
+        {filteredAssignments
+            .filter(assignment => userFavorites.includes(assignment.id))
+            .map(assignment => (
+              <AssignmentTile
+                key={assignment.id}
+                assignment={assignment}
+                onFavoriteToggle={toggleFavorite}
+                isFavorite={true}
+              />
+          ))}
      </div>
       )}
     </div>

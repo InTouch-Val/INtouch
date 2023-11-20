@@ -1,14 +1,12 @@
 import React from 'react';
 import "../css/assignmentTile.css"; 
 
-// Helper function to format the date
 const formatDate = (dateString) => {
   const options = { year: 'numeric', month: 'short', day: 'numeric' };
   return new Date(dateString).toLocaleDateString('en-US', options);
 }
 
-const AssignmentTile = ({ assignment, onFavoriteToggle }) => {
-  // Assuming 'assignment.date' is in 'YYYY-MM-DD' format
+const AssignmentTile = ({ assignment, onFavoriteToggle, isFavorite }) => {
   const displayDate = formatDate(assignment.update_date);
 
   return (
@@ -28,11 +26,11 @@ const AssignmentTile = ({ assignment, onFavoriteToggle }) => {
         <span className="popularity">{assignment.likes}</span>
         <button
           className={
-            assignment.favorite ? 'favorite-button selected' : 'favorite-button'
+            isFavorite ? 'favorite-button selected' : 'favorite-button'
           }
           onClick={() => onFavoriteToggle(assignment.id)}
         >
-          {assignment.favorite ? <><i class='fa fa-bookmark'></i> In My List</> : <><i class='fa fa-bookmark'></i> Add to List</>}
+          {isFavorite ? <><i class='fa fa-bookmark'></i> In My List</> : <><i class='fa fa-bookmark'></i> Add to List</>}
         </button>
       </div>
     </div>
