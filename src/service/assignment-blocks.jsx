@@ -5,8 +5,8 @@ import "../css/block.css"
 const AssignmentBlock = ({ block, updateBlock, removeBlock }) => {
   const [title, setTitle] = useState(block.title);
   const [choices, setChoices] = useState(block.choices);
-  const [minValue, setMinValue] = useState(0);
-  const [maxValue, setMaxValue] = useState(10);
+  const [minValue, setMinValue] = useState(block.minValue || 0);
+  const [maxValue, setMaxValue] = useState(block.maxValue || 10);
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
@@ -20,24 +20,30 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock }) => {
     updateBlock(block.id, block.content, newChoices, title);
   };
 
-  const handleMinChange = (event, sign) => {
-    if(sign == "plus")
-      setMinValue(event.target.value + 1);
-    else if(sign == "minus"){
-      setMinValue(event.target.value - 1);
-    }
-    updateBlock(block.id, block.content, block.choices, block.title, event.target.value, maxValue);
+  const handleMinChange = (change, e) => {
+    e.preventDefault()
+    const newValue = Math.max(0, minValue + change);
+    setMinValue(newValue);
+    updateBlock(block.id, block.content, block.choices, title, newValue, maxValue);
   };
 
-  const handleMaxChange = (event) => {
-    setMaxValue(event.target.value);
-    updateBlock(block.id, block.content, block.choices, block.title, minValue, event.target.value);
+  const handleMaxChange = (change, e) => {
+    e.preventDefault()
+    const newValue = Math.max(minValue, maxValue + change);
+    setMaxValue(newValue);
+    updateBlock(block.id, block.content, block.choices, title, minValue, newValue);
   };
 
   const handleNumberChange = (event, type) => {
-    type == "min" ? setMinValue(event.target.value) : setMaxValue(event.target.value);
-    updateBlock(block.id, block.content, block.choices, block.title, minValue, event.target.value);
-  }
+    const value = parseInt(event.target.value, 10) || 0;
+    if (type === "min") {
+      setMinValue(value);
+      updateBlock(block.id, block.content, block.choices, title, value, maxValue);
+    } else {
+      setMaxValue(value);
+      updateBlock(block.id, block.content, block.choices, title, minValue, value);
+    }
+  };
 
   const handleNewChoiceFocus = (event) => {
     if (event.target.value === '') {
@@ -69,7 +75,7 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock }) => {
             className="block-title-input"
           />
           <button type="button" onClick={() => removeBlock(block.id)} className="remove-block-button">
-            &#10006; {/* This is a unicode 'X' character */}
+            &#10006; 
           </button>
         </div>
         
@@ -95,14 +101,14 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock }) => {
         </div>
         <div className="range-inputs">
           <div className="number-input-container">
-            <button onClick={e => handleMinChange(e, "minus")}>-</button>
-            <input type="number" value={minValue} onChange={e => handleNumberChange(e, "min")} />
-            <button onClick={e => handleMinChange(e, "plus")}>+</button>
+            <button onClick={(e) => handleMinChange(-1, e)}>-</button>
+            <input type="number" value={minValue} onChange={(e) => handleNumberChange(e, "min")} />
+            <button onClick={(e) => handleMinChange(1, e)}>+</button>
           </div>
           <div className="number-input-container">
-            <button onClick={e => handleMinChange(e, "minus")}>-</button>
-            <input type="number" value={maxValue} onChange={e => handleNumberChange(e, "max")} />
-            <button onClick={e => handleMinChange(e, "plus")}>+</button>
+            <button onClick={(e) => handleMaxChange(-1, e)}>-</button>
+            <input type="number" value={maxValue} onChange={(e) => handleNumberChange(e, "max")} />
+            <button onClick={(e) => handleMaxChange(1, e)}>+</button>
           </div>
         </div>
       </div>

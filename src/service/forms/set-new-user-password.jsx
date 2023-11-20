@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import API from '../axios';
 
-const SetNewUserPassword = () => {
+const SetNewUserPassword = ({ accessToken }) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -18,11 +19,26 @@ const SetNewUserPassword = () => {
     return true;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validatePassword()) {
-      // Handle password update logic here
-      console.log('Password set successfully!');
+      try {
+        const response = await API.post('password/reset/complete/', {
+          new_password: password,
+          //confirm_new_password: confirmPassword
+        }, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        });
+
+        if (response.status === 200) {
+          setError('Password set successfully!');
+        }
+      } catch (error) {
+        console.error('Error resetting password:', error);
+        setError('Error resetting password:', error);
+      }
     }
   };
 

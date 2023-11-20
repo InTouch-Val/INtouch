@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import "../../css/app.css"
 
 function ActivateUserPage() {
   let { userId, userToken } = useParams();
@@ -30,8 +31,7 @@ function ActivateUserPage() {
 
   return (
     <div>
-      <h1>Активация учетной записи...</h1>
-      {/* Здесь может быть дополнительный UI */}
+      <h1>Account Activation In Progress...</h1>
     </div>
   );
 }

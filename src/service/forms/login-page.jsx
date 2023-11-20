@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import API from '../service/axios';
-import '../css/registration.css';
+import API from '../axios';
+import "../../css/registration.css"
 
 
 function LoginPage() {
@@ -34,8 +34,18 @@ function LoginPage() {
     }
   };
 
-  const handleForgotPassword = () => {
-    // TODO: handle forgot password
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await API.post('password/reset/', { email: credentials.email });
+      if (response.status === 200) {
+        navigate('/password-reset-requested');
+      }
+    } catch (error) {
+      const message = error.response?.data.message || 'An error occurred during password reset request.';
+      console.error('Password reset request error:', error);
+      setError(message);
+    }
   };
 
   return (
@@ -54,13 +64,12 @@ function LoginPage() {
             id='password'
             placeholder='Enter password'
             onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-            required
           />
         <div className='form-buttons'>
             <button type='submit'>
             Login
             </button>
-            <button onClick={handleForgotPassword}>
+            <button onClick={(e) => handleForgotPassword(e)}>
                 Forgot password
             </button>
         </div>

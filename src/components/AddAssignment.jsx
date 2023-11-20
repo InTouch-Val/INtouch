@@ -27,21 +27,28 @@ const AddAssignment = () => {
   e.preventDefault();
 
   const blockInfo = blocks.map(block => {
-    let content = '';
     if (block.type === "text") {
-      content = getPlainText(block.content);
+      return {
+        type: block.type,
+        question: getPlainText(block.content),
+        choice_replies: []
+      };
+    } else if (block.type === "range") {
+      return {
+        type: block.type,
+        question: block.title,
+        start_range: block.minValue,
+        end_range: block.maxValue
+      };
     } else {
-      content = block.title;
+      return {
+        type: block.type,
+        question: block.title,
+        choice_replies: block.choices.map(choice => ({ reply: choice }))
+      };
     }
-    
-    const choiceReplies = block.choices.map(choice => ({ reply: choice }));
-
-    return {
-      type: block.type,
-      question: content,
-      choice_replies: block.type === 'text' ? [] : choiceReplies 
-    };
   });
+
 
   const requestData = {
     blocks: blockInfo,
@@ -86,14 +93,16 @@ const AddAssignment = () => {
     setBlocks(updatedBlocks);
   };
 
-  const updateBlock = (blockId, newContent, newChoices, newTitle) => {
+  const updateBlock = (blockId, newContent, newChoices, newTitle, newMinValue, newMaxValue) => {
     const updatedBlocks = blocks.map((block) => {
       if (block.id === blockId) {
         return {
           ...block,
           content: newContent || block.content,
           choices: newChoices || block.choices,
-          title: newTitle || block.title
+          title: newTitle || block.title,
+          minValue: typeof newMinValue !== 'undefined' ? newMinValue : block.minValue,
+          maxValue: typeof newMaxValue !== 'undefined' ? newMaxValue : block.maxValue
         };
       }
       return block;
@@ -136,11 +145,11 @@ const AddAssignment = () => {
                 <select value={type} onChange={(e) => setType(e.target.value)}>
                   <option value="lesson">Lesson</option>
                   <option value="exercise">Exercise</option>
-                  <option value="metaphor">Essay</option>
+                  <option value="essay">Essay</option>
                   <option value="study">Study</option>
                   <option value="quiz">Quiz</option>
                   <option value="methology">Methodology</option>
-                  <option value="metaphor">Metaphors</option>
+                  <option value="metaphor">Metaphor</option>
                 </select>
           </div>
           <div className="form-setting">
