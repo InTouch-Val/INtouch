@@ -33,4 +33,8 @@ GET: api/v1/clients/
 Создание задачи, поля: title, text, assignment_type, tags, language, blocks[question, type, choice_replies[reply, reply ...]]  
 POST: api/v1/assignments/add/  
 Список задач  
-GET: api/v1/assignments/
+GET: api/v1/assignments/  
+Добавление задачи в My List  
+GET: api/v1/assignments/add-list/<pk>/  
+Удаление задачи из My List  
+GET: api/v1/assignments/delete-list/<pk>/  

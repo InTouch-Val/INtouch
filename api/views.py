@@ -173,17 +173,19 @@ class AssignmentDislikeView(APIView):
 
 
 class AssignmentAddUserMyListView(APIView):
-    def get(self, request, pk, user_pk):
+    def get(self, request, pk):
+        token = request.headers.get('Authorization').split(' ')[1]
+        user = User.objects.get(pk=AccessToken(token)['user_id'])
         assignment = Assignment.objects.get(pk=pk)
-        user = User.objects.get(pk=user_pk)
         user.assignments.add(assignment)
         return Response({'detail': 'Assignment added successfully.'})
 
 
 class AssignmentDeleteUserMyListView(APIView):
-    def get(self, request, pk, user_pk):
+    def get(self, request, pk):
+        token = request.headers.get('Authorization').split(' ')[1]
+        user = User.objects.get(pk=AccessToken(token)['user_id'])
         assignment = Assignment.objects.get(pk=pk)
-        user = User.objects.get(pk=user_pk)
         user.assignments.remove(assignment)
         return Response({'detail': 'Assignment deleted successfully.'})
 

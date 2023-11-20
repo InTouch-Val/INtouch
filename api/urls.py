@@ -41,14 +41,14 @@ urlpatterns = [
     path('assignments/add/', AddAssignmentView.as_view(), name='add_assignment'),
     path('assignments/', ListAssignmentView.as_view(), name='assignments'),
     path(
-        'assignments/<int:pk>/<int:user_pk>/add/',
+        'assignments/add-list/<int:pk>/',
         AssignmentAddUserMyListView.as_view(),
-        name='assignment_add_user'
+        name='assignment_add-list'
     ),
     path(
-        'assignments/<int:pk>/<int:user_pk>/delete/',
+        'assignments/delete-list/<int:pk>/',
         AssignmentDeleteUserMyListView.as_view(),
-        name='assignment_delete_user'
+        name='assignment_delete-list'
     ),
     path('assignments/<pk>/like/', AssignmentLikeView.as_view(), name='like'),
     path('assignments/<pk>/dislike/', AssignmentDislikeView.as_view(), name='dislike'),
