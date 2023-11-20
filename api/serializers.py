@@ -187,9 +187,17 @@ class AddBlockChoiceSerializer(serializers.ModelSerializer):
 
 class AddBlockSerializer(serializers.ModelSerializer):
     choice_replies = AddBlockChoiceSerializer(many=True, required=False)
+    start_range = serializers.IntegerField(required=False)
+    end_range = serializers.IntegerField(required=False)
     class Meta:
         model = Block
-        fields = ['question', 'type', 'choice_replies']
+        fields = [
+            'question',
+            'type',
+            'choice_replies',
+            'start_range',
+            'end_range'
+        ]
 
     def create(self, validated_data):
         choice_replies_data = validated_data.pop('choice_replies', [])

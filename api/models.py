@@ -56,6 +56,8 @@ class Block(models.Model):
     type = models.CharField(max_length=100)
     reply = models.TextField(blank=True)
     choice_replies = models.ManyToManyField('BlockChoice', blank=True, related_name='block_choices')
+    start_range = models.IntegerField(blank=True, null=True)
+    end_range = models.IntegerField(blank=True, null=True)
 
 
 class BlockChoice(models.Model):
