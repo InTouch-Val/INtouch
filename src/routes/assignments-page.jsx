@@ -1,82 +1,91 @@
 import React, { useState, useEffect } from 'react';
 import {useNavigate} from "react-router-dom"
-import assignmentsData from '../data/assignments.json';
 import "../css/assignments.css";
 import API from '../service/axios';
 import AssignmentTile from '../components/AssignmentTile';
-
-// const tagColors = {
-//   tag1: 'brown',
-//   tag2: 'blue',
-//   tag3: 'cyan',
-//   tag4: 'gray',
-// };
 
 function AssignmentsPage() {
   const [activeTab, setActiveTab] = useState('library');
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
-  const [filterTags, setFilterTags] = useState('all');
   const [filterLanguage, setFilterLanguage] = useState('all');
-  const [filterDate, setFilterDate] = useState('all');
+  const [sortMethod, setSortMethod] = useState('date_asc');
+  const [assignments, setAssignments] = useState([]); 
+  const [filteredAssignments, setFilteredAssignments] = useState([]); 
 
-  const [filteredAssignments, setFilteredAssignments] = useState([])  //useState(assignmentsData);
+    const navigate = useNavigate();
 
-  const navigate = useNavigate()
+    const toggleFavorite = (assignmentId) => {
+        // TODO
+    };
 
-  const toggleFavorite = (assignmentId) => {
-    const updatedAssignments = filteredAssignments.map((assignment) => {
-      if (assignment.id === assignmentId) {
-        return { ...assignment, favorite: !assignment.favorite };
-      }
-      return assignment;
-    });
-    setFilteredAssignments(updatedAssignments);
-  };
+    useEffect(() => {
+      const fetchAssignments = async () => {
+          try {
+              const response = await API.get('assignments/');
+              setAssignments(response.data); 
+              setFilteredAssignments(response.data);
+              console.log(response.data);
+          } catch (error){
+              console.error('Error fetching assignments', error);
+              navigate("/");
+          }
+      };
+      fetchAssignments();
+  }, [navigate]);
 
-  useEffect(() => {
-    const fetchAssignments = async () => {
-      try {
-        const response = await API.get('assignments/')
-        console.log(response, localStorage.getItem('accessToken'))
-        setFilteredAssignments(response.data)
-      }
-      catch (error){
-        console.error('Error fetching assignments', error)
-        navigate("/")
-      }
-  }
-    fetchAssignments()
-  }, [navigate])
+    useEffect(() => {
+        let updatedAssignments = [...assignments];
 
-  useEffect(() => {
-    let updatedAssignments = assignmentsData;
+        if (searchTerm) {
+            updatedAssignments = updatedAssignments.filter((assignment) =>
+                assignment.title.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        }
 
-    if (searchTerm) {
-      updatedAssignments = updatedAssignments.filter((assignment) =>
-        assignment.title.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
+        if (filterType !== 'all') {
+            updatedAssignments = updatedAssignments.filter((assignment) =>
+                assignment.assignment_type === filterType
+            );
+        }
 
-    if(filterType !== 'all'){
-      updatedAssignments = updatedAssignments.filter((assignment) =>
-        assignment.type === filterType
-      );
-    }
+        if (filterLanguage !== 'all') {
+            updatedAssignments = updatedAssignments.filter((assignment) =>
+                assignment.language === filterLanguage
+            );
+        }
 
-    if(filterLanguage !== 'all'){
-      updatedAssignments = updatedAssignments.filter((assignment) =>
-        assignment.language === filterLanguage
-      )
-    }
+        sortAssignments(sortMethod, updatedAssignments);
+    }, [searchTerm, filterType, filterLanguage, sortMethod, assignments]);
 
-    setFilteredAssignments(updatedAssignments);
-  }, [searchTerm, filterType, filterTags, filterLanguage, filterDate]);
-   
+    const handleSortMethodChange = (e) => {
+        setSortMethod(e.target.value);
+    };
 
-  const handleAddAssignment = () => {
-    navigate("/add-assignment");
-  };
+    const sortAssignments = (method, assignments) => {
+        let sortedAssignments = [...assignments];
+        switch (method) {
+            case "date_asc":
+                sortedAssignments.sort((a, b) => new Date(a.add_date) - new Date(b.add_date));
+                break;
+            case "date_desc":
+                sortedAssignments.sort((a, b) => new Date(b.add_date) - new Date(a.add_date));
+                break;
+            case "popularity_asc":
+                sortedAssignments.sort((a, b) => a.likes - b.likes);
+                break;
+            case "popularity_desc":
+                sortedAssignments.sort((a, b) => b.likes - a.likes);
+                break;
+            default:
+                break;
+        }
+        setFilteredAssignments(sortedAssignments);
+    };
+
+    const handleAddAssignment = () => {
+        navigate("/add-assignment");
+    };
 
   return (
     <div className="assignments-page">
@@ -120,12 +129,12 @@ function AssignmentsPage() {
           <option value="methology">Methodology</option>
           <option value="metaphor">Metaphors</option>
         </select>
-        <select
+        {/* <select
           value={filterTags}
           onChange={(e) => setFilterTags(e.target.value)}
         >
           <option value="all">All Tags</option>
-        </select>
+        </select> */}
         <select
           value={filterLanguage}
           onChange={(e) => setFilterLanguage(e.target.value)}
@@ -138,11 +147,12 @@ function AssignmentsPage() {
           <option value="it">Italian</option>
         </select>
         <select
-          value={filterDate}
-          onChange={(e) => setFilterDate(e.target.value)}
-        >
-          <option value="all">All Dates</option>
-          {/* Add date options here */}
+          value={sortMethod}
+          onChange={(e) => handleSortMethodChange(e)}>
+            <option value="date_asc">Date Created Up</option>
+            <option value="date_desc">Date Created Down</option>
+            <option value="popularity_asc">Popularity Up</option>
+            <option value="popularity_desc">Popularity Down</option>
         </select>
       </div>
       {activeTab === 'library' && (
