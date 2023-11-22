@@ -4,6 +4,7 @@ import API from '../service/axios';
 import AssignmentBlock from '../service/assignment-blocks';
 import { useNavigate } from 'react-router-dom';
 import "../css/assignments.css"
+import ImageSelector from '../service/image-selector';
 
 const getPlainText = (editorState) => {
   return editorState.getCurrentContent().getPlainText();
@@ -18,6 +19,7 @@ const AddAssignment = () => {
   const [tags, setTags] = useState('');
 
   const [blocks, setBlocks] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(false)
 
   const navigate = useNavigate()
@@ -56,7 +58,8 @@ const AddAssignment = () => {
     text: description,
     assignment_type: type,
     tags: "ffasd",
-    language: language
+    language: language,
+    image_url: selectedImage.urls.full || "https://unsplash.com/photos/selective-focus-photography-of-woman-holding-yellow-petaled-flowers-ktPKyUs3Qjs"
   };
 
   try {
@@ -76,14 +79,17 @@ const AddAssignment = () => {
   }
 };
 
+  const handleImageSelect = (image) => {
+    setSelectedImage(image);
+  }
 
   const addBlock = (type) => {
     const newBlock = {
       id: blocks.length + 1,
       type: type,
-      title: '', // Заголовок вопроса
+      title: '', 
       content: type === 'text' ? EditorState.createEmpty() : '',
-      choices: type === 'text' ? [] : [''] // Пустой массив для вариантов ответа
+      choices: type === 'text' ? [] : ['']
     };
     setBlocks([...blocks, newBlock]);
   };
@@ -120,6 +126,7 @@ const AddAssignment = () => {
         {blocks.length > 0 ? <button className='add-assignment-button' onClick={handleSubmit}>Save Assignment</button> : <></>}
       </header>
       <div className='add-assignment-body'>
+        <ImageSelector onImageSelect={handleImageSelect}/>
         <form onSubmit={handleSubmit} className="form-creator">
           <div className='form-title'>
             <input

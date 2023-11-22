@@ -16,7 +16,7 @@ const AssignmentTile = ({ assignment, onFavoriteToggle, isFavorite }) => {
           <span>{displayDate}</span>
           {assignment.assignment_type && <span className="type">{assignment.assignment_type}</span>}
         </div>
-        <img alt={assignment.title}  />
+        <img alt="Loading..."  />
       </div>
       <div className="assignment-info">
         <h3>{assignment.title}</h3>

@@ -161,6 +161,20 @@
     color: #656565;
   }
 
+  .no-assignments {
+    grid-column: 1 / -1; /* Занимает все колонки сетки */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: white;
+    padding: 20px;
+    font-size: 28px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+  }
+
   @keyframes slideIn {
     from {
       transform: translateY(-100%);

@@ -51,7 +51,7 @@ function App() {
             <ul>
               <li>
                 <NavLink to={`/clients`} activeClassName="active">
-                <i class='fa fa-address-card'></i> Clients
+                <i className='fa fa-address-card'></i> Clients
                 </NavLink>
               </li>
               <li>

@@ -186,29 +186,37 @@ function AssignmentsPage() {
       </div>
       {activeTab === 'library' && (
         <div className='assignment-grid'>
-        {filteredAssignments.map((assignment) => (
-         <AssignmentTile 
-            key={assignment.id} 
-            assignment={assignment} 
-            onFavoriteToggle={toggleFavorite} 
-            isFavorite={userFavorites.includes(assignment.id)} 
-         />
-     ))}
-     </div>
-      )}
-      {activeTab === 'my-list' && (
-        <div className='assignment-grid'>
-        {filteredAssignments
-            .filter(assignment => userFavorites.includes(assignment.id))
-            .map(assignment => (
+          {filteredAssignments.length > 0 ? (
+            filteredAssignments.map(assignment => (
               <AssignmentTile
                 key={assignment.id}
                 assignment={assignment}
                 onFavoriteToggle={toggleFavorite}
-                isFavorite={true}
+                isFavorite={userFavorites.includes(assignment.id)}
               />
-          ))}
-     </div>
+            ))
+          ) : (
+            <div className="no-assignments">There is nothing to show yet</div>
+          )}
+        </div>
+      )}
+      {activeTab === 'my-list' && (
+        <div className='assignment-grid'>
+          {filteredAssignments.filter(assignment => userFavorites.includes(assignment.id)).length > 0 ? (
+            filteredAssignments
+              .filter(assignment => userFavorites.includes(assignment.id))
+              .map(assignment => (
+                <AssignmentTile
+                  key={assignment.id}
+                  assignment={assignment}
+                  onFavoriteToggle={toggleFavorite}
+                  isFavorite={true}
+                />
+              ))
+          ) : (
+            <div className="no-assignments">There is nothing to show yet</div>
+          )}
+        </div>
       )}
     </div>
   );
