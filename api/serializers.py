@@ -43,6 +43,8 @@ class UserSerializer(serializers.ModelSerializer):
             'date_joined',
             'update_date',
             'assignments',
+            'clients',
+            'user_type',
         )
 
     def validate(self, attrs):
@@ -60,6 +62,7 @@ class UserSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
             password=validated_data['password'],
             accept_policy=validated_data['accept_policy'],
+            user_type='doctor',
             is_active=False,
         )
         token = default_token_generator.make_token(user)
@@ -100,23 +103,24 @@ class ChangePasswordSerializer(serializers.Serializer):
             )
         ]
     )
+    confirm_new_password = serializers.CharField(write_only=True)
 
     def validate(self, attrs):
-        new_password = attrs.get('new_password')
+        if attrs['new_password'] != attrs['confirm_new_password']:
+            raise serializers.ValidationError("Passwords do not match")
         return attrs
 
 
 class AddClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email', 'doctor_id']
+        fields = ['first_name', 'last_name', 'email']
 
     first_name = serializers.CharField()
     last_name = serializers.CharField()
     email = serializers.EmailField(
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
-    doctor_id = serializers.IntegerField()
 
     def create(self, validated_data):
         user = User.objects.create(
@@ -125,19 +129,20 @@ class AddClientSerializer(serializers.ModelSerializer):
             last_name=validated_data['last_name'],
             email=validated_data['email'],
             password=uuid.uuid4(),
-            accept_policy=True,
+            user_type='client',
             is_active=False,
         )
         token = default_token_generator.make_token(user)
-        activation_url = f'/api/v1/confirm-email/{user.pk}/{token}/'
-        current_site = 'http://127.0.0.1:8000'
+        activation_url = f'/activate-client/{user.pk}/{token}/'
+        current_site = 'http://127.0.0.1:3000'
         html_message = render_to_string(
-            'registration/confirm_mail.html',
-            {'url': activation_url, 'domen': current_site}
+            'registration/confirm_mail_client.html',
+            {'url': activation_url, 'domen': current_site,
+             'name': user.first_name}
         )
         message = strip_tags(html_message)
         mail = EmailMultiAlternatives(
-            'Подтвердите свой электронный адрес',
+            'Confirmation of Your Account Registration on INtouch',
             message,
             'iw.sitnikoff@yandex.ru',
             [user.email],
@@ -147,10 +152,49 @@ class AddClientSerializer(serializers.ModelSerializer):
         return user
 
 
-class ClientSerializer(serializers.ModelSerializer):
+class UpdateClientSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(
+        write_only=True,
+        validators=[
+            RegexValidator(
+                regex='^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$',
+                message='The password must contain at least 8 characters, '
+                        'including letters and numbers.'
+            )
+        ]
+    )
+    confirm_password = serializers.CharField(write_only=True)
+    email = serializers.EmailField(
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
     class Meta:
-        model = Client
-        fields = '__all__'
+        model = User
+        fields = [
+            'first_name',
+            'last_name',
+            'email',
+            'password',
+            'confirm_password',
+            'accept_policy'
+        ]
+
+    def update(self, user, validated_data):
+        password = validated_data.get('password')
+        confirm_password = validated_data.get('confirm_password')
+        if password and confirm_password and password == confirm_password:
+            user.first_name = validated_data['first_name']
+            user.last_name = validated_data['last_name']
+            user.email = validated_data['email']
+            user.accept_policy = validated_data['accept_policy']
+            user.set_password(password)
+            user.save()
+        return user
+
+
+# class ClientSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Client
+#         fields = '__all__'
 
 
 class BlockChoiceSerializer(serializers.ModelSerializer):

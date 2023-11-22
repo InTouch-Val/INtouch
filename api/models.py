@@ -7,19 +7,21 @@ class User(AbstractUser):
     update_date = models.DateTimeField(auto_now=True)
     add_date = models.DateTimeField(auto_now_add=True)
     profile = models.TextField(blank=True)
+    user_type = models.CharField(max_length=100)
     accept_policy = models.BooleanField(default=False)
     assignments = models.ManyToManyField('Assignment', blank=True)
+    clients = models.ManyToManyField('self', blank=True)
 
     def __str__(self):
         return self.username
 
 
-class Client(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
-    doctor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='doctor')
-
-    def __str__(self):
-        return self.user.username
+# class Client(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
+#     doctor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='doctor')
+#
+#     def __str__(self):
+#         return self.user.username
 
 
 class Assignment(models.Model):
@@ -34,6 +36,7 @@ class Assignment(models.Model):
     language = models.CharField(max_length=100)
     share = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
+    image_url = models.CharField(max_length=255)
     blocks = models.ManyToManyField('Block', related_name='blocks', blank=True, null=True)
     comments = models.ManyToManyField('Comment', blank=True)
 

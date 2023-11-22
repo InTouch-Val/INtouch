@@ -143,17 +143,22 @@ class AddClientView(APIView):
     def post(self, request):
         serializer = AddClientSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-        client = Client.objects.create(
-            user=user,
-            doctor_id=serializer.validated_data['doctor_id']
-        )
+        client = serializer.save()
+        token = request.headers.get('Authorization').split(' ')[1]
+        user = User.objects.get(pk=AccessToken(token)['user_id'])
+        user.clients.add(client)
         return Response("Confirm email sent.")
 
 
-class ClientListView(generics.ListAPIView):
-    queryset = Client.objects.all()
-    serializer_class = ClientSerializer
+class UpdateClientView(generics.UpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UpdateClientSerializer
+
+
+
+# class ClientListView(generics.ListAPIView):
+#     queryset = Client.objects.all()
+#     serializer_class = ClientSerializer
 
 
 class AssignmentLikeView(APIView):
