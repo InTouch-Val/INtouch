@@ -28,6 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
+    user_type = serializers.CharField(read_only=True)
 
     class Meta:
         model = User
@@ -260,6 +261,7 @@ class AddBlockSerializer(serializers.ModelSerializer):
 class AddAssignmentSerializer(serializers.ModelSerializer):
     blocks = AddBlockSerializer(many=True, required=False)
     tags = serializers.CharField(required=False)
+    image_url = serializers.CharField(required=False)
     class Meta:
         model = Assignment
         fields = [
@@ -268,6 +270,7 @@ class AddAssignmentSerializer(serializers.ModelSerializer):
             'assignment_type',
             'tags',
             'language',
+            'image_url',
             'blocks'
         ]
 
