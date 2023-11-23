@@ -28,7 +28,7 @@ const SetNewUserPassword = ({ accessToken }) => {
       try {
         const response = await API.post('password/reset/complete/', {
           new_password: password,
-          //confirm_new_password: confirmPassword
+          confirm_new_password: confirmPassword
         }, {
           headers: {
             Authorization: `Bearer ${accessToken}`

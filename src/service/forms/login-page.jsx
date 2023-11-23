@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import API from '../axios';
+import { useAuth } from '../authContext';
 import "../../css/registration.css"
 
 
 function LoginPage() {
   const navigate = useNavigate();
+  const { login } = useAuth(); // Использование useAuth
   const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
 
@@ -14,23 +16,22 @@ function LoginPage() {
 
     try {
       const requestData = {
-          username: credentials.email.trim(),
-          password: credentials.password.trim(),
+        username: credentials.email.trim(),
+        password: credentials.password.trim(),
       }
 
       const response = await API.post('token/', requestData);
 
       if (response.status === 200) {
-        localStorage.setItem('accessToken', response.data.access);
-        localStorage.setItem('refreshToken', response.data.refresh);
+        login(response.data.access, response.data.refresh);
         navigate('/');
       } else {
         setError("Something went wrong. Please try again");
       }
     } catch (error) {
-        const message = error.response?.data.message || 'An error occurred while logging in.';
-        setError(message);
-        console.error('Login error:', error);
+      const message = error.response?.data.message || 'An error occurred while logging in.';
+      setError(message);
+      console.error('Login error:', error);
     }
   };
 

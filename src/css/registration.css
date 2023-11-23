@@ -38,6 +38,12 @@
     display: flex;
     align-items: center; /* Выровняйте checkbox и текст по вертикали */
   }
+  .registration-form h2{
+    font-weight: 400;
+    text-align: center;
+    line-height: 40px;
+    font-size: 24px;
+  }
   
   .registration-form button {
     font-family: "Montserrat", sans-serif;

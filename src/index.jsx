@@ -5,6 +5,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from 'react-router-dom';
+import { AuthProvider } from './service/authContext.js';
 import ErrorPage from './service/forms/error-page.jsx';
 import ClientPage from './routes/client-page.jsx';
 import ClientDetailPage from './components/ClientsDetailsPage.jsx';
@@ -15,10 +16,11 @@ import RegistrationForm from './service/forms/registration-page.jsx';
 import LoginPage from './service/forms/login-page.jsx';
 import SettingsPage from './routes/settings-page.jsx';
 import PasswordResetRequested from './service/forms/password-reset-requested.jsx';
-import SetNewUserPassword from './service/forms/set-new-user-password.jsx';
 import AddAssignment from "./components/AddAssignment.jsx"
 import ActivateUserPage from './service/forms/activate-user-page.jsx';
 import PasswordResetMock from './service/forms/password-reset-mock.jsx';
+import AddClient from './components/AddClient.jsx';
+import ClientRegistrationPage from './service/forms/client-registration-page.jsx';
 
 const router = createBrowserRouter([
   {
@@ -57,6 +59,10 @@ const router = createBrowserRouter([
       {
         path: "/add-assignment",
         element: <AddAssignment/>
+      },
+      {
+        path: "/add-client",
+        element: <AddClient/>
       } 
     ],
   },
@@ -76,12 +82,17 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/set-new-user-password",
-    element: <SetNewUserPassword />,
+    path: "/client-registration",
+    element: <ClientRegistrationPage/>,
     errorElement: <ErrorPage />,
   },
   {
-    path: "/activate/:userId/:userToken",  // Routing for activating profile
+    path: "/activate/:userId/:userToken",  
+    element: <ActivateUserPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/activate-client/:userId/:userToken",  
     element: <ActivateUserPage />,
     errorElement: <ErrorPage />,
   },
@@ -94,6 +105,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
   </React.StrictMode>
 );

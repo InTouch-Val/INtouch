@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import '../css/clients.css';
 import clientsData from '../data/clients.json';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function ClientPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [openActionsClientId, setOpenActionsClientId] = useState(null);
+
+  const navigate = useNavigate()
 
   const filteredClients = clientsData.filter((client) =>
     client.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -19,12 +21,17 @@ function ClientPage() {
     }
   };
 
+  const handleAddClient = () => {
+    navigate("/add-client")
+  }
+
   return (
     <div className='clients-page'>
       <header className='first-row'>
         <h1>Clients</h1>
-        <button className='add-client-button'>
-<i class='fa fa-user-plus' style={{color: "white", width: "24px"}}></i> Add Client</button>
+        <button className='add-client-button'
+                onClick={handleAddClient}>
+        <i class='fa fa-user-plus' style={{color: "white", width: "28px"}}></i> Add Client</button>
       </header>
       <div className='search-filters'>
         <form className='search'>
@@ -86,7 +93,6 @@ function ClientPage() {
           </tbody>
         </table>
       </div>
-      <div className='pagination'>{/* Buttons for pagination */}</div>
     </div>
   );
 }

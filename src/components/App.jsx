@@ -1,35 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Outlet, NavLink, useNavigate } from "react-router-dom"; // Заменили Link на NavLink
 import "../css/app.css";
-import API from "../service/axios";
+import { useAuth } from "../service/authContext";
 
 function App() {
+  const { currentUser, logout } = useAuth(); 
   const navigate = useNavigate();
-  const [userDetails, setUserDetails] = useState(null);
-
-  useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
-    if (accessToken) {
-      API.get(`get-user/`)
-        .then(response => {
-          setUserDetails({
-            first_name: response.data[0].first_name,
-            last_name: response.data[0].last_name,
-          });
-        })
-        .catch(error => {
-          console.error('Error getting User Data:', error);
-          handleLogout();
-        });
-    } else {
-      navigate('/login');
-    }
-  }, [navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    setUserDetails(null);
+    logout(); 
     navigate('/login');
   };
 
@@ -43,7 +22,7 @@ function App() {
             alt="Something"
           />
           <h3>
-            {userDetails ? `${userDetails.first_name} ${userDetails.last_name}` : 'Loading...'}
+            {currentUser ? `${currentUser.first_name} ${currentUser.last_name}` : 'Loading...'}
           </h3>
         </div>
         <div className="menu upper">

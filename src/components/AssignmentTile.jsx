@@ -1,5 +1,5 @@
 import React from 'react';
-import "../css/assignmentTile.css"; 
+import "../css/assignment-tile.css"; 
 
 const formatDate = (dateString) => {
   const options = { year: 'numeric', month: 'short', day: 'numeric' };
@@ -16,7 +16,7 @@ const AssignmentTile = ({ assignment, onFavoriteToggle, isFavorite }) => {
           <span>{displayDate}</span>
           {assignment.assignment_type && <span className="type">{assignment.assignment_type}</span>}
         </div>
-        <img alt="Loading..."  />
+        <img alt="Loading..." src={assignment.image_url}  />
       </div>
       <div className="assignment-info">
         <h3>{assignment.title}</h3>

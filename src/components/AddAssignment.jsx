@@ -59,12 +59,13 @@ const AddAssignment = () => {
     assignment_type: type,
     tags: "ffasd",
     language: language,
-    image_url: selectedImage.urls.full || "https://unsplash.com/photos/selective-focus-photography-of-woman-holding-yellow-petaled-flowers-ktPKyUs3Qjs"
+    image_url: selectedImage?.urls.full || "https://unsplash.com/photos/selective-focus-photography-of-woman-holding-yellow-petaled-flowers-ktPKyUs3Qjs"
   };
 
   try {
     const response = await API.post('assignments/add/', requestData);
     console.log(response);
+    console.log(selectedImage)
     if(response.status == 201){
       setSuccessMessage(true)
       setTimeout(() => {
