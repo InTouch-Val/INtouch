@@ -19,7 +19,7 @@ pk, token из url из письма. Возвращает access и refresh т�
 pk, token из url из письма. Возвращает access и refresh токены.  
 **POST: api/v1/password/reset/complete/** - установка нового пароля  
 Тело запроса: new_password, confirm_new_password  
---- 
+  
 **POST: api/v1/clients/add/** - добавление клиента  
 Тело запроса: first_name, last_name, email  
 Клиент переходит по ссылке из письма на 127.0.0.1:3000/activate-client/<pk>/<token>/  
