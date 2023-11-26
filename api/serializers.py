@@ -29,6 +29,7 @@ class UserSerializer(serializers.ModelSerializer):
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
     user_type = serializers.CharField(read_only=True)
+    photo = serializers.ImageField(required=False)
 
     class Meta:
         model = User
@@ -46,6 +47,7 @@ class UserSerializer(serializers.ModelSerializer):
             'assignments',
             'clients',
             'user_type',
+            'photo',
         )
 
     def validate(self, attrs):

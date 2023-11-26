@@ -9,6 +9,11 @@ class User(AbstractUser):
     profile = models.TextField(blank=True)
     user_type = models.CharField(max_length=100)
     accept_policy = models.BooleanField(default=False)
+    photo = models.ImageField(
+        upload_to='user_photos',
+        default='default_user_photo.jpg',
+        blank=True,
+    )
     assignments = models.ManyToManyField('Assignment', blank=True)
     clients = models.ManyToManyField('self', blank=True)
 
