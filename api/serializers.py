@@ -13,6 +13,20 @@ from rest_framework.validators import UniqueValidator
 from .models import *
 
 
+class ClientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'first_name',
+            'last_name',
+            'email',
+            'photo',
+            'is_active',
+            'date_joined',
+        ]
+
+
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True,
@@ -30,6 +44,7 @@ class UserSerializer(serializers.ModelSerializer):
     )
     user_type = serializers.CharField(read_only=True)
     photo = serializers.ImageField(required=False)
+    clients = ClientSerializer(many=True)
 
     class Meta:
         model = User

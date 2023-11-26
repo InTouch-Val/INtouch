@@ -15,18 +15,19 @@ class User(AbstractUser):
         blank=True,
     )
     assignments = models.ManyToManyField('Assignment', blank=True)
-    clients = models.ManyToManyField('self', blank=True)
+    clients = models.ManyToManyField(
+        'self',
+        through='ClientRelationship',
+        symmetrical=False, blank=True
+    )
 
     def __str__(self):
         return self.username
 
 
-# class Client(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
-#     doctor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='doctor')
-#
-#     def __str__(self):
-#         return self.user.username
+class ClientRelationship(models.Model):
+    from_user = models.ForeignKey(User, related_name='from_users', on_delete=models.CASCADE)
+    to_user = models.ForeignKey(User, related_name='to_users', on_delete=models.CASCADE)
 
 
 class Assignment(models.Model):
@@ -42,7 +43,7 @@ class Assignment(models.Model):
     share = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
     image_url = models.CharField(max_length=255)
-    blocks = models.ManyToManyField('Block', related_name='blocks', blank=True, null=True)
+    blocks = models.ManyToManyField('Block', related_name='blocks', blank=True)
     comments = models.ManyToManyField('Comment', blank=True)
 
     def like(self):
