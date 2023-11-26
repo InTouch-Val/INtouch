@@ -39,7 +39,7 @@ const ImageSelector = ({ onImageSelect }) => {
         <button type="submit">Search</button>
       </form>
       <div className="image-results">
-        {images.map(image => (
+        {images.length > 0 ? images.map(image => (
           <div 
             key={image.id} 
             className={`image-item ${image.id === selectedImageId ? 'selected' : ''}`} 
@@ -47,7 +47,8 @@ const ImageSelector = ({ onImageSelect }) => {
           >
             <img src={image.urls.small} alt={image.alt_description} />
           </div>
-        ))}
+        )) : 
+        <p>No images were found</p>}
       </div>
     </div>
   );

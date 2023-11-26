@@ -10,12 +10,17 @@
     overflow: hidden; /* Обрезка контента по границам */
     width: 270px;
   }
+  .assignment-image-container{
+    display: flex;
+    flex-direction: column;
+  }
   
   .assignment-tile .assignment-image-container img {
-    width: 250px;
+    width: 200px;
+    height: 200px;
     display: block;
     border-radius: 6px;
-    margin-left: 10px;
+    align-self: center;
   }
   
   .assignment-info {

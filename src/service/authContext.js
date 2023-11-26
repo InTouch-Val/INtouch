@@ -3,6 +3,7 @@ import API from '../service/axios';
 
 const AuthContext = createContext(null);
 
+
 export const useAuth = () => {
   return useContext(AuthContext);
 };
@@ -10,15 +11,23 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-
-  const isLoggedIn = currentUser !== null;
+  
+  const isLoggedIn = currentUser != null;
 
   const login = async (accessToken, refreshToken) => {
+    setIsLoading(true); // Установка перед началом запроса
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
-    const response = await API.get('get-user/');
-    setCurrentUser(response.data[0]);
+    try {
+      const response = await API.get('get-user/');
+      setCurrentUser(response.data[0]);
+    } catch (error) {
+      console.error('Error during login:', error);
+      logout(); 
+    }
+    setIsLoading(false); // Установка после завершения всех операций
   };
+  
 
   const logout = () => {
     localStorage.removeItem('accessToken');
@@ -28,6 +37,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const initAuth = async () => {
+      console.log("auth context initialized")
       const accessToken = localStorage.getItem('accessToken');
       if (!accessToken) {
         setIsLoading(false);

@@ -54,7 +54,6 @@ const RegistrationForm = () => {
       password: formData.password,
       confirm_password: formData.confirmPassword,
       accept_policy: formData.acceptPolicy,
-      user_type: "doctor"
     };
 
     try {

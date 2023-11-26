@@ -1,11 +1,17 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Outlet, NavLink, useNavigate } from "react-router-dom"; // Заменили Link на NavLink
 import "../css/app.css";
 import { useAuth } from "../service/authContext";
 
 function App() {
-  const { currentUser, logout } = useAuth(); 
+  const { currentUser, logout, isLoading } = useAuth(); 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isLoading && !currentUser) {
+      navigate('/login'); 
+    }
+  }, [currentUser, isLoading, navigate]);
 
   const handleLogout = () => {
     logout(); 
