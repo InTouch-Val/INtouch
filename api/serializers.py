@@ -52,8 +52,6 @@ class DoctorSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    doctor = DoctorSerializer(required=False)
-    client = ClientSerializer(required=False)
     password = serializers.CharField(
         write_only=True,
         validators=[
@@ -70,6 +68,7 @@ class UserSerializer(serializers.ModelSerializer):
     )
     user_type = serializers.CharField(read_only=True)
     photo = serializers.ImageField(required=False)
+    clients = ClientSerializer(many=True)
 
     class Meta:
         model = User
@@ -81,13 +80,13 @@ class UserSerializer(serializers.ModelSerializer):
             'password',
             'confirm_password',
             'accept_policy',
-            'date_of_birth',
+            'birth_date',
             'date_joined',
-            'last_update',
+            'update_date',
+            'assignments',
+            'clients',
             'user_type',
             'photo',
-            'doctor',
-            'client',
         )
 
     def validate(self, attrs):
@@ -108,7 +107,6 @@ class UserSerializer(serializers.ModelSerializer):
             user_type='doctor',
             is_active=False,
         )
-        Doctor.objects.create(user=user)
         token = default_token_generator.make_token(user)
         activation_url = f'/activate/{user.pk}/{token}/'
         current_site = 'http://127.0.0.1:3000'
@@ -176,7 +174,6 @@ class AddClientSerializer(serializers.ModelSerializer):
             user_type='client',
             is_active=False,
         )
-        Client.objects.create(user=user)
         token = default_token_generator.make_token(user)
         activation_url = f'/activate-client/{user.pk}/{token}/'
         current_site = 'http://127.0.0.1:3000'
@@ -234,6 +231,12 @@ class UpdateClientSerializer(serializers.ModelSerializer):
             user.set_password(password)
             user.save()
         return user
+
+
+# class ClientSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Client
+#         fields = '__all__'
 
 
 class BlockChoiceSerializer(serializers.ModelSerializer):
@@ -328,22 +331,3 @@ class AddAssignmentSerializer(serializers.ModelSerializer):
                 block.choice_replies.add(block_choice)
             assignment.blocks.add(block)
         return assignment
-
-
-class AddAssignmentClientSerializer(AddAssignmentSerializer):
-    def create(self, validated_data):
-        blocks_data = validated_data.pop('blocks', [])
-        assignment_client = AssignmentClient.objects.create(**validated_data)
-        for block_data in blocks_data:
-            block_data['assignment_client'] = assignment_client
-            choice_replies_data = block_data.pop('choice_replies', [])
-            block = AddBlockSerializer.create(AddBlockSerializer(), block_data)
-            for choice_data in choice_replies_data:
-                choice_data['block'] = block
-                block_choice = AddBlockChoiceSerializer.create(
-                    AddBlockChoiceSerializer(),
-                    choice_data
-                )
-                block.choice_replies.add(block_choice)
-            assignment_client.blocks.add(block)
-        return assignment_client
