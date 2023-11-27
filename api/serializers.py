@@ -34,6 +34,7 @@ class ClientInDoctorSerializers(serializers.ModelSerializer):
             'last_name',
             'date_joined',
             'is_active',
+            'photo',
             'date_of_birth',
             'last_update',
             'client'
