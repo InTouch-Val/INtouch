@@ -52,8 +52,8 @@ class DoctorSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    client = ClientSerializer()
-    doctor = DoctorSerializer()
+    client = ClientSerializer(required=False)
+    doctor = DoctorSerializer(required=False)
     password = serializers.CharField(
         write_only=True,
         validators=[
@@ -108,6 +108,7 @@ class UserSerializer(serializers.ModelSerializer):
             user_type='doctor',
             is_active=False,
         )
+        Doctor.objects.create(user=user)
         token = default_token_generator.make_token(user)
         activation_url = f'/activate/{user.pk}/{token}/'
         current_site = 'http://127.0.0.1:3000'
@@ -175,6 +176,7 @@ class AddClientSerializer(serializers.ModelSerializer):
             user_type='client',
             is_active=False,
         )
+        Client.objects.create(user=user)
         token = default_token_generator.make_token(user)
         activation_url = f'/activate-client/{user.pk}/{token}/'
         current_site = 'http://127.0.0.1:3000'
