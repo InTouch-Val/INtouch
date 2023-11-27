@@ -206,7 +206,6 @@ class AddAssignmentClientView(APIView):
         assignments_copy = AssignmentClient.objects.create(
             title=assignment.title,
             text=assignment.text,
-            author=assignment.author,
             assignment_type=assignment.assignment_type,
             status=assignment.status,
             tags=assignment.tags,
@@ -219,7 +218,7 @@ class AddAssignmentClientView(APIView):
         blocks = assignment.blocks.all()
         for block in blocks:
             block_copy = Block.objects.create(
-                assignment=assignments_copy,
+                # assignment=assignments_copy,
                 question=block.question,
                 type=block.type,
                 reply=block.reply,
@@ -237,3 +236,8 @@ class AddAssignmentClientView(APIView):
             assignments_copy.blocks.add(block_copy)
         client.client.assignments.add(assignments_copy)
         return Response({'detail': 'Assignment set client successfully.'})
+
+
+class AssignmentDetail(generics.RetrieveAPIView):
+    queryset = Assignment.objects.all()
+    serializer_class = AssignmentSerializer

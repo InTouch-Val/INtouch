@@ -37,3 +37,5 @@ pk, token из url из письма. Возвращает access и refresh т�
 **GET: api/v1/assignments/** - список задач  
 **GET: api/v1/assignments/add-list/{pk}/** - добавление задачи в My List  
 **GET: api/v1/assignments/delete-list/{pk}/** - удаление задачи из My List  
+**GET: api/v1/assignments/set-client/{pk}/{client_pk}/** - назначение задачи клиенту  
+**GET: api/v1/assignments/{pk}/** - получение задачи по id  

@@ -71,12 +71,25 @@ class Assignment(models.Model):
         return self.title
 
 
-class AssignmentClient(Assignment):
+class AssignmentClient(models.Model):
+    title = models.CharField(max_length=100)
+    text = models.TextField()
+    update_date = models.DateField(auto_now=True)
+    add_date = models.DateTimeField(auto_now_add=True)
+    assignment_type = models.CharField(max_length=100)
+    status = models.CharField(max_length=100)
+    tags = models.CharField(max_length=255)
+    language = models.CharField(max_length=100)
+    share = models.IntegerField(default=0)
+    likes = models.IntegerField(default=0)
+    image_url = models.CharField(max_length=255)
+    blocks = models.ManyToManyField('Block', related_name='blocks_client', blank=True)
+    comments = models.ManyToManyField('Comment', blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class Block(models.Model):
-    assignment = models.ForeignKey('Assignment', on_delete=models.CASCADE)
+    # assignment = models.ForeignKey('Assignment', on_delete=models.CASCADE)
     question = models.CharField(max_length=250)
     type = models.CharField(max_length=100)
     reply = models.TextField(blank=True)
