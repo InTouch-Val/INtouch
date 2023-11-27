@@ -13,7 +13,7 @@ function ClientPage() {
     updateUserData()
   }, [])
 
-  const filteredClients = currentUser?.clients.filter((client) =>
+  const filteredClients = currentUser?.doctor?.clients.filter((client) =>
     `${client.first_name} ${client.last_name}`.toLowerCase().includes(searchTerm.toLowerCase())
   ) || [];
 

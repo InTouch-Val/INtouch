@@ -20,6 +20,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('refreshToken', refreshToken);
     try {
       const response = await API.get('get-user/');
+      console.log(response)
       setCurrentUser(response.data[0]);
     } catch (error) {
       console.error('Error during login:', error);

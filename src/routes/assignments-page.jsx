@@ -18,31 +18,31 @@ function AssignmentsPage() {
     const navigate = useNavigate();
 
     const toggleFavorite = async (assignmentId) => {
-        const isFavorite = userFavorites.includes(assignmentId)
-        try{
-          if(isFavorite) {
-            await API.get(`assignments/delete-list/${assignmentId}`)
-          }
-          else{
-            await API.get(`assignments/add-list/${assignmentId}`)
-          }
-          setUserFavorites(prev => 
-            isFavorite ? prev.filter(id => id != assignmentId) : [...prev, assignmentId]
-            )
-        }
-        catch(error){
-          console.error("Error toggling favorites: " + error)
-        }
-    };
+      const isFavorite = userFavorites.includes(assignmentId);
+      try {
+          const endpoint = isFavorite ? 'delete-list' : 'add-list';
+          await API.get(`assignments/${endpoint}/${assignmentId}`);
+          setUserFavorites(prevFavorites => {
+              if (isFavorite) {
+                  return prevFavorites.filter(id => id !== assignmentId);
+              } else {
+                  return [...prevFavorites, assignmentId];
+              }
+          });
+      } catch (error) {
+          console.error("Error toggling favorites:", error);
+      }
+  };
+  
 
     useEffect(() => {
       const fetchUserFavorites = async () => {
         try{
           const response = await API.get('get-user/')
-          setUserFavorites(response.data[0].assignments)
+          setUserFavorites(response.data[0].doctor.assignments)
         }
         catch(error){
-          console.errror("Error fetching user favorites: " + error)
+          console.error("Error fetching user favorites: " + error)
         }
       }
       fetchUserFavorites()
@@ -68,7 +68,7 @@ function AssignmentsPage() {
 
         if (searchTerm) {
             updatedAssignments = updatedAssignments.filter((assignment) =>
-                assignment.title.toLowerCase().includes(searchTerm.toLowerCase())
+                assignment.title.toLowerCase()?.includes(searchTerm.toLowerCase())
             );
         }
 
@@ -192,7 +192,7 @@ function AssignmentsPage() {
                 key={assignment.id}
                 assignment={assignment}
                 onFavoriteToggle={toggleFavorite}
-                isFavorite={userFavorites.includes(assignment.id)}
+                isFavorite={userFavorites?.includes(assignment.id)}
               />
             ))
           ) : (
@@ -202,9 +202,9 @@ function AssignmentsPage() {
       )}
       {activeTab === 'my-list' && (
         <div className='assignment-grid'>
-          {filteredAssignments.filter(assignment => userFavorites.includes(assignment.id)).length > 0 ? (
+          {filteredAssignments.filter(assignment => userFavorites?.includes(assignment.id)).length > 0 ? (
             filteredAssignments
-              .filter(assignment => userFavorites.includes(assignment.id))
+              .filter(assignment => userFavorites?.includes(assignment.id))
               .map(assignment => (
                 <AssignmentTile
                   key={assignment.id}

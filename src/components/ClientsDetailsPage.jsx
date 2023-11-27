@@ -7,7 +7,7 @@ import "../css/clients.css"
 const ClientDetailPage = () => {
     const { id } = useParams(); 
     const {currentUser} = useAuth()
-    const client = currentUser?.clients.find(client => client.id === Number(id));
+    const client = currentUser?.doctor.clients.find(client => client.id === Number(id));
     
     const [activeTab, setActiveTab] = useState('profile');
     const [chatHistory, setChatHistory] = useState(client.chatHistory);
@@ -17,6 +17,9 @@ const ClientDetailPage = () => {
     const switchToAssignmentsTab = () => { setActiveTab("assignments")}
     const switchToNotesTab = () => { setActiveTab("notes")}
 
+    useEffect(() => {
+        console.log(client)
+    }, [])
     // const sendMessage = () => {
     //     if (newMessage.trim() !== '') {
     //         const message = {
@@ -58,10 +61,10 @@ const ClientDetailPage = () => {
                     <p>{client.last_update || "No info yet"}</p>
 
                     <h3>Diagnosis</h3>
-                    <p>{client.diagnosis || "No info yet"}</p>
+                    <p>{client.client.diagnosis || "No info yet"}</p>
 
                     <h3>About Client</h3>
-                    <p>{client.about || "No info yet"}</p>
+                    <p>{client.client.about || "No info yet"}</p>
                 </div>
             )}
             {/*Chat Tab View */}
