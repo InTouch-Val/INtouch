@@ -83,7 +83,6 @@ class UserSerializer(serializers.ModelSerializer):
             'date_of_birth',
             'date_joined',
             'last_update',
-            'assignments',
             'clients',
             'user_type',
             'photo',
