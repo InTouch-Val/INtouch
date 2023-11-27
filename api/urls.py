@@ -50,8 +50,13 @@ urlpatterns = [
         AssignmentDeleteUserMyListView.as_view(),
         name='assignment_delete-list'
     ),
-    path('assignments/<pk>/like/', AssignmentLikeView.as_view(), name='like'),
-    path('assignments/<pk>/dislike/', AssignmentDislikeView.as_view(), name='dislike'),
+    path(
+        'assignments/set-client/<int:pk>/<int:client_pk>/',
+        AddAssignmentClientView.as_view(),
+        name='add_assignment_client'
+    ),
+    # path('assignments/<pk>/like/', AssignmentLikeView.as_view(), name='like'),
+    # path('assignments/<pk>/dislike/', AssignmentDislikeView.as_view(), name='dislike'),
     path('clients/add/', AddClientView.as_view(), name='add_client'),
     path('update-client/<int:pk>/', UpdateClientView.as_view(), name='update_client'),
 ]

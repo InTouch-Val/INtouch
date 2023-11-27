@@ -176,19 +176,6 @@ class AssignmentAddUserMyListView(APIView):
         token = request.headers.get('Authorization').split(' ')[1]
         user = User.objects.get(pk=AccessToken(token)['user_id'])
         assignment = Assignment.objects.get(pk=pk)
-        # assignment_copy = AssignmentMyList.objects.create(
-        #     title=assignment.title,
-        #     text=assignment.text,
-        #     author=assignment.author,
-        #     assignment_type=assignment.assignment_type,
-        #     status=assignment.status,
-        #     tags=assignment.tags,
-        #     language=assignment.language,
-        #     share=assignment.share,
-        #     likes=assignment.likes,
-        #     image_url=assignment.image_url,
-        #     blocks=assignment.blocks
-        # )
         user.doctor.assignments.add(assignment)
         return Response({'detail': 'Assignment added successfully.'})
 
@@ -212,6 +199,41 @@ class ListAssignmentView(generics.ListAPIView):
     serializer_class = AssignmentSerializer
 
 
-# class AddAssignmentClientView(generics.CreateAPIView):
-#     queryset = Assignment.objects.all()
-#     serializer_class = AddAssignmentClientSerializer
+class AddAssignmentClientView(APIView):
+    def get(self, request, pk, client_pk):
+        assignment = Assignment.objects.get(pk=pk)
+        client = User.objects.get(pk=client_pk)
+        assignments_copy = AssignmentClient.objects.create(
+            title=assignment.title,
+            text=assignment.text,
+            author=assignment.author,
+            assignment_type=assignment.assignment_type,
+            status=assignment.status,
+            tags=assignment.tags,
+            language=assignment.language,
+            share=assignment.share,
+            likes=assignment.likes,
+            image_url=assignment.image_url,
+            user=client,
+        )
+        blocks = assignment.blocks.all()
+        for block in blocks:
+            block_copy = Block.objects.create(
+                assignment=assignments_copy,
+                question=block.question,
+                type=block.type,
+                reply=block.reply,
+                start_range=block.start_range,
+                end_range=block.end_range,
+            )
+            choice_replies = block.choice_replies.all()
+            for choice_reply in choice_replies:
+                choice_reply_copy = BlockChoice.objects.create(
+                    block=block_copy,
+                    reply=choice_reply.reply,
+                    checked=choice_reply.checked,
+                )
+                block_copy.choice_replies.add(choice_reply_copy)
+            assignments_copy.blocks.add(block_copy)
+        client.client.assignments.add(assignments_copy)
+        return Response({'detail': 'Assignment set client successfully.'})
