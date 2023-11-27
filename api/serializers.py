@@ -52,6 +52,8 @@ class DoctorSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    client = ClientSerializer()
+    doctor = DoctorSerializer()
     password = serializers.CharField(
         write_only=True,
         validators=[
@@ -68,7 +70,6 @@ class UserSerializer(serializers.ModelSerializer):
     )
     user_type = serializers.CharField(read_only=True)
     photo = serializers.ImageField(required=False)
-    clients = ClientSerializer(many=True)
 
     class Meta:
         model = User
@@ -83,7 +84,8 @@ class UserSerializer(serializers.ModelSerializer):
             'date_of_birth',
             'date_joined',
             'last_update',
-            'clients',
+            'client',
+            'doctor',
             'user_type',
             'photo',
         )
