@@ -1,17 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../css/clients.css';
-import clientsData from '../data/clients.json';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../service/authContext';
 
 function ClientPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [openActionsClientId, setOpenActionsClientId] = useState(null);
-
+  const {currentUser, updateUserData} = useAuth()
   const navigate = useNavigate()
 
-  const filteredClients = clientsData.filter((client) =>
-    client.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    updateUserData()
+  }, [])
+
+  const filteredClients = currentUser?.clients.filter((client) =>
+    `${client.first_name} ${client.last_name}`.toLowerCase().includes(searchTerm.toLowerCase())
+  ) || [];
 
   const toggleActions = (clientId) => {
     if (openActionsClientId === clientId) {
@@ -64,16 +68,16 @@ function ClientPage() {
             </tr>
           </thead>
           <tbody>
-            {filteredClients.map((client) => (
+          {filteredClients.map((client) => (
               <tr key={client.id}>
                 <td className='full-name-cell'>
-                  <Link to={`/clients/${client.id}`}>
-                    <img src={client.avatar} alt={client.name} className='avatar' />
-                    {client.name}
+                  <Link className='link-to-client' to={`/clients/${client.id}`}>
+                    <img src={client.photo} alt={`${client.first_name} ${client.last_name}`} className='avatar' />
+                    {`${client.first_name} ${client.last_name}`}
                   </Link>
                 </td>
-                <td>{client.status}</td>
-                <td>{client.added}</td>
+                <td>{client.is_active ? "Active" : "Inactive"}</td>
+                <td>{new Date(client.date_joined).toLocaleDateString()}</td>
                 <td>
                   <button
                     className='actions-button'

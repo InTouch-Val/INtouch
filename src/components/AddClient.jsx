@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import API from '../service/axios'; 
 import "../css/add-client.css"
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../service/authContext';
 
 const AddClient = () => {
   const [clientData, setClientData] = useState({
@@ -12,6 +13,7 @@ const AddClient = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
+  const {updateUserData} = useAuth()
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -33,15 +35,37 @@ const AddClient = () => {
         if (response.status === 200) {
           setSuccess(true);
           setError('');
+          await updateUserData()
           setTimeout(() => {
             navigate('/clients');
           }, 1500);
         }
       } catch (error) {
-        if (error.response && error.response.status === 400) {
+        if (error.response && error.response.status === 401) {
+          try {
+            
+            const retryResponse = await API.post('clients/add/', {
+              first_name: clientData.firstName,
+              last_name: clientData.lastName,
+              email: clientData.email
+            });
+      
+            if (retryResponse.status === 200) {
+              setSuccess(true);
+              setError('');
+              await updateUserData();
+              setTimeout(() => {
+                navigate('/clients');
+              }, 1500);
+            }
+          } catch (retryError) {
+            // Обработка ошибок повторного запроса, если он тоже не удался
+            setError('Error adding client occurred after retry');
+          }
+        } else if (error.response && error.response.status === 400) {
           setError('User with such email already exists');
         } else {
-          setError('Error adding client occured');
+          setError('Error adding client occurred');
         }
         setSuccess(false);
       }

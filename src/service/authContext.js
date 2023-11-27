@@ -35,9 +35,17 @@ export const AuthProvider = ({ children }) => {
     setCurrentUser(null);
   };
 
+  const updateUserData = async () => {
+    try{
+      const response = await API.get('get-user/');
+      setCurrentUser(response.data[0]);
+    }catch (error) {
+      console.error('Error during login:', error);
+    }
+  }
+
   useEffect(() => {
     const initAuth = async () => {
-      console.log("auth context initialized")
       const accessToken = localStorage.getItem('accessToken');
       if (!accessToken) {
         setIsLoading(false);
@@ -58,7 +66,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ currentUser, isLoading, isLoggedIn, login, logout }}>
+    <AuthContext.Provider value={{ currentUser, isLoading, isLoggedIn, login, logout, updateUserData }}>
       {!isLoading && children}
     </AuthContext.Provider>
   );

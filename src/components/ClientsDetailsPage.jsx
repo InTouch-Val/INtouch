@@ -1,13 +1,13 @@
 import React, {useState, useEffect} from 'react'
-import clientsData from '../data/clients.json'
 import { useParams } from "react-router-dom";
-import Chat from './Chat' 
+import { useAuth } from '../service/authContext';
 import Notes from './Notes';
 import "../css/clients.css"
 
 const ClientDetailPage = () => {
     const { id } = useParams(); 
-    const client = clientsData.find(client => client.id === Number(id));
+    const {currentUser} = useAuth()
+    const client = currentUser?.clients.find(client => client.id === Number(id));
     
     const [activeTab, setActiveTab] = useState('profile');
     const [chatHistory, setChatHistory] = useState(client.chatHistory);
@@ -17,29 +17,29 @@ const ClientDetailPage = () => {
     const switchToAssignmentsTab = () => { setActiveTab("assignments")}
     const switchToNotesTab = () => { setActiveTab("notes")}
 
-    const sendMessage = () => {
-        if (newMessage.trim() !== '') {
-            const message = {
-                messageId: chatHistory.length + 1,
-                sender: 'user',
-                content: newMessage,
-                date: new Date().toLocaleString(),
-            };
-            setChatHistory([...chatHistory, message]);
-            setNewMessage('');
-        }
-    };
+    // const sendMessage = () => {
+    //     if (newMessage.trim() !== '') {
+    //         const message = {
+    //             messageId: chatHistory.length + 1,
+    //             sender: 'user',
+    //             content: newMessage,
+    //             date: new Date().toLocaleString(),
+    //         };
+    //         setChatHistory([...chatHistory, message]);
+    //         setNewMessage('');
+    //     }
+    // };
     
-      useEffect(() => {
-        setChatHistory(client.chatHistory);
-      }, [client.chatHistory]);
+    //   useEffect(() => {
+    //     setChatHistory(client.chatHistory);
+    //   }, [client.chatHistory]);
     
 
     return (
         <div className='client-detail-page'>
             <header>
-                <img src={client.avatar} alt={client.name} className='avatar' style={{"width": "46px"}} />
-                <h2>{client.name}</h2>
+                <img src={client.photo} className='avatar' style={{"width": "46px"}} />
+                <h2>{`${client.first_name} ${client.last_name}`}</h2>
             </header>
             <div className='tabs'>
                 <button className={activeTab === 'profile'? 'active' : ''} onClick={switchToProfileTab}>Profile</button>
@@ -52,20 +52,20 @@ const ClientDetailPage = () => {
             {activeTab === 'profile' && (
                 <div className='profile-tab'>
                     <h3>Date Of Birth</h3>
-                    <p>{client.dateOfBirth}</p>
-
-                    <h3>Diagnosis</h3>
-                    <p>{client.diagnoses.join(', ')}</p>
+                    <p>{client.date_of_birth || "No info yet"}</p>
 
                     <h3>Last Update</h3>
-                    <p>{client.lastUpdate}</p>
+                    <p>{client.last_update || "No info yet"}</p>
+
+                    <h3>Diagnosis</h3>
+                    <p>{client.diagnosis || "No info yet"}</p>
 
                     <h3>About Client</h3>
-                    <p>{client.about}</p>
+                    <p>{client.about || "No info yet"}</p>
                 </div>
             )}
             {/*Chat Tab View */}
-            {activeTab === 'chat' && (
+            {/* {activeTab === 'chat' && (
                 <div className='chat-tab'>
                     <Chat
                         chatHistory={chatHistory}
@@ -75,7 +75,7 @@ const ClientDetailPage = () => {
                         clientAvatar={client.avatar}
                     />
                 </div>
-            )}
+            )} */}
             {/*Assignments Tab View */}
             {activeTab === 'assignments' && (
                 <div className='assignments-tab'>

@@ -22,11 +22,11 @@ h1{
   font-family: "Montserrat", sans-serif;
   color: white;
   border: none;
-  border-radius: 100px;
-  padding: 3px 20px;
-  line-height: 20px;
+  border-radius: 20px;
+  padding: 10px 25px;
   font-size: 16px;
   cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .search-filters {
@@ -41,13 +41,14 @@ h1{
 }
 .search-input {
   flex: 1;
-  padding: 5px;
+  padding: 10px 15px;
   border-radius: 5px;
   border: none;
   box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.6);
   font-family: "Montserrat", sans-serif;
   margin-right: -25px;
   font-size: 16px;
+  background-color: white;
 }
 
 .search-button {
@@ -60,19 +61,21 @@ h1{
 }
 
 select {
-  flex: 7%;
-  padding: 5px;
+  flex: 15%;
+  padding: 10px 15px;
+  border: 1px solid #d1d1d1;
   margin-left: 10px;
   font-family: 'Montserrat', sans-serif;
   font-size: 16px;
-  line-height: 17px;
   border-radius: 10px;
-  -webkit-appearance: none; 
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='black'><path d='M7 10L12 3H2z'/></svg>");
+  -webkit-appearance: none; /* Удаление стандартного вида для Webkit браузеров */
+  -moz-appearance: none; /* Удаление стандартного вида для Firefox */
+  appearance: none; /* Удаление стандартного вида для других браузеров */
+  cursor: pointer; /* Изменение курсора при наведении */ 
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%23656565'><path d='M7 10L12 3H2z'/></svg>");
   background-repeat: no-repeat;
-  background-position: right center;
-  background-size: 14px 14px;
-  padding-right: 14px;
+  background-position: right 10px center;
+  background-size: 12px;
   color: #656565;
 }
 
@@ -85,22 +88,29 @@ table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border-radius: 15px;
+  box-sizing: border-box;
 }
 
 td, th {
   border: none;
-  padding: 8px;
+  padding: 15px;
   text-align: left;
   border-bottom: 1px solid #ddd;
   font-weight: medium;
   font-size: 16px;
-  line-height: 17px;
+}
+
+td{
+  vertical-align: middle;
+  height: 50px;
 }
 
 th {
   background-color: transparent;
   font-size: 16px;
-  line-height: 17px;
   font-weight: normal;
 }
 
@@ -109,10 +119,16 @@ th {
   align-items: center;
 }
 
+.link-to-client{
+  text-decoration: none;
+  color: inherit;
+}
+
 .avatar {
   border-radius: 50%;
   margin-right: 0.75cm;
-  width: 46px;
+  width: 50px;
+  height: 50px;
 }
 
 tr {
