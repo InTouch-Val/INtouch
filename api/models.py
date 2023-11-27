@@ -3,10 +3,9 @@ from django.db import models
 
 
 class User(AbstractUser):
-    birth_date = models.DateField(null=True)
-    update_date = models.DateTimeField(auto_now=True)
+    date_of_birth = models.DateField(null=True)
+    last_update = models.DateTimeField(auto_now=True)
     add_date = models.DateTimeField(auto_now_add=True)
-    profile = models.TextField(blank=True)
     user_type = models.CharField(max_length=100)
     accept_policy = models.BooleanField(default=False)
     photo = models.ImageField(
@@ -14,20 +13,33 @@ class User(AbstractUser):
         default='default_user_photo.jpg',
         blank=True,
     )
-    assignments = models.ManyToManyField('Assignment', blank=True)
-    clients = models.ManyToManyField(
-        'self',
-        through='ClientRelationship',
-        symmetrical=False, blank=True
-    )
 
     def __str__(self):
         return self.username
 
 
-class ClientRelationship(models.Model):
-    from_user = models.ForeignKey(User, related_name='from_users', on_delete=models.CASCADE)
-    to_user = models.ForeignKey(User, related_name='to_users', on_delete=models.CASCADE)
+class Doctor(models.Model):
+    user = models.OneToOneField('User', on_delete=models.CASCADE)
+    clients = models.ManyToManyField(
+        'User',
+        # through='ClientRelationship',
+        # symmetrical=False,
+        blank=True,
+        related_name='clients'
+    )
+    assignments = models.ManyToManyField('Assignment', blank=True)
+
+
+class Client(models.Model):
+    user = models.OneToOneField('User', on_delete=models.CASCADE)
+    assignments = models.ManyToManyField('AssignmentClient', blank=True)
+    diagnosis = models.CharField(max_length=255, blank=True)
+    about = models.TextField(blank=True)
+
+
+# class ClientRelationship(models.Model):
+#     from_user = models.ForeignKey(User, related_name='from_users', on_delete=models.CASCADE)
+#     to_user = models.ForeignKey(User, related_name='to_users', on_delete=models.CASCADE)
 
 
 class Assignment(models.Model):
@@ -57,6 +69,10 @@ class Assignment(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class AssignmentClient(Assignment):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class Block(models.Model):

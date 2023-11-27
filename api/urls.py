@@ -54,7 +54,9 @@ urlpatterns = [
     ),
     path('assignments/<pk>/like/', AssignmentLikeView.as_view(), name='like'),
     path('assignments/<pk>/dislike/', AssignmentDislikeView.as_view(), name='dislike'),
-    # path('clients/', ClientListView.as_view(), name='clients'),
     path('clients/add/', AddClientView.as_view(), name='add_client'),
     path('update-client/<int:pk>/', UpdateClientView.as_view(), name='update_client'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
