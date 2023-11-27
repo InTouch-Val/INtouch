@@ -212,6 +212,6 @@ class ListAssignmentView(generics.ListAPIView):
     serializer_class = AssignmentSerializer
 
 
-class AddAssignmentClientView(generics.CreateAPIView):
-    queryset = Assignment.objects.all()
-    serializer_class = AddAssignmentClientSerializer
+# class AddAssignmentClientView(generics.CreateAPIView):
+#     queryset = Assignment.objects.all()
+#     serializer_class = AddAssignmentClientSerializer
