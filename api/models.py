@@ -10,7 +10,7 @@ class User(AbstractUser):
     accept_policy = models.BooleanField(default=False)
     photo = models.ImageField(
         upload_to='user_photos',
-        default='default_user_photo.jpg',
+        default='user_photos/default_user_photo.jpg',
         blank=True,
     )
 

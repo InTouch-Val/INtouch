@@ -1,6 +1,4 @@
 from django.urls import path, include
-from django.conf import settings
-from django.conf.urls.static import static
 from rest_framework import routers
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -57,6 +55,3 @@ urlpatterns = [
     path('clients/add/', AddClientView.as_view(), name='add_client'),
     path('update-client/<int:pk>/', UpdateClientView.as_view(), name='update_client'),
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
