@@ -15,19 +15,36 @@ from .models import *
 
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = Client
         fields = [
             'id',
-            'first_name',
-            'last_name',
-            'email',
-            'photo',
-            'is_active',
-            'date_joined',
+            'diagnosis',
+            'about',
+            'assignments',
+        ]
+
+
+class ClientInDoctorSerializers(serializers.ModelSerializer):
+    client = ClientSerializer()
+    class Meta:
+        model = User
+        fields = ['id', 'date_of_birth', 'last_update', 'client']
+
+
+class DoctorSerializer(serializers.ModelSerializer):
+    clients = ClientInDoctorSerializers(many=True)
+    class Meta:
+        model = Doctor
+        fields = [
+            'id',
+            'clients',
+            'assignments',
         ]
 
 
 class UserSerializer(serializers.ModelSerializer):
+    doctor = DoctorSerializer(required=False)
+    client = ClientSerializer(required=False)
     password = serializers.CharField(
         write_only=True,
         validators=[
@@ -44,7 +61,6 @@ class UserSerializer(serializers.ModelSerializer):
     )
     user_type = serializers.CharField(read_only=True)
     photo = serializers.ImageField(required=False)
-    clients = ClientSerializer(many=True)
 
     class Meta:
         model = User
@@ -56,13 +72,13 @@ class UserSerializer(serializers.ModelSerializer):
             'password',
             'confirm_password',
             'accept_policy',
-            'birth_date',
+            'date_of_birth',
             'date_joined',
-            'update_date',
-            'assignments',
-            'clients',
+            'last_update',
             'user_type',
             'photo',
+            'doctor',
+            'client',
         )
 
     def validate(self, attrs):
@@ -83,6 +99,7 @@ class UserSerializer(serializers.ModelSerializer):
             user_type='doctor',
             is_active=False,
         )
+        Doctor.objects.create(user=user)
         token = default_token_generator.make_token(user)
         activation_url = f'/activate/{user.pk}/{token}/'
         current_site = 'http://127.0.0.1:3000'
@@ -150,6 +167,7 @@ class AddClientSerializer(serializers.ModelSerializer):
             user_type='client',
             is_active=False,
         )
+        Client.objects.create(user=user)
         token = default_token_generator.make_token(user)
         activation_url = f'/activate-client/{user.pk}/{token}/'
         current_site = 'http://127.0.0.1:3000'

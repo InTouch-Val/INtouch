@@ -146,19 +146,13 @@ class AddClientView(APIView):
         client = serializer.save()
         token = request.headers.get('Authorization').split(' ')[1]
         user = User.objects.get(pk=AccessToken(token)['user_id'])
-        user.clients.add(client)
+        user.doctor.clients.add(client)
         return Response("Confirm email sent.")
 
 
 class UpdateClientView(generics.UpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UpdateClientSerializer
-
-
-
-# class ClientListView(generics.ListAPIView):
-#     queryset = Client.objects.all()
-#     serializer_class = ClientSerializer
 
 
 class AssignmentLikeView(APIView):
@@ -182,7 +176,20 @@ class AssignmentAddUserMyListView(APIView):
         token = request.headers.get('Authorization').split(' ')[1]
         user = User.objects.get(pk=AccessToken(token)['user_id'])
         assignment = Assignment.objects.get(pk=pk)
-        user.assignments.add(assignment)
+        # assignment_copy = AssignmentMyList.objects.create(
+        #     title=assignment.title,
+        #     text=assignment.text,
+        #     author=assignment.author,
+        #     assignment_type=assignment.assignment_type,
+        #     status=assignment.status,
+        #     tags=assignment.tags,
+        #     language=assignment.language,
+        #     share=assignment.share,
+        #     likes=assignment.likes,
+        #     image_url=assignment.image_url,
+        #     blocks=assignment.blocks
+        # )
+        user.doctor.assignments.add(assignment)
         return Response({'detail': 'Assignment added successfully.'})
 
 
