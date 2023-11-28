@@ -116,6 +116,11 @@ class PasswordResetCompleteView(APIView):
             return Response({'message': 'Password not changed'})
 
 
+class UpdateUserView(generics.UpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UpdateUserSerializer
+
+
 @api_view(['GET'])
 def user_delete_hard(request):
     token = request.headers.get('Authorization').split(' ')[1]
@@ -238,6 +243,6 @@ class AddAssignmentClientView(APIView):
         return Response({'detail': 'Assignment set client successfully.'})
 
 
-class AssignmentDetail(generics.RetrieveAPIView):
+class AssignmentDetailView(generics.RetrieveAPIView):
     queryset = Assignment.objects.all()
     serializer_class = AssignmentSerializer

@@ -156,6 +156,21 @@ class ChangePasswordSerializer(serializers.Serializer):
         return attrs
 
 
+class UpdateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email', 'date_of_birth', 'photo']
+
+    def update(self, user, validated_data):
+        user.first_name = validated_data.get('first_name', user.first_name)
+        user.last_name = validated_data.get('last_name', user.last_name)
+        user.email = validated_data.get('email', user.email)
+        user.date_of_birth = validated_data.get('date_of_birth', user.date_of_birth)
+        user.photo = validated_data.get('photo', user.photo)
+        user.save()
+        return user
+
+
 class AddClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -298,8 +313,6 @@ class AddBlockSerializer(serializers.ModelSerializer):
                 AddBlockChoiceSerializer(),
                 choice_data
             )
-        block.assignment = validated_data['assignment']
-        block.save()
         return block
 
 
@@ -323,7 +336,6 @@ class AddAssignmentSerializer(serializers.ModelSerializer):
         blocks_data = validated_data.pop('blocks', [])
         assignment = Assignment.objects.create(**validated_data)
         for block_data in blocks_data:
-            block_data['assignment'] = assignment
             choice_replies_data = block_data.pop('choice_replies', [])
             block = AddBlockSerializer.create(AddBlockSerializer(), block_data)
             for choice_data in choice_replies_data:
