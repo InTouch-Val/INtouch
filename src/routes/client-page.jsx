@@ -4,8 +4,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../service/authContext';
 
 function ClientPage() {
+  const [showModal, setShowModal] = useState(null)
+  const [showDeleteModal, setShowDeleteModal] = useState(null)
+  const [showAssignmentModal, setShowAssignmentModal] = useState(null)
+  const [clientToInteract, setClientToInteract] = useState(null)
+
   const [searchTerm, setSearchTerm] = useState('');
-  const [openActionsClientId, setOpenActionsClientId] = useState(null);
   const {currentUser, updateUserData} = useAuth()
   const navigate = useNavigate()
 
@@ -18,12 +22,14 @@ function ClientPage() {
   ) || [];
 
   const toggleActions = (clientId) => {
-    if (openActionsClientId === clientId) {
-      setOpenActionsClientId(null);
-    } else {
-      setOpenActionsClientId(clientId);
+    if(!showModal){
+      setShowModal(clientId)
+    }else{
+      setShowModal(null)
     }
   };
+
+  const closeModal = () => setShowModal(null) 
 
   const handleAddClient = () => {
     navigate("/add-client")
@@ -70,7 +76,7 @@ function ClientPage() {
           <tbody>
           {filteredClients.map((client) => (
               <tr key={client.id}>
-                <td className='full-name-cell'>
+                <td>
                   <Link className='link-to-client' to={`/clients/${client.id}`}>
                     <img src={client.photo} alt={`${client.first_name} ${client.last_name}`} className='avatar' />
                     {`${client.first_name} ${client.last_name}`}
@@ -78,19 +84,25 @@ function ClientPage() {
                 </td>
                 <td>{client.is_active ? "Active" : "Inactive"}</td>
                 <td>{new Date(client.date_joined).toLocaleDateString()}</td>
-                <td>
+                <td className='actions'>
                   <button
-                    className='actions-button'
+                    className='open-modal-button'
                     onClick={() => toggleActions(client.id)}
                   >
                     &#8942;
                   </button>
-                  {openActionsClientId === client.id && (
-                    <div className='actions-menu'>
-                      <Link to={`/clients/${client.id}`}>Edit</Link>
-                      <button className='delete-client-button'>Delete</button>
-                    </div>
-                  )}
+                  {
+                    showModal === client.id && (
+                      <div className="modal-overlay" onClick={closeModal}>
+                        <div className="modal" onClick={e => e.stopPropagation()}>
+                          <button className="close-modal-button" onClick={closeModal}>&times;</button>
+                          <button className="action-button">Delete Client</button>
+                          <button className='action-button'>Add Assignment</button>
+                        </div>
+                      </div>
+                    
+                    
+                    )}
                 </td>
               </tr>
             ))}

@@ -1,0 +1,79 @@
+.settings-page{
+    padding: 35px; 
+}
+
+.settings-page header{
+    display: flex;
+    align-items: center;
+}
+
+header h2{
+    color: #656565;
+    font-weight: 400;
+}
+
+header img{
+    width: 50px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.tabs{
+    width: 100%;
+}
+
+.settings-profile-tab{
+    display: flex;
+    /* justify-content: space-evenly; */
+}
+
+.left-column{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    flex: 0 0 25%;
+}
+
+.left-column img{
+    width: 100px;
+    height: 100px;
+    margin-bottom: 20px;
+}
+
+.right-column{
+    flex-grow: 1;
+}
+
+.right-column form{
+    display: flex;
+    flex-direction: column;
+}
+
+.right-column label{
+    font-size: 22px;
+    color: #417D88;
+}
+
+.right-column form input{
+    margin: 10px;
+    box-shadow: 0px 0px 3px 2px #D7E4E773;
+    border: none;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 10px 15px;
+    font-size: 17px;
+    font-family: "Montserrat", sans-serif;
+    color: #656565;
+}
+
+#save-settings{
+    background-color: #417D88;
+    color: #fff;
+    width: 148px;
+    align-self: flex-end;
+    border-radius: 100px;
+    border: none;
+    padding: 10px 16px 10px 16px;
+    font-size: 16px;
+}

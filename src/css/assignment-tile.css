@@ -8,11 +8,13 @@
     flex-direction: column;
     justify-content: space-between;
     overflow: hidden; /* Обрезка контента по границам */
-    width: 270px;
+    width: 280px;
+    
   }
   .assignment-image-container{
     display: flex;
     flex-direction: column;
+    cursor: pointer;
   }
   
   .assignment-tile .assignment-image-container img {

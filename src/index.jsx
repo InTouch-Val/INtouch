@@ -41,6 +41,10 @@ const router = createBrowserRouter([
         element: <AssignmentsPage />,
       },
       {
+        path: '/assignment/:id',
+        element: <AddAssignment/>
+      },
+      {
         path: '/community',
         element: <CommunityPage />,
       },
@@ -63,7 +67,7 @@ const router = createBrowserRouter([
       {
         path: "/add-client",
         element: <AddClient/>
-      } 
+      }
     ],
   },
   {

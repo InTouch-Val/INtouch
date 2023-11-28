@@ -114,14 +114,11 @@ th {
   font-weight: normal;
 }
 
-.full-name-cell {
-  display: flex;
-  align-items: center;
-}
-
 .link-to-client{
   text-decoration: none;
   color: inherit;
+  display: flex;
+  align-items: center;
 }
 
 .avatar {
@@ -135,6 +132,66 @@ tr {
   border-bottom: 1px solid #000000;
   background-color: #ffffff;
 }
+
+.actions{
+  display: flex;
+  align-items: center;
+}
+
+.open-modal-button{
+  border: none;
+  background-color: #fff;
+  cursor: pointer;
+  transition: 0.25s linear;
+}
+.open-modal-button:hover{
+  background-color: rgba(220, 220, 220, 0.2);
+  scale: 1.2;
+}
+
+.action-button{
+  background-color: #417D88;
+  color: #fff;
+  cursor: pointer;
+  margin: 15px 10px 15px 10px;
+  font-family: "Montserrat", sans-serif;
+  padding: 15px 10px;
+  border-radius: 100px;
+  border: none;
+  
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; 
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  z-index: 1001; 
+}
+
+.close-modal-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: red;
+}
+
 
 /*CLIENTS DETAIL PART*/
 .client-detail-page{

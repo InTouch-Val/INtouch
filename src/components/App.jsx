@@ -24,7 +24,7 @@ function App() {
         <div className="user-profile">
           <img
             className="user-avatar"
-            src="https://avatars.githubusercontent.com/aksmaxn4?s=120"
+            src={currentUser?.photo}
             alt="Something"
           />
           <h3>

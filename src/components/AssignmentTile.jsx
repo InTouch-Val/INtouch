@@ -1,4 +1,5 @@
 import React from 'react';
+import {useNavigate} from "react-router-dom"
 import "../css/assignment-tile.css"; 
 
 const formatDate = (dateString) => {
@@ -8,10 +9,15 @@ const formatDate = (dateString) => {
 
 const AssignmentTile = ({ assignment, onFavoriteToggle, isFavorite }) => {
   const displayDate = formatDate(assignment.update_date);
+  const navigate = useNavigate()
+
+  const handleOnTileClick = (assignmentId) => () => {
+    navigate(`/assignment/${assignmentId}`)
+  }
 
   return (
     <div className="assignment-tile">
-      <div className="assignment-image-container">
+      <div className="assignment-image-container" onClick={handleOnTileClick(assignment.id)}>
         <div className='date-and-type'>
           <span>{displayDate}</span>
           {assignment.assignment_type && <span className="type">{assignment.assignment_type}</span>}

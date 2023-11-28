@@ -1,8 +1,8 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { EditorState } from 'draft-js';
 import API from '../service/axios';
 import AssignmentBlock from '../service/assignment-blocks';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import "../css/assignments.css"
 import ImageSelector from '../service/image-selector';
 
@@ -12,6 +12,9 @@ const getPlainText = (editorState) => {
 
 
 const AddAssignment = () => {
+  const {id} = useParams()
+  const isEditMode = id != undefined
+
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [type, setType] = useState('lesson');
@@ -23,6 +26,41 @@ const AddAssignment = () => {
   const [successMessage, setSuccessMessage] = useState(false)
 
   const navigate = useNavigate()
+
+  const loadAssignment = async() => {
+    if(isEditMode){
+      try{
+        const response = await API.get(`assignments/${id}/`)
+        return response.data
+      }
+      catch(error){
+        console.error("Error getting assignment", error)
+      } 
+    }
+  }
+
+  const setAssignmentCredentials = (data) => {
+    setTitle(data.title)
+    setDescription(data.text)
+    setType(data.assignment_type)
+    setLanguage(data.language)
+    setBlocks(data.blocks)
+    setSelectedImage(data.image_url)
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await loadAssignment()
+
+      if(data){
+        setAssignmentCredentials(data)
+      }
+    }
+
+    if(isEditMode){
+      fetchData()
+    }
+  }, [id, isEditMode])
 
 
   const handleSubmit = async (e) => {

@@ -58,13 +58,13 @@ const ClientDetailPage = () => {
                     <p>{client.date_of_birth || "No info yet"}</p>
 
                     <h3>Last Update</h3>
-                    <p>{client.last_update || "No info yet"}</p>
+                    <p>{new Date(client.last_update).toLocaleDateString() || "No info yet"}</p>
 
                     <h3>Diagnosis</h3>
-                    <p>{client.client.diagnosis || "No info yet"}</p>
+                    <p>{client.client?.diagnosis || "No info yet"}</p>
 
                     <h3>About Client</h3>
-                    <p>{client.client.about || "No info yet"}</p>
+                    <p>{client.client?.about || "No info yet"}</p>
                 </div>
             )}
             {/*Chat Tab View */}
