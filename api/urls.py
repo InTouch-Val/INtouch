@@ -37,6 +37,7 @@ urlpatterns = [
         name='password_reset_complete'
     ),
     path('user/update/<int:pk>/', UpdateUserView.as_view(), name='update_user'),
+    path('user/update/password/', UpdatePasswordView.as_view(), name='update_password'),
     path('user/delete/', user_delete_hard, name='user_delete'),
     path('user/deactivate/', user_delete_soft, name='user_deactivate'),
     path('assignments/add/', AddAssignmentView.as_view(), name='add_assignment'),

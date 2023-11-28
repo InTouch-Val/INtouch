@@ -3,6 +3,7 @@ import uuid
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.hashers import check_password
 from django.core.mail import EmailMultiAlternatives
 from django.core.validators import RegexValidator
 from django.template.loader import render_to_string
@@ -154,6 +155,15 @@ class ChangePasswordSerializer(serializers.Serializer):
         if attrs['new_password'] != attrs['confirm_new_password']:
             raise serializers.ValidationError("Passwords do not match")
         return attrs
+
+
+class UpdatePasswordSerializer(ChangePasswordSerializer):
+    password = serializers.CharField()
+    def validate(self, attrs):
+        if attrs['new_password'] != attrs['confirm_new_password']:
+            raise serializers.ValidationError("Passwords do not match")
+        return attrs
+
 
 
 class UpdateUserSerializer(serializers.ModelSerializer):

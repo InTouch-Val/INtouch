@@ -116,6 +116,21 @@ class PasswordResetCompleteView(APIView):
             return Response({'message': 'Password not changed'})
 
 
+class UpdatePasswordView(APIView):
+    def post(self, request):
+        serializer = UpdatePasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        new_password = serializer.validated_data['new_password']
+        token = request.headers.get('Authorization').split(' ')[1]
+        user = User.objects.get(pk=AccessToken(token)['user_id'])
+        if user and check_password(serializer.validated_data['password'], user.password):
+            user.set_password(new_password)
+            user.save()
+            return Response({'message': 'Password changed successfully'})
+        else:
+            return Response({'message': 'Password not changed'})
+
+
 class UpdateUserView(generics.UpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UpdateUserSerializer

@@ -32,6 +32,8 @@ pk, token из url из письма. Возвращает access и refresh т�
 Вводимые пользователем: password, confirm_password, accept_policy  
 **PUT: api/v1/user/update/{pk}/** - изменение данных пользователя  
 Тело запроса: first_name, last_name, email, date_of_birth, photo  
+**POST: api/v1/user/update/password/** - изменение пароля пользователя  
+Тело запроса: password, new_password, confirm_new_password  
 
 ##### Задачи
 **POST: api/v1/assignments/add/** - создание задачи  
