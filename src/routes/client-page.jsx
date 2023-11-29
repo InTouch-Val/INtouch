@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import '../css/clients.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../service/authContext';
+import API from '../service/axios';
 
 function ClientPage() {
-  const [showModal, setShowModal] = useState(null)
-  const [showDeleteModal, setShowDeleteModal] = useState(null)
-  const [showAssignmentModal, setShowAssignmentModal] = useState(null)
-  const [clientToInteract, setClientToInteract] = useState(null)
+  const [showModal, setShowModal] = useState(false)
+  const [selectedClientId, setSelectedClientId] = useState(null)
+  const [modalAction, setModalAction] = useState(null)
+  const [favoriteAssignments, setFavoriteAssignments] = useState([])
+  const [messageToUser, setMessageToUser] = useState(null)
 
   const [searchTerm, setSearchTerm] = useState('');
   const {currentUser, updateUserData} = useAuth()
@@ -17,23 +19,61 @@ function ClientPage() {
     updateUserData()
   }, [])
 
+  useEffect(() => {
+    const fetchAssignments = async () => {
+      if(modalAction === 'add'){
+        try{
+          const response = await API.get('assignments/').then(
+            response => {
+              const data = response.data.filter(assignment => currentUser.doctor.assignments.includes(assignment.id))
+              setFavoriteAssignments(data)
+            }
+          )
+        }catch(e){
+          console.error(e)
+        }
+      }
+    }
+
+    fetchAssignments()
+  }, [modalAction])
+
   const filteredClients = currentUser?.doctor?.clients.filter((client) =>
     `${client.first_name} ${client.last_name}`.toLowerCase().includes(searchTerm.toLowerCase())
   ) || [];
 
-  const toggleActions = (clientId) => {
-    if(!showModal){
-      setShowModal(clientId)
-    }else{
-      setShowModal(null)
-    }
+  const openModal = (clientId) => {
+    setShowModal(true)
+    setSelectedClientId(clientId)    
   };
 
-  const closeModal = () => setShowModal(null) 
+  const closeModal = () => {
+    setShowModal(false)
+    setSelectedClientId(null)
+    setModalAction(null)
+  }
+  
+  const handleActionSelect = (action) => {
+    setModalAction(action)
+  }
 
   const handleAddClient = () => {
     navigate("/add-client")
   }
+
+  const handleDeleteClient = () => {
+    // TODO: Remove client
+  }
+
+  const handleAssignmentAddToClient = async (assignment) => {
+    try{
+      const response = await API.get(`assignments/set-client/${assignment}/${selectedClientId}/`)
+      console.log(response);
+    }catch(e){
+      console.error(e);
+    }
+  }
+
 
   return (
     <div className='clients-page'>
@@ -63,6 +103,11 @@ function ClientPage() {
           <option value='added'>Added</option>
         </select>
       </div>
+      {messageToUser && (
+        <p>
+          {messageToUser}
+        </p>
+      )}
       <div className='clients-list'>
         <table>
           <thead>
@@ -87,21 +132,69 @@ function ClientPage() {
                 <td className='actions'>
                   <button
                     className='open-modal-button'
-                    onClick={() => toggleActions(client.id)}
+                    onClick={() => openModal(client.id)}
                   >
                     &#8942;
                   </button>
-                  {
-                    showModal === client.id && (
+                  {showModal && (
                       <div className="modal-overlay" onClick={closeModal}>
                         <div className="modal" onClick={e => e.stopPropagation()}>
                           <button className="close-modal-button" onClick={closeModal}>&times;</button>
-                          <button className="action-button">Delete Client</button>
-                          <button className='action-button'>Add Assignment</button>
+                          {
+                            !modalAction && (
+                              <div>
+                                <button className="action-button" onClick={() => handleActionSelect('delete')}>Delete Client</button>
+                                <button className='action-button' onClick={() => handleActionSelect('add')}>Add Assignment</button>
+                              </div>
+                            )
+                          }
+                          {
+                            modalAction == "delete" && (
+                              <div>
+                                <p>Are you sure you want to delete this client? This action is irrevertable!</p>
+                                <div>
+                                  <button className='action-button'>Delete</button>
+                                  <button className='action-button' onClick={closeModal}>Cancel</button>
+                                </div>
+                              </div>
+                            )
+                          }
+                          {
+                            modalAction == "add" && (
+                              <div>
+                                <p>Choose the assignment you want to assign:</p>
+                                <table>
+                                  <thead>
+                                    <tr>
+                                      <th>Title</th>
+                                      <th>Description</th>
+                                      <th>Type</th>
+                                      <th>Language</th>
+                                      <th>Author</th>
+                                      <th>Update Date</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                  {favoriteAssignments.map((assignment) => (
+                                    <tr key={assignment.id}>
+                                      <td>{assignment.title}</td>
+                                      <td>{assignment.text}</td>
+                                      <td>{assignment.assignment_type}</td>
+                                      <td>{assignment.language}</td>
+                                      <td>{assignment.author ? assignment.author : "Unknow Author" }</td>
+                                      <td>{assignment.update_date}</td>
+                                      <td>
+                                        <button className='action-button' onClick={() => handleAssignmentAddToClient(assignment.id)}>Assign</button>
+                                      </td>
+                                    </tr>
+                                ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            )
+                          }
                         </div>
                       </div>
-                    
-                    
                     )}
                 </td>
               </tr>

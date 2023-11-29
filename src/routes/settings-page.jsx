@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useAuth } from '../service/authContext';
 import '../css/settings.css';
+import API from '../service/axios';
+import FormData from 'form-data';
 
 const SettingsPage = () => {
   const [activeTab, setActiveTab] = useState('profile');
@@ -33,7 +35,7 @@ const SettingsPage = () => {
 }
 
 const ProfileTab = () => {
-  const {currentUser} = useAuth()
+  const {currentUser, updateUserData} = useAuth()
   const [userData, setUserData] = useState({
     firstName: currentUser.first_name || '',
     lastName: currentUser.last_name || '',
@@ -45,6 +47,7 @@ const ProfileTab = () => {
 
   const handleFileSelect = (e) => {
     setSelectedFile(e.target.files[0])
+    console.log(selectedFile)
   }
 
 
@@ -56,8 +59,29 @@ const ProfileTab = () => {
     })
   }
 
-  const handleSubmit = () => {
-    //TODO: handle submit 
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    const formData = new FormData()
+    formData.append("first_name", userData.firstName)
+    formData.append("last_name", userData.lastName)
+    formData.append("email", userData.email)
+    formData.append("date_of_birth", userData.dateOfBirth)
+    if(selectedFile){
+      formData.append("photo", selectedFile)
+    }
+    
+    try{
+      const response = await API.put(`user/update/${currentUser.id}/`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      }).then(() => updateUserData())
+
+      console.log(response);
+    } catch(error){
+      console.error("Error updating profile:" + error)
+    }
   }
 
 
