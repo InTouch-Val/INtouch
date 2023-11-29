@@ -42,6 +42,7 @@ urlpatterns = [
     path('user/deactivate/', user_delete_soft, name='user_deactivate'),
     path('assignments/add/', AddAssignmentView.as_view(), name='add_assignment'),
     path('assignments/', ListAssignmentView.as_view(), name='assignments'),
+    path('assignments-client/', ListAssignmentClientView.as_view(), name='assignments-client'),
     path('assignments/<int:pk>/', AssignmentDetailView.as_view(), name='assignment_detail'),
     path(
         'assignments/add-list/<int:pk>/',

@@ -262,12 +262,6 @@ class UpdateClientSerializer(serializers.ModelSerializer):
         return user
 
 
-# class ClientSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Client
-#         fields = '__all__'
-
-
 class BlockChoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = BlockChoice
@@ -285,6 +279,13 @@ class AssignmentSerializer(serializers.ModelSerializer):
     blocks = BlockSerializer(many=True, required=False)
     class Meta:
         model = Assignment
+        fields = '__all__'
+
+
+class AssignmentClientSerializer(serializers.ModelSerializer):
+    blocks = BlockSerializer(many=True, required=False)
+    class Meta:
+        model = AssignmentClient
         fields = '__all__'
 
 

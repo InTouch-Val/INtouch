@@ -261,3 +261,8 @@ class AddAssignmentClientView(APIView):
 class AssignmentDetailView(generics.RetrieveAPIView):
     queryset = Assignment.objects.all()
     serializer_class = AssignmentSerializer
+
+
+class ListAssignmentClientView(generics.ListAPIView):
+    queryset = AssignmentClient.objects.all()
+    serializer_class = AssignmentClientSerializer
