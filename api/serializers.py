@@ -10,6 +10,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+from rest_framework_simplejwt.tokens import AccessToken
 
 from .models import *
 
@@ -277,9 +278,26 @@ class BlockSerializer(serializers.ModelSerializer):
 
 class AssignmentSerializer(serializers.ModelSerializer):
     blocks = BlockSerializer(many=True, required=False)
+    author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    author_name = serializers.StringRelatedField(source='author', read_only=True)
     class Meta:
         model = Assignment
-        fields = '__all__'
+        fields = [
+            'id',
+            'title',
+            'text',
+            'update_date',
+            'add_date',
+            'assignment_type',
+            'status',
+            'tags',
+            'language',
+            'share',
+            'image_url',
+            'blocks',
+            'author',
+            'author_name'
+        ]
 
 
 class AssignmentClientSerializer(serializers.ModelSerializer):
@@ -345,7 +363,9 @@ class AddAssignmentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         blocks_data = validated_data.pop('blocks', [])
-        assignment = Assignment.objects.create(**validated_data)
+        token = self.context['request'].headers.get('Authorization').split(' ')[1]
+        user = User.objects.get(pk=AccessToken(token)['user_id'])
+        assignment = Assignment.objects.create(author=user, **validated_data)
         for block_data in blocks_data:
             choice_replies_data = block_data.pop('choice_replies', [])
             block = AddBlockSerializer.create(AddBlockSerializer(), block_data)
