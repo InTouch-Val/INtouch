@@ -305,9 +305,26 @@ class AssignmentSerializer(serializers.ModelSerializer):
 
 class AssignmentClientSerializer(serializers.ModelSerializer):
     blocks = BlockSerializer(many=True, required=False)
+    author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    author_name = serializers.StringRelatedField(source='author', read_only=True)
     class Meta:
         model = AssignmentClient
-        fields = '__all__'
+        fields = [
+            'id',
+            'title',
+            'text',
+            'update_date',
+            'add_date',
+            'assignment_type',
+            'status',
+            'tags',
+            'language',
+            'share',
+            'image_url',
+            'blocks',
+            'author',
+            'author_name'
+        ]
 
 
 class AddBlockChoiceSerializer(serializers.ModelSerializer):
@@ -317,8 +334,6 @@ class AddBlockChoiceSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         block_choice = BlockChoice.objects.create(**validated_data)
-        block_choice.block = validated_data['block']
-        block_choice.save()
         return block_choice
 
 
@@ -340,7 +355,6 @@ class AddBlockSerializer(serializers.ModelSerializer):
         choice_replies_data = validated_data.pop('choice_replies', [])
         block = Block.objects.create(**validated_data)
         for choice_data in choice_replies_data:
-            choice_data['block'] = block
             AddBlockChoiceSerializer.create(
                 AddBlockChoiceSerializer(),
                 choice_data
@@ -373,7 +387,6 @@ class AddAssignmentSerializer(serializers.ModelSerializer):
             choice_replies_data = block_data.pop('choice_replies', [])
             block = AddBlockSerializer.create(AddBlockSerializer(), block_data)
             for choice_data in choice_replies_data:
-                choice_data['block'] = block
                 block_choice = AddBlockChoiceSerializer.create(
                     AddBlockChoiceSerializer(),
                     choice_data

@@ -47,7 +47,12 @@ class Assignment(models.Model):
     text = models.TextField()
     update_date = models.DateField(auto_now=True)
     add_date = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        related_name='assignments',
+        null=True,
+    )
     assignment_type = models.CharField(max_length=100)
     status = models.CharField(max_length=100)
     tags = models.CharField(max_length=255)
@@ -55,7 +60,11 @@ class Assignment(models.Model):
     share = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
     image_url = models.CharField(max_length=255)
-    blocks = models.ManyToManyField('Block', related_name='blocks', blank=True)
+    blocks = models.ManyToManyField(
+        'Block',
+        related_name='assignment',
+        blank=True
+    )
     comments = models.ManyToManyField('Comment', blank=True)
 
     def like(self):
@@ -75,6 +84,12 @@ class AssignmentClient(models.Model):
     title = models.CharField(max_length=100)
     text = models.TextField()
     update_date = models.DateField(auto_now=True)
+    author = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        related_name='assignments_clients',
+        null=True,
+    )
     add_date = models.DateTimeField(auto_now_add=True)
     assignment_type = models.CharField(max_length=100)
     status = models.CharField(max_length=100)
@@ -83,7 +98,11 @@ class AssignmentClient(models.Model):
     share = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
     image_url = models.CharField(max_length=255)
-    blocks = models.ManyToManyField('Block', related_name='blocks_client', blank=True)
+    blocks = models.ManyToManyField(
+        'Block',
+        related_name='assignment_client',
+        blank=True
+    )
     comments = models.ManyToManyField('Comment', blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -92,13 +111,15 @@ class Block(models.Model):
     question = models.CharField(max_length=250)
     type = models.CharField(max_length=100)
     reply = models.TextField(blank=True)
-    choice_replies = models.ManyToManyField('BlockChoice', blank=True, related_name='block_choices')
+    choice_replies = models.ManyToManyField(
+        'BlockChoice',
+        blank=True
+    )
     start_range = models.IntegerField(blank=True, null=True)
     end_range = models.IntegerField(blank=True, null=True)
 
 
 class BlockChoice(models.Model):
-    block = models.ForeignKey('Block', on_delete=models.CASCADE)
     reply = models.CharField(max_length=100)
     checked = models.BooleanField(default=False)
 
