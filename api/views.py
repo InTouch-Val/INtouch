@@ -236,6 +236,7 @@ class AddAssignmentClientView(APIView):
         assignments_copy = AssignmentClient.objects.create(
             title=assignment.title,
             text=assignment.text,
+            author=assignment.author,
             assignment_type=assignment.assignment_type,
             status=assignment.status,
             tags=assignment.tags,

@@ -383,6 +383,7 @@ class AddAssignmentSerializer(serializers.ModelSerializer):
         token = self.context['request'].headers.get('Authorization').split(' ')[1]
         user = User.objects.get(pk=AccessToken(token)['user_id'])
         assignment = Assignment.objects.create(author=user, **validated_data)
+        user.doctor.assignments.add(assignment)
         for block_data in blocks_data:
             choice_replies_data = block_data.pop('choice_replies', [])
             block = AddBlockSerializer.create(AddBlockSerializer(), block_data)
