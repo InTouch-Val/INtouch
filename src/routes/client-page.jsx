@@ -3,6 +3,7 @@ import '../css/clients.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../service/authContext';
 import API from '../service/axios';
+import { update } from 'draft-js/lib/DefaultDraftBlockRenderMap';
 
 function ClientPage() {
   const [showModal, setShowModal] = useState(false)
@@ -61,8 +62,17 @@ function ClientPage() {
     navigate("/add-client")
   }
 
-  const handleDeleteClient = () => {
-    // TODO: Remove client
+  const handleDeleteClient = async () => {
+    try{
+      const response = await API.delete(`client/delete/${selectedClientId}/`)
+      await updateUserData()
+      setMessageToUser(response.data.message)
+      closeModal()
+    }
+    catch(e){
+      console.error(e)
+      setMessageToUser('There was an error deleting the client')
+    }
   }
 
   const handleAssignmentAddToClient = async (assignment) => {
@@ -79,7 +89,7 @@ function ClientPage() {
     <div className='clients-page'>
       <header className='first-row'>
         <h1>Clients</h1>
-        <button className='add-client-button'
+        <button className='client-button'
                 onClick={handleAddClient}>
         <i class='fa fa-user-plus' style={{color: "white", width: "28px"}}></i> Add Client</button>
       </header>
@@ -104,7 +114,7 @@ function ClientPage() {
         </select>
       </div>
       {messageToUser && (
-        <p>
+        <p className='success-message'>
           {messageToUser}
         </p>
       )}
@@ -153,7 +163,7 @@ function ClientPage() {
                               <div>
                                 <p>Are you sure you want to delete this client? This action is irrevertable!</p>
                                 <div>
-                                  <button className='action-button'>Delete</button>
+                                  <button className='action-button' onClick={handleDeleteClient}>Delete</button>
                                   <button className='action-button' onClick={closeModal}>Cancel</button>
                                 </div>
                               </div>

@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import { useParams } from "react-router-dom";
 import { useAuth } from '../service/authContext';
+import { ClientAssignmentTile } from './AssignmentTile';
+import API from '../service/axios';
 import Notes from './Notes';
 import "../css/clients.css"
 
@@ -10,16 +12,29 @@ const ClientDetailPage = () => {
     const client = currentUser?.doctor.clients.find(client => client.id === Number(id));
     
     const [activeTab, setActiveTab] = useState('profile');
-    const [chatHistory, setChatHistory] = useState(client.chatHistory);
-    const [newMessage, setNewMessage] = useState('');
+    const [clientAssignments, setClientAssignments] = useState([])
+    const [isEditing, setIsEditing] = useState(false);
+    const [editableClient, setEditableClient] = useState({ ...client.client });
 
     const switchToProfileTab = () => { setActiveTab("profile")}
     const switchToAssignmentsTab = () => { setActiveTab("assignments")}
     const switchToNotesTab = () => { setActiveTab("notes")}
 
     useEffect(() => {
-        console.log(client)
-    }, [])
+        const fetchClientAssignments = async () => {
+            if(activeTab === 'assignments') {
+                try {
+                    const response = await API.get('assignments-client/');
+                    const data = response.data.filter(assignment => assignment.user === Number(id));
+                    setClientAssignments(data);
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+        }
+
+        fetchClientAssignments()
+    }, [id, activeTab])
     // const sendMessage = () => {
     //     if (newMessage.trim() !== '') {
     //         const message = {
@@ -37,12 +52,33 @@ const ClientDetailPage = () => {
     //     setChatHistory(client.chatHistory);
     //   }, [client.chatHistory]);
     
+    const handleEditToggle = () => {
+        if (isEditing) {
+            // Save changes
+            saveClientChanges();
+        }
+        setIsEditing(!isEditing);
+    };
+
+    const handleInputChange = (e) => {
+        setEditableClient({
+            ...editableClient,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const saveClientChanges = async () => { 
+
+    }
 
     return (
         <div className='client-detail-page'>
             <header>
-                <img src={client.photo} className='avatar' style={{"width": "46px"}} />
-                <h2>{`${client.first_name} ${client.last_name}`}</h2>
+                <div>
+                    <img src={client.photo} className='avatar' style={{"width": "46px"}} />
+                    <h2>{`${client.first_name} ${client.last_name}`}</h2>
+                </div>
+                {activeTab === "profile" && (<button onClick={handleEditToggle} className='client-button'>{isEditing ? 'Save Changes' : 'Edit Client' }</button>)}
             </header>
             <div className='tabs'>
                 <button className={activeTab === 'profile'? 'active' : ''} onClick={switchToProfileTab}>Profile</button>
@@ -55,16 +91,46 @@ const ClientDetailPage = () => {
             {activeTab === 'profile' && (
                 <div className='profile-tab'>
                     <h3>Date Of Birth</h3>
-                    <p>{client.date_of_birth || "No info yet"}</p>
+                    {isEditing ? (
+                        <input
+                            type="date"
+                            name="date_of_birth"
+                            value={editableClient.date_of_birth || ''}
+                            onChange={handleInputChange}
+                            className='settings-input'
+                        />
+                    ) : (
+                        <p>{client.date_of_birth || "No info yet"}</p>
+                    )}
 
                     <h3>Last Update</h3>
                     <p>{new Date(client.last_update).toLocaleDateString() || "No info yet"}</p>
 
                     <h3>Diagnosis</h3>
-                    <p>{client.client?.diagnosis || "No info yet"}</p>
+                    {isEditing ? (
+                        <input
+                            type="text"
+                            name="diagnosis"
+                            value={editableClient.diagnosis || ''}
+                            onChange={handleInputChange}
+                            className='settings-input'
+                        />
+                    ) : (
+                        <p>{client.client?.diagnosis || "No info yet"}</p>
+                    )}
 
                     <h3>About Client</h3>
-                    <p>{client.client?.about || "No info yet"}</p>
+                    {isEditing ? (
+                        <input
+                            type="text"
+                            name="about"
+                            value={editableClient.about || ''}
+                            onChange={handleInputChange}
+                            className='settings-input'
+                        />
+                    ) : (
+                        <p>{client.client?.about || "No info yet"}</p>
+                    )}
                 </div>
             )}
             {/*Chat Tab View */}
@@ -82,7 +148,9 @@ const ClientDetailPage = () => {
             {/*Assignments Tab View */}
             {activeTab === 'assignments' && (
                 <div className='assignments-tab'>
-                    
+                    {clientAssignments.length > 0 ? clientAssignments.map((assignment) => (
+                        <ClientAssignmentTile key={assignment.id} assignment={assignment} />
+                    )) : (<div>There is nothing to show yet</div>)}
                 </div>
             )}
             {/*Notes Tab View */}

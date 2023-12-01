@@ -102,6 +102,7 @@ const ProfileTab = () => {
             value={userData.firstName}
             onChange={handleChange}
             placeholder="First Name"
+            className='settings-input'
           />
           
           <label htmlFor='lastName'>Last Name</label>
@@ -111,6 +112,7 @@ const ProfileTab = () => {
             value={userData.lastName}
             onChange={handleChange}
             placeholder="Last Name"
+            className='settings-input'
           />
 
           <label htmlFor='email'>Email</label>
@@ -120,6 +122,7 @@ const ProfileTab = () => {
             value={userData.email}
             onChange={handleChange}
             placeholder="Email"
+            className='settings-input'
           />
 
           <label htmlFor='dateOfBirt'>Date Of Birth</label>
@@ -129,6 +132,7 @@ const ProfileTab = () => {
             value={userData.dateOfBirth}
             onChange={handleChange}
             placeholder="Date of Birth"
+            className='settings-input'
           />
           <button id='save-settings' type="submit">Save Changes</button>
         </form>
@@ -138,13 +142,71 @@ const ProfileTab = () => {
 }
 
 const SecurityTab = () => {
-  // Здесь будет логика для безопасности пользователя
+  const [userPassword, setUserPassword] = useState({
+    password: '',
+    new_password: '',
+    confirm_new_password: ''
+  })
+  const [message, setMessage] = useState('')
+
+  const handleChange = (event) => {
+    const {name, value} = event.target
+    setUserPassword({
+      ...userPassword, 
+      [name]: value
+    })
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    try{
+      const response = await API.post(`user/update/password/`, userPassword)
+      console.log(response.data)
+      setMessage(response.data.message)
+    }
+    catch(e){
+      console.error(e)
+      setMessage('Error updating password: ' + e.data?.message)
+    }
+  }
+
   return (
     <div className="security-tab">
-      {/* Содержимое вкладки безопасности */}
       <h2>Change Password</h2>
-      <input type="password" placeholder="Current Password" />
-      {/* И так далее для каждого поля */}
+      <div className='change-password-form'>
+        <form onSubmit={handleSubmit}>
+          <label>Current Password</label>
+          <input 
+            type="password" 
+            placeholder="***********"
+            name="password"
+            value={userPassword.password}
+            onChange={handleChange}
+            className='settings-input' />
+          
+          <label>New Password</label>
+          <input 
+            type="password" 
+            placeholder="***********"
+            name="new_password"
+            value={userPassword.new_password}
+            onChange={handleChange}
+            className='settings-input' />
+
+          <label>Confirm New Password</label>
+          <input 
+            type="password" 
+            placeholder="***********"
+            name="confirm_new_password"
+            value={userPassword.confirm_new_password}
+            onChange={handleChange}
+            className='settings-input' />
+
+          <button id='save-settings' type='submit'>Save Changes</button>
+        </form>
+        {message && <div className='success-message'>{message}</div>}
+      </div>
     </div>
   )
 }

@@ -7,7 +7,7 @@ const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString('en-US', options);
 }
 
-const AssignmentTile = ({ assignment, onFavoriteToggle, isFavorite }) => {
+export const AssignmentTile = ({ assignment, onFavoriteToggle, isFavorite }) => {
   const displayDate = formatDate(assignment.update_date);
   const navigate = useNavigate()
 
@@ -26,7 +26,7 @@ const AssignmentTile = ({ assignment, onFavoriteToggle, isFavorite }) => {
       </div>
       <div className="assignment-info">
         <h3>{assignment.title}</h3>
-        <p>{assignment.author}</p>
+        <p>{assignment.author_name}</p>
       </div>
       <div className="assignment-actions">
         <span className="popularity">{assignment.likes}</span>
@@ -43,4 +43,22 @@ const AssignmentTile = ({ assignment, onFavoriteToggle, isFavorite }) => {
   );
 };
 
-export default AssignmentTile;
+export const ClientAssignmentTile = ({assignment}) => {
+  const displayDate = formatDate(assignment.update_date);
+
+  return(
+    <div className="assignment-tile">
+      <div className="assignment-image-container">
+        <div className='date-and-type'>
+          <span>{displayDate}</span>
+          {assignment.assignment_type && <span className="type">{assignment.assignment_type}</span>}
+        </div>
+        <img alt="Loading..." src={assignment.image_url}  />
+      </div>
+      <div className="assignment-info">
+        <h3>{assignment.title}</h3>
+        <p>{assignment.author_name}</p>
+      </div>
+    </div>
+  )
+}

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { EditorState } from 'draft-js';
+import { EditorState, ContentState, convertFromRaw, convertToRaw } from 'draft-js';
 import API from '../service/axios';
 import AssignmentBlock from '../service/assignment-blocks';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -40,19 +40,33 @@ const AddAssignment = () => {
   }
 
   const setAssignmentCredentials = (data) => {
-    setTitle(data.title)
-    setDescription(data.text)
-    setType(data.assignment_type)
-    setLanguage(data.language)
-    setBlocks(data.blocks)
-    setSelectedImage(data.image_url)
-  }
+    setTitle(data.title);
+    setDescription(data.text);
+    setType(data.assignment_type);
+    setLanguage(data.language);
+    
+    const restoredBlocks = data.blocks.map(block => {
+      if (block.type === 'text') {
+        const contentState = ContentState.createFromText(block.question);
+        return {
+          ...block,
+          content: EditorState.createWithContent(contentState),
+        };
+      }
+      return block;
+    });
+  
+    setBlocks(restoredBlocks);
+    setSelectedImage(data.image_url);
+  };
+  
 
   useEffect(() => {
     const fetchData = async () => {
       const data = await loadAssignment()
 
       if(data){
+        console.log(data)
         setAssignmentCredentials(data)
       }
     }
@@ -70,7 +84,8 @@ const AddAssignment = () => {
     if (block.type === "text") {
       return {
         type: block.type,
-        question: getPlainText(block.content),
+        question: block.title,
+        reply: getPlainText(block.content),
         choice_replies: []
       };
     } else if (block.type === "range") {

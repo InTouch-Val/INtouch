@@ -1,30 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-const tagColors = {
-  tag1: 'brown',
-  tag2: 'blue',
-  tag3: 'cyan',
-  tag4: 'gray',
-};
 
-function Notes({ clientNotes }) {
+function Notes() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterDate, setFilterDate] = useState('all');
   const [filterTag, setFilterTag] = useState('all');
   const [uniqueDates, setUniqueDates] = useState([]);
 
-  useEffect(() => {
-    const dates = [...new Set(clientNotes.map((note) => note.date))];
-    setUniqueDates(['all', ...dates]);
-  }, [clientNotes]);
-
-  const filteredNotes = clientNotes.filter((note) => {
-    const dateMatch = filterDate === 'all' || note.date === filterDate;
-    const tagMatch = filterTag === 'all' || note.tags.includes(filterTag);
-    const searchMatch = note.title.toLowerCase().includes(searchTerm.toLowerCase());
-    return dateMatch && tagMatch && searchMatch;
-  });
-
+  
   return (
     <div className="notes-page">
       <header className="first-row">
@@ -53,23 +36,11 @@ function Notes({ clientNotes }) {
             </option>
           ))}
         </select>
-        <select
-          className="tag-filter"
-          value={filterTag}
-          onChange={(e) => setFilterTag(e.target.value)}
-        >
-          <option value="all">All Tags</option>
-          <option value="tag1">Tag 1</option>
-          <option value="tag2">Tag 2</option>
-          <option value="tag3">Tag 3</option>
-          <option value="tag4">Tag 4</option>
-        </select>
       </div>
       <div className="notes-list">
         <table>
           <thead>
             <tr>
-              <th>Tag</th>
               <th>Title</th>
               <th>Owner</th>
               <th>Content</th>
@@ -78,26 +49,7 @@ function Notes({ clientNotes }) {
             </tr>
           </thead>
           <tbody>
-            {filteredNotes.map((note) => (
-              <tr key={note.id}>
-                <td>
-                  <div
-                    className="tag"
-                    style={{
-                      backgroundColor: note.tags.length > 0 ? tagColors[note.tags[0]] : "transparent",
-                    }}
-                  >{note.tags[0]}</div>
-                </td>
-                <td>{note.title}</td>
-                <td>{note.owner}</td>
-                <td>{note.content}</td>
-                <td>{note.date}</td>
-                <td>
-                  <button className="edit-note-button">&#9998; Edit</button>
-                  <button className="delete-note-button">&#128465; Delete</button>
-                </td>
-              </tr>
-            ))}
+            
           </tbody>
         </table>
       </div>

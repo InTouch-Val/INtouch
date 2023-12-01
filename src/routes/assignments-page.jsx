@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {useNavigate} from "react-router-dom"
 import "../css/assignments.css";
 import API from '../service/axios';
-import AssignmentTile from '../components/AssignmentTile';
+import {AssignmentTile} from '../components/AssignmentTile';
 
 function AssignmentsPage() {
   const [activeTab, setActiveTab] = useState('library');
