@@ -106,8 +106,7 @@ class PasswordResetCompleteView(APIView):
         serializer = ChangePasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         new_password = serializer.validated_data['new_password']
-        token = request.headers.get('Authorization').split(' ')[1]
-        user = User.objects.get(pk=AccessToken(token)['user_id'])
+        user = request.user
         if user:
             user.set_password(new_password)
             user.save()
@@ -157,6 +156,17 @@ def user_delete_soft(request):
         return Response({'message': 'User deactivated successfully'})
     else:
         return Response({'message': 'User not found'})
+
+
+class ClientDeleteView(APIView):
+    def delete(self, request, pk):
+        try:
+            client = User.objects.get(pk=pk)
+            if request.user.doctor.clients.filter(pk=client.pk).exists():
+                client.delete()
+                return Response({'message': 'Client deleted successfully'})
+        except User.DoesNotExist:
+            return Response({'message': 'Client not found'})
 
 
 class AddClientView(APIView):

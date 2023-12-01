@@ -63,4 +63,5 @@ urlpatterns = [
     # path('assignments/<pk>/dislike/', AssignmentDislikeView.as_view(), name='dislike'),
     path('clients/add/', AddClientView.as_view(), name='add_client'),
     path('update-client/<int:pk>/', UpdateClientView.as_view(), name='update_client'),
+    path('client/delete/<int:pk>/', ClientDeleteView.as_view(), name='client_delete'),
 ]
