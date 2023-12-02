@@ -8,7 +8,7 @@ import "../css/clients.css"
 
 const ClientDetailPage = () => {
     const { id } = useParams(); 
-    const {currentUser} = useAuth()
+    const {currentUser, updateUserData} = useAuth()
     const client = currentUser?.doctor.clients.find(client => client.id === Number(id));
     
     const [activeTab, setActiveTab] = useState('profile');
@@ -52,10 +52,12 @@ const ClientDetailPage = () => {
     //     setChatHistory(client.chatHistory);
     //   }, [client.chatHistory]);
     
-    const handleEditToggle = () => {
+    const handleEditToggle = async () => {
         if (isEditing) {
-            // Save changes
-            saveClientChanges();
+            //save changes
+            await saveClientChanges();
+            //update client
+            await updateUserData();
         }
         setIsEditing(!isEditing);
     };
@@ -67,8 +69,22 @@ const ClientDetailPage = () => {
         });
     };
 
-    const saveClientChanges = async () => { 
-
+    const saveClientChanges = async () => {
+        const requestBody = {
+            "date_of_birth": editableClient.date_of_birth,
+            "client": {
+                "diagnosis": editableClient.diagnosis,
+                "about": editableClient.about
+            }
+        } 
+        console.log(requestBody)
+        try{
+            const response = await API.put(`client/update/${id}/`, requestBody)
+            console.log(response)
+        }
+        catch(e){
+            console.error("Error saving client", e.message)
+        }
     }
 
     return (
@@ -133,18 +149,6 @@ const ClientDetailPage = () => {
                     )}
                 </div>
             )}
-            {/*Chat Tab View */}
-            {/* {activeTab === 'chat' && (
-                <div className='chat-tab'>
-                    <Chat
-                        chatHistory={chatHistory}
-                        newMessage={newMessage}
-                        setNewMessage={setNewMessage}
-                        sendMessage={sendMessage}
-                        clientAvatar={client.avatar}
-                    />
-                </div>
-            )} */}
             {/*Assignments Tab View */}
             {activeTab === 'assignments' && (
                 <div className='assignments-tab'>
@@ -156,7 +160,7 @@ const ClientDetailPage = () => {
             {/*Notes Tab View */}
             {activeTab === 'notes' && (
                 <div className='notes-tab'>
-                    <Notes clientNotes={client.notes} />
+                    <Notes />
                 </div>
             )}
         </div>

@@ -5,6 +5,7 @@ import "../css/image-selector.css"
 const ImageSelector = ({ onImageSelect }) => {
   const [images, setImages] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isSearchDone, setIsSearchDone] = useState(false)
   const [selectedImageId, setSelectedImageId] = useState(null); // Состояние для хранения ID выбранного изображения
   const accessKey = process.env.REACT_APP_UNSPLASH_ACCESS_KEY;
 
@@ -19,6 +20,7 @@ const ImageSelector = ({ onImageSelect }) => {
   const handleSearch = (e) => {
     e.preventDefault();
     searchImages(searchTerm);
+    setIsSearchDone(true);
   };
 
   const handleImageClick = (image) => {
@@ -47,8 +49,8 @@ const ImageSelector = ({ onImageSelect }) => {
           >
             <img src={image.urls.small} alt={image.alt_description} />
           </div>
-        )) : 
-        <p>No images were found</p>}
+        )) : isSearchDone ? (<p>No images were found</p>) : (<></>) 
+        }
       </div>
     </div>
   );

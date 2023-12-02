@@ -2,11 +2,39 @@ import React, { useState } from 'react';
 import EditorToolbar from '../service/editors-toolbar';
 import "../css/block.css"
 
-const AssignmentBlock = ({ block, updateBlock, removeBlock }) => {
+const AssignmentBlock = ({ block, updateBlock, removeBlock, readOnly }) => {
+
   const [title, setTitle] = useState(block.title);
   const [choices, setChoices] = useState(block.choices);
-  const [minValue, setMinValue] = useState(block.minValue || 0);
+  const [minValue, setMinValue] = useState(block.minValue || 1);
   const [maxValue, setMaxValue] = useState(block.maxValue || 10);
+
+  if(readOnly){ //блок в режиме чтения
+    return (
+      <div className="block">
+        <div className="block-header">
+          <p className="block-title">{block.question}</p>
+        </div>
+        {block.type === 'text' && (
+          <p className="block-text">{block.question}</p>
+        )}
+        {(block.type === 'single' || block.type === 'multiple') && (
+          <ul className={`choices-container ${block.type}`}>
+            {block.choice_replies.map((choice, index) => (
+              <li key={index} className="choice-option">
+                <label>{choice.reply}</label>
+              </li>
+            ))}
+          </ul>
+        )}
+        {block.type === 'range' && (
+          <div className="range-display">
+            <p>Range from {block.start_range} to {block.end_range}</p>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
@@ -61,7 +89,7 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock }) => {
     const newChoices = choices.filter((_, i) => i !== index);
     setChoices(newChoices);
     updateBlock(block.id, block.content, newChoices, title);
-  };
+  };  
 
   if (block.type === 'text') {
     return (

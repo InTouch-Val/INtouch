@@ -11,12 +11,11 @@ import ClientPage from './routes/client-page.jsx';
 import ClientDetailPage from './components/ClientsDetailsPage.jsx';
 import AssignmentsPage from './routes/assignments-page.jsx';
 import CommunityPage from './routes/community-page.jsx'; 
-import StoragePage from './routes/storage.jsx';
 import RegistrationForm from './service/forms/registration-page.jsx';
 import LoginPage from './service/forms/login-page.jsx';
 import SettingsPage from './routes/settings-page.jsx';
 import PasswordResetRequested from './service/forms/password-reset-requested.jsx';
-import AddAssignment from "./components/AddAssignment.jsx"
+import {AddAssignment, ViewAssignment} from "./components/AddAssignment.jsx"
 import ActivateUserPage from './service/forms/activate-user-page.jsx';
 import PasswordResetMock from './service/forms/password-reset-mock.jsx';
 import AddClient from './components/AddClient.jsx';
@@ -42,7 +41,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/assignment/:id',
-        element: <AddAssignment/>
+        element: <ViewAssignment/>
       },
       {
         path: '/community',
@@ -52,10 +51,6 @@ const router = createBrowserRouter([
       //   path: '/community/:chatId',
       //   element: <Chat />, 
       // },
-      {
-        path: '/storage',
-        element: <StoragePage />, 
-      },
       {
         path: '/settings',
         element: <SettingsPage />,

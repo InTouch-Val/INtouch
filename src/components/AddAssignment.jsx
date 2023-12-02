@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { EditorState, ContentState, convertFromRaw, convertToRaw } from 'draft-js';
+import { EditorState, ContentState } from 'draft-js';
 import API from '../service/axios';
 import AssignmentBlock from '../service/assignment-blocks';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -12,9 +12,6 @@ const getPlainText = (editorState) => {
 
 
 const AddAssignment = () => {
-  const {id} = useParams()
-  const isEditMode = id != undefined
-
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [type, setType] = useState('lesson');
@@ -26,56 +23,6 @@ const AddAssignment = () => {
   const [successMessage, setSuccessMessage] = useState(false)
 
   const navigate = useNavigate()
-
-  const loadAssignment = async() => {
-    if(isEditMode){
-      try{
-        const response = await API.get(`assignments/${id}/`)
-        return response.data
-      }
-      catch(error){
-        console.error("Error getting assignment", error)
-      } 
-    }
-  }
-
-  const setAssignmentCredentials = (data) => {
-    setTitle(data.title);
-    setDescription(data.text);
-    setType(data.assignment_type);
-    setLanguage(data.language);
-    
-    const restoredBlocks = data.blocks.map(block => {
-      if (block.type === 'text') {
-        const contentState = ContentState.createFromText(block.question);
-        return {
-          ...block,
-          content: EditorState.createWithContent(contentState),
-        };
-      }
-      return block;
-    });
-  
-    setBlocks(restoredBlocks);
-    setSelectedImage(data.image_url);
-  };
-  
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await loadAssignment()
-
-      if(data){
-        console.log(data)
-        setAssignmentCredentials(data)
-      }
-    }
-
-    if(isEditMode){
-      fetchData()
-    }
-  }, [id, isEditMode])
-
 
   const handleSubmit = async (e) => {
   e.preventDefault();
@@ -117,8 +64,7 @@ const AddAssignment = () => {
 
   try {
     const response = await API.post('assignments/add/', requestData);
-    console.log(response);
-    console.log(selectedImage)
+    console.log(requestData)
     if(response.status == 201){
       setSuccessMessage(true)
       setTimeout(() => {
@@ -143,7 +89,9 @@ const AddAssignment = () => {
       type: type,
       title: '', 
       content: type === 'text' ? EditorState.createEmpty() : '',
-      choices: type === 'text' ? [] : ['']
+      choices: type === 'text' ? [] : [''],
+      minValue: type == 'range' ? 1 : null,
+      maxValue: type == 'range' ? 10 : null,
     };
     setBlocks([...blocks, newBlock]);
   };
@@ -255,4 +203,75 @@ const AddAssignment = () => {
   
 }
 
-export default AddAssignment
+
+const ViewAssignment = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [assignmentData, setAssignmentData] = useState({
+    title: '',
+    text: '',
+    type: '',
+    language: '',
+    image_url: '',
+    blocks: []
+  });
+
+  const setAssignmentCredentials = (data) => {
+    const restoredBlocks = data.blocks ? data.blocks.map(block => {
+      if (block.type === 'text') {
+        const contentState = ContentState.createFromText(block.question);
+        return {
+          ...block,
+          content: EditorState.createWithContent(contentState),
+        };
+      }
+      return block;
+    }) : [];
+
+    setAssignmentData({
+      ...data,
+      blocks: restoredBlocks
+    });
+  };
+
+  useEffect(() => {
+    const fetchAssignmentData = async () => {
+      try {
+        const response = await API.get(`assignments/${id}/`);
+        setAssignmentCredentials(response.data);
+      } catch (error) {
+        console.error("Error fetching assignment data", error);
+        navigate('/assignments'); // Redirect if error
+      }
+    };
+
+    fetchAssignmentData();
+  }, [id, navigate]);
+
+  return (
+    <div className='assignments-page'>
+      <header>
+        <h1>{assignmentData.title}</h1>
+        <img src={assignmentData.image_url} alt="Assignment" className="assignment-image" />
+      </header>
+      <div className='assignment-view-body'>
+        <div className='assignment-details'>
+          <p><strong>Description:</strong> {assignmentData.text}</p>
+          <p><strong>Author: </strong>{assignmentData.author_name}</p>
+          <p><strong>Type: </strong> {assignmentData.assignment_type}</p>
+          <p><strong>Language: </strong> {assignmentData.language}</p>
+          <div className='assignment-blocks'>
+            {assignmentData.blocks.length > 0 &&
+              assignmentData.blocks.map((block, index) => (
+                <AssignmentBlock key={index} block={block} readOnly={true} />
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+export {AddAssignment, ViewAssignment}
