@@ -185,6 +185,11 @@ class UpdateClientView(generics.UpdateAPIView):
     serializer_class = UpdateClientSerializer
 
 
+class DoctorUpdateClientView(generics.UpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = DoctorUpdateClientSerializer
+
+
 class AssignmentLikeView(APIView):
     def get(self, request, pk):
         assignment = Assignment.objects.get(pk=pk)
@@ -249,7 +254,6 @@ class AddAssignmentClientView(APIView):
         blocks = assignment.blocks.all()
         for block in blocks:
             block_copy = Block.objects.create(
-                # assignment=assignments_copy,
                 question=block.question,
                 type=block.type,
                 reply=block.reply,

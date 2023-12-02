@@ -35,6 +35,8 @@ pk, token из url из письма. Возвращает access и refresh т�
 **POST: api/v1/user/update/password/** - изменение пароля пользователя  
 Тело запроса: password, new_password, confirm_new_password  
 **DELETE: api/v1/client/delete/{pk}/** - удаление клиента  
+**PUT: api/v1/client/update/{pk}/** - редактирование данных о клиенте  
+Тело запроса: date_of_birth, client{diagnosis, about}  
 
 ##### Задачи
 **POST: api/v1/assignments/add/** - создание задачи  

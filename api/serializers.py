@@ -266,6 +266,24 @@ class UpdateClientSerializer(serializers.ModelSerializer):
         return user
 
 
+class DoctorUpdateClientSerializer(serializers.ModelSerializer):
+    client = ClientSerializer()
+    class Meta:
+        model = User
+        fields = [
+            'date_of_birth',
+            'client',
+        ]
+
+    def update(self, user, validated_data):
+        user.date_of_birth = validated_data['date_of_birth']
+        user.client.diagnosis = validated_data['client']['diagnosis']
+        user.client.about = validated_data['client']['about']
+        user.client.save()
+        user.save()
+        return user
+
+
 class BlockChoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = BlockChoice
