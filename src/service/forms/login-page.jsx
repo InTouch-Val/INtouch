@@ -67,10 +67,10 @@ function LoginPage() {
             onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
           />
         <div className='form-buttons'>
-            <button type='submit'>
+            <button type='submit' className='action-button'>
             Login
             </button>
-            <button onClick={(e) => handleForgotPassword(e)}>
+            <button className='action-button' onClick={(e) => handleForgotPassword(e)}>
                 Forgot password
             </button>
         </div>

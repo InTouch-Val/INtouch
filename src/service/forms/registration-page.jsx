@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import API from '../axios';
 import '../../css/registration.css';
 
 //TODO: PopUp windows
@@ -59,18 +59,17 @@ const RegistrationForm = () => {
     };
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/v1/users/', requestData, {
+      const response = await API.post('users/', requestData, {
         headers: {
           'Content-Type': 'application/json',
         },
         withCredentials: true,
       });
-      console.log(response.data);
-      navigate('/login');
+      navigate('/welcome-to-intouch');
       
     } catch (error) {
       console.error('Registration error:', error);
-      setError('Registration failed. Please try again.');
+      setError('Registration failed. Please try again.' + error?.data?.message);
     }
   };
 
@@ -129,7 +128,7 @@ const RegistrationForm = () => {
           />
           I agree with the terms and conditions
         </label>
-        <button type="submit">Register</button>
+        <button type="submit" className='action-button'>Register</button>
         <p>Already have an account? <Link to={"/login"}>Log in</Link></p>
         {error && <p className="error-message">{error}</p>}
       </form>

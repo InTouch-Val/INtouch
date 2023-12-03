@@ -158,7 +158,7 @@ tr {
   padding: 15px 10px;
   border-radius: 100px;
   border: none;
-  
+  min-width: 100px;
 }
 
 .modal-overlay {

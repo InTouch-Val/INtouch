@@ -20,6 +20,7 @@ import ActivateUserPage from './service/forms/activate-user-page.jsx';
 import PasswordResetMock from './service/forms/password-reset-mock.jsx';
 import AddClient from './components/AddClient.jsx';
 import ClientRegistrationPage from './service/forms/client-registration-page.jsx';
+import AfterRegistrationPage from './service/forms/after-registration-welcome-page.jsx';
 
 const router = createBrowserRouter([
   {
@@ -98,6 +99,11 @@ const router = createBrowserRouter([
   {
     path: "/reset-password/:pk/:token",
     element: <PasswordResetMock />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/welcome-to-intouch",
+    element: <AfterRegistrationPage/>,
     errorElement: <ErrorPage />,
   }
 ]);
