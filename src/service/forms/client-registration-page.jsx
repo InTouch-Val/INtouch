@@ -81,7 +81,7 @@ const ClientRegistrationPage = () => {
   return (
     <div className="registration-page">
       <form onSubmit={handleSubmit} className="registration-form">
-        <h2>Welcome to InTouch!<br/> Set Your Password To Proceed</h2>
+        <h2>Hello and Welcome to InTouch!<br/> Set Your Password To Proceed</h2>
         <input
           type="text"
           value={firstName}

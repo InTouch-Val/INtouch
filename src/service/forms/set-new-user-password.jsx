@@ -10,6 +10,7 @@ const SetNewUserPassword = ({ accessToken }) => {
   const navigate = useNavigate()
 
   const validatePassword = () => {
+    setError("")
     if (password.length < 8) {
       setError('Password must be at least 8 characters long.');
       return false;
@@ -43,39 +44,45 @@ const SetNewUserPassword = ({ accessToken }) => {
         }
       } catch (error) {
         console.error('Error resetting password:', error);
-        setError('Error resetting password:', error);
+        if (error.message) {
+          setError(error.message);
+        } else {
+          setError('Error resetting password. Please try again.');
+        }
       }
     }
   };
 
   return (
-    <div className="set-password">
-      <form onSubmit={handleSubmit}>
+    <div className="welcome-container">
+      <form className='registration-form' onSubmit={handleSubmit}>
         <h2>Set Your New Password</h2>
         
         <div>
-          <label>Password:</label>
+          <label style={{fontSize: "16px"}}>Password:</label>
           <input 
             type="password" 
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required 
+            required
+            style={{width: '100%'}} 
           />
         </div>
         
         <div>
-          <label>Confirm Password:</label>
+          <label style={{fontSize: "16px"}}>Confirm Password:</label>
           <input 
             type="password" 
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            required 
+            required
+            style={{width: '100%'}} 
           />
         </div>
         
-        {error && <p className="error">{error}</p>}
+        {error && <p className="success-message">{error}</p>}
         
-        <button type="submit">Set Password</button>
+        <button type="submit" className='action-button'>Set Password</button>
       </form>
     </div>
   );
