@@ -341,7 +341,8 @@ class AssignmentClientSerializer(serializers.ModelSerializer):
             'image_url',
             'blocks',
             'author',
-            'author_name'
+            'author_name',
+            'user',
         ]
 
 

@@ -47,3 +47,4 @@ pk, token из url из письма. Возвращает access и refresh т�
 **GET: api/v1/assignments/set-client/{pk}/{client_pk}/** - назначение задачи клиенту  
 **GET: api/v1/assignments/{pk}/** - получение задачи по id  
 **GET: api/v1/assignments-client/** - список задач клиентов  
+**GET: api/v1/assignments-client/{pk}/** - получение задачи клиента по id  
