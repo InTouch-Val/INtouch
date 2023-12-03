@@ -71,7 +71,7 @@ const ClientDetailPage = () => {
 
     const saveClientChanges = async () => {
         const requestBody = {
-            "date_of_birth": editableClient.date_of_birth,
+            "date_of_birth": editableClient.date_of_birth ? editableClient.date_of_birth : null,
             "client": {
                 "diagnosis": editableClient.diagnosis,
                 "about": editableClient.about

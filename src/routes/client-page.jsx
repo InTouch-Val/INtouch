@@ -160,7 +160,7 @@ function ClientPage() {
                           }
                           {
                             modalAction == "delete" && (
-                              <div>
+                              <div className='delete-modal-div'>
                                 <p>Are you sure you want to delete this client? This action is irrevertable!</p>
                                 <div>
                                   <button className='action-button' onClick={handleDeleteClient}>Delete</button>
@@ -191,7 +191,7 @@ function ClientPage() {
                                       <td>{assignment.text}</td>
                                       <td>{assignment.assignment_type}</td>
                                       <td>{assignment.language}</td>
-                                      <td>{assignment.author ? assignment.author : "Unknow Author" }</td>
+                                      <td>{assignment.author_name ? assignment.author_name : "Unknow Author" }</td>
                                       <td>{assignment.update_date}</td>
                                       <td>
                                         <button className='action-button' onClick={() => handleAssignmentAddToClient(assignment.id)}>Assign</button>

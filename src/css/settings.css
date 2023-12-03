@@ -83,16 +83,54 @@ header img{
 /*SECURITY TAB*/
 /*SECURITY TAB*/
 /*SECURITY TAB*/
+.security-tab {
+    display: flex;
+    padding: 20px;
+    align-items: flex-start;
+    padding: 0;
+  }
 
 .security-tab h2{
-    font-weight: 500;
+    font-weight: 600;
+    margin: 10px 0;
     color: #417D88;
-    font-size: 28px;
 }
 
-.change-password-form form{
+  
+  .change-password-form label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 22px;
+    color: #417D88;
+  }
+  
+  .change-password-form form{
     display: flex;
     flex-direction: column;
-    width: 50%;
-}
+    margin-right: 90px;
+  }
+
+  .change-password-form input,
+  .danger-zone button {
+
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  .danger-zone button {
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 20px;
+  }
+  
+  .danger-zone button:hover {
+    background-color: #ff3333;
+  }
+  
+
+
 

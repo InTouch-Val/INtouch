@@ -3,6 +3,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import '../../css/registration.css';
 
+//TODO: PopUp windows
+
 const RegistrationForm = () => {
   const [formData, setFormData] = useState({
     firstName: '',
