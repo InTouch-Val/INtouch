@@ -39,14 +39,16 @@ pk, token из url из письма. Возвращает access и refresh т�
 Тело запроса: date_of_birth, client{diagnosis, about}  
 
 ##### Задачи
-**POST: api/v1/assignments/add/** - создание задачи  
+**POST: api/v1/assignments/** - создание задачи  
 Тело запроса: title, text, assignment_type, tags, language, image_url, blocks[question, type, choice_replies[reply, reply ...], start_range, end_range]  
 **GET: api/v1/assignments/** - список задач  
+**GET: api/v1/assignments/{pk}/** - получение задачи по id  
+**DELETE: api/v1/assignments/{pk}** - удаление задания  
+**PUT: api/v1/assignments/{pk}** - редактирование задания  
 **GET: api/v1/assignments/add-list/{pk}/** - добавление задачи в My List  
 **GET: api/v1/assignments/delete-list/{pk}/** - удаление задачи из My List  
 **GET: api/v1/assignments/set-client/{pk}/{client_pk}/** - назначение задачи клиенту  
-**GET: api/v1/assignments/{pk}/** - получение задачи по id  
 **GET: api/v1/assignments-client/** - список задач клиентов  
 **GET: api/v1/assignments-client/{pk}/** - получение задачи клиента по id  
-**DELETE: api/v1/assignments/delete/{pk}** - удаление задания  
-**DELETE: api/v1/assignments-client/delete/{pk}** - удаление задания клиента  
+**DELETE: api/v1/assignments-client/{pk}** - удаление задания клиента  
+**PUT: api/v1/assignments-client/{pk}** - редактирование задания клиента  

@@ -10,6 +10,7 @@ from .views import *
 router = routers.DefaultRouter()
 router.register('users', UserViewSet, basename='users')
 router.register('assignments', AssignmentViewSet, basename='assignments')
+router.register('assignments-client', AssignmentClientViewSet, basename='assignments_client')
 
 urlpatterns = [
     path('', include(router.urls)),
@@ -41,13 +42,6 @@ urlpatterns = [
     path('user/update/password/', UpdatePasswordView.as_view(), name='update_password'),
     path('user/delete/', user_delete_hard, name='user_delete'),
     path('user/deactivate/', user_delete_soft, name='user_deactivate'),
-    # path('assignment/add/', AddAssignmentView.as_view(), name='add_assignment'),
-    # path('assignments/', ListAssignmentView.as_view(), name='assignments'),
-    # path('assignments-client/', ListAssignmentClientView.as_view(), name='assignments_client'),
-    # path('assignments/<int:pk>/', AssignmentDetailView.as_view(), name='assignment_detail'),
-    # path('assignments-client/<int:pk>/', AssignmentClientDetailView.as_view(), name='assignment_client_detail'),
-    # path('assignments/delete/<int:pk>/', AssignmentDeleteView.as_view(), name='assignment_delete'),
-    # path('assignments-client/delete/<int:pk>/', AssignmentClientDeleteView.as_view(), name='assignment_client_delete'),
     path(
         'assignments/add-list/<int:pk>/',
         AssignmentAddUserMyListView.as_view(),

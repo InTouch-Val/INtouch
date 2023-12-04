@@ -120,8 +120,7 @@ class UpdatePasswordView(APIView):
         serializer = UpdatePasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         new_password = serializer.validated_data['new_password']
-        token = request.headers.get('Authorization').split(' ')[1]
-        user = User.objects.get(pk=AccessToken(token)['user_id'])
+        user = request.user
         if user and check_password(serializer.validated_data['password'], user.password):
             user.set_password(new_password)
             user.save()
@@ -137,8 +136,7 @@ class UpdateUserView(generics.UpdateAPIView):
 
 @api_view(['GET'])
 def user_delete_hard(request):
-    token = request.headers.get('Authorization').split(' ')[1]
-    user = User.objects.get(pk=AccessToken(token)['user_id'])
+    user = request.user
     if user:
         user.delete()
         return Response({'message': 'User deleted successfully'})
@@ -148,8 +146,7 @@ def user_delete_hard(request):
 
 @api_view(['GET'])
 def user_delete_soft(request):
-    token = request.headers.get('Authorization').split(' ')[1]
-    user = User.objects.get(pk=AccessToken(token)['user_id'])
+    user = request.user
     if user:
         user.is_active = False
         user.save()
@@ -174,8 +171,7 @@ class AddClientView(APIView):
         serializer = AddClientSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         client = serializer.save()
-        token = request.headers.get('Authorization').split(' ')[1]
-        user = User.objects.get(pk=AccessToken(token)['user_id'])
+        user = request.user
         user.doctor.clients.add(client)
         return Response({"message": "Confirm email sent."})
 
@@ -208,8 +204,7 @@ class AssignmentDislikeView(APIView):
 
 class AssignmentAddUserMyListView(APIView):
     def get(self, request, pk):
-        token = request.headers.get('Authorization').split(' ')[1]
-        user = User.objects.get(pk=AccessToken(token)['user_id'])
+        user = request.user
         assignment = Assignment.objects.get(pk=pk)
         user.doctor.assignments.add(assignment)
         return Response({'message': 'Assignment added successfully.'})
@@ -217,21 +212,10 @@ class AssignmentAddUserMyListView(APIView):
 
 class AssignmentDeleteUserMyListView(APIView):
     def get(self, request, pk):
-        token = request.headers.get('Authorization').split(' ')[1]
-        user = User.objects.get(pk=AccessToken(token)['user_id'])
+        user = request.user
         assignment = Assignment.objects.get(pk=pk)
         user.doctor.assignments.remove(assignment)
         return Response({'message': 'Assignment deleted successfully.'})
-
-
-# class AddAssignmentView(generics.CreateAPIView):
-#     queryset = Assignment.objects.all()
-#     serializer_class = AddAssignmentSerializer
-
-
-# class ListAssignmentView(generics.ListAPIView):
-#     queryset = Assignment.objects.all()
-#     serializer_class = AssignmentSerializer
 
 
 class AddAssignmentClientView(APIView):
@@ -273,41 +257,25 @@ class AddAssignmentClientView(APIView):
         return Response({'message': 'Assignment set client successfully.'})
 
 
-# class AssignmentDetailView(generics.RetrieveAPIView):
-#     queryset = Assignment.objects.all()
-#     serializer_class = AssignmentSerializer
-#
-#
-# class AssignmentClientDetailView(generics.RetrieveAPIView):
-#     queryset = AssignmentClient.objects.all()
-#     serializer_class = AssignmentClientSerializer
-#
-#
-# class ListAssignmentClientView(generics.ListAPIView):
-#     queryset = AssignmentClient.objects.all()
-#     serializer_class = AssignmentClientSerializer
-#
-#
-# class AssignmentDeleteView(generics.DestroyAPIView):
-#     queryset = Assignment.objects.all()
-#     serializer_class = AssignmentSerializer
-#
-#
-# class AssignmentClientDeleteView(generics.DestroyAPIView):
-#     queryset = AssignmentClient.objects.all()
-#     serializer_class = AssignmentClientSerializer
-#
-#
-# class AssignmentsUpdateView(generics.UpdateAPIView):
-#     queryset = Assignment.objects.all()
-#     serializer_class = AssignmentSerializer
-#
-#
-# class AssignmentsClientUpdateView(generics.UpdateAPIView):
-#     queryset = AssignmentClient.objects.all()
-#     serializer_class = AssignmentClientSerializer
-
-
 class AssignmentViewSet(viewsets.ModelViewSet):
     queryset = Assignment.objects.all()
     serializer_class = AssignmentSerializer
+
+    def destroy(self, request, *args, **kwargs):
+        assignment = self.get_object()
+        if assignment.author != request.user:
+            raise PermissionDenied(
+                "You don't have permission to delete this assignment.")
+        return super().destroy(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        assignment = self.get_object()
+        if assignment.author != request.user:
+            raise PermissionDenied(
+                "You don't have permission to update this assignment.")
+        return super().update(request, *args, **kwargs)
+
+
+class AssignmentClientViewSet(viewsets.ModelViewSet):
+    queryset = AssignmentClient.objects.all()
+    serializer_class = AssignmentClientSerializer
