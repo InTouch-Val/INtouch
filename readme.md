@@ -40,7 +40,7 @@ pk, token из url из письма. Возвращает access и refresh т�
 
 ##### Задачи
 **POST: api/v1/assignments/** - создание задачи  
-Тело запроса: title, text, assignment_type, tags, language, image_url, blocks[question, type, choice_replies[reply, reply ...], start_range, end_range]  
+Тело запроса: title, text, assignment_type, tags, language, image_url, blocks[question, description, type, choice_replies[reply, reply ...], start_range, end_range]  
 **GET: api/v1/assignments/** - список задач  
 **GET: api/v1/assignments/{pk}/** - получение задачи по id  
 **DELETE: api/v1/assignments/{pk}** - удаление задания  
