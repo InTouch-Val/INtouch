@@ -10,6 +10,7 @@ from .views import *
 router = routers.DefaultRouter()
 router.register('users', UserViewSet, basename='users')
 router.register('assignments', AssignmentViewSet, basename='assignments')
+router.register('assignments-client', AssignmentClientViewSet, basename='assignments_client')
 
 urlpatterns = [
     path('', include(router.urls)),

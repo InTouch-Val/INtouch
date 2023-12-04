@@ -341,8 +341,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         blocks_data = validated_data.pop('blocks', [])
-        token = self.context['request'].headers.get('Authorization').split(' ')[1]
-        user = User.objects.get(pk=AccessToken(token)['user_id'])
+        user = self.context['request'].user
         assignment = Assignment.objects.create(author=user,
                                                **validated_data)
         user.doctor.assignments.add(assignment)
