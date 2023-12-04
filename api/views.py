@@ -286,3 +286,13 @@ class AssignmentClientDetailView(generics.RetrieveAPIView):
 class ListAssignmentClientView(generics.ListAPIView):
     queryset = AssignmentClient.objects.all()
     serializer_class = AssignmentClientSerializer
+
+
+class AssignmentDeleteView(generics.DestroyAPIView):
+    queryset = Assignment.objects.all()
+    serializer_class = AssignmentSerializer
+
+
+class AssignmentClientDeleteView(generics.DestroyAPIView):
+    queryset = AssignmentClient.objects.all()
+    serializer_class = AssignmentClientSerializer

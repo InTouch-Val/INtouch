@@ -45,6 +45,8 @@ urlpatterns = [
     path('assignments-client/', ListAssignmentClientView.as_view(), name='assignments_client'),
     path('assignments/<int:pk>/', AssignmentDetailView.as_view(), name='assignment_detail'),
     path('assignments-client/<int:pk>/', AssignmentClientDetailView.as_view(), name='assignment_client_detail'),
+    path('assignments/delete/<int:pk>/', AssignmentDeleteView.as_view(), name='assignment_delete'),
+    path('assignments-client/delete/<int:pk>/', AssignmentClientDeleteView.as_view(), name='assignment_client_delete'),
     path(
         'assignments/add-list/<int:pk>/',
         AssignmentAddUserMyListView.as_view(),
@@ -60,8 +62,6 @@ urlpatterns = [
         AddAssignmentClientView.as_view(),
         name='add_assignment_client'
     ),
-    # path('assignments/<pk>/like/', AssignmentLikeView.as_view(), name='like'),
-    # path('assignments/<pk>/dislike/', AssignmentDislikeView.as_view(), name='dislike'),
     path('clients/add/', AddClientView.as_view(), name='add_client'),
     path('update-client/<int:pk>/', UpdateClientView.as_view(), name='update_client'),
     path('client/delete/<int:pk>/', ClientDeleteView.as_view(), name='client_delete'),
