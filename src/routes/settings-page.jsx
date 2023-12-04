@@ -46,13 +46,16 @@ const ProfileTab = () => {
     dateOfBirth: currentUser.date_of_birth || ''
   })
   const [selectedFile, setSelectedFile] = useState([])
-
+  const [previewImage, setPreviewImage] = useState(currentUser.photo || 'default-avatar.png')
+  const fileInputRef = React.createRef()
 
   const handleFileSelect = (e) => {
-    setSelectedFile(e.target.files[0])
-    console.log(selectedFile)
+    const file = e.target.files[0]
+    if(file){
+      setSelectedFile(file)
+      setPreviewImage(URL.createObjectURL(file))
+    }
   }
-
 
   const handleChange = (event) => {
     const {name, value} = event.target
@@ -87,13 +90,17 @@ const ProfileTab = () => {
     }
   }
 
+  const handleChooseFileClick = () => {
+    fileInputRef.current.click()
+  }
 
 
   return (
     <div className="settings-profile-tab">
       <div className="left-column">
-        <img src={currentUser.photo || 'default-avatar.png'} alt="Profile" className="avatar" />
-        <input type="file" onChange={handleFileSelect} />
+        <img src={previewImage} alt="Profile" className="avatar" />
+        <input type="file" ref={fileInputRef} style={{display: "none"}} onChange={handleFileSelect} />
+        <button className='action-button' onClick={handleChooseFileClick}>Change Photo</button>
       </div>
       <div className="right-column">
         <form onSubmit={handleSubmit}>

@@ -196,7 +196,7 @@ function AssignmentsPage() {
               />
             ))
           ) : (
-            <div className="no-assignments">There is nothing to show yet</div>
+            <div className="nothing-to-show">There is nothing to show yet</div>
           )}
         </div>
       )}

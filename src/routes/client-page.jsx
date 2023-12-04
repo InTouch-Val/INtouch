@@ -3,7 +3,6 @@ import '../css/clients.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../service/authContext';
 import API from '../service/axios';
-import { update } from 'draft-js/lib/DefaultDraftBlockRenderMap';
 
 function ClientPage() {
   const [showModal, setShowModal] = useState(false)
@@ -78,7 +77,9 @@ function ClientPage() {
   const handleAssignmentAddToClient = async (assignment) => {
     try{
       const response = await API.get(`assignments/set-client/${assignment}/${selectedClientId}/`)
-      console.log(response);
+      closeModal()
+      setMessageToUser(response.data.detail);
+
     }catch(e){
       console.error(e);
     }
@@ -102,7 +103,6 @@ function ClientPage() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button className='search-button'>&#128269;</button>
         </form>
         <select className='activity-filters'>
           <option value='all'>All</option>

@@ -63,7 +63,7 @@ const AddAssignment = () => {
   };
 
   try {
-    const response = await API.post('assignments/add/', requestData);
+    const response = await API.post('assignments/', requestData);
     console.log(requestData)
     if(response.status == 201){
       setSuccessMessage(true)

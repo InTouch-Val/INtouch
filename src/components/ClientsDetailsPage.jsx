@@ -95,6 +95,7 @@ const ClientDetailPage = () => {
                     <h2>{`${client.first_name} ${client.last_name}`}</h2>
                 </div>
                 {activeTab === "profile" && (<button onClick={handleEditToggle} className='client-button'>{isEditing ? 'Save Changes' : 'Edit Client' }</button>)}
+                {activeTab === "notes" && (<button className='client-button'>Add Note</button>)}
             </header>
             <div className='tabs'>
                 <button className={activeTab === 'profile'? 'active' : ''} onClick={switchToProfileTab}>Profile</button>
@@ -154,14 +155,12 @@ const ClientDetailPage = () => {
                 <div className='assignments-tab'>
                     {clientAssignments.length > 0 ? clientAssignments.map((assignment) => (
                         <ClientAssignmentTile key={assignment.id} assignment={assignment} />
-                    )) : (<div>There is nothing to show yet</div>)}
+                    )) : (<div className='nothing-to-show'>There is nothing to show yet</div>)}
                 </div>
             )}
             {/*Notes Tab View */}
             {activeTab === 'notes' && (
-                <div className='notes-tab'>
-                    <Notes />
-                </div>
+                <Notes />
             )}
         </div>
     )

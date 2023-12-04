@@ -10,6 +10,12 @@ function LoginPage() {
   const { login } = useAuth(); // Использование useAuth
   const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
+  const [passwordShown, setPasswordShown] = useState(false)
+
+
+  const handleTogglePassword = () => {
+    setPasswordShown(!passwordShown);
+  }
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -60,12 +66,15 @@ function LoginPage() {
             onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
             required
           />
-          <input
-            type='password'
-            id='password'
-            placeholder='Enter password'
-            onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-          />
+          <div className='password-field'>
+            <input
+              type={passwordShown ? 'text' : 'password'}
+              id='password'
+              placeholder='Enter password'
+              onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
+            />
+            <button onClick={handleTogglePassword}>Show password</button>
+          </div>
         <div className='form-buttons'>
             <button type='submit' className='action-button'>
             Login

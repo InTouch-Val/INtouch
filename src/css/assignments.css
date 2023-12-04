@@ -161,7 +161,7 @@
     color: #656565;
   }
 
-  .no-assignments {
+  .nothing-to-show {
     grid-column: 1 / -1; /* Занимает все колонки сетки */
     display: flex;
     justify-content: center;
