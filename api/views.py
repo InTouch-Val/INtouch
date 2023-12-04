@@ -52,12 +52,12 @@ class UserConfirmEmailView(APIView):
             mail.attach_alternative(html_message, 'text/html')
             mail.send()
             return Response({
-                'detail': 'Account activated',
+                'message': 'Account activated',
                 'access_token': str(refresh.access_token),
                 'refresh_token': str(refresh)
             })
         else:
-            return Response({'detail': 'Account not activated'})
+            return Response({'error': 'Account not activated'})
 
 
 class PasswordResetRequestView(APIView):
@@ -83,7 +83,7 @@ class PasswordResetRequestView(APIView):
         )
         mail.attach_alternative(html_message, 'text/html')
         mail.send()
-        return Response("Password reset email sent.")
+        return Response({"message": "Password reset email sent."})
 
 
 class PasswordResetConfirmView(generics.GenericAPIView):
@@ -93,12 +93,12 @@ class PasswordResetConfirmView(generics.GenericAPIView):
         if user and default_token_generator.check_token(user, token):
             refresh = RefreshToken.for_user(user)
             return Response({
-                'detail': 'Password reset successful',
+                'message': 'Password reset successful',
                 'access_token': str(refresh.access_token),
                 'refresh_token': str(refresh)
             })
         else:
-            return Response({'detail': 'Password not reset'})
+            return Response({'error': 'Password not reset'})
 
 
 class PasswordResetCompleteView(APIView):
@@ -110,9 +110,9 @@ class PasswordResetCompleteView(APIView):
         if user:
             user.set_password(new_password)
             user.save()
-            return Response({'message': 'Password changed successfully'})
+            return Response({'message': 'Password reset successfully'})
         else:
-            return Response({'message': 'Password not changed'})
+            return Response({'error': 'Password not reset'})
 
 
 class UpdatePasswordView(APIView):
@@ -127,7 +127,7 @@ class UpdatePasswordView(APIView):
             user.save()
             return Response({'message': 'Password changed successfully'})
         else:
-            return Response({'message': 'Password not changed'})
+            return Response({'error': 'Password not changed'})
 
 
 class UpdateUserView(generics.UpdateAPIView):
@@ -143,7 +143,7 @@ def user_delete_hard(request):
         user.delete()
         return Response({'message': 'User deleted successfully'})
     else:
-        return Response({'message': 'User not found'})
+        return Response({'error': 'User not found'})
 
 
 @api_view(['GET'])
@@ -155,7 +155,7 @@ def user_delete_soft(request):
         user.save()
         return Response({'message': 'User deactivated successfully'})
     else:
-        return Response({'message': 'User not found'})
+        return Response({'error': 'User not found'})
 
 
 class ClientDeleteView(APIView):
@@ -166,7 +166,7 @@ class ClientDeleteView(APIView):
                 client.delete()
                 return Response({'message': 'Client deleted successfully'})
         except User.DoesNotExist:
-            return Response({'message': 'Client not found'})
+            return Response({'error': 'Client not found'})
 
 
 class AddClientView(APIView):
@@ -177,7 +177,7 @@ class AddClientView(APIView):
         token = request.headers.get('Authorization').split(' ')[1]
         user = User.objects.get(pk=AccessToken(token)['user_id'])
         user.doctor.clients.add(client)
-        return Response("Confirm email sent.")
+        return Response({"message": "Confirm email sent."})
 
 
 class UpdateClientView(generics.UpdateAPIView):
@@ -195,7 +195,7 @@ class AssignmentLikeView(APIView):
         assignment = Assignment.objects.get(pk=pk)
         assignment.like()
         assignment.save()
-        return Response({'detail': 'Like.'})
+        return Response({'message': 'Like.'})
 
 
 class AssignmentDislikeView(APIView):
@@ -203,7 +203,7 @@ class AssignmentDislikeView(APIView):
         assignment = Assignment.objects.get(pk=pk)
         assignment.dislike()
         assignment.save()
-        return Response({'detail': 'Dislike.'})
+        return Response({'message': 'Dislike.'})
 
 
 class AssignmentAddUserMyListView(APIView):
@@ -212,7 +212,7 @@ class AssignmentAddUserMyListView(APIView):
         user = User.objects.get(pk=AccessToken(token)['user_id'])
         assignment = Assignment.objects.get(pk=pk)
         user.doctor.assignments.add(assignment)
-        return Response({'detail': 'Assignment added successfully.'})
+        return Response({'message': 'Assignment added successfully.'})
 
 
 class AssignmentDeleteUserMyListView(APIView):
@@ -221,7 +221,7 @@ class AssignmentDeleteUserMyListView(APIView):
         user = User.objects.get(pk=AccessToken(token)['user_id'])
         assignment = Assignment.objects.get(pk=pk)
         user.doctor.assignments.remove(assignment)
-        return Response({'detail': 'Assignment deleted successfully.'})
+        return Response({'message': 'Assignment deleted successfully.'})
 
 
 class AddAssignmentView(generics.CreateAPIView):
@@ -270,7 +270,7 @@ class AddAssignmentClientView(APIView):
                 block_copy.choice_replies.add(choice_reply_copy)
             assignments_copy.blocks.add(block_copy)
         client.client.assignments.add(assignments_copy)
-        return Response({'detail': 'Assignment set client successfully.'})
+        return Response({'message': 'Assignment set client successfully.'})
 
 
 class AssignmentDetailView(generics.RetrieveAPIView):
