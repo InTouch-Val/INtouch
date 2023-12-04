@@ -224,14 +224,14 @@ class AssignmentDeleteUserMyListView(APIView):
         return Response({'message': 'Assignment deleted successfully.'})
 
 
-class AddAssignmentView(generics.CreateAPIView):
-    queryset = Assignment.objects.all()
-    serializer_class = AddAssignmentSerializer
+# class AddAssignmentView(generics.CreateAPIView):
+#     queryset = Assignment.objects.all()
+#     serializer_class = AddAssignmentSerializer
 
 
-class ListAssignmentView(generics.ListAPIView):
-    queryset = Assignment.objects.all()
-    serializer_class = AssignmentSerializer
+# class ListAssignmentView(generics.ListAPIView):
+#     queryset = Assignment.objects.all()
+#     serializer_class = AssignmentSerializer
 
 
 class AddAssignmentClientView(APIView):
@@ -273,26 +273,41 @@ class AddAssignmentClientView(APIView):
         return Response({'message': 'Assignment set client successfully.'})
 
 
-class AssignmentDetailView(generics.RetrieveAPIView):
+# class AssignmentDetailView(generics.RetrieveAPIView):
+#     queryset = Assignment.objects.all()
+#     serializer_class = AssignmentSerializer
+#
+#
+# class AssignmentClientDetailView(generics.RetrieveAPIView):
+#     queryset = AssignmentClient.objects.all()
+#     serializer_class = AssignmentClientSerializer
+#
+#
+# class ListAssignmentClientView(generics.ListAPIView):
+#     queryset = AssignmentClient.objects.all()
+#     serializer_class = AssignmentClientSerializer
+#
+#
+# class AssignmentDeleteView(generics.DestroyAPIView):
+#     queryset = Assignment.objects.all()
+#     serializer_class = AssignmentSerializer
+#
+#
+# class AssignmentClientDeleteView(generics.DestroyAPIView):
+#     queryset = AssignmentClient.objects.all()
+#     serializer_class = AssignmentClientSerializer
+#
+#
+# class AssignmentsUpdateView(generics.UpdateAPIView):
+#     queryset = Assignment.objects.all()
+#     serializer_class = AssignmentSerializer
+#
+#
+# class AssignmentsClientUpdateView(generics.UpdateAPIView):
+#     queryset = AssignmentClient.objects.all()
+#     serializer_class = AssignmentClientSerializer
+
+
+class AssignmentViewSet(viewsets.ModelViewSet):
     queryset = Assignment.objects.all()
     serializer_class = AssignmentSerializer
-
-
-class AssignmentClientDetailView(generics.RetrieveAPIView):
-    queryset = AssignmentClient.objects.all()
-    serializer_class = AssignmentClientSerializer
-
-
-class ListAssignmentClientView(generics.ListAPIView):
-    queryset = AssignmentClient.objects.all()
-    serializer_class = AssignmentClientSerializer
-
-
-class AssignmentDeleteView(generics.DestroyAPIView):
-    queryset = Assignment.objects.all()
-    serializer_class = AssignmentSerializer
-
-
-class AssignmentClientDeleteView(generics.DestroyAPIView):
-    queryset = AssignmentClient.objects.all()
-    serializer_class = AssignmentClientSerializer

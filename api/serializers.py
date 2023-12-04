@@ -289,18 +289,37 @@ class BlockChoiceSerializer(serializers.ModelSerializer):
         model = BlockChoice
         fields = '__all__'
 
+    def create(self, validated_data):
+        block_choice = BlockChoice.objects.create(**validated_data)
+        return block_choice
+
 
 class BlockSerializer(serializers.ModelSerializer):
     choice_replies = BlockChoiceSerializer(many=True, required=False)
+    start_range = serializers.IntegerField(required=False)
+    end_range = serializers.IntegerField(required=False)
     class Meta:
         model = Block
         fields = '__all__'
 
+    def create(self, validated_data):
+        choice_replies_data = validated_data.pop('choice_replies', [])
+        block = Block.objects.create(**validated_data)
+        for choice_data in choice_replies_data:
+            BlockChoiceSerializer.create(
+                BlockChoiceSerializer(),
+                choice_data
+            )
+        return block
+
 
 class AssignmentSerializer(serializers.ModelSerializer):
     blocks = BlockSerializer(many=True, required=False)
-    author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
-    author_name = serializers.StringRelatedField(source='author', read_only=True)
+    author_name = serializers.StringRelatedField(source='author',
+                                                 read_only=True)
+    status = serializers.CharField(required=False)
+    tags = serializers.CharField(required=False)
+    image_url = serializers.CharField(required=False)
     class Meta:
         model = Assignment
         fields = [
@@ -319,6 +338,36 @@ class AssignmentSerializer(serializers.ModelSerializer):
             'author',
             'author_name'
         ]
+
+    def create(self, validated_data):
+        blocks_data = validated_data.pop('blocks', [])
+        token = self.context['request'].headers.get('Authorization').split(' ')[1]
+        user = User.objects.get(pk=AccessToken(token)['user_id'])
+        assignment = Assignment.objects.create(author=user,
+                                               **validated_data)
+        user.doctor.assignments.add(assignment)
+        for block_data in blocks_data:
+            choice_replies_data = block_data.pop('choice_replies', [])
+            block = BlockSerializer.create(BlockSerializer(),
+                                              block_data)
+            for choice_data in choice_replies_data:
+                block_choice = BlockChoiceSerializer.create(
+                    BlockChoiceSerializer(),
+                    choice_data
+                )
+                block.choice_replies.add(block_choice)
+            assignment.blocks.add(block)
+        return assignment
+
+    def update(self, instance, validated_data):
+        instance.title = validated_data['title']
+        instance.text = validated_data['text']
+        instance.assignment_type = validated_data['assignment_type']
+        instance.tags = validated_data['tags']
+        instance.language = validated_data['language']
+        instance.image_url = validated_data['image_url']
+        instance.save()
+        return instance
 
 
 class AssignmentClientSerializer(serializers.ModelSerializer):
@@ -346,71 +395,71 @@ class AssignmentClientSerializer(serializers.ModelSerializer):
         ]
 
 
-class AddBlockChoiceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = BlockChoice
-        fields = ['reply']
-
-    def create(self, validated_data):
-        block_choice = BlockChoice.objects.create(**validated_data)
-        return block_choice
-
-
-class AddBlockSerializer(serializers.ModelSerializer):
-    choice_replies = AddBlockChoiceSerializer(many=True, required=False)
-    start_range = serializers.IntegerField(required=False)
-    end_range = serializers.IntegerField(required=False)
-    class Meta:
-        model = Block
-        fields = [
-            'question',
-            'type',
-            'choice_replies',
-            'start_range',
-            'end_range'
-        ]
-
-    def create(self, validated_data):
-        choice_replies_data = validated_data.pop('choice_replies', [])
-        block = Block.objects.create(**validated_data)
-        for choice_data in choice_replies_data:
-            AddBlockChoiceSerializer.create(
-                AddBlockChoiceSerializer(),
-                choice_data
-            )
-        return block
-
-
-class AddAssignmentSerializer(serializers.ModelSerializer):
-    blocks = AddBlockSerializer(many=True, required=False)
-    tags = serializers.CharField(required=False)
-    image_url = serializers.CharField(required=False)
-    class Meta:
-        model = Assignment
-        fields = [
-            'title',
-            'text',
-            'assignment_type',
-            'tags',
-            'language',
-            'image_url',
-            'blocks'
-        ]
-
-    def create(self, validated_data):
-        blocks_data = validated_data.pop('blocks', [])
-        token = self.context['request'].headers.get('Authorization').split(' ')[1]
-        user = User.objects.get(pk=AccessToken(token)['user_id'])
-        assignment = Assignment.objects.create(author=user, **validated_data)
-        user.doctor.assignments.add(assignment)
-        for block_data in blocks_data:
-            choice_replies_data = block_data.pop('choice_replies', [])
-            block = AddBlockSerializer.create(AddBlockSerializer(), block_data)
-            for choice_data in choice_replies_data:
-                block_choice = AddBlockChoiceSerializer.create(
-                    AddBlockChoiceSerializer(),
-                    choice_data
-                )
-                block.choice_replies.add(block_choice)
-            assignment.blocks.add(block)
-        return assignment
+# class AddBlockChoiceSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = BlockChoice
+#         fields = ['reply']
+#
+#     def create(self, validated_data):
+#         block_choice = BlockChoice.objects.create(**validated_data)
+#         return block_choice
+#
+#
+# class AddBlockSerializer(serializers.ModelSerializer):
+#     choice_replies = AddBlockChoiceSerializer(many=True, required=False)
+#     start_range = serializers.IntegerField(required=False)
+#     end_range = serializers.IntegerField(required=False)
+#     class Meta:
+#         model = Block
+#         fields = [
+#             'question',
+#             'type',
+#             'choice_replies',
+#             'start_range',
+#             'end_range'
+#         ]
+#
+#     def create(self, validated_data):
+#         choice_replies_data = validated_data.pop('choice_replies', [])
+#         block = Block.objects.create(**validated_data)
+#         for choice_data in choice_replies_data:
+#             AddBlockChoiceSerializer.create(
+#                 AddBlockChoiceSerializer(),
+#                 choice_data
+#             )
+#         return block
+#
+#
+# class AddAssignmentSerializer(serializers.ModelSerializer):
+#     blocks = AddBlockSerializer(many=True, required=False)
+#     tags = serializers.CharField(required=False)
+#     image_url = serializers.CharField(required=False)
+#     class Meta:
+#         model = Assignment
+#         fields = [
+#             'title',
+#             'text',
+#             'assignment_type',
+#             'tags',
+#             'language',
+#             'image_url',
+#             'blocks'
+#         ]
+#
+#     def create(self, validated_data):
+#         blocks_data = validated_data.pop('blocks', [])
+#         token = self.context['request'].headers.get('Authorization').split(' ')[1]
+#         user = User.objects.get(pk=AccessToken(token)['user_id'])
+#         assignment = Assignment.objects.create(author=user, **validated_data)
+#         user.doctor.assignments.add(assignment)
+#         for block_data in blocks_data:
+#             choice_replies_data = block_data.pop('choice_replies', [])
+#             block = AddBlockSerializer.create(AddBlockSerializer(), block_data)
+#             for choice_data in choice_replies_data:
+#                 block_choice = AddBlockChoiceSerializer.create(
+#                     AddBlockChoiceSerializer(),
+#                     choice_data
+#                 )
+#                 block.choice_replies.add(block_choice)
+#             assignment.blocks.add(block)
+#         return assignment
