@@ -143,10 +143,6 @@ tr {
   cursor: pointer;
   transition: 0.25s linear;
 }
-.open-modal-button:hover{
-  background-color: rgba(220, 220, 220, 0.2);
-  scale: 1.2;
-}
 
 .action-button{
   background-color: #417D88;

@@ -120,7 +120,7 @@ function AssignmentsPage() {
     <div className="assignments-page">
       <header>
         <h1>Assignments</h1>
-        <button className="add-assignment-button" onClick={handleAddAssignment}> Add Assignment</button>
+        <button className="action-button" onClick={handleAddAssignment}> Add Assignment</button>
       </header>
       <div className="tabs">
         <button
@@ -214,7 +214,7 @@ function AssignmentsPage() {
                 />
               ))
           ) : (
-            <div className="no-assignments">There is nothing to show yet</div>
+            <div className="nothing-to-show">There is nothing to show yet</div>
           )}
         </div>
       )}

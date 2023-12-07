@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { Outlet, NavLink, useNavigate } from "react-router-dom"; // Заменили Link на NavLink
 import "../css/app.css";
 import { useAuth } from "../service/authContext";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faArrowRightFromBracket, faGear, faUser, faList} from '@fortawesome/free-solid-svg-icons';
 
 function App() {
   const { currentUser, logout, isLoading } = useAuth(); 
@@ -36,12 +38,12 @@ function App() {
             <ul>
               <li>
                 <NavLink to={`/clients`} activeClassName="active">
-                <i className='fa fa-address-card'></i> Clients
+                 <FontAwesomeIcon icon={faUser} /> Clients
                 </NavLink>
               </li>
               <li>
                 <NavLink to={`/assignments`} activeClassName="active">
-                  Assignments
+                 <FontAwesomeIcon icon={faList} /> Assignments
                 </NavLink>
               </li>
               {/* <li>
@@ -62,7 +64,7 @@ function App() {
             <ul>
               <li>
                 <NavLink to={`/settings`} activeClassName="active">
-                  Settings
+                <FontAwesomeIcon icon={faGear} /> Settings
                 </NavLink>
               </li>
               {/* <li>
@@ -72,7 +74,7 @@ function App() {
               </li> */}
               <li>
                 <a onClick={handleLogout}>
-                  Logout
+                <FontAwesomeIcon icon={faArrowRightFromBracket} /> Logout
                 </a>
               </li>
             </ul>

@@ -5,6 +5,8 @@ import AssignmentBlock from '../service/assignment-blocks';
 import { useNavigate, useParams } from 'react-router-dom';
 import "../css/assignments.css"
 import ImageSelector from '../service/image-selector';
+import { useAuth } from '../service/authContext';
+import Modal from '../service/modal';
 
 const getPlainText = (editorState) => {
   return editorState.getCurrentContent().getPlainText();
@@ -32,7 +34,7 @@ const AddAssignment = () => {
       return {
         type: block.type,
         question: block.title,
-        reply: getPlainText(block.content),
+        description: getPlainText(block.content),
         choice_replies: []
       };
     } else if (block.type === "range") {
@@ -125,7 +127,7 @@ const AddAssignment = () => {
       {successMessage && <div className='success-message'>Assignment created succesfully</div>}
       <header>
         <h1>Add Assignment</h1>
-        {blocks.length > 0 ? <button className='add-assignment-button' onClick={handleSubmit}>Save Assignment</button> : <></>}
+        {blocks.length > 0 ? <button className='action-button' onClick={handleSubmit}>Save Assignment</button> : <></>}
       </header>
       <div className='add-assignment-body'>
         <ImageSelector onImageSelect={handleImageSelect}/>
@@ -206,13 +208,17 @@ const AddAssignment = () => {
 
 const ViewAssignment = () => {
   const { id } = useParams();
+  const {currentUser} = useAuth()
   const navigate = useNavigate();
+
+  const [showModal, setShowModal] = useState()
   const [assignmentData, setAssignmentData] = useState({
     title: '',
     text: '',
     type: '',
     language: '',
     image_url: '',
+    author: '',
     blocks: []
   });
 
@@ -234,6 +240,17 @@ const ViewAssignment = () => {
     });
   };
 
+  const handleToggleModal = () => {setShowModal(!showModal)}
+
+  const handleDeleteAssignment = async () => {
+    try{
+      const response = API.delete(`assignments/${id}/`)
+      navigate('/assignments')
+    }catch(e){
+      console.error(e.message)
+    }
+  }
+
   useEffect(() => {
     const fetchAssignmentData = async () => {
       try {
@@ -252,7 +269,12 @@ const ViewAssignment = () => {
     <div className='assignments-page'>
       <header>
         <h1>{assignmentData.title}</h1>
-        <img src={assignmentData.image_url} alt="Assignment" className="assignment-image" />
+          {currentUser.id === assignmentData.author && (
+            <div>
+              <button className='action-button' onClick={handleToggleModal}>Delete Assignment</button>
+              <button className='action-button'>Edit Assignment</button>
+            </div>
+          )}
       </header>
       <div className='assignment-view-body'>
         <div className='assignment-details'>
@@ -269,6 +291,14 @@ const ViewAssignment = () => {
           </div>
         </div>
       </div>
+      <Modal
+        isOpen={showModal}
+        onClose={handleToggleModal}
+        onConfirm={handleDeleteAssignment}
+        confirmText="Delete forever"
+      >
+        <p>Are you sure you want to delete this assignment? <strong>This action is irrevertable!</strong></p>
+      </Modal>
     </div>
   );
 };

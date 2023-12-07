@@ -3,6 +3,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import API from '../axios';
 import { useAuth } from '../authContext';
 import "../../css/registration.css"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 
 function LoginPage() {
@@ -13,7 +15,8 @@ function LoginPage() {
   const [passwordShown, setPasswordShown] = useState(false)
 
 
-  const handleTogglePassword = () => {
+  const handleTogglePassword = (e) => {
+    e.preventDefault()
     setPasswordShown(!passwordShown);
   }
 
@@ -59,22 +62,25 @@ function LoginPage() {
     <div className='registration-page'>
       <form className="registration-form" onSubmit={handleLogin}>
         <img src="https://i122.fastpic.org/big/2023/1030/7b/1e679a924edf77196513a8491eb5f37b.jpg" width="100px" border="0" />
+        <div className='login-input-fields'>
           <input
-            type='text'
-            id='username'
-            placeholder='Enter username'
-            onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
-            required
-          />
-          <div className='password-field'>
-            <input
-              type={passwordShown ? 'text' : 'password'}
-              id='password'
-              placeholder='Enter password'
-              onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
+              type='text'
+              id='username'
+              placeholder='Enter username'
+              onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
+              required
             />
-            <button onClick={handleTogglePassword}>Show password</button>
-          </div>
+          
+            <div className='password-field'>
+              <input
+                type={passwordShown ? 'text' : 'password'}
+                id='password'
+                placeholder='Enter password'
+                onChange={e => setCredentials({ ...credentials, password: e.target.value })}
+              />
+              <button onClick={e => handleTogglePassword(e)}> {passwordShown ? (<FontAwesomeIcon icon={faEyeSlash} />) : (<FontAwesomeIcon icon={faEye} />)} </button>
+            </div>
+        </div>
         <div className='form-buttons'>
             <button type='submit' className='action-button'>
             Login
@@ -91,3 +97,5 @@ function LoginPage() {
 }
 
 export default LoginPage;
+
+

@@ -8,7 +8,7 @@
     align-items: center;
   }
   .registration-form img{
-    margin-bottom: 10px;
+    margin-bottom: 15px;
   }
   .registration-form {
     padding: 20px;
@@ -19,16 +19,42 @@
     align-items: center; 
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   }
-  
-  .registration-form input {
-    font-family: "Montserrat", sans-serif;
-    width: 50%; /* Заполните доступное пространство внутри контейнера */
-    padding: 10px 15px;
-    margin: 10px;
+
+.login-input-fields input,
+.password-field input {
+    width: calc(100% - 20px); /* Adjust width to account for padding */
+    margin: 10px 0;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    box-shadow: 0px 0px 3px 1px #D7E4E773;
     border-radius: 10px;
-    box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.6);
+}
+
+/* Align button inside password field */
+.password-field {
+    position: relative; /* Position the field relatively */
+    display: flex;
+    align-items: center;
+}
+
+.password-field input {
+    flex-grow: 1;
+     /* Spacing between input and button */
+    padding-right: 40px; /* Padding to prevent text overlapping with the button */
+}
+
+.password-field button {
+    position: absolute;
+    right: 15px;
+    padding: 0;
     border: none;
-  }
+    background-color: #fff;
+    cursor: pointer;
+    border-radius: 0 10px 10px 0;
+    height: calc(100% - 30px);
+}
+
+
 
   .registration-form input:focus{
     box-shadow: 0 0 3px #666;
@@ -44,8 +70,6 @@
     line-height: 40px;
     font-size: 24px;
   }
-  
-
 
   .registration-form label{
     font-size: 12px;
@@ -67,4 +91,16 @@
   input[type="checkbox"], input[type="checkbox"]:focus{
     box-shadow: none;
     margin: 0;
+}
+
+
+@media (max-width: 600px) {
+    .registration-form {
+        width: 80%; /* Adjust for smaller screens */
+    }
+
+    .login-input-fields input,
+    .password-field input {
+        width: 100%; /* Full width on small screens */
+    }
 }

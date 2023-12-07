@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import EditorToolbar from '../service/editors-toolbar';
 import "../css/block.css"
 
@@ -8,15 +8,29 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock, readOnly }) => {
   const [choices, setChoices] = useState(block.choices);
   const [minValue, setMinValue] = useState(block.minValue || 1);
   const [maxValue, setMaxValue] = useState(block.maxValue || 10);
+  const [choiceRefs, setChoiceRefs] = useState([]);
+
+  useEffect(() => {
+    //Установка фокуса на последний добавленный вариант
+    if (choices && choices.length > 0 && choiceRefs[choices.length - 1]) {
+      choiceRefs[choices.length - 1].current.focus();
+    }
+  }, [choices, choiceRefs]);
+
+  useEffect(() => {
+    if(choices){
+      setChoiceRefs(choices.map(() => React.createRef()));
+    }
+  }, [choices]);
 
   if(readOnly){ //блок в режиме чтения
     return (
       <div className="block">
         <div className="block-header">
-          <p className="block-title">{block.question}</p>
+          <h3 className="block-title">{block.question}</h3>
         </div>
         {block.type === 'text' && (
-          <p className="block-text">{block.question}</p>
+          <p className="block-text">{block.description}</p>
         )}
         {(block.type === 'single' || block.type === 'multiple') && (
           <ul className={`choices-container ${block.type}`}>
@@ -79,12 +93,21 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock, readOnly }) => {
     }
   };
 
-  const addChoice = (newChoice = '') => {
-    const newChoices = [...choices, newChoice];
-    setChoices(newChoices);
-    updateBlock(block.id, block.content, newChoices, title);
+  const addChoice = () => {
+    if (choices.some(choice => choice.trim() === '')) {
+      // Не добавлять новый выбор, если есть пустой
+      return;
+    }
+  
+    const newChoiceRef = React.createRef();
+    setChoiceRefs(refs => [...refs, newChoiceRef]);
+    setChoices(currentChoices => {
+      const updatedChoices = [...currentChoices, ''];
+      updateBlock(block.id, block.content, updatedChoices, title);
+      return updatedChoices;
+    });
   };
-
+  
   const removeChoice = (index) => {
     const newChoices = choices.filter((_, i) => i !== index);
     setChoices(newChoices);
@@ -160,11 +183,12 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock, readOnly }) => {
       {choices.map((choice, index) => (
         <div key={index} className="choice-option">
           {block.type === 'multiple' ? (
-            <input type="checkbox" name={`block-${block.id}-choice`} />
+            <input type="checkbox" disabled />
           ) : (
-            <input type="radio" name={`block-${block.id}-choice`} />
+            <input type="radio" disabled />
           )}
           <input
+            ref={choiceRefs[index]}
             type="text"
             value={choice}
             onChange={(event) => handleChoiceChange(index, event)}

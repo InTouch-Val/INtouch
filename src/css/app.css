@@ -50,9 +50,9 @@ body{
     font-weight: 500; 
     color: #656565; /* Text color for menu links */
     display: block;
-    padding: 8px 0;
+    padding: 8px 12px;
     margin-left: 45px;
-    text-align: center; /* Add spacing above and below each menu item */
+    text-align: flex-end; /* Add spacing above and below each menu item */
   }
   .menu ul li a.active {
     background: #FFFFFF;

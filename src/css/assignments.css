@@ -14,18 +14,6 @@
     font-size: 36px;
 }
 
-.add-assignment-button{
-    background-color: #417D88;
-    height: 29px;
-    width: 198px;
-    border-radius: 50px;
-    color: #fff;
-    font-family: "Montserrat", sans-serif;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-}
-
 .assignments-page .tabs button{
     width: 50%;
 }

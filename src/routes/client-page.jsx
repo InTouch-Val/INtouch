@@ -3,6 +3,10 @@ import '../css/clients.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../service/authContext';
 import API from '../service/axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faUserPlus, faEllipsisVertical} from '@fortawesome/free-solid-svg-icons';
+
+
 
 function ClientPage() {
   const [showModal, setShowModal] = useState(false)
@@ -92,7 +96,7 @@ function ClientPage() {
         <h1>Clients</h1>
         <button className='client-button'
                 onClick={handleAddClient}>
-        <i class='fa fa-user-plus' style={{color: "white", width: "28px"}}></i> Add Client</button>
+               <FontAwesomeIcon icon={faUserPlus} /> Add Client</button>
       </header>
       <div className='search-filters'>
         <form className='search'>
@@ -144,7 +148,7 @@ function ClientPage() {
                     className='open-modal-button'
                     onClick={() => openModal(client.id)}
                   >
-                    &#8942;
+                    <FontAwesomeIcon icon={faEllipsisVertical} />
                   </button>
                   {showModal && (
                       <div className="modal-overlay" onClick={closeModal}>
