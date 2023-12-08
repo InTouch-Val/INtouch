@@ -279,3 +279,8 @@ class AssignmentViewSet(viewsets.ModelViewSet):
 class AssignmentClientViewSet(viewsets.ModelViewSet):
     queryset = AssignmentClient.objects.all()
     serializer_class = AssignmentClientSerializer
+
+
+class NoteViewSet(viewsets.ModelViewSet):
+    queryset = Note.objects.all()
+    serializer_class = NoteSerializer

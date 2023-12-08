@@ -11,6 +11,7 @@ router = routers.DefaultRouter()
 router.register('users', UserViewSet, basename='users')
 router.register('assignments', AssignmentViewSet, basename='assignments')
 router.register('assignments-client', AssignmentClientViewSet, basename='assignments_client')
+router.register('notes', NoteViewSet, basename='notes')
 
 urlpatterns = [
     path('', include(router.urls)),
@@ -60,5 +61,5 @@ urlpatterns = [
     path('clients/add/', AddClientView.as_view(), name='add_client'),
     path('update-client/<int:pk>/', UpdateClientView.as_view(), name='update_client'),
     path('client/delete/<int:pk>/', ClientDeleteView.as_view(), name='client_delete'),
-    path('client/update/<int:pk>/', DoctorUpdateClientView.as_view(), name='doctor_update_client')
+    path('client/update/<int:pk>/', DoctorUpdateClientView.as_view(), name='doctor_update_client'),
 ]
