@@ -10,7 +10,7 @@ function ActivateUserPage() {
   const {login} = useAuth()
 
   useEffect(() => {
-    API.get(`confirm-email/${userId}/${userToken}`)
+    API.get(`confirm-email/${userId}/${userToken}/`)
       .then(response => {
         if (window.location.href.includes('/activate-client/')) {
           localStorage.setItem("refreshToken", response.data.refresh_token)

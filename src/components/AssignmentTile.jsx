@@ -1,6 +1,9 @@
 import React from 'react';
 import {useNavigate} from "react-router-dom"
 import "../css/assignment-tile.css"; 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBookmark } from '@fortawesome/free-solid-svg-icons';
+
 
 const formatDate = (dateString) => {
   const options = { year: 'numeric', month: 'short', day: 'numeric' };
@@ -36,7 +39,7 @@ export const AssignmentTile = ({ assignment, onFavoriteToggle, isFavorite }) => 
           }
           onClick={() => onFavoriteToggle(assignment.id)}
         >
-          {isFavorite ? <><i class='fa fa-bookmark'></i> In My List</> : <><i class='fa fa-bookmark'></i> Add to List</>}
+          {isFavorite ? <><FontAwesomeIcon icon={faBookmark} />  In My List</> : <><FontAwesomeIcon icon={faBookmark} /> Add to List</>}
         </button>
       </div>
     </div>

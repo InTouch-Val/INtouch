@@ -3,7 +3,7 @@ import { Outlet, NavLink, useNavigate } from "react-router-dom"; // Замени
 import "../css/app.css";
 import { useAuth } from "../service/authContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faArrowRightFromBracket, faGear, faUser, faList} from '@fortawesome/free-solid-svg-icons';
+import {faArrowRightFromBracket, faGear, faUser, faList, faBookMedical, faNoteSticky} from '@fortawesome/free-solid-svg-icons';
 
 function App() {
   const { currentUser, logout, isLoading } = useAuth(); 
@@ -20,6 +20,8 @@ function App() {
     navigate('/login');
   };
 
+  const isDoctor = currentUser?.user_type == "doctor"
+
   return (
     <div className="app-container">
       <div className="side-bar">
@@ -35,28 +37,39 @@ function App() {
         </div>
         <div className="menu upper">
           <nav>
-            <ul>
-              <li>
+            {isDoctor && (
+              <ul>
+                <li>
                 <NavLink to={`/clients`} activeClassName="active">
                  <FontAwesomeIcon icon={faUser} /> Clients
                 </NavLink>
-              </li>
-              <li>
+                </li>
+                <li>
                 <NavLink to={`/assignments`} activeClassName="active">
                  <FontAwesomeIcon icon={faList} /> Assignments
                 </NavLink>
-              </li>
-              {/* <li>
-                <NavLink to={`/community`} activeClassName="active">
-                  Community
-                </NavLink>
-              </li> */}
-              {/* <li>
-                <NavLink to={`/storage`} activeClassName="active">
-                  Storage
-                </NavLink>
-              </li> */}
-            </ul>
+                </li>
+              </ul>
+            )}
+            {!isDoctor && (
+              <ul>
+                <li>
+                  <NavLink to={'/my-assignments'} activeClassName="active">
+                  <FontAwesomeIcon icon={faList} /> Assignments
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to={'/my-diary'} activeClassName="active">
+                  <FontAwesomeIcon icon={faBookMedical} /> Diary
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to={'/my-notes'} activeClassName="active">
+                  <FontAwesomeIcon icon={faNoteSticky} /> Notes
+                  </NavLink>
+                </li>
+              </ul>
+            )}
           </nav>
         </div>
         <div className="menu lower">

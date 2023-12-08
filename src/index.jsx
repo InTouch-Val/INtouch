@@ -21,6 +21,8 @@ import PasswordResetMock from './service/forms/password-reset-mock.jsx';
 import AddClient from './components/AddClient.jsx';
 import ClientRegistrationPage from './service/forms/client-registration-page.jsx';
 import AfterRegistrationPage from './service/forms/after-registration-welcome-page.jsx';
+import ClientsAssignments from './clients-components/ClientsAssignments.jsx';
+
 
 const router = createBrowserRouter([
   {
@@ -63,6 +65,10 @@ const router = createBrowserRouter([
       {
         path: "/add-client",
         element: <AddClient/>
+      },
+      {
+        path: "/my-assignments",
+        element: <ClientsAssignments/>
       }
     ],
   },

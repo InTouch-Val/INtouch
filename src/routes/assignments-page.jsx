@@ -3,6 +3,8 @@ import {useNavigate} from "react-router-dom"
 import "../css/assignments.css";
 import API from '../service/axios';
 import {AssignmentTile} from '../components/AssignmentTile';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 function AssignmentsPage() {
   const [activeTab, setActiveTab] = useState('library');
@@ -120,7 +122,7 @@ function AssignmentsPage() {
     <div className="assignments-page">
       <header>
         <h1>Assignments</h1>
-        <button className="action-button" onClick={handleAddAssignment}> Add Assignment</button>
+        <button className="action-button" onClick={handleAddAssignment}><FontAwesomeIcon icon={faPlus} /> Add Assignment</button>
       </header>
       <div className="tabs">
         <button
@@ -178,10 +180,10 @@ function AssignmentsPage() {
         <select
           value={sortMethod}
           onChange={(e) => handleSortMethodChange(e)}>
-            <option value="date_asc">Date Created Up</option>
-            <option value="date_desc">Date Created Down</option>
-            <option value="popularity_asc">Popularity Up</option>
-            <option value="popularity_desc">Popularity Down</option>
+            <option value="date_asc">Date Created ▲</option>
+            <option value="date_desc">Date Created ▼</option>
+            <option value="popularity_asc">Popularity ▲</option>
+            <option value="popularity_desc">Popularity ▼</option>
         </select>
       </div>
       {activeTab === 'library' && (
