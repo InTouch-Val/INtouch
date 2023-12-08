@@ -90,6 +90,7 @@ class UserSerializer(serializers.ModelSerializer):
             'client',
             'doctor',
             'user_type',
+            'is_active',
             'photo',
         )
 

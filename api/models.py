@@ -124,6 +124,19 @@ class BlockChoice(models.Model):
     checked = models.BooleanField(default=False)
 
 
+class Note(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    content = models.TextField()
+    add_date = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        related_name='notes',
+        null=True,
+    )
+
+
 class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     text = models.TextField()

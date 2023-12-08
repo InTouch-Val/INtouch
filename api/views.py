@@ -227,7 +227,7 @@ class AddAssignmentClientView(APIView):
             text=assignment.text,
             author=assignment.author,
             assignment_type=assignment.assignment_type,
-            status=assignment.status,
+            status='to-do',
             tags=assignment.tags,
             language=assignment.language,
             share=assignment.share,
