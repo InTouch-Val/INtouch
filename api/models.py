@@ -67,14 +67,14 @@ class Assignment(models.Model):
     )
     comments = models.ManyToManyField('Comment', blank=True)
 
-    def like(self):
-        self.likes += 1
-        self.save()
-
-    def dislike(self):
-        if self.likes > 0:
-            self.likes -= 1
-            self.save()
+    # def like(self):
+    #     self.likes += 1
+    #     self.save()
+    #
+    # def dislike(self):
+    #     if self.likes > 0:
+    #         self.likes -= 1
+    #         self.save()
 
     def __str__(self):
         return self.title
@@ -109,6 +109,7 @@ class AssignmentClient(models.Model):
 
 class Block(models.Model):
     question = models.CharField(max_length=250)
+    # reply = models.TextField()
     type = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     choice_replies = models.ManyToManyField(
