@@ -239,6 +239,7 @@ class AddAssignmentClientView(APIView):
             block_copy = Block.objects.create(
                 question=block.question,
                 type=block.type,
+                description=block.description,
                 reply=block.reply,
                 start_range=block.start_range,
                 end_range=block.end_range,
