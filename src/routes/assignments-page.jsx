@@ -180,10 +180,10 @@ function AssignmentsPage() {
         <select
           value={sortMethod}
           onChange={(e) => handleSortMethodChange(e)}>
-            <option value="date_asc">Date Created ▲</option>
-            <option value="date_desc">Date Created ▼</option>
-            <option value="popularity_asc">Popularity ▲</option>
-            <option value="popularity_desc">Popularity ▼</option>
+            <option value="date_asc">Date Created ↑</option>
+            <option value="date_desc">Date Created ↓</option>
+            <option value="popularity_asc">Popularity ↑</option>
+            <option value="popularity_desc">Popularity ↓</option>
         </select>
       </div>
       {activeTab === 'library' && (

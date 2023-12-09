@@ -1,21 +1,26 @@
 import React, { useState, useRef, useEffect } from 'react';
 import EditorToolbar from '../service/editors-toolbar';
 import "../css/block.css"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashCan, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 const AssignmentBlock = ({ block, updateBlock, removeBlock, readOnly }) => {
 
   const [title, setTitle] = useState(block.title);
-  const [choices, setChoices] = useState(block.choices);
+  const [choices, setChoices] = useState(block.choices || []);
   const [minValue, setMinValue] = useState(block.minValue || 1);
   const [maxValue, setMaxValue] = useState(block.maxValue || 10);
   const [choiceRefs, setChoiceRefs] = useState([]);
 
   useEffect(() => {
-    //Установка фокуса на последний добавленный вариант
-    if (choices && choices.length > 0 && choiceRefs[choices.length - 1]) {
-      choiceRefs[choices.length - 1].current.focus();
+    if (choices && choices.length > 0) {
+      const lastRef = choiceRefs[choices.length - 1];
+      if (lastRef && lastRef.current) {
+        lastRef.current.focus();
+      }
     }
   }, [choices, choiceRefs]);
+  
 
   useEffect(() => {
     if(choices){
@@ -126,7 +131,7 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock, readOnly }) => {
             className="block-title-input"
           />
           <button type="button" onClick={() => removeBlock(block.id)} className="remove-block-button">
-            &#10006; 
+            <FontAwesomeIcon icon={faTrashCan} /> 
           </button>
         </div>
         
@@ -147,7 +152,7 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock, readOnly }) => {
             className="block-title-input"
           />
           <button type="button" onClick={() => removeBlock(block.id)} className="remove-block-button">
-            <i class='fa fa-trash-o'></i>
+            <FontAwesomeIcon icon={faTrashCan} />
           </button>
         </div>
         <div className="range-inputs">
@@ -177,7 +182,7 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock, readOnly }) => {
           className="block-title-input"
         />
         <button type="button" onClick={() => removeBlock(block.id)} className="remove-block-button">
-          <i class='fa fa-trash-o'></i>
+        <FontAwesomeIcon icon={faTrashCan} />
         </button>
       </div>
       {choices.map((choice, index) => (
@@ -196,7 +201,7 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock, readOnly }) => {
             className="choice-input"
           />
           <button type="button" onClick={() => removeChoice(index)} className="remove-choice-button">
-            &#10006; 
+            <FontAwesomeIcon icon={faXmark} />
           </button>
         </div>
       ))}

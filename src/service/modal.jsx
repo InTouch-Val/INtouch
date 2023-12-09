@@ -6,7 +6,6 @@ const Modal = ({ isOpen, onClose, onConfirm, children, confirmText }) => {
     return (
       <div className='modal-overlay' onClick={onClose}>
         <div className='modal' onClick={e => e.stopPropagation()}>
-          <button className="close-modal-button" onClick={onClose}>&times;</button>
           <div className='modal-content'
             style={{display: 'flex', flexDirection: 'column',
                     alignItems: 'center'}}

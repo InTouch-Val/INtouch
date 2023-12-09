@@ -63,6 +63,10 @@ const router = createBrowserRouter([
         element: <AddAssignment/>
       },
       {
+        path: "/edit-assignment/:id",
+        element: <AddAssignment/>
+      },
+      {
         path: "/add-client",
         element: <AddClient/>
       },

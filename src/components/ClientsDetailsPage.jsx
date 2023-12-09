@@ -87,6 +87,12 @@ const ClientDetailPage = () => {
         }
     }
 
+    const handleDeleteAssignment = (deletedAssignmentId) => {
+        setClientAssignments(currentAssignments =>
+            currentAssignments.filter(assignment => assignment.id !== deletedAssignmentId)
+        );
+    }
+
     return (
         <div className='client-detail-page'>
             <header>
@@ -154,7 +160,11 @@ const ClientDetailPage = () => {
             {activeTab === 'assignments' && (
                 <div className='assignments-tab'>
                     {clientAssignments.length > 0 ? clientAssignments.map((assignment) => (
-                        <ClientAssignmentTile key={assignment.id} assignment={assignment} />
+                        <ClientAssignmentTile 
+                            key={assignment.id} 
+                            assignment={assignment} 
+                            onDeleteSuccess={handleDeleteAssignment}
+                        />
                     )) : (<div className='nothing-to-show'>There is nothing to show yet</div>)}
                 </div>
             )}

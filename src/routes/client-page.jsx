@@ -85,7 +85,7 @@ function ClientPage() {
       setMessageToUser(response.data.detail);
 
     }catch(e){
-      console.error(e);
+      setMessageToUser(e.message);
     }
   }
 

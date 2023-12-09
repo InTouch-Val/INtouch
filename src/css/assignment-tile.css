@@ -9,7 +9,8 @@
     justify-content: space-between;
     overflow: hidden; /* Обрезка контента по границам */
     width: 280px;
-    
+    position: relative;
+    overflow: hidden;
   }
   .assignment-image-container{
     display: flex;
@@ -98,6 +99,31 @@
     line-height: 17px;
     border: solid 3px #417D88;
   }
+
+  .delete-button {
+    position: absolute;
+    bottom: -50px; /* Initially positioned outside the tile */
+    left: 0;
+    width: 100%; /* Button width should match the tile width */
+    padding: 10px 0;
+    background-color: #FF4136; /* Red background for deletion */
+    color: white;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    animation: slideUp 0.3s;
+    z-index: 2;
+  }
   
+  .assignment-tile:hover .delete-button {
+    animation: slideUp 0.3s forwards ease;
+  }
   
-  
+  @keyframes slideUp{
+    from{
+      bottom: -50px;
+    }
+    to{
+      bottom: 0;
+    }
+  }

@@ -7,6 +7,8 @@ import "../css/assignments.css"
 import ImageSelector from '../service/image-selector';
 import { useAuth } from '../service/authContext';
 import Modal from '../service/modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faComment, faSquareCheck, faCircleDot, faEllipsis } from '@fortawesome/free-solid-svg-icons';
 
 const getPlainText = (editorState) => {
   return editorState.getCurrentContent().getPlainText();
@@ -25,6 +27,54 @@ const AddAssignment = () => {
   const [successMessage, setSuccessMessage] = useState(false)
 
   const navigate = useNavigate()
+  const {id} = useParams()
+  const isEditMode = id != null
+
+  useEffect(() => {
+    if(isEditMode){
+      fetchAssignment()
+    }
+  }, [id])
+
+  const fetchAssignment = async () => {
+    try {
+      const response = await API.get(`assignments/${id}/`);
+      setTitle(response.data.title);
+      setDescription(response.data.text);
+      setType(response.data.assignment_type);
+      setLanguage(response.data.language);
+      setSelectedImage({ urls: { full: response.data.image_url } }); // Assuming your ImageSelector expects an object like this
+  
+      const fetchedBlocks = response.data.blocks.map(block => {
+        if (block.type === 'text') {
+          const contentState = ContentState.createFromText(block.description);
+          return {
+            ...block,
+            title: block.question,
+            content: EditorState.createWithContent(contentState),
+          };
+        } else if (block.type === 'single' || block.type === 'multiple') {
+          return {
+            ...block,
+            title: block.question,
+            choices: block.choice_replies.map(choice => choice.reply)
+          };
+        } else if (block.type === 'range') {
+          return {
+            ...block,
+            title: block.question,
+            minValue: block.start_range,
+            maxValue: block.end_range
+          };
+        }
+        return block;
+      });
+  
+      setBlocks(fetchedBlocks);
+    } catch (e) {
+      console.error(e.message);
+    }
+  };
 
   const handleSubmit = async (e) => {
   e.preventDefault();
@@ -65,16 +115,18 @@ const AddAssignment = () => {
   };
 
   try {
-    const response = await API.post('assignments/', requestData);
-    console.log(requestData)
-    if(response.status == 201){
-      setSuccessMessage(true)
-      setTimeout(() => {
-        navigate('/assignments')
-      }, 2000)
+    let response;
+    if (isEditMode) {
+      response = await API.put(`assignments/${id}/`, requestData);
+    } else {
+      response = await API.post('assignments/', requestData);
     }
-    if(response.status == 400){
 
+    if ([200, 201].includes(response.status)) {
+      setSuccessMessage(true);
+      setTimeout(() => {
+        navigate('/assignments');
+      }, 2000);
     }
   } catch (error) {
     console.error("Error creating assignment ", error);
@@ -193,10 +245,10 @@ const AddAssignment = () => {
         </form>
         <div className='block-buttons-container'>
           <div className='block-buttons'>
-            <button title="Add Text Block" type="button" onClick={() => addBlock('text')}>  <span class="material-symbols-outlined">text_fields</span></button>
-            <button title="Add Multiple Choice Block" type="button" onClick={() => addBlock('multiple')}>  <span class="material-symbols-outlined">select_check_box</span> </button>
-            <button title="Add Single Choice Block" type="button" onClick={() => addBlock('single')}>  <span class="material-symbols-outlined">radio_button_checked</span> </button>
-            <button title='Add Range Question Block' type='button' onClick={() => addBlock('range')}><span class="material-icons">linear_scale</span></button>
+            <button title="Add Text Block" onClick={() => addBlock('text')}><FontAwesomeIcon icon={faComment} />  </button>
+            <button title="Add Multiple Choice Block" onClick={() => addBlock('multiple')}><FontAwesomeIcon icon={faSquareCheck} />  </button>
+            <button title="Add Single Choice Block" onClick={() => addBlock('single')}><FontAwesomeIcon icon={faCircleDot} />    </button>
+            <button title='Add Range Question Block' onClick={() => addBlock('range')}><FontAwesomeIcon icon={faEllipsis} /></button>
           </div>
         </div>
       </div>
@@ -272,7 +324,7 @@ const ViewAssignment = () => {
           {currentUser.id === assignmentData.author && (
             <div>
               <button className='action-button' onClick={handleToggleModal}>Delete Assignment</button>
-              <button className='action-button'>Edit Assignment</button>
+              <button className='action-button' onClick={() => navigate(`/edit-assignment/${id}`)}>Edit Assignment</button>
             </div>
           )}
       </header>
