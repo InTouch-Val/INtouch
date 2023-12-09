@@ -296,6 +296,7 @@ class BlockChoiceSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.reply = validated_data['reply']
+        instance.checked = validated_data.pop('checked', False)
         instance.save()
         return instance
 
@@ -321,7 +322,8 @@ class BlockSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.question = validated_data['question']
         instance.type = validated_data['type']
-        instance.description = validated_data['description']
+        instance.description = validated_data.pop('description', '')
+        instance.reply = validated_data.pop('reply', '')
         try:
             instance.start_range = validated_data['start_range']
             instance.end_range = validated_data['end_range']
@@ -422,6 +424,21 @@ class AssignmentClientSerializer(serializers.ModelSerializer):
             'author_name',
             'user',
         ]
+
+    def update(self, instance, validated_data):
+        blocks_data = validated_data.pop('blocks', [])
+        for i in range(len(blocks_data)):
+            block = instance.blocks[i]
+            choice_replies_data = blocks_data[i].pop('choice_replies', [])
+            for j in range(len(choice_replies_data)):
+                BlockSerializer.update(BlockSerializer(),
+                                       block.choice_replies[j],
+                                       choice_replies_data[j])
+            BlockSerializer.update(BlockSerializer(),
+                                   block,
+                                   blocks_data[i])
+        instance.save()
+        return instance
 
 
 class NoteSerializer(serializers.ModelSerializer):
