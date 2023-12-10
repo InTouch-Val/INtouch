@@ -392,12 +392,21 @@ class AssignmentSerializer(serializers.ModelSerializer):
         instance.tags = validated_data['tags']
         instance.language = validated_data['language']
         instance.image_url = validated_data['image_url']
+        blocks = instance.blocks.all()
+        for block in blocks:
+            block.delete()
         blocks_data = validated_data.pop('blocks', [])
-        for i in range(len(blocks_data)):
-            BlockSerializer.update(BlockSerializer(), instance.blocks.all()[i], blocks_data[i])
-            choice_replies_data = blocks_data[i].pop('choice_replies', [])
-            for j in range(len(choice_replies_data)):
-                BlockSerializer.update(BlockSerializer(), instance.blocks[i].choice_replies[j].all(), choice_replies_data[j])
+        for block_data in blocks_data:
+            choice_replies_data = block_data.pop('choice_replies', [])
+            block = BlockSerializer.create(BlockSerializer(),
+                                           block_data)
+            for choice_data in choice_replies_data:
+                block_choice = BlockChoiceSerializer.create(
+                    BlockChoiceSerializer(),
+                    choice_data
+                )
+                block.choice_replies.add(block_choice)
+            instance.blocks.add(block)
         instance.save()
         return instance
 
@@ -426,17 +435,21 @@ class AssignmentClientSerializer(serializers.ModelSerializer):
         ]
 
     def update(self, instance, validated_data):
+        blocks = instance.blocks.all()
+        for block in blocks:
+            block.delete()
         blocks_data = validated_data.pop('blocks', [])
-        for i in range(len(blocks_data)):
-            block = instance.blocks[i]
-            choice_replies_data = blocks_data[i].pop('choice_replies', [])
-            for j in range(len(choice_replies_data)):
-                BlockSerializer.update(BlockSerializer(),
-                                       block.choice_replies[j],
-                                       choice_replies_data[j])
-            BlockSerializer.update(BlockSerializer(),
-                                   block,
-                                   blocks_data[i])
+        for block_data in blocks_data:
+            choice_replies_data = block_data.pop('choice_replies', [])
+            block = BlockSerializer.create(BlockSerializer(),
+                                           block_data)
+            for choice_data in choice_replies_data:
+                block_choice = BlockChoiceSerializer.create(
+                    BlockChoiceSerializer(),
+                    choice_data
+                )
+                block.choice_replies.add(block_choice)
+            instance.blocks.add(block)
         instance.save()
         return instance
 
