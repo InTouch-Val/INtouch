@@ -116,8 +116,10 @@ class Block(models.Model):
         'BlockChoice',
         blank=True
     )
-    start_range = models.IntegerField(blank=True, null=True)
-    end_range = models.IntegerField(blank=True, null=True)
+    start_range = models.IntegerField(default=1)
+    end_range = models.IntegerField(default=10)
+    left_pole = models.CharField(max_length=50)
+    right_pole = models.CharField(max_length=50)
 
 
 class BlockChoice(models.Model):

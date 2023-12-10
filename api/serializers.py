@@ -303,8 +303,8 @@ class BlockChoiceSerializer(serializers.ModelSerializer):
 
 class BlockSerializer(serializers.ModelSerializer):
     choice_replies = BlockChoiceSerializer(many=True, required=False)
-    start_range = serializers.IntegerField(required=False)
-    end_range = serializers.IntegerField(required=False)
+    left_pole = serializers.CharField(required=False)
+    right_pole = serializers.CharField(required=False)
     class Meta:
         model = Block
         fields = '__all__'
@@ -318,26 +318,6 @@ class BlockSerializer(serializers.ModelSerializer):
                 choice_data
             )
         return block
-
-    def update(self, instance, validated_data):
-        instance.question = validated_data['question']
-        instance.type = validated_data['type']
-        instance.description = validated_data.pop('description', '')
-        instance.reply = validated_data.pop('reply', '')
-        try:
-            instance.start_range = validated_data['start_range']
-            instance.end_range = validated_data['end_range']
-        except:
-            pass
-        choice_replies_data = validated_data.pop('choice_replies', [])
-        for choice_data in choice_replies_data:
-            BlockChoiceSerializer.update(
-                BlockChoiceSerializer(),
-                instance,
-                choice_data
-            )
-        instance.save()
-        return instance
 
 
 class AssignmentSerializer(serializers.ModelSerializer):
