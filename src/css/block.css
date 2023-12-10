@@ -19,6 +19,19 @@
   font-family: "Montserrat", sans-serif;
 }
 
+.block-header{
+  margin: 10px;
+}
+
+.block-title{
+  color: #3f7983;
+  margin: 0;
+}
+
+.block-text{
+  padding: 10px;
+}
+
 .choice-input{
   border: none;
   cursor: pointer;
@@ -29,7 +42,6 @@
   box-shadow: none;
 }
 
-.block-header,
 .control-panel {
   display: flex; /* Используем flexbox для расположения элементов */
   justify-content: space-between; /* Размещаем элементы на противоположных концах */
@@ -55,9 +67,11 @@
 .choice-option {
   display: flex; /* Используем flexbox для опций */
   align-items: center;
-  justify-content: center;
   margin-bottom: 10px; /* Отступ снизу для каждого варианта */
-  margin-left: 15px;
+}
+
+.choice-label{
+  margin-left: 5px;
 }
 
 .choice-option input[type="text"]:disabled {
@@ -65,8 +79,28 @@
   color: #d60000; /* Серый текст для неактивного инпута */
 }
 
-.range-inputs{
+.range-display {
   display: flex;
-  justify-content: space-evenly;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
 }
 
+.range-options {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.range-option {
+  margin: 0 5px;
+}
+
+.range-option input[type="radio"] {
+  margin-right: 5px;
+}
+
+.range-label {
+  margin: 0 10px;
+}

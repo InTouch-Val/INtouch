@@ -62,7 +62,7 @@ function LoginPage() {
     <div className='registration-page'>
       <form className="registration-form" onSubmit={handleLogin}>
         <img src="https://i122.fastpic.org/big/2023/1030/7b/1e679a924edf77196513a8491eb5f37b.jpg" width="100px" border="0" />
-        <div className='login-input-fields'>
+        <div className='input-fields login'>
           <input
               type='text'
               id='username'

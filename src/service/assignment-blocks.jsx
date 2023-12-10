@@ -11,6 +11,8 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock, readOnly }) => {
   const [minValue, setMinValue] = useState(block.minValue || 1);
   const [maxValue, setMaxValue] = useState(block.maxValue || 10);
   const [choiceRefs, setChoiceRefs] = useState([]);
+  const [leftPole, setLeftPole] = useState(block.leftPole || "Left Pole")
+  const [rightPole, setRightPole] = useState(block.rightPole || "Right Pole")
 
   useEffect(() => {
     if (choices && choices.length > 0) {
@@ -28,32 +30,51 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock, readOnly }) => {
     }
   }, [choices]);
 
-  if(readOnly){ //блок в режиме чтения
-    return (
-      <div className="block">
-        <div className="block-header">
-          <h3 className="block-title">{block.question}</h3>
-        </div>
-        {block.type === 'text' && (
-          <p className="block-text">{block.description}</p>
-        )}
-        {(block.type === 'single' || block.type === 'multiple') && (
-          <ul className={`choices-container ${block.type}`}>
-            {block.choice_replies.map((choice, index) => (
-              <li key={index} className="choice-option">
-                <label>{choice.reply}</label>
-              </li>
-            ))}
-          </ul>
-        )}
-        {block.type === 'range' && (
-          <div className="range-display">
-            <p>Range from {block.start_range} to {block.end_range}</p>
-          </div>
-        )}
+  if (readOnly) {
+  return (
+    <div className="block">
+      <div className="block-header">
+        <h3 className="block-title">{block.question}</h3>
       </div>
-    );
-  }
+      {block.type === 'text' && (
+        <p className="block-text">{block.description}</p>
+      )}
+      {(block.type === 'single' || block.type === 'multiple') && (
+        <ul className={`choices-container ${block.type}`}>
+          {block.choice_replies.map((choice, index) => (
+            <li key={index} className="choice-option">
+              {block.type === 'single' ? (
+                <input type="radio" disabled />
+              ) : (
+                <input type="checkbox" disabled />
+              )}
+              <span className="choice-label">{choice.reply}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+      {block.type === 'range' && (
+        <div className="range-display">
+          <span className="range-label">{block.left_pole || "Left Pole"}</span>
+          <div className="range-options">
+            {Array.from({ length: block.end_range - block.start_range + 1 }, (_, i) => i + block.start_range).map(value => (
+              <label key={value} className="range-option">
+                <input
+                  type="radio"
+                  name={`range-${block.id}`}
+                  value={value}
+                />
+                <span className="range-option-label">{value}</span>
+              </label>
+            ))}
+          </div>
+          <span className="range-label">{block.right_pole || "Right Pole"}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
@@ -89,6 +110,16 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock, readOnly }) => {
     } else {
       setMaxValue(value);
       updateBlock(block.id, block.content, block.choices, title, minValue, value);
+    }
+  };
+
+  const handlePoleChange = (pole, value) => {
+    if (pole === "left") {
+      setLeftPole(value);
+      updateBlock(block.id, block.content, block.choices, title, minValue, maxValue, value, rightPole);
+    } else {
+      setRightPole(value);
+      updateBlock(block.id, block.content, block.choices, title, minValue, maxValue, leftPole, value);
     }
   };
 
@@ -165,6 +196,20 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock, readOnly }) => {
             <button onClick={(e) => handleMaxChange(-1, e)}>-</button>
             <input type="number" value={maxValue} onChange={(e) => handleNumberChange(e, "max")} />
             <button onClick={(e) => handleMaxChange(1, e)}>+</button>
+          </div>
+          <div className='pole-inputs'>
+          <input
+            type='text'
+            value={leftPole}
+            onChange={(e) => handlePoleChange('left', e.target.value)}
+            placeholder='Input left pole name'
+          />
+          <input
+            type='text'
+            value={rightPole}
+            onChange={(e) => handlePoleChange('right', e.target.value)}
+            placeholder='Input right pole name'
+          />
           </div>
         </div>
       </div>

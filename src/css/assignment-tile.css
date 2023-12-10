@@ -100,6 +100,18 @@
     border: solid 3px #417D88;
   }
 
+  .status{
+    padding: 10px 15px;
+    border-radius: 20px;
+  }
+
+  .status.to-do{
+    background-color: #F7CFA4;
+    color: #fff;
+  }
+
+
+
   .delete-button {
     position: absolute;
     bottom: -50px; /* Initially positioned outside the tile */

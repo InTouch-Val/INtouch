@@ -92,7 +92,9 @@ const AddAssignment = () => {
         type: block.type,
         question: block.title,
         start_range: block.minValue,
-        end_range: block.maxValue
+        end_range: block.maxValue,
+        left_pole: block.leftPole || "Left Pole",
+        right_pole: block.rightPole || "Right Pole"
       };
     } else {
       return {
@@ -155,7 +157,7 @@ const AddAssignment = () => {
     setBlocks(updatedBlocks);
   };
 
-  const updateBlock = (blockId, newContent, newChoices, newTitle, newMinValue, newMaxValue) => {
+  const updateBlock = (blockId, newContent, newChoices, newTitle, newMinValue, newMaxValue, newLeftPole, newRightPole) => {
     const updatedBlocks = blocks.map((block) => {
       if (block.id === blockId) {
         return {
@@ -164,7 +166,9 @@ const AddAssignment = () => {
           choices: newChoices || block.choices,
           title: newTitle || block.title,
           minValue: typeof newMinValue !== 'undefined' ? newMinValue : block.minValue,
-          maxValue: typeof newMaxValue !== 'undefined' ? newMaxValue : block.maxValue
+          maxValue: typeof newMaxValue !== 'undefined' ? newMaxValue : block.maxValue,
+          leftPole: typeof newLeftPole !== 'undefined' ? newLeftPole : block.leftPole,
+          rightPole: typeof newRightPole !== 'undefined' ? newRightPole : block.rightPole
         };
       }
       return block;

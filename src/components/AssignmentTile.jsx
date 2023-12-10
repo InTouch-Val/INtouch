@@ -71,7 +71,7 @@ export const ClientAssignmentTile = ({assignment, onDeleteSuccess }) => {
     >
       <div className="assignment-image-container">
         <div className='date-and-type'>
-          <span>{assignment.status}</span>
+          <span className={`status ${assignment.status}`}>{assignment.status}</span>
           {assignment.assignment_type && <span className="type">{assignment.assignment_type}</span>}
         </div>
         <img alt="Loading..." src={assignment.image_url}  />

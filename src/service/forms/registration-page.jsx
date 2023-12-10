@@ -77,57 +77,59 @@ const RegistrationForm = () => {
     <div className='registration-page'>
       <form className='registration-form' onSubmit={handleSubmit}>
         <img src="https://i122.fastpic.org/big/2023/1030/7b/1e679a924edf77196513a8491eb5f37b.jpg" width="140px" border="0" />
-        <input
-          type="text"
-          name="firstName"
-          placeholder="First Name"
-          value={formData.firstName}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="lastName"
-          placeholder="Last Name"
-          value={formData.lastName}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-          minLength="8"
-        />
-        <input
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          required
-          minLength="8"
-        />
-        <label>
+        <div className='input-fields'>
           <input
-            type="checkbox"
-            name="acceptPolicy"
-            checked={formData.acceptPolicy}
+            type="text"
+            name="firstName"
+            placeholder="First Name"
+            value={formData.firstName}
             onChange={handleChange}
+            required
           />
-          I agree with the terms and conditions
-        </label>
+          <input
+            type="text"
+            name="lastName"
+            placeholder="Last Name"
+            value={formData.lastName}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            minLength="8"
+          />
+          <input
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+            minLength="8"
+          />
+          <label>
+            <input
+              type="checkbox"
+              name="acceptPolicy"
+              checked={formData.acceptPolicy}
+              onChange={handleChange}
+            />
+            I agree with the terms and conditions
+          </label>
+        </div>
         <button type="submit" className='action-button'>Register</button>
         <p>Already have an account? <Link to={"/login"}>Log in</Link></p>
         {error && <p className="error-message">{error}</p>}
