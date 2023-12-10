@@ -2,7 +2,7 @@ from django.urls import reverse_lazy
 from django.core.exceptions import PermissionDenied
 from rest_framework import generics, viewsets, status
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, action
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -279,6 +279,13 @@ class AssignmentViewSet(viewsets.ModelViewSet):
 class AssignmentClientViewSet(viewsets.ModelViewSet):
     queryset = AssignmentClient.objects.all()
     serializer_class = AssignmentClientSerializer
+
+    @action(detail=True, methods=['get'])
+    def complete(self, request, pk):
+        assignment = self.get_object()
+        assignment.status = 'done'
+        assignment.save()
+        return Response({'message': 'Status is done'})
 
 
 class NoteViewSet(viewsets.ModelViewSet):

@@ -435,6 +435,7 @@ class AssignmentClientSerializer(serializers.ModelSerializer):
         ]
 
     def update(self, instance, validated_data):
+        instance.status = 'in progress'
         blocks = instance.blocks.all()
         for block in blocks:
             block.delete()

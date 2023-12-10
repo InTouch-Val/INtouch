@@ -92,7 +92,7 @@ class AssignmentClient(models.Model):
     )
     add_date = models.DateTimeField(auto_now_add=True)
     assignment_type = models.CharField(max_length=100)
-    status = models.CharField(max_length=100, default='to-do')
+    status = models.CharField(max_length=100, default='to do')
     tags = models.CharField(max_length=255)
     language = models.CharField(max_length=100)
     share = models.IntegerField(default=0)
