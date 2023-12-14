@@ -23,6 +23,7 @@ class ClientSerializer(serializers.ModelSerializer):
             'diagnosis',
             'about',
             'assignments',
+            'notes',
         ]
 
 
@@ -437,19 +438,23 @@ class AssignmentClientSerializer(serializers.ModelSerializer):
 
 class NoteSerializer(serializers.ModelSerializer):
     author_name = serializers.StringRelatedField(source='author', read_only=True)
+    client_id = serializers.IntegerField(write_only=True)
     class Meta:
         model = Note
         fields = [
             'id',
             'title',
-            'description',
             'content',
             'add_date',
             'author',
             'author_name',
+            'client_id',
         ]
 
     def create(self, validated_data):
-        author = self.context['request'].user.pk
+        author = self.context['request'].user
+        client_id = validated_data.pop('client_id')
         note = Note.objects.create(author=author, **validated_data)
+        client = User.objects.get(pk=client_id)
+        client.client.notes.add(note)
         return note

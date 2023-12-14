@@ -35,6 +35,7 @@ class Client(models.Model):
     assignments = models.ManyToManyField('AssignmentClient', blank=True)
     diagnosis = models.CharField(max_length=255, blank=True)
     about = models.TextField(blank=True)
+    notes = models.ManyToManyField('Note', blank=True)
 
 
 # class ClientRelationship(models.Model):
@@ -129,7 +130,6 @@ class BlockChoice(models.Model):
 
 class Note(models.Model):
     title = models.CharField(max_length=100)
-    description = models.TextField()
     content = models.TextField()
     add_date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(
