@@ -121,6 +121,10 @@ class Block(models.Model):
     end_range = models.IntegerField(default=10)
     left_pole = models.CharField(max_length=50)
     right_pole = models.CharField(max_length=50)
+    image = models.ImageField(
+        upload_to='block_images',
+        blank=True,
+    )
 
 
 class BlockChoice(models.Model):

@@ -306,6 +306,7 @@ class BlockSerializer(serializers.ModelSerializer):
     choice_replies = BlockChoiceSerializer(many=True, required=False)
     left_pole = serializers.CharField(required=False)
     right_pole = serializers.CharField(required=False)
+    image = serializers.ImageField(required=False)
     class Meta:
         model = Block
         fields = '__all__'
