@@ -22,7 +22,7 @@ import AddClient from './components/AddClient.jsx';
 import ClientRegistrationPage from './service/forms/client-registration-page.jsx';
 import AfterRegistrationPage from './service/forms/after-registration-welcome-page.jsx';
 import ClientsAssignments from './clients-components/ClientsAssignments.jsx';
-
+import AddNote from './components/AddNote.jsx';
 
 const router = createBrowserRouter([
   {
@@ -69,6 +69,10 @@ const router = createBrowserRouter([
       {
         path: "/add-client",
         element: <AddClient/>
+      },
+      {
+        path: "/add-note/:id",
+        element: <AddNote/>
       },
       {
         path: "/my-assignments",

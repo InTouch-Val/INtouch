@@ -104,3 +104,13 @@
 .range-label {
   margin: 0 10px;
 }
+
+.block,
+.block-title-input,
+.choice-input,
+.range-display,
+.range-options,
+.range-option input[type="radio"],
+.range-label {
+  box-sizing: border-box; /* Добавляем это свойство к элементам */
+}

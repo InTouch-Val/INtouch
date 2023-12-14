@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useNavigate} from "react-router-dom"
 import "../css/assignment-tile.css"; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -49,7 +49,17 @@ export const AssignmentTile = ({ assignment, onFavoriteToggle, isFavorite }) => 
 
 export const ClientAssignmentTile = ({assignment, onDeleteSuccess }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(false);
+  const [statusOneWord, setStatusOneWord] = useState('to-do')
+
+  useEffect(() => {
+    if(assignment.status == "to do"){
+      setStatusOneWord("to-do")
+    }
+    else if(assignment.status == "in progress"){
+      setStatusOneWord("in-progress")
+    }
+  }, [assignment])
 
   const deleteClientsAssignment = async () => {
     try{
@@ -71,7 +81,7 @@ export const ClientAssignmentTile = ({assignment, onDeleteSuccess }) => {
     >
       <div className="assignment-image-container">
         <div className='date-and-type'>
-          <span className={`status ${assignment.status}`}>{assignment.status}</span>
+          <span className={`status ${statusOneWord}`}>{assignment.status}</span>
           {assignment.assignment_type && <span className="type">{assignment.assignment_type}</span>}
         </div>
         <img alt="Loading..." src={assignment.image_url}  />

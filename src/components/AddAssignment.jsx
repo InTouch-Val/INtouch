@@ -10,8 +10,8 @@ import Modal from '../service/modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment, faSquareCheck, faCircleDot, faEllipsis } from '@fortawesome/free-solid-svg-icons';
 
-const getPlainText = (editorState) => {
-  return editorState.getCurrentContent().getPlainText();
+const getObjectFromEditorState = (editorState) => {
+  return JSON.stringify(editorState)
 };
 
 
@@ -84,7 +84,7 @@ const AddAssignment = () => {
       return {
         type: block.type,
         question: block.title,
-        description: getPlainText(block.content),
+        description: getObjectFromEditorState(block.content),
         choice_replies: []
       };
     } else if (block.type === "range") {
@@ -278,18 +278,92 @@ const ViewAssignment = () => {
     blocks: []
   });
 
+  function decodeStyledText(jsonData) {
+    // Parse the JSON data
+    let data = JSON.parse(jsonData);
+
+    // Initialize an empty string to hold the HTML
+    let html = '';
+
+    // Function to apply styles
+    const applyStyles = (char, styles) => {
+        if (styles.includes('BOLD')) {
+            char = `<b>${char}</b>`;
+        }
+        if (styles.includes('ITALIC')) {
+            char = `<em>${char}</em>`;
+        }
+        if (styles.includes('UNDERLINE')) {
+            char = `<u>${char}</u>`;
+        }
+        return char;
+    };
+
+    // Traverse each block in the blockMap
+    for (let blockKey in data._immutable.currentContent.blockMap) {
+        let block = data._immutable.currentContent.blockMap[blockKey];
+
+        // Determine the block type
+        let blockType = block.type;
+        let openTag = '', closeTag = '';
+        switch (blockType) {
+            case 'unstyled':
+                openTag = '<p>'; closeTag = '</p>';
+                break;
+            case 'header-one':
+                openTag = '<h1>'; closeTag = '</h1>';
+                break;
+            case 'header-two':
+                openTag = '<h2>'; closeTag = '</h2>';
+                break;
+            case 'header-three':
+                openTag = '<h3>'; closeTag = '</h3>';
+                break;
+            case 'unordered-list-item':
+                openTag = '<li>'; closeTag = '</li>';
+                break;
+            case 'ordered-list-item':
+                openTag = '<li>'; closeTag = '</li>';
+                break;
+            // Add more cases for other types
+        }
+
+        // Start the block
+        html += openTag;
+
+        // Process each character in the block
+        for (let i = 0; i < block.text.length; i++) {
+            let char = block.text[i];
+            let style = block.characterList[i].style;
+
+            // Apply styles
+            char = applyStyles(char, style);
+
+            // Add the character to the HTML string
+            html += char;
+        }
+
+        // Close the block
+        html += closeTag;
+    }
+    console.log(html)
+    return html;
+}
+
   const setAssignmentCredentials = (data) => {
     const restoredBlocks = data.blocks ? data.blocks.map(block => {
       if (block.type === 'text') {
-        const contentState = ContentState.createFromText(block.question);
+        // Используем функцию парсинга для получения HTML-текста из JSON Draft.js
+        const parsedContent = decodeStyledText(block.description);
+  
         return {
           ...block,
-          content: EditorState.createWithContent(contentState),
+          description: parsedContent,
         };
       }
       return block;
     }) : [];
-
+  
     setAssignmentData({
       ...data,
       blocks: restoredBlocks

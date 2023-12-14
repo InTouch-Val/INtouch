@@ -74,6 +74,7 @@
     width: 100%;
     color: #417D88;
     font-family: "Montserrat", sans-serif;
+    box-sizing: border-box;
 }
 .title-input:last-child{
     border-radius: 0 0 6px 6px;

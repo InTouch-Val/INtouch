@@ -37,7 +37,7 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock, readOnly }) => {
         <h3 className="block-title">{block.question}</h3>
       </div>
       {block.type === 'text' && (
-        <p className="block-text">{block.description}</p>
+        <div dangerouslySetInnerHTML={{__html: block.description}}/>
       )}
       {(block.type === 'single' || block.type === 'multiple') && (
         <ul className={`choices-container ${block.type}`}>
@@ -153,7 +153,7 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock, readOnly }) => {
   if (block.type === 'text') {
     return (
       <div className="block">
-        <div className='block-header'>
+        <div className='control-panel'>
           <input
             type="text"
             value={title}

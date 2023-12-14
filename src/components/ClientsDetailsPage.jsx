@@ -1,13 +1,16 @@
 import React, {useState, useEffect} from 'react'
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from '../service/authContext';
 import { ClientAssignmentTile } from './AssignmentTile';
 import API from '../service/axios';
 import Notes from './Notes';
 import "../css/clients.css"
+import { faNoteSticky } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const ClientDetailPage = () => {
-    const { id } = useParams(); 
+    const { id } = useParams();
+    const navigate = useNavigate() 
     const {currentUser, updateUserData} = useAuth()
     const client = currentUser?.doctor.clients.find(client => client.id === Number(id));
     
@@ -101,7 +104,7 @@ const ClientDetailPage = () => {
                     <h2>{`${client.first_name} ${client.last_name}`}</h2>
                 </div>
                 {activeTab === "profile" && (<button onClick={handleEditToggle} className='client-button'>{isEditing ? 'Save Changes' : 'Edit Client' }</button>)}
-                {activeTab === "notes" && (<button className='client-button'>Add Note</button>)}
+                {activeTab === "notes" && (<button onClick={() => navigate(`/add-note/${client.id}/`)} className='client-button'><FontAwesomeIcon icon={faNoteSticky} /> Add Note</button>)}
             </header>
             <div className='tabs'>
                 <button className={activeTab === 'profile'? 'active' : ''} onClick={switchToProfileTab}>Profile</button>
@@ -170,7 +173,7 @@ const ClientDetailPage = () => {
             )}
             {/*Notes Tab View */}
             {activeTab === 'notes' && (
-                <Notes />
+                <Notes clientId={client.id}/>
             )}
         </div>
     )

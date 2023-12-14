@@ -27,12 +27,20 @@ async function refreshTokens() {
   if (!refreshToken) {
     throw new Error("No refresh token available");
   }
-  const response = await API.post('token/refresh/', { refresh: refreshToken });
+  try{
+    const response = await API.post('token/refresh/', { refresh: refreshToken });
   const { access: newAccessToken, refresh: newRefreshToken } = response.data;
   localStorage.setItem('accessToken', newAccessToken);
   localStorage.setItem('refreshToken', newRefreshToken);
   API.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
   return newAccessToken;
+  }
+  catch(error) {
+    console.error("Token refresh failed:", error);
+    localStorage.clear();
+    window.location.href = '/login'; // Redirect to login page on refresh failure
+  }
+  
 }
 
 API.interceptors.request.use(
@@ -75,6 +83,8 @@ API.interceptors.response.use(
         return API(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
+        localStorage.clear();
+        window.location.href = '/login'; // Redirect to login page on refresh failure
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

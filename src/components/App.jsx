@@ -11,7 +11,7 @@ function App() {
 
   useEffect(() => {
     if (!isLoading && !currentUser) {
-      navigate('/login'); 
+      handleLogout() 
     }
   }, [currentUser, isLoading, navigate]);
 

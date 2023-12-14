@@ -24,7 +24,8 @@ export const AuthProvider = ({ children }) => {
       setCurrentUser(response.data[0]);
     } catch (error) {
       console.error('Error during login:', error);
-      logout(); 
+      logout();
+      window.location.href = '/login'; // Redirect to login page on login failure
     }
     setIsLoading(false); // Установка после завершения всех операций
   };
@@ -34,6 +35,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     setCurrentUser(null);
+    window.location.href = '/login';
   };
 
   const updateUserData = async () => {
@@ -41,7 +43,9 @@ export const AuthProvider = ({ children }) => {
       const response = await API.get('get-user/');
       setCurrentUser(response.data[0]);
     }catch (error) {
-      console.error('Error during login:', error);
+      console.error('Error during user data update:', error);
+      logout();
+      window.location.href = '/login'; // Redirect to login page on update failure
     }
   }
 

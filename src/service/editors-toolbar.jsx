@@ -6,14 +6,11 @@ import {
   ItalicButton,
   BoldButton,
   UnderlineButton,
-  CodeButton,
   HeadlineOneButton,
   HeadlineTwoButton,
   HeadlineThreeButton,
   UnorderedListButton,
   OrderedListButton,
-  BlockquoteButton,
-  CodeBlockButton,
 } from 'draft-js-buttons';
 import 'draft-js-static-toolbar-plugin/lib/plugin.css';
 import "../css/editorsBar.css"
@@ -46,8 +43,6 @@ const EditorToolbar = ({ editorState, setEditorState }) => {
               <BoldButton {...externalProps} />
               <ItalicButton {...externalProps} />
               <UnderlineButton {...externalProps} />
-              <Separator {...externalProps} />
-              <CodeButton {...externalProps} />
               <Separator {...externalProps} />
               <HeadlineOneButton {...externalProps} />
               <HeadlineTwoButton {...externalProps} />
