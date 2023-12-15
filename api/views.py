@@ -17,11 +17,12 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny, )
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    http_method_names = ['get', 'post']
 
 
 class UserDetailsView(generics.ListAPIView):
+    """Получение модели пользователя по токену"""
     serializer_class = UserSerializer
-
     def get_queryset(self):
         token = self.request.headers.get('Authorization').split(' ')[1]
         try:
