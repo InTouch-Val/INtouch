@@ -105,8 +105,8 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(
             username=validated_data['email'],
-            first_name=validated_data['first_name'],
-            last_name=validated_data['last_name'],
+            first_name=validated_data['first_name'].title(),
+            last_name=validated_data['last_name'].title(),
             email=validated_data['email'],
             password=validated_data['password'],
             accept_policy=validated_data['accept_policy'],
@@ -201,8 +201,8 @@ class AddClientSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create(
             username=validated_data['email'],
-            first_name=validated_data['first_name'],
-            last_name=validated_data['last_name'],
+            first_name=validated_data['first_name'].title(),
+            last_name=validated_data['last_name'].title(),
             email=validated_data['email'],
             password=uuid.uuid4(),
             user_type='client',
