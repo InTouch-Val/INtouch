@@ -14,6 +14,7 @@ from .serializers import *
 
 
 class UserViewSet(viewsets.ModelViewSet):
+    """Создание и получение пользователей"""
     permission_classes = (AllowAny, )
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -35,6 +36,7 @@ class UserDetailsView(generics.ListAPIView):
 
 
 class UserConfirmEmailView(APIView):
+    """Активация аккаунта, выдача токенов авторизации"""
     permission_classes = (AllowAny, )
     def get(self, request, pk, token):
         user = User.objects.get(pk=pk)
@@ -62,6 +64,7 @@ class UserConfirmEmailView(APIView):
 
 
 class PasswordResetRequestView(APIView):
+    """Запрос на сброс пароля"""
     permission_classes = (AllowAny,)
     def post(self, request):
         serializer = PasswordResetSerializer(data=request.data)
@@ -88,6 +91,7 @@ class PasswordResetRequestView(APIView):
 
 
 class PasswordResetConfirmView(generics.GenericAPIView):
+    """Подтверждение сброса пароля, выдача токенов авторизации"""
     permission_classes = (AllowAny,)
     def get(self, request, pk, token):
         user = User.objects.get(pk=pk)
@@ -103,6 +107,7 @@ class PasswordResetConfirmView(generics.GenericAPIView):
 
 
 class PasswordResetCompleteView(APIView):
+    """Установка нового пароля пользователя"""
     def post(self, request):
         serializer = ChangePasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -117,6 +122,7 @@ class PasswordResetCompleteView(APIView):
 
 
 class UpdatePasswordView(APIView):
+    """Изменение существующего пароля пользователя"""
     def post(self, request):
         serializer = UpdatePasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -131,12 +137,14 @@ class UpdatePasswordView(APIView):
 
 
 class UpdateUserView(generics.UpdateAPIView):
+    """Редактирование пользовательских данных"""
     queryset = User.objects.all()
     serializer_class = UpdateUserSerializer
 
 
 @api_view(['GET'])
 def user_delete_hard(request):
+    """Полное удаление пользователя"""
     user = request.user
     if user:
         user.delete()
@@ -147,6 +155,7 @@ def user_delete_hard(request):
 
 @api_view(['GET'])
 def user_delete_soft(request):
+    """Перевод пользователя в неактивные"""
     user = request.user
     if user:
         user.is_active = False
@@ -157,6 +166,7 @@ def user_delete_soft(request):
 
 
 class ClientDeleteView(APIView):
+    """Удаление аккаунта клиента из интерфейса доктора"""
     def delete(self, request, pk):
         try:
             client = User.objects.get(pk=pk)
@@ -168,6 +178,7 @@ class ClientDeleteView(APIView):
 
 
 class AddClientView(APIView):
+    """Добавление нового клиента из интерфейса доктора"""
     def post(self, request):
         serializer = AddClientSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -178,32 +189,35 @@ class AddClientView(APIView):
 
 
 class UpdateClientView(generics.UpdateAPIView):
+    """Завершение регистрации из интерфейса клиента, установка пароля"""
     queryset = User.objects.all()
     serializer_class = UpdateClientSerializer
 
 
 class DoctorUpdateClientView(generics.UpdateAPIView):
+    """Редактирование доктором данных о клиенте"""
     queryset = User.objects.all()
     serializer_class = DoctorUpdateClientSerializer
 
 
-class AssignmentLikeView(APIView):
-    def get(self, request, pk):
-        assignment = Assignment.objects.get(pk=pk)
-        assignment.like()
-        assignment.save()
-        return Response({'message': 'Like.'})
-
-
-class AssignmentDislikeView(APIView):
-    def get(self, request, pk):
-        assignment = Assignment.objects.get(pk=pk)
-        assignment.dislike()
-        assignment.save()
-        return Response({'message': 'Dislike.'})
+# class AssignmentLikeView(APIView):
+#     def get(self, request, pk):
+#         assignment = Assignment.objects.get(pk=pk)
+#         assignment.like()
+#         assignment.save()
+#         return Response({'message': 'Like.'})
+#
+#
+# class AssignmentDislikeView(APIView):
+#     def get(self, request, pk):
+#         assignment = Assignment.objects.get(pk=pk)
+#         assignment.dislike()
+#         assignment.save()
+#         return Response({'message': 'Dislike.'})
 
 
 class AssignmentAddUserMyListView(APIView):
+    """Добавление задачи в свой список"""
     def get(self, request, pk):
         user = request.user
         assignment = Assignment.objects.get(pk=pk)
@@ -212,6 +226,7 @@ class AssignmentAddUserMyListView(APIView):
 
 
 class AssignmentDeleteUserMyListView(APIView):
+    """Удаение задачи из своего списка"""
     def get(self, request, pk):
         user = request.user
         assignment = Assignment.objects.get(pk=pk)
@@ -220,6 +235,7 @@ class AssignmentDeleteUserMyListView(APIView):
 
 
 class AddAssignmentClientView(APIView):
+    """Назначение задачи клиенту"""
     def get(self, request, pk, client_pk):
         assignment = Assignment.objects.get(pk=pk)
         client = User.objects.get(pk=client_pk)
@@ -261,6 +277,7 @@ class AddAssignmentClientView(APIView):
 
 
 class AssignmentViewSet(viewsets.ModelViewSet):
+    """CRUD операции над задачами доктора"""
     queryset = Assignment.objects.all()
     serializer_class = AssignmentSerializer
 
@@ -280,6 +297,7 @@ class AssignmentViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get'])
     def draft(self, request, pk):
+        """Сокрытие задачи из общего пула"""
         assignments = self.get_object()
         assignments.is_public = False
         assignments.save()
@@ -287,11 +305,13 @@ class AssignmentViewSet(viewsets.ModelViewSet):
 
 
 class AssignmentClientViewSet(viewsets.ModelViewSet):
+    """CRUD операции над задачами клиента"""
     queryset = AssignmentClient.objects.all()
     serializer_class = AssignmentClientSerializer
 
     @action(detail=True, methods=['get'])
     def complete(self, request, pk):
+        """Смена статуса задачи на 'done'"""
         assignment = self.get_object()
         assignment.status = 'done'
         assignment.save()
@@ -299,5 +319,6 @@ class AssignmentClientViewSet(viewsets.ModelViewSet):
 
 
 class NoteViewSet(viewsets.ModelViewSet):
+    """CRUD операции над заметками"""
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
