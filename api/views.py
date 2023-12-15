@@ -275,6 +275,13 @@ class AssignmentViewSet(viewsets.ModelViewSet):
                 "You don't have permission to update this assignment.")
         return super().update(request, *args, **kwargs)
 
+    @action(detail=True, methods=['get'])
+    def draft(self, request, pk):
+        assignments = self.get_object()
+        assignments.is_public = False
+        assignments.save()
+        return Response({'message': 'Assignments saved in draft'})
+
 
 class AssignmentClientViewSet(viewsets.ModelViewSet):
     queryset = AssignmentClient.objects.all()

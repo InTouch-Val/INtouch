@@ -67,15 +67,7 @@ class Assignment(models.Model):
         blank=True
     )
     comments = models.ManyToManyField('Comment', blank=True)
-
-    # def like(self):
-    #     self.likes += 1
-    #     self.save()
-    #
-    # def dislike(self):
-    #     if self.likes > 0:
-    #         self.likes -= 1
-    #         self.save()
+    is_public = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title

@@ -329,6 +329,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
     status = serializers.CharField(required=False)
     tags = serializers.CharField(required=False)
     image_url = serializers.CharField(required=False)
+    is_public = serializers.BooleanField(read_only=True)
     class Meta:
         model = Assignment
         fields = [
@@ -345,7 +346,8 @@ class AssignmentSerializer(serializers.ModelSerializer):
             'image_url',
             'blocks',
             'author',
-            'author_name'
+            'author_name',
+            'is_public',
         ]
 
     def create(self, validated_data):
@@ -368,6 +370,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
         return assignment
 
     def update(self, instance, validated_data):
+        instance.is_public = True
         instance.title = validated_data['title']
         instance.text = validated_data['text']
         instance.assignment_type = validated_data['assignment_type']
