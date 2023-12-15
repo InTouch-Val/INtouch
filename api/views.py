@@ -254,6 +254,8 @@ class AddAssignmentClientView(APIView):
                 block_copy.choice_replies.add(choice_reply_copy)
             assignments_copy.blocks.add(block_copy)
         client.client.assignments.add(assignments_copy)
+        assignment.share += 1
+        assignment.save()
         return Response({'message': 'Assignment set client successfully.'})
 
 
