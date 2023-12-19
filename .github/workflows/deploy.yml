@@ -17,7 +17,7 @@ jobs:
         with:
           switches: -avzr --delete
           remote_path: /opt/test
-          path: ./frontend
+          path: ./readme.md
           remote_host: ${{ secrets.REMOTE_HOST }}
           remote_user: ${{ secrets.REMOTE_USER }}
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -42,7 +42,7 @@ jobs:
         with:
           switches: -avzr --delete
           remote_path: /opt/test
-          local_path: ./frontend/build/
+          path: ./frontend/build/
           remote_host: ${{ secrets.REMOTE_HOST }}
           remote_user: ${{ secrets.REMOTE_USER }}
-          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
