@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { EditorState, ContentState } from 'draft-js';
+import { EditorState, ContentState, convertFromHTML, convertFromRaw } from 'draft-js';
 import API from '../service/axios';
 import AssignmentBlock from '../service/assignment-blocks';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -47,7 +47,16 @@ const AddAssignment = () => {
   
       const fetchedBlocks = response.data.blocks.map(block => {
         if (block.type === 'text') {
-          const contentState = ContentState.createFromText(block.description);
+          let contentState;
+        try {
+        const rawContent = JSON.parse(block.description);
+        contentState = convertFromRaw(rawContent);
+        console.log(contentState)
+        } catch (e) {
+        console.error('Ошибка при обработке содержимого:', e);
+        contentState = ContentState.createFromText(''); // Создаем пустое содержимое в случае ошибки
+        }
+
           return {
             ...block,
             title: block.question,
@@ -76,7 +85,7 @@ const AddAssignment = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
 
   const blockInfo = blocks.map(block => {
@@ -325,7 +334,7 @@ const ViewAssignment = () => {
             case 'ordered-list-item':
                 openTag = '<li>'; closeTag = '</li>';
                 break;
-            // Add more cases for other types
+            
         }
 
         // Start the block

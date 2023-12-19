@@ -46,13 +46,16 @@ function LoginPage() {
 
   const handleForgotPassword = async (e) => {
     e.preventDefault();
+    if(credentials.email.trim() === ""){
+      setError("Email field must not be blank")
+    }
     try {
       const response = await API.post('password/reset/', { email: credentials.email });
       if (response.status === 200) {
         navigate('/password-reset-requested');
       }
     } catch (error) {
-      const message = error.response?.data.message || 'An error occurred during password reset request.';
+      const message = error.response?.data?.email[0] || 'An error occurred during password reset request.';
       console.error('Password reset request error:', error);
       setError(message);
     }

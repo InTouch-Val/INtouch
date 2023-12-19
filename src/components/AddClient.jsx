@@ -3,6 +3,8 @@ import API from '../service/axios';
 import "../css/add-client.css"
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../service/authContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 const AddClient = () => {
   const [clientData, setClientData] = useState({
@@ -22,6 +24,10 @@ const AddClient = () => {
       [name]: value
     }));
   };
+
+  const handleBack = () => {
+    navigate(-1)
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -73,6 +79,9 @@ const AddClient = () => {
 
   return (
     <div className="add-client-form-container">
+      <button id='back' className="action-button" onClick={handleBack}>
+        <FontAwesomeIcon icon={faArrowLeft} /> Back
+      </button>
       <form className="add-client-form" onSubmit={handleSubmit}>
         <h2>Add Client</h2>
         <input

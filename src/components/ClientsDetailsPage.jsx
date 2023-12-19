@@ -90,6 +90,11 @@ const ClientDetailPage = () => {
         }
     }
 
+    const handleCancelEdit = () => {
+        setIsEditing(false);
+        setEditableClient({ ...client.client });
+    };
+
     const handleDeleteAssignment = (deletedAssignmentId) => {
         setClientAssignments(currentAssignments =>
             currentAssignments.filter(assignment => assignment.id !== deletedAssignmentId)
@@ -103,7 +108,12 @@ const ClientDetailPage = () => {
                     <img src={client.photo} className='avatar' style={{"width": "46px"}} />
                     <h2>{`${client.first_name} ${client.last_name}`}</h2>
                 </div>
-                {activeTab === "profile" && (<button onClick={handleEditToggle} className='client-button'>{isEditing ? 'Save Changes' : 'Edit Client' }</button>)}
+                <div>
+                    {activeTab === "profile" && (<button onClick={handleEditToggle} className='action-button'>{isEditing ? 'Save Changes' : 'Edit Client' }</button>)}
+                    {activeTab === "profile" && isEditing && (
+                    <button className='action-button' onClick={handleCancelEdit}>Cancel</button>
+                )}
+                </div>
                 {activeTab === "notes" && (<button onClick={() => navigate(`/add-note/${client.id}/`)} className='client-button'><FontAwesomeIcon icon={faNoteSticky} /> Add Note</button>)}
             </header>
             <div className='tabs'>

@@ -15,6 +15,7 @@ function ClientPage() {
   const [favoriteAssignments, setFavoriteAssignments] = useState([])
   const [messageToUser, setMessageToUser] = useState(null)
 
+  const [activityFilter, setActivityFilter] = useState('all')
   const [searchTerm, setSearchTerm] = useState('');
   const {currentUser, updateUserData} = useAuth()
   const navigate = useNavigate()
@@ -42,9 +43,11 @@ function ClientPage() {
     fetchAssignments()
   }, [modalAction])
 
-  const filteredClients = currentUser?.doctor?.clients.filter((client) =>
-    `${client.first_name} ${client.last_name}`.toLowerCase().includes(searchTerm.toLowerCase())
-  ) || [];
+  const filteredClients = currentUser?.doctor?.clients
+    .filter(client => 
+      `${client.first_name} ${client.last_name}`.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (activityFilter === 'all' || client.is_active.toString() === activityFilter)
+    ) || [];
 
   const openModal = (clientId) => {
     setShowModal(true)
@@ -108,10 +111,14 @@ function ClientPage() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </form>
-        <select className='activity-filters'>
+        <select 
+          className='activity-filters'
+          value={activityFilter} 
+          onChange={e => setActivityFilter(e.target.value)}
+        >
           <option value='all'>All</option>
-          <option value='active'>Active clients</option>
-          <option value='inactive'>Inactive clients</option>
+          <option value='true'>Active clients</option>
+          <option value='false'>Inactive clients</option>
         </select>
         <select className='added-filters'>
           <option value='added'>Added</option>
