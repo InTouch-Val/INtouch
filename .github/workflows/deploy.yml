@@ -22,7 +22,7 @@ jobs:
           remote_user: ${{ secrets.REMOTE_USER }}
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
       
-  
+
   deploy:
     runs-on: ubuntu-latest
 
