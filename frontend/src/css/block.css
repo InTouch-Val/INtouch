@@ -1,0 +1,116 @@
+/* block.css */
+.block {
+  width: 100%; /* Задаем ширину блока */
+  background-color: #fff; /* Фон блока */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Тень блока */
+  border-radius: 8px; /* Скругление углов блока */
+  margin-bottom: 20px;
+  padding: 10px;
+}
+
+.block-title-input,
+.choice-input {
+  width: calc(100% - 30px); 
+  margin: 10px; 
+  padding: 10px 15px; 
+  border: 1px solid #ccc; 
+  border-radius: 4px; 
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+}
+
+.block-header{
+  margin: 10px;
+}
+
+.block-title{
+  color: #3f7983;
+  margin: 0;
+}
+
+.block-text{
+  padding: 10px;
+}
+
+.choice-input{
+  border: none;
+  cursor: pointer;
+}
+
+.choice-input:focus,
+.block-title-input:focus{
+  box-shadow: none;
+}
+
+.control-panel {
+  display: flex; /* Используем flexbox для расположения элементов */
+  justify-content: space-between; /* Размещаем элементы на противоположных концах */
+  align-items: center; /* Центрируем элементы по вертикали */
+}
+
+.remove-block-button,
+.remove-choice-button {
+  background-color: #417D88; /* Красный фон кнопок */
+  color: #fff; /* Белый текст на кнопках */
+  border: none; /* Убираем границу */
+  padding: 8px 16px; /* Паддинги для кнопки */
+  border-radius: 50px; /* Скругление углов кнопки */
+  cursor: pointer;
+  margin: 10px; /* Курсор в виде руки */
+}
+
+.remove-block-button:hover,
+.remove-choice-button:hover {
+  background-color: #3f7983; /* Темно-красный фон при наведении */
+}
+
+.choice-option {
+  display: flex; /* Используем flexbox для опций */
+  align-items: center;
+  margin-bottom: 10px; /* Отступ снизу для каждого варианта */
+}
+
+.choice-label{
+  margin-left: 5px;
+}
+
+.choice-option input[type="text"]:disabled {
+  background-color: #e0e0e0; /* Серый фон для неактивного инпута */
+  color: #d60000; /* Серый текст для неактивного инпута */
+}
+
+.range-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.range-options {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.range-option {
+  margin: 0 5px;
+}
+
+.range-option input[type="radio"] {
+  margin-right: 5px;
+}
+
+.range-label {
+  margin: 0 10px;
+}
+
+.block,
+.block-title-input,
+.choice-input,
+.range-display,
+.range-options,
+.range-option input[type="radio"],
+.range-label {
+  box-sizing: border-box; /* Добавляем это свойство к элементам */
+}

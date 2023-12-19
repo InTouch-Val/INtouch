@@ -1,0 +1,80 @@
+[
+    {
+        "id": 1,
+        "title": "Learning to fly",
+        "author": "Jane Claus",
+        "status": "expansion",
+        "type": "exercise",
+        "modified": "2023-10-10",
+        "popularity": 12345,
+        "favorite": false,
+        "language": "en",
+        "archived": false,
+        "image": "https://img.freepik.com/free-photo/african-american-man-working-open-air-man-suit-sunglasses-with-beard-using-laptop-sitting-terrace-rooftops-working-manager-technology-concept_74855-25538.jpg?w=996&t=st=1699115767~exp=1699116367~hmac=faae800901f163a8fd70b67e0491464e8607530a2acfc76ee66c52d9ef71420a"
+    },
+    {
+        "id": 2,
+        "title": "Mindfulness is the key",
+        "author": "Jane Claus",
+        "status": "in progress",
+        "type": "lesson",
+        "modified": "2023-10-11",
+        "popularity": 54321,
+        "favorite": true,
+        "language": "es",
+        "archived": false,
+        "image": "https://img.freepik.com/free-photo/african-american-man-working-open-air-man-suit-sunglasses-with-beard-using-laptop-sitting-terrace-rooftops-working-manager-technology-concept_74855-25538.jpg?w=996&t=st=1699115767~exp=1699116367~hmac=faae800901f163a8fd70b67e0491464e8607530a2acfc76ee66c52d9ef71420a"
+    },
+    {
+        "id": 3,
+        "title": "Gratitude will make you feel better",
+        "author": "Jane Claus",
+        "status": "publish",
+        "type": "metaphor",
+        "modified": "2023-11-10",
+        "popularity": 5432,
+        "favorite": true,
+        "language": "it",
+        "archived": false,
+        "image": "https://img.freepik.com/free-photo/african-american-man-working-open-air-man-suit-sunglasses-with-beard-using-laptop-sitting-terrace-rooftops-working-manager-technology-concept_74855-25538.jpg?w=996&t=st=1699115767~exp=1699116367~hmac=faae800901f163a8fd70b67e0491464e8607530a2acfc76ee66c52d9ef71420a"
+    },
+    {
+        "id": 4,
+        "title": "Constatly repeat to yourself that you are not alone",
+        "author": "Jane Claus",
+        "status": "publish",
+        "type": "metaphor",
+        "modified": "2023-11-10",
+        "popularity": 123,
+        "favorite": false,
+        "language": "fr",
+        "archived": true,
+        "image": "https://img.freepik.com/free-photo/african-american-man-working-open-air-man-suit-sunglasses-with-beard-using-laptop-sitting-terrace-rooftops-working-manager-technology-concept_74855-25538.jpg?w=996&t=st=1699115767~exp=1699116367~hmac=faae800901f163a8fd70b67e0491464e8607530a2acfc76ee66c52d9ef71420a"
+    },
+    {
+        "id": 5,
+        "title": "Constatly repeat to yourself that you are not alone",
+        "author": "Jane Claus",
+        "status": "publish",
+        "type": "metaphor",
+        "modified": "2023-11-10",
+        "popularity": 123,
+        "favorite": false,
+        "language": "en",
+        "archived": false,
+        "image": "https://img.freepik.com/free-photo/african-american-man-working-open-air-man-suit-sunglasses-with-beard-using-laptop-sitting-terrace-rooftops-working-manager-technology-concept_74855-25538.jpg?w=996&t=st=1699115767~exp=1699116367~hmac=faae800901f163a8fd70b67e0491464e8607530a2acfc76ee66c52d9ef71420a"
+    },
+    {
+        "id": 6,
+        "title": "Constatly repeat to yourself that you are not alone",
+        "author": "Jane Claus",
+        "status": "publish",
+        "type": "metaphor",
+        "modified": "2023-11-10",
+        "popularity": 123,
+        "favorite": false,
+        "language": "en",
+        "archived": false,
+        "image": "https://img.freepik.com/free-photo/african-american-man-working-open-air-man-suit-sunglasses-with-beard-using-laptop-sitting-terrace-rooftops-working-manager-technology-concept_74855-25538.jpg?w=996&t=st=1699115767~exp=1699116367~hmac=faae800901f163a8fd70b67e0491464e8607530a2acfc76ee66c52d9ef71420a"
+    }
+]

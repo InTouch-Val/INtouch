@@ -1,0 +1,141 @@
+/* assignmentTile.css */
+
+.assignment-tile {
+    background-color: #ffffff; /* Белый фон */
+    border-radius: 10px; /* Скругленные углы */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden; /* Обрезка контента по границам */
+    width: 280px;
+    position: relative;
+    overflow: hidden;
+  }
+  .assignment-image-container{
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+  }
+  
+  .assignment-tile .assignment-image-container img {
+    width: 200px;
+    height: 200px;
+    display: block;
+    border-radius: 6px;
+    align-self: center;
+  }
+  
+  .assignment-info {
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .assignment-info h3 {
+    margin: 0;
+    color: #656565; /* Темно-серый текст */
+    font-size: 16px; /* Размер шрифта заголовка */
+    font-weight: 500; /* Жирность шрифта */
+  }
+  
+  .assignment-info p {
+    color: #777; /* Серый текст */
+    font-size: 14px; /* Размер шрифта подзаголовка */
+    margin: 5px 0 15px; /* Отступы */
+  }
+  
+  .assignment-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Распределение пространства */
+    padding: 10px;
+    background-color: #f8f8f8; /* Светло-серый фон */
+  }
+  
+  .assignment-actions .popularity {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+  }
+  
+  .assignment-actions .popularity:before {
+    content: '👁‍🗨'; /* Эмодзи глаза */
+    margin-right: 5px;
+  }
+  
+  .favorite-button {
+    border: 2px solid #417D88;
+    border-radius: 100px;
+    padding: 2px 10px;
+    background: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #417D88; /* Цвет сердца */
+  }
+  
+  .favorite-button.selected {
+    color: #fff;
+    background-color: #417D88;
+  }
+  
+  /* Для даты и типа задания в верхнем углу */
+  .date-and-type {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px; /* Отступы */
+    border-radius: 20px; /* Закругленный фон */
+    z-index: 10;
+    font-size: 16px;
+    color: #B7B7B7;
+  }
+
+  .type {
+    background-color: #fff; /* Зеленый фон */
+    margin-left: 5px; /* Отступ справа */
+    padding: 5px 10px; /* Отступы */
+    border-radius: 100px;
+    color: #656565;
+    line-height: 17px;
+    border: solid 3px #417D88;
+  }
+
+  .status{
+    padding: 10px 15px;
+    border-radius: 20px;
+  }
+
+  .status.to-do{
+    background-color: #F7CFA4;
+    color: #fff;
+  }
+
+
+
+  .delete-button {
+    position: absolute;
+    bottom: -50px; /* Initially positioned outside the tile */
+    left: 0;
+    width: 100%; /* Button width should match the tile width */
+    padding: 10px 0;
+    background-color: #FF4136; /* Red background for deletion */
+    color: white;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    animation: slideUp 0.3s;
+    z-index: 2;
+  }
+  
+  .assignment-tile:hover .delete-button {
+    animation: slideUp 0.3s forwards ease;
+  }
+  
+  @keyframes slideUp{
+    from{
+      bottom: -50px;
+    }
+    to{
+      bottom: 0;
+    }
+  }

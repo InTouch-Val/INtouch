@@ -1,0 +1,111 @@
+.registration-page {
+    background-color: rgba(225, 244, 248, 0.35);
+    background-image: url("https://i122.fastpic.org/big/2023/1025/d2/e4e7924e98bda72edc75d27bf95bcad2.png");
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .registration-form img{
+    margin-bottom: 15px;
+  }
+  .registration-form {
+    padding: 20px;
+    background-color: #fff;
+    width: 40%; 
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .input-fields{
+    display: flex;
+    flex-direction: column;
+  }
+
+.input-fields input{
+  margin: 10px 0;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    box-shadow: 0px 0px 3px 1px #D7E4E773;
+    border-radius: 10px;
+}
+
+.input-fields.login input,
+.password-field input {
+    width: calc(100% - 20px); /* Adjust width to account for padding */   
+}
+
+/* Align button inside password field */
+.password-field {
+    position: relative; /* Position the field relatively */
+    display: flex;
+    align-items: center;
+}
+
+.password-field input {
+    flex-grow: 1;
+    padding-right: 40px; /* Padding to prevent text overlapping with the button */
+}
+
+.password-field button {
+    position: absolute;
+    right: 15px;
+    padding: 0;
+    border: none;
+    background-color: #fff;
+    cursor: pointer;
+    border-radius: 0 10px 10px 0;
+    height: calc(100% - 30px);
+}
+
+  .registration-form input:focus{
+    box-shadow: 0 0 3px #666;
+  }
+  
+  .registration-form label {
+    display: flex;
+    align-items: center; /* Выровняйте checkbox и текст по вертикали */
+  }
+  .registration-form h2{
+    font-weight: 400;
+    text-align: center;
+    line-height: 40px;
+    font-size: 24px;
+  }
+
+  .registration-form label{
+    font-size: 12px;
+  }
+  
+  .registration-form button:hover {
+    cursor: pointer;
+  }
+  
+  .error-message {
+    color: red;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .form-buttons{
+    display: flex;
+  }
+  input[type="checkbox"], input[type="checkbox"]:focus{
+    box-shadow: none;
+    margin: 0;
+}
+
+
+@media (max-width: 600px) {
+    .registration-form {
+        width: 80%; /* Adjust for smaller screens */
+    }
+
+    .input-fields.login input,
+    .password-field input {
+        width: 100%; /* Full width on small screens */
+    }
+}

@@ -1,0 +1,14 @@
+.editorContainer {
+    cursor: text;
+    background-color: #fff; 
+    border: 1px solid #ddd; /* граница, как у textarea */
+    border-radius: 4px; /* скругление углов, если необходимо */
+    padding: 10px; /* отступы внутри, как у textarea */
+    margin-top: 5px; /* отступ сверху, если необходимо */
+    min-height: 100px; /* минимальная высота */
+  }
+  
+  .editorContainer .DraftEditor-root {
+    min-height: 100px; /* минимальная высота */
+  }
+  
