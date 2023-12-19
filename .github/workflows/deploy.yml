@@ -28,7 +28,7 @@ jobs:
       - name: Copy docker-compose.yml to server
         run: scp -i ./ssh_key readme.md ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/opt/test/
       
-        
+    
   deploy:
     runs-on: ubuntu-latest
 
