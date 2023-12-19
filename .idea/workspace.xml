@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a6376cc8-9c17-4bc1-a0d1-d708dab7fda4" name="Changes" comment="Прописана документация к view">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/INtouch/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/INtouch/asgi.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/INtouch/settings.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/INtouch/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/INtouch/wsgi.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/admin.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/apps.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/migrations/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/models.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/serializers.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/templates/registration/confirm_mail.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/templates/registration/confirm_mail_client.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/templates/registration/password_reset.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/templates/registration/welcome_mail.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/tests.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/views.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/manage.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/user_photos/default_user_photo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2XiscQTitw6atxnk7KAoSx35YRh" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  }
+}</component>
+  <component name="RunManager">
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="INtouch" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/api" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/api/test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.test" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a6376cc8-9c17-4bc1-a0d1-d708dab7fda4" name="Changes" comment="" />
+      <created>1699123314750</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1699123314750</updated>
+    </task>
+    <task id="LOCAL-00036" summary="user photo">
+      <option name="closed" value="true" />
+      <created>1700984767461</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1700984767461</updated>
+    </task>
+    <task id="LOCAL-00037" summary="serialized user.clients">
+      <option name="closed" value="true" />
+      <created>1700987229145</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1700987229145</updated>
+    </task>
+    <task id="LOCAL-00038" summary="переделана модель пользователя">
+      <option name="closed" value="true" />
+      <created>1701071968381</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1701071968381</updated>
+    </task>
+    <task id="LOCAL-00039" summary="fix">
+      <option name="closed" value="true" />
+      <created>1701078369405</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1701078369405</updated>
+    </task>
+    <task id="LOCAL-00040" summary="fix">
+      <option name="closed" value="true" />
+      <created>1701078818191</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1701078818191</updated>
+    </task>
+    <task id="LOCAL-00041" summary="fix">
+      <option name="closed" value="true" />
+      <created>1701079121883</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1701079121883</updated>
+    </task>
+    <task id="LOCAL-00042" summary="fix">
+      <option name="closed" value="true" />
+      <created>1701079429218</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1701079429218</updated>
+    </task>
+    <task id="LOCAL-00043" summary="Merge remote-tracking branch 'origin/master'">
+      <option name="closed" value="true" />
+      <created>1701079916888</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1701079916888</updated>
+    </task>
+    <task id="LOCAL-00044" summary="Merge remote-tracking branch 'origin/master'">
+      <option name="closed" value="true" />
+      <created>1701080288352</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1701080288352</updated>
+    </task>
+    <task id="LOCAL-00045" summary="fix photo">
+      <option name="closed" value="true" />
+      <created>1701082012626</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1701082012626</updated>
+    </task>
+    <task id="LOCAL-00046" summary="fix photo">
+      <option name="closed" value="true" />
+      <created>1701082843926</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1701082843926</updated>
+    </task>
+    <task id="LOCAL-00047" summary="Merge remote-tracking branch 'origin/master'">
+      <option name="closed" value="true" />
+      <created>1701082901917</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1701082901917</updated>
+    </task>
+    <task id="LOCAL-00048" summary="реализована отправка задачи клиенту">
+      <option name="closed" value="true" />
+      <created>1701093882110</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1701093882110</updated>
+    </task>
+    <task id="LOCAL-00049" summary="AssignmentDetail">
+      <option name="closed" value="true" />
+      <created>1701096339878</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1701096339878</updated>
+    </task>
+    <task id="LOCAL-00050" summary="user/update">
+      <option name="closed" value="true" />
+      <created>1701188220862</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1701188220862</updated>
+    </task>
+    <task id="LOCAL-00051" summary="user/update/password">
+      <option name="closed" value="true" />
+      <created>1701189426343</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1701189426343</updated>
+    </task>
+    <task id="LOCAL-00052" summary="assignments-client">
+      <option name="closed" value="true" />
+      <created>1701288664637</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1701288664637</updated>
+    </task>
+    <task id="LOCAL-00053" summary="добавлен автор при создании задачи">
+      <option name="closed" value="true" />
+      <created>1701375528390</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1701375528390</updated>
+    </task>
+    <task id="LOCAL-00054" summary="добавлено удаление клиента">
+      <option name="closed" value="true" />
+      <created>1701415089747</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1701415089747</updated>
+    </task>
+    <task id="LOCAL-00055" summary="фикс сериаизатора создания задачи">
+      <option name="closed" value="true" />
+      <created>1701459714931</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1701459714931</updated>
+    </task>
+    <task id="LOCAL-00056" summary="автодобавление задачи в my list">
+      <option name="closed" value="true" />
+      <created>1701460623051</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1701460623051</updated>
+    </task>
+    <task id="LOCAL-00057" summary="Добавлено редактирование данных о клиенте">
+      <option name="closed" value="true" />
+      <created>1701498206272</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1701498206272</updated>
+    </task>
+    <task id="LOCAL-00058" summary="Добавлено редактирование данных о клиенте">
+      <option name="closed" value="true" />
+      <created>1701498394141</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1701498394141</updated>
+    </task>
+    <task id="LOCAL-00059" summary="AssignmentClientDetailView">
+      <option name="closed" value="true" />
+      <created>1701590141013</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1701590141013</updated>
+    </task>
+    <task id="LOCAL-00060" summary="форматированы ответы вью">
+      <option name="closed" value="true" />
+      <created>1701675963930</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1701675963930</updated>
+    </task>
+    <task id="LOCAL-00061" summary="удаление заданий">
+      <option name="closed" value="true" />
+      <created>1701677340669</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1701677340669</updated>
+    </task>
+    <task id="LOCAL-00062" summary="Assignment APIView зменил на ViewSet">
+      <option name="closed" value="true" />
+      <created>1701683571810</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1701683571810</updated>
+    </task>
+    <task id="LOCAL-00063" summary="refactoring">
+      <option name="closed" value="true" />
+      <created>1701685627296</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1701685627296</updated>
+    </task>
+    <task id="LOCAL-00064" summary="refactoring">
+      <option name="closed" value="true" />
+      <created>1701686088561</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1701686088561</updated>
+    </task>
+    <task id="LOCAL-00065" summary="refactoring">
+      <option name="closed" value="true" />
+      <created>1701686099026</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1701686099026</updated>
+    </task>
+    <task id="LOCAL-00066" summary="доработана модель Assignment">
+      <option name="closed" value="true" />
+      <created>1701689235804</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1701689235804</updated>
+    </task>
+    <task id="LOCAL-00067" summary="доработано редактирование заданий">
+      <option name="closed" value="true" />
+      <created>1701694927098</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1701694927098</updated>
+    </task>
+    <task id="LOCAL-00068" summary="создана модель Note">
+      <option name="closed" value="true" />
+      <created>1702033560578</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1702033560578</updated>
+    </task>
+    <task id="LOCAL-00069" summary="добавлены CRUD операции для Note">
+      <option name="closed" value="true" />
+      <created>1702035641268</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1702035641268</updated>
+    </task>
+    <task id="LOCAL-00070" summary="добавлен дефолтный статус задания">
+      <option name="closed" value="true" />
+      <created>1702060223884</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1702060223884</updated>
+    </task>
+    <task id="LOCAL-00071" summary="fix status">
+      <option name="closed" value="true" />
+      <created>1702116889152</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1702116889152</updated>
+    </task>
+    <task id="LOCAL-00072" summary="fix AddAssignmentClientView">
+      <option name="closed" value="true" />
+      <created>1702135756469</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1702135756469</updated>
+    </task>
+    <task id="LOCAL-00073" summary="fix Block update">
+      <option name="closed" value="true" />
+      <created>1702140600755</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1702140600755</updated>
+    </task>
+    <task id="LOCAL-00074" summary="Доработано редактирование заданий доктора  клиента">
+      <option name="closed" value="true" />
+      <created>1702193255373</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1702193255374</updated>
+    </task>
+    <task id="LOCAL-00075" summary="добавлена смена статусов задания">
+      <option name="closed" value="true" />
+      <created>1702195395262</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1702195395262</updated>
+    </task>
+    <task id="LOCAL-00076" summary="добавлены поля блока right_pole и left_pole">
+      <option name="closed" value="true" />
+      <created>1702198614560</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1702198614560</updated>
+    </task>
+    <task id="LOCAL-00077" summary="доработана модель Note, связана с моделью Client">
+      <option name="closed" value="true" />
+      <created>1702541918561</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1702541918561</updated>
+    </task>
+    <task id="LOCAL-00078" summary="Добавлено image в блок">
+      <option name="closed" value="true" />
+      <created>1702553481851</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1702553481852</updated>
+    </task>
+    <task id="LOCAL-00079" summary="Добавлено image в блок">
+      <option name="closed" value="true" />
+      <created>1702553586287</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1702553586287</updated>
+    </task>
+    <task id="LOCAL-00080" summary="Добавлено сохранение домашек без публикации">
+      <option name="closed" value="true" />
+      <created>1702626248147</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1702626248147</updated>
+    </task>
+    <task id="LOCAL-00081" summary="Добавлено счетчик chare к домашке">
+      <option name="closed" value="true" />
+      <created>1702626823861</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1702626823861</updated>
+    </task>
+    <task id="LOCAL-00082" summary="имя и фамилия с заглавной буквы">
+      <option name="closed" value="true" />
+      <created>1702627441286</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1702627441286</updated>
+    </task>
+    <task id="LOCAL-00083" summary="UserViewSet разрешены get и post запросы">
+      <option name="closed" value="true" />
+      <created>1702628753679</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1702628753679</updated>
+    </task>
+    <task id="LOCAL-00084" summary="Прописана документация к view">
+      <option name="closed" value="true" />
+      <created>1702630257088</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1702630257088</updated>
+    </task>
+    <option name="localTasksCounter" value="85" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="автодобавление задачи в my list" />
+    <MESSAGE value="Добавлено редактирование данных о клиенте" />
+    <MESSAGE value="AssignmentClientDetailView" />
+    <MESSAGE value="форматированы ответы вью" />
+    <MESSAGE value="удаление заданий" />
+    <MESSAGE value="Assignment APIView зменил на ViewSet" />
+    <MESSAGE value="refactoring" />
+    <MESSAGE value="доработана модель Assignment" />
+    <MESSAGE value="доработано редактирование заданий" />
+    <MESSAGE value="создана модель Note" />
+    <MESSAGE value="добавлены CRUD операции для Note" />
+    <MESSAGE value="добавлен дефолтный статус задания" />
+    <MESSAGE value="fix status" />
+    <MESSAGE value="fix AddAssignmentClientView" />
+    <MESSAGE value="fix Block update" />
+    <MESSAGE value="Доработано редактирование заданий доктора  клиента" />
+    <MESSAGE value="добавлена смена статусов задания" />
+    <MESSAGE value="добавлены поля блока right_pole и left_pole" />
+    <MESSAGE value="доработана модель Note, связана с моделью Client" />
+    <MESSAGE value="Добавлено image в блок" />
+    <MESSAGE value="Добавлено сохранение домашек без публикации" />
+    <MESSAGE value="Добавлено счетчик chare к домашке" />
+    <MESSAGE value="имя и фамилия с заглавной буквы" />
+    <MESSAGE value="UserViewSet разрешены get и post запросы" />
+    <MESSAGE value="Прописана документация к view" />
+    <option name="LAST_COMMIT_MESSAGE" value="Прописана документация к view" />
+  </component>
+</project>
