@@ -12,21 +12,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-        
-      - name: SSH into server
-        uses: appleboy/ssh-action@master
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.0
         with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: create SSH-key
-        run: echo "$SSH_PRIVATE_KEY" > ssh_key && chmod 600 ssh_key
-
-      - name: Copy docker-compose.yml to server
-        run: scp -i ./ssh_key readme.md ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/opt/test/
+      - name: Copy file to server
+        run: scp -i ${{ secrets.SSH_PRIVATE_KEY }} ./readme.md root@85.31.237.54:/opt/test/
       
     
   deploy:
