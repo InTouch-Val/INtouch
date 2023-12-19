@@ -17,10 +17,10 @@ jobs:
         with:
           switches: -avzr --delete
           remote_path: /opt/test
-          local_path: ./frontend
+          path: ./frontend
           remote_host: ${{ secrets.REMOTE_HOST }}
           remote_user: ${{ secrets.REMOTE_USER }}
-          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
       
   deploy:
     runs-on: ubuntu-latest
