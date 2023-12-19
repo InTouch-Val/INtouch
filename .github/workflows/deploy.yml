@@ -22,7 +22,6 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-
       - name: create SSH-key
         run: echo "$SSH_PRIVATE_KEY" > ssh_key && chmod 600 ssh_key
 
