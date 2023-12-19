@@ -6,6 +6,25 @@ on:
       - master
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        
+      - name: SSH into server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Copy docker-compose.yml to server
+        run: scp -i ${{ secrets.SSH_PRIVATE_KEY }} readme.md ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/opt/test/
+        
   deploy:
     runs-on: ubuntu-latest
 
