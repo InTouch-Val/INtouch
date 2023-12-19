@@ -22,8 +22,11 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: create SSH-key
+        run: echo "$SSH_PRIVATE_KEY" > ssh_key && chmod 600 ssh_key
+
       - name: Copy docker-compose.yml to server
-        run: scp -i ${{ secrets.SSH_PRIVATE_KEY }} readme.md ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/opt/test/
+        run: scp -i ssh_key readme.md ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/opt/test/
         
         
   deploy:
