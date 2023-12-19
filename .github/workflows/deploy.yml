@@ -12,16 +12,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.0
+      - name: Deploy to server
+        uses: burnett01/rsync-deployments@4.1
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: faaf
-        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > key && chmod 600 key
-
-      - name: Copy file to server
-        run: scp -i key ./readme.md root@85.31.237.54:/opt/test/
+          switches: -avzr --delete
+          remote_path: /opt/test
+          local_path: ./frontend
+          remote_host: ${{ secrets.REMOTE_HOST }}
+          remote_user: ${{ secrets.REMOTE_USER }}
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
       
     
   deploy:
