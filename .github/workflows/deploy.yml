@@ -18,7 +18,7 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: faaf
-        run: echo ${{ secrets.SSH_PRIVATE_KEY }} > key && chmod 600 key
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > key && chmod 600 key
 
       - name: Copy file to server
         run: scp -i key ./readme.md root@85.31.237.54:/opt/test/
