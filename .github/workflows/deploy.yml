@@ -51,7 +51,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /opt/app
-            docker-compose up -d
+            docker compose up -d
 
   # deploy-frontend:
   #   runs-on: ubuntu-latest
