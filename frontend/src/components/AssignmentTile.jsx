@@ -53,17 +53,17 @@ export const ClientAssignmentTile = ({assignment, onDeleteSuccess }) => {
   const [statusOneWord, setStatusOneWord] = useState('to-do')
 
   useEffect(() => {
-    if(assignment.status == "to do"){
+    if(assignment.status === "to do"){
       setStatusOneWord("to-do")
     }
-    else if(assignment.status == "in progress"){
+    else if(assignment.status === "in progress"){
       setStatusOneWord("in-progress")
     }
   }, [assignment])
 
   const deleteClientsAssignment = async () => {
     try{
-      const response = await API.delete(`assignments-client/${assignment.id}/`)
+      await API.delete(`assignments-client/${assignment.id}/`)
       handleToggleModal()
       onDeleteSuccess(assignment.id)
     }

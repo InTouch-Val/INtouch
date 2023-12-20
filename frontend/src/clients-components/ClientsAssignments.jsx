@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../service/authContext'
 import API from '../service/axios'
 import { ClientAssignmentTile } from '../components/AssignmentTile'
@@ -10,7 +9,6 @@ const ClientsAssignments = () => {
     const [assignments, setAssignments] = useState([])
     const [filteredAssignments, setFilteredAssignments] = useState([])
 
-    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchAssignments = async () => {
@@ -26,7 +24,7 @@ const ClientsAssignments = () => {
         }
 
         fetchAssignments()
-    }, [navigate])
+    }, [currentUser.id])
 
     useEffect(() => {
         let updatedAssignments = [...assignments];
