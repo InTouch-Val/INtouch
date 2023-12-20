@@ -49,12 +49,9 @@ jobs:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Change directory to /opt/app
-        run: cd /opt/app/
-
-      - name: Run docker-compose up
-        run: docker-compose up -d
+          script: |
+            cd /opt/app
+            docker-compose up -d
 
   # deploy-frontend:
   #   runs-on: ubuntu-latest
