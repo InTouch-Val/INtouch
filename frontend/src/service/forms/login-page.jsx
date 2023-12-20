@@ -64,7 +64,7 @@ function LoginPage() {
   return (
     <div className='registration-page'>
       <form className="registration-form" onSubmit={handleLogin}>
-        <img src="https://i122.fastpic.org/big/2023/1030/7b/1e679a924edf77196513a8491eb5f37b.jpg" width="100px" border="0" />
+        <img alt='in' src="https://i122.fastpic.org/big/2023/1030/7b/1e679a924edf77196513a8491eb5f37b.jpg" width="100px" border="0" />
         <div className='input-fields login'>
           <input
               type='text'
@@ -81,7 +81,7 @@ function LoginPage() {
                 placeholder='Enter password'
                 onChange={e => setCredentials({ ...credentials, password: e.target.value })}
               />
-              <button onClick={e => handleTogglePassword(e)}> {passwordShown ? (<FontAwesomeIcon icon={faEyeSlash} />) : (<FontAwesomeIcon icon={faEye} />)} </button>
+              <button type='button' onClick={e => handleTogglePassword(e)}> {passwordShown ? (<FontAwesomeIcon icon={faEyeSlash} />) : (<FontAwesomeIcon icon={faEye} />)} </button>
             </div>
         </div>
         <div className='form-buttons'>

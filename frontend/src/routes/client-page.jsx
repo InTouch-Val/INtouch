@@ -22,13 +22,13 @@ function ClientPage() {
 
   useEffect(() => {
     updateUserData()
-  }, [])
+  }, [updateUserData])
 
   useEffect(() => {
     const fetchAssignments = async () => {
       if(modalAction === 'add'){
         try{
-          const response = await API.get('assignments/').then(
+            await API.get('assignments/').then(
             response => {
               const data = response.data.filter(assignment => currentUser.doctor.assignments.includes(assignment.id))
               setFavoriteAssignments(data)
@@ -41,7 +41,7 @@ function ClientPage() {
     }
 
     fetchAssignments()
-  }, [modalAction])
+  }, [modalAction, currentUser.doctor.assignments])
 
   const filteredClients = currentUser?.doctor?.clients
     .filter(client => 
@@ -170,7 +170,7 @@ function ClientPage() {
                             )
                           }
                           {
-                            modalAction == "delete" && (
+                            modalAction === "delete" && (
                               <div className='delete-modal-div'>
                                 <p>Are you sure you want to delete this client? This action is irrevertable!</p>
                                 <div>
@@ -181,7 +181,7 @@ function ClientPage() {
                             )
                           }
                           {
-                            modalAction == "add" && (
+                            modalAction === "add" && (
                               <div>
                                 <p>Choose the assignment you want to assign:</p>
                                 <table>

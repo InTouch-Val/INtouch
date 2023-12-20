@@ -59,7 +59,7 @@ const RegistrationForm = () => {
     };
 
     try {
-      const response = await API.post('users/', requestData, {
+        await API.post('users/', requestData, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -76,7 +76,7 @@ const RegistrationForm = () => {
   return (
     <div className='registration-page'>
       <form className='registration-form' onSubmit={handleSubmit}>
-        <img src="https://i122.fastpic.org/big/2023/1030/7b/1e679a924edf77196513a8491eb5f37b.jpg" width="140px" border="0" />
+        <img alt="in" src="https://i122.fastpic.org/big/2023/1030/7b/1e679a924edf77196513a8491eb5f37b.jpg" width="140px" border="0" />
         <div className='input-fields'>
           <input
             type="text"

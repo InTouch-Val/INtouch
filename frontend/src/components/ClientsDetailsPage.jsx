@@ -105,7 +105,7 @@ const ClientDetailPage = () => {
         <div className='client-detail-page'>
             <header>
                 <div>
-                    <img src={client.photo} className='avatar' style={{"width": "46px"}} />
+                    <img alt='avatar' src={client.photo} className='avatar' style={{"width": "46px"}} />
                     <h2>{`${client.first_name} ${client.last_name}`}</h2>
                 </div>
                 <div>

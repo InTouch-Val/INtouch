@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import EditorToolbar from '../service/editors-toolbar';
 import "../css/block.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
