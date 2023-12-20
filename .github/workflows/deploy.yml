@@ -6,27 +6,28 @@ on:
       - master
 
 jobs:
-  # build:
-  #   runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-  #     - name: Build Docker image
-  #       working-directory: ./backend
-  #       run: docker build -t ivansitnikov1/repo .
+      - name: Build Docker image
+        working-directory: ./backend
+        run: docker build -t ivansitnikov1/repo .
 
-  #     - name: Login to Docker Hub
-  #       run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to Docker Hub
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
 
-  #     - name: Push Docker image
-  #       run: docker push ivansitnikov1/repo
+      - name: Push Docker image
+        run: docker push ivansitnikov1/repo
 
-  #     - name: Logout from Docker Hub
-  #       run: docker logout
+      - name: Logout from Docker Hub
+        run: docker logout
 
   deploy-backend:
+    needs: build
     runs-on: ubuntu-latest
 
     steps:
@@ -37,7 +38,7 @@ jobs:
         uses: burnett01/rsync-deployments@4.1
         with:
           switches: -avzr --delete
-          remote_path: /opt/test
+          remote_path: /opt/app/
           path: ./backend/docker-compose.yml
           remote_host: ${{ secrets.REMOTE_HOST }}
           remote_user: ${{ secrets.REMOTE_USER }}
@@ -51,29 +52,31 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /opt/app
-            docker compose up -d
+            docker compose down --rmi all -v || echo '-'
+            docker compose rm -f -s -v
+            docker compose up -d --no-build
 
-  # deploy-frontend:
-  #   runs-on: ubuntu-latest
+  deploy-frontend:
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-  #     - name: Install dependencies
-  #       working-directory: ./frontend
-  #       run: npm ci --legacy-peer-deps
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm ci --legacy-peer-deps
 
-  #     - name: Build
-  #       working-directory: ./frontend
-  #       run: npm run build
+      - name: Build
+        working-directory: ./frontend
+        run: npm run build
 
-  #     - name: Deploy to server
-  #       uses: burnett01/rsync-deployments@4.1
-  #       with:
-  #         switches: -avzr --delete
-  #         remote_path: /opt/test
-  #         path: ./frontend/build/
-  #         remote_host: ${{ secrets.REMOTE_HOST }}
-  #         remote_user: ${{ secrets.REMOTE_USER }}
-  #         remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Deploy to server
+        uses: burnett01/rsync-deployments@4.1
+        with:
+          switches: -avzr --delete
+          remote_path: /opt/app/frontend/build/
+          path: ./frontend/build/
+          remote_host: ${{ secrets.REMOTE_HOST }}
+          remote_user: ${{ secrets.REMOTE_USER }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
