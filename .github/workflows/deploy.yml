@@ -6,25 +6,25 @@ on:
       - master
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  # build:
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
 
-      - name: Build Docker image
-        working-directory: ./backend
-        run: docker build -t ivansitnikov1/repo .
+  #     - name: Build Docker image
+  #       working-directory: ./backend
+  #       run: docker build -t ivansitnikov1/repo .
 
-      - name: Login to Docker Hub
-        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+  #     - name: Login to Docker Hub
+  #       run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Push Docker image
-        run: docker push ivansitnikov1/repo
+  #     - name: Push Docker image
+  #       run: docker push ivansitnikov1/repo
 
-      - name: Logout from Docker Hub
-        run: docker logout
+  #     - name: Logout from Docker Hub
+  #       run: docker logout
 
   deploy-backend:
     runs-on: ubuntu-latest
@@ -51,7 +51,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Change directory to /opt/app
-        run: cd /opt/app
+        run: cd /opt/app/
 
       - name: Run docker-compose up
         run: docker-compose up -d
