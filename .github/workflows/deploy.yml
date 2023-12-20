@@ -23,11 +23,8 @@ jobs:
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Delete image 
-        run: docker rmi ivansitnikov1/repo:latest
-
       - name: Push Docker image
-        run: docker push ivansitnikov1/repo
+        run: docker push ivansitnikov1/repo:latest
 
       - name: Logout from Docker Hub
         run: docker logout
