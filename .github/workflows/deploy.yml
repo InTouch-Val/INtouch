@@ -14,7 +14,7 @@ jobs:
 
       - name: Build Docker image
         working-directory: ./backend
-        run: docker build -t app:latest/repo .
+        run: docker build -t app:latest .
 
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
