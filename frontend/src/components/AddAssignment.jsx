@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import { EditorState, ContentState, convertFromRaw } from 'draft-js';
 import API from '../service/axios';
 import AssignmentBlock from '../service/assignment-blocks';
@@ -30,60 +30,62 @@ const AddAssignment = () => {
   const {id} = useParams()
   const isEditMode = id != null
 
+  const fetchAssignment =  useCallback(
+    async () => {
+      try {
+        const response = await API.get(`assignments/${id}/`);
+        setTitle(response.data.title);
+        setDescription(response.data.text);
+        setType(response.data.assignment_type);
+        setLanguage(response.data.language);
+        setSelectedImage({ urls: { full: response.data.image_url } }); // Assuming your ImageSelector expects an object like this
+    
+        const fetchedBlocks = response.data.blocks.map(block => {
+          if (block.type === 'text') {
+            let contentState;
+          try {
+          const rawContent = JSON.parse(block.description);
+          contentState = convertFromRaw(rawContent);
+          console.log(contentState)
+          } catch (e) {
+          console.error('Ошибка при обработке содержимого:', e);
+          contentState = ContentState.createFromText(''); // Создаем пустое содержимое в случае ошибки
+          }
+  
+            return {
+              ...block,
+              title: block.question,
+              content: EditorState.createWithContent(contentState),
+            };
+          } else if (block.type === 'single' || block.type === 'multiple') {
+            return {
+              ...block,
+              title: block.question,
+              choices: block.choice_replies.map(choice => choice.reply)
+            };
+          } else if (block.type === 'range') {
+            return {
+              ...block,
+              title: block.question,
+              minValue: block.start_range,
+              maxValue: block.end_range
+            };
+          }
+          return block;
+        });
+    
+        setBlocks(fetchedBlocks);
+      } catch (e) {
+        console.error(e.message);
+      }
+    }, [id]) 
+
+  
   useEffect(() => {
     if(isEditMode){
       fetchAssignment()
     }
   }, [isEditMode, fetchAssignment])
-
-  const fetchAssignment = async () => {
-    try {
-      const response = await API.get(`assignments/${id}/`);
-      setTitle(response.data.title);
-      setDescription(response.data.text);
-      setType(response.data.assignment_type);
-      setLanguage(response.data.language);
-      setSelectedImage({ urls: { full: response.data.image_url } }); // Assuming your ImageSelector expects an object like this
-  
-      const fetchedBlocks = response.data.blocks.map(block => {
-        if (block.type === 'text') {
-          let contentState;
-        try {
-        const rawContent = JSON.parse(block.description);
-        contentState = convertFromRaw(rawContent);
-        console.log(contentState)
-        } catch (e) {
-        console.error('Ошибка при обработке содержимого:', e);
-        contentState = ContentState.createFromText(''); // Создаем пустое содержимое в случае ошибки
-        }
-
-          return {
-            ...block,
-            title: block.question,
-            content: EditorState.createWithContent(contentState),
-          };
-        } else if (block.type === 'single' || block.type === 'multiple') {
-          return {
-            ...block,
-            title: block.question,
-            choices: block.choice_replies.map(choice => choice.reply)
-          };
-        } else if (block.type === 'range') {
-          return {
-            ...block,
-            title: block.question,
-            minValue: block.start_range,
-            maxValue: block.end_range
-          };
-        }
-        return block;
-      });
-  
-      setBlocks(fetchedBlocks);
-    } catch (e) {
-      console.error(e.message);
-    }
-  };
 
 const handleSubmit = async (e) => {
   e.preventDefault();
@@ -334,6 +336,8 @@ const ViewAssignment = () => {
             case 'ordered-list-item':
                 openTag = '<li>'; closeTag = '</li>';
                 break;
+            default:
+                break;
             
         }
 
@@ -359,7 +363,7 @@ const ViewAssignment = () => {
     return html;
 }
 
-  const setAssignmentCredentials = (data) => {
+  const setAssignmentCredentials = useCallback((data) => {
     const restoredBlocks = data.blocks ? data.blocks.map(block => {
       if (block.type === 'text') {
         // Используем функцию парсинга для получения HTML-текста из JSON Draft.js
@@ -377,7 +381,7 @@ const ViewAssignment = () => {
       ...data,
       blocks: restoredBlocks
     });
-  };
+  }, []);
 
   const handleToggleModal = () => {setShowModal(!showModal)}
 
@@ -402,7 +406,7 @@ const ViewAssignment = () => {
     };
 
     fetchAssignmentData();
-  }, [setAssignmentCredentials]);
+  }, [id, navigate, setAssignmentCredentials]);
 
   return (
     <div className='assignments-page'>
