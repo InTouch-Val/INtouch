@@ -116,7 +116,7 @@ class UserSerializer(serializers.ModelSerializer):
         Doctor.objects.create(user=user)
         token = default_token_generator.make_token(user)
         activation_url = f'/activate/{user.pk}/{token}/'
-        current_site = 'http://127.0.0.1:3000'
+        current_site = 'http://85.31.237.54'
         html_message = render_to_string(
             'registration/confirm_mail.html',
             {'url': activation_url, 'domen': current_site, 'name': user.first_name}
@@ -211,7 +211,7 @@ class AddClientSerializer(serializers.ModelSerializer):
         Client.objects.create(user=user)
         token = default_token_generator.make_token(user)
         activation_url = f'/activate-client/{user.pk}/{token}/'
-        current_site = 'http://127.0.0.1:3000'
+        current_site = 'http://85.31.237.54'
         html_message = render_to_string(
             'registration/confirm_mail_client.html',
             {'url': activation_url, 'domen': current_site,
