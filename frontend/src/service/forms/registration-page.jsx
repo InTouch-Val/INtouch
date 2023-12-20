@@ -69,7 +69,7 @@ const RegistrationForm = () => {
       
     } catch (error) {
       console.error('Registration error:', error);
-      setError('Registration failed. Please try again.' + error?.data?.message);
+      setError('Registration failed. Please try again. Email:' +  error.response?.data?.email[0]);
     }
   };
 
