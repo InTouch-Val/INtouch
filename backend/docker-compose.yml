@@ -4,6 +4,8 @@ services:
     image: ivansitnikov1/repo:latest
     ports:
       - "8000:8000"
+    volumes:
+      - "/opt/media:/app/media/"
     depends_on:
       app-postgres:
         condition: service_healthy
