@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { EditorState, ContentState, convertFromHTML, convertFromRaw } from 'draft-js';
+import { EditorState, ContentState, convertFromRaw } from 'draft-js';
 import API from '../service/axios';
 import AssignmentBlock from '../service/assignment-blocks';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -34,7 +34,7 @@ const AddAssignment = () => {
     if(isEditMode){
       fetchAssignment()
     }
-  }, [id])
+  }, [isEditMode, fetchAssignment])
 
   const fetchAssignment = async () => {
     try {
@@ -155,8 +155,8 @@ const handleSubmit = async (e) => {
       title: '', 
       content: type === 'text' ? EditorState.createEmpty() : '',
       choices: type === 'text' ? [] : [''],
-      minValue: type == 'range' ? 1 : null,
-      maxValue: type == 'range' ? 10 : null,
+      minValue: type === 'range' ? 1 : null,
+      maxValue: type === 'range' ? 10 : null,
     };
     setBlocks([...blocks, newBlock]);
   };
@@ -383,7 +383,7 @@ const ViewAssignment = () => {
 
   const handleDeleteAssignment = async () => {
     try{
-      const response = API.delete(`assignments/${id}/`)
+      await API.delete(`assignments/${id}/`)
       navigate('/assignments')
     }catch(e){
       console.error(e.message)
@@ -402,7 +402,7 @@ const ViewAssignment = () => {
     };
 
     fetchAssignmentData();
-  }, [id, navigate]);
+  }, [setAssignmentCredentials]);
 
   return (
     <div className='assignments-page'>

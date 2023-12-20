@@ -3,7 +3,7 @@ import API from '../service/axios';
 import {useAuth} from '../service/authContext'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
-import Modal from '../service/modal';
+
 
 function Notes({clientId}) {
   const { currentUser } = useAuth();

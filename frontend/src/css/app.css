@@ -60,6 +60,21 @@ body{
     border-radius: 4px;
 }
 
+#logout{
+    font-family: "Montserrat", sans-serif;
+    font-size: 16px;
+    line-height: 28px;
+    font-weight: 500; 
+    color: #656565; /* Цвет текста */
+    display: block;
+    padding: 8px 12px;
+    margin-left: 45px;
+    text-align: flex-end;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
 input:focus, select:focus{
     outline: none;
     box-shadow: 0 0 2px #666;
