@@ -12,37 +12,49 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Deploy to server
-        uses: burnett01/rsync-deployments@4.1
-        with:
-          switches: -avzr --delete
-          remote_path: /opt/test
-          path: ./readme.md
-          remote_host: ${{ secrets.REMOTE_HOST }}
-          remote_user: ${{ secrets.REMOTE_USER }}
-          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Build Docker image
+        run: docker build -t app:latest .
+
+      - name: Login to Docker Hub
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push Docker image
+        run: docker push app:latest
+
+      - name: Logout from Docker Hub
+        run: docker logout
+
+      # - name: Deploy to server
+      #   uses: burnett01/rsync-deployments@4.1
+      #   with:
+      #     switches: -avzr --delete
+      #     remote_path: /opt/test
+      #     path: ./readme.md
+      #     remote_host: ${{ secrets.REMOTE_HOST }}
+      #     remote_user: ${{ secrets.REMOTE_USER }}
+      #     remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
       
-  deploy:
-    runs-on: ubuntu-latest
+  # deploy:
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
 
-      - name: Install dependencies
-        working-directory: ./frontend
-        run: npm ci --legacy-peer-deps
+  #     - name: Install dependencies
+  #       working-directory: ./frontend
+  #       run: npm ci --legacy-peer-deps
 
-      - name: Build
-        working-directory: ./frontend
-        run: npm run build
+  #     - name: Build
+  #       working-directory: ./frontend
+  #       run: npm run build
 
-      - name: Deploy to server
-        uses: burnett01/rsync-deployments@4.1
-        with:
-          switches: -avzr --delete
-          remote_path: /opt/test
-          path: ./frontend/build/
-          remote_host: ${{ secrets.REMOTE_HOST }}
-          remote_user: ${{ secrets.REMOTE_USER }}
-          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+  #     - name: Deploy to server
+  #       uses: burnett01/rsync-deployments@4.1
+  #       with:
+  #         switches: -avzr --delete
+  #         remote_path: /opt/test
+  #         path: ./frontend/build/
+  #         remote_host: ${{ secrets.REMOTE_HOST }}
+  #         remote_user: ${{ secrets.REMOTE_USER }}
+  #         remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
