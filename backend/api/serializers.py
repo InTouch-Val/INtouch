@@ -125,7 +125,7 @@ class UserSerializer(serializers.ModelSerializer):
         mail = EmailMultiAlternatives(
             'Confirmation of Your Account Registration on INtouch',
             message,
-            'iw.sitnikoff@yandex.ru',
+            'info@intouch.care',
             [user.email],
         )
         mail.attach_alternative(html_message, 'text/html')
@@ -221,7 +221,7 @@ class AddClientSerializer(serializers.ModelSerializer):
         mail = EmailMultiAlternatives(
             'Confirmation of Your Account Registration on INtouch',
             message,
-            'iw.sitnikoff@yandex.ru',
+            'info@intouch.care',
             [user.email],
         )
         mail.attach_alternative(html_message, 'text/html')

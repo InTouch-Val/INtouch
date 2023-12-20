@@ -82,7 +82,7 @@ class PasswordResetRequestView(APIView):
         mail = EmailMultiAlternatives(
             'Password Reset for INtouch Account',
             message,
-            'iw.sitnikoff@yandex.ru',
+            'info@intouch.care',
             [email],
         )
         mail.attach_alternative(html_message, 'text/html')
