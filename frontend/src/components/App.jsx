@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Outlet, NavLink, useNavigate } from "react-router-dom"; // Заменили Link на NavLink
 import "../css/app.css";
 import { useAuth } from "../service/authContext";
@@ -8,19 +8,20 @@ import {faArrowRightFromBracket, faGear, faUser, faList, faBookMedical, faNoteSt
 function App() {
   const { currentUser, logout, isLoading } = useAuth(); 
   const navigate = useNavigate();
+  
+  const handleLogout = useCallback(() => {
+    logout(); 
+    navigate('/login');
+  }, [logout, navigate]);
 
   useEffect(() => {
     if (!isLoading && !currentUser) {
       handleLogout() 
     }
-  }, [currentUser, isLoading, navigate]);
+  }, [currentUser, isLoading, handleLogout]);
 
-  const handleLogout = () => {
-    logout(); 
-    navigate('/login');
-  };
 
-  const isDoctor = currentUser?.user_type == "doctor"
+  const isDoctor = currentUser?.user_type === "doctor"
 
   return (
     <div className="app-container">
@@ -86,9 +87,9 @@ function App() {
                 </NavLink>
               </li> */}
               <li>
-                <a onClick={handleLogout}>
+                <button id="logout" onClick={handleLogout}>
                 <FontAwesomeIcon icon={faArrowRightFromBracket} /> Logout
-                </a>
+                </button>
               </li>
             </ul>
           </nav>
