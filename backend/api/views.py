@@ -49,7 +49,7 @@ class UserConfirmEmailView(APIView):
             mail = EmailMultiAlternatives(
                 'Welcome to INtouch!',
                 message,
-                'iw.sitnikoff@yandex.ru',
+                'info@intouch.care',
                 [user.email],
             )
             mail.attach_alternative(html_message, 'text/html')
