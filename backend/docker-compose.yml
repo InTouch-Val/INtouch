@@ -1,9 +1,7 @@
 version: "3.5"
 services:
   app:
-    image: django-app
-    build:
-      context: .
+    image: ivansitnikov1/repo:latest
     ports:
       - "8000:8000"
 #    depends_on:
