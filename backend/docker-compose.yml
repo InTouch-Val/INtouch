@@ -4,26 +4,26 @@ services:
     image: ivansitnikov1/repo:latest
     ports:
       - "8000:8000"
-#    depends_on:
-#      app-postgres:
-#        condition: service_healthy
-#
-#  app-postgres:
-#    image: postgres:15-alpine
-#    ports:
-#      - "5432:5432"
-#    volumes:
-#      - "app-postgres:/var/lib/postgresql/data"
-#    environment:
-#      POSTGRES_DB: django_app
-#      POSTGRES_USER: postgres
-#      POSTGRES_PASSWORD: postgres
-#    healthcheck:
-#      test: ["CMD-SHELL", "pg_isready", "-U", "postgres"]
-#      interval: 1s
-#      timeout: 5s
-#      retries: 10
-#
-#volumes:
-#  app-postgres:
-#    name: "app-postgres"
+    depends_on:
+      app-postgres:
+        condition: service_healthy
+
+  app-postgres:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - "/opt/intouch_data:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_DB: django_app
+      POSTGRES_USER: ivan
+      POSTGRES_PASSWORD: ivan
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d django_app"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  app-postgres:
+    name: "app-postgres"
