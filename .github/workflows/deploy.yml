@@ -58,6 +58,7 @@ jobs:
             # docker compose down --rmi all -v || echo '-'
             # docker compose rm -f -s -v
             docker compose down
+            docker image rm ivansitnikov1/repo
             docker compose up -d
 
   deploy-frontend:
