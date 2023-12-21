@@ -1,6 +1,5 @@
 from django.urls import reverse_lazy
 from django.core.exceptions import PermissionDenied
-from django.utils import timezone
 from rest_framework import generics, viewsets, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view, action
@@ -41,30 +40,25 @@ class UserConfirmEmailView(APIView):
     permission_classes = (AllowAny, )
     def get(self, request, pk, token):
         user = User.objects.get(pk=pk)
-        expires = float(request.GET.get('expires'))
-        current_time = timezone.now().timestamp()
         if user and default_token_generator.check_token(user, token):
-            if current_time < expires:
-                user.is_active = True
-                user.save()
-                refresh = RefreshToken.for_user(user)
-                html_message = render_to_string('registration/welcome_mail.html')
-                message = strip_tags(html_message)
-                mail = EmailMultiAlternatives(
-                    'Welcome to INtouch!',
-                    message,
-                    'info@intouch.care',
-                    [user.email],
-                )
-                mail.attach_alternative(html_message, 'text/html')
-                mail.send()
-                return Response({
-                    'message': 'Account activated',
-                    'access_token': str(refresh.access_token),
-                    'refresh_token': str(refresh)
-                })
-            else:
-                return Response({'error': 'Link lifetime has expired'})
+            user.is_active = True
+            user.save()
+            refresh = RefreshToken.for_user(user)
+            html_message = render_to_string('registration/welcome_mail.html')
+            message = strip_tags(html_message)
+            mail = EmailMultiAlternatives(
+                'Welcome to INtouch!',
+                message,
+                'info@intouch.care',
+                [user.email],
+            )
+            mail.attach_alternative(html_message, 'text/html')
+            mail.send()
+            return Response({
+                'message': 'Account activated',
+                'access_token': str(refresh.access_token),
+                'refresh_token': str(refresh)
+            })
         else:
             return Response({'error': 'Account not activated'})
 
