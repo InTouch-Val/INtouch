@@ -7,6 +7,7 @@ from django.contrib.auth.hashers import check_password
 from django.core.mail import EmailMultiAlternatives
 from django.core.validators import RegexValidator
 from django.template.loader import render_to_string
+from django.utils import timezone
 from django.utils.html import strip_tags
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
@@ -115,7 +116,8 @@ class UserSerializer(serializers.ModelSerializer):
         )
         Doctor.objects.create(user=user)
         token = default_token_generator.make_token(user)
-        activation_url = f'/activate/{user.pk}/{token}/'
+        expiration_time = timezone.now() + timezone.timedelta(seconds=20)
+        activation_url = f'/activate/{user.pk}/{token}/?expires={expiration_time.timestamp()}'
         current_site = 'http://85.31.237.54'
         html_message = render_to_string(
             'registration/confirm_mail.html',
