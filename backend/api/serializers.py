@@ -400,6 +400,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
 class AssignmentClientSerializer(serializers.ModelSerializer):
     blocks = BlockSerializer(many=True, required=False)
     author_name = serializers.StringRelatedField(source='author', read_only=True)
+    visible = serializers.BooleanField(read_only=True)
     class Meta:
         model = AssignmentClient
         fields = [
@@ -418,6 +419,7 @@ class AssignmentClientSerializer(serializers.ModelSerializer):
             'author',
             'author_name',
             'user',
+            'visible'
         ]
 
     def update(self, instance, validated_data):

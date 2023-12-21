@@ -98,6 +98,7 @@ class AssignmentClient(models.Model):
     )
     comments = models.ManyToManyField('Comment', blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    visible = models.BooleanField(default=True)
 
 
 class Block(models.Model):

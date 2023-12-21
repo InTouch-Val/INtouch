@@ -6,6 +6,7 @@ services:
       - "8000:8000"
     volumes:
       - "/opt/media:/app/media/"
+      - "/opt/intouch_static:/app/static/"
     depends_on:
       app-postgres:
         condition: service_healthy
