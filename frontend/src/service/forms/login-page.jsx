@@ -68,8 +68,8 @@ function LoginPage() {
         <div className='input-fields login'>
           <input
               type='text'
-              id='username'
-              placeholder='Enter username'
+              id='email'
+              placeholder='Enter email'
               onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
               required
             />
