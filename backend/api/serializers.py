@@ -401,7 +401,6 @@ class AssignmentSerializer(serializers.ModelSerializer):
 class AssignmentClientSerializer(serializers.ModelSerializer):
     blocks = BlockSerializer(many=True, required=False)
     author_name = serializers.StringRelatedField(source='author', read_only=True)
-    visible = serializers.BooleanField(read_only=True)
     class Meta:
         model = AssignmentClient
         fields = [
@@ -425,6 +424,7 @@ class AssignmentClientSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.status = 'in progress'
+        instance.visible = validated_data['visible']
         blocks = instance.blocks.all()
         for block in blocks:
             block.delete()
