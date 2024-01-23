@@ -172,9 +172,8 @@ class ClientDeleteView(APIView):
     def delete(self, request, pk):
         try:
             client = User.objects.get(pk=pk)
-            if request.user.doctor.clients.filter(pk=client.pk).exists():
-                client.delete()
-                return Response({'message': 'Client deleted successfully'})
+            request.user.doctor.clients.remove(client)
+            return Response({'message': 'Client deleted successfully'})
         except User.DoesNotExist:
             return Response({'error': 'Client not found'})
 
