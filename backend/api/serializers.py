@@ -401,6 +401,8 @@ class AssignmentSerializer(serializers.ModelSerializer):
 class AssignmentClientSerializer(serializers.ModelSerializer):
     blocks = BlockSerializer(many=True, required=False)
     author_name = serializers.StringRelatedField(source='author', read_only=True)
+    grade = serializers.IntegerField(required=False)
+    review = serializers.CharField(required=False)
     class Meta:
         model = AssignmentClient
         fields = [
@@ -419,12 +421,16 @@ class AssignmentClientSerializer(serializers.ModelSerializer):
             'author',
             'author_name',
             'user',
-            'visible'
+            'visible',
+            'grade',
+            'review',
         ]
 
     def update(self, instance, validated_data):
         instance.status = 'in progress'
         instance.visible = validated_data['visible']
+        instance.grade = validated_data.get('grade')
+        instance.review = validated_data.get('review', '')
         blocks = instance.blocks.all()
         for block in blocks:
             block.delete()

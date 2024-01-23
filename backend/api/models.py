@@ -99,6 +99,8 @@ class AssignmentClient(models.Model):
     comments = models.ManyToManyField('Comment', blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     visible = models.BooleanField(default=True)
+    grade = models.IntegerField(null=True, blank=True)
+    review = models.TextField()
 
 
 class Block(models.Model):
