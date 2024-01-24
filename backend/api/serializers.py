@@ -332,6 +332,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
     tags = serializers.CharField(required=False)
     image_url = serializers.CharField(required=False)
     is_public = serializers.BooleanField(read_only=True)
+    grades = serializers.ListField(child=serializers.IntegerField())
     class Meta:
         model = Assignment
         fields = [
@@ -350,6 +351,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
             'author',
             'author_name',
             'is_public',
+            'grades',
         ]
 
     def create(self, validated_data):
@@ -429,8 +431,12 @@ class AssignmentClientSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.status = 'in progress'
         instance.visible = validated_data['visible']
-        instance.grade = validated_data.get('grade')
-        instance.review = validated_data.get('review', '')
+        grade = validated_data.get('grade')
+        if grade:
+            instance.grade = grade
+            instance.review = validated_data.get('review', '')
+            instance.assignment_root.grades.append(grade)
+            instance.assignment_root.save()
         blocks = instance.blocks.all()
         for block in blocks:
             block.delete()

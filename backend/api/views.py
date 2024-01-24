@@ -201,22 +201,6 @@ class DoctorUpdateClientView(generics.UpdateAPIView):
     serializer_class = DoctorUpdateClientSerializer
 
 
-# class AssignmentLikeView(APIView):
-#     def get(self, request, pk):
-#         assignment = Assignment.objects.get(pk=pk)
-#         assignment.like()
-#         assignment.save()
-#         return Response({'message': 'Like.'})
-#
-#
-# class AssignmentDislikeView(APIView):
-#     def get(self, request, pk):
-#         assignment = Assignment.objects.get(pk=pk)
-#         assignment.dislike()
-#         assignment.save()
-#         return Response({'message': 'Dislike.'})
-
-
 class AssignmentAddUserMyListView(APIView):
     """Добавление задачи в свой список"""
     def get(self, request, pk):
@@ -251,6 +235,7 @@ class AddAssignmentClientView(APIView):
             likes=assignment.likes,
             image_url=assignment.image_url,
             user=client,
+            assignment_root=assignment,
         )
         blocks = assignment.blocks.all()
         for block in blocks:
