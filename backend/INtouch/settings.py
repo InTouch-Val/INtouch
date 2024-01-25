@@ -204,6 +204,7 @@ CORS_ALLOW_CREDENTIALS = True
 
 CORS_ORIGIN_WHITELIST = [
     'https://85.31.237.54',
+    'http://localhost:3000',
 ]
 
 CORS_ALLOW_METHODS = [
