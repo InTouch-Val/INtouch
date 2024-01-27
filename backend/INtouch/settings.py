@@ -235,7 +235,7 @@ EMAIL_HOST_PASSWORD = 'OMG_LoveINtouch23!'
 DRAMATIQ_BROKER = {
     "BROKER": "dramatiq.brokers.redis.RedisBroker",
     "OPTIONS": {
-        "url": "redis://localhost:6379",
+        "url": "redis://redis:6379",
     },
     "MIDDLEWARE": [
         "dramatiq.middleware.Prometheus",

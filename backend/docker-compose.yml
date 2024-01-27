@@ -9,7 +9,7 @@ services:
       - "/opt/intouch_static:/app/static/"
     depends_on:
       app-postgres:
-        condition: service_healthy
+          condition: service_healthy
 
   app-postgres:
     image: postgres:15-alpine
@@ -26,6 +26,9 @@ services:
       interval: 1s
       timeout: 5s
       retries: 10
+
+  redis:
+    image: redis:latest
 
 volumes:
   app-postgres:
