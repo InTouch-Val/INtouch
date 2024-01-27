@@ -332,7 +332,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
     tags = serializers.CharField(required=False)
     image_url = serializers.CharField(required=False)
     is_public = serializers.BooleanField(read_only=True)
-    grades = serializers.ListField(child=serializers.IntegerField())
+    grades = serializers.ListField(child=serializers.IntegerField(), read_only=True)
     class Meta:
         model = Assignment
         fields = [
