@@ -11,5 +11,3 @@ DJANGO_SUPERUSER_USERNAME="admin" \
 python manage.py collectstatic --noinput
 
 python manage.py runserver --noreload 0.0.0.0:8000
-
-python manage.py rundramatiq --noinput
