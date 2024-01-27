@@ -14,6 +14,7 @@ from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.tokens import AccessToken
 
 from .models import *
+from .tasks import remove_unverified_user
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -228,6 +229,7 @@ class AddClientSerializer(serializers.ModelSerializer):
         )
         mail.attach_alternative(html_message, 'text/html')
         mail.send()
+        remove_unverified_user.send_with_options(args=(user.pk,), delay=300000)
         return user
 
 
