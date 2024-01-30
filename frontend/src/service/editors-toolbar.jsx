@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
-import Editor from 'draft-js-plugins-editor';
-import createToolbarPlugin, { Separator } from 'draft-js-static-toolbar-plugin';
+import Editor from '@draft-js-plugins/editor';
+import createToolbarPlugin, { Separator } from '@draft-js-plugins/static-toolbar';
 import {
   ItalicButton,
   BoldButton,
@@ -10,8 +10,8 @@ import {
   HeadlineThreeButton,
   UnorderedListButton,
   OrderedListButton,
-} from 'draft-js-buttons';
-import 'draft-js-static-toolbar-plugin/lib/plugin.css';
+} from '@draft-js-plugins/buttons';
+import '@draft-js-plugins/static-toolbar/lib/plugin.css';
 import "../css/editorsBar.css"
 
 const toolbarPlugin = createToolbarPlugin();

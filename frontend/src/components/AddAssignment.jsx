@@ -1,7 +1,7 @@
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState, useEffect, useCallback} from 'react';
 import { EditorState, ContentState, convertFromRaw } from 'draft-js';
-import API from '../service/axios';
-import AssignmentBlock from '../service/assignment-blocks';
+import API from 'axios';
+import AssignmentBlock from '../service/assignment-blocks.jsx';
 import { useNavigate, useParams } from 'react-router-dom';
 import "../css/assignments.css"
 import ImageSelector from '../service/image-selector';
@@ -9,6 +9,8 @@ import { useAuth } from '../service/authContext';
 import Modal from '../service/modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment, faSquareCheck, faCircleDot, faEllipsis } from '@fortawesome/free-solid-svg-icons';
+import Headline from './headline';
+import ImageQuestionBlock from './ImageQuestionBlock';
 
 const getObjectFromEditorState = (editorState) => {
   return JSON.stringify(editorState)
@@ -199,6 +201,12 @@ const handleSubmit = async (e) => {
       <div className='add-assignment-body'>
         <ImageSelector onImageSelect={handleImageSelect}/>
         <form onSubmit={handleSubmit} className="form-creator">
+        {blocks.map((block, index) => (
+           <div key={index}>
+           {block.type === 'headline' && <Headline block={block} updateBlock={updateBlock} />}
+           {block.type === 'imageQuestion' && <ImageQuestionBlock block={block} updateBlock={updateBlock} />}
+      </div>
+      ))}
           <div className='form-title'>
             <input
               type='text'
@@ -256,7 +264,8 @@ const handleSubmit = async (e) => {
               updateBlock={updateBlock}
               removeBlock={removeBlock}
             />
-          ))}
+        ))};
+              
         </form>
         <div className='block-buttons-container'>
           <div className='block-buttons'>
@@ -268,6 +277,7 @@ const handleSubmit = async (e) => {
         </div>
       </div>
     </div>
+  
   );
   
 }
@@ -446,5 +456,5 @@ const ViewAssignment = () => {
   );
 };
 
-
-export {AddAssignment, ViewAssignment}
+export { AddAssignment, ViewAssignment, Headline };
+export default AddAssignment;
