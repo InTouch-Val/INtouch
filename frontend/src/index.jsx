@@ -5,12 +5,12 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from 'react-router-dom';
-import { AuthProvider } from './service/authContext.js';
+import { AuthProvider } from './service/authContext';
 import ErrorPage from './service/forms/error-page.jsx';
 import ClientPage from './routes/client-page.jsx';
 import ClientDetailPage from './components/ClientsDetailsPage.jsx';
 import AssignmentsPage from './routes/assignments-page.jsx';
-import CommunityPage from './routes/community-page.jsx'; 
+import CommunityPage from './routes/community-page.jsx';
 import RegistrationForm from './service/forms/registration-page.jsx';
 import LoginPage from './service/forms/login-page.jsx';
 import SettingsPage from './routes/settings-page.jsx';
@@ -52,7 +52,7 @@ const router = createBrowserRouter([
       },
       // {
       //   path: '/community/:chatId',
-      //   element: <Chat />, 
+      //   element: <Chat />,
       // },
       {
         path: '/settings',
@@ -101,12 +101,12 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/activate/:userId/:userToken",  
+    path: "/activate/:userId/:userToken",
     element: <ActivateUserPage />,
     errorElement: <ErrorPage />,
   },
   {
-    path: "/activate-client/:userId/:userToken",  
+    path: "/activate-client/:userId/:userToken",
     element: <ActivateUserPage />,
     errorElement: <ErrorPage />,
   },

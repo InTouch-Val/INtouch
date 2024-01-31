@@ -70,7 +70,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./frontend
-        run: npm ci --legacy-peer-deps
+        run: npm ci
 
       - name: Build
         working-directory: ./frontend
@@ -81,7 +81,7 @@ jobs:
         with:
           switches: -avzr --delete
           remote_path: /opt/app/frontend/build/
-          path: ./frontend/build/
+          path: ./frontend/dist/
           remote_host: ${{ secrets.REMOTE_HOST }}
           remote_user: ${{ secrets.REMOTE_USER }}
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
