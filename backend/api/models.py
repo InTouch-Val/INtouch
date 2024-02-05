@@ -167,3 +167,14 @@ class Massage(models.Model):
     massage = models.TextField()
     post_date = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
+
+
+class DiaryNote(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    add_date = models.DateTimeField(auto_now_add=True)
+    visible = models.BooleanField(default=True)
+    event_details = models.TextField()
+    thoughts_analysis = models.TextField()
+    physical_sensations = models.TextField()
+    primary_emotion = models.CharField(max_length=50)
+    clarifying_emotion = ArrayField(models.CharField(max_length=50), default=[])
