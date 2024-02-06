@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import API from '../axios';
+import { API } from '../axios';
 import { useAuth } from '../authContext';
-import "../../css/registration.css";
+import '../../css/registration.css';
 
-const ClientRegistrationPage = () => {
+function ClientRegistrationPage() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -14,24 +14,24 @@ const ClientRegistrationPage = () => {
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [error, setError] = useState('');
 
-  const {login} = useAuth()
+  const { login } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const { accessToken } = location.state || {};
 
   useEffect(() => {
     if (!accessToken) {
-        navigate('/login');
-        return;
-      }
+      navigate('/login');
+      return;
+    }
     API.get(`/get-user`, { headers: { Authorization: `Bearer ${accessToken}` } })
-      .then(response => {
+      .then((response) => {
         setFirstName(response.data[0].first_name);
         setLastName(response.data[0].last_name);
         setEmail(response.data[0].email);
         setUserId(response.data[0].id);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error fetching user data', error);
       });
   }, [accessToken, navigate]);
@@ -42,46 +42,52 @@ const ClientRegistrationPage = () => {
       setError('You must accept the terms and conditions.');
       return;
     }
-    if(password.length < 8){
-        setError("You must have at least 8 characters in your password.");
-        return;
+    if (password.length < 8) {
+      setError('You must have at least 8 characters in your password.');
+      return;
     }
     if (password !== confirmPassword) {
       setError('Passwords do not match.');
       return;
     }
 
-    try{
-        const response = await API.put(`update-client/${userId}/`, {
-            first_name: firstName,
-            last_name: lastName,
-            email: email,
-            password: password,
-            confirm_password: confirmPassword,
-            accept_policy: acceptTerms
-        },{
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        })
-        if(response.status === 200){
-            setError("Updated Sueccessfully")
-            setTimeout(() => {
-                login(localStorage.getItem("accessToken"), localStorage.getItem("refreshToken"))
-                navigate('/')
-            }, 1500)
-        }
-    }
-    catch (error) {
-        console.error('Error updating client:', error);
-        setError(error.response?.data?.message || 'An error occurred during the client update.');
+    try {
+      const response = await API.put(
+        `update-client/${userId}/`,
+        {
+          first_name: firstName,
+          last_name: lastName,
+          email: email,
+          password: password,
+          confirm_password: confirmPassword,
+          accept_policy: acceptTerms,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      );
+      if (response.status === 200) {
+        setError('Updated Sueccessfully');
+        setTimeout(() => {
+          login(localStorage.getItem('accessToken'), localStorage.getItem('refreshToken'));
+          navigate('/');
+        }, 1500);
+      }
+    } catch (error) {
+      console.error('Error updating client:', error);
+      setError(error.response?.data?.message || 'An error occurred during the client update.');
     }
   };
 
   return (
     <div className="registration-page">
       <form onSubmit={handleSubmit} className="registration-form">
-        <h2>Hello and Welcome to InTouch!<br/> Set Your Password To Proceed</h2>
+        <h2>
+          Hello and Welcome to InTouch!
+          <br /> Set Your Password To Proceed
+        </h2>
         <input
           type="text"
           value={firstName}
@@ -132,6 +138,6 @@ const ClientRegistrationPage = () => {
       </form>
     </div>
   );
-};
+}
 
-export default ClientRegistrationPage;
+export { ClientRegistrationPage };

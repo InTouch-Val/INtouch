@@ -1,85 +1,84 @@
-import React, { useState } from 'react';
-import API from '../service/axios'; 
-import "../css/add-client.css"
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../service/authContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { useAuth } from '../service/authContext';
+import { API } from '../service/axios';
+import '../css/add-client.css';
 
-const AddClient = () => {
+function AddClient() {
   const [clientData, setClientData] = useState({
     firstName: '',
     lastName: '',
-    email: ''
+    email: '',
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
-  const {updateUserData} = useAuth()
+  const { updateUserData } = useAuth();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setClientData(prevData => ({
+    setClientData((prevData) => ({
       ...prevData,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleBack = () => {
-    navigate(-1)
-  }
+    navigate(-1);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        const response = await API.post('clients/add/', { 
+      const response = await API.post('clients/add/', {
+        first_name: clientData.firstName,
+        last_name: clientData.lastName,
+        email: clientData.email,
+      });
+
+      if (response.status === 200) {
+        setSuccess(true);
+        setError('');
+        await updateUserData();
+        setTimeout(() => {
+          navigate('/clients');
+        }, 1500);
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        try {
+          const retryResponse = await API.post('clients/add/', {
             first_name: clientData.firstName,
             last_name: clientData.lastName,
-            email: clientData.email
-        });
-  
-        if (response.status === 200) {
-          setSuccess(true);
-          setError('');
-          await updateUserData()
-          setTimeout(() => {
-            navigate('/clients');
-          }, 1500);
-        }
-      } catch (error) {
-        if (error.response && error.response.status === 401) {
-          try {
-            
-            const retryResponse = await API.post('clients/add/', {
-              first_name: clientData.firstName,
-              last_name: clientData.lastName,
-              email: clientData.email
-            });
-      
-            if (retryResponse.status === 200) {
-              setSuccess(true);
-              setError('');
-              await updateUserData();
-              setTimeout(() => {
-                navigate('/clients');
-              }, 1500);
-            }
-          } catch (retryError) {
-            // Обработка ошибок повторного запроса, если он тоже не удался
-            setError('Error adding client occurred after retry');
+            email: clientData.email,
+          });
+
+          if (retryResponse.status === 200) {
+            setSuccess(true);
+            setError('');
+            await updateUserData();
+            setTimeout(() => {
+              navigate('/clients');
+            }, 1500);
           }
-        } else if (error.response && error.response.status === 400) {
-          setError('User with such email already exists');
-        } else {
-          setError('Error adding client occurred');
+        } catch (retryError) {
+          // Обработка ошибок повторного запроса, если он тоже не удался
+          setError('Error adding client occurred after retry');
         }
-        setSuccess(false);
+      } else if (error.response && error.response.status === 400) {
+        setError('User with such email already exists');
+      } else {
+        setError('Error adding client occurred');
       }
+      setSuccess(false);
+    }
   };
 
   return (
     <div className="add-client-form-container">
-      <button id='back' className="action-button" onClick={handleBack}>
+      <button id="back" className="action-button" onClick={handleBack}>
         <FontAwesomeIcon icon={faArrowLeft} /> Back
       </button>
       <form className="add-client-form" onSubmit={handleSubmit}>
@@ -112,9 +111,8 @@ const AddClient = () => {
         {success && <div className="success-message">Client created succesfully!</div>}
         <button type="submit">Add Client</button>
       </form>
-
     </div>
   );
-};
+}
 
-export default AddClient;
+export { AddClient };

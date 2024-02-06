@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../authContext';
-import API from '../axios';
-import "../../css/app.css"
+import { API } from '../axios';
+import '../../css/app.css';
 
 function ActivateUserPage() {
   let { userId, userToken } = useParams();
@@ -12,20 +12,22 @@ function ActivateUserPage() {
 
   useEffect(() => {
     API.get(`confirm-email/${userId}/${userToken}/`)
-      .then(response => {
+      .then((response) => {
         if (response.data) {
           if (window.location.pathname.includes('/activate-client/')) {
-            localStorage.setItem("refreshToken", response.data.refresh_token);
-            navigate(`/client-registration`, { state: { accessToken: response.data.access_token } });
+            localStorage.setItem('refreshToken', response.data.refresh_token);
+            navigate(`/client-registration`, {
+              state: { accessToken: response.data.access_token },
+            });
           } else {
             login(response.data.access_token, response.data.refresh_token);
             navigate('/');
           }
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error activating your account', error);
-        setActivationStatus('failed'); 
+        setActivationStatus('failed');
       });
   }, [userId, userToken, navigate, login]);
 
@@ -37,4 +39,4 @@ function ActivateUserPage() {
   );
 }
 
-export default ActivateUserPage;
+export { ActivateUserPage };

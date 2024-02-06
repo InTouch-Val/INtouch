@@ -1,23 +1,22 @@
-.add-note-container{
-    padding: 10px 15px;
-    
+.add-note-container {
+  padding: 10px 15px;
 }
 
-.add-note-container h2{
-    color: #656565;
-    font-weight: 500;
-    font-size: 32px;
+.add-note-container h2 {
+  color: #656565;
+  font-size: 32px;
+  font-weight: 500;
 }
 
-.add-note-container input{
-    font-family: "Montserrat", sans-serif;
-    width: 100%;
-    padding: 5px 15px;
-    box-sizing: border-box;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    border: none;   
-    box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.9);
-    font-size: 20px;
-    color: #656565;
+.add-note-container input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 5px 15px;
+  border: none;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 3px 1px rgb(215 228 231 / 90%);
+  color: #656565;
+  font-family: Montserrat, sans-serif;
+  font-size: 20px;
 }

@@ -1,67 +1,67 @@
 .image-selector {
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 20px; /* Добавьте отступ, если необходимо отделить от других элементов */
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 20px; /* Добавьте отступ, если необходимо отделить от других элементов */
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgb(0 0 0 / 10%);
 }
 
 .image-selector label {
-    display: block;
-    margin-bottom: 10px;
-    font-weight: 400;
-    color: #656565;
+  display: block;
+  margin-bottom: 10px;
+  color: #656565;
+  font-weight: 400;
 }
 
 .image-selector form {
-    display: flex;
-    margin-bottom: 10px;
+  display: flex;
+  margin-bottom: 10px;
 }
 
-.image-selector input[type="text"] {
-    flex-grow: 1;
-    margin-right: 10px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-family: "Montserrat", sans-serif;
+.image-selector input[type='text'] {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 10px;
+  font-family: Montserrat, sans-serif;
 }
 
 .image-selector button {
-    padding: 10px 15px;
-    background-color: #417D88;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-family: "Montserrat", sans-serif;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 10px;
+  background-color: #417d88;
+  color: white;
+  cursor: pointer;
+  font-family: Montserrat, sans-serif;
 }
 
 .image-results {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    gap: 10px;
-    padding-bottom: 10px; /* Добавить отступ снизу */
+  display: flex;
+  flex-wrap: nowrap;
+  padding-bottom: 10px; /* Добавить отступ снизу */
+  gap: 10px;
+  overflow-x: auto;
 }
 
 .image-item {
-    flex: 0 0 auto;
-    cursor: pointer;
-    border: 3px solid transparent; /* Изначально граница прозрачная */
-    transition: all 0.3s; /* Плавный переход всех свойств */
+  flex: 0 0 auto;
+  border: 3px solid transparent; /* Изначально граница прозрачная */
+  cursor: pointer;
+  transition: all 0.3s; /* Плавный переход всех свойств */
 }
 
 .image-item img {
-    display: block;
-    max-width: 100%; /* Максимальная ширина 100% от родительского элемента */
-    max-height: 100px; /* Максимальная высота изображения */
-    object-fit: cover; /* Обрезка изображения по контейнеру */
-    border-radius: 4px; /* Слегка закруглённые углы */
+  display: block;
+  max-width: 100%; /* Максимальная ширина 100% от родительского элемента */
+  max-height: 100px; /* Максимальная высота изображения */
+  border-radius: 4px; /* Слегка закруглённые углы */
+  object-fit: cover; /* Обрезка изображения по контейнеру */
 }
 
 .image-item.selected {
-    border-color: #3f7983; /* Цвет границы для выбранного элемента */
-    box-shadow: 0px 0px 8px rgba(63, 121, 131, 0.5); /* Добавить тень для акцента */
-    border-radius: 8px;
+  border-color: #3f7983; /* Цвет границы для выбранного элемента */
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgb(63 121 131 / 50%); /* Добавить тень для акцента */
 }

@@ -28,6 +28,7 @@
     "react-router-dom": "^6.22.0"
   },
   "devDependencies": {
+    "@awmottaz/prettier-plugin-void-html": "^1.5.0",
     "@eslint/eslintrc": "^3.0.0",
     "@eslint/js": "^8.56.0",
     "@vitejs/plugin-react": "^4.2.1",
