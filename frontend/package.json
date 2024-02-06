@@ -11,7 +11,8 @@
     "lint:style": "stylelint '**/*.css'",
     "lint:style:fix": "stylelint '**/*.css' --fix",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepare": "cd .. && husky frontend/.husky"
   },
   "dependencies": {
     "@draft-js-plugins/buttons": "^4.3.3",
@@ -41,6 +42,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-unicorn": "^51.0.0",
     "globals": "^13.24.0",
+    "husky": "^9.0.10",
     "prettier": "^3.2.5",
     "stylelint": "^16.2.1",
     "stylelint-config-idiomatic-order": "^10.0.0",
