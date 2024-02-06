@@ -12,6 +12,7 @@ router.register('users', UserViewSet, basename='users')
 router.register('assignments', AssignmentViewSet, basename='assignments')
 router.register('assignments-client', AssignmentClientViewSet, basename='assignments_client')
 router.register('notes', NoteViewSet, basename='notes')
+router.register('diary-notes', DiaryNoteViewSet, basename='diary_notes')
 
 urlpatterns = [
     path('', include(router.urls)),
