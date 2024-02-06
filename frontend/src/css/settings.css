@@ -1,136 +1,133 @@
-.settings-page{
-    padding: 35px; 
+.settings-page {
+  padding: 35px;
 }
 
-.settings-page header{
-    display: flex;
-    align-items: center;
+.settings-page header {
+  display: flex;
+  align-items: center;
 }
 
-header h2{
-    color: #656565;
-    font-weight: 400;
+header h2 {
+  color: #656565;
+  font-weight: 400;
 }
 
-header img{
-    width: 50px;
-    border-radius: 50%;
-    margin-right: 20px;
+header img {
+  width: 50px;
+  border-radius: 50%;
+  margin-right: 20px;
 }
 
-.tabs{
-    width: 100%;
+.tabs {
+  width: 100%;
 }
 
-.settings-profile-tab{
-    display: flex;
-    /* justify-content: space-evenly; */
+.settings-profile-tab {
+  display: flex;
+
+  /* justify-content: space-evenly; */
 }
 
-.left-column{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    flex: 0 0 25%;
+.left-column {
+  display: flex;
+  flex: 0 0 25%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
-.left-column img{
-    width: 100px;
-    height: 100px;
-    margin: 0;
+.left-column img {
+  width: 100px;
+  height: 100px;
+  margin: 0;
 }
 
-.right-column{
-    flex-grow: 1;
+.right-column {
+  flex-grow: 1;
 }
 
-.right-column form{
-    display: flex;
-    flex-direction: column;
+.right-column form {
+  display: flex;
+  flex-direction: column;
 }
 
-.right-column label{
-    font-size: 22px;
-    color: #417D88;
+.right-column label {
+  color: #417d88;
+  font-size: 22px;
 }
 
-.settings-input{
-    margin: 10px;
-    box-shadow: 0px 0px 3px 2px #D7E4E773;
-    border: none;
-    background-color: #fff;
-    border-radius: 10px;
-    padding: 10px 15px;
-    font-size: 17px;
-    font-family: "Montserrat", sans-serif;
-    color: #656565;
+.settings-input {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 10px;
+  margin: 10px;
+  background-color: #fff;
+  box-shadow: 0 0 3px 2px #d7e4e773;
+  color: #656565;
+  font-family: Montserrat, sans-serif;
+  font-size: 17px;
 }
 
-#save-settings{
-    background-color: #417D88;
-    color: #fff;
-    width: 148px;
-    align-self: flex-end;
-    border-radius: 100px;
-    border: none;
-    padding: 10px 16px 10px 16px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 15px;
+#save-settings {
+  width: 148px;
+  align-self: flex-end;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 100px;
+  margin-top: 15px;
+  background-color: #417d88;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
 }
 
-/*SECURITY TAB*/
-/*SECURITY TAB*/
-/*SECURITY TAB*/
+/* SECURITY TAB */
+
+/* SECURITY TAB */
+
+/* SECURITY TAB */
 .security-tab {
-    display: flex;
-    padding: 20px;
-    align-items: flex-start;
-    padding: 0;
-  }
-
-.security-tab h2{
-    font-weight: 600;
-    margin: 10px 0;
-    color: #417D88;
+  display: flex;
+  align-items: flex-start;
+  padding: 20px;
+  padding: 0;
 }
 
-  
-  .change-password-form label {
-    display: block;
-    margin-bottom: 10px;
-    font-size: 22px;
-    color: #417D88;
-  }
-  
-  .change-password-form form{
-    display: flex;
-    flex-direction: column;
-    margin-right: 90px;
-  }
+.security-tab h2 {
+  margin: 10px 0;
+  color: #417d88;
+  font-weight: 600;
+}
 
-  .change-password-form input,
-  .danger-zone button {
+.change-password-form label {
+  display: block;
+  margin-bottom: 10px;
+  color: #417d88;
+  font-size: 22px;
+}
 
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    font-family: 'Montserrat', sans-serif;
-  }
-  
-  .danger-zone button {
-    background-color: #ff4d4f;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 20px;
-  }
-  
-  .danger-zone button:hover {
-    background-color: #ff3333;
-  }
-  
+.change-password-form form {
+  display: flex;
+  flex-direction: column;
+  margin-right: 90px;
+}
 
+.change-password-form input,
+.danger-zone button {
+  padding: 10px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  font-family: Montserrat, sans-serif;
+}
 
+.danger-zone button {
+  border: none;
+  border-radius: 20px;
+  background-color: #ff4d4f;
+  color: white;
+  cursor: pointer;
+}
 
+.danger-zone button:hover {
+  background-color: #f33;
+}

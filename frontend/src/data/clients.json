@@ -1,120 +1,120 @@
 [
-    {
-        "id": 1,
-        "name": "Benjamin Cooper",
-        "avatar": "https://i122.fastpic.org/big/2023/1026/41/8686eb54497049a412f177da74c46741.png",    
-        "status": "Active",
-        "added": "2023-10-10",
-        "dateOfBirth": "1990-01-01",
-        "diagnoses": ["None", "Sick", "Nice person"],
-        "lastUpdate": "2023-10-10",
-        "about": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem", 
-        "assignments": [
-            {
-                "id": "1",
-                "title": "Assignment 1",
-                "sent": "2023-05-12",
-                "status": "Done",
-                "lastUpdate": "2023-05-12"                
-            },
-            {
-                "id": "2",
-                "title": "Assignment 2",
-                "sent": "2023-05-12",
-                "status": "Done",
-                "lastUpdate": "2023-05-12"
-            }
-        ],
-        "notes": [
-            {
-                "id": "1",
-                "title": "Note 1",
-                "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
-                "date": "2023-05-12",
-                "owner": "Benjamin Cooper",
-                "tags": ["tag1"]
-            }, 
-            {
-                "id": "2",
-                "title": "Note 2",
-                "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
-                "date": "2023-06-12",
-                "owner": "user",
-                "tags": ["tag2"]
-            }
-        ],
-        "chatHistory": [
-            {
-                "messageId": "1",
-                "sender": "Benjamin Cooper",
-                "text": "Hi I got problem with mindfulness and I am very happy",
-                "timestamp": "2023-10-23 12:00:00"
-            },
-            {
-                "messageId": "2",
-                "sender": "user",
-                "text": "Hi Benjamin, what's your problem with mindfulness?",
-                "timestamp": "2023-10-23 13:00:00"
-            }
-        ]
-    },
-    {
-        "id": 2,
-        "name": "Sophia Reynolds",
-        "avatar": "https://i122.fastpic.org/big/2023/1026/41/8686eb54497049a412f177da74c46741.png",    
-        "status": "Active",
-        "added": "2023-10-10",
-        "dateOfBirth": "1990-01-01",
-        "diagnoses": ["None"],
-        "lastUpdate": "2023-10-10",
-        "about": "This is Sophia Reynolds's profile",
-        "assignments": [
-            {
-                "id": "1",
-                "title": "Assignment 1",
-                "sent": "2023-05-12",
-                "status": "Done",
-                "lastUpdate": "2023-05-12"                
-            },
-            {
-                "id": "2",
-                "title": "Assignment 2",
-                "sent": "2023-05-12",
-                "status": "Done",
-                "lastUpdate": "2023-05-12"
-            }
-        ],
-        "notes": [
-            {
-                "id": "1",
-                "title": "Note 1",
-                "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
-                "date": "2023-05-12",
-                "owner": "user",
-                "tags": ["tag2"]
-            },
-            {
-                "id": "2",
-                "title": "Note 2",
-                "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
-                "date": "2023-06-12",
-                "owner": "Sophia Reynolds",
-                "tags": ["tag1"]
-            }
-        ],
-        "chatHistory": [
-            {
-                "messageId": "1",
-                "sender": "Sophia Reynolds",
-                "text": "Hi I got problem with mindfulness and I am very saaad",
-                "timestamp": "2023-10-23 12:00:00"
-            },
-            {
-                "messageId": "2",
-                "sender": "user",
-                "text": "Hi Sophia, what's your problem with mindfulness?",
-                "timestamp": "2023-10-23 13:00:00"
-            }
-        ]
-    }
+  {
+    "id": 1,
+    "name": "Benjamin Cooper",
+    "avatar": "https://i122.fastpic.org/big/2023/1026/41/8686eb54497049a412f177da74c46741.png",
+    "status": "Active",
+    "added": "2023-10-10",
+    "dateOfBirth": "1990-01-01",
+    "diagnoses": ["None", "Sick", "Nice person"],
+    "lastUpdate": "2023-10-10",
+    "about": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem",
+    "assignments": [
+      {
+        "id": "1",
+        "title": "Assignment 1",
+        "sent": "2023-05-12",
+        "status": "Done",
+        "lastUpdate": "2023-05-12"
+      },
+      {
+        "id": "2",
+        "title": "Assignment 2",
+        "sent": "2023-05-12",
+        "status": "Done",
+        "lastUpdate": "2023-05-12"
+      }
+    ],
+    "notes": [
+      {
+        "id": "1",
+        "title": "Note 1",
+        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
+        "date": "2023-05-12",
+        "owner": "Benjamin Cooper",
+        "tags": ["tag1"]
+      },
+      {
+        "id": "2",
+        "title": "Note 2",
+        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
+        "date": "2023-06-12",
+        "owner": "user",
+        "tags": ["tag2"]
+      }
+    ],
+    "chatHistory": [
+      {
+        "messageId": "1",
+        "sender": "Benjamin Cooper",
+        "text": "Hi I got problem with mindfulness and I am very happy",
+        "timestamp": "2023-10-23 12:00:00"
+      },
+      {
+        "messageId": "2",
+        "sender": "user",
+        "text": "Hi Benjamin, what's your problem with mindfulness?",
+        "timestamp": "2023-10-23 13:00:00"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Sophia Reynolds",
+    "avatar": "https://i122.fastpic.org/big/2023/1026/41/8686eb54497049a412f177da74c46741.png",
+    "status": "Active",
+    "added": "2023-10-10",
+    "dateOfBirth": "1990-01-01",
+    "diagnoses": ["None"],
+    "lastUpdate": "2023-10-10",
+    "about": "This is Sophia Reynolds's profile",
+    "assignments": [
+      {
+        "id": "1",
+        "title": "Assignment 1",
+        "sent": "2023-05-12",
+        "status": "Done",
+        "lastUpdate": "2023-05-12"
+      },
+      {
+        "id": "2",
+        "title": "Assignment 2",
+        "sent": "2023-05-12",
+        "status": "Done",
+        "lastUpdate": "2023-05-12"
+      }
+    ],
+    "notes": [
+      {
+        "id": "1",
+        "title": "Note 1",
+        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
+        "date": "2023-05-12",
+        "owner": "user",
+        "tags": ["tag2"]
+      },
+      {
+        "id": "2",
+        "title": "Note 2",
+        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
+        "date": "2023-06-12",
+        "owner": "Sophia Reynolds",
+        "tags": ["tag1"]
+      }
+    ],
+    "chatHistory": [
+      {
+        "messageId": "1",
+        "sender": "Sophia Reynolds",
+        "text": "Hi I got problem with mindfulness and I am very saaad",
+        "timestamp": "2023-10-23 12:00:00"
+      },
+      {
+        "messageId": "2",
+        "sender": "user",
+        "text": "Hi Sophia, what's your problem with mindfulness?",
+        "timestamp": "2023-10-23 13:00:00"
+      }
+    ]
+  }
 ]

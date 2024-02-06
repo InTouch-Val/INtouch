@@ -1,20 +1,23 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
-import "../css/image-selector.css"
+import '../css/image-selector.css';
 
-const ImageSelector = ({ onImageSelect }) => {
+function ImageSelector({ onImageSelect }) {
   const [images, setImages] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [isSearchDone, setIsSearchDone] = useState(false)
+  const [isSearchDone, setIsSearchDone] = useState(false);
   const [selectedImageId, setSelectedImageId] = useState(null); // Состояние для хранения ID выбранного изображения
   const accessKey = process.env.REACT_APP_UNSPLASH_ACCESS_KEY;
 
   const searchImages = (query) => {
-    axios.get(`https://api.unsplash.com/search/photos?query=${query}&client_id=${accessKey}&per_page=10`)
-      .then(response => {
+    axios
+      .get(
+        `https://api.unsplash.com/search/photos?query=${query}&client_id=${accessKey}&per_page=10`,
+      )
+      .then((response) => {
         setImages(response.data.results);
       })
-      .catch(error => console.error('Error searching images:', error));
+      .catch((error) => console.error('Error searching images:', error));
   };
 
   const handleSearch = (e) => {
@@ -41,19 +44,24 @@ const ImageSelector = ({ onImageSelect }) => {
         <button type="submit">Search</button>
       </form>
       <div className="image-results">
-        {images.length > 0 ? images.map(image => (
-          <div 
-            key={image.id} 
-            className={`image-item ${image.id === selectedImageId ? 'selected' : ''}`} 
-            onClick={() => handleImageClick(image)}
-          >
-            <img src={image.urls.small} alt={image.alt_description} />
-          </div>
-        )) : isSearchDone ? (<p>No images were found</p>) : (<></>) 
-        }
+        {images.length > 0 ? (
+          images.map((image) => (
+            <div
+              key={image.id}
+              className={`image-item ${image.id === selectedImageId ? 'selected' : ''}`}
+              onClick={() => handleImageClick(image)}
+            >
+              <img src={image.urls.small} alt={image.alt_description} />
+            </div>
+          ))
+        ) : isSearchDone ? (
+          <p>No images were found</p>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );
-};
+}
 
-export default ImageSelector;
+export { ImageSelector };

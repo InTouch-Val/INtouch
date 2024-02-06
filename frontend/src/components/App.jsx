@@ -1,37 +1,39 @@
-import React, { useCallback, useEffect } from "react";
-import { Outlet, NavLink, useNavigate } from "react-router-dom"; // Заменили Link на NavLink
-import "../css/app.css";
-import { useAuth } from "../service/authContext";
+import { useCallback, useEffect } from 'react';
+import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faArrowRightFromBracket, faGear, faUser, faList, faBookMedical, faNoteSticky} from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowRightFromBracket,
+  faGear,
+  faUser,
+  faList,
+  faBookMedical,
+  faNoteSticky,
+} from '@fortawesome/free-solid-svg-icons';
+import { useAuth } from '../service/authContext';
+import '../css/app.css';
 
 function App() {
-  const { currentUser, logout, isLoading } = useAuth(); 
+  const { currentUser, logout, isLoading } = useAuth();
   const navigate = useNavigate();
-  
+
   const handleLogout = useCallback(() => {
-    logout(); 
+    logout();
     navigate('/login');
   }, [logout, navigate]);
 
   useEffect(() => {
     if (!isLoading && !currentUser) {
-      handleLogout() 
+      handleLogout();
     }
   }, [currentUser, isLoading, handleLogout]);
 
-
-  const isDoctor = currentUser?.user_type === "doctor"
+  const isDoctor = currentUser?.user_type === 'doctor';
 
   return (
     <div className="app-container">
       <div className="side-bar">
         <div className="user-profile">
-          <img
-            className="user-avatar"
-            src={currentUser?.photo}
-            alt="Something"
-          />
+          <img className="user-avatar" src={currentUser?.photo} alt="Something" />
           <h3>
             {currentUser ? `${currentUser.first_name} ${currentUser.last_name}` : 'Loading...'}
           </h3>
@@ -41,32 +43,38 @@ function App() {
             {isDoctor && (
               <ul>
                 <li>
-                <NavLink to={`/clients`} activeClassName="active">
-                 <FontAwesomeIcon icon={faUser} /> Clients
-                </NavLink>
+                  <NavLink to="/clients" className={({ isActive }) => (isActive ? 'active' : '')}>
+                    <FontAwesomeIcon icon={faUser} /> Clients
+                  </NavLink>
                 </li>
                 <li>
-                <NavLink to={`/assignments`} activeClassName="active">
-                 <FontAwesomeIcon icon={faList} /> Assignments
-                </NavLink>
+                  <NavLink
+                    to="/assignments"
+                    className={({ isActive }) => (isActive ? 'active' : '')}
+                  >
+                    <FontAwesomeIcon icon={faList} /> Assignments
+                  </NavLink>
                 </li>
               </ul>
             )}
             {!isDoctor && (
               <ul>
                 <li>
-                  <NavLink to={'/my-assignments'} activeClassName="active">
-                  <FontAwesomeIcon icon={faList} /> Assignments
+                  <NavLink
+                    to="/my-assignments"
+                    className={({ isActive }) => (isActive ? 'active' : '')}
+                  >
+                    <FontAwesomeIcon icon={faList} /> Assignments
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to={'/my-diary'} activeClassName="active">
-                  <FontAwesomeIcon icon={faBookMedical} /> Diary
+                  <NavLink to="/my-diary" className={({ isActive }) => (isActive ? 'active' : '')}>
+                    <FontAwesomeIcon icon={faBookMedical} /> Diary
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to={'/my-notes'} activeClassName="active">
-                  <FontAwesomeIcon icon={faNoteSticky} /> Notes
+                  <NavLink to="/my-notes" className={({ isActive }) => (isActive ? 'active' : '')}>
+                    <FontAwesomeIcon icon={faNoteSticky} /> Notes
                   </NavLink>
                 </li>
               </ul>
@@ -77,18 +85,18 @@ function App() {
           <nav>
             <ul>
               <li>
-                <NavLink to={`/settings`} activeClassName="active">
-                <FontAwesomeIcon icon={faGear} /> Settings
+                <NavLink to="/settings" className={({ isActive }) => (isActive ? 'active' : '')}>
+                  <FontAwesomeIcon icon={faGear} /> Settings
                 </NavLink>
               </li>
               {/* <li>
-                <NavLink to={`/support`} activeClassName="active">
+                <NavLink to="/support" className={({ isActive }) => (isActive ? "active" : "")}>
                   Support
                 </NavLink>
               </li> */}
               <li>
                 <button id="logout" onClick={handleLogout}>
-                <FontAwesomeIcon icon={faArrowRightFromBracket} /> Logout
+                  <FontAwesomeIcon icon={faArrowRightFromBracket} /> Logout
                 </button>
               </li>
             </ul>
@@ -102,4 +110,4 @@ function App() {
   );
 }
 
-export default App;
+export { App };

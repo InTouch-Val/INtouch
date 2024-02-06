@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import EditorToolbar from '../service/editors-toolbar';
-import "../css/block.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { EditorToolbar } from '../service/editors-toolbar';
+import '../css/block.css';
 
-const AssignmentBlock = ({ block, updateBlock, removeBlock, readOnly }) => {
-
+function AssignmentBlock({ block, updateBlock, removeBlock, readOnly }) {
   const [title, setTitle] = useState(block.title);
   const [choices, setChoices] = useState(block.choices || []);
   const [minValue, setMinValue] = useState(block.minValue || 1);
   const [maxValue, setMaxValue] = useState(block.maxValue || 10);
   const [choiceRefs, setChoiceRefs] = useState([]);
-  const [leftPole, setLeftPole] = useState(block.leftPole || "Left Pole")
-  const [rightPole, setRightPole] = useState(block.rightPole || "Right Pole")
+  const [leftPole, setLeftPole] = useState(block.leftPole || 'Left Pole');
+  const [rightPole, setRightPole] = useState(block.rightPole || 'Right Pole');
 
   useEffect(() => {
     if (choices && choices.length > 0) {
@@ -22,59 +21,54 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock, readOnly }) => {
       }
     }
   }, [choices, choiceRefs]);
-  
 
   useEffect(() => {
-    if(choices){
+    if (choices) {
       setChoiceRefs(choices.map(() => React.createRef()));
     }
   }, [choices]);
 
   if (readOnly) {
-  return (
-    <div className="block">
-      <div className="block-header">
-        <h3 className="block-title">{block.question}</h3>
-      </div>
-      {block.type === 'text' && (
-        <div dangerouslySetInnerHTML={{__html: block.description}}/>
-      )}
-      {(block.type === 'single' || block.type === 'multiple') && (
-        <ul className={`choices-container ${block.type}`}>
-          {block.choice_replies.map((choice, index) => (
-            <li key={index} className="choice-option">
-              {block.type === 'single' ? (
-                <input type="radio" disabled />
-              ) : (
-                <input type="checkbox" disabled />
-              )}
-              <span className="choice-label">{choice.reply}</span>
-            </li>
-          ))}
-        </ul>
-      )}
-      {block.type === 'range' && (
-        <div className="range-display">
-          <span className="range-label">{block.left_pole || "Left Pole"}</span>
-          <div className="range-options">
-            {Array.from({ length: block.end_range - block.start_range + 1 }, (_, i) => i + block.start_range).map(value => (
-              <label key={value} className="range-option">
-                <input
-                  type="radio"
-                  name={`range-${block.id}`}
-                  value={value}
-                />
-                <span className="range-option-label">{value}</span>
-              </label>
-            ))}
-          </div>
-          <span className="range-label">{block.right_pole || "Right Pole"}</span>
+    return (
+      <div className="block">
+        <div className="block-header">
+          <h3 className="block-title">{block.question}</h3>
         </div>
-      )}
-    </div>
-  );
-}
-
+        {block.type === 'text' && <div dangerouslySetInnerHTML={{ __html: block.description }} />}
+        {(block.type === 'single' || block.type === 'multiple') && (
+          <ul className={`choices-container ${block.type}`}>
+            {block.choice_replies.map((choice, index) => (
+              <li key={index} className="choice-option">
+                {block.type === 'single' ? (
+                  <input type="radio" disabled />
+                ) : (
+                  <input type="checkbox" disabled />
+                )}
+                <span className="choice-label">{choice.reply}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+        {block.type === 'range' && (
+          <div className="range-display">
+            <span className="range-label">{block.left_pole || 'Left Pole'}</span>
+            <div className="range-options">
+              {Array.from(
+                { length: block.end_range - block.start_range + 1 },
+                (_, i) => i + block.start_range,
+              ).map((value) => (
+                <label key={value} className="range-option">
+                  <input type="radio" name={`range-${block.id}`} value={value} />
+                  <span className="range-option-label">{value}</span>
+                </label>
+              ))}
+            </div>
+            <span className="range-label">{block.right_pole || 'Right Pole'}</span>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
@@ -89,14 +83,14 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock, readOnly }) => {
   };
 
   const handleMinChange = (change, e) => {
-    e.preventDefault()
+    e.preventDefault();
     const newValue = Math.max(0, minValue + change);
     setMinValue(newValue);
     updateBlock(block.id, block.content, block.choices, title, newValue, maxValue);
   };
 
   const handleMaxChange = (change, e) => {
-    e.preventDefault()
+    e.preventDefault();
     const newValue = Math.max(minValue, maxValue + change);
     setMaxValue(newValue);
     updateBlock(block.id, block.content, block.choices, title, minValue, newValue);
@@ -104,7 +98,7 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock, readOnly }) => {
 
   const handleNumberChange = (event, type) => {
     const value = parseInt(event.target.value, 10) || 0;
-    if (type === "min") {
+    if (type === 'min') {
       setMinValue(value);
       updateBlock(block.id, block.content, block.choices, title, value, maxValue);
     } else {
@@ -114,12 +108,30 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock, readOnly }) => {
   };
 
   const handlePoleChange = (pole, value) => {
-    if (pole === "left") {
+    if (pole === 'left') {
       setLeftPole(value);
-      updateBlock(block.id, block.content, block.choices, title, minValue, maxValue, value, rightPole);
+      updateBlock(
+        block.id,
+        block.content,
+        block.choices,
+        title,
+        minValue,
+        maxValue,
+        value,
+        rightPole,
+      );
     } else {
       setRightPole(value);
-      updateBlock(block.id, block.content, block.choices, title, minValue, maxValue, leftPole, value);
+      updateBlock(
+        block.id,
+        block.content,
+        block.choices,
+        title,
+        minValue,
+        maxValue,
+        leftPole,
+        value,
+      );
     }
   };
 
@@ -130,48 +142,27 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock, readOnly }) => {
   };
 
   const addChoice = () => {
-    if (choices.some(choice => choice.trim() === '')) {
+    if (choices.some((choice) => choice.trim() === '')) {
       // Не добавлять новый выбор, если есть пустой
       return;
     }
-  
+
     const newChoiceRef = React.createRef();
-    setChoiceRefs(refs => [...refs, newChoiceRef]);
-    setChoices(currentChoices => {
+    setChoiceRefs((refs) => [...refs, newChoiceRef]);
+    setChoices((currentChoices) => {
       const updatedChoices = [...currentChoices, ''];
       updateBlock(block.id, block.content, updatedChoices, title);
       return updatedChoices;
     });
   };
-  
+
   const removeChoice = (index) => {
     const newChoices = choices.filter((_, i) => i !== index);
     setChoices(newChoices);
     updateBlock(block.id, block.content, newChoices, title);
-  };  
+  };
 
   if (block.type === 'text') {
-    return (
-      <div className="block">
-        <div className='control-panel'>
-          <input
-            type="text"
-            value={title}
-            onChange={handleTitleChange}
-            placeholder="Write question here..."
-            className="block-title-input"
-          />
-          <button type="button" onClick={() => removeBlock(block.id)} className="remove-block-button">
-            <FontAwesomeIcon icon={faTrashCan} /> 
-          </button>
-        </div>
-        
-        <EditorToolbar editorState={block.content} setEditorState={(newState) => updateBlock(block.id, newState, block.choices)} />
-      </div>
-    );
-  }
-
-  if(block.type === 'range'){
     return (
       <div className="block">
         <div className="control-panel">
@@ -182,34 +173,66 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock, readOnly }) => {
             placeholder="Write question here..."
             className="block-title-input"
           />
-          <button type="button" onClick={() => removeBlock(block.id)} className="remove-block-button">
+          <button
+            type="button"
+            onClick={() => removeBlock(block.id)}
+            className="remove-block-button"
+          >
+            <FontAwesomeIcon icon={faTrashCan} />
+          </button>
+        </div>
+
+        <EditorToolbar
+          editorState={block.content}
+          setEditorState={(newState) => updateBlock(block.id, newState, block.choices)}
+        />
+      </div>
+    );
+  }
+
+  if (block.type === 'range') {
+    return (
+      <div className="block">
+        <div className="control-panel">
+          <input
+            type="text"
+            value={title}
+            onChange={handleTitleChange}
+            placeholder="Write question here..."
+            className="block-title-input"
+          />
+          <button
+            type="button"
+            onClick={() => removeBlock(block.id)}
+            className="remove-block-button"
+          >
             <FontAwesomeIcon icon={faTrashCan} />
           </button>
         </div>
         <div className="range-inputs">
           <div className="number-input-container">
             <button onClick={(e) => handleMinChange(-1, e)}>-</button>
-            <input type="number" value={minValue} onChange={(e) => handleNumberChange(e, "min")} />
+            <input type="number" value={minValue} onChange={(e) => handleNumberChange(e, 'min')} />
             <button onClick={(e) => handleMinChange(1, e)}>+</button>
           </div>
           <div className="number-input-container">
             <button onClick={(e) => handleMaxChange(-1, e)}>-</button>
-            <input type="number" value={maxValue} onChange={(e) => handleNumberChange(e, "max")} />
+            <input type="number" value={maxValue} onChange={(e) => handleNumberChange(e, 'max')} />
             <button onClick={(e) => handleMaxChange(1, e)}>+</button>
           </div>
-          <div className='pole-inputs'>
-          <input
-            type='text'
-            value={leftPole}
-            onChange={(e) => handlePoleChange('left', e.target.value)}
-            placeholder='Input left pole name'
-          />
-          <input
-            type='text'
-            value={rightPole}
-            onChange={(e) => handlePoleChange('right', e.target.value)}
-            placeholder='Input right pole name'
-          />
+          <div className="pole-inputs">
+            <input
+              type="text"
+              value={leftPole}
+              onChange={(e) => handlePoleChange('left', e.target.value)}
+              placeholder="Input left pole name"
+            />
+            <input
+              type="text"
+              value={rightPole}
+              onChange={(e) => handlePoleChange('right', e.target.value)}
+              placeholder="Input right pole name"
+            />
           </div>
         </div>
       </div>
@@ -227,7 +250,7 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock, readOnly }) => {
           className="block-title-input"
         />
         <button type="button" onClick={() => removeBlock(block.id)} className="remove-block-button">
-        <FontAwesomeIcon icon={faTrashCan} />
+          <FontAwesomeIcon icon={faTrashCan} />
         </button>
       </div>
       {choices.map((choice, index) => (
@@ -245,27 +268,32 @@ const AssignmentBlock = ({ block, updateBlock, removeBlock, readOnly }) => {
             placeholder={`Option ${index + 1}`}
             className="choice-input"
           />
-          <button type="button" onClick={() => removeChoice(index)} className="remove-choice-button">
+          <button
+            type="button"
+            onClick={() => removeChoice(index)}
+            className="remove-choice-button"
+          >
             <FontAwesomeIcon icon={faXmark} />
           </button>
         </div>
       ))}
-      <div className='choice-option'>
-        {
-          block.type === 'single' ? <input type="radio" disabled style={{ opacity: 0.8 }} /> : <input type="checkbox" disabled style={{ opacity: 0.8 }} /> 
-        }
+      <div className="choice-option">
+        {block.type === 'single' ? (
+          <input type="radio" disabled style={{ opacity: 0.8 }} />
+        ) : (
+          <input type="checkbox" disabled style={{ opacity: 0.8 }} />
+        )}
         <input
           type="text"
-          value=''
+          value=""
           onFocus={handleNewChoiceFocus}
           placeholder="Add option..."
           style={{ opacity: 0.8 }}
           className="choice-input"
         />
       </div>
-      
     </div>
   );
-};
+}
 
-export default AssignmentBlock;
+export { AssignmentBlock };

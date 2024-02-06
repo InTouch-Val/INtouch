@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import communityData from '../data/community.json';
-import { Link } from 'react-router-dom'; 
-import "../css/community.css"
+import '../css/community.css';
 
 function CommunityPage() {
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredChats = communityData.filter((chat) =>
-    chat.name.toLowerCase().includes(searchTerm.toLowerCase())
+    chat.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (
@@ -36,10 +36,7 @@ function CommunityPage() {
             {filteredChats.map((chat) => (
               <tr key={chat.chatId}>
                 <td className="user-cell">
-                <Link
-                    to={`/community/${chat.chatId}`} 
-                    state={{ chatId: chat.chatId }} 
-                  >
+                  <Link to={`/community/${chat.chatId}`} state={{ chatId: chat.chatId }}>
                     <img src={chat.avatar} alt={chat.name} className="avatar" />
                     {chat.name}
                   </Link>
@@ -69,4 +66,4 @@ function formatDate(timestamp) {
   }
 }
 
-export default CommunityPage;
+export { CommunityPage };
