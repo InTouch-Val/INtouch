@@ -4,7 +4,7 @@ import image from '../../images/image2.svg';
 import imageGirl from '../../images/image_girl.png';
 import arrowLeft from '../../images/arrow-left.svg';
 import { EditorState, ContentState, convertFromRaw } from 'draft-js';
-import EditorToolbar from '../../service/editors-toolbar';
+import { EditorToolbar } from '../../service/editors-toolbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan, faXmark } from '@fortawesome/free-solid-svg-icons';
 import '../../css/block.css';
