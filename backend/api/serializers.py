@@ -485,11 +485,14 @@ class DiaryNoteSerializer(serializers.ModelSerializer):
     clarifying_emotion = serializers.ListField(
         child=serializers.CharField(max_length=50)
     )
+    author_name = serializers.StringRelatedField(source='author',
+                                                 read_only=True)
     class Meta:
         model = DiaryNote
         fields = [
             'id',
             'author',
+            'author_name',
             'add_date',
             'visible',
             'event_details',
