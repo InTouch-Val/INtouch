@@ -15,17 +15,10 @@ const compat = new FlatCompat({
 
 export default [
   eslintPluginUnicorn.configs['flat/recommended'],
-  ...compat.extends(
-    'airbnb',
-    'plugin:react/jsx-runtime',
-    'airbnb/hooks',
-  ),
+  ...compat.extends('airbnb', 'plugin:react/jsx-runtime', 'airbnb/hooks'),
   eslintConfigPrettier,
   {
-    files: [
-      '**/*.js',
-      '**/*.jsx',
-    ],
+    files: ['**/*.js', '**/*.jsx'],
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -55,8 +48,6 @@ export default [
     },
   },
   {
-    ignores: [
-      'dist',
-    ],
+    ignores: ['dist'],
   },
 ];
