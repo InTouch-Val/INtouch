@@ -20,6 +20,7 @@ import { AddClient } from './components/AddClient';
 import { AddNote } from './components/AddNote';
 import { ClientDetailsPage } from './components/ClientDetailsPage';
 import { ClientsAssignments } from './clients-components/ClientsAssignments';
+import CompleteAssignments from './clients-components/CompleteAssignments/CompleteAssignments';
 
 const router = createBrowserRouter([
   {
