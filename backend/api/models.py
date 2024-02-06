@@ -69,7 +69,7 @@ class Assignment(models.Model):
     )
     comments = models.ManyToManyField('Comment', blank=True)
     is_public = models.BooleanField(default=True)
-    grades = ArrayField(models.IntegerField(), default=[])
+    grades = ArrayField(models.IntegerField())
 
     def __str__(self):
         return self.title
@@ -177,4 +177,4 @@ class DiaryNote(models.Model):
     thoughts_analysis = models.TextField()
     physical_sensations = models.TextField()
     primary_emotion = models.CharField(max_length=50)
-    clarifying_emotion = ArrayField(models.CharField(max_length=50), default=[])
+    clarifying_emotion = ArrayField(models.CharField(max_length=50))

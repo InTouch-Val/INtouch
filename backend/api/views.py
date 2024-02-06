@@ -314,3 +314,9 @@ class NoteViewSet(viewsets.ModelViewSet):
     """CRUD операции над заметками"""
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
+
+
+class DiaryNoteViewSet(viewsets.ModelViewSet):
+    """CRUD операции над заметками в дневнике"""
+    queryset = DiaryNote.objects.all()
+    serializer_class = DiaryNoteSerializer
