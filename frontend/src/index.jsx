@@ -72,13 +72,13 @@ const router = createBrowserRouter([
         element: <AddNote />,
       },
       {
-        path: "/my-assignments",
-        element: <ClientsAssignments/>
+        path: '/my-assignments',
+        element: <ClientsAssignments />,
       },
       {
-        path:"/my-assignments/1",
-        element:<CompleteAssignments/>
-      }
+        path: '/my-assignments/1',
+        element: <CompleteAssignments />,
+      },
     ],
   },
   {
