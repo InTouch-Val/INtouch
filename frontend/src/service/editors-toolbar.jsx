@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import Editor from '@draft-js-plugins/editor';
 import createToolbarPlugin, { Separator } from '@draft-js-plugins/static-toolbar';
 import {
@@ -12,18 +12,18 @@ import {
   OrderedListButton,
 } from '@draft-js-plugins/buttons';
 import '@draft-js-plugins/static-toolbar/lib/plugin.css';
-import "../css/editorsBar.css"
+import '../css/editorsBar.css';
 
 const toolbarPlugin = createToolbarPlugin();
 const { Toolbar } = toolbarPlugin;
 const plugins = [toolbarPlugin];
 
-const EditorToolbar = ({ editorState, setEditorState}) => {
-    const editor = useRef(null);
+function EditorToolbar({ editorState, setEditorState }) {
+  const editor = useRef(null);
 
-    const focusEditor = () => {
-        editor.current.focus();
-    };
+  const focusEditor = () => {
+    editor.current.focus();
+  };
 
   return (
     <div className="editorContainer" onClick={focusEditor}>
@@ -55,6 +55,6 @@ const EditorToolbar = ({ editorState, setEditorState}) => {
       </Toolbar>
     </div>
   );
-};
+}
 
-export default EditorToolbar;
+export { EditorToolbar };

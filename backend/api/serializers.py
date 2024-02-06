@@ -480,3 +480,33 @@ class NoteSerializer(serializers.ModelSerializer):
         client = User.objects.get(pk=client_id)
         client.client.notes.add(note)
         return note
+
+class DiaryNoteSerializer(serializers.ModelSerializer):
+    clarifying_emotion = serializers.ListField(
+        child=serializers.CharField(max_length=50)
+    )
+    author = serializers.PrimaryKeyRelatedField(
+        read_only=True,
+        default=serializers.CurrentUserDefault()
+    )
+    author_name = serializers.StringRelatedField(source='author',
+                                                 read_only=True)
+    class Meta:
+        model = DiaryNote
+        fields = [
+            'id',
+            'author',
+            'author_name',
+            'add_date',
+            'visible',
+            'event_details',
+            'thoughts_analysis',
+            'physical_sensations',
+            'primary_emotion',
+            'clarifying_emotion',
+        ]
+
+    def create(self, validated_data):
+        author = self.context['request'].user
+        diary_note = DiaryNote.objects.create(author=author, **validated_data)
+        return diary_note

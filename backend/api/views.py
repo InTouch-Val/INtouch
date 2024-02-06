@@ -15,10 +15,16 @@ from .serializers import *
 
 class UserViewSet(viewsets.ModelViewSet):
     """Создание и получение пользователей"""
-    permission_classes = (AllowAny, )
     queryset = User.objects.all()
     serializer_class = UserSerializer
     http_method_names = ['get', 'post']
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = self.permission_classes
+        return [permission() for permission in permission_classes]
 
 
 class UserDetailsView(generics.ListAPIView):
@@ -308,3 +314,9 @@ class NoteViewSet(viewsets.ModelViewSet):
     """CRUD операции над заметками"""
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
+
+
+class DiaryNoteViewSet(viewsets.ModelViewSet):
+    """CRUD операции над заметками в дневнике"""
+    queryset = DiaryNote.objects.all()
+    serializer_class = DiaryNoteSerializer

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import API from '../axios';
+import { API } from '../axios';
 import '../../css/registration.css';
 
 //TODO: PopUp windows
 
-const RegistrationForm = () => {
+function RegistrationForm() {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -33,7 +33,9 @@ const RegistrationForm = () => {
     const passwordRegex = /^(?=(?:.*[a-zA-Z]+))(?=(?:.*\d+))(?!.*(.)\1{3,}).{8,}$/;
 
     if (!passwordRegex.test(formData.password)) {
-      setError('Password must contain letters, numbers, and no more than 3 consecutive identical characters.');
+      setError(
+        'Password must contain letters, numbers, and no more than 3 consecutive identical characters.',
+      );
       return;
     }
 
@@ -59,25 +61,29 @@ const RegistrationForm = () => {
     };
 
     try {
-        await API.post('users/', requestData, {
+      await API.post('users/', requestData, {
         headers: {
           'Content-Type': 'application/json',
         },
         withCredentials: true,
       });
       navigate('/welcome-to-intouch');
-      
     } catch (error) {
       console.error('Registration error:', error);
-      setError('Registration failed. Please try again. Email:' +  error.response?.data?.email[0]);
+      setError('Registration failed. Please try again. Email:' + error.response?.data?.email[0]);
     }
   };
 
   return (
-    <div className='registration-page'>
-      <form className='registration-form' onSubmit={handleSubmit}>
-        <img alt="in" src="https://i122.fastpic.org/big/2023/1030/7b/1e679a924edf77196513a8491eb5f37b.jpg" width="140px" border="0" />
-        <div className='input-fields'>
+    <div className="registration-page">
+      <form className="registration-form" onSubmit={handleSubmit}>
+        <img
+          alt="in"
+          src="https://i122.fastpic.org/big/2023/1030/7b/1e679a924edf77196513a8491eb5f37b.jpg"
+          width="140px"
+          border="0"
+        />
+        <div className="input-fields">
           <input
             type="text"
             name="firstName"
@@ -130,12 +136,16 @@ const RegistrationForm = () => {
             I agree with the terms and conditions
           </label>
         </div>
-        <button type="submit" className='action-button'>Register</button>
-        <p>Already have an account? <Link to={"/login"}>Log in</Link></p>
+        <button type="submit" className="action-button">
+          Register
+        </button>
+        <p>
+          Already have an account? <Link to={'/login'}>Log in</Link>
+        </p>
         {error && <p className="error-message">{error}</p>}
       </form>
     </div>
   );
-};
+}
 
-export default RegistrationForm;
+export { RegistrationForm };
