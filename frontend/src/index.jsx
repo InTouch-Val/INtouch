@@ -1,16 +1,17 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import App from './components/App.jsx';
+import './index.css';
 import {
   createBrowserRouter,
   RouterProvider,
 } from 'react-router-dom';
-import { AuthProvider } from './service/authContext.js';
+import { AuthProvider } from './service/authContext';
 import ErrorPage from './service/forms/error-page.jsx';
 import ClientPage from './routes/client-page.jsx';
 import ClientDetailPage from './components/ClientsDetailsPage.jsx';
 import AssignmentsPage from './routes/assignments-page.jsx';
-import CommunityPage from './routes/community-page.jsx'; 
+import CommunityPage from './routes/community-page.jsx';
 import RegistrationForm from './service/forms/registration-page.jsx';
 import LoginPage from './service/forms/login-page.jsx';
 import SettingsPage from './routes/settings-page.jsx';
@@ -23,6 +24,7 @@ import ClientRegistrationPage from './service/forms/client-registration-page.jsx
 import AfterRegistrationPage from './service/forms/after-registration-welcome-page.jsx';
 import ClientsAssignments from './clients-components/ClientsAssignments.jsx';
 import AddNote from './components/AddNote.jsx';
+import CompleteAssignments from './clients-components/CompleteAssignments/CompleteAssignments.jsx';
 
 const router = createBrowserRouter([
   {
@@ -52,7 +54,7 @@ const router = createBrowserRouter([
       },
       // {
       //   path: '/community/:chatId',
-      //   element: <Chat />, 
+      //   element: <Chat />,
       // },
       {
         path: '/settings',
@@ -77,6 +79,10 @@ const router = createBrowserRouter([
       {
         path: "/my-assignments",
         element: <ClientsAssignments/>
+      },
+      {
+        path:"/my-assignments/1",
+        element:<CompleteAssignments/>
       }
     ],
   },
@@ -101,12 +107,12 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/activate/:userId/:userToken",  
+    path: "/activate/:userId/:userToken",
     element: <ActivateUserPage />,
     errorElement: <ErrorPage />,
   },
   {
-    path: "/activate-client/:userId/:userToken",  
+    path: "/activate-client/:userId/:userToken",
     element: <ActivateUserPage />,
     errorElement: <ErrorPage />,
   },

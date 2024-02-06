@@ -14,6 +14,7 @@ from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.tokens import AccessToken
 
 from .models import *
+from .tasks import remove_unverified_user
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -228,6 +229,7 @@ class AddClientSerializer(serializers.ModelSerializer):
         )
         mail.attach_alternative(html_message, 'text/html')
         mail.send()
+        remove_unverified_user.send_with_options(args=(user.pk,), delay=300000)
         return user
 
 
@@ -332,6 +334,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
     tags = serializers.CharField(required=False)
     image_url = serializers.CharField(required=False)
     is_public = serializers.BooleanField(read_only=True)
+    grades = serializers.ListField(child=serializers.IntegerField(), read_only=True)
     class Meta:
         model = Assignment
         fields = [
@@ -350,6 +353,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
             'author',
             'author_name',
             'is_public',
+            'grades',
         ]
 
     def create(self, validated_data):
@@ -401,6 +405,8 @@ class AssignmentSerializer(serializers.ModelSerializer):
 class AssignmentClientSerializer(serializers.ModelSerializer):
     blocks = BlockSerializer(many=True, required=False)
     author_name = serializers.StringRelatedField(source='author', read_only=True)
+    grade = serializers.IntegerField(required=False)
+    review = serializers.CharField(required=False)
     class Meta:
         model = AssignmentClient
         fields = [
@@ -419,12 +425,20 @@ class AssignmentClientSerializer(serializers.ModelSerializer):
             'author',
             'author_name',
             'user',
-            'visible'
+            'visible',
+            'grade',
+            'review',
         ]
 
     def update(self, instance, validated_data):
         instance.status = 'in progress'
         instance.visible = validated_data['visible']
+        grade = validated_data.get('grade')
+        if grade:
+            instance.grade = grade
+            instance.review = validated_data.get('review', '')
+            instance.assignment_root.grades.append(grade)
+            instance.assignment_root.save()
         blocks = instance.blocks.all()
         for block in blocks:
             block.delete()

@@ -21,7 +21,8 @@ function App() {
   }, [currentUser, isLoading, handleLogout]);
 
 
-  const isDoctor = currentUser?.user_type === "doctor"
+  const isDoctor = currentUser?.user_type === "doctor";
+ 
 
   return (
     <div className="app-container">

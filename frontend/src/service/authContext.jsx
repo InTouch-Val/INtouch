@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import API from '../service/axios';
+import API from './axios';
 
 const AuthContext = createContext(null);
 
@@ -11,7 +11,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   const isLoggedIn = currentUser != null;
 
   const login = async (accessToken, refreshToken) => {
@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
     }
     setIsLoading(false); // Установка после завершения всех операций
   };
-  
+
 
   const logout = () => {
     localStorage.removeItem('accessToken');
@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser(response.data[0]);
       } catch (error) {
         console.error('Error during initial auth check:', error);
-        logout(); 
+        logout();
       }
       setIsLoading(false);
     };

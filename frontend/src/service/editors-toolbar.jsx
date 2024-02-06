@@ -18,7 +18,7 @@ const toolbarPlugin = createToolbarPlugin();
 const { Toolbar } = toolbarPlugin;
 const plugins = [toolbarPlugin];
 
-const EditorToolbar = ({ editorState, setEditorState }) => {
+const EditorToolbar = ({ editorState, setEditorState}) => {
     const editor = useRef(null);
 
     const focusEditor = () => {

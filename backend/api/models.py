@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
 
@@ -68,6 +69,7 @@ class Assignment(models.Model):
     )
     comments = models.ManyToManyField('Comment', blank=True)
     is_public = models.BooleanField(default=True)
+    grades = ArrayField(models.IntegerField(), default=[])
 
     def __str__(self):
         return self.title
@@ -99,6 +101,14 @@ class AssignmentClient(models.Model):
     comments = models.ManyToManyField('Comment', blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     visible = models.BooleanField(default=True)
+    grade = models.IntegerField(null=True, blank=True)
+    review = models.TextField()
+    assignment_root = models.ForeignKey(
+        'Assignment',
+        on_delete=models.SET_NULL,
+        related_name='assignments_clients',
+        null=True,
+    )
 
 
 class Block(models.Model):
