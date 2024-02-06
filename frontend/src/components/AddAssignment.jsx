@@ -9,7 +9,7 @@ import { useAuth } from '../service/authContext';
 import Modal from '../service/modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment, faSquareCheck, faCircleDot, faEllipsis } from '@fortawesome/free-solid-svg-icons';
-import Headline from './headline';
+import headline from './headline';
 import ImageQuestionBlock from './ImageQuestionBlock';
 
 const getObjectFromEditorState = (editorState) => {
@@ -201,12 +201,14 @@ const handleSubmit = async (e) => {
       <div className='add-assignment-body'>
         <ImageSelector onImageSelect={handleImageSelect}/>
         <form onSubmit={handleSubmit} className="form-creator">
+
         {blocks.map((block, index) => (
            <div key={index}>
-           {block.type === 'headline' && <Headline block={block} updateBlock={updateBlock} />}
+           {block.type === 'headline' && <headline block={block} updateBlock={updateBlock} />}
            {block.type === 'imageQuestion' && <ImageQuestionBlock block={block} updateBlock={updateBlock} />}
       </div>
       ))}
+
           <div className='form-title'>
             <input
               type='text'
@@ -456,5 +458,5 @@ const ViewAssignment = () => {
   );
 };
 
-export { AddAssignment, ViewAssignment, Headline };
+export { AddAssignment, ViewAssignment, headline };
 export default AddAssignment;

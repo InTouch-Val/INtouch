@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Headline = ({ block, updateBlock }) => {
+const headline = ({ block, updateBlock }) => {
   return (
     <div>
       <input
@@ -18,4 +18,4 @@ const Headline = ({ block, updateBlock }) => {
   );
 };
 
-export default Headline;
+export default headline;
