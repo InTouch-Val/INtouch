@@ -24,8 +24,10 @@ export const AuthProvider = ({ children }) => {
       setCurrentUser(response.data[0]);
     } catch (error) {
       console.error('Error during login:', error);
-      logout();
-      window.location.href = '/login'; // Redirect to login page on login failure
+      if (error.response.status === 401) {
+        logout();
+        window.location.href = '/login'; // Redirect to login page on login failure
+      }
     }
     setIsLoading(false); // Установка после завершения всех операций
   };
@@ -39,16 +41,17 @@ export const AuthProvider = ({ children }) => {
   };
 
   const updateUserData = async () => {
-    try{
+    try {
       const response = await API.get('get-user/');
       setCurrentUser(response.data[0]);
-    }catch (error) {
+    } catch (error) {
       console.error('Error during user data update:', error);
-      logout();
-      window.location.href = '/login'; // Redirect to login page on update failure
+      if (error.response.status === 401) {
+        logout();
+        window.location.href = '/login'; // Redirect to login page on update failure
+      }
     }
   }
-
   useEffect(() => {
     const initAuth = async () => {
       const accessToken = localStorage.getItem('accessToken');

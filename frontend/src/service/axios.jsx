@@ -37,11 +37,12 @@ async function refreshTokens() {
   }
   catch(error) {
     console.error("Token refresh failed:", error);
-    localStorage.clear();
-    window.location.href = '/login'; // Redirect to login page on refresh failure
+    throw error; //Передаём ошибку дальше для обработки в интерцепторе ответов
+
+    // localStorage.clear();
+    // window.location.href = '/login'; // Redirect to login page on refresh failure
   }
-  
-}
+ }
 
 API.interceptors.request.use(
   config => {
@@ -80,11 +81,12 @@ API.interceptors.response.use(
       try {
         const newAccessToken = await refreshTokens();
         processQueue(null, newAccessToken);
+        originalRequest.headers['Authorization'] = 'Bearer ' + newAccessToken;
         return API(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
         localStorage.clear();
-        window.location.href = '/login'; // Redirect to login page on refresh failure
+        window.location.href = '/login';
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
