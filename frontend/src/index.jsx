@@ -18,7 +18,7 @@ import { App } from './components/App';
 import { AddAssignment, ViewAssignment } from './components/AddAssignment';
 import { AddClient } from './components/AddClient';
 import { AddNote } from './components/AddNote';
-import ClientDetailPage from './components/ClientsDetailsPage';
+import { ClientDetailsPage } from './components/ClientDetailsPage';
 import { ClientsAssignments } from './clients-components/ClientsAssignments';
 
 const router = createBrowserRouter([
@@ -33,7 +33,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/clients/:id',
-        element: <ClientDetailPage />,
+        element: <ClientDetailsPage />,
       },
       {
         path: '/assignments',

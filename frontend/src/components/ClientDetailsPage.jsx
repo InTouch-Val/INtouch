@@ -8,7 +8,7 @@ import { ClientAssignmentTile } from './AssignmentTile';
 import { Notes } from './Notes';
 import '../css/clients.css';
 
-function ClientDetailPage() {
+function ClientDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { currentUser, updateUserData } = useAuth();
@@ -215,4 +215,4 @@ function ClientDetailPage() {
   );
 }
 
-export default ClientDetailPage;
+export { ClientDetailsPage };
