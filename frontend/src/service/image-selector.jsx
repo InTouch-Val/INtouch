@@ -7,12 +7,17 @@ function ImageSelector({ onImageSelect }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearchDone, setIsSearchDone] = useState(false);
   const [selectedImageId, setSelectedImageId] = useState(null); // Состояние для хранения ID выбранного изображения
-  const accessKey = process.env.REACT_APP_UNSPLASH_ACCESS_KEY;
+  const accessKey = import.meta.env.VITE_APP_UNSPLASH_ACCESS_KEY;
 
   const searchImages = (query) => {
+    if (!accessKey) {
+      console.error('Unsplash Access Key is missing. Please add it to .env file.');
+      return;
+    }
+
     axios
       .get(
-        `https://api.unsplash.com/search/photos?query=${query}&client_id=${accessKey}&per_page=10`,
+        `https://api.unsplash.com/search/photos?query=${query}&client_id=${accessKey}`,
       )
       .then((response) => {
         setImages(response.data.results);
