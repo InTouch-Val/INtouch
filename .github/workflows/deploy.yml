@@ -75,6 +75,8 @@ jobs:
       - name: Build
         working-directory: ./frontend
         run: npm run build
+        env:
+          VITE_APP_UNSPLASH_ACCESS_KEY: ${{ secrets.VITE_APP_UNSPLASH_ACCESS_KEY }}
 
       - name: Deploy to server
         uses: burnett01/rsync-deployments@6.0.0
