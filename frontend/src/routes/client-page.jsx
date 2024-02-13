@@ -18,9 +18,9 @@ function ClientPage() {
   const { currentUser, updateUserData } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    updateUserData();
-  }, [updateUserData]);
+  // useEffect(() => {
+  //   updateUserData();
+  // }, [updateUserData]);
 
   useEffect(() => {
     const fetchAssignments = async () => {
