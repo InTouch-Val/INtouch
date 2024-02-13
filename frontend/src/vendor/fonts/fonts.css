@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'Itim';
+    src: url(./Itim.woff) format('woff'),
+    url(./Itim.woff2) format('woff2');
+    font-style: normal;
+    font-weight: 400;
+}
+@font-face {
+    font-family: 'Raleway';
+    src: url(./Raleway-Regular.woff) format('woff');
+    font-style: normal;
+    font-weight: 400;
+}
