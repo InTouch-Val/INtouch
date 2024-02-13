@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-l*&rk!&cy2+6m-798lb1^2^hde_&&*u&u4_3o+z79g__%tpi_r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['85.31.237.54', '127.0.0.1']
+ALLOWED_HOSTS = ['85.31.237.54', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -82,10 +82,10 @@ WSGI_APPLICATION = 'INtouch.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'HOST': 'app-postgres',
