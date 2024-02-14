@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -11,10 +11,12 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../service/authContext';
 import '../css/app.css';
+import HeadlinerImg from './HeadlinerImg/HeadlinerImg';
 
 function App() {
   const { currentUser, logout, isLoading } = useAuth();
   const navigate = useNavigate();
+  const [showHeadliner, setShowHeadliner] = useState(false); // Состояние для отображения блока кода
 
   const handleLogout = useCallback(() => {
     logout();
@@ -94,7 +96,8 @@ function App() {
                   Support
                 </NavLink>
               </li> */}
-              <li>
+             
+               <li>
                 <button id="logout" onClick={handleLogout}>
                   <FontAwesomeIcon icon={faArrowRightFromBracket} /> Logout
                 </button>
@@ -105,6 +108,7 @@ function App() {
       </div>
       <div className="content">
         <Outlet />
+        {showHeadliner && <HeadlinerImg />}
       </div>
     </div>
   );

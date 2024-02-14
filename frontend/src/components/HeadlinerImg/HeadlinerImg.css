@@ -1,0 +1,73 @@
+:root {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+  }
+  
+  body {
+    margin: 15px;
+    /* max-width: 935px;
+    min-height: 470px; */
+    border: 1px solid;
+    border-color: #D7E4E7;
+    border-radius: 6px;
+    box-shadow: 0px 0px 3px 1px #D7E4E773;
+  }
+  
+  h1 {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 17px;
+    color: #417D88;
+    margin: 23px 0 0 15px;
+  }
+  
+  h2 {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 17px;
+    color: #417D88;
+    text-align: center;
+    margin-top: 32px;
+  }
+  
+  h3 {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 17px;
+    text-align: center;
+    color: grey;
+    position: relative;
+    left: 1px;
+    top: 148px;
+  }
+  
+  .img-container {
+    position: relative;
+    text-align: center; 
+    margin: 63px auto; 
+    max-width: 400px; 
+  }
+  
+  .img-container img {
+    max-width: 200px; 
+    height: auto; 
+    position: absolute;
+    top: -66px;
+    left: 25%;  
+   }
+  
+   .icon-copy-trash{
+    display: flex;
+    gap: 15px;
+    justify-content: end;
+    margin: 42px 162px 0 0;
+    position: relative;
+    left: 1px; top: 150px;
+    }
+  
+    .saveBlock{
+     position: relative; 
+      top: 20px; left: 30px;
+    }
+  

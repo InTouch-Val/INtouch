@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { EditorToolbar } from '../service/editors-toolbar';
 import '../css/block.css';
+import HeadlinerImg from '../components/HeadlinerImg/HeadlinerImg';
 
 function AssignmentBlock({ block, updateBlock, removeBlock, readOnly }) {
   const [title, setTitle] = useState(block.title);
@@ -209,6 +210,7 @@ function AssignmentBlock({ block, updateBlock, removeBlock, readOnly }) {
             <FontAwesomeIcon icon={faTrashCan} />
           </button>
         </div>
+        
         <div className="range-inputs">
           <div className="number-input-container">
             <button onClick={(e) => handleMinChange(-1, e)}>-</button>
@@ -238,6 +240,60 @@ function AssignmentBlock({ block, updateBlock, removeBlock, readOnly }) {
       </div>
     );
   }
+
+  if (block.type === 'image') {
+    <div className="block">
+    <div className="control-panel">
+      <input
+        type="text"
+        value={title}
+        onChange={handleTitleChange}
+        placeholder="Write question here..."
+        className="block-title-input"
+      />
+
+{/* иконка корзина */}
+    <button type="button" onClick={() => removeBlock(block.id)} className="remove-block-button">
+        <FontAwesomeIcon icon={faTrashCan} />
+    </button>
+
+    </div>
+    {choices.map((choice, index) => (
+      <div key={index} className="choice-option">
+        {block.type === 'multiple' ? (
+          <input type="checkbox" disabled />
+        ) : (
+          <input type="radio" disabled />
+        )}
+        <input
+          ref={choiceRefs[index]}
+          type="text"
+          value={choice}
+          onChange={(event) => handleChoiceChange(index, event)}
+          placeholder={`Option ${index + 1}`}
+          className="choice-input"
+        />
+
+{/* icon close */}
+        <button
+          type="button"
+          onClick={() => removeChoice(index)}
+          className="remove-choice-button"
+        >
+          <FontAwesomeIcon icon={faXmark} />
+        </button>
+
+      </div>
+   ) )}
+   
+    
+   <div> 
+    <HeadlinerImg />
+   </div>
+ 
+  </div>
+  }
+
 
   return (
     <div className="block">
@@ -292,8 +348,13 @@ function AssignmentBlock({ block, updateBlock, removeBlock, readOnly }) {
           className="choice-input"
         />
       </div>
-    </div>
+     
+    
+
+
+  
+</div> 
   );
 }
 
-export { AssignmentBlock };
+export { AssignmentBlock }

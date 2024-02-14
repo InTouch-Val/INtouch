@@ -13,8 +13,7 @@ import { AssignmentBlock } from '../service/assignment-blocks';
 import { ImageSelector } from '../service/image-selector';
 import { useAuth } from '../service/authContext';
 import { Modal } from '../service/modal';
-import { Headline } from './Headline';
-import { ImageQuestionBlock } from './ImageQuestionBlock';
+import  HeadlinerImg from './HeadlinerImg/HeadlinerImg';
 import '../css/assignments.css';
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
@@ -74,6 +73,14 @@ function AddAssignment() {
             title: block.question,
             minValue: block.start_range,
             maxValue: block.end_range,
+          };
+        }
+        if (block.type === 'image') {
+          return {
+            ...block,
+            // title: block.question,
+            // minValue: block.start_range,
+            // maxValue: block.end_range,
           };
         }
         return block;
@@ -154,6 +161,7 @@ function AddAssignment() {
   };
 
   const addBlock = (type) => {
+    console.log(type);
     const newBlock = {
       id: blocks.length + 1,
       type,
@@ -217,11 +225,8 @@ function AddAssignment() {
         <form onSubmit={handleSubmit} className="form-creator">
           {blocks.map((block, index) => (
             <div key={index}>
-              {block.type === 'headline' && <Headline block={block} updateBlock={updateBlock} />}
-              {block.type === 'imageQuestion' && (
-                <ImageQuestionBlock block={block} updateBlock={updateBlock} />
-              )}
-            </div>
+              {block.type === 'headlinerImg' && <HeadlinerImg block={block} updateBlock={updateBlock} />}
+             </div>
           ))}
           <div className="form-title">
             <input
@@ -291,6 +296,9 @@ function AddAssignment() {
               <FontAwesomeIcon icon={faCircleDot} />{' '}
             </button>
             <button title="Add Range Question Block" onClick={() => addBlock('range')}>
+              <FontAwesomeIcon icon={faEllipsis} />
+            </button>
+            <button title="Add Image" onClick={() => addBlock('image')}>
               <FontAwesomeIcon icon={faEllipsis} />
             </button>
           </div>
