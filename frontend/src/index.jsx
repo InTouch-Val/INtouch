@@ -1,5 +1,4 @@
 import { StrictMode } from 'react';
-import './index.css';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { AuthProvider } from './service/authContext';
@@ -16,12 +15,13 @@ import { AssignmentsPage } from './routes/assignments-page';
 import { CommunityPage } from './routes/community-page';
 import { SettingsPage } from './routes/settings-page';
 import { App } from './components/App';
-import { AddAssignment, ViewAssignment } from './components/AddAssignment';
-import { AddClient } from './components/AddClient';
-import { AddNote } from './components/AddNote';
-import { ClientDetailsPage } from './components/ClientDetailsPage';
-import { ClientsAssignments } from './clients-components/ClientsAssignments';
-import CompleteAssignments from './clients-components/CompleteAssignments/CompleteAssignments';
+import { AddAssignment, ViewAssignment } from './components/psy/AddAssignment';
+import { AddClient } from './components/psy/AddClient';
+import { AddNote } from './components/psy/AddNote';
+import { ClientDetailsPage } from './components/psy/ClientDetailsPage';
+import { ClientAssignments } from './components/client/ClientAssignments';
+import { CompleteAssignments } from './components/client/CompleteAssignments/CompleteAssignments';
+import './index.css';
 
 const router = createBrowserRouter([
   {
@@ -75,7 +75,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/my-assignments',
-        element: <ClientsAssignments />,
+        element: <ClientAssignments />,
       },
       {
         path: '/my-assignments/1',

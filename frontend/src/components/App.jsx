@@ -21,13 +21,13 @@ function App() {
     navigate('/login');
   }, [logout, navigate]);
 
+  const isDoctor = currentUser?.user_type === 'doctor';
+
   useEffect(() => {
     if (!isLoading && !currentUser) {
       handleLogout();
     }
   }, [currentUser, isLoading, handleLogout]);
-
-  const isDoctor = currentUser?.user_type === 'doctor';
 
   return (
     <div className="app-container">

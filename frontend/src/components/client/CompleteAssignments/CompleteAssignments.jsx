@@ -1,21 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import save from '../../images/save.svg';
-import image from '../../images/image2.svg';
-import imageGirl from '../../images/image_girl.png';
-import arrowLeft from '../../images/arrow-left.svg';
-import { EditorState, ContentState, convertFromRaw } from 'draft-js';
-import { EditorToolbar } from '../../service/editors-toolbar';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashCan, faXmark } from '@fortawesome/free-solid-svg-icons';
-import '../../css/block.css';
-import '../../css/assignments.css';
+import { useState } from 'react';
+import { EditorState } from 'draft-js';
+import { EditorToolbar } from '../../../service/editors-toolbar';
+import save from '../../../images/save.svg';
+import image from '../../../images/image2.svg';
+import imageGirl from '../../../images/image_girl.png';
+import arrowLeft from '../../../images/arrow-left.svg';
+import '../../../css/block.css';
+import '../../../css/assignments.css';
 
 function CompleteAssignments() {
-  const [editorStateFirst, setEditorStateFirst] = React.useState(() => EditorState.createEmpty());
-
-  const [editorStateSecond, setEditorStateSecond] = React.useState(() => EditorState.createEmpty());
-
-  const [editorStateThird, setEditorStateThird] = React.useState(() => EditorState.createEmpty());
+  const [editorStateFirst, setEditorStateFirst] = useState(() => EditorState.createEmpty());
+  const [editorStateSecond, setEditorStateSecond] = useState(() => EditorState.createEmpty());
+  const [editorStateThird, setEditorStateThird] = useState(() => EditorState.createEmpty());
 
   return (
     <>
@@ -66,7 +62,7 @@ function CompleteAssignments() {
               value="Answer 1"
               style={{ opacity: 0.8 }}
             ></input>
-            <label className="block-radio__label" for="1">
+            <label className="block-radio__label" htmlFor="1">
               Answer 1
             </label>
           </div>
@@ -79,7 +75,7 @@ function CompleteAssignments() {
               value="Answer 2"
               style={{ opacity: 0.8 }}
             />
-            <label for="2" className="block-radio__label">
+            <label htmlFor="2" className="block-radio__label">
               Answer 2
             </label>
           </div>
@@ -92,7 +88,7 @@ function CompleteAssignments() {
               value="Answer 3"
               style={{ opacity: 0.8 }}
             />
-            <label for="3" className="block-radio__label">
+            <label htmlFor="3" className="block-radio__label">
               Answer 3
             </label>
           </div>
@@ -111,7 +107,7 @@ function CompleteAssignments() {
               value="Answer 1"
               style={{ opacity: 0.8 }}
             ></input>
-            <label className="block-radio__label" for="1">
+            <label className="block-radio__label" htmlFor="1">
               Answer 1
             </label>
           </div>
@@ -124,7 +120,7 @@ function CompleteAssignments() {
               value="Answer 2"
               style={{ opacity: 0.8 }}
             />
-            <label for="2" className="block-radio__label">
+            <label htmlFor="2" className="block-radio__label">
               Answer 2
             </label>
           </div>
@@ -137,7 +133,7 @@ function CompleteAssignments() {
               value="Answer 3"
               style={{ opacity: 0.8 }}
             />
-            <label for="3" className="block-radio__label">
+            <label htmlFor="3" className="block-radio__label">
               Answer 3
             </label>
           </div>
@@ -148,7 +144,7 @@ function CompleteAssignments() {
         <fieldset className="assignments__block-radio block-radio__rate">
           <p className="block-radio_rate-text">Левый полюс</p>
           <div className="block-radio__input-container block-radio__rate-container">
-            <label className="block-radio__label_rate" for="1">
+            <label className="block-radio__label_rate" htmlFor="1">
               1
             </label>
             <input
@@ -161,7 +157,7 @@ function CompleteAssignments() {
             ></input>
           </div>
           <div className="block-radio__input-container block-radio__rate-container">
-            <label for="2" className="block-radio__label_rate">
+            <label htmlFor="2" className="block-radio__label_rate">
               2
             </label>
             <input
@@ -174,7 +170,7 @@ function CompleteAssignments() {
             />
           </div>
           <div className="block-radio__input-container block-radio__rate-container">
-            <label for="3" className="block-radio__label_rate">
+            <label htmlFor="3" className="block-radio__label_rate">
               3
             </label>
             <input
@@ -187,7 +183,7 @@ function CompleteAssignments() {
             />
           </div>
           <div className="block-radio__input-container block-radio__rate-container">
-            <label for="3" className="block-radio__label_rate">
+            <label htmlFor="3" className="block-radio__label_rate">
               4
             </label>
             <input
@@ -200,7 +196,7 @@ function CompleteAssignments() {
             />
           </div>
           <div className="block-radio__input-container block-radio__rate-container">
-            <label for="3" className="block-radio__label_rate">
+            <label htmlFor="3" className="block-radio__label_rate">
               5
             </label>
             <input
@@ -241,4 +237,4 @@ function CompleteAssignments() {
   );
 }
 
-export default CompleteAssignments;
+export { CompleteAssignments };

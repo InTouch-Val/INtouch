@@ -8,14 +8,14 @@ import {
   faCircleDot,
   faEllipsis,
 } from '@fortawesome/free-solid-svg-icons';
-import { API } from '../service/axios';
-import { AssignmentBlock } from '../service/assignment-blocks';
-import { ImageSelector } from '../service/image-selector';
-import { useAuth } from '../service/authContext';
-import { Modal } from '../service/modal';
+import { API } from '../../service/axios';
+import { AssignmentBlock } from '../../service/assignment-blocks';
+import { ImageSelector } from '../../service/image-selector';
+import { useAuth } from '../../service/authContext';
+import { Modal } from '../../service/modal';
 import { Headline } from './Headline';
 import { ImageQuestionBlock } from './ImageQuestionBlock';
-import '../css/assignments.css';
+import '../../css/assignments.css';
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
@@ -277,7 +277,6 @@ function AddAssignment() {
               removeBlock={removeBlock}
             />
           ))}
-          ;
         </form>
         <div className="block-buttons-container">
           <div className="block-buttons">

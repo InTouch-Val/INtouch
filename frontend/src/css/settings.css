@@ -64,7 +64,6 @@ header img {
   background-color: #fff;
   box-shadow: 0 0 3px 2px #d7e4e773;
   color: #656565;
-  font-family: Montserrat, sans-serif;
   font-size: 17px;
 }
 
@@ -117,7 +116,6 @@ header img {
   padding: 10px;
   border: 1px solid #ddd;
   margin-bottom: 10px;
-  font-family: Montserrat, sans-serif;
 }
 
 .danger-zone button {

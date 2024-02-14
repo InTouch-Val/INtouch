@@ -24,7 +24,6 @@
   border: 1px solid #ddd;
   border-radius: 4px;
   margin-right: 10px;
-  font-family: Montserrat, sans-serif;
 }
 
 .image-selector button {
@@ -34,7 +33,6 @@
   background-color: #417d88;
   color: white;
   cursor: pointer;
-  font-family: Montserrat, sans-serif;
 }
 
 .image-results {

@@ -34,8 +34,6 @@
 .assignment-info h3 {
   margin: 0;
   color: #656565; /* Темно-серый текст */
-  font-size: 16px; /* Размер шрифта заголовка */
-  font-weight: 500; /* Жирность шрифта */
 }
 
 .assignment-info p {
@@ -55,7 +53,6 @@
 .assignment-actions .popularity {
   display: flex;
   align-items: center;
-  font-size: 16px;
 }
 
 .assignment-actions .popularity::before {
@@ -87,7 +84,6 @@
   padding: 5px 10px; /* Отступы */
   border-radius: 20px; /* Закругленный фон */
   color: #b7b7b7;
-  font-size: 16px;
 }
 
 .type {

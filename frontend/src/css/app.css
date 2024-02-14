@@ -1,7 +1,9 @@
 body {
   padding: 0;
   margin: 0;
-  font-family: Montserrat, sans-serif;
+  font-family: Montserrat, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .app-container {
@@ -25,7 +27,6 @@ body {
 
 .user-profile h3 {
   color: #656565;
-  font-weight: 500;
 }
 
 .user-avatar {
@@ -52,8 +53,6 @@ body {
   padding: 8px 12px;
   margin-left: 45px;
   color: #656565; /* Text color for menu links */
-  font-size: 16px;
-  font-weight: 500;
   line-height: 28px;
   text-align: flex-end; /* Add spacing above and below each menu item */
   text-decoration: none; /* Remove underlines from menu links */
@@ -75,9 +74,7 @@ body {
   background: transparent;
   color: #656565; /* Цвет текста */
   cursor: pointer;
-  font-family: Montserrat, sans-serif;
   font-size: 16px;
-  font-weight: 500;
   line-height: 28px;
   text-align: flex-end;
 }

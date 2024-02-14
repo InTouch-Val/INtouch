@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '../service/authContext';
-import { API } from '../service/axios';
-import { ClientAssignmentTile } from '../components/AssignmentTile';
+import { useAuth } from '../../service/authContext';
+import { API } from '../../service/axios';
+import { ClientAssignmentCard } from './ClientAssignmentCard/ClientAssignmentCard';
 
-function ClientsAssignments() {
+function ClientAssignments() {
   const { currentUser } = useAuth();
   const [currentTab, setCurrentTab] = useState('all');
   const [assignments, setAssignments] = useState([]);
@@ -12,9 +12,10 @@ function ClientsAssignments() {
   useEffect(() => {
     const fetchAssignments = async () => {
       try {
-        var response = await API.get('assignments-client/');
+        let response = await API.get('assignments-client/');
         console.log(response);
-        response = response.data.filter((assignment) => assignment.user === currentUser.id);
+        // response = response.data.filter((assignment) => assignment.user === currentUser.id);
+        response = response.data;
         setAssignments(response);
       } catch (error) {
         console.error(error.message);
@@ -25,7 +26,8 @@ function ClientsAssignments() {
   }, [currentUser.id]);
 
   useEffect(() => {
-    let updatedAssignments = [...assignments];
+    // let updatedAssignments = [...assignments];
+    let updatedAssignments = assignments;
 
     // Filter assignments based on status
     if (currentTab !== 'all') {
@@ -65,14 +67,14 @@ function ClientsAssignments() {
       <div className="assignment-grid">
         {filteredAssignments.length > 0 ? (
           filteredAssignments.map((assignment) => (
-            <ClientAssignmentTile key={assignment.id} assignment={assignment} />
+            <ClientAssignmentCard key={assignment.id} assignmentData={assignment} />
           ))
         ) : (
-          <div className="nothing-to-show">You have no assignments. Contact your doctor.</div>
+          <div className="nothing-to-show">You have no assignments. Contact your doctor</div>
         )}
       </div>
     </div>
   );
 }
 
-export { ClientsAssignments };
+export { ClientAssignments };

@@ -1,0 +1,119 @@
+.card {
+  width: 270px;
+  box-sizing: border-box;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 0 3px 1px rgb(215 228 231 / 45%);
+}
+
+.card__clickable-container {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.card__wrapper-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.card__date {
+  color: #b7b7b7;
+  line-height: 1.06;
+}
+
+.card__status {
+  display: flex;
+  width: 115px;
+  height: 27px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+  background-color: #f7cfa4;
+  color: #eaf2f3;
+  line-height: 1.06;
+}
+
+.card__status_status_to-do {
+  background-color: #f7cfa4;
+}
+
+.card__status_status_in-progress {
+  background-color: #1f304f;
+}
+
+.card__status_status_done {
+  background-color: #417d88;
+}
+
+.card__image {
+  display: block;
+  width: 100%;
+  height: 146px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  object-fit: cover;
+}
+
+.card__title {
+  margin: 0;
+  color: #656565;
+  font-weight: 500;
+  line-height: 1.06;
+}
+
+.card__actions {
+  width: 27px;
+  height: 33px;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  background-image: url('../../../images/more-button.svg');
+  cursor: pointer;
+}
+
+.card__input-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  color: #656565;
+  column-gap: 5px;
+  font-size: 14px;
+  line-height: 1.06;
+}
+
+.card__input-checkbox {
+  width: 32px;
+  height: 17px;
+  padding: 0;
+  border: 1px solid #656565;
+  border-radius: 100px;
+  margin: 0;
+  appearance: none;
+  cursor: pointer;
+  transition: background-color 0.5s;
+}
+
+.card__input-checkbox:checked {
+  background-color: #417d88;
+}
+
+.card__input-checkbox::after {
+  display: block;
+  width: 13px;
+  height: 13px;
+  border-radius: 100%;
+  background-color: #417d88;
+  content: '';
+  transform: translate(0.1em, 0.1em);
+  transition:
+    transform 0.5s,
+    background-color 0.5s;
+}
+
+.card__input-checkbox:checked::after {
+  background-color: #fff;
+  transform: translate(1.25em, 0.1em);
+}

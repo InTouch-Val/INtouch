@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { faNoteSticky } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useAuth } from '../service/authContext';
-import { API } from '../service/axios';
+import { useAuth } from '../../service/authContext';
+import { API } from '../../service/axios';
 import { ClientAssignmentTile } from './AssignmentTile';
 import { Notes } from './Notes';
-import '../css/clients.css';
+import '../../css/clients.css';
 
 function ClientDetailsPage() {
   const { id } = useParams();
