@@ -1,0 +1,10 @@
+@font-face {
+  font-display: swap;
+  font-family: Raleway;
+  font-style: normal;
+  font-weight: 400;
+  src:
+    local('Raleway'),
+    local('Raleway Regular'),
+    url('./Raleway-Regular.woff2') format('woff2');
+}
