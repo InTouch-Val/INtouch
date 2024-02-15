@@ -4,17 +4,8 @@
     font-style: normal;
   }
   
-  body {
-    margin: 15px;
-    /* max-width: 935px;
-    min-height: 470px; */
-    border: 1px solid;
-    border-color: #D7E4E7;
-    border-radius: 6px;
-    box-shadow: 0px 0px 3px 1px #D7E4E773;
-  }
-  
-  h1 {
+   
+  h1.tittle-headline {
     font-weight: 500;
     font-size: 24px;
     line-height: 17px;
@@ -22,7 +13,7 @@
     margin: 23px 0 0 15px;
   }
   
-  h2 {
+  .add-an-img {
     font-size: 16px;
     font-weight: 500;
     line-height: 17px;
@@ -31,16 +22,13 @@
     margin-top: 32px;
   }
   
-  h3 {
+  h3.drop-img{
     font-size: 16px;
     font-weight: 500;
     line-height: 17px;
     text-align: center;
     color: grey;
-    position: relative;
-    left: 1px;
-    top: 148px;
-  }
+   }
   
   .img-container {
     position: relative;
@@ -50,24 +38,25 @@
   }
   
   .img-container img {
-    max-width: 200px; 
+    max-width: 100px; 
     height: auto; 
     position: absolute;
-    top: -66px;
-    left: 25%;  
+    top: -60px;
+    left: 33%;  
+    border: 0 solid #D7E4E7;
+    box-shadow: 0px 0px 3px 1px #D7E4E773;
+    margin: 5px;
+    padding: 0 8px;
    }
   
-   .icon-copy-trash{
+  .icon-copy-trash{
     display: flex;
     gap: 15px;
-    justify-content: end;
-    margin: 42px 162px 0 0;
-    position: relative;
-    left: 1px; top: 150px;
+      }  
+
+    .icon-and-button{
+      display: flex;
+      justify-content: end;
+      align-items: center;
+     
     }
-  
-    .saveBlock{
-     position: relative; 
-      top: 20px; left: 30px;
-    }
-  

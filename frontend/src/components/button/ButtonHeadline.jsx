@@ -1,4 +1,4 @@
-import './ButtonHeadline'
+import './ButtonHeadline.css'
 import PropTypes from 'prop-types';
 
 export default function Button({ children, className, onClick }) {
@@ -9,7 +9,7 @@ function handleClick() {
 }
 
     return (
-    <button className={`button ${className}`} onClick={handleClick}>{ children }</button>
+    <button className={`browse ${className}`} onClick={handleClick}>{ children }</button>
     );
 } 
 Button.propTypes = {

@@ -1,4 +1,4 @@
-button {
+.browse{
     border-radius: 100px;
     border: 1px solid transparent;
     font-size: 16px;
@@ -10,10 +10,8 @@ button {
     cursor: pointer;
     width: 122px;
     height: 41px;
-    position: relative;
-    top: 150px;  
-    left: 43.5%;
-}
+    margin: 63px auto 0; 
+} 
   
   button:focus,
   button:focus-visible {
@@ -21,6 +19,5 @@ button {
   }
   
   .saveBlock {
-    position: absolute;
-    left: 640px; top: 1109px;
-  }
+    margin: 20px; 
+} 
