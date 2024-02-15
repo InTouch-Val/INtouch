@@ -6,6 +6,12 @@ body {
   font-weight: 500;
 }
 
+button {
+  font-family: Montserrat, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+}
+
 .app-container {
   display: flex;
   flex: 1;
@@ -117,4 +123,9 @@ select:focus {
 .welcome-content p {
   margin-bottom: 10px;
   font-size: 1.2em;
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
 }

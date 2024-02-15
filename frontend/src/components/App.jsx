@@ -68,12 +68,18 @@ function App() {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/my-diary" className={({ isActive }) => (isActive ? 'active' : '')}>
+                  <NavLink
+                    to="/my-diary"
+                    className={({ isActive }) => 'disabled' + (isActive ? 'active' : '')}
+                  >
                     <FontAwesomeIcon icon={faBookMedical} /> Diary
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/my-notes" className={({ isActive }) => (isActive ? 'active' : '')}>
+                  <NavLink
+                    to="/my-notes"
+                    className={({ isActive }) => 'disabled' + (isActive ? 'active' : '')}
+                  >
                     <FontAwesomeIcon icon={faNoteSticky} /> Notes
                   </NavLink>
                 </li>

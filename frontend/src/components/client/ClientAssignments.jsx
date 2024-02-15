@@ -8,17 +8,19 @@ function ClientAssignments() {
   const [currentTab, setCurrentTab] = useState('all');
   const [assignments, setAssignments] = useState([]);
   const [filteredAssignments, setFilteredAssignments] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchAssignments = async () => {
       try {
         let response = await API.get('assignments-client/');
-        console.log(response);
         // response = response.data.filter((assignment) => assignment.user === currentUser.id);
         response = response.data;
         setAssignments(response);
+        setIsLoading(false);
       } catch (error) {
         console.error(error.message);
+        setIsLoading(false);
       }
     };
 
@@ -65,7 +67,9 @@ function ClientAssignments() {
         </button>
       </div>
       <div className="assignment-grid">
-        {filteredAssignments.length > 0 ? (
+        {isLoading ? (
+          <div className="nothing-to-show">Loading...</div>
+        ) : filteredAssignments.length > 0 ? (
           filteredAssignments.map((assignment) => (
             <ClientAssignmentCard key={assignment.id} assignmentData={assignment} />
           ))

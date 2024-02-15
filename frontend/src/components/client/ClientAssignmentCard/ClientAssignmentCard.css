@@ -17,6 +17,7 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 8px;
+  column-gap: 5px;
 }
 
 .card__date {
@@ -58,13 +59,21 @@
 }
 
 .card__title {
+  position: relative;
+  overflow: hidden;
   margin: 0;
   color: #656565;
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1.06;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.card__actions {
+.card__action-container {
+  position: relative;
+}
+
+.card__action-button {
   width: 27px;
   height: 33px;
   padding: 0;
@@ -74,13 +83,80 @@
   cursor: pointer;
 }
 
+.card__action-menu {
+  position: absolute;
+  z-index: 1;
+  top: 33px;
+  left: -10px;
+  display: flex;
+  width: 150px;
+  height: 94px;
+  flex-direction: column;
+  padding: 0;
+  border: 2px solid #417d88;
+  border-radius: 6px;
+  margin: 0;
+  background-color: #fff;
+  row-gap: 2px;
+}
+
+.card__action-menu_disabled {
+  display: none;
+}
+
+.card__action-menu-item {
+  list-style: none;
+}
+
+.card__action-menu-item:hover {
+  border-radius: 4px;
+  background-color: #f0f0f0;
+}
+
+.card__action-menu-text {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 10px;
+  border: none;
+  margin: 0;
+  background-color: transparent;
+  color: #656565;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1.06;
+  text-decoration: none;
+}
+
+.card__action-menu-icon {
+  width: 26px;
+  height: 26px;
+  background-size: contain;
+}
+
+.card__action-menu-icon_type_edit {
+  background-image: url('../../../images/edit.svg');
+}
+
+.card__action-menu-icon_type_clear {
+  background-image: url('../../../images/trash.svg');
+}
+
+.card__action-menu-icon_type_duplicate {
+  background-image: url('../../../images/copy.svg');
+}
+
 .card__input-label {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 5px;
   color: #656565;
   column-gap: 5px;
-  font-size: 14px;
+  cursor: pointer;
+  font-size: 16px;
   line-height: 1.06;
 }
 
@@ -96,6 +172,11 @@
   transition: background-color 0.5s;
 }
 
+.card__input-checkbox:focus-visible {
+  outline: 2px solid #00f;
+  outline-offset: 1px;
+}
+
 .card__input-checkbox:checked {
   background-color: #417d88;
 }
@@ -107,7 +188,7 @@
   border-radius: 100%;
   background-color: #417d88;
   content: '';
-  transform: translate(0.1em, 0.1em);
+  transform: translate(0.1em, 0.08em);
   transition:
     transform 0.5s,
     background-color 0.5s;
@@ -115,5 +196,5 @@
 
 .card__input-checkbox:checked::after {
   background-color: #fff;
-  transform: translate(1.25em, 0.1em);
+  transform: translate(1.22em, 0.08em);
 }
