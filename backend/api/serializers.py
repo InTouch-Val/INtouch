@@ -407,6 +407,7 @@ class AssignmentClientSerializer(serializers.ModelSerializer):
     author_name = serializers.StringRelatedField(source='author', read_only=True)
     grade = serializers.IntegerField(required=False)
     review = serializers.CharField(required=False)
+    assignment_root = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = AssignmentClient
         fields = [
@@ -428,6 +429,7 @@ class AssignmentClientSerializer(serializers.ModelSerializer):
             'visible',
             'grade',
             'review',
+            'assignment_root',
         ]
 
     def update(self, instance, validated_data):

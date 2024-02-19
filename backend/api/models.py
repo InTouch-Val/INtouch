@@ -69,7 +69,7 @@ class Assignment(models.Model):
     )
     comments = models.ManyToManyField('Comment', blank=True)
     is_public = models.BooleanField(default=True)
-    grades = ArrayField(models.IntegerField())
+    grades = ArrayField(models.IntegerField(), default=[])
 
     def __str__(self):
         return self.title

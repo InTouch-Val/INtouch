@@ -307,7 +307,34 @@ class AssignmentClientViewSet(viewsets.ModelViewSet):
         assignment = self.get_object()
         assignment.status = 'done'
         assignment.save()
-        return Response({'message': 'Status is done'})
+        return Response({'message': 'Status is "done"'})
+
+    @action(detail=True, methods=['get'])
+    def clear(self, request, pk):
+        """Очистка задачи клиента"""
+        assignment = self.get_object()
+
+        if assignment.status == 'to do':
+            return Response({
+                'message': 'No cleaning required. Status is "to do"'
+            })
+
+        for block in assignment.blocks:
+            if block.type == 'text':
+                block.reply = ''
+            if block.type == 'single' or block.type == 'multiple':
+                for ans in block.choice_replies:
+                    ans.checked = False
+                block.choice_replies.save()
+            if block.type == 'range':
+                pass
+            if block.type == 'image':
+                pass
+            block.save()
+
+        assignment.status = 'to do'
+        assignment.save()
+        return Response({'message': 'Assignments cleared successfully'})
 
 
 class NoteViewSet(viewsets.ModelViewSet):
