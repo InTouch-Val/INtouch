@@ -8,6 +8,9 @@ const useAuth = () => useContext(AuthContext);
 function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [card, setCard] = useState(null);
+
+  console.log(card)
 
   const isLoggedIn = currentUser != null;
 
@@ -49,6 +52,10 @@ function AuthProvider({ children }) {
     }
   };
 
+  function setCurrentCard(card){
+     setCard(card)
+  }
+
   useEffect(() => {
     const initAuth = async () => {
       const accessToken = localStorage.getItem('accessToken');
@@ -72,7 +79,7 @@ function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ currentUser, isLoading, isLoggedIn, login, logout, updateUserData }}
+      value={{ currentUser, isLoading, isLoggedIn, login, logout, updateUserData, card, setCurrentCard }}
     >
       {!isLoading && children}
     </AuthContext.Provider>

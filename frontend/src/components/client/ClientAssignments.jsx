@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useAuth } from '../../service/authContext';
 import { API } from '../../service/axios';
 import { ClientAssignmentCard } from './ClientAssignmentCard/ClientAssignmentCard';
+import { AuthProvider } from '../../service/authContext';
 
 function ClientAssignments() {
   const { currentUser } = useAuth();
@@ -9,6 +10,7 @@ function ClientAssignments() {
   const [assignments, setAssignments] = useState([]);
   const [filteredAssignments, setFilteredAssignments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { setCurrentCard, card } = useAuth();
 
   useEffect(() => {
     const fetchAssignments = async () => {
@@ -41,6 +43,11 @@ function ClientAssignments() {
     setFilteredAssignments(updatedAssignments);
   }, [currentTab, assignments]);
 
+
+  function openAssignment(card){
+    setCurrentCard(card);
+  }
+
   return (
     <div className="assignments-page">
       <header>
@@ -71,7 +78,7 @@ function ClientAssignments() {
           <div className="nothing-to-show">Loading...</div>
         ) : filteredAssignments.length > 0 ? (
           filteredAssignments.map((assignment) => (
-            <ClientAssignmentCard key={assignment.id} assignmentData={assignment} />
+            <ClientAssignmentCard key={assignment.id} assignmentData={assignment} openAssignment={openAssignment} />
           ))
         ) : (
           <div className="nothing-to-show">You have no assignments. Contact your doctor</div>

@@ -78,7 +78,7 @@ const router = createBrowserRouter([
         element: <ClientAssignments />,
       },
       {
-        path: '/my-assignments/1',
+        path: '/my-assignments/:id',
         element: <CompleteAssignments />,
       },
     ],
