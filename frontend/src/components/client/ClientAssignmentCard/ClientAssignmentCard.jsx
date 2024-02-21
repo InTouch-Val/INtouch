@@ -51,9 +51,8 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
     }, 0);
   }
 
-  function onCardClick(){
-    openAssignment(assignmentData)
-
+  function onCardClick() {
+    openAssignment(assignmentData);
   }
 
   // close a context menu when clicking outside
@@ -75,7 +74,11 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
 
   return (
     <article className="card">
-      <NavLink to={`/my-assignments/${assignmentData?.id}`} className="card__clickable-container" onClick={onCardClick}>
+      <NavLink
+        to={`/my-assignments/${assignmentData?.id}`}
+        className="card__clickable-container"
+        onClick={onCardClick}
+      >
         <div className="card__wrapper-container">
           <span className="card__date">
             {new Date(assignmentData?.add_date)?.toLocaleString('en-US', {

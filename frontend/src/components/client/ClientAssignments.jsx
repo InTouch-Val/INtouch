@@ -43,8 +43,7 @@ function ClientAssignments() {
     setFilteredAssignments(updatedAssignments);
   }, [currentTab, assignments]);
 
-
-  function openAssignment(card){
+  function openAssignment(card) {
     setCurrentCard(card);
   }
 
@@ -78,7 +77,11 @@ function ClientAssignments() {
           <div className="nothing-to-show">Loading...</div>
         ) : filteredAssignments.length > 0 ? (
           filteredAssignments.map((assignment) => (
-            <ClientAssignmentCard key={assignment.id} assignmentData={assignment} openAssignment={openAssignment} />
+            <ClientAssignmentCard
+              key={assignment.id}
+              assignmentData={assignment}
+              openAssignment={openAssignment}
+            />
           ))
         ) : (
           <div className="nothing-to-show">You have no assignments. Contact your doctor</div>

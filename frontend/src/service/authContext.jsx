@@ -10,7 +10,7 @@ function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true);
   const [card, setCard] = useState(null);
 
-  console.log(card)
+  console.log(card);
 
   const isLoggedIn = currentUser != null;
 
@@ -52,8 +52,8 @@ function AuthProvider({ children }) {
     }
   };
 
-  function setCurrentCard(card){
-     setCard(card)
+  function setCurrentCard(card) {
+    setCard(card);
   }
 
   useEffect(() => {
@@ -79,7 +79,16 @@ function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ currentUser, isLoading, isLoggedIn, login, logout, updateUserData, card, setCurrentCard }}
+      value={{
+        currentUser,
+        isLoading,
+        isLoggedIn,
+        login,
+        logout,
+        updateUserData,
+        card,
+        setCurrentCard,
+      }}
     >
       {!isLoading && children}
     </AuthContext.Provider>
