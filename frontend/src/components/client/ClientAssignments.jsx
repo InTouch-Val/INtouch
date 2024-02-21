@@ -51,7 +51,7 @@ function ClientAssignments() {
   return (
     <div className="assignments-page">
       <header>
-        <h1>My Assignments</h1>
+        <h1>Assignments</h1>
       </header>
       <div className="client tabs">
         <button

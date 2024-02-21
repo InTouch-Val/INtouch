@@ -78,7 +78,7 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
       <NavLink to={`/my-assignments/${assignmentData?.id}`} className="card__clickable-container" onClick={onCardClick}>
         <div className="card__wrapper-container">
           <span className="card__date">
-            {new Date(assignmentData?.update_date)?.toLocaleString('en-US', {
+            {new Date(assignmentData?.add_date)?.toLocaleString('en-US', {
               year: 'numeric',
               month: 'short',
               day: 'numeric',
