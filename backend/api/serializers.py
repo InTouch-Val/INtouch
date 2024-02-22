@@ -1,20 +1,14 @@
 import uuid
 
-from django.contrib.auth import authenticate
-from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.hashers import check_password
-from django.core.mail import EmailMultiAlternatives
 from django.core.validators import RegexValidator
 from django.template.loader import render_to_string
-from django.utils import timezone
-from django.utils.html import strip_tags
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from rest_framework_simplejwt.tokens import AccessToken
 
 from .models import *
 from .tasks import remove_unverified_user
+from .utils import current_site, send_by_mail
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -119,20 +113,11 @@ class UserSerializer(serializers.ModelSerializer):
         Doctor.objects.create(user=user)
         token = default_token_generator.make_token(user)
         activation_url = f'/activate/{user.pk}/{token}/'
-        current_site = 'http://85.31.237.54'
         html_message = render_to_string(
             'registration/confirm_mail.html',
             {'url': activation_url, 'domen': current_site, 'name': user.first_name}
         )
-        message = strip_tags(html_message)
-        mail = EmailMultiAlternatives(
-            'Confirmation of Your Account Registration on INtouch',
-            message,
-            'info@intouch.care',
-            [user.email],
-        )
-        mail.attach_alternative(html_message, 'text/html')
-        mail.send()
+        send_by_mail(html_message, user.email)
         return user
 
 
@@ -141,10 +126,22 @@ class PasswordResetSerializer(serializers.Serializer):
 
     def validate_email(self, value):
         try:
-            user = User.objects.get(email=value)
+            User.objects.get(email=value)
         except User.DoesNotExist:
             raise serializers.ValidationError("User with this email does not exist.")
         return value
+
+    def create(self, validated_data):
+        email = validated_data['email']
+        user = User.objects.get(email=email)
+        token = default_token_generator.make_token(user)
+        url = f'/reset-password/{user.pk}/{token}/'
+        html_message = render_to_string(
+            'registration/password_reset.html',
+            {'url': url, 'domen': current_site, 'name': user.first_name}
+        )
+        send_by_mail(html_message, user.email)
+        return {"message": "Password reset email sent."}
 
 
 class ChangePasswordSerializer(serializers.Serializer):
@@ -214,21 +211,12 @@ class AddClientSerializer(serializers.ModelSerializer):
         Client.objects.create(user=user)
         token = default_token_generator.make_token(user)
         activation_url = f'/activate-client/{user.pk}/{token}/'
-        current_site = 'http://85.31.237.54'
         html_message = render_to_string(
             'registration/confirm_mail_client.html',
             {'url': activation_url, 'domen': current_site,
              'name': user.first_name}
         )
-        message = strip_tags(html_message)
-        mail = EmailMultiAlternatives(
-            'Confirmation of Your Account Registration on INtouch',
-            message,
-            'info@intouch.care',
-            [user.email],
-        )
-        mail.attach_alternative(html_message, 'text/html')
-        mail.send()
+        send_by_mail(html_message, user.email)
         remove_unverified_user.send_with_options(args=(user.pk,), delay=300000)
         return user
 
