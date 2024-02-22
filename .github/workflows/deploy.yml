@@ -55,11 +55,10 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /opt/app
-            # docker compose down --rmi all -v || echo '-'
-            # docker compose rm -f -s -v
             docker compose down
             docker image rm ivansitnikov1/repo
             docker compose up -d
+            docker exec -d app-app-1 python manage.py rundramatiq
 
   deploy-frontend:
     runs-on: ubuntu-latest

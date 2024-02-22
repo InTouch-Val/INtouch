@@ -118,6 +118,8 @@ class UserSerializer(serializers.ModelSerializer):
             {'url': activation_url, 'domen': current_site, 'name': user.first_name}
         )
         send_by_mail(html_message, user.email)
+        remove_unverified_user.send_with_options(args=(user.pk,),
+                                                 delay=259200000)
         return user
 
 
@@ -181,6 +183,7 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         user.first_name = validated_data.get('first_name', user.first_name)
         user.last_name = validated_data.get('last_name', user.last_name)
         user.email = validated_data.get('email', user.email)
+        user.username = user.email
         user.date_of_birth = validated_data.get('date_of_birth', user.date_of_birth)
         user.photo = validated_data.get('photo', user.photo)
         user.save()
@@ -217,7 +220,7 @@ class AddClientSerializer(serializers.ModelSerializer):
              'name': user.first_name}
         )
         send_by_mail(html_message, user.email)
-        remove_unverified_user.send_with_options(args=(user.pk,), delay=300000)
+        remove_unverified_user.send_with_options(args=(user.pk,), delay=259200000)
         return user
 
 
