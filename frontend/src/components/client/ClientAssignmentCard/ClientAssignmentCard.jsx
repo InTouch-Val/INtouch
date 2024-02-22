@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import './ClientAssignmentCard.css';
 import { API } from '../../../service/axios';
 
-function ClientAssignmentCard({ assignmentData }) {
+function ClientAssignmentCard({ assignmentData, openAssignment }) {
   const [isShowContextMenu, setIsShowContextMenu] = useState(false);
   const menuReference = useRef(null);
   const buttonReference = useRef(null);
@@ -51,6 +51,10 @@ function ClientAssignmentCard({ assignmentData }) {
     }, 0);
   }
 
+  function onCardClick() {
+    openAssignment(assignmentData);
+  }
+
   // close a context menu when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
@@ -70,10 +74,14 @@ function ClientAssignmentCard({ assignmentData }) {
 
   return (
     <article className="card">
-      <NavLink to={`/my-assignments/${assignmentData?.id}`} className="card__clickable-container">
+      <NavLink
+        to={`/my-assignments/${assignmentData?.id}`}
+        className="card__clickable-container"
+        onClick={onCardClick}
+      >
         <div className="card__wrapper-container">
           <span className="card__date">
-            {new Date(assignmentData?.update_date)?.toLocaleString('en-US', {
+            {new Date(assignmentData?.add_date)?.toLocaleString('en-US', {
               year: 'numeric',
               month: 'short',
               day: 'numeric',

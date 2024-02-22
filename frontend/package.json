@@ -26,7 +26,7 @@
     "form-data": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.22.0"
+    "react-router-dom": "^6.22.1"
   },
   "devDependencies": {
     "@awmottaz/prettier-plugin-void-html": "^1.5.0",

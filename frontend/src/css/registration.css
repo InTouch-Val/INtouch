@@ -113,7 +113,6 @@ input[type='checkbox']:focus {
 }
 
 .registration-client {
-  display: flex;
   width: 720px;
   max-height: 946px;
   flex-direction: column;
@@ -121,14 +120,13 @@ input[type='checkbox']:focus {
   background-color: #fff;
   box-shadow: 0 4px 8px rgb(0 0 0 / 20%);
 }
-
 .registration__logo {
-  width: 88px;
   height: 93px;
+  width: 88px;
   margin-top: 30px;
 }
-
 .registration__header {
+  font-family: 'Itim', 'Arial, sans-serif';
   max-width: 430px;
   color: rgb(65 125 136 / 100%);
   font-family: Itim, Arial, sans-serif;
@@ -136,7 +134,6 @@ input[type='checkbox']:focus {
   line-height: 30px;
   text-align: center;
 }
-
 .registration__form {
   display: flex;
   flex-direction: column;
@@ -144,28 +141,29 @@ input[type='checkbox']:focus {
   justify-content: center;
   row-gap: 20px;
 }
-
-.registration-client__input {
+.registartion-client__input {
   width: 435px;
   height: 35px;
   padding-left: 10px;
   border: 1px solid rgb(65 125 136 / 70%);
   border-radius: 10px;
 }
-
 .registration-client__checkbox {
+  font-family: 'Raleway', 'Arial, sans-serif';
+  color: rgba(101, 101, 101, 1);
   padding-left: 10px;
   color: rgb(101 101 101 / 100%);
   font-family: Raleway, Arial, sans-serif;
   font-size: 22px;
 }
-
 .registration-client__checkbox-box {
   margin-top: 20px;
   margin-bottom: 20px;
 }
-
 .registration__button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   width: 230px;
   height: 57px;
   padding: 15px 10px;
@@ -178,5 +176,5 @@ input[type='checkbox']:focus {
   cursor: pointer;
   font-family: Raleway, Arial, sans-serif;
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 700px;
 }

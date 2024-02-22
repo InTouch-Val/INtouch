@@ -85,13 +85,13 @@ function ClientRegistrationPage() {
   return (
     <div className="registration-page">
       <div onSubmit={handleSubmit} className="registration-client">
-        <img src={logo} className="registration__logo" alt="logo" />
+        <img src={logo} className="registration__logo" alt="logo"></img>
         <h2 className="registration__header">
-          Hello and Welcome to InTouch! Set Your Password To Proceed
+          Hello and Welcome to INtouch! Set Your Password To Proceed
         </h2>
         <form className="registration__form">
           <input
-            className="registration-client__input"
+            className="registartion-client__input"
             type="text"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
@@ -99,7 +99,7 @@ function ClientRegistrationPage() {
             required
           />
           <input
-            className="registration-client__input"
+            className="registartion-client__input"
             type="text"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
@@ -107,7 +107,7 @@ function ClientRegistrationPage() {
             required
           />
           <input
-            className="registration-client__input"
+            className="registartion-client__input"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -115,7 +115,7 @@ function ClientRegistrationPage() {
             required
           />
           <input
-            className="registration-client__input"
+            className="registartion-client__input"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -123,7 +123,7 @@ function ClientRegistrationPage() {
             required
           />
           <input
-            className="registration-client__input"
+            className="registartion-client__input"
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
