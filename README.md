@@ -38,9 +38,9 @@ pk, token из url из письма. Возвращает access и refresh т�
 **PUT: api/v1/client/update/{pk}/** - редактирование данных о клиенте  
 Тело запроса: date_of_birth, client{diagnosis, about}  
 
-##### Задачи
+##### Задачи доктора
 **POST: api/v1/assignments/** - создание задачи  
-Тело запроса: title, text, assignment_type, tags, language, image_url, blocks[question, description, type, choice_replies[reply, reply ...], start_range, end_range]  
+Тело запроса: title, text, assignment_type, tags, language, image_url, blocks[] 
 **GET: api/v1/assignments/** - список задач  
 **GET: api/v1/assignments/{pk}/** - получение задачи по id  
 **DELETE: api/v1/assignments/{pk}** - удаление задания  
@@ -49,21 +49,44 @@ pk, token из url из письма. Возвращает access и refresh т�
 **GET: api/v1/assignments/add-list/{pk}/** - добавление задачи в My List  
 **GET: api/v1/assignments/delete-list/{pk}/** - удаление задачи из My List  
 **GET: api/v1/assignments/set-client/{pk}/{client_pk}/** - назначение задачи клиенту  
+##### Задачи клиента
 **GET: api/v1/assignments-client/** - список задач клиентов  
 **GET: api/v1/assignments-client/{pk}/** - получение задачи клиента по id  
 **DELETE: api/v1/assignments-client/{pk}/** - удаление задания клиента  
 **PUT: api/v1/assignments-client/{pk}/** - редактирование задания клиента  
 **GET: api/v1/assignments-client/{pk}/complete/** - смена статуса задания на DONE  
-**GET: api/v1/assignments-client/{pk}/clear/** - очистка задания клиента  
+**GET: api/v1/assignments-client/{pk}/clear/** - очистка задания клиента
 
 Дубликат задания клиента - запрос на **GET: api/v1/assignments/set-client/{pk}/{client_pk}/**  
 pk - из поля assignments_root  
+##### Блоки
+В POST-запросах указана логика создания домашек. Дополнительные поля в GET-запросах так же указываются в PUT-запросах при заполнении домашки со стороны клиента.
 
+Open-ended  
+POST: {question: "question", type: "open_ended"}  
+GET: {question: "question", reply: "reply"}
+
+Single-choice, multiple-choice  
+POST: {question: "question", choice_replies:[{reply: "reply"}], type: "single_choice/multiple_choice"}  
+GET: {question: "question", choice_replies:[{reply: "reply", checked: false}]}
+
+Range  
+POST: {question: "question", start_range: 1, end_range: 10, left_pole: "name_pole", right_pole: "name_pole", type: "range"}  
+GET: {question: "question", start_range: 1, end_range: 10b, left_pole: "name_pole", right_pole: "name_pole", reply_range: 10}
+
+Text  
+POST: {description: "description", type: "text"}
+
+Image  
+POST: {question: "question", image: image, type: "image"}  
+
+##### Заметки
 **GET: api/v1/notes/** - список заметок  
 **GET: api/v1/notes/{pk}/** - получение заметки по id  
 **POST: api/v1/notes/** - создание заметки  
 Тело запроса: title, content  
 **DELETE: api/v1/notes/{pk}/** - удаление заметки  
+##### Дневник
 **GET: api/v1/diary-notes/** - список заметок в дневнике  
 **GET: api/v1/diary-notes/{pk}/** - получение заметки в дневнике по id  
 **POST: api/v1/diary-notes/** - создание заметки в дневнике  

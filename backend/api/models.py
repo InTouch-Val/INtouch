@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.contrib.postgres.fields import ArrayField
+from django.core.exceptions import ValidationError
 from django.db import models
 
 
@@ -69,7 +70,7 @@ class Assignment(models.Model):
     )
     comments = models.ManyToManyField('Comment', blank=True)
     is_public = models.BooleanField(default=True)
-    grades = ArrayField(models.IntegerField(), default=[])
+    grades = ArrayField(models.IntegerField(), default=list)
 
     def __str__(self):
         return self.title
@@ -112,18 +113,20 @@ class AssignmentClient(models.Model):
 
 
 class Block(models.Model):
-    question = models.CharField(max_length=250)
-    reply = models.TextField(blank=True)
+    question = models.CharField(max_length=250, default='')
+    reply = models.TextField(blank=True, default='')
     type = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     choice_replies = models.ManyToManyField(
         'BlockChoice',
-        blank=True
+        blank=True,
+        default=list,
     )
     start_range = models.IntegerField(default=1)
     end_range = models.IntegerField(default=10)
-    left_pole = models.CharField(max_length=50)
-    right_pole = models.CharField(max_length=50)
+    left_pole = models.CharField(max_length=50, default='left pole')
+    right_pole = models.CharField(max_length=50, default='right pole')
+    reply_range = models.IntegerField(null=True, blank=True)
     image = models.ImageField(
         upload_to='block_images',
         blank=True,

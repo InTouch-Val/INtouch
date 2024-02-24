@@ -295,14 +295,14 @@ class AssignmentClientViewSet(viewsets.ModelViewSet):
             })
 
         for block in assignment.blocks:
-            if block.type == 'text':
+            if block.type == 'open_ended':
                 block.reply = ''
-            if block.type == 'single' or block.type == 'multiple':
+            if block.type == 'single_choice' or block.type == 'multiple_choice':
                 for ans in block.choice_replies:
                     ans.checked = False
                 block.choice_replies.save()
             if block.type == 'range':
-                pass
+                block.reply_range = None
             if block.type == 'image':
                 pass
             block.save()

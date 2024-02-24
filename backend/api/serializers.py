@@ -298,15 +298,22 @@ class BlockChoiceSerializer(serializers.ModelSerializer):
 
 
 class BlockSerializer(serializers.ModelSerializer):
-    choice_replies = BlockChoiceSerializer(many=True, required=False)
-    left_pole = serializers.CharField(required=False)
-    right_pole = serializers.CharField(required=False)
+    reply_range = serializers.IntegerField(required=False)
     image = serializers.ImageField(required=False)
     class Meta:
         model = Block
         fields = '__all__'
 
     def create(self, validated_data):
+        TYPE_CHOICES = [
+            'open_ended',
+            'single_choice',
+            'multiple_choice',
+            'range',
+            'image'
+        ]
+        if validated_data['type'] not in TYPE_CHOICES:
+            raise serializers.ValidationError('Invalid type value')
         choice_replies_data = validated_data.pop('choice_replies', [])
         block = Block.objects.create(**validated_data)
         for choice_data in choice_replies_data:
