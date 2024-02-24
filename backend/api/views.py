@@ -311,6 +311,13 @@ class AssignmentClientViewSet(viewsets.ModelViewSet):
         assignment.save()
         return Response({'message': 'Assignments cleared successfully'})
 
+    @action(detail=True, methods=['get'])
+    def visible(self, request, pk):
+        """Смена значения видимости задания для доктора"""
+        assignment = self.get_object()
+        assignment.visible = not assignment.visible
+        return Response({'message': 'Visibility changed'})
+
 
 class NoteViewSet(viewsets.ModelViewSet):
     """CRUD операции над заметками"""

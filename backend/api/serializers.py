@@ -399,6 +399,7 @@ class AssignmentClientSerializer(serializers.ModelSerializer):
     grade = serializers.IntegerField(required=False)
     review = serializers.CharField(required=False)
     assignment_root = serializers.PrimaryKeyRelatedField(read_only=True)
+    visible = serializers.BooleanField(read_only=True)
     class Meta:
         model = AssignmentClient
         fields = [
@@ -425,7 +426,6 @@ class AssignmentClientSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.status = 'in progress'
-        instance.visible = validated_data['visible']
         grade = validated_data.get('grade')
         if grade:
             instance.grade = grade
