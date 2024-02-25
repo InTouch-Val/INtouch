@@ -1,4 +1,4 @@
-import { ImageSelector } from '../service/image-selector';
+import { ImageSelector } from '../../service/image-selector';
 
 function ImageQuestionBlock({ block, updateBlock }) {
   return (

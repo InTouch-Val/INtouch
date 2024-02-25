@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { EditorToolbar } from '../service/editors-toolbar';
 import '../css/block.css';
-import HeadlinerImg from '../components/HeadlinerImg/HeadlinerImg';
+import HeadlinerImg from '../components/psy/HeadlinerImg/HeadlinerImg';
 
 function AssignmentBlock({ block, updateBlock, removeBlock, readOnly }) {
   const [title, setTitle] = useState(block.title);
@@ -210,7 +210,7 @@ function AssignmentBlock({ block, updateBlock, removeBlock, readOnly }) {
             <FontAwesomeIcon icon={faTrashCan} />
           </button>
         </div>
-        
+
         <div className="range-inputs">
           <div className="number-input-container">
             <button onClick={(e) => handleMinChange(-1, e)}>-</button>
@@ -244,14 +244,14 @@ function AssignmentBlock({ block, updateBlock, removeBlock, readOnly }) {
   if (block.type === 'image') {
     return (
       <div className="block">
-        <div className="control-panel">
+        <div className="control-panel"></div>
+
+        <div>
+          <HeadlinerImg />
+        </div>
       </div>
+    );
+  }
+}
 
-            <div> 
-              <HeadlinerImg />
-            </div>
-   </div>
-      )}
-    }
-
-export { AssignmentBlock }
+export { AssignmentBlock };

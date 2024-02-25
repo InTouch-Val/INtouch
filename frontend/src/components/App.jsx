@@ -11,7 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../service/authContext';
 import '../css/app.css';
-import HeadlinerImg from './HeadlinerImg/HeadlinerImg';
+import HeadlinerImg from './psy/HeadlinerImg/HeadlinerImg';
 
 function App() {
   const { currentUser, logout, isLoading } = useAuth();
@@ -102,8 +102,8 @@ function App() {
                   Support
                 </NavLink>
               </li> */}
-             
-               <li>
+
+              <li>
                 <button id="logout" onClick={handleLogout}>
                   <FontAwesomeIcon icon={faArrowRightFromBracket} /> Logout
                 </button>

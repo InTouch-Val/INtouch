@@ -1,0 +1,22 @@
+.browse {
+  width: 122px;
+  height: 41px;
+  border: 1px solid transparent;
+  border-radius: 100px;
+  margin: 63px auto 0;
+  background-color: #417d88;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  line-height: 16px;
+}
+
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.saveBlock {
+  margin: 20px;
+}
