@@ -23,13 +23,13 @@ function App() {
     navigate('/login');
   }, [logout, navigate]);
 
+  const isDoctor = currentUser?.user_type === 'doctor';
+
   useEffect(() => {
     if (!isLoading && !currentUser) {
       handleLogout();
     }
   }, [currentUser, isLoading, handleLogout]);
-
-  const isDoctor = currentUser?.user_type === 'doctor';
 
   return (
     <div className="app-container">
@@ -70,12 +70,18 @@ function App() {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/my-diary" className={({ isActive }) => (isActive ? 'active' : '')}>
+                  <NavLink
+                    to="/my-diary"
+                    className={({ isActive }) => 'disabled' + (isActive ? 'active' : '')}
+                  >
                     <FontAwesomeIcon icon={faBookMedical} /> Diary
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/my-notes" className={({ isActive }) => (isActive ? 'active' : '')}>
+                  <NavLink
+                    to="/my-notes"
+                    className={({ isActive }) => 'disabled' + (isActive ? 'active' : '')}
+                  >
                     <FontAwesomeIcon icon={faNoteSticky} /> Notes
                   </NavLink>
                 </li>

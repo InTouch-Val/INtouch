@@ -26,7 +26,7 @@ function EditorToolbar({ editorState, setEditorState }) {
   };
 
   return (
-    <div className="editorContainer" onClick={focusEditor}>
+    <div className="editor-container" onClick={focusEditor}>
       <Editor
         ref={editor}
         editorState={editorState}

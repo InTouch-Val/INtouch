@@ -1,7 +1,5 @@
-from django.urls import reverse_lazy
 from django.core.exceptions import PermissionDenied
-from rest_framework import generics, viewsets, status
-from rest_framework.authentication import TokenAuthentication
+from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view, action
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -11,6 +9,7 @@ from rest_framework_simplejwt.exceptions import TokenError
 
 from .models import *
 from .serializers import *
+from .utils import send_by_mail
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -53,15 +52,7 @@ class UserConfirmEmailView(APIView):
             user.save()
             refresh = RefreshToken.for_user(user)
             html_message = render_to_string('registration/welcome_mail.html')
-            message = strip_tags(html_message)
-            mail = EmailMultiAlternatives(
-                'Welcome to INtouch!',
-                message,
-                'info@intouch.care',
-                [user.email],
-            )
-            mail.attach_alternative(html_message, 'text/html')
-            mail.send()
+            send_by_mail(html_message, user.email)
             return Response({
                 'message': 'Account activated',
                 'access_token': str(refresh.access_token),
@@ -74,28 +65,12 @@ class UserConfirmEmailView(APIView):
 class PasswordResetRequestView(APIView):
     """Запрос на сброс пароля"""
     permission_classes = (AllowAny,)
+
     def post(self, request):
         serializer = PasswordResetSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        email = serializer.validated_data['email']
-        user = User.objects.get(email=email)
-        token = default_token_generator.make_token(user)
-        url = f'/reset-password/{user.pk}/{token}/'
-        current_site = 'http://85.31.237.54'
-        html_message = render_to_string(
-            'registration/password_reset.html',
-            {'url': url, 'domen': current_site, 'name': user.first_name}
-        )
-        message = strip_tags(html_message)
-        mail = EmailMultiAlternatives(
-            'Password Reset for INtouch Account',
-            message,
-            'info@intouch.care',
-            [email],
-        )
-        mail.attach_alternative(html_message, 'text/html')
-        mail.send()
-        return Response({"message": "Password reset email sent."})
+        response_data = serializer.save()
+        return Response(response_data)
 
 
 class PasswordResetConfirmView(generics.GenericAPIView):
@@ -307,7 +282,41 @@ class AssignmentClientViewSet(viewsets.ModelViewSet):
         assignment = self.get_object()
         assignment.status = 'done'
         assignment.save()
-        return Response({'message': 'Status is done'})
+        return Response({'message': 'Status is "done"'})
+
+    @action(detail=True, methods=['get'])
+    def clear(self, request, pk):
+        """Очистка задачи клиента"""
+        assignment = self.get_object()
+
+        if assignment.status == 'to do':
+            return Response({
+                'message': 'No cleaning required. Status is "to do"'
+            })
+
+        for block in assignment.blocks:
+            if block.type == 'text':
+                block.reply = ''
+            if block.type == 'single' or block.type == 'multiple':
+                for ans in block.choice_replies:
+                    ans.checked = False
+                block.choice_replies.save()
+            if block.type == 'range':
+                pass
+            if block.type == 'image':
+                pass
+            block.save()
+
+        assignment.status = 'to do'
+        assignment.save()
+        return Response({'message': 'Assignments cleared successfully'})
+
+    @action(detail=True, methods=['get'])
+    def visible(self, request, pk):
+        """Смена значения видимости задания для доктора"""
+        assignment = self.get_object()
+        assignment.visible = not assignment.visible
+        return Response({'message': 'Visibility changed'})
 
 
 class NoteViewSet(viewsets.ModelViewSet):

@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookmark, faTrashCan } from '@fortawesome/free-solid-svg-icons';
-import { API } from '../service/axios';
-import { Modal } from '../service/modal';
-import '../css/assignment-tile.css';
+import { API } from '../../service/axios';
+import { Modal } from '../../service/modal';
+import '../../css/assignment-tile.css';
 
 const formatDate = (dateString) => {
   const options = { year: 'numeric', month: 'short', day: 'numeric' };

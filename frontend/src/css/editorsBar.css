@@ -1,4 +1,4 @@
-.editorContainer {
+.editor-container {
   min-height: 100px; /* минимальная высота */
   padding: 10px; /* отступы внутри, как у textarea */
   border: 1px solid #ddd; /* граница, как у textarea */
@@ -8,6 +8,6 @@
   cursor: text;
 }
 
-.editorContainer .DraftEditor-root {
+.editor-container .DraftEditor-root {
   min-height: 100px; /* минимальная высота */
 }

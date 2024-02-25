@@ -43,7 +43,7 @@ function SettingsPage() {
   );
 }
 
-const ProfileTab = () => {
+function ProfileTab() {
   const { currentUser, updateUserData } = useAuth();
   const [userData, setUserData] = useState({
     firstName: currentUser.first_name || '',
@@ -162,7 +162,7 @@ const ProfileTab = () => {
       </div>
     </div>
   );
-};
+}
 
 const SecurityTab = () => {
   const [userPassword, setUserPassword] = useState({

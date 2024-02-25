@@ -1,0 +1,32 @@
+@font-face {
+  font-display: swap;
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: 500;
+  src:
+    local('Montserrat'),
+    local('Montserrat Medium'),
+    url('./Montserrat-Medium.woff2?v=7.222') format('woff2');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: 600;
+  src:
+    local('Montserrat'),
+    local('Montserrat SemiBold'),
+    url('./Montserrat-SemiBold.woff2?v=7.222') format('woff2');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: 700;
+  src:
+    local('Montserrat'),
+    local('Montserrat Bold'),
+    url('./Montserrat-Bold.woff2?v=7.222') format('woff2');
+}

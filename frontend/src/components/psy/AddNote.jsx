@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { EditorState } from 'draft-js';
-import { EditorToolbar } from '../service/editors-toolbar';
-import { API } from '../service/axios';
-import '../css/note.css';
+import { EditorToolbar } from '../../service/editors-toolbar';
+import { API } from '../../service/axios';
+import '../../css/note.css';
 
 function AddNote() {
   const { id } = useParams();

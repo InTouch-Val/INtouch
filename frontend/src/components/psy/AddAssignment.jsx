@@ -8,13 +8,15 @@ import {
   faCircleDot,
   faEllipsis,
 } from '@fortawesome/free-solid-svg-icons';
-import { API } from '../service/axios';
-import { AssignmentBlock } from '../service/assignment-blocks';
-import { ImageSelector } from '../service/image-selector';
-import { useAuth } from '../service/authContext';
-import { Modal } from '../service/modal';
+import { API } from '../../service/axios';
+import { AssignmentBlock } from '../../service/assignment-blocks';
+import { ImageSelector } from '../../service/image-selector';
+import { useAuth } from '../../service/authContext';
+import { Modal } from '../../service/modal';
+import { Headline } from './Headline';
+import { ImageQuestionBlock } from './ImageQuestionBlock';
 import  HeadlinerImg from './HeadlinerImg/HeadlinerImg';
-import '../css/assignments.css';
+import '../../css/assignments.css';
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
@@ -161,7 +163,6 @@ function AddAssignment() {
   };
 
   const addBlock = (type) => {
-    console.log(type);
     const newBlock = {
       id: blocks.length + 1,
       type,
@@ -225,8 +226,12 @@ function AddAssignment() {
         <form onSubmit={handleSubmit} className="form-creator">
           {blocks.map((block, index) => (
             <div key={index}>
+              {block.type === 'headline' && <Headline block={block} updateBlock={updateBlock} />}
+              {block.type === 'imageQuestion' && (
+                <ImageQuestionBlock block={block} updateBlock={updateBlock} />
+              )}
               {block.type === 'headlinerImg' && <HeadlinerImg block={block} updateBlock={updateBlock} />}
-             </div>
+            </div>
           ))}
           <div className="form-title">
             <input
@@ -282,7 +287,6 @@ function AddAssignment() {
               removeBlock={removeBlock}
             />
           ))}
-          ;
         </form>
         <div className="block-buttons-container">
           <div className="block-buttons">
@@ -299,7 +303,7 @@ function AddAssignment() {
               <FontAwesomeIcon icon={faEllipsis} />
             </button>
             <button title="Add Image" onClick={() => addBlock('image')}>
-              <FontAwesomeIcon icon={faEllipsis} />
+              <FontAwesomeIcon icon={faImage} />
             </button>
           </div>
         </div>

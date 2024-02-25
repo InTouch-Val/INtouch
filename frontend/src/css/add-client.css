@@ -27,7 +27,6 @@
   border: 1px solid #ddd;
   border-radius: 4px;
   margin-bottom: 20px;
-  font-family: Montserrat, sans-serif;
 }
 
 .add-client-form button {
@@ -39,8 +38,7 @@
   background-color: #417d88;
   color: white;
   cursor: pointer;
-  font-family: Montserrat, sans-serif;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .success-message,

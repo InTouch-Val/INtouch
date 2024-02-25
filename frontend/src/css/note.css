@@ -5,7 +5,6 @@
 .add-note-container h2 {
   color: #656565;
   font-size: 32px;
-  font-weight: 500;
 }
 
 .add-note-container input {
@@ -17,6 +16,5 @@
   margin-bottom: 20px;
   box-shadow: 0 0 3px 1px rgb(215 228 231 / 90%);
   color: #656565;
-  font-family: Montserrat, sans-serif;
   font-size: 20px;
 }

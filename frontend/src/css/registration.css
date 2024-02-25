@@ -92,6 +92,7 @@
 
 .form-buttons {
   display: flex;
+  margin-bottom: 20px;
 }
 
 input[type='checkbox'],
@@ -109,4 +110,71 @@ input[type='checkbox']:focus {
   .password-field input {
     width: 100%; /* Full width on small screens */
   }
+}
+
+.registration-client {
+  width: 720px;
+  max-height: 946px;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgb(0 0 0 / 20%);
+}
+.registration__logo {
+  height: 93px;
+  width: 88px;
+  margin-top: 30px;
+}
+.registration__header {
+  font-family: 'Itim', 'Arial, sans-serif';
+  max-width: 430px;
+  color: rgb(65 125 136 / 100%);
+  font-family: Itim, Arial, sans-serif;
+  font-size: 32px;
+  line-height: 30px;
+  text-align: center;
+}
+.registration__form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 20px;
+}
+.registartion-client__input {
+  width: 435px;
+  height: 35px;
+  padding-left: 10px;
+  border: 1px solid rgb(65 125 136 / 70%);
+  border-radius: 10px;
+}
+.registration-client__checkbox {
+  font-family: 'Raleway', 'Arial, sans-serif';
+  color: rgba(101, 101, 101, 1);
+  padding-left: 10px;
+  color: rgb(101 101 101 / 100%);
+  font-family: Raleway, Arial, sans-serif;
+  font-size: 22px;
+}
+.registration-client__checkbox-box {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.registration__button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 230px;
+  height: 57px;
+  padding: 15px 10px;
+  border: none;
+  border-radius: 100px;
+  margin: 15px 10px 50px;
+  appearance: none;
+  background-color: #417d88;
+  color: #fff;
+  cursor: pointer;
+  font-family: Raleway, Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 700px;
 }

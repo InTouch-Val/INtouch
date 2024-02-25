@@ -1,1 +1,2 @@
-@import url(./clients-components/CompleteAssignments/CompleteAssignments.css);
+@import url('./vendor/fonts/fonts.css');
+@import url('./components/client/CompleteAssignments/CompleteAssignments.css');

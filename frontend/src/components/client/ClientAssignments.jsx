@@ -1,23 +1,28 @@
-import { useState, useEffect } from 'react';
-import { useAuth } from '../service/authContext';
-import { API } from '../service/axios';
-import { ClientAssignmentTile } from '../components/AssignmentTile';
+import { useState, useEffect, useContext } from 'react';
+import { useAuth } from '../../service/authContext';
+import { API } from '../../service/axios';
+import { ClientAssignmentCard } from './ClientAssignmentCard/ClientAssignmentCard';
+import { AuthProvider } from '../../service/authContext';
 
-function ClientsAssignments() {
+function ClientAssignments() {
   const { currentUser } = useAuth();
   const [currentTab, setCurrentTab] = useState('all');
   const [assignments, setAssignments] = useState([]);
   const [filteredAssignments, setFilteredAssignments] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { setCurrentCard, card } = useAuth();
 
   useEffect(() => {
     const fetchAssignments = async () => {
       try {
-        var response = await API.get('assignments-client/');
-        console.log(response);
-        response = response.data.filter((assignment) => assignment.user === currentUser.id);
+        let response = await API.get('assignments-client/');
+        // response = response.data.filter((assignment) => assignment.user === currentUser.id);
+        response = response.data;
         setAssignments(response);
+        setIsLoading(false);
       } catch (error) {
         console.error(error.message);
+        setIsLoading(false);
       }
     };
 
@@ -25,7 +30,8 @@ function ClientsAssignments() {
   }, [currentUser.id]);
 
   useEffect(() => {
-    let updatedAssignments = [...assignments];
+    // let updatedAssignments = [...assignments];
+    let updatedAssignments = assignments;
 
     // Filter assignments based on status
     if (currentTab !== 'all') {
@@ -37,10 +43,14 @@ function ClientsAssignments() {
     setFilteredAssignments(updatedAssignments);
   }, [currentTab, assignments]);
 
+  function openAssignment(card) {
+    setCurrentCard(card);
+  }
+
   return (
     <div className="assignments-page">
       <header>
-        <h1>My Assignments</h1>
+        <h1>Assignments</h1>
       </header>
       <div className="client tabs">
         <button
@@ -63,16 +73,22 @@ function ClientsAssignments() {
         </button>
       </div>
       <div className="assignment-grid">
-        {filteredAssignments.length > 0 ? (
+        {isLoading ? (
+          <div className="nothing-to-show">Loading...</div>
+        ) : filteredAssignments.length > 0 ? (
           filteredAssignments.map((assignment) => (
-            <ClientAssignmentTile key={assignment.id} assignment={assignment} />
+            <ClientAssignmentCard
+              key={assignment.id}
+              assignmentData={assignment}
+              openAssignment={openAssignment}
+            />
           ))
         ) : (
-          <div className="nothing-to-show">You have no assignments. Contact your doctor.</div>
+          <div className="nothing-to-show">You have no assignments. Contact your doctor</div>
         )}
       </div>
     </div>
   );
 }
 
-export { ClientsAssignments };
+export { ClientAssignments };

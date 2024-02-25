@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { API } from '../axios';
 import { useAuth } from '../authContext';
 import '../../css/registration.css';
+import logo from '../../images/logo.svg';
 
 function ClientRegistrationPage() {
   const [firstName, setFirstName] = useState('');
@@ -83,59 +84,71 @@ function ClientRegistrationPage() {
 
   return (
     <div className="registration-page">
-      <form onSubmit={handleSubmit} className="registration-form">
-        <h2>
-          Hello and Welcome to InTouch!
-          <br /> Set Your Password To Proceed
+      <div onSubmit={handleSubmit} className="registration-client">
+        <img src={logo} className="registration__logo" alt="logo"></img>
+        <h2 className="registration__header">
+          Hello and Welcome to INtouch! Set Your Password To Proceed
         </h2>
-        <input
-          type="text"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          placeholder="First Name"
-          required
-        />
-        <input
-          type="text"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-          placeholder="Last Name"
-          required
-        />
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          required
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          required
-        />
-        <input
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          placeholder="Confirm Password"
-          required
-        />
-        <label>
+        <form className="registration__form">
           <input
-            type="checkbox"
-            checked={acceptTerms}
-            onChange={(e) => setAcceptTerms(e.target.checked)}
+            className="registartion-client__input"
+            type="text"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            placeholder="First Name"
+            required
           />
-          Accept Terms and Conditions
-        </label>
-        {error && <div className="error-message">{error}</div>}
-        <div className="form-buttons">
-          <button type="submit">Set Password</button>
-        </div>
-      </form>
+          <input
+            className="registartion-client__input"
+            type="text"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            placeholder="Last Name"
+            required
+          />
+          <input
+            className="registartion-client__input"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+            required
+          />
+          <input
+            className="registartion-client__input"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            required
+          />
+          <input
+            className="registartion-client__input"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder="Confirm Password"
+            required
+          />
+          <div className="registration-client__checkbox-box">
+            <input
+              className="registration-client__checkbox-input"
+              type="checkbox"
+              checked={acceptTerms}
+              onChange={(e) => setAcceptTerms(e.target.checked)}
+            />
+            <label className="registration-client__checkbox">
+              I agree with the terms and conditions
+            </label>
+          </div>
+          {error && <div className="error-message">{error}</div>}
+          <div className="form-buttons">
+            <button type="submit" className="registration__button">
+              Set Password
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

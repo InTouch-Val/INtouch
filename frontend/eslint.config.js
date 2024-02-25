@@ -14,8 +14,8 @@ const compat = new FlatCompat({
 });
 
 export default [
-  eslintPluginUnicorn.configs['flat/recommended'],
   ...compat.extends('airbnb', 'plugin:react/jsx-runtime', 'airbnb/hooks'),
+  eslintPluginUnicorn.configs['flat/recommended'],
   eslintConfigPrettier,
   {
     files: ['**/*.js', '**/*.jsx'],
@@ -38,6 +38,12 @@ export default [
       'spaced-comment': 'off',
       'unicorn/filename-case': 'off',
       'react/jsx-boolean-value': 'off',
+      'jsx-a11y/label-has-associated-control': [
+        2,
+        {
+          assert: 'either',
+        },
+      ],
     },
   },
   {

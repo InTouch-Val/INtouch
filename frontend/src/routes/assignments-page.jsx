@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { API } from '../service/axios';
-import { AssignmentTile } from '../components/AssignmentTile';
+import { AssignmentTile } from '../components/psy/AssignmentTile';
 import '../css/assignments.css';
 
 function AssignmentsPage() {

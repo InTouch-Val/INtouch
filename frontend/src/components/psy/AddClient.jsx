@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { useAuth } from '../service/authContext';
-import { API } from '../service/axios';
-import '../css/add-client.css';
+import { useAuth } from '../../service/authContext';
+import { API } from '../../service/axios';
+import '../../css/add-client.css';
 
 function AddClient() {
   const [clientData, setClientData] = useState({
