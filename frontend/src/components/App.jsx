@@ -100,6 +100,7 @@ function App() {
                   Support
                 </NavLink>
               </li> */}
+
               <li>
                 <button id="logout" onClick={handleLogout}>
                   <FontAwesomeIcon icon={faArrowRightFromBracket} /> Logout

@@ -1,0 +1,54 @@
+h1.tittle-headline {
+  margin: 23px 0 0 15px;
+  color: #417d88;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 17px;
+}
+
+.add-an-img {
+  margin-top: 32px;
+  color: #417d88;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 17px;
+  text-align: center;
+}
+
+h3.drop-img {
+  color: grey;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 17px;
+  text-align: center;
+}
+
+.img-container {
+  position: relative;
+  max-width: 400px;
+  margin: 63px auto;
+  text-align: center;
+}
+
+.img-container img {
+  position: absolute;
+  top: -60px;
+  left: 33%;
+  max-width: 100px;
+  height: auto;
+  padding: 0 8px;
+  border: 0 solid #d7e4e7;
+  margin: 5px;
+  box-shadow: 0 0 3px 1px #d7e4e773;
+}
+
+.icon-copy-trash {
+  display: flex;
+  gap: 15px;
+}
+
+.icon-and-button {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}

@@ -66,10 +66,7 @@
   display: block;
   width: 375px;
   height: 206px;
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin: 20px auto;
 }
 
 .aassignment__paragraph {
