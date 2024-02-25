@@ -252,6 +252,62 @@ function AssignmentBlock({ block, updateBlock, removeBlock, readOnly }) {
       </div>
     );
   }
+
+  return (
+    <div className="block">
+      <div className="control-panel">
+        <input
+          type="text"
+          value={title}
+          onChange={handleTitleChange}
+          placeholder="Write question here..."
+          className="block-title-input"
+        />
+        <button type="button" onClick={() => removeBlock(block.id)} className="remove-block-button">
+          <FontAwesomeIcon icon={faTrashCan} />
+        </button>
+      </div>
+      {choices.map((choice, index) => (
+        <div key={index} className="choice-option">
+          {block.type === 'multiple' ? (
+            <input type="checkbox" disabled />
+          ) : (
+            <input type="radio" disabled />
+          )}
+          <input
+            ref={choiceRefs[index]}
+            type="text"
+            value={choice}
+            onChange={(event) => handleChoiceChange(index, event)}
+            placeholder={`Option ${index + 1}`}
+            className="choice-input"
+          />
+          <button
+            type="button"
+            onClick={() => removeChoice(index)}
+            className="remove-choice-button"
+          >
+            <FontAwesomeIcon icon={faXmark} />
+          </button>
+        </div>
+      ))}
+      <div className="choice-option">
+        {block.type === 'single' ? (
+          <input type="radio" disabled style={{ opacity: 0.8 }} />
+        ) : (
+          <input type="checkbox" disabled style={{ opacity: 0.8 }} />
+        )}
+        <input
+          type="text"
+          value=""
+          onFocus={handleNewChoiceFocus}
+          placeholder="Add option..."
+          style={{ opacity: 0.8 }}
+          className="choice-input"
+        />
+      </div>
+    </div>
+  );
 }
 
 export { AssignmentBlock };
