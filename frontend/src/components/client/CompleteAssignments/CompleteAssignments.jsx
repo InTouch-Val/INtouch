@@ -9,7 +9,7 @@ import imageGirl from '../../../images/image_girl.png';
 import arrowLeft from '../../../images/arrow-left.svg';
 import '../../../css/block.css';
 import '../../../css/assignments.css';
-import ClientAssignmentBlocks from '../../../service/clientAssignmentBlocks';
+import { ClientAssignmentBlocks } from '../../../service/clientAssignmentBlocks';
 
 function CompleteAssignments() {
   const [editorStateFirst, setEditorStateFirst] = useState(() => EditorState.createEmpty());
@@ -26,9 +26,6 @@ function CompleteAssignments() {
     blocks: [],
   });
 
-  console.log(assignmentData);
- console.log(assignmentData.blocks)
- 
   function decodeStyledText(jsonData) {
     // Parse the JSON data
     const data = JSON.parse(jsonData);
@@ -112,10 +109,9 @@ function CompleteAssignments() {
       // Close the block
       html += closeTag;
     }
-    console.log(html);
+  //  console.log(html);
     return html;
   }
-
 
   const setAssignmentCredentials = useCallback((data) => {
     const restoredBlocks = data.blocks
@@ -140,7 +136,7 @@ function CompleteAssignments() {
   }, []);
 
   useEffect(() => {
-   setAssignmentCredentials(card)
+    setAssignmentCredentials(card);
   }, []);
 
   return (
@@ -159,13 +155,17 @@ function CompleteAssignments() {
         <h1 className="assignment__name">{assignmentData.title}</h1>
         <p className="assignment__progress">{assignmentData.status}</p>
       </div>
-      {assignmentData.image_url ? <img className="assignment__image" src={assignmentData.image_url}></img> : ''}
+      {assignmentData.image_url ? (
+        <img className="assignment__image" src={assignmentData.image_url}></img>
+      ) : (
+        ''
+      )}
       <p className="aassignment__paragraph">{assignmentData.text}</p>
       <div className="assignment-blocks">
-            {assignmentData.blocks.length > 0 &&
-              assignmentData.blocks.map((block, index) => (
-                <ClientAssignmentBlocks key={index} block={block}/>
-              ))}
+        {assignmentData.blocks.length > 0 &&
+          assignmentData.blocks.map((block, index) => (
+            <ClientAssignmentBlocks key={index} block={block} />
+          ))}
       </div>
       {/*
       <div className="block assignment__block">
@@ -219,7 +219,7 @@ function CompleteAssignments() {
         </fieldset>
        </div>
   */}
-     {/* <div className="block assignment__block">
+      {/* <div className="block assignment__block">
         <h4 className="assignment__block-header header_margin">#5 Question</h4>
         <p className="assignment__block-note">more than one answer possible</p>
         <fieldset className="assignments__block-radio">
@@ -265,7 +265,7 @@ function CompleteAssignments() {
         </fieldset>
       </div>
   */}
-  {/*
+      {/*
       <div className="block assignment__block">
         <h4 className="assignment__block-header">#6 Question</h4>
         <fieldset className="assignments__block-radio block-radio__rate">
@@ -366,7 +366,7 @@ function CompleteAssignments() {
       <div className="assignment__buttons-box">
         <button className="action-button assignment__button">Complete Task</button>
         <button className="action-button assignment__button">Rate Task</button>
-    </div> 
+      </div>
     </>
   );
 }
