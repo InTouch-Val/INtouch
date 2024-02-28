@@ -9,7 +9,7 @@ import imageGirl from '../../../images/image_girl.png';
 import arrowLeft from '../../../images/arrow-left.svg';
 import '../../../css/block.css';
 import '../../../css/assignments.css';
-import { ClientAssignmentBlocks } from '../../../service/clientAssignmentBlocks';
+import { ClientAssignmentBlocks } from '../../../service/ClientAssignmentBlocks';
 
 function CompleteAssignments() {
   const [editorStateFirst, setEditorStateFirst] = useState(() => EditorState.createEmpty());
@@ -109,7 +109,7 @@ function CompleteAssignments() {
       // Close the block
       html += closeTag;
     }
-  //  console.log(html);
+    //  console.log(html);
     return html;
   }
 

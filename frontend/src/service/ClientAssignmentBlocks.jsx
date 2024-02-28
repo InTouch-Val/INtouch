@@ -43,7 +43,7 @@ function ClientAssignmentBlocks({ block }) {
         <fieldset className="assignments__block-radio">
           {block.choice_replies.map((radio, index) => {
             return (
-              <div className="block-radio__input-container" key={index}> 
+              <div className="block-radio__input-container" key={index}>
                 <input
                   type="radio"
                   className="block-radio__input"
