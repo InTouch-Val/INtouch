@@ -7,22 +7,30 @@ import './HeadlinerImg.css';
 
 function HeadlinerImg() {
   const [blockVisible, setBlockVisible] = useState(true);
+  const [uploadedImage, setUploadedImage] = useState(CloudUploadSignal);
+
   const handleDeleteBlock = () => {
     setBlockVisible(false);
   };
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setUploadedImage(reader.result);
+    };
+    reader.readAsDataURL(file);
 
     console.log('Selected file:', file);
   };
+
   return (
     blockVisible && (
       <>
         <h1 className="tittle-headline">Headline</h1>
         <h2 className="add-an-img">Add an image</h2>
         <div className="img-container">
-          <img src={CloudUploadSignal} alt="CloudUpload" />
+          <img src={uploadedImage} alt="CloudUpload" />
 
           <Button>
             <label htmlFor="fileInput">Browse</label>
@@ -34,7 +42,7 @@ function HeadlinerImg() {
             />
           </Button>
 
-          <h3 className="drop-img">or drop an image here</h3>
+          {/*<h3 className="drop-img">or drop an image here</h3>*/}
         </div>
 
         <div className="icon-and-button">
