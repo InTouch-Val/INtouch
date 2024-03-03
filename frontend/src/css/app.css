@@ -37,8 +37,10 @@ button {
 
 .user-avatar {
   width: 46px;
+  height: 46px;
   border-radius: 50%;
   margin-right: 10px;
+  object-fit: cover;
 }
 
 .side-bar {
