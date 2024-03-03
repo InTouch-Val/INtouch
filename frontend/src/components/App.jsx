@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react';
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowRightFromBracket,
@@ -15,6 +15,7 @@ import '../css/app.css';
 function App() {
   const { currentUser, logout, isLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = useCallback(() => {
     logout();
@@ -28,6 +29,16 @@ function App() {
       handleLogout();
     }
   }, [currentUser, isLoading, handleLogout]);
+
+  useEffect(() => {
+    if (location.pathname === '/') {
+      if (currentUser?.user_type === 'doctor') {
+        navigate('/clients');
+      } else if (currentUser?.user_type === 'client') {
+        navigate('/my-assignments');
+      }
+    }
+  }, [location.pathname, currentUser, navigate]);
 
   return (
     <div className="app-container">
