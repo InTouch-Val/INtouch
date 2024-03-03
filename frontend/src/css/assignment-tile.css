@@ -24,6 +24,7 @@
   height: 200px;
   align-self: center;
   border-radius: 6px;
+  object-fit: cover;
 }
 
 .assignment-info {

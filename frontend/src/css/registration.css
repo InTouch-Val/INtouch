@@ -10,6 +10,7 @@
 
 .registration-form img {
   margin-bottom: 15px;
+  object-fit: cover;
 }
 
 .registration-form {

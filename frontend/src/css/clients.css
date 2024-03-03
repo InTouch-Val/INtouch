@@ -217,6 +217,7 @@ tr {
 .client-detail-page header img {
   width: 46px;
   height: 46px;
+  object-fit: cover;
 }
 
 .profile-tab {
