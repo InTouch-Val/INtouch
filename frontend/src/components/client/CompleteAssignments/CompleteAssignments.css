@@ -94,7 +94,7 @@
   max-height: 265px;
   margin-right: auto;
   margin-left: auto;
-  font-family: 'Montserrat';
+  font-family: Montserrat, Arial, sans-serif;
 }
 
 .assignments__block-radio {
@@ -140,25 +140,25 @@
 
 .block-radio__label {
   padding-left: 10px;
-  color: rgba(101, 101, 101, 1);
-  line-height: 17px;
+  color: rgb(101 101 101 / 100%);
   font-size: 16px;
+  line-height: 17px;
 }
 
 .block-radio__input-container {
   display: flex;
   flex-direction: row;
-  margin-bottom: 14px;
   align-items: center;
+  margin-bottom: 14px;
 }
 
 .assignment__block-note {
   padding: 0;
+  padding-top: 10px;
   padding-left: 12px;
   margin: 0;
   font-size: 12px;
   font-weight: 200;
-  padding-top: 10px;
   line-height: 17px;
 }
 
@@ -202,10 +202,10 @@
   margin-bottom: 30px;
   margin-left: 15px;
   color: #656565;
+  color: rgb(11 74 86 / 100%);
   font-weight: 500;
-  line-height: 21px;
   letter-spacing: -0.32px;
-  color: rgba(11, 74, 86, 1);
+  line-height: 21px;
 }
 
 .block__image {

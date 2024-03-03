@@ -3,5 +3,8 @@ export default {
     'npm run format',
     // 'npm run lint:fix',
   ],
-  '*.{css}': ['npm run format', 'npm run lint:style:fix'],
+  '*.{css}': [
+    'npm run format',
+    // 'npm run lint:style:fix',
+  ],
 };

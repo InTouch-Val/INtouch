@@ -30,6 +30,7 @@
     local('Montserrat Bold'),
     url('./Montserrat-Bold.woff2?v=7.222') format('woff2');
 }
+
 @font-face {
   font-display: swap;
   font-family: Montserrat;
