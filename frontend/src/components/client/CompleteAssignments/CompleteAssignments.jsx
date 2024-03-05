@@ -16,6 +16,7 @@ function CompleteAssignments() {
   const [editorStateSecond, setEditorStateSecond] = useState(() => EditorState.createEmpty());
   const [editorStateThird, setEditorStateThird] = useState(() => EditorState.createEmpty());
   const { setCurrentCard, card } = useAuth();
+  const [values, setValues] = useState({});
   const [assignmentData, setAssignmentData] = useState({
     title: '',
     text: '',
@@ -25,6 +26,8 @@ function CompleteAssignments() {
     author: '',
     blocks: [],
   });
+
+  console.log(card);
 
   function decodeStyledText(jsonData) {
     // Parse the JSON data
@@ -139,6 +142,12 @@ function CompleteAssignments() {
     setAssignmentCredentials(card);
   }, []);
 
+  function handleValues(event) {
+    const { name, value } = event.target;
+    setValues({ ...values, [name]: value });
+    console.log(event.target);
+  }
+  //console.log(values)
   return (
     <>
       <div className="assignment-header">
@@ -164,7 +173,7 @@ function CompleteAssignments() {
       <div className="assignment-blocks">
         {assignmentData.blocks.length > 0 &&
           assignmentData.blocks.map((block, index) => (
-            <ClientAssignmentBlocks key={index} block={block} />
+            <ClientAssignmentBlocks key={index} block={block} handleClick={handleValues} />
           ))}
       </div>
       {/*

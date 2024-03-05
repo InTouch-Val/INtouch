@@ -5,13 +5,14 @@ import { EditorToolbar } from '../service/editors-toolbar';
 import '../css/block.css';
 import '../css/assignments.css';
 
-function ClientAssignmentBlocks({ block }) {
+function ClientAssignmentBlocks({ block, handleClick }) {
   const [choices, setChoices] = useState(block.choices || []);
   const [minValue, setMinValue] = useState(block.minValue || 1);
   const [maxValue, setMaxValue] = useState(block.maxValue || 10);
   const [choiceRefs, setChoiceRefs] = useState([]);
   const [leftPole, setLeftPole] = useState(block.leftPole || 'Left Pole');
   const [rightPole, setRightPole] = useState(block.rightPole || 'Right Pole');
+  const [values, setValues] = useState({});
 
   useEffect(() => {
     if (choices && choices.length > 0) {
@@ -27,6 +28,11 @@ function ClientAssignmentBlocks({ block }) {
       setChoiceRefs(choices.map(() => React.createRef()));
     }
   }, [choices]);
+
+  function handleValues(event) {
+    handleClick(event);
+    //  console.log(event.target)
+  }
 
   if (block.type === 'text') {
     return (
@@ -51,6 +57,7 @@ function ClientAssignmentBlocks({ block }) {
                   name={block.question}
                   value={radio.reply}
                   style={{ opacity: 0.8 }}
+                  onClick={handleValues}
                 ></input>
                 <label className="block-radio__label" htmlFor={radio.id}>
                   {radio.reply}
@@ -78,6 +85,7 @@ function ClientAssignmentBlocks({ block }) {
                   name={block.question}
                   value={checkbox.reply}
                   style={{ opacity: 0.8 }}
+                  onClick={handleValues}
                 ></input>
                 <label className="block-radio__label" htmlFor={checkbox.id}>
                   {checkbox.reply}
