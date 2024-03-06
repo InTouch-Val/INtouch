@@ -10,6 +10,7 @@
 
 .registration-form img {
   margin-bottom: 15px;
+  object-fit: cover;
 }
 
 .registration-form {
@@ -113,27 +114,45 @@ input[type='checkbox']:focus {
 }
 
 .registration-client {
-  width: 720px;
-  max-height: 946px;
+  width: 620px;
+  max-height: 636px;
   flex-direction: column;
   align-items: center;
   background-color: #fff;
   box-shadow: 0 4px 8px rgb(0 0 0 / 20%);
 }
+
 .registration__logo {
-  height: 93px;
-  width: 88px;
+  width: 90px;
+  height: 86px;
   margin-top: 30px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
+
 .registration__header {
-  font-family: 'Itim', 'Arial, sans-serif';
-  max-width: 430px;
+  max-width: 500px;
   color: rgb(65 125 136 / 100%);
-  font-family: Itim, Arial, sans-serif;
-  font-size: 32px;
+  font-size: 24px;
+  font-weight: 500;
   line-height: 30px;
   text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 50px;
 }
+
+.registration__text {
+  font-size: 20px;
+  max-width: 500px;
+  color: rgb(65 125 136 / 100%);
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: 500;
+  text-align: center;
+}
+
 .registration__form {
   display: flex;
   flex-direction: column;
@@ -141,29 +160,43 @@ input[type='checkbox']:focus {
   justify-content: center;
   row-gap: 20px;
 }
+
 .registartion-client__input {
-  width: 435px;
-  height: 35px;
+  width: 338px;
+  height: 44px;
   padding-left: 10px;
   border: 1px solid rgb(65 125 136 / 70%);
   border-radius: 10px;
+  font-size: 16px;
 }
+
 .registration-client__checkbox {
-  font-family: 'Raleway', 'Arial, sans-serif';
-  color: rgba(101, 101, 101, 1);
   padding-left: 10px;
   color: rgb(101 101 101 / 100%);
-  font-family: Raleway, Arial, sans-serif;
-  font-size: 22px;
+  font-size: 16px;
+  font-weight: 400;
 }
+
 .registration-client__checkbox-box {
-  margin-top: 20px;
   margin-bottom: 20px;
 }
+
+.registration__password-field {
+  display: flex;
+  position: relative;
+  align-items: center;
+}
+.registration__button-eye {
+  position: absolute;
+  right: 15px;
+  height: calc(100% - 30px);
+  padding: 0;
+  border: none;
+  border-radius: 0 10px 10px 0;
+  background-color: #fff;
+  cursor: pointer;
+}
 .registration__button {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
   width: 230px;
   height: 57px;
   padding: 15px 10px;

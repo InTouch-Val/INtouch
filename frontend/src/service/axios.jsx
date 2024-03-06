@@ -52,7 +52,8 @@ API.interceptors.request.use(
     return config;
   },
   (error) => {
-    return Promise.reject(error);
+    // return Promise.reject(error);
+    throw error;
   },
 );
 
@@ -69,8 +70,8 @@ API.interceptors.response.use(
             originalRequest.headers['Authorization'] = 'Bearer ' + token;
             return API(originalRequest);
           })
-          .catch((err) => {
-            return Promise.reject(err);
+          .catch((error_) => {
+            throw error_;
           });
       }
 
@@ -86,13 +87,13 @@ API.interceptors.response.use(
         processQueue(refreshError, null);
         localStorage.clear();
         window.location.href = '/login';
-        return Promise.reject(refreshError);
+        throw refreshError;
       } finally {
         isRefreshing = false;
       }
     }
 
-    return Promise.reject(error);
+    throw error;
   },
 );
 

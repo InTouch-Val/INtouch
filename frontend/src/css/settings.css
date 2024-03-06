@@ -14,8 +14,10 @@ header h2 {
 
 header img {
   width: 50px;
+  height: 50px;
   border-radius: 50%;
   margin-right: 20px;
+  object-fit: cover;
 }
 
 .tabs {
@@ -40,6 +42,7 @@ header img {
   width: 100px;
   height: 100px;
   margin: 0;
+  object-fit: cover;
 }
 
 .right-column {

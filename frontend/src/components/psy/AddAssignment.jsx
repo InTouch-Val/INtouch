@@ -7,6 +7,7 @@ import {
   faSquareCheck,
   faCircleDot,
   faEllipsis,
+  faImage,
 } from '@fortawesome/free-solid-svg-icons';
 import { API } from '../../service/axios';
 import { AssignmentBlock } from '../../service/assignment-blocks';
@@ -15,6 +16,7 @@ import { useAuth } from '../../service/authContext';
 import { Modal } from '../../service/modal';
 import { Headline } from './Headline';
 import { ImageQuestionBlock } from './ImageQuestionBlock';
+import HeadlinerImg from './HeadlinerImg/HeadlinerImg';
 import '../../css/assignments.css';
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
@@ -74,6 +76,14 @@ function AddAssignment() {
             title: block.question,
             minValue: block.start_range,
             maxValue: block.end_range,
+          };
+        }
+        if (block.type === 'image') {
+          return {
+            ...block,
+            // title: block.question,
+            // minValue: block.start_range,
+            // maxValue: block.end_range,
           };
         }
         return block;
@@ -221,6 +231,9 @@ function AddAssignment() {
               {block.type === 'imageQuestion' && (
                 <ImageQuestionBlock block={block} updateBlock={updateBlock} />
               )}
+              {block.type === 'headlinerImg' && (
+                <HeadlinerImg block={block} updateBlock={updateBlock} />
+              )}
             </div>
           ))}
           <div className="form-title">
@@ -291,6 +304,9 @@ function AddAssignment() {
             </button>
             <button title="Add Range Question Block" onClick={() => addBlock('range')}>
               <FontAwesomeIcon icon={faEllipsis} />
+            </button>
+            <button title="Add Image" onClick={() => addBlock('image')}>
+              <FontAwesomeIcon icon={faImage} />
             </button>
           </div>
         </div>
