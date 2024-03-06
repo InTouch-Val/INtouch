@@ -1,3 +1,4 @@
+from django.contrib.auth.hashers import check_password
 from django.core.exceptions import PermissionDenied
 from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view, action
@@ -264,7 +265,7 @@ class AssignmentViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get'])
     def draft(self, request, pk):
-        """Сокрытие задачи из общего пула"""
+        """Сокрытие задачи из общего пула, добавление  драфт"""
         assignments = self.get_object()
         assignments.is_public = False
         assignments.save()
@@ -286,7 +287,7 @@ class AssignmentClientViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get'])
     def clear(self, request, pk):
-        """Очистка задачи клиента"""
+        """Очистка ответов в задании клиента"""
         assignment = self.get_object()
 
         if assignment.status == 'to do':

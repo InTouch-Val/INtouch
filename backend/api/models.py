@@ -23,12 +23,10 @@ class Doctor(models.Model):
     user = models.OneToOneField('User', on_delete=models.CASCADE)
     clients = models.ManyToManyField(
         'User',
-        # through='ClientRelationship',
-        # symmetrical=False,
         blank=True,
         related_name='clients'
     )
-    assignments = models.ManyToManyField('Assignment', blank=True)
+    assignments = models.ManyToManyField('Assignment', blank=True) # задания, добавленные в избранное
 
 
 class Client(models.Model):
@@ -37,11 +35,6 @@ class Client(models.Model):
     diagnosis = models.CharField(max_length=255, blank=True)
     about = models.TextField(blank=True)
     notes = models.ManyToManyField('Note', blank=True)
-
-
-# class ClientRelationship(models.Model):
-#     from_user = models.ForeignKey(User, related_name='from_users', on_delete=models.CASCADE)
-#     to_user = models.ForeignKey(User, related_name='to_users', on_delete=models.CASCADE)
 
 
 class Assignment(models.Model):
@@ -68,8 +61,8 @@ class Assignment(models.Model):
         blank=True
     )
     comments = models.ManyToManyField('Comment', blank=True)
-    is_public = models.BooleanField(default=True)
-    grades = ArrayField(models.IntegerField(), default=[])
+    is_public = models.BooleanField(default=True) # состояние - опубликовано или в драфте
+    grades = ArrayField(models.IntegerField(), default=[]) # список оценок, поставленных клиентами к заданию
 
     def __str__(self):
         return self.title
@@ -100,15 +93,15 @@ class AssignmentClient(models.Model):
     )
     comments = models.ManyToManyField('Comment', blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    visible = models.BooleanField(default=True)
-    grade = models.IntegerField(null=True, blank=True)
+    visible = models.BooleanField(default=True) # состояние - видит доктор или нет
+    grade = models.IntegerField(null=True, blank=True) # оценка клиента
     review = models.TextField()
     assignment_root = models.ForeignKey(
         'Assignment',
         on_delete=models.SET_NULL,
         related_name='assignments_clients',
         null=True,
-    )
+    ) # ссылка на задание, с которого назначено текущее
 
 
 class Block(models.Model):

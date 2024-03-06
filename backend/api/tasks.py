@@ -1,3 +1,5 @@
+"""Модуль содержит функции для выполнения асинхронных задач"""
+
 import dramatiq
 
 from .models import User

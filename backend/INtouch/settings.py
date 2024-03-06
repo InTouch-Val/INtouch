@@ -42,8 +42,8 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'rest_framework',
     'rest_framework_simplejwt',
-    'corsheaders',
-    'drf_spectacular',
+    'corsheaders', # библитотека для корректной работы запросов с реакта
+    'drf_spectacular', # библиотека для генерации документации к API
 ]
 
 MIDDLEWARE = [
@@ -141,14 +141,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'api.User'
+AUTH_USER_MODEL = 'api.User' # переопределение стандартной модели пользователя
 
 LOGIN_REDIRECT_URL = '/'
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
-        # 'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
     ],
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -201,6 +201,8 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
 
+# corsheaders
+
 CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ALLOW_CREDENTIALS = True
@@ -219,20 +221,17 @@ CORS_ALLOW_METHODS = [
     'OPTIONS',
 ]
 
+# настройки smtp сервера для отправки сообщений
+
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_USE_SSL = False
-# EMAIL_HOST_USER = 'contrheil@gmail.com'
-# EMAIL_HOST_PASSWORD = 'vsmg vbhx easu sknb'
-
 EMAIL_HOST = 'smtp.titan.email'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'info@intouch.care'
 EMAIL_HOST_PASSWORD = 'OMG_LoveINtouch23!'
+
+# настройки dramatiq - библиотеки для асинхронных задач
 
 DRAMATIQ_BROKER = {
     "BROKER": "dramatiq.brokers.redis.RedisBroker",

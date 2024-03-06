@@ -2,6 +2,8 @@ version: "3.5"
 services:
   app:
     image: ivansitnikov1/repo:latest
+#    image: django_app
+#    build: .
     ports:
       - "8000:8000"
     volumes:

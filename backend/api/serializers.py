@@ -24,6 +24,7 @@ class ClientSerializer(serializers.ModelSerializer):
 
 
 class ClientInDoctorSerializers(serializers.ModelSerializer):
+    """Сериализатор для наглядного описания клиента в модели доктора(clients)"""
     client = ClientSerializer()
     class Meta:
         model = User
@@ -100,6 +101,7 @@ class UserSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
+        """Используется при создании пользователя-доктора"""
         user = User.objects.create_user(
             username=validated_data['email'],
             first_name=validated_data['first_name'].title(),
@@ -175,6 +177,7 @@ class UpdatePasswordSerializer(ChangePasswordSerializer):
 
 
 class UpdateUserSerializer(serializers.ModelSerializer):
+    """Редактирование данных в профиле пользователя"""
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email', 'date_of_birth', 'photo']
@@ -202,6 +205,7 @@ class AddClientSerializer(serializers.ModelSerializer):
     )
 
     def create(self, validated_data):
+        """Создание пользователя-клиента"""
         user = User.objects.create(
             username=validated_data['email'],
             first_name=validated_data['first_name'].title(),
@@ -225,6 +229,7 @@ class AddClientSerializer(serializers.ModelSerializer):
 
 
 class UpdateClientSerializer(serializers.ModelSerializer):
+    """Завершение регистрации со стороны клиента, установка пароля"""
     password = serializers.CharField(
         write_only=True,
         validators=[
@@ -264,6 +269,7 @@ class UpdateClientSerializer(serializers.ModelSerializer):
 
 
 class DoctorUpdateClientSerializer(serializers.ModelSerializer):
+    """Дает возможность доктору редактировать данные своего клиента"""
     client = ClientSerializer()
     class Meta:
         model = User
