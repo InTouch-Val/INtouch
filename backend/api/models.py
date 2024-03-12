@@ -62,7 +62,7 @@ class Assignment(models.Model):
     )
     comments = models.ManyToManyField('Comment', blank=True)
     is_public = models.BooleanField(default=True) # состояние - опубликовано или в драфте
-    grades = ArrayField(models.IntegerField(), default=[]) # список оценок, поставленных клиентами к заданию
+    grades = ArrayField(models.IntegerField(), default=list) # список оценок, поставленных клиентами к заданию
 
     def __str__(self):
         return self.title
