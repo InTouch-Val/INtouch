@@ -1,7 +1,8 @@
 .editor-container {
   min-height: 100px; /* минимальная высота */
   padding: 10px; /* отступы внутри, как у textarea */
-  border: 1px solid #ddd; /* граница, как у textarea */
+  /* border: 1px solid #ddd; граница, как у textarea */
+  box-shadow: 0px 0px 3px 1px #d7e4e773;
   border-radius: 4px; /* скругление углов, если необходимо */
   margin-top: 5px; /* отступ сверху, если необходимо */
   background-color: #fff;

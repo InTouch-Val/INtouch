@@ -4,6 +4,7 @@ import { faTrashCan, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { EditorToolbar } from '../service/editors-toolbar';
 import '../css/block.css';
 import HeadlinerImg from '../components/psy/HeadlinerImg/HeadlinerImg';
+import QuestionOpenField from '../components/psy/QuestionOpenField/QuestionOpenField';
 
 function AssignmentBlock({ block, updateBlock, removeBlock, readOnly }) {
   const [title, setTitle] = useState(block.title);
@@ -250,6 +251,24 @@ function AssignmentBlock({ block, updateBlock, removeBlock, readOnly }) {
           <HeadlinerImg />
         </div>
       </div>
+    );
+  }
+
+  if (block.type === 'open-question') {
+    return (
+      <>
+        <QuestionOpenField
+          removeBlock={() => removeBlock(block.id)}
+          block={block}
+          editorState={block.content}
+          setEditorState={(newState) => updateBlock(block.id, newState, block.choices)}
+        />
+      </>
+      // <div className="block">
+      //   <div className="control-panel">
+      //     <QuestionOpenField />
+      //   </div>
+      // </div>
     );
   }
 

@@ -1,0 +1,47 @@
+.blockQuestion {
+  padding-top: 20px;
+}
+
+.block__title {
+  padding-left: 15px;
+  padding-bottom: 20px;
+  color: #417d88;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 17px;
+}
+
+.block__wrapper {
+  background-color: #fff; /* Фон блока */
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgb(0 0 0 / 10%); /* Тень блока */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 35px;
+}
+
+.block__content {
+  padding: 20px;
+  width: 95%; /*Задаем ширину блока */
+  border-radius: 8px; /* Скругление углов блока */
+}
+
+.block__buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 18px;
+  padding-bottom: 38px;
+  justify-content: flex-end;
+  padding-right: 14px;
+}
+
+.block__icon-button {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+}
+
+.block__icon-button:hover {
+  opacity: 0.7;
+}
