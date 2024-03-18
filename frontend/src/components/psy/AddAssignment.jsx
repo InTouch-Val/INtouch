@@ -18,6 +18,7 @@ import { Headline } from './Headline';
 import { ImageQuestionBlock } from './ImageQuestionBlock';
 import HeadlinerImg from './HeadlinerImg/HeadlinerImg';
 import '../../css/assignments.css';
+import HeaderAssignment from './HeaderAssigmentPage/HeaderAssignment';
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
@@ -155,9 +156,12 @@ function AddAssignment() {
         }, 2000);
       }
     } catch (error) {
+      setErrorText('Fill in all the fields..');
       console.error('Error creating assignment', error);
     }
   };
+
+  const [errorText, setErrorText] = useState('');
 
   const handleImageSelect = (image) => {
     setSelectedImage(image);
@@ -212,16 +216,25 @@ function AddAssignment() {
   return (
     <div className="assignments-page">
       {successMessage && <div className="success-message">Assignment created succesfully</div>}
-      <header>
-        <h1>Add Assignment</h1>
-        {blocks.length > 0 ? (
-          <button className="action-button" onClick={handleSubmit}>
-            Save Assignment
-          </button>
-        ) : (
-          <></>
-        )}
-      </header>
+      <HeaderAssignment blocks={blocks} handleSubmit={handleSubmit} errorText={errorText} />
+      <div className="form-title">
+        <input
+          type="text"
+          className="title-input"
+          placeholder="Name of Assignment..."
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          className="title-input"
+          placeholder="Description..."
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+        />
+      </div>
       <div className="add-assignment-body">
         <ImageSelector onImageSelect={handleImageSelect} />
         <form onSubmit={handleSubmit} className="form-creator">
@@ -236,24 +249,6 @@ function AddAssignment() {
               )}
             </div>
           ))}
-          <div className="form-title">
-            <input
-              type="text"
-              className="title-input"
-              placeholder="Name of form"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
-            <input
-              type="text"
-              className="title-input"
-              placeholder="Give a brief description..."
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-            />
-          </div>
           <div className="form-settings">
             <div className="form-setting">
               <label>Type</label>
