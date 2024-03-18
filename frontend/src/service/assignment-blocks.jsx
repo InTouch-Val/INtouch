@@ -244,7 +244,22 @@ function AssignmentBlock({ block, updateBlock, removeBlock, readOnly }) {
   if (block.type === 'image') {
     return (
       <div className="block">
-        <div className="control-panel"></div>
+        <div className="control-panel">
+          <input
+            type="text"
+            value={title}
+            onChange={handleTitleChange}
+            placeholder="HEADLINE"
+            className="block-title-input"
+          />
+          <button
+            type="button"
+            onClick={() => removeBlock(block.id)}
+            className="remove-block-button"
+          >
+            <FontAwesomeIcon icon={faTrashCan} />
+          </button>
+        </div>
 
         <div>
           <HeadlinerImg />
