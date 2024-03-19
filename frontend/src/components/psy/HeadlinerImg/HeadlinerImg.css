@@ -1,6 +1,5 @@
 .headline {
   position: relative;
-  height: 501px;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -29,17 +28,6 @@
   object-fit: contain;
   border: 0 solid #d7e4e7;
   box-shadow: 0 0 3px 1px #d7e4e773;
-}
-
-.icon-copy-trash {
-  display: flex;
-  gap: 15px;
-}
-
-.icon-and-button {
-  display: flex;
-  align-items: center;
-  justify-content: end;
 }
 
 .headline__browse-container {
@@ -75,11 +63,6 @@
   transition: background-color 0.3s ease;
   border-radius: 5px;
   text-align: center;
-  cursor: pointer;
-}
-
-.headline__img-input-custom:hover {
-  box-shadow: inset 0 0 10px 5px #108ca873;
 }
 
 .dragging {

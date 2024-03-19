@@ -10,7 +10,7 @@ import {
   faImage,
 } from '@fortawesome/free-solid-svg-icons';
 import { API } from '../../service/axios';
-import { AssignmentBlock } from '../../service/assignment-blocks';
+import { AssignmentBlock } from '../../service/psyAssignment/AssignmentBlock';
 import { ImageSelector } from '../../service/image-selector';
 import { useAuth } from '../../service/authContext';
 import { Modal } from '../../service/modal';
@@ -181,6 +181,42 @@ function AddAssignment() {
     setBlocks(updatedBlocks);
   };
 
+  const copyBlock = (block) => {
+    const maxId = Math.max(...blocks.map((b) => b.id));
+    const newBlock = { ...block, id: maxId + 1 };
+    const updatedBlocks = blocks.concat(newBlock);
+
+    setBlocks(updatedBlocks);
+  };
+
+  const moveBlockForward = (index) => {
+    // Проверяем, не является ли текущий блок последним в массиве
+    if (index < blocks.length - 1) {
+      // Сохраняем текущий блок
+      const block = blocks[index];
+      // Удаляем блок из текущей позиции
+      blocks.splice(index, 1);
+      // Добавляем блок обратно в массив, но на позицию на одну вперед
+      blocks.splice(index + 1, 0, block);
+      // Обновляем состояние
+      setBlocks([...blocks]);
+    }
+  };
+
+  const moveBlockBackward = (index) => {
+    // Проверяем, не является ли текущий блок первым в массиве
+    if (index > 0) {
+      // Сохраняем текущий блок
+      const block = blocks[index];
+      // Удаляем блок из текущей позиции
+      blocks.splice(index, 1);
+      // Добавляем блок обратно в массив, но на позицию на одну назад
+      blocks.splice(index - 1, 0, block);
+      // Обновляем состояние
+      setBlocks([...blocks]);
+    }
+  };
+
   const updateBlock = (
     blockId,
     newContent,
@@ -282,12 +318,16 @@ function AddAssignment() {
               <input type="text" value={tags} onChange={(e) => setTags(e.target.value)} />
             </div>
           </div>
-          {blocks.map((block) => (
+          {blocks.map((block, index) => (
             <AssignmentBlock
               key={block.id}
               block={block}
               updateBlock={updateBlock}
               removeBlock={removeBlock}
+              copyBlock={copyBlock}
+              moveBlockForward={moveBlockForward}
+              moveBlockBackward={moveBlockBackward}
+              index={index}
             />
           ))}
         </form>

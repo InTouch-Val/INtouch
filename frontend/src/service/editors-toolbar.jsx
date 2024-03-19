@@ -18,7 +18,7 @@ const toolbarPlugin = createToolbarPlugin();
 const { Toolbar } = toolbarPlugin;
 const plugins = [toolbarPlugin];
 
-function EditorToolbar({ editorState, setEditorState }) {
+function EditorToolbar({ editorState, setEditorState, placeholder }) {
   const editor = useRef(null);
 
   const focusEditor = () => {
@@ -32,26 +32,23 @@ function EditorToolbar({ editorState, setEditorState }) {
         editorState={editorState}
         onChange={setEditorState}
         plugins={plugins}
-        placeholder="Write text here..."
+        placeholder={placeholder}
       />
       <Toolbar>
-        {
-          // May be used to render a custom toolbar
-          (externalProps) => (
-            <>
-              <BoldButton {...externalProps} />
-              <ItalicButton {...externalProps} />
-              <UnderlineButton {...externalProps} />
-              <Separator {...externalProps} />
-              <HeadlineOneButton {...externalProps} />
-              <HeadlineTwoButton {...externalProps} />
-              <HeadlineThreeButton {...externalProps} />
-              <Separator {...externalProps} />
-              <UnorderedListButton {...externalProps} />
-              <OrderedListButton {...externalProps} />
-            </>
-          )
-        }
+        {(externalProps) => (
+          <>
+            <BoldButton {...externalProps} />
+            <ItalicButton {...externalProps} />
+            <UnderlineButton {...externalProps} />
+            <Separator {...externalProps} />
+            <HeadlineOneButton {...externalProps} />
+            <HeadlineTwoButton {...externalProps} />
+            <HeadlineThreeButton {...externalProps} />
+            <Separator {...externalProps} />
+            <UnorderedListButton {...externalProps} />
+            <OrderedListButton {...externalProps} />
+          </>
+        )}
       </Toolbar>
     </div>
   );

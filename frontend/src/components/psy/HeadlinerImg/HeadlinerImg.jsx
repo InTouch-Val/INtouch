@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react';
 import CloudUploadSignal from '../../../images/CloudUploadSignal.svg';
 import IconCopy from '../../../images/IconCopy.svg';
-import IconTrash from '../../../images/FreeIconTrash.svg';
 import Button from '../button/ButtonHeadline';
 import './HeadlinerImg.css';
 
@@ -60,7 +59,6 @@ function HeadlinerImg() {
         <h2 className="headline__add-an-img">Add an image</h2>
         <div
           id="customFileInput"
-          onClick={handleClick}
           className={
             isDragging ? 'headline__img-input-custom dragging' : 'headline__img-input-custom'
           }
@@ -88,14 +86,6 @@ function HeadlinerImg() {
 
             <p className="headline__drop-img">or drop an image here</p>
           </div>
-        </div>
-
-        <div className="icon-and-button">
-          <div className="icon-copy-trash">
-            <img src={IconCopy} alt="Icon-Copy" />
-          </div>
-
-          <Button className="saveBlock">Save block</Button>
         </div>
       </div>
     )
