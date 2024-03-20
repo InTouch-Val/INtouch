@@ -46,17 +46,23 @@ function AddAssignment() {
       setSelectedImage({ urls: { full: response.data.image_url } }); // Assuming your ImageSelector expects an object like this
 
       const fetchedBlocks = response.data.blocks.map((block) => {
-        if (block.type === 'text') {
-          let contentState;
-          try {
-            const rawContent = JSON.parse(block.description);
-            contentState = convertFromRaw(rawContent);
-            console.log(contentState);
-          } catch (error) {
-            console.error('Ошибка при обработке содержимого:', error);
-            contentState = ContentState.createFromText(''); // Создаем пустое содержимое в случае ошибки
+        let contentState;
+        try {
+          const rawContent = JSON.parse(block.description);
+          contentState = convertFromRaw(rawContent);
+          console.log(contentState);
+        } catch (error) {
+          console.error('Ошибка при обработке содержимого:', error);
+          // Создаем ContentState с текстом из data.title для всех типов блоков, кроме 'text'
+          if (block.type !== 'text') {
+            contentState = ContentState.createFromText(block.title);
+          } else {
+            // Для типа 'text' создаем пустое содержимое, если описание не может быть обработано
+            contentState = ContentState.createFromText('');
           }
+        }
 
+        if (block.type === 'text') {
           return {
             ...block,
             title: block.question,
@@ -68,6 +74,7 @@ function AddAssignment() {
             ...block,
             title: block.question,
             choices: block.choice_replies.map((choice) => choice.reply),
+            content: EditorState.createWithContent(contentState),
           };
         }
         if (block.type === 'range') {
@@ -76,11 +83,13 @@ function AddAssignment() {
             title: block.question,
             minValue: block.start_range,
             maxValue: block.end_range,
+            content: EditorState.createWithContent(contentState),
           };
         }
         if (block.type === 'image') {
           return {
             ...block,
+            content: EditorState.createWithContent(contentState),
             // title: block.question,
             // minValue: block.start_range,
             // maxValue: block.end_range,

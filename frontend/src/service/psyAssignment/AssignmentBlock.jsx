@@ -179,7 +179,7 @@ function AssignmentBlock({
         block={block}
         removeBlock={removeBlock}
         copyBlock={copyBlock}
-        heading="Open-ended question"
+        heading="Text paragraph"
         question={title}
         updateBlock={updateBlock}
         handleTitleChange={handleTitleChange}

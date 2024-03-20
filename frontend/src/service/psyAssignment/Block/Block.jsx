@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { EditorState } from 'draft-js';
 import { EditorToolbar } from '../../editors-toolbar';
+import { ToolbarProvider } from '../../ToolbarContext';
 import arrow from '../../../images/arrow.svg';
 import copy from '../../../images/block-copy-btn.svg';
 import trash from '../../../images/block-trash-btn.svg';
@@ -15,18 +16,22 @@ function Block({
   copyBlock,
   moveBlockForward,
   moveBlockBackward,
+  updateBlock,
   index = { index },
   ...props
 }) {
   const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
 
   const handleEditorStateChange = (newEditorState) => {
+    updateBlock(block.id, newEditorState, block.choices);
     setEditorState(newEditorState);
     // Конвертируем editorState в строку и обновляем title
     const contentState = newEditorState.getCurrentContent();
     const text = contentState.getPlainText();
     handleTitleChange({ target: { value: text } });
   };
+
+  const editorRef = useRef(null);
 
   return (
     <div className="block-container">
@@ -41,11 +46,15 @@ function Block({
             className="block-title-input"
             style={{ display: 'none' }}
           />
-          <EditorToolbar
-            editorState={editorState}
-            setEditorState={handleEditorStateChange}
-            placeholder={placeholder}
-          />
+          <ToolbarProvider>
+            <EditorToolbar
+              ref={editorRef}
+              editorState={editorState}
+              setEditorState={handleEditorStateChange}
+              placeholder={placeholder}
+              block={block}
+            />
+          </ToolbarProvider>
         </div>
         {props.children}
         <div className="buttons">
