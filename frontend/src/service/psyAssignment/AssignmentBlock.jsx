@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { EditorToolbar } from '../service/editors-toolbar';
-import '../css/block.css';
-import HeadlinerImg from '../components/psy/HeadlinerImg/HeadlinerImg';
+import { EditorToolbar } from '../editors-toolbar';
+import '../../css/block.css';
+import HeadlinerImg from '../../components/psy/HeadlinerImg/HeadlinerImg';
+import Block from './Block/Block';
 
-function AssignmentBlock({ block, updateBlock, removeBlock, readOnly }) {
+function AssignmentBlock({
+  block,
+  updateBlock,
+  removeBlock,
+  copyBlock,
+  moveBlockForward,
+  moveBlockBackward,
+  index,
+  readOnly,
+}) {
   const [title, setTitle] = useState(block.title);
   const [choices, setChoices] = useState(block.choices || []);
   const [minValue, setMinValue] = useState(block.minValue || 1);
@@ -165,52 +175,37 @@ function AssignmentBlock({ block, updateBlock, removeBlock, readOnly }) {
 
   if (block.type === 'text') {
     return (
-      <div className="block">
-        <div className="control-panel">
-          <input
-            type="text"
-            value={title}
-            onChange={handleTitleChange}
-            placeholder="Write question here..."
-            className="block-title-input"
-          />
-          <button
-            type="button"
-            onClick={() => removeBlock(block.id)}
-            className="remove-block-button"
-          >
-            <FontAwesomeIcon icon={faTrashCan} />
-          </button>
-        </div>
-
-        <EditorToolbar
-          editorState={block.content}
-          setEditorState={(newState) => updateBlock(block.id, newState, block.choices)}
-        />
-      </div>
+      <Block
+        block={block}
+        removeBlock={removeBlock}
+        copyBlock={copyBlock}
+        heading="Text paragraph"
+        question={title}
+        updateBlock={updateBlock}
+        handleTitleChange={handleTitleChange}
+        placeholder="Write question here..."
+        moveBlockForward={moveBlockForward}
+        moveBlockBackward={moveBlockBackward}
+        index={index}
+      ></Block>
     );
   }
 
   if (block.type === 'range') {
     return (
-      <div className="block">
-        <div className="control-panel">
-          <input
-            type="text"
-            value={title}
-            onChange={handleTitleChange}
-            placeholder="Write question here..."
-            className="block-title-input"
-          />
-          <button
-            type="button"
-            onClick={() => removeBlock(block.id)}
-            className="remove-block-button"
-          >
-            <FontAwesomeIcon icon={faTrashCan} />
-          </button>
-        </div>
-
+      <Block
+        block={block}
+        removeBlock={removeBlock}
+        copyBlock={copyBlock}
+        heading="Range"
+        question={title}
+        updateBlock={updateBlock}
+        handleTitleChange={handleTitleChange}
+        placeholder="Write question here..."
+        moveBlockForward={moveBlockForward}
+        moveBlockBackward={moveBlockBackward}
+        index={index}
+      >
         <div className="range-inputs">
           <div className="number-input-container">
             <button onClick={(e) => handleMinChange(-1, e)}>-</button>
@@ -237,36 +232,44 @@ function AssignmentBlock({ block, updateBlock, removeBlock, readOnly }) {
             />
           </div>
         </div>
-      </div>
+      </Block>
     );
   }
 
   if (block.type === 'image') {
     return (
-      <div className="block">
-        <div className="control-panel"></div>
-
-        <div>
-          <HeadlinerImg />
-        </div>
-      </div>
+      <Block
+        block={block}
+        removeBlock={removeBlock}
+        copyBlock={copyBlock}
+        heading="Image"
+        question={title}
+        updateBlock={updateBlock}
+        handleTitleChange={handleTitleChange}
+        placeholder="HEADLINE"
+        moveBlockForward={moveBlockForward}
+        moveBlockBackward={moveBlockBackward}
+        index={index}
+      >
+        <HeadlinerImg />
+      </Block>
     );
   }
 
   return (
-    <div className="block">
-      <div className="control-panel">
-        <input
-          type="text"
-          value={title}
-          onChange={handleTitleChange}
-          placeholder="Write question here..."
-          className="block-title-input"
-        />
-        <button type="button" onClick={() => removeBlock(block.id)} className="remove-block-button">
-          <FontAwesomeIcon icon={faTrashCan} />
-        </button>
-      </div>
+    <Block
+      block={block}
+      removeBlock={removeBlock}
+      copyBlock={copyBlock}
+      heading={block.type === 'multiple' ? 'Multiple-choice' : 'Single-choice'}
+      question={title}
+      updateBlock={updateBlock}
+      handleTitleChange={handleTitleChange}
+      placeholder="Write question here..."
+      moveBlockForward={moveBlockForward}
+      moveBlockBackward={moveBlockBackward}
+      index={index}
+    >
       {choices.map((choice, index) => (
         <div key={index} className="choice-option">
           {block.type === 'multiple' ? (
@@ -282,11 +285,7 @@ function AssignmentBlock({ block, updateBlock, removeBlock, readOnly }) {
             placeholder={`Option ${index + 1}`}
             className="choice-input"
           />
-          <button
-            type="button"
-            onClick={() => removeChoice(index)}
-            className="remove-choice-button"
-          >
+          <button type="button" onClick={() => removeChoice(index)} className="button">
             <FontAwesomeIcon icon={faXmark} />
           </button>
         </div>
@@ -306,7 +305,7 @@ function AssignmentBlock({ block, updateBlock, removeBlock, readOnly }) {
           className="choice-input"
         />
       </div>
-    </div>
+    </Block>
   );
 }
 

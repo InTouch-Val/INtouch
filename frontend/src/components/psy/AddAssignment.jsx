@@ -10,7 +10,7 @@ import {
   faImage,
 } from '@fortawesome/free-solid-svg-icons';
 import { API } from '../../service/axios';
-import { AssignmentBlock } from '../../service/assignment-blocks';
+import { AssignmentBlock } from '../../service/psyAssignment/AssignmentBlock';
 import { ImageSelector } from '../../service/image-selector';
 import { useAuth } from '../../service/authContext';
 import { Modal } from '../../service/modal';
@@ -47,17 +47,23 @@ function AddAssignment() {
       setSelectedImage({ urls: { full: response.data.image_url } }); // Assuming your ImageSelector expects an object like this
 
       const fetchedBlocks = response.data.blocks.map((block) => {
-        if (block.type === 'text') {
-          let contentState;
-          try {
-            const rawContent = JSON.parse(block.description);
-            contentState = convertFromRaw(rawContent);
-            console.log(contentState);
-          } catch (error) {
-            console.error('Ошибка при обработке содержимого:', error);
-            contentState = ContentState.createFromText(''); // Создаем пустое содержимое в случае ошибки
+        let contentState;
+        try {
+          const rawContent = JSON.parse(block.description);
+          contentState = convertFromRaw(rawContent);
+          console.log(contentState);
+        } catch (error) {
+          console.error('Ошибка при обработке содержимого:', error);
+          // Создаем ContentState с текстом из data.title для всех типов блоков, кроме 'text'
+          if (block.type !== 'text') {
+            contentState = ContentState.createFromText(block.title);
+          } else {
+            // Для типа 'text' создаем пустое содержимое, если описание не может быть обработано
+            contentState = ContentState.createFromText('');
           }
+        }
 
+        if (block.type === 'text') {
           return {
             ...block,
             title: block.question,
@@ -69,6 +75,7 @@ function AddAssignment() {
             ...block,
             title: block.question,
             choices: block.choice_replies.map((choice) => choice.reply),
+            content: EditorState.createWithContent(contentState),
           };
         }
         if (block.type === 'range') {
@@ -77,11 +84,13 @@ function AddAssignment() {
             title: block.question,
             minValue: block.start_range,
             maxValue: block.end_range,
+            content: EditorState.createWithContent(contentState),
           };
         }
         if (block.type === 'image') {
           return {
             ...block,
+            content: EditorState.createWithContent(contentState),
             // title: block.question,
             // minValue: block.start_range,
             // maxValue: block.end_range,
@@ -185,6 +194,42 @@ function AddAssignment() {
     setBlocks(updatedBlocks);
   };
 
+  const copyBlock = (block) => {
+    const maxId = Math.max(...blocks.map((b) => b.id));
+    const newBlock = { ...block, id: maxId + 1 };
+    const updatedBlocks = blocks.concat(newBlock);
+
+    setBlocks(updatedBlocks);
+  };
+
+  const moveBlockForward = (index) => {
+    // Проверяем, не является ли текущий блок последним в массиве
+    if (index < blocks.length - 1) {
+      // Сохраняем текущий блок
+      const block = blocks[index];
+      // Удаляем блок из текущей позиции
+      blocks.splice(index, 1);
+      // Добавляем блок обратно в массив, но на позицию на одну вперед
+      blocks.splice(index + 1, 0, block);
+      // Обновляем состояние
+      setBlocks([...blocks]);
+    }
+  };
+
+  const moveBlockBackward = (index) => {
+    // Проверяем, не является ли текущий блок первым в массиве
+    if (index > 0) {
+      // Сохраняем текущий блок
+      const block = blocks[index];
+      // Удаляем блок из текущей позиции
+      blocks.splice(index, 1);
+      // Добавляем блок обратно в массив, но на позицию на одну назад
+      blocks.splice(index - 1, 0, block);
+      // Обновляем состояние
+      setBlocks([...blocks]);
+    }
+  };
+
   const updateBlock = (
     blockId,
     newContent,
@@ -277,12 +322,16 @@ function AddAssignment() {
               <input type="text" value={tags} onChange={(e) => setTags(e.target.value)} />
             </div>
           </div>
-          {blocks.map((block) => (
+          {blocks.map((block, index) => (
             <AssignmentBlock
               key={block.id}
               block={block}
               updateBlock={updateBlock}
               removeBlock={removeBlock}
+              copyBlock={copyBlock}
+              moveBlockForward={moveBlockForward}
+              moveBlockBackward={moveBlockBackward}
+              index={index}
             />
           ))}
         </form>
