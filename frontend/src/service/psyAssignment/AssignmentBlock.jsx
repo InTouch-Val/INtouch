@@ -191,6 +191,24 @@ function AssignmentBlock({
     );
   }
 
+  if (block.type === 'open') {
+    return (
+      <Block
+        block={block}
+        removeBlock={removeBlock}
+        copyBlock={copyBlock}
+        heading="Open-ended question"
+        question={title}
+        updateBlock={updateBlock}
+        handleTitleChange={handleTitleChange}
+        placeholder="Write question here..."
+        moveBlockForward={moveBlockForward}
+        moveBlockBackward={moveBlockBackward}
+        index={index}
+      ></Block>
+    );
+  }
+
   if (block.type === 'range') {
     return (
       <Block
