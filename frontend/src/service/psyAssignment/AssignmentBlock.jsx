@@ -23,6 +23,7 @@ function AssignmentBlock({
   const [choiceRefs, setChoiceRefs] = useState([]);
   const [leftPole, setLeftPole] = useState(block.leftPole || 'Left Pole');
   const [rightPole, setRightPole] = useState(block.rightPole || 'Right Pole');
+  const [image, setImage] = useState(block.image);
 
   useEffect(() => {
     if (choices && choices.length > 0) {

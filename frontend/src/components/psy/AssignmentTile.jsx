@@ -11,7 +11,15 @@ const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString('en-US', options);
 };
 
-function AssignmentTile({ assignment, onFavoriteToggle, isFavorite }) {
+function AssignmentTile({
+  assignment,
+  onFavoriteToggle,
+  isFavorite,
+  onShareToggle,
+  isAuthor,
+  onCopyClick,
+  onDeleteClick,
+}) {
   const displayDate = formatDate(assignment.update_date);
   const navigate = useNavigate();
 
@@ -19,35 +27,134 @@ function AssignmentTile({ assignment, onFavoriteToggle, isFavorite }) {
     navigate(`/assignment/${assignmentId}`);
   };
 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isDropdownOpen && event.target.closest('.assignment__dropdown-btn') === null) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isDropdownOpen]);
+
   return (
     <div className="assignment-tile">
       <div className="assignment-image-container" onClick={handleOnTileClick(assignment.id)}>
         <div className="date-and-type">
           <span>{displayDate}</span>
           {assignment.assignment_type && <span className="type">{assignment.assignment_type}</span>}
+          {assignment.is_public === false ? null : (
+            <>
+              {isAuthor ? (
+                <button
+                  className="assignment__dropdown-btn"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setIsDropdownOpen(!isDropdownOpen);
+                  }}
+                >
+                  {isDropdownOpen ? (
+                    <div className="assignment__dropdown">
+                      <button
+                        className={
+                          isFavorite
+                            ? 'favorite-button favorite-button_dropdown_selected favorite-button_dropdown'
+                            : 'favorite-button favorite-button_dropdown'
+                        }
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          onFavoriteToggle(assignment.id);
+                        }}
+                      >
+                        Favorite
+                      </button>
+                      <hr className="dropdown-separate-line" />
+                      <button
+                        className="assignment__dropdown-copy-btn"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          onCopyClick(assignment.id);
+                        }}
+                      >
+                        Duplicate
+                      </button>
+                      <hr className="dropdown-separate-line" />
+                      <button
+                        className="assignment__dropdown-delete-btn"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          onDeleteClick(assignment.id);
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  ) : null}
+                </button>
+              ) : (
+                <button
+                  className={
+                    isFavorite ? 'favorite-button favorite-button_selected' : 'favorite-button'
+                  }
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    onFavoriteToggle(assignment.id);
+                  }}
+                ></button>
+              )}
+            </>
+          )}
         </div>
         <img alt="Loading..." src={assignment.image_url} />
       </div>
       <div className="assignment-info">
         <h3>{assignment.title}</h3>
         <p>{assignment.author_name}</p>
-      </div>
-      <div className="assignment-actions">
-        <span className="popularity">{assignment.likes}</span>
-        <button
-          className={isFavorite ? 'favorite-button selected' : 'favorite-button'}
-          onClick={() => onFavoriteToggle(assignment.id)}
-        >
-          {isFavorite ? (
+        <div className="assignment-actions">
+          {assignment.is_public === false ? (
             <>
-              <FontAwesomeIcon icon={faBookmark} /> In My List
+              <button
+                className="assignment__edit-btn"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onEditClick(assignment.id);
+                }}
+              ></button>
+              <button
+                className="assignment__delete-btn"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onDeleteClick(assignment.id);
+                }}
+              ></button>
             </>
           ) : (
             <>
-              <FontAwesomeIcon icon={faBookmark} /> Add to List
+              <span
+                title="средняя оценка задания от клиентов"
+                className="assignment-actions__statistics assignment-actions__statistics_grades"
+              >
+                {assignment.grades.length}
+              </span>
+              <span
+                title="сколько раз эту домашку назначали клиентам"
+                className="assignment-actions__statistics assignment-actions__statistics_shares"
+              >
+                {assignment.share}
+              </span>
+              <button
+                className="assignment-actions__share-with-client"
+                onClick={() => onShareToggle()}
+              ></button>{' '}
             </>
           )}
-        </button>
+        </div>
       </div>
     </div>
   );

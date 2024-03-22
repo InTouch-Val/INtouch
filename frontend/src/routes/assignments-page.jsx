@@ -36,6 +36,25 @@ function AssignmentsPage() {
     }
   };
 
+  const duplicateAssignment = async (assignmentId) => {
+    try {
+      await API.post(`assignments/`);
+    } catch (error) {
+      console.error('Error toggling favorites:', error);
+    }
+  };
+
+  const deleteAssignment = async (assignmentId) => {
+    try {
+      await API.delete(`assignments/${assignmentId}`);
+      console.log(assignments);
+      setAssignments(assignments.filter((assignment) => assignment.id !== assignmentId));
+      console.log(assignments);
+    } catch (error) {
+      console.error('Error toggling favorites:', error);
+    }
+  };
+
   useEffect(() => {
     const fetchUserFavorites = async () => {
       try {
@@ -198,6 +217,8 @@ function AssignmentsPage() {
                 assignment={assignment}
                 onFavoriteToggle={toggleFavorite}
                 isFavorite={userFavorites?.includes(assignment.id)}
+                isAuthor={assignment.author === currentUser.id}
+                onDeleteClick={deleteAssignment}
               />
             ))
           ) : (
@@ -216,6 +237,8 @@ function AssignmentsPage() {
                   assignment={assignment}
                   onFavoriteToggle={toggleFavorite}
                   isFavorite={true}
+                  isAuthor={assignment.author === currentUser.id}
+                  onDeleteClick={deleteAssignment}
                 />
               ))
           ) : (
@@ -233,6 +256,8 @@ function AssignmentsPage() {
                 assignment={assignment}
                 onFavoriteToggle={toggleFavorite}
                 isFavorite={userFavorites?.includes(assignment.id)}
+                isAuthor={assignment.author === currentUser.id}
+                onDeleteClick={deleteAssignment}
               />
             ))}
         </div>
