@@ -45,7 +45,10 @@ class UserConfirmEmailView(APIView):
     """Активация аккаунта, выдача токенов авторизации"""
     permission_classes = (AllowAny, )
     def get(self, request, pk, token):
-        user = User.objects.get(pk=pk)
+        if self.request.user.is_anonymous():
+            user = User.objects.get(pk=pk)
+        else:
+            user = self.request.user
         if user.is_active:
             return Response({'message': 'Account has already been activated'})
         if user and default_token_generator.check_token(user, token):
