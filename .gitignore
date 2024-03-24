@@ -22,6 +22,9 @@ frontend/node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-backend/venv
 .idea
 package-lock.json
+
+__pycache__
+venv
+.venv
