@@ -360,7 +360,10 @@ class AssignmentSerializer(serializers.ModelSerializer):
         ]
 
     def get_avarage_grade(self, instance):
-        return sum(instance.grades) / len(instance.grades)
+        try:
+            return sum(instance.grades) / len(instance.grades)
+        except ZeroDivisionError:
+            return 0
 
     def create(self, validated_data):
         blocks_data = validated_data.pop("blocks", [])
@@ -443,6 +446,11 @@ class AssignmentClientSerializer(serializers.ModelSerializer):
             "title",
             "image_url",
         ]
+
+    def validate_grade(self, data):
+        if not 0 < data < 10:
+            raise serializers.ValidationError("Grade must be in range from 0 to 10!")
+        return data
 
     def update(self, instance, validated_data):
         instance.status = "in progress"
