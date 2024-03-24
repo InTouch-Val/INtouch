@@ -8,6 +8,7 @@ import {
   faCircleDot,
   faEllipsis,
   faImage,
+  faQuestion,
 } from '@fortawesome/free-solid-svg-icons';
 import { API } from '../../service/axios';
 import { AssignmentBlock } from '../../service/psyAssignment/AssignmentBlock';
@@ -181,8 +182,8 @@ function AddAssignment() {
       id: blocks.length + 1,
       type,
       title: '',
-      content: type === 'text' ? EditorState.createEmpty() : '',
-      choices: type === 'text' ? [] : [''],
+      content: type === 'text' || 'open' ? EditorState.createEmpty() : '',
+      choices: type === 'text' || 'open' ? [] : [''],
       minValue: type === 'range' ? 1 : null,
       maxValue: type === 'range' ? 10 : null,
     };
@@ -339,6 +340,9 @@ function AddAssignment() {
           <div className="block-buttons">
             <button title="Add Text Block" onClick={() => addBlock('text')}>
               <FontAwesomeIcon icon={faComment} />{' '}
+            </button>
+            <button title="Add Open-Question Block" onClick={() => addBlock('open')}>
+              <FontAwesomeIcon icon={faQuestion} />{' '}
             </button>
             <button title="Add Multiple Choice Block" onClick={() => addBlock('multiple')}>
               <FontAwesomeIcon icon={faSquareCheck} />{' '}
