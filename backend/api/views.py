@@ -46,7 +46,7 @@ class UserConfirmEmailView(APIView):
     """Активация аккаунта, выдача токенов авторизации"""
     permission_classes = (AllowAny, )
     def get(self, request, pk, token):
-        if self.request.user.is_anonymous():
+        if self.request.user.is_anonymous:
             user = get_object_or_404(User, pk=pk)
         else:
             user = self.request.user
