@@ -26,7 +26,8 @@ class Doctor(models.Model):
         blank=True,
         related_name='clients'
     )
-    assignments = models.ManyToManyField('Assignment', blank=True) # задания, добавленные в избранное
+    assignments = models.ManyToManyField('Assignment', blank=True)
+    # задания, добавленные в избранное
 
 
 class Client(models.Model):
@@ -61,8 +62,10 @@ class Assignment(models.Model):
         blank=True
     )
     comments = models.ManyToManyField('Comment', blank=True)
-    is_public = models.BooleanField(default=True) # состояние - опубликовано или в драфте
-    grades = ArrayField(models.IntegerField(), default=list) # список оценок, поставленных клиентами к заданию
+    is_public = models.BooleanField(default=True)
+    # состояние - опубликовано или в драфте
+    grades = ArrayField(models.IntegerField(), default=list)
+    # список оценок, поставленных клиентами к заданию
 
     def __str__(self):
         return self.title
@@ -93,15 +96,16 @@ class AssignmentClient(models.Model):
     )
     comments = models.ManyToManyField('Comment', blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    visible = models.BooleanField(default=True) # состояние - видит доктор или нет
-    grade = models.IntegerField(null=True, blank=True) # оценка клиента
+    visible = models.BooleanField(default=True)
+    # состояние - видит доктор или нет
+    grade = models.IntegerField(null=True, blank=True)  # оценка клиента
     review = models.TextField()
     assignment_root = models.ForeignKey(
         'Assignment',
         on_delete=models.SET_NULL,
         related_name='assignments_clients',
         null=True,
-    ) # ссылка на задание, с которого назначено текущее
+    )  # ссылка на задание, с которого назначено текущее
 
 
 class Block(models.Model):

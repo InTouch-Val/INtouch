@@ -1,4 +1,5 @@
 from django.contrib.auth.hashers import check_password
+from django.shortcuts import get_object_or_404
 from django.core.exceptions import PermissionDenied
 from rest_framework import generics, viewsets
 from rest_framework.decorators import api_view, action
@@ -45,7 +46,10 @@ class UserConfirmEmailView(APIView):
     """Активация аккаунта, выдача токенов авторизации"""
     permission_classes = (AllowAny, )
     def get(self, request, pk, token):
-        user = User.objects.get(pk=pk)
+        if self.request.user.is_anonymous:
+            user = get_object_or_404(User, pk=pk)
+        else:
+            user = self.request.user
         if user.is_active:
             return Response({'message': 'Account has already been activated'})
         if user and default_token_generator.check_token(user, token):

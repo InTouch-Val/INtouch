@@ -88,6 +88,7 @@ DATABASES = {
 #     }
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
+#        'HOST': '127.0.0.1',
         'HOST': 'app-postgres',
         'PORT': 5432,
         'NAME': 'django_app',
@@ -250,3 +251,22 @@ DRAMATIQ_BROKER = {
 }
 
 DRAMATIQ_TASKS_DATABASE = "default"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "file": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": f"{BASE_DIR}/debug.log",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["file"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+    },
+}
