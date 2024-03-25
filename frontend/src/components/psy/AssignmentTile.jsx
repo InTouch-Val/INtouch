@@ -24,7 +24,9 @@ function AssignmentTile({
   const navigate = useNavigate();
 
   const handleOnTileClick = (assignmentId) => () => {
-    navigate(`/assignment/${assignmentId}`);
+    assignment.is_public
+      ? navigate(`/assignment/${assignmentId}`)
+      : navigate(`/edit-assignment/${assignmentId}`);
   };
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -123,7 +125,7 @@ function AssignmentTile({
                 className="assignment__edit-btn"
                 onClick={(event) => {
                   event.stopPropagation();
-                  onEditClick(assignment.id);
+                  navigate(`/edit-assignment/${assignment.id}`);
                 }}
               ></button>
               <button

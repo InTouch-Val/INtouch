@@ -51,31 +51,35 @@ function AddAssignment() {
       const fetchedBlocks = response.data.blocks.map((block) => {
         let contentState;
         try {
-          const rawContent = JSON.parse(block.description);
-          contentState = convertFromRaw(rawContent);
-          console.log(contentState);
+          // Проверяем, что description не пустая
+          if (block.description) {
+            const rawContent = JSON.parse(block.description);
+            contentState = convertFromRaw(rawContent);
+            console.log(contentState);
+          } else {
+            // Если description пустая, создаем пустое содержимое
+            contentState = ContentState.createFromText(block.question);
+          }
         } catch (error) {
           console.error('Ошибка при обработке содержимого:', error);
           // Создаем ContentState с текстом из data.title для всех типов блоков, кроме 'text'
           if (block.type !== 'text') {
-            contentState = ContentState.createFromText(block.title);
+            contentState = ContentState.createFromText(block.question);
           } else {
             // Для типа 'text' создаем пустое содержимое, если описание не может быть обработано
-            contentState = ContentState.createFromText('');
+            contentState = ContentState.createFromText(block.question);
           }
         }
 
         if (block.type === 'text') {
           return {
             ...block,
-            title: block.question,
             content: EditorState.createWithContent(contentState),
           };
         }
         if (block.type === 'single' || block.type === 'multiple') {
           return {
             ...block,
-            title: block.question,
             choices: block.choice_replies.map((choice) => choice.reply),
             content: EditorState.createWithContent(contentState),
           };
@@ -83,7 +87,6 @@ function AddAssignment() {
         if (block.type === 'range') {
           return {
             ...block,
-            title: block.question,
             minValue: block.start_range,
             maxValue: block.end_range,
             content: EditorState.createWithContent(contentState),

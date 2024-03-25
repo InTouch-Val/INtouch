@@ -329,6 +329,7 @@
   background-size: contain;
   background-position: center;
   margin-left: auto;
+  cursor: pointer;
 }
 
 .assignment__delete-btn {
@@ -338,4 +339,5 @@
   background: url(../images/trash_green.svg) no-repeat;
   background-size: contain;
   background-position: center;
+  cursor: pointer;
 }
