@@ -38,9 +38,24 @@ function AssignmentsPage() {
 
   const duplicateAssignment = async (assignmentId) => {
     try {
-      await API.post(`assignments/`);
+      // Получаем данные задания, которое нужно дублировать
+      const response = await API.get(`assignments/${assignmentId}`);
+      let assignmentData = response.data;
+
+      // Генерируем новый уникальный id для дубликата
+      // Предполагаем, что id - это число, и новый id будет максимальным текущим id + 1
+      const newId = Math.max(...assignments.map((assignment) => assignment.id)) + 1;
+      assignmentData.id = newId;
+
+      // Отправляем данные задания на сервер для создания дубликата
+      const duplicateResponse = await API.post(`assignments/`, assignmentData);
+
+      // Если все прошло успешно, добавляем дубликат в список заданий
+      if (duplicateResponse.status === 200) {
+        setAssignments((prevAssignments) => [...prevAssignments, duplicateResponse.data]);
+      }
     } catch (error) {
-      console.error('Error toggling favorites:', error);
+      console.error('Error duplicating assignment:', error);
     }
   };
 
@@ -219,6 +234,7 @@ function AssignmentsPage() {
                 isFavorite={userFavorites?.includes(assignment.id)}
                 isAuthor={assignment.author === currentUser.id}
                 onDeleteClick={deleteAssignment}
+                onCopyClick={duplicateAssignment}
               />
             ))
           ) : (
@@ -239,6 +255,7 @@ function AssignmentsPage() {
                   isFavorite={true}
                   isAuthor={assignment.author === currentUser.id}
                   onDeleteClick={deleteAssignment}
+                  onCopyClick={duplicateAssignment}
                 />
               ))
           ) : (
@@ -258,6 +275,7 @@ function AssignmentsPage() {
                 isFavorite={userFavorites?.includes(assignment.id)}
                 isAuthor={assignment.author === currentUser.id}
                 onDeleteClick={deleteAssignment}
+                onCopyClick={duplicateAssignment}
               />
             ))}
         </div>

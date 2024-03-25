@@ -137,13 +137,13 @@ function AssignmentTile({
           ) : (
             <>
               <span
-                title="средняя оценка задания от клиентов"
+                title="Client`s rating"
                 className="assignment-actions__statistics assignment-actions__statistics_grades"
               >
                 {assignment.grades.length}
               </span>
               <span
-                title="сколько раз эту домашку назначали клиентам"
+                title="Assignments count"
                 className="assignment-actions__statistics assignment-actions__statistics_shares"
               >
                 {assignment.share}
