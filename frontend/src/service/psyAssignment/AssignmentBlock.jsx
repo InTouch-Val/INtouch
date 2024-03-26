@@ -15,6 +15,7 @@ function AssignmentBlock({
   moveBlockBackward,
   index,
   readOnly,
+  isView,
 }) {
   const [title, setTitle] = useState(block.title);
   const [choices, setChoices] = useState(block.choices || []);
@@ -43,21 +44,34 @@ function AssignmentBlock({
     return (
       <div className="block">
         <div className="block-header">
-          <h3 className="block-title">{block.question}</h3>
+          <h3 className="block-title">{isView ? block.title : block.question}</h3>
         </div>
-        {block.type === 'text' && <div dangerouslySetInnerHTML={{ __html: block.description }} />}
+        {block.type === 'text' ||
+          ('open' && <div dangerouslySetInnerHTML={{ __html: block.description }} />)}
         {(block.type === 'single' || block.type === 'multiple') && (
           <ul className={`choices-container ${block.type}`}>
-            {block.choice_replies.map((choice, index) => (
-              <li key={index} className="choice-option">
-                {block.type === 'single' ? (
-                  <input type="radio" disabled />
-                ) : (
-                  <input type="checkbox" disabled />
-                )}
-                <span className="choice-label">{choice.reply}</span>
-              </li>
-            ))}
+            {isView == true &&
+              block.choices.map((choice, index) => (
+                <li key={index} className="choice-option">
+                  {block.type === 'single' ? (
+                    <input type="radio" disabled />
+                  ) : (
+                    <input type="checkbox" disabled />
+                  )}
+                  <span className="choice-label">{choice.reply}</span>
+                </li>
+              ))}
+            {block.choice_replies &&
+              block.choice_replies.map((choice, index) => (
+                <li key={index} className="choice-option">
+                  {block.type === 'single' ? (
+                    <input type="radio" disabled />
+                  ) : (
+                    <input type="checkbox" disabled />
+                  )}
+                  <span className="choice-label">{choice.reply}</span>
+                </li>
+              ))}
           </ul>
         )}
         {block.type === 'range' && (

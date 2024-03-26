@@ -5,7 +5,7 @@ import save from '../../../images/assignment-page/save.svg';
 import eye from '../../../images/assignment-page/eye.svg';
 import { useNavigate } from 'react-router-dom';
 
-export default function HeaderAssignment({ blocks, handleSubmit, errorText }) {
+export default function HeaderAssignment({ blocks, handleSubmit, errorText, changeView }) {
   const navigate = useNavigate();
 
   function onBack() {
@@ -25,7 +25,7 @@ export default function HeaderAssignment({ blocks, handleSubmit, errorText }) {
               src={save}
               onClick={handleSubmit}
             />
-            <img className="header__icon-eye" alt="назад" src={eye} />
+            <img className="header__icon-eye" alt="назад" src={eye} onClick={changeView} />
           </div>
         </div>
         <span className="error__text">{errorText}</span>
