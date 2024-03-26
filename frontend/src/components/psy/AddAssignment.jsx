@@ -8,9 +8,10 @@ import {
   faCircleDot,
   faEllipsis,
   faImage,
+  faQuestion,
 } from '@fortawesome/free-solid-svg-icons';
 import { API } from '../../service/axios';
-import { AssignmentBlock } from '../../service/assignment-blocks';
+import { AssignmentBlock } from '../../service/psyAssignment/AssignmentBlock';
 import { ImageSelector } from '../../service/image-selector';
 import { useAuth } from '../../service/authContext';
 import { Modal } from '../../service/modal';
@@ -18,6 +19,7 @@ import { Headline } from './Headline';
 import { ImageQuestionBlock } from './ImageQuestionBlock';
 import HeadlinerImg from './HeadlinerImg/HeadlinerImg';
 import '../../css/assignments.css';
+import HeaderAssignment from './HeaderAssigmentPage/HeaderAssignment';
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
@@ -31,6 +33,8 @@ function AddAssignment() {
   const [blocks, setBlocks] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(false);
+
+  const [isChangeView, setChangeView] = useState(false);
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -46,17 +50,23 @@ function AddAssignment() {
       setSelectedImage({ urls: { full: response.data.image_url } }); // Assuming your ImageSelector expects an object like this
 
       const fetchedBlocks = response.data.blocks.map((block) => {
-        if (block.type === 'text') {
-          let contentState;
-          try {
-            const rawContent = JSON.parse(block.description);
-            contentState = convertFromRaw(rawContent);
-            console.log(contentState);
-          } catch (error) {
-            console.error('Ошибка при обработке содержимого:', error);
-            contentState = ContentState.createFromText(''); // Создаем пустое содержимое в случае ошибки
+        let contentState;
+        try {
+          const rawContent = JSON.parse(block.description);
+          contentState = convertFromRaw(rawContent);
+          console.log(contentState);
+        } catch (error) {
+          console.error('Ошибка при обработке содержимого:', error);
+          // Создаем ContentState с текстом из data.title для всех типов блоков, кроме 'text'
+          if (block.type !== 'text') {
+            contentState = ContentState.createFromText(block.title);
+          } else {
+            // Для типа 'text' создаем пустое содержимое, если описание не может быть обработано
+            contentState = ContentState.createFromText('');
           }
+        }
 
+        if (block.type === 'text') {
           return {
             ...block,
             title: block.question,
@@ -68,6 +78,7 @@ function AddAssignment() {
             ...block,
             title: block.question,
             choices: block.choice_replies.map((choice) => choice.reply),
+            content: EditorState.createWithContent(contentState),
           };
         }
         if (block.type === 'range') {
@@ -76,11 +87,13 @@ function AddAssignment() {
             title: block.question,
             minValue: block.start_range,
             maxValue: block.end_range,
+            content: EditorState.createWithContent(contentState),
           };
         }
         if (block.type === 'image') {
           return {
             ...block,
+            content: EditorState.createWithContent(contentState),
             // title: block.question,
             // minValue: block.start_range,
             // maxValue: block.end_range,
@@ -103,9 +116,8 @@ function AddAssignment() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const blockInfo = blocks.map((block) => {
-      if (block.type === 'text') {
+      if (block.type === 'text' || 'open') {
         return {
           type: block.type,
           question: block.title,
@@ -155,9 +167,12 @@ function AddAssignment() {
         }, 2000);
       }
     } catch (error) {
+      setErrorText('Fill in all the fields..');
       console.error('Error creating assignment', error);
     }
   };
+
+  const [errorText, setErrorText] = useState('');
 
   const handleImageSelect = (image) => {
     setSelectedImage(image);
@@ -168,8 +183,8 @@ function AddAssignment() {
       id: blocks.length + 1,
       type,
       title: '',
-      content: type === 'text' ? EditorState.createEmpty() : '',
-      choices: type === 'text' ? [] : [''],
+      content: type === 'text' || 'open' ? EditorState.createEmpty() : '',
+      choices: type === 'text' || 'open' ? [] : [''],
       minValue: type === 'range' ? 1 : null,
       maxValue: type === 'range' ? 10 : null,
     };
@@ -179,6 +194,42 @@ function AddAssignment() {
   const removeBlock = (blockId) => {
     const updatedBlocks = blocks.filter((block) => block.id !== blockId);
     setBlocks(updatedBlocks);
+  };
+
+  const copyBlock = (block) => {
+    const maxId = Math.max(...blocks.map((b) => b.id));
+    const newBlock = { ...block, id: maxId + 1 };
+    const updatedBlocks = blocks.concat(newBlock);
+
+    setBlocks(updatedBlocks);
+  };
+
+  const moveBlockForward = (index) => {
+    // Проверяем, не является ли текущий блок последним в массиве
+    if (index < blocks.length - 1) {
+      // Сохраняем текущий блок
+      const block = blocks[index];
+      // Удаляем блок из текущей позиции
+      blocks.splice(index, 1);
+      // Добавляем блок обратно в массив, но на позицию на одну вперед
+      blocks.splice(index + 1, 0, block);
+      // Обновляем состояние
+      setBlocks([...blocks]);
+    }
+  };
+
+  const moveBlockBackward = (index) => {
+    // Проверяем, не является ли текущий блок первым в массиве
+    if (index > 0) {
+      // Сохраняем текущий блок
+      const block = blocks[index];
+      // Удаляем блок из текущей позиции
+      blocks.splice(index, 1);
+      // Добавляем блок обратно в массив, но на позицию на одну назад
+      blocks.splice(index - 1, 0, block);
+      // Обновляем состояние
+      setBlocks([...blocks]);
+    }
   };
 
   const updateBlock = (
@@ -209,19 +260,37 @@ function AddAssignment() {
     setBlocks(updatedBlocks);
   };
 
+  console.log(blocks);
+
   return (
     <div className="assignments-page">
       {successMessage && <div className="success-message">Assignment created succesfully</div>}
-      <header>
-        <h1>Add Assignment</h1>
-        {blocks.length > 0 ? (
-          <button className="action-button" onClick={handleSubmit}>
-            Save Assignment
-          </button>
-        ) : (
-          <></>
-        )}
-      </header>
+      <HeaderAssignment
+        blocks={blocks}
+        handleSubmit={handleSubmit}
+        errorText={errorText}
+        changeView={() => {
+          setChangeView((prev) => !prev);
+        }}
+      />
+      <div className="form-title">
+        <input
+          type="text"
+          className="title-input"
+          placeholder="Name of Assignment..."
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          className="title-input"
+          placeholder="Description..."
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+        />
+      </div>
       <div className="add-assignment-body">
         <ImageSelector onImageSelect={handleImageSelect} />
         <form onSubmit={handleSubmit} className="form-creator">
@@ -236,24 +305,6 @@ function AddAssignment() {
               )}
             </div>
           ))}
-          <div className="form-title">
-            <input
-              type="text"
-              className="title-input"
-              placeholder="Name of form"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
-            <input
-              type="text"
-              className="title-input"
-              placeholder="Give a brief description..."
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-            />
-          </div>
           <div className="form-settings">
             <div className="form-setting">
               <label>Type</label>
@@ -282,19 +333,47 @@ function AddAssignment() {
               <input type="text" value={tags} onChange={(e) => setTags(e.target.value)} />
             </div>
           </div>
-          {blocks.map((block) => (
-            <AssignmentBlock
-              key={block.id}
-              block={block}
-              updateBlock={updateBlock}
-              removeBlock={removeBlock}
-            />
-          ))}
+          {isChangeView ? (
+            <>
+              {Array.from(blocks).map((block, index) => (
+                <AssignmentBlock
+                  key={block.id}
+                  block={block}
+                  updateBlock={updateBlock}
+                  removeBlock={removeBlock}
+                  copyBlock={copyBlock}
+                  moveBlockForward={moveBlockForward}
+                  moveBlockBackward={moveBlockBackward}
+                  index={index}
+                  readOnly={true}
+                  isView={true}
+                />
+              ))}
+            </>
+          ) : (
+            <>
+              {blocks.map((block, index) => (
+                <AssignmentBlock
+                  key={block.id}
+                  block={block}
+                  updateBlock={updateBlock}
+                  removeBlock={removeBlock}
+                  copyBlock={copyBlock}
+                  moveBlockForward={moveBlockForward}
+                  moveBlockBackward={moveBlockBackward}
+                  index={index}
+                />
+              ))}
+            </>
+          )}
         </form>
         <div className="block-buttons-container">
           <div className="block-buttons">
             <button title="Add Text Block" onClick={() => addBlock('text')}>
               <FontAwesomeIcon icon={faComment} />{' '}
+            </button>
+            <button title="Add Open-Question Block" onClick={() => addBlock('open')}>
+              <FontAwesomeIcon icon={faQuestion} />{' '}
             </button>
             <button title="Add Multiple Choice Block" onClick={() => addBlock('multiple')}>
               <FontAwesomeIcon icon={faSquareCheck} />{' '}
@@ -466,6 +545,8 @@ function ViewAssignment() {
 
     fetchAssignmentData();
   }, [id, navigate, setAssignmentCredentials]);
+
+  console.log('data', assignmentData);
 
   return (
     <div className="assignments-page">
