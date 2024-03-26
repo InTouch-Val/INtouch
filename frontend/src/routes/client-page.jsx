@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPlus, faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
+import { faUserPlus, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../service/authContext';
 import { API } from '../service/axios';
 import '../css/clients.css';
@@ -17,6 +17,12 @@ function ClientPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const { currentUser, updateUserData } = useAuth();
   const navigate = useNavigate();
+
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    setCount(filteredClients.length);
+  }, []);
 
   // useEffect(() => {
   //   updateUserData();
@@ -138,11 +144,6 @@ function ClientPage() {
               <tr key={client.id}>
                 <td>
                   <Link className="link-to-client" to={`/clients/${client.id}`}>
-                    <img
-                      src={client.photo}
-                      alt={`${client.first_name} ${client.last_name}`}
-                      className="avatar"
-                    />
                     {`${client.first_name} ${client.last_name}`}
                   </Link>
                 </td>
@@ -150,7 +151,7 @@ function ClientPage() {
                 <td>{new Date(client.date_joined).toLocaleDateString()}</td>
                 <td className="actions">
                   <button className="open-modal-button" onClick={() => openModal(client.id)}>
-                    <FontAwesomeIcon icon={faEllipsisVertical} />
+                    <FontAwesomeIcon icon={faTrashCan} />
                   </button>
                   {showModal && (
                     <div className="modal-overlay" onClick={closeModal}>
@@ -237,6 +238,14 @@ function ClientPage() {
                 </td>
               </tr>
             ))}
+            <tr>
+              <td></td>
+              <td className="table__show-result">
+                Show result {filteredClients.length} is {count}
+              </td>
+              <td></td>
+              <td></td>
+            </tr>
           </tbody>
         </table>
       </div>
