@@ -268,3 +268,14 @@ tr {
   grid-gap: 20px;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 }
+
+.table__show-result {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #b7b7b7;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 17px;
+  border: none;
+}
