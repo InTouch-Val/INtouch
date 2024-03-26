@@ -122,6 +122,10 @@ tr {
   background-color: #fff;
 }
 
+tr:last-child {
+  border: none;
+}
+
 .actions {
   display: flex;
   align-items: center;
@@ -277,5 +281,4 @@ tr {
   font-weight: 500;
   font-size: 16px;
   line-height: 17px;
-  border: none;
 }
