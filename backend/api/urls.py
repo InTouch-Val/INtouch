@@ -63,4 +63,5 @@ urlpatterns = [
     path('update-client/<int:pk>/', UpdateClientView.as_view(), name='update_client'),
     path('client/delete/<int:pk>/', ClientDeleteView.as_view(), name='client_delete'),
     path('client/update/<int:pk>/', DoctorUpdateClientView.as_view(), name='doctor_update_client'),
+    path('confirmation_code/', UserConfirmCode.as_view(), name='confirmation_code')
 ]

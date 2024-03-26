@@ -19,6 +19,7 @@ pk, token из url из письма. Возвращает access и refresh т�
 pk, token из url из письма. Возвращает access и refresh токены.  
 **POST: api/v1/password/reset/complete/** - установка нового пароля  
 Тело запроса: new_password, confirm_new_password  
+**POST: api/v1/token/** - подтверждение кода двухфакторной авторизации
   
 **POST: api/v1/clients/add/** - добавление клиента  
 Тело запроса: first_name, last_name, email  

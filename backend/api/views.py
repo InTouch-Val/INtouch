@@ -12,6 +12,22 @@ from rest_framework_simplejwt.exceptions import TokenError
 from .models import *
 from .serializers import *
 from .utils import send_by_mail
+from .permissions import IsConfirmedUser
+
+
+class UserConfirmCode(APIView):
+    """Подтверждение кода двухфакторной авторизации."""
+    def post(self, request):
+        user = request.user
+        serializer = ConfirmationSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        code = serializer.validated_data['confirmation_code']
+        if code != user.confirmation_code.code:
+            return Response('Confirmation code is incorrect.')
+        confirmation = ConfirmationCode.objects.get(user=user)
+        confirmation.is_confirmed = True
+        confirmation.save()
+        return Response('Authorization is confirmed')
 
 
 class UserViewSet(viewsets.ModelViewSet):

@@ -1,14 +1,60 @@
 import uuid
+import random
 
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.models import update_last_login
 from django.core.validators import RegexValidator
+from django.core.mail import send_mail
+from django.conf import settings
 from django.template.loader import render_to_string
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+from rest_framework_simplejwt.settings import api_settings
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.serializers import TokenObtainSerializer
 
 from .models import *
 from .tasks import remove_unverified_user
 from .utils import current_site, send_by_mail
+
+
+class MyTokenObtainPairSerializer(TokenObtainSerializer):
+    token_class = RefreshToken
+
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        refresh = self.get_token(self.user)
+
+        email = self.initial_data['username']
+        user = get_object_or_404(User, email=email)
+        if user.double_auth:
+            code = random.randint(100000, 999999)
+            confirmation = ConfirmationCode.objects.filter(user=user)
+            if confirmation:
+                confirmation_code = ConfirmationCode.objects.get(user=user)
+                confirmation_code.code = code
+                confirmation_code.save()
+            else:
+                ConfirmationCode.objects.create(
+                    user=user,
+                    code=code
+                )
+            send_mail(
+                subject='Confirmation code',
+                message=f'Your confirmation code for authorization: {code}',
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+            )
+
+        data["refresh"] = str(refresh)
+        data["access"] = str(refresh.access_token)
+
+        if api_settings.UPDATE_LAST_LOGIN:
+            update_last_login(None, self.user)
+
+        return data
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -91,6 +137,7 @@ class UserSerializer(serializers.ModelSerializer):
             'user_type',
             'is_active',
             'photo',
+            'double_auth'
         )
 
     def validate(self, attrs):
@@ -180,7 +227,14 @@ class UpdateUserSerializer(serializers.ModelSerializer):
     """Редактирование данных в профиле пользователя"""
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email', 'date_of_birth', 'photo']
+        fields = [
+            'first_name',
+            'last_name',
+            'email',
+            'date_of_birth',
+            'photo',
+            'double_auth'
+            ]
 
     def update(self, user, validated_data):
         user.first_name = validated_data.get('first_name', user.first_name)
@@ -189,6 +243,7 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         user.username = user.email
         user.date_of_birth = validated_data.get('date_of_birth', user.date_of_birth)
         user.photo = validated_data.get('photo', user.photo)
+        user.double_auth = validated_data.get('double_auth', user.double_auth)
         user.save()
         return user
 
@@ -455,6 +510,17 @@ class AssignmentClientSerializer(serializers.ModelSerializer):
             instance.blocks.add(block)
         instance.save()
         return instance
+
+
+class ConfirmationSerializer(serializers.Serializer):
+    confirmation_code = serializers.CharField()
+
+    def validate_confirmation_code(self, value):
+        if len(value) != 6:
+            raise serializers.ValidationError(
+                'Confirmation code must be 6-number value.'
+            )
+        return value
 
 
 class NoteSerializer(serializers.ModelSerializer):

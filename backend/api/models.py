@@ -14,6 +14,7 @@ class User(AbstractUser):
         default='user_photos/default_user_photo.jpg',
         blank=True,
     )
+    double_auth = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
@@ -36,6 +37,17 @@ class Client(models.Model):
     diagnosis = models.CharField(max_length=255, blank=True)
     about = models.TextField(blank=True)
     notes = models.ManyToManyField('Note', blank=True)
+
+
+class ConfirmationCode(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='confirmation_code',
+        null=True,
+    )
+    code = models.CharField(max_length=6, blank=True)
+    is_confirmed = models.BooleanField(default=False)
 
 
 class Assignment(models.Model):
