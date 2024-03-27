@@ -31,7 +31,7 @@ const EditorToolbar = forwardRef(({ editorState, setEditorState, placeholder, bl
         editorState={editorState}
         onChange={setEditorState}
         plugins={plugins}
-        placeholder={placeholder}
+        placeholder={block.question ? block.question : placeholder}
         ref={ref}
       />
       <Toolbar>

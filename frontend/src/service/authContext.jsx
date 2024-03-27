@@ -34,7 +34,6 @@ function AuthProvider({ children }) {
       console.error('Error during login:', error);
       if (error.response.status === 401) {
         logout();
-        window.location.href = '/login'; // Redirect to login page on login failure
       }
     }
     setIsLoading(false); // Установка после завершения всех операций
