@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPlus, faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
+import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../service/authContext';
 import { API } from '../service/axios';
 import '../css/clients.css';
+import Select from '../components/psy/Select/Select';
+import { menuActive, menuDate } from '../utils/constants';
 
 function ClientPage() {
   const [showModal, setShowModal] = useState(false);
@@ -12,11 +14,28 @@ function ClientPage() {
   const [modalAction, setModalAction] = useState(null);
   const [favoriteAssignments, setFavoriteAssignments] = useState([]);
   const [messageToUser, setMessageToUser] = useState(null);
+  const [activityFilter, setActivityFilter] = useState({
+    id: 1,
+    text: 'All clients',
+    status: 'All clients',
+  });
 
-  const [activityFilter, setActivityFilter] = useState('all');
+  const [activityFilterDate, setActivityFilterDate] = useState({
+    id: 1,
+    text: 'Added',
+    status: 'Date up',
+  });
   const [searchTerm, setSearchTerm] = useState('');
   const { currentUser, updateUserData } = useAuth();
+  const [isSelectActive, setSelectActive] = useState(false);
+  const [isSelectDateActive, setSelectDateActive] = useState(false);
   const navigate = useNavigate();
+
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    setCount(filteredClients.length);
+  }, []);
 
   // useEffect(() => {
   //   updateUserData();
@@ -42,15 +61,23 @@ function ClientPage() {
   }, [modalAction, currentUser.doctor.assignments]);
 
   const filteredClients =
-    currentUser?.doctor?.clients.filter(
-      (client) =>
-        `${client.first_name} ${client.last_name}`
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()) &&
-        (activityFilter === 'all' || client.is_active.toString() === activityFilter),
-    ) || [];
+    currentUser?.doctor?.clients
+      .sort((a, b) =>
+        activityFilterDate.status === 'Date up'
+          ? new Date(b.date_joined) - new Date(a.date_joined)
+          : new Date(a.date_joined) - new Date(b.date_joined),
+      )
+      .filter(
+        (client) =>
+          `${client.first_name} ${client.last_name}`
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) &&
+          (activityFilter.status === 'All clients' ||
+            client.is_active.toString() === activityFilter.status),
+      ) || [];
 
   const openModal = (clientId) => {
+    handleActionSelect('delete');
     setShowModal(true);
     setSelectedClientId(clientId);
   };
@@ -91,8 +118,13 @@ function ClientPage() {
     }
   };
 
+  function handleClickOverlay(e) {
+    setSelectDateActive(false);
+    setSelectActive(false);
+  }
+
   return (
-    <div className="clients-page">
+    <div className="clients-page" onClick={handleClickOverlay}>
       <header className="first-row">
         <h1>Clients</h1>
         <button className="client-button" onClick={handleAddClient}>
@@ -109,28 +141,31 @@ function ClientPage() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </form>
-        <select
-          className="activity-filters"
-          value={activityFilter}
-          onChange={(e) => setActivityFilter(e.target.value)}
-        >
-          <option value="all">All</option>
-          <option value="true">Active clients</option>
-          <option value="false">Inactive clients</option>
-        </select>
-        <select className="added-filters">
-          <option value="added">Added</option>
-        </select>
       </div>
       {messageToUser && <p className="success-message">{messageToUser}</p>}
       <div className="clients-list">
         <table>
           <thead>
-            <tr>
-              <th>Full Name</th>
-              <th>Status</th>
-              <th>Added</th>
-              <th>Actions</th>
+            <tr onClick={(e) => e.stopPropagation()}>
+              <th className="table__headColumn">Full Name</th>
+              <th className="table__headColumn">
+                <div className="button-select" onClick={() => setSelectActive((prev) => !prev)}>
+                  {activityFilter.text}
+                </div>
+
+                {isSelectActive && (
+                  <Select menu={menuActive} setActivityFilter={setActivityFilter} />
+                )}
+              </th>
+              <th className="table__headColumn">
+                <div className="button-select" onClick={() => setSelectDateActive((prev) => !prev)}>
+                  {activityFilterDate.text}
+                </div>
+                {isSelectDateActive && (
+                  <Select menu={menuDate} setActivityFilter={setActivityFilterDate} />
+                )}
+              </th>
+              <th className="table__headColumn">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -138,20 +173,16 @@ function ClientPage() {
               <tr key={client.id}>
                 <td>
                   <Link className="link-to-client" to={`/clients/${client.id}`}>
-                    <img
-                      src={client.photo}
-                      alt={`${client.first_name} ${client.last_name}`}
-                      className="avatar"
-                    />
                     {`${client.first_name} ${client.last_name}`}
                   </Link>
                 </td>
                 <td>{client.is_active ? 'Active' : 'Inactive'}</td>
                 <td>{new Date(client.date_joined).toLocaleDateString()}</td>
                 <td className="actions">
-                  <button className="open-modal-button" onClick={() => openModal(client.id)}>
-                    <FontAwesomeIcon icon={faEllipsisVertical} />
-                  </button>
+                  <button
+                    className="open-modal-button icon-trash"
+                    onClick={() => openModal(client.id)}
+                  ></button>
                   {showModal && (
                     <div className="modal-overlay" onClick={closeModal}>
                       <div className="modal" onClick={(e) => e.stopPropagation()}>
@@ -166,6 +197,9 @@ function ClientPage() {
                             >
                               Delete Client
                             </button>
+
+                            {/* TODO: Дизайнеры отказались от 2 модалки на этой странице, 
+                            но сказали, что где то будут ее использовать еще */}
                             <button
                               className="action-button"
                               onClick={() => handleActionSelect('add')}
@@ -237,6 +271,14 @@ function ClientPage() {
                 </td>
               </tr>
             ))}
+            <tr>
+              <td></td>
+              <td className="table__show-result">
+                Show result {filteredClients.length} is {count}
+              </td>
+              <td></td>
+              <td></td>
+            </tr>
           </tbody>
         </table>
       </div>

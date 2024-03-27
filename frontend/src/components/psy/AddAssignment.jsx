@@ -35,6 +35,8 @@ function AddAssignment() {
   const [successMessage, setSuccessMessage] = useState(false);
   const [successMessageText, setSuccessMessageText] = useState('');
 
+  const [isChangeView, setChangeView] = useState(false);
+
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditMode = id != undefined;
@@ -118,9 +120,8 @@ function AddAssignment() {
 
   const handleSubmit = async (e, isDraft = false) => {
     e.preventDefault();
-
     const blockInfo = blocks.map((block) => {
-      if (block.type === 'text') {
+      if (block.type === 'text' || 'open') {
         return {
           type: block.type,
           question: block.title,
@@ -298,6 +299,8 @@ function AddAssignment() {
     setBlocks(updatedBlocks);
   };
 
+  console.log(blocks);
+
   return (
     <div className="assignments-page">
       {successMessage && <div className="success-message">{successMessageText}</div>}
@@ -305,6 +308,9 @@ function AddAssignment() {
         blocks={blocks}
         handleSubmit={(e) => handleSubmit(e, true)}
         errorText={errorText}
+        changeView={() => {
+          setChangeView((prev) => !prev);
+        }}
       />
       <div className="form-title">
         <input
@@ -366,18 +372,39 @@ function AddAssignment() {
               <input type="text" value={tags} onChange={(e) => setTags(e.target.value)} />
             </div>
           </div>
-          {blocks.map((block, index) => (
-            <AssignmentBlock
-              key={block.id}
-              block={block}
-              updateBlock={updateBlock}
-              removeBlock={removeBlock}
-              copyBlock={copyBlock}
-              moveBlockForward={moveBlockForward}
-              moveBlockBackward={moveBlockBackward}
-              index={index}
-            />
-          ))}
+          {isChangeView ? (
+            <>
+              {Array.from(blocks).map((block, index) => (
+                <AssignmentBlock
+                  key={block.id}
+                  block={block}
+                  updateBlock={updateBlock}
+                  removeBlock={removeBlock}
+                  copyBlock={copyBlock}
+                  moveBlockForward={moveBlockForward}
+                  moveBlockBackward={moveBlockBackward}
+                  index={index}
+                  readOnly={true}
+                  isView={true}
+                />
+              ))}
+            </>
+          ) : (
+            <>
+              {blocks.map((block, index) => (
+                <AssignmentBlock
+                  key={block.id}
+                  block={block}
+                  updateBlock={updateBlock}
+                  removeBlock={removeBlock}
+                  copyBlock={copyBlock}
+                  moveBlockForward={moveBlockForward}
+                  moveBlockBackward={moveBlockBackward}
+                  index={index}
+                />
+              ))}
+            </>
+          )}
         </form>
         <div className="block-buttons-container">
           <div className="block-buttons">
@@ -571,6 +598,8 @@ function ViewAssignment() {
 
     fetchAssignmentData();
   }, [id, navigate, setAssignmentCredentials]);
+
+  console.log('data', assignmentData);
 
   return (
     <div className="assignments-page">

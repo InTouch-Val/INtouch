@@ -142,7 +142,7 @@ function AssignmentTile({
                 title="Client`s rating"
                 className="assignment-actions__statistics assignment-actions__statistics_grades"
               >
-                {assignment.grades.length}
+                {assignment.average_grade}
               </span>
               <span
                 title="Assignments count"
@@ -153,7 +153,7 @@ function AssignmentTile({
               <button
                 className="assignment-actions__share-with-client"
                 onClick={() => onShareToggle()}
-              ></button>{' '}
+              ></button>
             </>
           )}
         </div>
