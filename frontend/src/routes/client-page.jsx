@@ -1,7 +1,7 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPlus, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../service/authContext';
 import { API } from '../service/axios';
 import '../css/clients.css';
@@ -184,9 +184,10 @@ function ClientPage() {
                 <td>{client.is_active ? 'Active' : 'Inactive'}</td>
                 <td>{new Date(client.date_joined).toLocaleDateString()}</td>
                 <td className="actions">
-                  <button className="open-modal-button" onClick={() => openModal(client.id)}>
-                    <FontAwesomeIcon icon={faTrashCan} />
-                  </button>
+                  <button
+                    className="open-modal-button icon-trash"
+                    onClick={() => openModal(client.id)}
+                  ></button>
                   {showModal && (
                     <div className="modal-overlay" onClick={closeModal}>
                       <div className="modal" onClick={(e) => e.stopPropagation()}>

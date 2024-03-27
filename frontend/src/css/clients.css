@@ -304,3 +304,16 @@ tr:last-child {
   position: relative;
   cursor: pointer;
 }
+
+.icon-trash {
+  background-image: url('../images/icons/trash.svg');
+  background-repeat: no-repeat;
+  width: 30px;
+  height: 30px;
+  transition: 0.3 ease-in-out;
+}
+
+.icon-trash:hover {
+  zoom: 1.2;
+  opacity: 0.7;
+}
