@@ -64,10 +64,8 @@ function ClientPage() {
     currentUser?.doctor?.clients
       .sort((a, b) =>
         activityFilterDate.status === 'Date up'
-          ? new Date(a.date_joined).toLocaleDateString() >
-            new Date(b.date_joined).toLocaleDateString()
-          : new Date(a.date_joined).toLocaleDateString() <
-            new Date(b.date_joined).toLocaleDateString(),
+          ? new Date(b.date_joined) - new Date(a.date_joined)
+          : new Date(a.date_joined) - new Date(b.date_joined),
       )
       .filter(
         (client) =>
