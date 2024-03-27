@@ -1,6 +1,7 @@
 import uuid
 
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.hashers import make_password
 from django.core.validators import RegexValidator
 from django.template.loader import render_to_string
 from rest_framework import serializers
@@ -107,7 +108,7 @@ class UserSerializer(serializers.ModelSerializer):
             first_name=validated_data['first_name'].title(),
             last_name=validated_data['last_name'].title(),
             email=validated_data['email'],
-            password=validated_data['password'],
+            password=make_password(validated_data['password']),
             accept_policy=validated_data['accept_policy'],
             user_type='doctor',
             is_active=False,
@@ -263,7 +264,7 @@ class UpdateClientSerializer(serializers.ModelSerializer):
             user.last_name = validated_data['last_name']
             user.email = validated_data['email']
             user.accept_policy = validated_data['accept_policy']
-            user.set_password(password)
+            user.set_password(make_password(password))
             user.save()
         return user
 
