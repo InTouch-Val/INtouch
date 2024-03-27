@@ -95,8 +95,7 @@ table {
   box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
 }
 
-td,
-th {
+td {
   padding: 15px;
   border: none;
   border-bottom: 1px solid #ddd;
@@ -316,4 +315,16 @@ tr:last-child {
 .icon-trash:hover {
   zoom: 1.2;
   opacity: 0.7;
+}
+
+.table__headColumn {
+  padding: 15px;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  background-color: transparent;
+  font-weight: 400;
+  text-align: left;
+
+  font-size: 16px;
+  font-weight: 700;
 }
