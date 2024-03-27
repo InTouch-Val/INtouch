@@ -1,60 +1,60 @@
-import { useRef } from 'react';
+import React, { useRef, forwardRef } from 'react';
 import Editor from '@draft-js-plugins/editor';
-import createToolbarPlugin, { Separator } from '@draft-js-plugins/static-toolbar';
+import { Separator } from '@draft-js-plugins/static-toolbar';
 import {
   ItalicButton,
   BoldButton,
   UnderlineButton,
   HeadlineOneButton,
   HeadlineTwoButton,
-  HeadlineThreeButton,
   UnorderedListButton,
   OrderedListButton,
 } from '@draft-js-plugins/buttons';
 import '@draft-js-plugins/static-toolbar/lib/plugin.css';
 import '../css/editorsBar.css';
+import { useToolbar } from './ToolbarContext'; // Импортируем хук для использования контекста
 
-const toolbarPlugin = createToolbarPlugin();
-const { Toolbar } = toolbarPlugin;
-const plugins = [toolbarPlugin];
-
-function EditorToolbar({ editorState, setEditorState }) {
-  const editor = useRef(null);
+const EditorToolbar = forwardRef(({ editorState, setEditorState, placeholder, block }, ref) => {
+  const { toolbarPlugin, setToolbarPlugin } = useToolbar(); // Используем контекст
+  const { Toolbar } = toolbarPlugin;
+  const plugins = [toolbarPlugin];
 
   const focusEditor = () => {
-    editor.current.focus();
+    if (ref.current) {
+      ref.current.focus();
+    }
   };
 
   return (
     <div className="editor-container" onClick={focusEditor}>
       <Editor
-        ref={editor}
         editorState={editorState}
         onChange={setEditorState}
         plugins={plugins}
-        placeholder="Write text here..."
+        placeholder={placeholder}
+        ref={ref}
       />
       <Toolbar>
-        {
-          // May be used to render a custom toolbar
-          (externalProps) => (
-            <>
-              <BoldButton {...externalProps} />
-              <ItalicButton {...externalProps} />
-              <UnderlineButton {...externalProps} />
-              <Separator {...externalProps} />
-              <HeadlineOneButton {...externalProps} />
-              <HeadlineTwoButton {...externalProps} />
-              <HeadlineThreeButton {...externalProps} />
-              <Separator {...externalProps} />
-              <UnorderedListButton {...externalProps} />
-              <OrderedListButton {...externalProps} />
-            </>
-          )
-        }
+        {(externalProps) => (
+          <>
+            <BoldButton {...externalProps} />
+            <ItalicButton {...externalProps} />
+            <UnderlineButton {...externalProps} />
+            {block.type === 'text' ? (
+              <>
+                <Separator {...externalProps} />
+                <HeadlineOneButton {...externalProps} />
+                <HeadlineTwoButton {...externalProps} />
+                <Separator {...externalProps} />
+                <UnorderedListButton {...externalProps} />
+                <OrderedListButton {...externalProps} />
+              </>
+            ) : null}
+          </>
+        )}
       </Toolbar>
     </div>
   );
-}
+});
 
 export { EditorToolbar };

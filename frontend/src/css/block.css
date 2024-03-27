@@ -1,4 +1,12 @@
 /* block.css */
+.block-container {
+  width: 100%;
+}
+
+.block-container h2 {
+  color: #3f7983;
+}
+
 .block {
   width: 100%; /* Задаем ширину блока */
   padding: 10px;
@@ -47,20 +55,33 @@
   justify-content: space-between; /* Размещаем элементы на противоположных концах */
 }
 
-.remove-block-button,
-.remove-choice-button {
-  padding: 8px 16px; /* Паддинги для кнопки */
-  border: none; /* Убираем границу */
-  border-radius: 50px; /* Скругление углов кнопки */
-  margin: 10px; /* Курсор в виде руки */
-  background-color: #417d88; /* Красный фон кнопок */
-  color: #fff; /* Белый текст на кнопках */
-  cursor: pointer;
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  margin-top: 33px;
+  margin-bottom: 37px;
+  margin-left: 16px;
 }
 
-.remove-block-button:hover,
-.remove-choice-button:hover {
-  background-color: #3f7983; /* Темно-красный фон при наведении */
+.button {
+  width: 20px;
+  height: 20px;
+  border: none; /* Убираем границу */
+  background: none;
+  color: rgba(101, 101, 101, 1);
+  cursor: pointer;
+  padding: 0;
+}
+
+.button img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.button:hover img {
+  filter: contrast(300%);
 }
 
 .choice-option {
