@@ -60,23 +60,21 @@ function ClientPage() {
     fetchAssignments();
   }, [modalAction, currentUser.doctor.assignments]);
 
-  const filteredClients = currentUser?.doctor?.clients
-    .sort((a, b) =>
-      activityFilterDate.status === 'Date up'
-        ? new Date(a.date_joined).toLocaleDateString() >
-          new Date(b.date_joined).toLocaleDateString()
-        : new Date(a.date_joined).toLocaleDateString() <
-          new Date(b.date_joined).toLocaleDateString(),
-    )
-    .filter(
-      (client) =>
-        (`${client.first_name} ${client.last_name}`
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()) &&
+  const filteredClients =
+    currentUser?.doctor?.clients
+      .sort((a, b) =>
+        activityFilterDate.status === 'Date up'
+          ? new Date(b.date_joined) - new Date(a.date_joined)
+          : new Date(a.date_joined) - new Date(b.date_joined),
+      )
+      .filter(
+        (client) =>
+          `${client.first_name} ${client.last_name}`
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) &&
           (activityFilter.status === 'All clients' ||
-            client.is_active.toString() === activityFilter.status)) ||
-        [],
-    );
+            client.is_active.toString() === activityFilter.status),
+      ) || [];
 
   const openModal = (clientId) => {
     handleActionSelect('delete');
