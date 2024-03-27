@@ -60,7 +60,7 @@ h1 {
 select {
   flex: 15%;
   padding: 10px 15px;
-  border: 1px solid #d1d1d1;
+  /* border: 1px solid #d1d1d1; */
   border-radius: 10px;
   margin-left: 10px;
   appearance: none; /* Удаление стандартного вида */
@@ -71,6 +71,13 @@ select {
   color: #656565;
   cursor: pointer; /* Изменение курсора при наведении */
   font-size: 16px;
+}
+
+select:active,
+select:focus {
+  outline: none;
+  border: none;
+  border: transparent;
 }
 
 .clients-list {
@@ -88,8 +95,7 @@ table {
   box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
 }
 
-td,
-th {
+td {
   padding: 15px;
   border: none;
   border-bottom: 1px solid #ddd;
@@ -120,6 +126,10 @@ td {
 tr {
   border-bottom: 1px solid #000;
   background-color: #fff;
+}
+
+tr:last-child {
+  border: none;
 }
 
 .actions {
@@ -267,4 +277,54 @@ tr {
   margin-bottom: 20px;
   grid-gap: 20px;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+.table__show-result {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #b7b7b7;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 17px;
+}
+
+.activity-filters {
+  content: 'Status';
+  border: none;
+}
+
+.activity-filters:focus {
+  border: none;
+}
+
+.button-select {
+  /* position: absolute; */
+  position: relative;
+  cursor: pointer;
+}
+
+.icon-trash {
+  background-image: url('../images/icons/trash.svg');
+  background-repeat: no-repeat;
+  width: 30px;
+  height: 30px;
+  transition: 0.3 ease-in-out;
+}
+
+.icon-trash:hover {
+  zoom: 1.2;
+  opacity: 0.7;
+}
+
+.table__headColumn {
+  padding: 15px;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  background-color: transparent;
+  font-weight: 400;
+  text-align: left;
+
+  font-size: 16px;
+  font-weight: 700;
 }
