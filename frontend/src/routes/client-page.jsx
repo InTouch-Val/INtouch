@@ -5,6 +5,8 @@ import { faUserPlus, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../service/authContext';
 import { API } from '../service/axios';
 import '../css/clients.css';
+import Select from '../components/psy/Select/Select';
+import { menuActive, menuDate } from '../utils/constants';
 
 function ClientPage() {
   const [showModal, setShowModal] = useState(false);
@@ -12,10 +14,21 @@ function ClientPage() {
   const [modalAction, setModalAction] = useState(null);
   const [favoriteAssignments, setFavoriteAssignments] = useState([]);
   const [messageToUser, setMessageToUser] = useState(null);
+  const [activityFilter, setActivityFilter] = useState({
+    id: 1,
+    text: 'All clients',
+    status: 'All clients',
+  });
 
-  const [activityFilter, setActivityFilter] = useState('all');
+  const [activityFilterDate, setActivityFilterDate] = useState({
+    id: 1,
+    text: 'Added',
+    status: 'Date up',
+  });
   const [searchTerm, setSearchTerm] = useState('');
   const { currentUser, updateUserData } = useAuth();
+  const [isSelectActive, setSelectActive] = useState(false);
+  const [isSelectDateActive, setSelectDateActive] = useState(false);
   const navigate = useNavigate();
 
   const [count, setCount] = useState(0);
@@ -47,16 +60,26 @@ function ClientPage() {
     fetchAssignments();
   }, [modalAction, currentUser.doctor.assignments]);
 
-  const filteredClients =
-    currentUser?.doctor?.clients.filter(
+  const filteredClients = currentUser?.doctor?.clients
+    .sort((a, b) =>
+      activityFilterDate.status === 'Date up'
+        ? new Date(a.date_joined).toLocaleDateString() >
+          new Date(b.date_joined).toLocaleDateString()
+        : new Date(a.date_joined).toLocaleDateString() <
+          new Date(b.date_joined).toLocaleDateString(),
+    )
+    .filter(
       (client) =>
-        `${client.first_name} ${client.last_name}`
+        (`${client.first_name} ${client.last_name}`
           .toLowerCase()
           .includes(searchTerm.toLowerCase()) &&
-        (activityFilter === 'all' || client.is_active.toString() === activityFilter),
-    ) || [];
+          (activityFilter.status === 'All clients' ||
+            client.is_active.toString() === activityFilter.status)) ||
+        [],
+    );
 
   const openModal = (clientId) => {
+    handleActionSelect('delete');
     setShowModal(true);
     setSelectedClientId(clientId);
   };
@@ -97,8 +120,13 @@ function ClientPage() {
     }
   };
 
+  function handleClickOverlay(e) {
+    setSelectDateActive(false);
+    setSelectActive(false);
+  }
+
   return (
-    <div className="clients-page">
+    <div className="clients-page" onClick={handleClickOverlay}>
       <header className="first-row">
         <h1>Clients</h1>
         <button className="client-button" onClick={handleAddClient}>
@@ -115,15 +143,6 @@ function ClientPage() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </form>
-        <select
-          className="activity-filters"
-          value={activityFilter}
-          onChange={(e) => setActivityFilter(e.target.value)}
-        >
-          <option value="all">All</option>
-          <option value="true">Active clients</option>
-          <option value="false">Inactive clients</option>
-        </select>
         <select className="added-filters">
           <option value="added">Added</option>
         </select>
@@ -132,10 +151,25 @@ function ClientPage() {
       <div className="clients-list">
         <table>
           <thead>
-            <tr>
+            <tr onClick={(e) => e.stopPropagation()}>
               <th>Full Name</th>
-              <th>Status</th>
-              <th>Added</th>
+              <th>
+                <div className="button-select" onClick={() => setSelectActive((prev) => !prev)}>
+                  {activityFilter.text}
+                </div>
+
+                {isSelectActive && (
+                  <Select menu={menuActive} setActivityFilter={setActivityFilter} />
+                )}
+              </th>
+              <th>
+                <div className="button-select" onClick={() => setSelectDateActive((prev) => !prev)}>
+                  {activityFilterDate.text}
+                </div>
+                {isSelectDateActive && (
+                  <Select menu={menuDate} setActivityFilter={setActivityFilterDate} />
+                )}
+              </th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -167,6 +201,9 @@ function ClientPage() {
                             >
                               Delete Client
                             </button>
+
+                            {/* TODO: Дизайнеры отказались от 2 модалки на этой странице, 
+                            но сказали, что где то будут ее использовать еще */}
                             <button
                               className="action-button"
                               onClick={() => handleActionSelect('add')}

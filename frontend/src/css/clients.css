@@ -60,7 +60,7 @@ h1 {
 select {
   flex: 15%;
   padding: 10px 15px;
-  border: 1px solid #d1d1d1;
+  /* border: 1px solid #d1d1d1; */
   border-radius: 10px;
   margin-left: 10px;
   appearance: none; /* Удаление стандартного вида */
@@ -71,6 +71,13 @@ select {
   color: #656565;
   cursor: pointer; /* Изменение курсора при наведении */
   font-size: 16px;
+}
+
+select:active,
+select:focus {
+  outline: none;
+  border: none;
+  border: transparent;
 }
 
 .clients-list {
@@ -281,4 +288,19 @@ tr:last-child {
   font-weight: 500;
   font-size: 16px;
   line-height: 17px;
+}
+
+.activity-filters {
+  content: 'Status';
+  border: none;
+}
+
+.activity-filters:focus {
+  border: none;
+}
+
+.button-select {
+  /* position: absolute; */
+  position: relative;
+  cursor: pointer;
 }
