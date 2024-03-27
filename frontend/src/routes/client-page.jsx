@@ -143,9 +143,6 @@ function ClientPage() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </form>
-        <select className="added-filters">
-          <option value="added">Added</option>
-        </select>
       </div>
       {messageToUser && <p className="success-message">{messageToUser}</p>}
       <div className="clients-list">
