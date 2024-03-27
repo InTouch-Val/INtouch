@@ -42,8 +42,8 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'rest_framework',
     'rest_framework_simplejwt',
-    'corsheaders', # библитотека для корректной работы запросов с реакта
-    'drf_spectacular', # библиотека для генерации документации к API
+    'corsheaders',  # библитотека для корректной работы запросов с реакта
+    'drf_spectacular',  # библиотека для генерации документации к API
 ]
 
 MIDDLEWARE = [
@@ -82,14 +82,10 @@ WSGI_APPLICATION = 'INtouch.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': '127.0.0.1',
-#        'HOST': 'app-postgres',
+#        'HOST': '127.0.0.1',
+        'HOST': 'app-postgres',
         'PORT': 5432,
         'NAME': 'django_app',
         'USER': 'ivan',
@@ -142,7 +138,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'api.User' # переопределение стандартной модели пользователя
+AUTH_USER_MODEL = 'api.User'  # переопределение стандартной модели пользователя
 
 LOGIN_REDIRECT_URL = '/'
 
@@ -252,21 +248,21 @@ DRAMATIQ_BROKER = {
 
 DRAMATIQ_TASKS_DATABASE = "default"
 
-# LOGGING = {
-#    "version": 1,
-#    "disable_existing_loggers": False,
-#    "handlers": {
-#        "file": {
-#            "level": "DEBUG",
-#            "class": "logging.FileHandler",
-#            "filename": f"{BASE_DIR}/debug.log",
-#        },
-#    },
-#    "loggers": {
-#        "django": {
-#            "handlers": ["file"],
-#            "level": "DEBUG",
-#            "propagate": True,
-#        },
-#    },
-#}
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "file": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": f"{BASE_DIR}/debug.log",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["file"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+    },
+}
