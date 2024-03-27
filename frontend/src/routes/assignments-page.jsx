@@ -5,8 +5,10 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { API } from '../service/axios';
 import { AssignmentTile } from '../components/psy/AssignmentTile';
 import '../css/assignments.css';
+import { useAuth } from '../service/authContext';
 
 function AssignmentsPage() {
+  const { currentUser } = useAuth();
   const [activeTab, setActiveTab] = useState('library');
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
@@ -135,10 +137,16 @@ function AssignmentsPage() {
           Library
         </button>
         <button
+          className={activeTab === 'favorites' ? 'active' : ''}
+          onClick={() => setActiveTab('favorites')}
+        >
+          Favorites
+        </button>
+        <button
           className={activeTab === 'my-list' ? 'active' : ''}
           onClick={() => setActiveTab('my-list')}
         >
-          My List
+          My Tasks
         </button>
       </div>
       <div className="search-bar">
@@ -197,7 +205,7 @@ function AssignmentsPage() {
           )}
         </div>
       )}
-      {activeTab === 'my-list' && (
+      {activeTab === 'favorites' && (
         <div className="assignment-grid">
           {filteredAssignments.some((assignment) => userFavorites?.includes(assignment.id)) ? (
             filteredAssignments
@@ -213,6 +221,20 @@ function AssignmentsPage() {
           ) : (
             <div className="nothing-to-show">There is nothing to show yet</div>
           )}
+        </div>
+      )}
+      {activeTab === 'my-list' && (
+        <div className="assignment-grid">
+          {filteredAssignments
+            .filter((assignment) => assignment.author === currentUser.id)
+            .map((assignment) => (
+              <AssignmentTile
+                key={assignment.id}
+                assignment={assignment}
+                onFavoriteToggle={toggleFavorite}
+                isFavorite={userFavorites?.includes(assignment.id)}
+              />
+            ))}
         </div>
       )}
     </div>

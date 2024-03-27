@@ -1,26 +1,29 @@
 from django.contrib.auth.hashers import check_password
 from django.core.exceptions import PermissionDenied
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, viewsets
-from rest_framework.decorators import api_view, action
+from rest_framework.decorators import action, api_view
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
 from .models import *
+from .permissions import *
 from .serializers import *
 from .utils import send_by_mail
 
 
 class UserViewSet(viewsets.ModelViewSet):
     """Создание и получение пользователей"""
+
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    http_method_names = ['get', 'post']
+    http_method_names = ["get", "post"]
 
     def get_permissions(self):
-        if self.request.method == 'POST':
+        if self.request.method == "POST":
             permission_classes = [AllowAny]
         else:
             permission_classes = self.permission_classes
@@ -29,42 +32,52 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class UserDetailsView(generics.ListAPIView):
     """Получение модели пользователя по токену"""
+
     serializer_class = UserSerializer
+
     def get_queryset(self):
-        token = self.request.headers.get('Authorization').split(' ')[1]
+        token = self.request.headers.get("Authorization").split(" ")[1]
         try:
             decoded_token = AccessToken(token)
         except TokenError:
-            raise PermissionDenied('Invalid token')
+            raise PermissionDenied("Invalid token")
 
-        queryset = User.objects.filter(pk=int(decoded_token['user_id']))
+        queryset = User.objects.filter(pk=int(decoded_token["user_id"]))
         return queryset
 
 
 class UserConfirmEmailView(APIView):
     """Активация аккаунта, выдача токенов авторизации"""
-    permission_classes = (AllowAny, )
+
+    permission_classes = (AllowAny,)
+
     def get(self, request, pk, token):
-        user = User.objects.get(pk=pk)
+        if self.request.user.is_anonymous:
+            user = get_object_or_404(User, pk=pk)
+        else:
+            user = self.request.user
         if user.is_active:
-            return Response({'message': 'Account has already been activated'})
+            return Response({"message": "Account has already been activated"})
         if user and default_token_generator.check_token(user, token):
             user.is_active = True
             user.save()
             refresh = RefreshToken.for_user(user)
-            html_message = render_to_string('registration/welcome_mail.html')
+            html_message = render_to_string("registration/welcome_mail.html")
             send_by_mail(html_message, user.email)
-            return Response({
-                'message': 'Account activated',
-                'access_token': str(refresh.access_token),
-                'refresh_token': str(refresh)
-            })
+            return Response(
+                {
+                    "message": "Account activated",
+                    "access_token": str(refresh.access_token),
+                    "refresh_token": str(refresh),
+                }
+            )
         else:
-            return Response({'error': 'Account not activated'})
+            return Response({"error": "Account not activated"})
 
 
 class PasswordResetRequestView(APIView):
     """Запрос на сброс пароля"""
+
     permission_classes = (AllowAny,)
 
     def post(self, request):
@@ -76,92 +89,103 @@ class PasswordResetRequestView(APIView):
 
 class PasswordResetConfirmView(generics.GenericAPIView):
     """Подтверждение сброса пароля, выдача токенов авторизации"""
+
     permission_classes = (AllowAny,)
+
     def get(self, request, pk, token):
         user = User.objects.get(pk=pk)
         if user and default_token_generator.check_token(user, token):
             refresh = RefreshToken.for_user(user)
-            return Response({
-                'message': 'Password reset successful',
-                'access_token': str(refresh.access_token),
-                'refresh_token': str(refresh)
-            })
+            return Response(
+                {
+                    "message": "Password reset successful",
+                    "access_token": str(refresh.access_token),
+                    "refresh_token": str(refresh),
+                }
+            )
         else:
-            return Response({'error': 'Password not reset'})
+            return Response({"error": "Password not reset"})
 
 
 class PasswordResetCompleteView(APIView):
     """Установка нового пароля пользователя"""
+
     def post(self, request):
         serializer = ChangePasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        new_password = serializer.validated_data['new_password']
+        new_password = serializer.validated_data["new_password"]
         user = request.user
         if user:
             user.set_password(new_password)
             user.save()
-            return Response({'message': 'Password reset successfully'})
+            return Response({"message": "Password reset successfully"})
         else:
-            return Response({'error': 'Password not reset'})
+            return Response({"error": "Password not reset"})
 
 
 class UpdatePasswordView(APIView):
     """Изменение существующего пароля пользователя"""
+
     def post(self, request):
         serializer = UpdatePasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        new_password = serializer.validated_data['new_password']
+        new_password = serializer.validated_data["new_password"]
         user = request.user
-        if user and check_password(serializer.validated_data['password'], user.password):
+        if user and check_password(
+            serializer.validated_data["password"], user.password
+        ):
             user.set_password(new_password)
             user.save()
-            return Response({'message': 'Password changed successfully'})
+            return Response({"message": "Password changed successfully"})
         else:
-            return Response({'error': 'Password not changed'})
+            return Response({"error": "Password not changed"})
 
 
 class UpdateUserView(generics.UpdateAPIView):
     """Редактирование пользовательских данных"""
+
     queryset = User.objects.all()
     serializer_class = UpdateUserSerializer
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 def user_delete_hard(request):
     """Полное удаление пользователя"""
     user = request.user
     if user:
         user.delete()
-        return Response({'message': 'User deleted successfully'})
+        return Response({"message": "User deleted successfully"})
     else:
-        return Response({'error': 'User not found'})
+        return Response({"error": "User not found"})
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 def user_delete_soft(request):
     """Перевод пользователя в неактивные"""
     user = request.user
     if user:
         user.is_active = False
         user.save()
-        return Response({'message': 'User deactivated successfully'})
+        return Response({"message": "User deactivated successfully"})
     else:
-        return Response({'error': 'User not found'})
+        return Response({"error": "User not found"})
 
 
 class ClientDeleteView(APIView):
     """Удаление аккаунта клиента из интерфейса доктора"""
+
     def delete(self, request, pk):
         try:
             client = User.objects.get(pk=pk)
             request.user.doctor.clients.remove(client)
-            return Response({'message': 'Client deleted successfully'})
+            return Response({"message": "Client deleted successfully"})
         except User.DoesNotExist:
-            return Response({'error': 'Client not found'})
+            return Response({"error": "Client not found"})
 
 
 class AddClientView(APIView):
     """Добавление нового клиента из интерфейса доктора"""
+
     def post(self, request):
         serializer = AddClientSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -173,36 +197,41 @@ class AddClientView(APIView):
 
 class UpdateClientView(generics.UpdateAPIView):
     """Завершение регистрации из интерфейса клиента, установка пароля"""
+
     queryset = User.objects.all()
     serializer_class = UpdateClientSerializer
 
 
 class DoctorUpdateClientView(generics.UpdateAPIView):
     """Редактирование доктором данных о клиенте"""
+
     queryset = User.objects.all()
     serializer_class = DoctorUpdateClientSerializer
 
 
 class AssignmentAddUserMyListView(APIView):
     """Добавление задачи в свой список"""
+
     def get(self, request, pk):
         user = request.user
         assignment = Assignment.objects.get(pk=pk)
         user.doctor.assignments.add(assignment)
-        return Response({'message': 'Assignment added successfully.'})
+        return Response({"message": "Assignment added successfully."})
 
 
 class AssignmentDeleteUserMyListView(APIView):
     """Удаение задачи из своего списка"""
+
     def get(self, request, pk):
         user = request.user
         assignment = Assignment.objects.get(pk=pk)
         user.doctor.assignments.remove(assignment)
-        return Response({'message': 'Assignment deleted successfully.'})
+        return Response({"message": "Assignment deleted successfully."})
 
 
 class AddAssignmentClientView(APIView):
     """Назначение задачи клиенту"""
+
     def get(self, request, pk, client_pk):
         assignment = Assignment.objects.get(pk=pk)
         client = User.objects.get(pk=client_pk)
@@ -241,92 +270,99 @@ class AddAssignmentClientView(APIView):
         client.client.assignments.add(assignments_copy)
         assignment.share += 1
         assignment.save()
-        return Response({'message': 'Assignment set client successfully.'})
+        return Response({"message": "Assignment set client successfully."})
 
 
 class AssignmentViewSet(viewsets.ModelViewSet):
     """CRUD операции над задачами доктора"""
+
     queryset = Assignment.objects.all()
     serializer_class = AssignmentSerializer
+    permission_classes = [
+        IsAuthorOrReadOnly,
+    ]
 
     def destroy(self, request, *args, **kwargs):
         assignment = self.get_object()
         if assignment.author != request.user:
             raise PermissionDenied(
-                "You don't have permission to delete this assignment.")
+                "You don't have permission to delete this assignment."
+            )
         return super().destroy(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
         assignment = self.get_object()
         if assignment.author != request.user:
             raise PermissionDenied(
-                "You don't have permission to update this assignment.")
+                "You don't have permission to update this assignment."
+            )
         return super().update(request, *args, **kwargs)
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=["get"])
     def draft(self, request, pk):
         """Сокрытие задачи из общего пула, добавление  драфт"""
         assignments = self.get_object()
         assignments.is_public = False
         assignments.save()
-        return Response({'message': 'Assignments saved in draft'})
+        return Response({"message": "Assignments saved in draft"})
 
 
 class AssignmentClientViewSet(viewsets.ModelViewSet):
     """CRUD операции над задачами клиента"""
+
     queryset = AssignmentClient.objects.all()
     serializer_class = AssignmentClientSerializer
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=["get"])
     def complete(self, request, pk):
         """Смена статуса задачи на 'done'"""
         assignment = self.get_object()
-        assignment.status = 'done'
+        assignment.status = "done"
         assignment.save()
-        return Response({'message': 'Status is "done"'})
+        return Response({"message": 'Status is "done"'})
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=["get"])
     def clear(self, request, pk):
         """Очистка ответов в задании клиента"""
         assignment = self.get_object()
 
-        if assignment.status == 'to do':
-            return Response({
-                'message': 'No cleaning required. Status is "to do"'
-            })
+        if assignment.status == "to do":
+            return Response({"message": 'No cleaning required. Status is "to do"'})
 
         for block in assignment.blocks:
-            if block.type == 'text':
-                block.reply = ''
-            if block.type == 'single' or block.type == 'multiple':
+            if block.type == "text":
+                block.reply = ""
+            if block.type == "single" or block.type == "multiple":
                 for ans in block.choice_replies:
                     ans.checked = False
                 block.choice_replies.save()
-            if block.type == 'range':
+            if block.type == "range":
                 pass
-            if block.type == 'image':
+            if block.type == "image":
                 pass
             block.save()
 
-        assignment.status = 'to do'
+        assignment.status = "to do"
         assignment.save()
-        return Response({'message': 'Assignments cleared successfully'})
+        return Response({"message": "Assignments cleared successfully"})
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=["get"])
     def visible(self, request, pk):
         """Смена значения видимости задания для доктора"""
         assignment = self.get_object()
         assignment.visible = not assignment.visible
-        return Response({'message': 'Visibility changed'})
+        return Response({"message": "Visibility changed"})
 
 
 class NoteViewSet(viewsets.ModelViewSet):
     """CRUD операции над заметками"""
+
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
 
 
 class DiaryNoteViewSet(viewsets.ModelViewSet):
     """CRUD операции над заметками в дневнике"""
+
     queryset = DiaryNote.objects.all()
     serializer_class = DiaryNoteSerializer

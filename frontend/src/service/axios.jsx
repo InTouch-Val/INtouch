@@ -38,8 +38,8 @@ async function refreshTokens() {
     console.error('Token refresh failed:', error);
     throw error; //Передаём ошибку дальше для обработки в интерцепторе ответов
 
-    // localStorage.clear();
-    // window.location.href = '/login'; // Redirect to login page on refresh failure
+    localStorage.clear();
+    window.location.href = '/login'; // Redirect to login page on refresh failure
   }
 }
 

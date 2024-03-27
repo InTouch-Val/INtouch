@@ -29,6 +29,7 @@ function AuthProvider({ children }) {
       const response = await API.get('get-user/');
       console.log(response);
       setCurrentUser(response.data[0]);
+      console.log(currentUser);
     } catch (error) {
       console.error('Error during login:', error);
       if (error.response.status === 401) {
