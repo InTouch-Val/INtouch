@@ -15,7 +15,7 @@ function AssignmentTile({
   assignment,
   onFavoriteToggle,
   isFavorite,
-  onShareToggle,
+  onShareClick,
   isAuthor,
   onCopyClick,
   onDeleteClick,
@@ -152,7 +152,10 @@ function AssignmentTile({
               </span>
               <button
                 className="assignment-actions__share-with-client"
-                onClick={() => onShareToggle()}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onShareClick(assignment.id);
+                }}
               ></button>
             </>
           )}

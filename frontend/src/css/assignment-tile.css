@@ -127,6 +127,7 @@
   background-position: center;
   background-size: contain;
   margin-left: auto;
+  cursor: pointer;
 }
 
 .favorite-button {
@@ -340,4 +341,128 @@
   background-size: contain;
   background-position: center;
   cursor: pointer;
+}
+
+/* Блок: Контейнер списка */
+.share-assignment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 564px;
+  padding: 10px;
+  position: relative;
+}
+
+.share-assignment__list-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  justify-content: center;
+  width: 283px;
+  max-height: 250px;
+  overflow-y: auto;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+/* Элемент: Заголовок списка */
+.share-assignment__title {
+  text-align: center;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 28px;
+  margin-bottom: 20px;
+}
+
+/* Элемент: Элемент списка (клиент) */
+.share-assignment__item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Элемент: Чекбокс */
+.share-assignment__checkbox {
+  width: 30px;
+  height: 30px;
+  margin-right: 16px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  outline: none;
+  cursor: pointer;
+  border: 1px solid rgba(101, 101, 101, 1);
+  border-radius: 50%;
+  position: relative;
+}
+
+.share-assignment__checkbox:hover {
+  border: 2px solid rgba(101, 101, 101, 1);
+}
+
+.share-assignment__checkbox::after {
+  content: '✓'; /* Unicode символ галочки */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 200%; /* Размер смайлика */
+  color: rgba(101, 101, 101, 1); /* Цвет смайлика */
+  opacity: 0;
+}
+
+.share-assignment__checkbox:checked::after {
+  opacity: 1;
+}
+
+.share-assignment__checkbox-label {
+  font-size: 16px;
+  line-height: 17px;
+  cursor: pointer;
+}
+
+.share-assignment__checkbox-label:hover {
+  font-weight: 800;
+}
+
+/* Стили для ссылки на верх списка */
+.share-assignment__list-wrapper::-webkit-scrollbar {
+  width: 20px;
+}
+
+.share-assignment__list-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.share-assignment__list-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(65, 125, 136, 1);
+  border-radius: 10px;
+}
+
+.share-assignment__list-wrapper::-webkit-scrollbar-thumb:hover {
+  background: rgba(65, 125, 136, 1);
+}
+
+.share-assignment__close-button {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 23px;
+  height: 23px;
+  border: 2px solid rgba(65, 125, 136, 1); /* Зеленый бордер */
+  border-radius: 30%; /* Скругленные углы */
+  background-color: transparent;
+  color: rgba(65, 125, 136, 1); /* Зеленый крестик */
+  font-size: 100%;
+  font-weight: 800;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+}
+
+.share-assignment__close-button:hover {
+  background-color: rgba(65, 125, 136, 1); /* Зеленый фон при наведении */
+  color: white; /* Белый крестик при наведении */
 }
