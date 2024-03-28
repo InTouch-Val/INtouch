@@ -1,5 +1,10 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
 # dependencies
 frontend/node_modules
 /.pnp
@@ -25,6 +30,19 @@ yarn-error.log*
 .idea
 package-lock.json
 
-__pycache__
-venv
+# Environments
+.env
 .venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Directories with static and media
+static/
+media/
+sent_emails/
+
+# Logging data
+debug.log
