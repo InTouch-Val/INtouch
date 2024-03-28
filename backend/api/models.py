@@ -1,3 +1,4 @@
+from api.constants import LANGUAGES
 from django.contrib.auth.models import AbstractUser
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
@@ -49,7 +50,7 @@ class Assignment(models.Model):
     assignment_type = models.CharField(max_length=100)
     status = models.CharField(max_length=100)
     tags = models.CharField(max_length=255)
-    language = models.CharField(max_length=100)
+    language = models.CharField(max_length=100, choices=LANGUAGES)
     share = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
     image_url = models.CharField(max_length=255)
@@ -80,7 +81,7 @@ class AssignmentClient(models.Model):
     assignment_type = models.CharField(max_length=100)
     status = models.CharField(max_length=100, default="to do")
     tags = models.CharField(max_length=255)
-    language = models.CharField(max_length=100)
+    language = models.CharField(max_length=100, choices=LANGUAGES)
     share = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
     image_url = models.CharField(max_length=255)
