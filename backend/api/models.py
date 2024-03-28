@@ -1,7 +1,8 @@
-from api.constants import LANGUAGES
 from django.contrib.auth.models import AbstractUser
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
+
+from api.constants import LANGUAGES
 
 
 class User(AbstractUser):

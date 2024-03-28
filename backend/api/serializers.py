@@ -7,8 +7,8 @@ from django.template.loader import render_to_string
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from .tasks import remove_unverified_user
-from .utils import current_site, send_by_mail
+from api.tasks import remove_unverified_user
+from api.utils import current_site, send_by_mail
 
 
 class ClientSerializer(serializers.ModelSerializer):
