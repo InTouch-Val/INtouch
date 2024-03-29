@@ -41,7 +41,7 @@ venv.bak/
 
 # Directories with static and media
 static/
-media/
+# media/
 sent_emails/
 
 # Logging data
