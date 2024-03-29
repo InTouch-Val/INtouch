@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders', # библитотека для корректной работы запросов с реакта
     'drf_spectacular', # библиотека для генерации документации к API
+    'django_password_validators',
+    'django_password_validators.password_history'
 ]
 
 MIDDLEWARE = [
@@ -84,8 +86,8 @@ WSGI_APPLICATION = 'INtouch.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-#        'HOST': '127.0.0.1',
-        'HOST': 'app-postgres',
+        'HOST': '127.0.0.1',
+#        'HOST': 'app-postgres',
         'PORT': 5432,
         'NAME': 'django_app',
         'USER': 'ivan',
@@ -109,6 +111,32 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+    {
+        'NAME': 'api.validators.MaximumLengthValidator',
+    },
+    {
+        'NAME': 'api.validators.LatinLettersValidator',
+    },
+    {
+        'NAME': 'api.validators.NoSpaceValidator',
+    },
+    {
+        'NAME': 'django_password_validators.password_history.password_validation.UniquePasswordsValidator',
+        'OPTIONS': {
+            'last_passwords': 8
+        }
+    },
+    {
+        'NAME': 'django_password_validators.password_character_requirements.password_validation.PasswordCharacterValidator',
+        'OPTIONS': {
+             'min_length_digit': 1,
+             'min_length_alpha': 2,
+             'min_length_special': 0,
+             'min_length_lower': 1,
+             'min_length_upper': 1,
+             'special_characters': "~!?@#$%^&*_-+|/()[]{}><\'.,:;"
+         }
     },
 ]
 
@@ -255,21 +283,21 @@ DRAMATIQ_BROKER = {
 
 DRAMATIQ_TASKS_DATABASE = "default"
 
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "handlers": {
-        "file": {
-            "level": "DEBUG",
-            "class": "logging.FileHandler",
-            "filename": f"{BASE_DIR}/debug.log",
-        },
-    },
-    "loggers": {
-        "django": {
-            "handlers": ["file"],
-            "level": "DEBUG",
-            "propagate": True,
-        },
-    },
-}
+#LOGGING = {
+#    "version": 1,
+#    "disable_existing_loggers": False,
+#    "handlers": {
+#        "file": {
+#            "level": "DEBUG",
+#            "class": "logging.FileHandler",
+#            "filename": f"{BASE_DIR}/debug.log",
+#        },
+#    },
+#    "loggers": {
+#        "django": {
+#            "handlers": ["file"],
+#            "level": "DEBUG",
+#            "propagate": True,
+#        },
+#    },
+#}

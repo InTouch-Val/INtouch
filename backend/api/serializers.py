@@ -2,7 +2,8 @@ import uuid
 
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.hashers import make_password
-from django.core.validators import RegexValidator
+from django.contrib.auth.password_validation import MinimumLengthValidator
+from django_password_validators.password_character_requirements.password_validation import PasswordCharacterValidator
 from django.template.loader import render_to_string
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
@@ -10,6 +11,11 @@ from rest_framework.validators import UniqueValidator
 from .models import *
 from .tasks import remove_unverified_user
 from .utils import current_site, send_by_mail
+from .validators import (
+    MaximumLengthValidator,
+    LatinLettersValidator,
+    NoSpaceValidator
+)
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -60,11 +66,11 @@ class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True,
         validators=[
-            RegexValidator(
-                regex='^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$',
-                message='The password must contain at least 8 characters, '
-                        'including letters and numbers.'
-            )
+            MinimumLengthValidator,
+            MaximumLengthValidator,
+            LatinLettersValidator,
+            NoSpaceValidator,
+            PasswordCharacterValidator
         ]
     )
     confirm_password = serializers.CharField(write_only=True)
@@ -153,11 +159,11 @@ class ChangePasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(
         write_only=True,
         validators=[
-            RegexValidator(
-                regex='^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$',
-                message='The password must contain at least 8 characters, '
-                        'including letters and numbers.'
-            )
+            MinimumLengthValidator,
+            MaximumLengthValidator,
+            LatinLettersValidator,
+            NoSpaceValidator,
+            PasswordCharacterValidator
         ]
     )
     confirm_new_password = serializers.CharField(write_only=True)
@@ -170,6 +176,16 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 class UpdatePasswordSerializer(ChangePasswordSerializer):
     password = serializers.CharField()
+    new_password = serializers.CharField(
+        write_only=True,
+        validators=[
+            MinimumLengthValidator,
+            MaximumLengthValidator,
+            LatinLettersValidator,
+            NoSpaceValidator,
+            PasswordCharacterValidator
+        ]
+    )
     def validate(self, attrs):
         if attrs['new_password'] != attrs['confirm_new_password']:
             raise serializers.ValidationError("Passwords do not match")
@@ -234,11 +250,11 @@ class UpdateClientSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True,
         validators=[
-            RegexValidator(
-                regex='^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$',
-                message='The password must contain at least 8 characters, '
-                        'including letters and numbers.'
-            )
+            MinimumLengthValidator,
+            MaximumLengthValidator,
+            LatinLettersValidator,
+            NoSpaceValidator,
+            PasswordCharacterValidator
         ]
     )
     confirm_password = serializers.CharField(write_only=True)
