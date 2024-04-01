@@ -1,6 +1,7 @@
 import uuid
 
 from api.models import *
+from drf_extra_fields.fields import Base64ImageField
 from django.contrib.auth.tokens import default_token_generator
 from django.core.validators import RegexValidator
 from django.template.loader import render_to_string
@@ -315,7 +316,7 @@ class BlockSerializer(serializers.ModelSerializer):
     choice_replies = BlockChoiceSerializer(many=True, required=False)
     left_pole = serializers.CharField(required=False)
     right_pole = serializers.CharField(required=False)
-    image = serializers.ImageField(required=False)
+    image = Base64ImageField(required=False)
 
     class Meta:
         model = Block
