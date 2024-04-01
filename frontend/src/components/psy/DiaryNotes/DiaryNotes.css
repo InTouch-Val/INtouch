@@ -1,0 +1,12 @@
+.diarySection {
+  background-color: #fbfbfb;
+  width: 935px;
+}
+
+.diary__list {
+  padding: 20px 30px;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  column-gap: 30px;
+  row-gap: 20px;
+}
