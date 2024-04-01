@@ -4,7 +4,7 @@ import IconCopy from '../../../images/IconCopy.svg';
 import Button from '../button/ButtonHeadline';
 import './HeadlinerImg.css';
 
-function HeadlinerImg() {
+function HeadlinerImg({ setSelectedImageForBlock }) {
   const [blockVisible, setBlockVisible] = useState(true);
   const [uploadedImage, setUploadedImage] = useState(CloudUploadSignal);
   const [isDragging, setIsDragging] = useState(false);
@@ -30,6 +30,10 @@ function HeadlinerImg() {
         const reader = new FileReader();
         reader.onloadend = () => {
           setUploadedImage(reader.result); // Устанавливаем URL изображения в состояние
+          setSelectedImageForBlock({
+            file: file, // Сохраняем файл изображения
+            url: reader.result, // Сохраняем URL изображения
+          });
         };
         reader.readAsDataURL(file); // Читаем файл как Data URL
       } else {
@@ -43,14 +47,24 @@ function HeadlinerImg() {
   };
 
   const handleFileUpload = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setUploadedImage(reader.result);
-    };
-    reader.readAsDataURL(file);
-
-    console.log('Selected file:', file);
+    const files = event.target.files; // Используйте event.target.files для доступа к файлам
+    if (files.length > 0) {
+      const file = files[0]; // Получаем первый файл
+      if (file.type.startsWith('image/')) {
+        // Проверяем, что файл является изображением
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setUploadedImage(reader.result); // Устанавливаем URL изображения в состояние
+          setSelectedImageForBlock({
+            file: file, // Сохраняем файл изображения
+            url: reader.result, // Сохраняем URL изображения
+          });
+        };
+        reader.readAsDataURL(file); // Читаем файл как Data URL
+      } else {
+        console.log('Файл не является изображением');
+      }
+    }
   };
 
   return (

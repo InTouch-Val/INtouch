@@ -34,6 +34,10 @@ function AddAssignment() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(false);
   const [successMessageText, setSuccessMessageText] = useState('');
+  const [selectedImageForBlock, setSelectedImageForBlock] = useState({
+    file: null, // Файл изображения
+    url: null, // URL изображения, полученный с помощью FileReader
+  });
 
   const [isChangeView, setChangeView] = useState(false);
 
@@ -127,6 +131,7 @@ function AddAssignment() {
           question: block.title,
           description: getObjectFromEditorState(block.content),
           choice_replies: [],
+          image: selectedImageForBlock.file,
         };
       }
       if (block.type === 'range') {
@@ -137,19 +142,21 @@ function AddAssignment() {
           end_range: block.maxValue,
           left_pole: block.leftPole || 'Left Pole',
           right_pole: block.rightPole || 'Right Pole',
+          image: selectedImageForBlock.file,
         };
       }
       if (block.type === 'image') {
         return {
           type: block.type,
           question: block.title,
-          image: block.image,
+          image: selectedImageForBlock.file,
         };
       }
       return {
         type: block.type,
         question: block.title,
         choice_replies: block.choices.map((choice) => ({ reply: choice })),
+        image: selectedImageForBlock.file,
       };
     });
 
@@ -161,7 +168,7 @@ function AddAssignment() {
       tags: 'ffasd',
       language,
       image_url:
-        selectedImage?.urls.full ||
+        selectedImage?.url ||
         'https://images.unsplash.com/photo-1641531316051-30d6824c6460?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1MzE0ODh8MHwxfHNlYXJjaHwxfHxsZW9uaWR8ZW58MHx8fHwxNzAwODE4Nzc5fDA&ixlib=rb-4.0.3&q=85',
     };
 
@@ -343,7 +350,11 @@ function AddAssignment() {
                 <ImageQuestionBlock block={block} updateBlock={updateBlock} />
               )}
               {block.type === 'headlinerImg' && (
-                <HeadlinerImg block={block} updateBlock={updateBlock} />
+                <HeadlinerImg
+                  block={block}
+                  updateBlock={updateBlock}
+                  setSelectedImageForBlock={setSelectedImageForBlock}
+                />
               )}
             </div>
           ))}
@@ -389,6 +400,7 @@ function AddAssignment() {
                   index={index}
                   readOnly={true}
                   isView={true}
+                  setSelectedImageForBlock={setSelectedImageForBlock}
                 />
               ))}
             </>
@@ -404,6 +416,7 @@ function AddAssignment() {
                   moveBlockForward={moveBlockForward}
                   moveBlockBackward={moveBlockBackward}
                   index={index}
+                  setSelectedImageForBlock={setSelectedImageForBlock}
                 />
               ))}
             </>

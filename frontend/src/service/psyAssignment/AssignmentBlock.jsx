@@ -16,6 +16,7 @@ function AssignmentBlock({
   index,
   readOnly,
   isView,
+  setSelectedImageForBlock,
 }) {
   const [title, setTitle] = useState(block.title);
   const [choices, setChoices] = useState(block.choices || []);
@@ -315,7 +316,7 @@ function AssignmentBlock({
         moveBlockBackward={moveBlockBackward}
         index={index}
       >
-        <HeadlinerImg />
+        <HeadlinerImg setSelectedImageForBlock={setSelectedImageForBlock} />
       </Block>
     );
   }
