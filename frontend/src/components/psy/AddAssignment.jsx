@@ -236,9 +236,12 @@ function AddAssignment() {
   const copyBlock = (block) => {
     const maxId = Math.max(...blocks.map((b) => b.id));
     const newBlock = { ...block, id: maxId + 1 };
-    const updatedBlocks = blocks.concat(newBlock);
 
-    setBlocks(updatedBlocks);
+    const index = blocks.findIndex((b) => b.id === block.id);
+
+    blocks.splice(index + 1, 0, newBlock);
+
+    setBlocks([...blocks]);
   };
 
   const moveBlockForward = (index) => {
