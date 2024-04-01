@@ -22,8 +22,8 @@ function AssignmentBlock({
   const [minValue, setMinValue] = useState(block.minValue || 1);
   const [maxValue, setMaxValue] = useState(block.maxValue || 10);
   const [choiceRefs, setChoiceRefs] = useState([]);
-  const [leftPole, setLeftPole] = useState(block.leftPole || 'Left Pole');
-  const [rightPole, setRightPole] = useState(block.rightPole || 'Right Pole');
+  const [leftPole, setLeftPole] = useState(block.leftPole || '');
+  const [rightPole, setRightPole] = useState(block.rightPole || '');
   const [image, setImage] = useState(block.image);
 
   useEffect(() => {
@@ -240,30 +240,61 @@ function AssignmentBlock({
         index={index}
       >
         <div className="range-inputs">
+          <input
+            className="number-input-container"
+            type="text"
+            value={leftPole}
+            onChange={(e) => handlePoleChange('left', e.target.value)}
+            placeholder="Left pole..."
+          />
           <div className="number-input-container">
-            <button onClick={(e) => handleMinChange(-1, e)}>-</button>
-            <input type="number" value={minValue} onChange={(e) => handleNumberChange(e, 'min')} />
-            <button onClick={(e) => handleMinChange(1, e)}>+</button>
+            <button
+              className="number-input-container-button"
+              onClick={(e) => handleMinChange(-1, e)}
+            >
+              ▼
+            </button>
+            <input
+              className="number-input-container-input"
+              type="number"
+              value={minValue}
+              onChange={(e) => handleNumberChange(e, 'min')}
+            />
+            <button
+              className="number-input-container-button"
+              onClick={(e) => handleMinChange(1, e)}
+            >
+              ▲
+            </button>
           </div>
+          <p>-</p>
           <div className="number-input-container">
-            <button onClick={(e) => handleMaxChange(-1, e)}>-</button>
-            <input type="number" value={maxValue} onChange={(e) => handleNumberChange(e, 'max')} />
-            <button onClick={(e) => handleMaxChange(1, e)}>+</button>
-          </div>
-          <div className="pole-inputs">
+            <button
+              className="number-input-container-button"
+              onClick={(e) => handleMaxChange(-1, e)}
+            >
+              ▼
+            </button>
             <input
-              type="text"
-              value={leftPole}
-              onChange={(e) => handlePoleChange('left', e.target.value)}
-              placeholder="Input left pole name"
+              className="number-input-container-input"
+              type="number"
+              value={maxValue}
+              onChange={(e) => handleNumberChange(e, 'max')}
             />
-            <input
-              type="text"
-              value={rightPole}
-              onChange={(e) => handlePoleChange('right', e.target.value)}
-              placeholder="Input right pole name"
-            />
+            <button
+              className="number-input-container-button"
+              onClick={(e) => handleMaxChange(1, e)}
+            >
+              ▲
+            </button>
           </div>
+          <input
+            className="number-input-container"
+            type="text"
+            value={rightPole}
+            onChange={(e) => handlePoleChange('right', e.target.value)}
+            placeholder="Right pole..."
+          />
         </div>
       </Block>
     );
