@@ -18,14 +18,14 @@ export default function HeaderAssignment({ blocks, handleSubmit, errorText, chan
         <div className="header__wrapper">
           <h1>Add Assignment</h1>
           <div className="header__buttons">
-            <img className="header__icon-back" alt="назад" src={arrowBack} onClick={onBack} />
+            <img className="header__icon-back" alt="back" src={arrowBack} onClick={onBack} />
             <img
               className={blocks.length > 0 ? 'header__icon-save' : 'header__icon-save-disabled'}
-              alt="назад"
+              alt="save"
               src={save}
               onClick={handleSubmit}
             />
-            <img className="header__icon-eye" alt="назад" src={eye} onClick={changeView} />
+            <img className="header__icon-eye" alt="changeView" src={eye} onClick={changeView} />
           </div>
         </div>
         <span className="error__text">{errorText}</span>
