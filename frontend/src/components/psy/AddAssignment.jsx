@@ -131,7 +131,6 @@ function AddAssignment() {
           question: block.title,
           description: getObjectFromEditorState(block.content),
           choice_replies: [],
-          image: selectedImageForBlock.file,
         };
       }
       if (block.type === 'range') {
@@ -142,7 +141,6 @@ function AddAssignment() {
           end_range: block.maxValue,
           left_pole: block.leftPole || 'Left Pole',
           right_pole: block.rightPole || 'Right Pole',
-          image: selectedImageForBlock.file,
         };
       }
       if (block.type === 'image') {
@@ -156,7 +154,6 @@ function AddAssignment() {
         type: block.type,
         question: block.title,
         choice_replies: block.choices.map((choice) => ({ reply: choice })),
-        image: selectedImageForBlock.file,
       };
     });
 
