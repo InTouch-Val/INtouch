@@ -146,6 +146,16 @@
   font-weight: 500;
 }
 
+.number-input-container-input::-webkit-outer-spin-button,
+.number-input-container-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
 .range-options {
   display: flex;
   flex-wrap: nowrap;
