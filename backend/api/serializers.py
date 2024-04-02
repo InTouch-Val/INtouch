@@ -1,8 +1,9 @@
 import uuid
 
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.password_validation import MinimumLengthValidator
-from django_password_validators.password_character_requirements.password_validation import PasswordCharacterValidator
+from django.contrib.auth.password_validation import validate_password
+from django_password_validators.password_history.password_validation import UniquePasswordsValidator
+from django.core.exceptions import ValidationError
 from django.template.loader import render_to_string
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
@@ -10,11 +11,6 @@ from rest_framework.validators import UniqueValidator
 from .models import *
 from .tasks import remove_unverified_user
 from .utils import current_site, send_by_mail
-from .validators import (
-    MaximumLengthValidator,
-    LatinLettersValidator,
-    NoSpaceValidator
-)
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -62,16 +58,7 @@ class DoctorSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     client = ClientSerializer(required=False)
     doctor = DoctorSerializer(required=False)
-    password = serializers.CharField(
-        write_only=True,
-        validators=[
-            MinimumLengthValidator,
-            MaximumLengthValidator,
-            LatinLettersValidator,
-            NoSpaceValidator,
-            PasswordCharacterValidator
-        ]
-    )
+    password = serializers.CharField(write_only=True)
     confirm_password = serializers.CharField(write_only=True)
     email = serializers.EmailField(
         validators=[UniqueValidator(queryset=User.objects.all())]
@@ -100,6 +87,10 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
     def validate(self, attrs):
+        if len(attrs['first_name']) < 2 or len(attrs['last_name']) < 2:
+            raise serializers.ValidationError(
+                "First and last names must be at least two-symbols words"
+                )
         if attrs['password'] != attrs['confirm_password']:
             raise serializers.ValidationError("Passwords do not match")
         if not attrs['accept_policy']:
@@ -118,6 +109,11 @@ class UserSerializer(serializers.ModelSerializer):
             user_type='doctor',
             is_active=False,
         )
+        try:
+            validate_password(password=validated_data['password'], user=user)
+        except ValidationError as err:
+            user.delete()
+            raise serializers.ValidationError({'password': err.messages})
         Doctor.objects.create(user=user)
         token = default_token_generator.make_token(user)
         activation_url = f'/activate/{user.pk}/{token}/'
@@ -155,39 +151,34 @@ class PasswordResetSerializer(serializers.Serializer):
 
 
 class ChangePasswordSerializer(serializers.Serializer):
-    new_password = serializers.CharField(
-        write_only=True,
-        validators=[
-            MinimumLengthValidator,
-            MaximumLengthValidator,
-            LatinLettersValidator,
-            NoSpaceValidator,
-            PasswordCharacterValidator
-        ]
-    )
+    new_password = serializers.CharField(write_only=True)
     confirm_new_password = serializers.CharField(write_only=True)
 
     def validate(self, attrs):
+        request = self.context.get('request')
+        user = request.user
         if attrs['new_password'] != attrs['confirm_new_password']:
             raise serializers.ValidationError("Passwords do not match")
+        try:
+            validate_password(password=attrs['new_password'], user=user)
+        except ValidationError as err:
+            raise serializers.ValidationError({'new_password': err.messages})
         return attrs
 
 
 class UpdatePasswordSerializer(ChangePasswordSerializer):
     password = serializers.CharField()
-    new_password = serializers.CharField(
-        write_only=True,
-        validators=[
-            MinimumLengthValidator,
-            MaximumLengthValidator,
-            LatinLettersValidator,
-            NoSpaceValidator,
-            PasswordCharacterValidator
-        ]
-    )
+    new_password = serializers.CharField(write_only=True)
+
     def validate(self, attrs):
+        request = self.context.get('request')
+        user = request.user
         if attrs['new_password'] != attrs['confirm_new_password']:
             raise serializers.ValidationError("Passwords do not match")
+        try:
+            validate_password(password=attrs['new_password'], user=user)
+        except ValidationError as err:
+            raise serializers.ValidationError({'new_password': err.messages})
         return attrs
 
 
@@ -197,6 +188,13 @@ class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email', 'date_of_birth', 'photo']
+
+    def validate(self, attrs):
+        if len(attrs['first_name']) < 2 or len(attrs['last_name']) < 2:
+            raise serializers.ValidationError(
+                "First and last names must be at least two-symbols words"
+                )
+        return attrs
 
     def update(self, user, validated_data):
         user.first_name = validated_data.get('first_name', user.first_name)
@@ -246,16 +244,7 @@ class AddClientSerializer(serializers.ModelSerializer):
 
 class UpdateClientSerializer(serializers.ModelSerializer):
     """Завершение регистрации со стороны клиента, установка пароля"""
-    password = serializers.CharField(
-        write_only=True,
-        validators=[
-            MinimumLengthValidator,
-            MaximumLengthValidator,
-            LatinLettersValidator,
-            NoSpaceValidator,
-            PasswordCharacterValidator
-        ]
-    )
+    password = serializers.CharField(write_only=True)
     confirm_password = serializers.CharField(write_only=True)
     email = serializers.EmailField(
         validators=[UniqueValidator(queryset=User.objects.all())]
@@ -274,6 +263,10 @@ class UpdateClientSerializer(serializers.ModelSerializer):
     def update(self, user, validated_data):
         password = validated_data.get('password')
         confirm_password = validated_data.get('confirm_password')
+        try:
+            validate_password(password=password, user=user)
+        except ValidationError as err:
+            raise serializers.ValidationError({'password': err.messages})
         if password and confirm_password and password == confirm_password:
             user.first_name = validated_data['first_name']
             user.last_name = validated_data['last_name']

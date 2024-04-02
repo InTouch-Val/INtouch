@@ -97,7 +97,8 @@ class PasswordResetConfirmView(generics.GenericAPIView):
 class PasswordResetCompleteView(APIView):
     """Установка нового пароля пользователя"""
     def post(self, request):
-        serializer = ChangePasswordSerializer(data=request.data)
+        serializer = ChangePasswordSerializer(data=request.data,
+                                              context={'request': request})
         serializer.is_valid(raise_exception=True)
         new_password = serializer.validated_data['new_password']
         user = request.user
@@ -112,7 +113,8 @@ class PasswordResetCompleteView(APIView):
 class UpdatePasswordView(APIView):
     """Изменение существующего пароля пользователя"""
     def post(self, request):
-        serializer = UpdatePasswordSerializer(data=request.data)
+        serializer = UpdatePasswordSerializer(data=request.data,
+                                              context={'request': request})
         serializer.is_valid(raise_exception=True)
         new_password = serializer.validated_data['new_password']
         user = request.user
