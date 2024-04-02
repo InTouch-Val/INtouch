@@ -16,14 +16,15 @@ function AssignmentBlock({
   index,
   readOnly,
   isView,
+  setSelectedImageForBlock,
 }) {
   const [title, setTitle] = useState(block.title);
   const [choices, setChoices] = useState(block.choices || []);
   const [minValue, setMinValue] = useState(block.minValue || 1);
   const [maxValue, setMaxValue] = useState(block.maxValue || 10);
   const [choiceRefs, setChoiceRefs] = useState([]);
-  const [leftPole, setLeftPole] = useState(block.leftPole || 'Left Pole');
-  const [rightPole, setRightPole] = useState(block.rightPole || 'Right Pole');
+  const [leftPole, setLeftPole] = useState(block.leftPole || '');
+  const [rightPole, setRightPole] = useState(block.rightPole || '');
   const [image, setImage] = useState(block.image);
 
   useEffect(() => {
@@ -111,20 +112,38 @@ function AssignmentBlock({
 
   const handleMinChange = (change, e) => {
     e.preventDefault();
-    const newValue = Math.max(0, minValue + change);
+    let newValue = Math.max(0, minValue + change);
+    // Добавляем проверку, чтобы ограничить максимальное значение
+    newValue = Math.min(1, newValue);
     setMinValue(newValue);
     updateBlock(block.id, block.content, block.choices, title, newValue, maxValue);
   };
 
   const handleMaxChange = (change, e) => {
     e.preventDefault();
-    const newValue = Math.max(minValue, maxValue + change);
+    // Используем Math.min и Math.max для ограничения значения в диапазоне от 2 до 10
+    const newValue = Math.min(Math.max(maxValue + change, 2), 10);
     setMaxValue(newValue);
     updateBlock(block.id, block.content, block.choices, title, minValue, newValue);
   };
 
   const handleNumberChange = (event, type) => {
-    const value = parseInt(event.target.value, 10) || 0;
+    let value = parseInt(event.target.value, 10);
+    // Если тип ввода равен 'min', ограничиваем диапазон от 0 до 1
+    if (type === 'min') {
+      if (isNaN(value) || value < 0) {
+        value = 0;
+      } else if (value > 1) {
+        value = 1;
+      }
+    } else {
+      if (isNaN(value) || value < 2) {
+        value = 2;
+      } else if (value > 10) {
+        value = 10;
+      }
+    }
+
     if (type === 'min') {
       setMinValue(value);
       updateBlock(block.id, block.content, block.choices, title, value, maxValue);
@@ -199,7 +218,7 @@ function AssignmentBlock({
         question={title}
         updateBlock={updateBlock}
         handleTitleChange={handleTitleChange}
-        placeholder="Write question here..."
+        placeholder="Write your text here..."
         moveBlockForward={moveBlockForward}
         moveBlockBackward={moveBlockBackward}
         index={index}
@@ -231,7 +250,7 @@ function AssignmentBlock({
         block={block}
         removeBlock={removeBlock}
         copyBlock={copyBlock}
-        heading="Range"
+        heading="Linear Scale"
         question={title}
         updateBlock={updateBlock}
         handleTitleChange={handleTitleChange}
@@ -241,30 +260,67 @@ function AssignmentBlock({
         index={index}
       >
         <div className="range-inputs">
+          <input
+            className="number-input-container"
+            type="text"
+            value={leftPole}
+            onChange={(e) => handlePoleChange('left', e.target.value)}
+            placeholder="Left pole..."
+            maxLength={15}
+          />
           <div className="number-input-container">
-            <button onClick={(e) => handleMinChange(-1, e)}>-</button>
-            <input type="number" value={minValue} onChange={(e) => handleNumberChange(e, 'min')} />
-            <button onClick={(e) => handleMinChange(1, e)}>+</button>
+            <button
+              className="number-input-container-button"
+              onClick={(e) => handleMinChange(-1, e)}
+            >
+              ▼
+            </button>
+            <input
+              className="number-input-container-input"
+              type="number"
+              value={minValue}
+              onChange={(e) => handleNumberChange(e, 'min')}
+              min={0}
+              max={1}
+            />
+            <button
+              className="number-input-container-button"
+              onClick={(e) => handleMinChange(1, e)}
+            >
+              ▲
+            </button>
           </div>
+          <p>-</p>
           <div className="number-input-container">
-            <button onClick={(e) => handleMaxChange(-1, e)}>-</button>
-            <input type="number" value={maxValue} onChange={(e) => handleNumberChange(e, 'max')} />
-            <button onClick={(e) => handleMaxChange(1, e)}>+</button>
-          </div>
-          <div className="pole-inputs">
+            <button
+              className="number-input-container-button"
+              onClick={(e) => handleMaxChange(-1, e)}
+            >
+              ▼
+            </button>
             <input
-              type="text"
-              value={leftPole}
-              onChange={(e) => handlePoleChange('left', e.target.value)}
-              placeholder="Input left pole name"
+              className="number-input-container-input"
+              type="number"
+              value={maxValue}
+              onChange={(e) => handleNumberChange(e, 'max')}
+              min={2}
+              max={10}
             />
-            <input
-              type="text"
-              value={rightPole}
-              onChange={(e) => handlePoleChange('right', e.target.value)}
-              placeholder="Input right pole name"
-            />
+            <button
+              className="number-input-container-button"
+              onClick={(e) => handleMaxChange(1, e)}
+            >
+              ▲
+            </button>
           </div>
+          <input
+            className="number-input-container"
+            type="text"
+            value={rightPole}
+            onChange={(e) => handlePoleChange('right', e.target.value)}
+            placeholder="Right pole..."
+            maxLength={15}
+          />
         </div>
       </Block>
     );
@@ -285,7 +341,7 @@ function AssignmentBlock({
         moveBlockBackward={moveBlockBackward}
         index={index}
       >
-        <HeadlinerImg />
+        <HeadlinerImg setSelectedImageForBlock={setSelectedImageForBlock} />
       </Block>
     );
   }

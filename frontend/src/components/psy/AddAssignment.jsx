@@ -34,6 +34,10 @@ function AddAssignment() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(false);
   const [successMessageText, setSuccessMessageText] = useState('');
+  const [selectedImageForBlock, setSelectedImageForBlock] = useState({
+    file: null, // Файл изображения
+    url: null, // URL изображения, полученный с помощью FileReader
+  });
 
   const [isChangeView, setChangeView] = useState(false);
 
@@ -143,7 +147,7 @@ function AddAssignment() {
         return {
           type: block.type,
           question: block.title,
-          image: block.image,
+          image: selectedImageForBlock.file,
         };
       }
       return {
@@ -161,7 +165,7 @@ function AddAssignment() {
       tags: 'ffasd',
       language,
       image_url:
-        selectedImage?.urls.full ||
+        selectedImage?.url ||
         'https://images.unsplash.com/photo-1641531316051-30d6824c6460?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1MzE0ODh8MHwxfHNlYXJjaHwxfHxsZW9uaWR8ZW58MHx8fHwxNzAwODE4Nzc5fDA&ixlib=rb-4.0.3&q=85',
     };
 
@@ -236,9 +240,12 @@ function AddAssignment() {
   const copyBlock = (block) => {
     const maxId = Math.max(...blocks.map((b) => b.id));
     const newBlock = { ...block, id: maxId + 1 };
-    const updatedBlocks = blocks.concat(newBlock);
 
-    setBlocks(updatedBlocks);
+    const index = blocks.findIndex((b) => b.id === block.id);
+
+    blocks.splice(index + 1, 0, newBlock);
+
+    setBlocks([...blocks]);
   };
 
   const moveBlockForward = (index) => {
@@ -340,7 +347,11 @@ function AddAssignment() {
                 <ImageQuestionBlock block={block} updateBlock={updateBlock} />
               )}
               {block.type === 'headlinerImg' && (
-                <HeadlinerImg block={block} updateBlock={updateBlock} />
+                <HeadlinerImg
+                  block={block}
+                  updateBlock={updateBlock}
+                  setSelectedImageForBlock={setSelectedImageForBlock}
+                />
               )}
             </div>
           ))}
@@ -386,6 +397,7 @@ function AddAssignment() {
                   index={index}
                   readOnly={true}
                   isView={true}
+                  setSelectedImageForBlock={setSelectedImageForBlock}
                 />
               ))}
             </>
@@ -401,6 +413,7 @@ function AddAssignment() {
                   moveBlockForward={moveBlockForward}
                   moveBlockBackward={moveBlockBackward}
                   index={index}
+                  setSelectedImageForBlock={setSelectedImageForBlock}
                 />
               ))}
             </>
@@ -420,7 +433,7 @@ function AddAssignment() {
             <button title="Add Single Choice Block" onClick={() => addBlock('single')}>
               <FontAwesomeIcon icon={faCircleDot} />{' '}
             </button>
-            <button title="Add Range Question Block" onClick={() => addBlock('range')}>
+            <button title="Add Linear Scale Question Block" onClick={() => addBlock('range')}>
               <FontAwesomeIcon icon={faEllipsis} />
             </button>
             <button title="Add Image" onClick={() => addBlock('image')}>
