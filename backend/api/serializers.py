@@ -4,7 +4,6 @@ from api.models import *
 from drf_extra_fields.fields import Base64ImageField
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.password_validation import validate_password
-from django_password_validators.password_history.password_validation import UniquePasswordsValidator
 from django.core.exceptions import ValidationError
 from django.template.loader import render_to_string
 from rest_framework import serializers
@@ -91,11 +90,11 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
     def validate(self, attrs):
-        if len(attrs['first_name']) < 2 or len(attrs['last_name']) < 2:
+        if len(attrs["first_name"]) < 2 or len(attrs["last_name"]) < 2:
             raise serializers.ValidationError(
                 "First and last names must be at least two-symbols words"
-                )
-        if attrs['password'] != attrs['confirm_password']:
+            )
+        if attrs["password"] != attrs["confirm_password"]:
             raise serializers.ValidationError("Passwords do not match")
         if not attrs["accept_policy"]:
             raise serializers.ValidationError("Accept with company policy")
@@ -104,20 +103,20 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Используется при создании пользователя-доктора"""
         user = User.objects.create_user(
-            username=validated_data['email'],
-            first_name=validated_data['first_name'].title(),
-            last_name=validated_data['last_name'].title(),
-            email=validated_data['email'],
-            password=(validated_data['password']),
-            accept_policy=validated_data['accept_policy'],
-            user_type='doctor',
+            username=validated_data["email"],
+            first_name=validated_data["first_name"].title(),
+            last_name=validated_data["last_name"].title(),
+            email=validated_data["email"],
+            password=(validated_data["password"]),
+            accept_policy=validated_data["accept_policy"],
+            user_type="doctor",
             is_active=False,
         )
         try:
-            validate_password(password=validated_data['password'], user=user)
+            validate_password(password=validated_data["password"], user=user)
         except ValidationError as err:
             user.delete()
-            raise serializers.ValidationError({'password': err.messages})
+            raise serializers.ValidationError({"password": err.messages})
         Doctor.objects.create(user=user)
         token = default_token_generator.make_token(user)
         activation_url = f"/activate/{user.pk}/{token}/"
@@ -158,14 +157,14 @@ class ChangePasswordSerializer(serializers.Serializer):
     confirm_new_password = serializers.CharField(write_only=True)
 
     def validate(self, attrs):
-        request = self.context.get('request')
+        request = self.context.get("request")
         user = request.user
-        if attrs['new_password'] != attrs['confirm_new_password']:
+        if attrs["new_password"] != attrs["confirm_new_password"]:
             raise serializers.ValidationError("Passwords do not match")
         try:
-            validate_password(password=attrs['new_password'], user=user)
+            validate_password(password=attrs["new_password"], user=user)
         except ValidationError as err:
-            raise serializers.ValidationError({'new_password': err.messages})
+            raise serializers.ValidationError({"new_password": err.messages})
         return attrs
 
 
@@ -174,14 +173,14 @@ class UpdatePasswordSerializer(ChangePasswordSerializer):
     new_password = serializers.CharField(write_only=True)
 
     def validate(self, attrs):
-        request = self.context.get('request')
+        request = self.context.get("request")
         user = request.user
-        if attrs['new_password'] != attrs['confirm_new_password']:
+        if attrs["new_password"] != attrs["confirm_new_password"]:
             raise serializers.ValidationError("Passwords do not match")
         try:
-            validate_password(password=attrs['new_password'], user=user)
+            validate_password(password=attrs["new_password"], user=user)
         except ValidationError as err:
-            raise serializers.ValidationError({'new_password': err.messages})
+            raise serializers.ValidationError({"new_password": err.messages})
         return attrs
 
 
@@ -193,17 +192,10 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         fields = ["first_name", "last_name", "email", "date_of_birth", "photo"]
 
     def validate(self, attrs):
-        if len(attrs['first_name']) < 2 or len(attrs['last_name']) < 2:
+        if len(attrs["first_name"]) < 2 or len(attrs["last_name"]) < 2:
             raise serializers.ValidationError(
                 "First and last names must be at least two-symbols words"
-                )
-        return attrs
-
-    def validate(self, attrs):
-        if len(attrs['first_name']) < 2 or len(attrs['last_name']) < 2:
-            raise serializers.ValidationError(
-                "First and last names must be at least two-symbols words"
-                )
+            )
         return attrs
 
     def update(self, user, validated_data):
@@ -253,6 +245,7 @@ class AddClientSerializer(serializers.ModelSerializer):
 
 class UpdateClientSerializer(serializers.ModelSerializer):
     """Завершение регистрации со стороны клиента, установка пароля"""
+
     password = serializers.CharField(write_only=True)
     confirm_password = serializers.CharField(write_only=True)
     email = serializers.EmailField(
@@ -276,7 +269,7 @@ class UpdateClientSerializer(serializers.ModelSerializer):
         try:
             validate_password(password=password, user=user)
         except ValidationError as err:
-            raise serializers.ValidationError({'password': err.messages})
+            raise serializers.ValidationError({"password": err.messages})
         if password and confirm_password and password == confirm_password:
             user.first_name = validated_data["first_name"]
             user.last_name = validated_data["last_name"]
