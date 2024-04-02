@@ -48,8 +48,9 @@ function AssignmentBlock({
         <div className="block-header">
           <h3 className="block-title">{isView ? block.title : block.question}</h3>
         </div>
-        {block.type === 'text' ||
-          ('open' && <div dangerouslySetInnerHTML={{ __html: block.description }} />)}
+        {block.type === 'text' || block.type == 'open' || (
+          <div dangerouslySetInnerHTML={{ __html: block.description }} />
+        )}
         {(block.type === 'single' || block.type === 'multiple') && (
           <ul className={`choices-container ${block.type}`}>
             {isView == true &&
