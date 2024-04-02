@@ -7,6 +7,7 @@ import { API } from '../../service/axios';
 import { ClientAssignmentTile } from './AssignmentTile';
 import { Notes } from './Notes';
 import '../../css/clients.css';
+import DiaryNotes from './DiaryNotes/DiaryNotes';
 
 function ClientDetailsPage() {
   const { id } = useParams();
@@ -27,6 +28,9 @@ function ClientDetailsPage() {
   };
   const switchToNotesTab = () => {
     setActiveTab('notes');
+  };
+  const switchToDiaryTab = () => {
+    setActiveTab('diary');
   };
 
   useEffect(() => {
@@ -143,8 +147,11 @@ function ClientDetailsPage() {
           Assignments
         </button>
         {/* <button className={activeTab ==='stats'? 'active' : ''} onClick={switchToStatsTab}>Stats</button> */}
-        <button className={activeTab === 'notes' ? 'active' : ''} onClick={switchToNotesTab}>
+        {/* <button className={activeTab === 'notes' ? 'active' : ''} onClick={switchToNotesTab}>
           Notes
+        </button> */}
+        <button className={activeTab === 'diary' ? 'active' : ''} onClick={switchToDiaryTab}>
+          Diary
         </button>
       </div>
       {/*Profile Tab View */}
@@ -211,6 +218,7 @@ function ClientDetailsPage() {
       )}
       {/*Notes Tab View */}
       {activeTab === 'notes' && <Notes clientId={client.id} />}
+      {activeTab === 'diary' && <DiaryNotes clientId={client.id} />}
     </div>
   );
 }

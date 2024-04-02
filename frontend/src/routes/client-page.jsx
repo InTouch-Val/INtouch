@@ -16,7 +16,7 @@ function ClientPage() {
   const [messageToUser, setMessageToUser] = useState(null);
   const [activityFilter, setActivityFilter] = useState({
     id: 1,
-    text: 'All clients',
+    text: 'Status',
     status: 'All clients',
   });
 
@@ -147,8 +147,8 @@ function ClientPage() {
         <table>
           <thead>
             <tr onClick={(e) => e.stopPropagation()}>
-              <th>Full Name</th>
-              <th>
+              <th className="table__headColumn">Full Name</th>
+              <th className="table__headColumn">
                 <div className="button-select" onClick={() => setSelectActive((prev) => !prev)}>
                   {activityFilter.text}
                 </div>
@@ -157,7 +157,7 @@ function ClientPage() {
                   <Select menu={menuActive} setActivityFilter={setActivityFilter} />
                 )}
               </th>
-              <th>
+              <th className="table__headColumn">
                 <div className="button-select" onClick={() => setSelectDateActive((prev) => !prev)}>
                   {activityFilterDate.text}
                 </div>
@@ -165,7 +165,7 @@ function ClientPage() {
                   <Select menu={menuDate} setActivityFilter={setActivityFilterDate} />
                 )}
               </th>
-              <th>Actions</th>
+              <th className="table__headColumn">Actions</th>
             </tr>
           </thead>
           <tbody>
