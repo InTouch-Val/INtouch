@@ -112,20 +112,38 @@ function AssignmentBlock({
 
   const handleMinChange = (change, e) => {
     e.preventDefault();
-    const newValue = Math.max(0, minValue + change);
+    let newValue = Math.max(0, minValue + change);
+    // Добавляем проверку, чтобы ограничить максимальное значение
+    newValue = Math.min(1, newValue);
     setMinValue(newValue);
     updateBlock(block.id, block.content, block.choices, title, newValue, maxValue);
   };
 
   const handleMaxChange = (change, e) => {
     e.preventDefault();
-    const newValue = Math.max(minValue, maxValue + change);
+    // Используем Math.min и Math.max для ограничения значения в диапазоне от 2 до 10
+    const newValue = Math.min(Math.max(maxValue + change, 2), 10);
     setMaxValue(newValue);
     updateBlock(block.id, block.content, block.choices, title, minValue, newValue);
   };
 
   const handleNumberChange = (event, type) => {
-    const value = parseInt(event.target.value, 10) || 0;
+    let value = parseInt(event.target.value, 10);
+    // Если тип ввода равен 'min', ограничиваем диапазон от 0 до 1
+    if (type === 'min') {
+      if (isNaN(value) || value < 0) {
+        value = 0;
+      } else if (value > 1) {
+        value = 1;
+      }
+    } else {
+      if (isNaN(value) || value < 2) {
+        value = 2;
+      } else if (value > 10) {
+        value = 10;
+      }
+    }
+
     if (type === 'min') {
       setMinValue(value);
       updateBlock(block.id, block.content, block.choices, title, value, maxValue);
@@ -200,7 +218,7 @@ function AssignmentBlock({
         question={title}
         updateBlock={updateBlock}
         handleTitleChange={handleTitleChange}
-        placeholder="Write question here..."
+        placeholder="Write your text here..."
         moveBlockForward={moveBlockForward}
         moveBlockBackward={moveBlockBackward}
         index={index}
@@ -232,7 +250,7 @@ function AssignmentBlock({
         block={block}
         removeBlock={removeBlock}
         copyBlock={copyBlock}
-        heading="Range"
+        heading="Linear Scale"
         question={title}
         updateBlock={updateBlock}
         handleTitleChange={handleTitleChange}
@@ -248,6 +266,7 @@ function AssignmentBlock({
             value={leftPole}
             onChange={(e) => handlePoleChange('left', e.target.value)}
             placeholder="Left pole..."
+            maxLength={15}
           />
           <div className="number-input-container">
             <button
@@ -261,6 +280,8 @@ function AssignmentBlock({
               type="number"
               value={minValue}
               onChange={(e) => handleNumberChange(e, 'min')}
+              min={0}
+              max={1}
             />
             <button
               className="number-input-container-button"
@@ -282,6 +303,8 @@ function AssignmentBlock({
               type="number"
               value={maxValue}
               onChange={(e) => handleNumberChange(e, 'max')}
+              min={2}
+              max={10}
             />
             <button
               className="number-input-container-button"
@@ -296,6 +319,7 @@ function AssignmentBlock({
             value={rightPole}
             onChange={(e) => handlePoleChange('right', e.target.value)}
             placeholder="Right pole..."
+            maxLength={15}
           />
         </div>
       </Block>

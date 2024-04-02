@@ -433,7 +433,7 @@ function AddAssignment() {
             <button title="Add Single Choice Block" onClick={() => addBlock('single')}>
               <FontAwesomeIcon icon={faCircleDot} />{' '}
             </button>
-            <button title="Add Range Question Block" onClick={() => addBlock('range')}>
+            <button title="Add Linear Scale Question Block" onClick={() => addBlock('range')}>
               <FontAwesomeIcon icon={faEllipsis} />
             </button>
             <button title="Add Image" onClick={() => addBlock('image')}>
