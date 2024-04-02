@@ -18,9 +18,6 @@ class MaximumLengthValidator:
 
 
 class LatinLettersValidator:
-    def __init__(self, password):
-        pass
-
     def validate(self, password, user=None):
         if re.search(r'[а-яёА-ЯЁ]', password):
             raise ValidationError(
@@ -34,9 +31,6 @@ class LatinLettersValidator:
 
 
 class NoSpaceValidator:
-    def __init__(self, password):
-        pass
-
     def validate(self, password, user=None):
         if re.search(r'(\s+)', password):
             raise ValidationError(

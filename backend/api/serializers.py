@@ -1,7 +1,6 @@
 import uuid
 
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.hashers import make_password
 from django.contrib.auth.password_validation import MinimumLengthValidator
 from django_password_validators.password_character_requirements.password_validation import PasswordCharacterValidator
 from django.template.loader import render_to_string
@@ -114,7 +113,7 @@ class UserSerializer(serializers.ModelSerializer):
             first_name=validated_data['first_name'].title(),
             last_name=validated_data['last_name'].title(),
             email=validated_data['email'],
-            password=make_password(validated_data['password']),
+            password=(validated_data['password']),
             accept_policy=validated_data['accept_policy'],
             user_type='doctor',
             is_active=False,
@@ -280,7 +279,7 @@ class UpdateClientSerializer(serializers.ModelSerializer):
             user.last_name = validated_data['last_name']
             user.email = validated_data['email']
             user.accept_policy = validated_data['accept_policy']
-            user.set_password(make_password(password))
+            user.set_password(password)
             user.save()
         return user
 

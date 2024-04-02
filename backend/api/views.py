@@ -1,4 +1,4 @@
-from django.contrib.auth.hashers import check_password, make_password
+from django.contrib.auth.hashers import check_password
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import PermissionDenied
 from rest_framework import generics, viewsets
@@ -102,7 +102,7 @@ class PasswordResetCompleteView(APIView):
         new_password = serializer.validated_data['new_password']
         user = request.user
         if user:
-            user.set_password(make_password(new_password))
+            user.set_password(new_password)
             user.save()
             return Response({'message': 'Password reset successfully'})
         else:
@@ -117,7 +117,7 @@ class UpdatePasswordView(APIView):
         new_password = serializer.validated_data['new_password']
         user = request.user
         if user and check_password(serializer.validated_data['password'], user.password):
-            user.set_password(make_password(new_password))
+            user.set_password(new_password)
             user.save()
             return Response({'message': 'Password changed successfully'})
         else:
