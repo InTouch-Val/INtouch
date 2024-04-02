@@ -9,33 +9,31 @@ class MaximumLengthValidator:
 
     def validate(self, password, user=None):
         if len(password) > self.max_length:
-            raise ValidationError(
-                "This password cannot exceed 128 characters."
-            )
+            raise ValidationError("This password cannot exceed 128 characters.")
 
     def get_help_text(self):
-        return ("Your password cannot exceed 128 characters.")
+        return "Your password cannot exceed 128 characters."
 
 
 class LatinLettersValidator:
     def validate(self, password, user=None):
-        if re.search(r'[а-яёА-ЯЁ]', password):
+        if re.search(r"[а-яёА-ЯЁ]", password):
             raise ValidationError(
                 "This password can include latin letters, "
                 "arabic numerals and special characters."
             )
 
     def get_help_text(self):
-        return ("Your password can include latin letters, "
-                "arabic numerals and special characters.")
+        return (
+            "Your password can include latin letters, "
+            "arabic numerals and special characters."
+        )
 
 
 class NoSpaceValidator:
     def validate(self, password, user=None):
-        if re.search(r'(\s+)', password):
-            raise ValidationError(
-                "Spaces are not allowed in this password."
-            )
+        if re.search(r"(\s+)", password):
+            raise ValidationError("Spaces are not allowed in this password.")
 
     def get_help_text(self):
-        return ("Your password cannot include any spaces.")
+        return "Your password cannot include any spaces."

@@ -33,6 +33,11 @@ function AddAssignment() {
   const [blocks, setBlocks] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(false);
+  const [successMessageText, setSuccessMessageText] = useState('');
+  const [selectedImageForBlock, setSelectedImageForBlock] = useState({
+    file: null, // Файл изображения
+    url: null, // URL изображения, полученный с помощью FileReader
+  });
 
   const [isChangeView, setChangeView] = useState(false);
 
@@ -52,31 +57,35 @@ function AddAssignment() {
       const fetchedBlocks = response.data.blocks.map((block) => {
         let contentState;
         try {
-          const rawContent = JSON.parse(block.description);
-          contentState = convertFromRaw(rawContent);
-          console.log(contentState);
+          // Проверяем, что description не пустая
+          if (block.description) {
+            const rawContent = JSON.parse(block.description);
+            contentState = convertFromRaw(rawContent);
+            console.log(contentState);
+          } else {
+            // Если description пустая, создаем пустое содержимое
+            contentState = ContentState.createFromText(block.question);
+          }
         } catch (error) {
           console.error('Ошибка при обработке содержимого:', error);
           // Создаем ContentState с текстом из data.title для всех типов блоков, кроме 'text'
           if (block.type !== 'text') {
-            contentState = ContentState.createFromText(block.title);
+            contentState = ContentState.createFromText(block.question);
           } else {
             // Для типа 'text' создаем пустое содержимое, если описание не может быть обработано
-            contentState = ContentState.createFromText('');
+            contentState = ContentState.createFromText(block.question);
           }
         }
 
         if (block.type === 'text') {
           return {
             ...block,
-            title: block.question,
             content: EditorState.createWithContent(contentState),
           };
         }
         if (block.type === 'single' || block.type === 'multiple') {
           return {
             ...block,
-            title: block.question,
             choices: block.choice_replies.map((choice) => choice.reply),
             content: EditorState.createWithContent(contentState),
           };
@@ -84,7 +93,6 @@ function AddAssignment() {
         if (block.type === 'range') {
           return {
             ...block,
-            title: block.question,
             minValue: block.start_range,
             maxValue: block.end_range,
             content: EditorState.createWithContent(contentState),
@@ -114,7 +122,7 @@ function AddAssignment() {
     }
   }, [isEditMode, fetchAssignment]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, isDraft = false) => {
     e.preventDefault();
     const blockInfo = blocks.map((block) => {
       if (block.type === 'text' || 'open') {
@@ -135,6 +143,13 @@ function AddAssignment() {
           right_pole: block.rightPole || 'Right Pole',
         };
       }
+      if (block.type === 'image') {
+        return {
+          type: block.type,
+          question: block.title,
+          image: selectedImageForBlock.file,
+        };
+      }
       return {
         type: block.type,
         question: block.title,
@@ -150,21 +165,46 @@ function AddAssignment() {
       tags: 'ffasd',
       language,
       image_url:
-        selectedImage?.urls.full ||
+        selectedImage?.url ||
         'https://images.unsplash.com/photo-1641531316051-30d6824c6460?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1MzE0ODh8MHwxfHNlYXJjaHwxfHxsZW9uaWR8ZW58MHx8fHwxNzAwODE4Nzc5fDA&ixlib=rb-4.0.3&q=85',
     };
 
     try {
       let response;
-      response = await (isEditMode
-        ? API.put(`assignments/${id}/`, requestData)
-        : API.post('assignments/', requestData));
+      if (!isEditMode) {
+        // Если задание создается впервые, выполняем POST запрос
+        response = await API.post('assignments/', requestData);
+        if (!response || !response.data || !response.data.id) {
+          throw new Error('Failed to create assignment');
+        }
+        // Получаем ID созданного задания
+        const assignmentId = response.data.id;
+
+        if (isDraft) {
+          // Если задание должно быть сохранено как черновик, выполняем GET запрос
+          await API.get(`assignments/${assignmentId}/draft/`);
+        }
+      } else {
+        // Если задание уже существует, выполняем PUT запрос
+        response = await API.put(`assignments/${id}/`, requestData);
+        if (isDraft) {
+          // Если задание должно быть перемещено в черновик, выполняем GET запрос
+          await API.get(`assignments/${id}/draft/`);
+        }
+      }
 
       if ([200, 201].includes(response.status)) {
-        setSuccessMessage(true);
-        setTimeout(() => {
-          navigate('/assignments');
-        }, 2000);
+        if (!isDraft) {
+          setTimeout(() => {
+            navigate('/assignments');
+          }, 2000);
+
+          setSuccessMessageText('Assignment created succesfully');
+          setSuccessMessage(true);
+        } else {
+          setSuccessMessageText('Draft created succesfully');
+          setSuccessMessage(true);
+        }
       }
     } catch (error) {
       setErrorText('Fill in all the fields..');
@@ -187,6 +227,7 @@ function AddAssignment() {
       choices: type === 'text' || 'open' ? [] : [''],
       minValue: type === 'range' ? 1 : null,
       maxValue: type === 'range' ? 10 : null,
+      image: type === 'image' ? '' : null,
     };
     setBlocks([...blocks, newBlock]);
   };
@@ -199,9 +240,12 @@ function AddAssignment() {
   const copyBlock = (block) => {
     const maxId = Math.max(...blocks.map((b) => b.id));
     const newBlock = { ...block, id: maxId + 1 };
-    const updatedBlocks = blocks.concat(newBlock);
 
-    setBlocks(updatedBlocks);
+    const index = blocks.findIndex((b) => b.id === block.id);
+
+    blocks.splice(index + 1, 0, newBlock);
+
+    setBlocks([...blocks]);
   };
 
   const moveBlockForward = (index) => {
@@ -241,6 +285,7 @@ function AddAssignment() {
     newMaxValue,
     newLeftPole,
     newRightPole,
+    newImage,
   ) => {
     const updatedBlocks = blocks.map((block) => {
       if (block.id === blockId) {
@@ -253,6 +298,7 @@ function AddAssignment() {
           maxValue: newMaxValue === undefined ? block.maxValue : newMaxValue,
           leftPole: newLeftPole === undefined ? block.leftPole : newLeftPole,
           rightPole: newRightPole === undefined ? block.rightPole : newRightPole,
+          image: newImage === undefined ? block.image : newImage,
         };
       }
       return block;
@@ -264,10 +310,10 @@ function AddAssignment() {
 
   return (
     <div className="assignments-page">
-      {successMessage && <div className="success-message">Assignment created succesfully</div>}
+      {successMessage && <div className="success-message">{successMessageText}</div>}
       <HeaderAssignment
         blocks={blocks}
-        handleSubmit={handleSubmit}
+        handleSubmit={(e) => handleSubmit(e, true)}
         errorText={errorText}
         changeView={() => {
           setChangeView((prev) => !prev);
@@ -293,7 +339,7 @@ function AddAssignment() {
       </div>
       <div className="add-assignment-body">
         <ImageSelector onImageSelect={handleImageSelect} />
-        <form onSubmit={handleSubmit} className="form-creator">
+        <form onSubmit={(e) => handleSubmit(e, false)} className="form-creator">
           {blocks.map((block, index) => (
             <div key={index}>
               {block.type === 'headline' && <Headline block={block} updateBlock={updateBlock} />}
@@ -301,7 +347,11 @@ function AddAssignment() {
                 <ImageQuestionBlock block={block} updateBlock={updateBlock} />
               )}
               {block.type === 'headlinerImg' && (
-                <HeadlinerImg block={block} updateBlock={updateBlock} />
+                <HeadlinerImg
+                  block={block}
+                  updateBlock={updateBlock}
+                  setSelectedImageForBlock={setSelectedImageForBlock}
+                />
               )}
             </div>
           ))}
@@ -347,6 +397,7 @@ function AddAssignment() {
                   index={index}
                   readOnly={true}
                   isView={true}
+                  setSelectedImageForBlock={setSelectedImageForBlock}
                 />
               ))}
             </>
@@ -362,6 +413,7 @@ function AddAssignment() {
                   moveBlockForward={moveBlockForward}
                   moveBlockBackward={moveBlockBackward}
                   index={index}
+                  setSelectedImageForBlock={setSelectedImageForBlock}
                 />
               ))}
             </>
@@ -381,13 +433,27 @@ function AddAssignment() {
             <button title="Add Single Choice Block" onClick={() => addBlock('single')}>
               <FontAwesomeIcon icon={faCircleDot} />{' '}
             </button>
-            <button title="Add Range Question Block" onClick={() => addBlock('range')}>
+            <button title="Add Linear Scale Question Block" onClick={() => addBlock('range')}>
               <FontAwesomeIcon icon={faEllipsis} />
             </button>
             <button title="Add Image" onClick={() => addBlock('image')}>
               <FontAwesomeIcon icon={faImage} />
             </button>
           </div>
+        </div>
+        <div className="buttons-save-as-draft-and-publish-container">
+          <button
+            className="buttons-save-as-draft-and-publish"
+            onClick={(e) => handleSubmit(e, true)}
+          >
+            Save as Draft
+          </button>
+          <button
+            className="buttons-save-as-draft-and-publish"
+            onClick={(e) => handleSubmit(e, false)}
+          >
+            Complete & Publish
+          </button>
         </div>
       </div>
     </div>

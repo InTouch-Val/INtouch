@@ -27,9 +27,25 @@ frontend/node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-backend/venv
 .idea
 package-lock.json
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Directories with static and media
+static/
+media/
+sent_emails/
+
+# Logging data
+debug.log
 
 
 # Environments
@@ -45,7 +61,7 @@ venv.bak/
 
 # Directories with static and media
 static/
-# media/
+media/
 sent_emails/
 
 # Logging data

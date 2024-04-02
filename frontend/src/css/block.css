@@ -106,6 +106,46 @@
   padding: 10px;
 }
 
+.range-inputs {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  padding: 22px 0;
+  gap: 13px;
+}
+
+.number-input-container {
+  display: flex;
+  max-width: 125px;
+  height: 32px;
+  border-radius: 6px;
+  box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
+  border: none;
+  align-items: center;
+}
+
+.number-input-container::placeholder {
+  padding-left: 5px;
+  color: rgba(229, 229, 229, 1);
+}
+
+.number-input-container-button {
+  border: none;
+  background: none;
+  padding: 0 11px;
+  color: #3f7983;
+}
+
+.number-input-container-input {
+  font-family: Montserrat, Arial, sans-serif;
+  font-size: 16px;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: center;
+  font-weight: 500;
+}
+
 .range-options {
   display: flex;
   flex-wrap: nowrap;

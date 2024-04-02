@@ -10,7 +10,7 @@ function Block({
   block,
   removeBlock,
   heading,
-  title,
+  question,
   handleTitleChange,
   placeholder,
   copyBlock,
@@ -40,7 +40,7 @@ function Block({
         <div className="control-panel">
           <input
             type="text"
-            value={title}
+            value={block.question}
             onChange={handleTitleChange}
             placeholder={placeholder}
             className="block-title-input"
