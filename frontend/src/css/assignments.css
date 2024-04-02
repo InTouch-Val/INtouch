@@ -215,3 +215,30 @@
   width: 180px;
   border-radius: 10px;
 }
+
+.buttons-save-as-draft-and-publish-container {
+  display: flex;
+  justify-content: space-around;
+  margin: auto;
+  margin-top: 100px;
+  width: 100%;
+}
+
+.buttons-save-as-draft-and-publish {
+  border: none;
+  width: 226px;
+  height: 59px;
+  flex-grow: 0;
+  border-radius: 100px;
+  box-shadow: 0 0 3px 1px rgba(215, 228, 231, 0.45);
+  background-color: #417d88;
+  font-size: 20px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 0.85;
+  letter-spacing: normal;
+  text-align: center;
+  color: #fff;
+  cursor: pointer;
+}

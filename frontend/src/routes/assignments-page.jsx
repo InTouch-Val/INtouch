@@ -6,6 +6,7 @@ import { API } from '../service/axios';
 import { AssignmentTile } from '../components/psy/AssignmentTile';
 import '../css/assignments.css';
 import { useAuth } from '../service/authContext';
+const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
 function AssignmentsPage() {
   const { currentUser } = useAuth();
@@ -36,32 +37,113 @@ function AssignmentsPage() {
     }
   };
 
-  useEffect(() => {
-    const fetchUserFavorites = async () => {
-      try {
-        const response = await API.get('get-user/');
-        setUserFavorites(response.data[0].doctor.assignments);
-      } catch (error) {
-        console.error(`Error fetching user favorites: ${error}`);
+  const duplicateAssignment = async (assignmentId) => {
+    try {
+      const response = await API.get(`assignments/${assignmentId}/`);
+      let assignmentData = response.data;
+      console.log(assignmentData);
+
+      // Подготавливаем данные для дубликата, используя ту же структуру, что и в handleSubmit
+      const blockInfo = assignmentData.blocks.map((block) => {
+        if (block.type === 'text') {
+          return {
+            type: block.type,
+            question: block.question,
+            description: getObjectFromEditorState(block.content),
+            choice_replies: [],
+          };
+        }
+        if (block.type === 'range') {
+          return {
+            type: block.type,
+            question: block.question,
+            start_range: block.minValue,
+            end_range: block.maxValue,
+            left_pole: block.leftPole || 'Left Pole',
+            right_pole: block.rightPole || 'Right Pole',
+          };
+        }
+        if (block.type === 'image') {
+          return {
+            type: block.type,
+            question: block.question,
+            image: block.image,
+          };
+        }
+        if (block.type === 'open') {
+          return {
+            type: block.type,
+            question: block.question,
+          };
+        }
+        return {
+          type: block.type,
+          question: block.question,
+          choice_replies: block.choices.map((choice) => ({ reply: choice })),
+        };
+      });
+
+      const duplicateData = {
+        blocks: blockInfo,
+        title: assignmentData.title + ' COPY',
+        text: assignmentData.text,
+        assignment_type: assignmentData.assignment_type,
+        tags: assignmentData.tags,
+        language: assignmentData.language,
+        image_url:
+          assignmentData.image_url ||
+          'https://images.unsplash.com/photo-1641531316051-30d6824c6460?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1MzE0ODh8MHwxfHNlYXJjaHwxfHxsZW9uaWR8ZW58MHx8fHwxNzAwODE4Nzc5fDA&ixlib=rb-4.0.3&q=85',
+      };
+
+      // Отправляем данные задания на сервер для создания дубликата
+      const duplicateResponse = await API.post(`assignments/`, duplicateData);
+      if (!duplicateResponse || !duplicateResponse.data || !duplicateResponse.data.id) {
+        throw new Error('Failed to create assignment');
       }
-    };
-    fetchUserFavorites();
-  }, []);
+      // Получаем ID созданного задания
+      const responseAssignmentId = duplicateResponse.data.id;
+
+      // Если задание должно быть сохранено как черновик, выполняем GET запрос
+      await API.get(`assignments/${responseAssignmentId}/draft/`);
+      duplicateResponse.data.is_public = false;
+
+      // Если все прошло успешно, добавляем дубликат в список заданий
+      if (duplicateResponse.status === 201) {
+        setAssignments((prevAssignments) => [...prevAssignments, duplicateResponse.data]);
+      }
+    } catch (error) {
+      console.error('Error duplicating assignment:', error);
+    }
+  };
+
+  const deleteAssignment = async (assignmentId) => {
+    try {
+      await API.delete(`assignments/${assignmentId}`);
+      console.log(assignments);
+      setAssignments(assignments.filter((assignment) => assignment.id !== assignmentId));
+      console.log(assignments);
+    } catch (error) {
+      console.error('Error toggling favorites:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchAssignments = async () => {
       try {
         const response = await API.get('assignments/');
-        setAssignments(response.data);
-        setFilteredAssignments(response.data);
-        console.log(response.data);
+        const filteredAssignments = response.data.filter(
+          (assignment) => assignment.is_public || assignment.author === currentUser.id,
+        );
+        setAssignments(filteredAssignments);
+        setFilteredAssignments(filteredAssignments);
+        console.log(filteredAssignments);
       } catch (error) {
         console.error('Error fetching assignments', error);
         navigate('/');
       }
     };
     fetchAssignments();
-  }, [navigate]);
+  }, [navigate, currentUser.id]);
 
   useEffect(() => {
     let updatedAssignments = [...assignments];
@@ -198,6 +280,9 @@ function AssignmentsPage() {
                 assignment={assignment}
                 onFavoriteToggle={toggleFavorite}
                 isFavorite={userFavorites?.includes(assignment.id)}
+                isAuthor={assignment.author === currentUser.id}
+                onDeleteClick={deleteAssignment}
+                onCopyClick={duplicateAssignment}
               />
             ))
           ) : (
@@ -216,6 +301,9 @@ function AssignmentsPage() {
                   assignment={assignment}
                   onFavoriteToggle={toggleFavorite}
                   isFavorite={true}
+                  isAuthor={assignment.author === currentUser.id}
+                  onDeleteClick={deleteAssignment}
+                  onCopyClick={duplicateAssignment}
                 />
               ))
           ) : (
@@ -233,6 +321,9 @@ function AssignmentsPage() {
                 assignment={assignment}
                 onFavoriteToggle={toggleFavorite}
                 isFavorite={userFavorites?.includes(assignment.id)}
+                isAuthor={assignment.author === currentUser.id}
+                onDeleteClick={deleteAssignment}
+                onCopyClick={duplicateAssignment}
               />
             ))}
         </div>

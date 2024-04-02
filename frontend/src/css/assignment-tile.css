@@ -3,13 +3,13 @@
 .assignment-tile {
   position: relative;
   display: flex; /* Обрезка контента по границам */
-  overflow: hidden;
-  width: 280px;
+  width: 290px;
   flex-direction: column;
-  justify-content: space-between;
   border-radius: 10px; /* Скругленные углы */
   background-color: #fff; /* Белый фон */
   box-shadow: 0 4px 8px rgb(0 0 0 / 10%); /* Тень */
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .assignment-image-container {
@@ -19,81 +19,266 @@
 }
 
 .assignment-tile .assignment-image-container img {
-  display: block;
-  width: 200px;
-  height: 200px;
+  width: 270px;
+  height: 146px;
   align-self: center;
   border-radius: 6px;
   object-fit: cover;
 }
 
+.assignment__dropdown-btn {
+  position: relative;
+  height: 100%;
+  width: 30px;
+  border: none;
+  background: url(../images/three-dots.svg) no-repeat;
+  background-position: center;
+  padding: 0;
+}
+
+.assignment__dropdown {
+  position: absolute;
+  left: 30px;
+  display: flex;
+  flex-direction: column;
+  width: 130px;
+  height: 100px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  box-shadow: 0 0 3px 1px rgba(215, 228, 231, 0.45);
+  background-color: white;
+  z-index: 100;
+}
+
+.assignment__dropdown button {
+  height: 35px;
+  padding: 5px;
+  border-radius: 6px;
+}
+
+.dropdown-separate-line {
+  width: 100%;
+  border: 1px solid #e5e5e5;
+  margin: 0;
+}
+
 .assignment-info {
-  padding: 10px;
-  text-align: center;
+  margin-top: 10px;
+  font-size: 16px;
 }
 
 .assignment-info h3 {
   margin: 0;
-  color: #656565; /* Темно-серый текст */
+  color: rgba(101, 101, 101, 1);
+  font-size: 16px;
+  line-height: 17px;
+  font-weight: 500;
 }
 
 .assignment-info p {
   margin: 5px 0 15px; /* Отступы */
-  color: #777; /* Серый текст */
-  font-size: 14px; /* Размер шрифта подзаголовка */
+  color: rgba(183, 183, 183, 1);
 }
 
 .assignment-actions {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Распределение пространства */
-  padding: 10px;
-  background-color: #f8f8f8; /* Светло-серый фон */
+  gap: 20px; /* Распределение пространства */
+  font-size: 16px;
+  line-height: 17px;
+  height: 35px;
+  box-sizing: border-box;
+  color: rgba(183, 183, 183, 1);
 }
 
-.assignment-actions .popularity {
+.assignment-actions__statistics {
   display: flex;
   align-items: center;
+  gap: 10px;
 }
 
-.assignment-actions .popularity::before {
-  margin-right: 5px;
-  content: '👁‍🗨'; /* Эмодзи глаза */
+.assignment-actions__statistics_grades::before {
+  display: inline-block;
+  content: '';
+  width: 25px;
+  height: 25px;
+  background-image: url(../images/star.svg);
+  background-size: contain; /* Масштабируем изображение так, чтобы оно полностью помещалось в элемент */
+  background-repeat: no-repeat; /* Предотвращаем повторение изображения */
+  background-position: center; /* Центрируем изображение внутри элемента */
+}
+
+.assignment-actions__statistics_shares::before {
+  display: inline-block;
+  content: '';
+  width: 25px;
+  height: 25px;
+  background-image: url(../images/repeat.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.assignment-actions__share-with-client {
+  width: 35px;
+  height: 25px;
+  border: none;
+  background: url(../images/shareArrow.svg) no-repeat;
+  background-position: center;
+  background-size: contain;
+  margin-left: auto;
 }
 
 .favorite-button {
-  padding: 2px 10px;
-  border: 2px solid #417d88;
-  border-radius: 100px;
-  background: none;
-  color: #417d88; /* Цвет сердца */
+  width: 20px;
+  height: 100%;
+  border: none;
+  background: url(../images/fav.svg) no-repeat;
+  background-size: contain;
+  background-position: center;
+  color: #fff;
   cursor: pointer;
-  font-size: 20px;
 }
 
-.favorite-button.selected {
-  background-color: #417d88;
-  color: #fff;
+.favorite-button_selected {
+  background: url(../images/fav_selected.svg) no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.favorite-button_dropdown {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 11px;
+  background: none;
+  color: #656565;
+}
+
+.favorite-button_dropdown:hover {
+  color: white;
+  background: rgba(65, 125, 136, 1);
+}
+
+.favorite-button_dropdown::before {
+  display: inline-block;
+  content: '';
+  width: 19px;
+  height: 100%;
+  background: url(../images/fav_gray.svg) no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.favorite-button_dropdown:hover::before {
+  background: url(../images/fav_white.svg) no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.favorite-button_dropdown_selected::before {
+  background: url(../images/fav_selected.svg) no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.favorite-button_dropdown_selected:hover::before {
+  background: url(../images/fav_selected_white.svg) no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.assignment__dropdown-copy-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 11px;
+  border: none;
+  background: none;
+  color: #656565;
+  cursor: pointer;
+}
+
+.assignment__dropdown-copy-btn:hover {
+  color: white;
+  background: rgba(65, 125, 136, 1);
+}
+
+.assignment__dropdown-copy-btn::before {
+  display: inline-block;
+  content: '';
+  width: 19px;
+  height: 100%;
+  background: url(../images/copy.svg) no-repeat;
+  background-position: center;
+}
+
+.assignment__dropdown-copy-btn:hover::before {
+  display: inline-block;
+  content: '';
+  width: 19px;
+  height: 100%;
+  background: url(../images/copy_white.svg) no-repeat;
+  background-position: center;
+}
+
+.assignment__dropdown-delete-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 11px;
+  border: none;
+  background: none;
+  color: #656565;
+  cursor: pointer;
+}
+
+.assignment__dropdown-delete-btn:hover {
+  color: white;
+  background: rgba(65, 125, 136, 1);
+}
+
+.assignment__dropdown-delete-btn::before {
+  display: inline-block;
+  content: '';
+  width: 19px;
+  height: 100%;
+  background: url(../images/trash.svg) no-repeat;
+  background-position: center;
+}
+
+.assignment__dropdown-delete-btn:hover::before {
+  display: inline-block;
+  content: '';
+  width: 19px;
+  height: 100%;
+  background: url(../images/trash_white.svg) no-repeat;
+  background-position: center;
 }
 
 /* Для даты и типа задания в верхнем углу */
 .date-and-type {
-  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 5px 10px; /* Отступы */
+  padding: 10px 0; /* Отступы */
   border-radius: 20px; /* Закругленный фон */
   color: #b7b7b7;
 }
 
 .type {
-  padding: 5px 10px; /* Отступы */
-  border: solid 3px #417d88;
+  text-transform: capitalize;
+  max-width: 100px;
+  overflow: hidden;
+  box-sizing: border-box;
+  text-overflow: ellipsis;
+  padding: 5px 12px; /* Отступы */
+  border: solid 2px #417d88;
   border-radius: 100px;
   margin-left: 5px; /* Отступ справа */
   background-color: #fff; /* Зеленый фон */
   color: #656565;
+  font-size: 16px;
   line-height: 17px;
 }
 
@@ -134,4 +319,25 @@
   to {
     bottom: 0;
   }
+}
+
+.assignment__edit-btn {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: url(../images/assignment-edit_green.svg) no-repeat;
+  background-size: contain;
+  background-position: center;
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.assignment__delete-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: url(../images/trash_green.svg) no-repeat;
+  background-size: contain;
+  background-position: center;
+  cursor: pointer;
 }
