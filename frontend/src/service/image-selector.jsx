@@ -1,13 +1,20 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../css/image-selector.css';
 
-function ImageSelector({ onImageSelect }) {
-  const [images, setImages] = useState([]);
+function ImageSelector({ onImageSelect, selectedImage }) {
+  const [images, setImages] = useState(selectedImage ? [selectedImage] : []);
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearchDone, setIsSearchDone] = useState(false);
   const [selectedImageId, setSelectedImageId] = useState(null); // Состояние для хранения ID выбранного изображения
   const accessKey = import.meta.env.VITE_APP_UNSPLASH_ACCESS_KEY;
+
+  useEffect(() => {
+    if (selectedImage) {
+      const updatedImage = { ...selectedImage, id: 1 };
+      setImages([updatedImage]);
+    }
+  }, [selectedImage]);
 
   const searchImages = (query) => {
     if (!accessKey) {
@@ -54,7 +61,10 @@ function ImageSelector({ onImageSelect }) {
               className={`image-item ${image.id === selectedImageId ? 'selected' : ''}`}
               onClick={() => handleImageClick(image)}
             >
-              <img src={image.urls.small} alt={image.alt_description} />
+              <img
+                src={image.urls.small || image.urls.full}
+                alt={image.alt_description || 'image'}
+              />
             </div>
           ))
         ) : isSearchDone ? (

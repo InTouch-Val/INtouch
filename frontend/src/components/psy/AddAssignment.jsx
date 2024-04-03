@@ -338,7 +338,7 @@ function AddAssignment() {
         />
       </div>
       <div className="add-assignment-body">
-        <ImageSelector onImageSelect={handleImageSelect} />
+        <ImageSelector onImageSelect={handleImageSelect} selectedImage={selectedImage} />
         <form onSubmit={(e) => handleSubmit(e, false)} className="form-creator">
           {blocks.map((block, index) => (
             <div key={index}>
