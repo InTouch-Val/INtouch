@@ -16,7 +16,7 @@ function ClientPage() {
   const [messageToUser, setMessageToUser] = useState(null);
   const [activityFilter, setActivityFilter] = useState({
     id: 1,
-    text: 'All clients',
+    text: 'Status',
     status: 'All clients',
   });
 

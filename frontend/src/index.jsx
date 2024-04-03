@@ -22,6 +22,7 @@ import { ClientDetailsPage } from './components/psy/ClientDetailsPage';
 import { ClientAssignments } from './components/client/ClientAssignments';
 import { CompleteAssignments } from './components/client/CompleteAssignments/CompleteAssignments';
 import './index.css';
+import { DiaryPage, loaderDiaryById } from './routes/diary-page';
 
 const router = createBrowserRouter([
   {
@@ -80,6 +81,11 @@ const router = createBrowserRouter([
       {
         path: '/my-assignments/:id',
         element: <CompleteAssignments />,
+      },
+      {
+        path: '/diary/:id',
+        element: <DiaryPage />,
+        loader: loaderDiaryById,
       },
     ],
   },
