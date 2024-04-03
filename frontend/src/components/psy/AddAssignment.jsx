@@ -52,7 +52,7 @@ function AddAssignment() {
       setDescription(response.data.text);
       setType(response.data.assignment_type);
       setLanguage(response.data.language);
-      setSelectedImage({ urls: { full: response.data.image_url } }); // Assuming your ImageSelector expects an object like this
+      setSelectedImage({ urls: { full: response.data.image_url } });
 
       const fetchedBlocks = response.data.blocks.map((block) => {
         let contentState;
