@@ -1,14 +1,15 @@
 import uuid
 
 from api.models import *
+from drf_extra_fields.fields import Base64ImageField
 from django.contrib.auth.tokens import default_token_generator
 from django.core.validators import RegexValidator
 from django.template.loader import render_to_string
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from .tasks import remove_unverified_user
-from .utils import current_site, send_by_mail
+from api.tasks import remove_unverified_user
+from api.utils import current_site, send_by_mail
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -315,7 +316,7 @@ class BlockSerializer(serializers.ModelSerializer):
     choice_replies = BlockChoiceSerializer(many=True, required=False)
     left_pole = serializers.CharField(required=False)
     right_pole = serializers.CharField(required=False)
-    image = serializers.ImageField(required=False)
+    image = Base64ImageField(required=False)
 
     class Meta:
         model = Block

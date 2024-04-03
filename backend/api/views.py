@@ -9,10 +9,10 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
-from .models import *
-from .permissions import *
-from .serializers import *
-from .utils import send_by_mail
+from api.models import *
+from api.permissions import *
+from api.serializers import *
+from api.utils import send_by_mail
 
 
 class UserViewSet(viewsets.ModelViewSet):
