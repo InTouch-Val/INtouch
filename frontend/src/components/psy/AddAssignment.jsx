@@ -102,6 +102,7 @@ function AddAssignment() {
           return {
             ...block,
             content: EditorState.createWithContent(contentState),
+            image: block.image,
             // title: block.question,
             // minValue: block.start_range,
             // maxValue: block.end_range,
@@ -147,7 +148,7 @@ function AddAssignment() {
         return {
           type: block.type,
           question: block.title,
-          image: selectedImageForBlock.file,
+          image: selectedImageForBlock.url,
         };
       }
       return {
