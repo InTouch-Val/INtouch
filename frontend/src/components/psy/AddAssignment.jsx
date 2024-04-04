@@ -28,7 +28,7 @@ function AddAssignment() {
   const [description, setDescription] = useState('');
   const [type, setType] = useState('lesson');
   const [language, setLanguage] = useState('en');
-  const [tags, setTags] = useState('');
+  // const [tags, setTags] = useState('');
 
   const [blocks, setBlocks] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -378,10 +378,10 @@ function AddAssignment() {
                 <option value="it">Italian</option>
               </select>
             </div>
-            <div className="form-setting tags-setting">
+            {/* <div className="form-setting tags-setting">
               <label>Tags</label>
               <input type="text" value={tags} onChange={(e) => setTags(e.target.value)} />
-            </div>
+            </div> */}
           </div>
           {isChangeView ? (
             <>
