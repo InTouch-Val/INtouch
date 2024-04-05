@@ -123,7 +123,7 @@ function AddAssignment() {
     }
   }, [isEditMode, fetchAssignment]);
 
-  const handleSubmit = async (e, isDraft = false) => {
+  const handleSubmit = async (e, isDraft = false, isSaveAsDraft = false) => {
     e.preventDefault();
     const blockInfo = blocks.map((block) => {
       if (block.type === 'text' || 'open') {
@@ -181,29 +181,36 @@ function AddAssignment() {
         // Получаем ID созданного задания
         const assignmentId = response.data.id;
 
-        if (isDraft) {
+        if (isDraft || isSaveAsDraft) {
           // Если задание должно быть сохранено как черновик, выполняем GET запрос
           await API.get(`assignments/${assignmentId}/draft/`);
         }
       } else {
         // Если задание уже существует, выполняем PUT запрос
         response = await API.put(`assignments/${id}/`, requestData);
-        if (isDraft) {
+        if (isDraft || isSaveAsDraft) {
           // Если задание должно быть перемещено в черновик, выполняем GET запрос
           await API.get(`assignments/${id}/draft/`);
         }
       }
 
       if ([200, 201].includes(response.status)) {
-        if (!isDraft) {
+        if (isDraft) {
+          setSuccessMessageText('Saved succesfully');
+          setSuccessMessage(true);
+        } else if (isSaveAsDraft) {
+          setTimeout(() => {
+            navigate('/assignments');
+          }, 2000);
+
+          setSuccessMessageText('Draft created succesfully');
+          setSuccessMessage(true);
+        } else {
           setTimeout(() => {
             navigate('/assignments');
           }, 2000);
 
           setSuccessMessageText('Assignment created succesfully');
-          setSuccessMessage(true);
-        } else {
-          setSuccessMessageText('Draft created succesfully');
           setSuccessMessage(true);
         }
       }
@@ -216,6 +223,7 @@ function AddAssignment() {
   const [errorText, setErrorText] = useState('');
 
   const handleImageSelect = (image) => {
+    console.log('Selected image URL:', image.url);
     setSelectedImage(image);
   };
 
@@ -314,7 +322,7 @@ function AddAssignment() {
       {successMessage && <div className="success-message">{successMessageText}</div>}
       <HeaderAssignment
         blocks={blocks}
-        handleSubmit={(e) => handleSubmit(e, true)}
+        handleSubmit={(e) => handleSubmit(e, true, false)}
         errorText={errorText}
         changeView={() => {
           setChangeView((prev) => !prev);
@@ -340,7 +348,7 @@ function AddAssignment() {
       </div>
       <div className="add-assignment-body">
         <ImageSelector onImageSelect={handleImageSelect} selectedImage={selectedImage} />
-        <form onSubmit={(e) => handleSubmit(e, false)} className="form-creator">
+        <form onSubmit={(e) => handleSubmit(e, false, false)} className="form-creator">
           {blocks.map((block, index) => (
             <div key={index}>
               {block.type === 'headline' && <Headline block={block} updateBlock={updateBlock} />}
@@ -445,13 +453,13 @@ function AddAssignment() {
         <div className="buttons-save-as-draft-and-publish-container">
           <button
             className="buttons-save-as-draft-and-publish"
-            onClick={(e) => handleSubmit(e, true)}
+            onClick={(e) => handleSubmit(e, false, true)}
           >
             Save as Draft
           </button>
           <button
             className="buttons-save-as-draft-and-publish"
-            onClick={(e) => handleSubmit(e, false)}
+            onClick={(e) => handleSubmit(e, false, false)}
           >
             Complete & Publish
           </button>
