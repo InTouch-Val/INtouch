@@ -223,7 +223,7 @@ function AddAssignment() {
   const [errorText, setErrorText] = useState('');
 
   const handleImageSelect = (image) => {
-    console.log('Selected image URL:', image.url);
+    console.log('Selected image:', image);
     setSelectedImage(image);
   };
 
