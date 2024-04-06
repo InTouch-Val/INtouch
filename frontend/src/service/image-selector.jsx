@@ -28,6 +28,7 @@ function ImageSelector({ onImageSelect, selectedImage }) {
       .get(`https://api.unsplash.com/search/photos?query=${query}&client_id=${accessKey}`)
       .then((response) => {
         setImages(response.data.results);
+        setIsSelected(false);
       })
       .catch((error) => console.error('Error searching images:', error));
   };
