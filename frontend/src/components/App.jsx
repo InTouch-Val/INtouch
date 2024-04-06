@@ -79,10 +79,7 @@ function App() {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink
-                    to="/my-diary"
-                    className={({ isActive }) => 'disabled' + (isActive ? 'active' : '')}
-                  >
+                  <NavLink to="/my-diary" className={({ isActive }) => (isActive ? 'active' : '')}>
                     <FontAwesomeIcon icon={faBookMedical} /> Diary
                   </NavLink>
                 </li>
