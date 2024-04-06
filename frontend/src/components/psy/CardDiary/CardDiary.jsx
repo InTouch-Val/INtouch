@@ -3,7 +3,7 @@ import './CardDiary.css';
 import Button from '../button/ButtonHeadline';
 import { useNavigate } from 'react-router-dom';
 
-const options = { weekday: 'short', month: 'long', year: 'numeric' };
+export const options = { weekday: 'short', month: 'long', year: 'numeric' };
 
 export default function CardDiary({ card }) {
   const navigate = useNavigate();

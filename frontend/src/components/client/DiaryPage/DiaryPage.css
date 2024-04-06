@@ -1,0 +1,139 @@
+.diaryPage {
+  display: flex;
+  flex-direction: column;
+  padding: 58px 47px 100px;
+}
+
+.diary__block-event {
+  margin-top: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: #ffffff;
+  border-radius: 6px;
+  box-shadow: 0px 0px 3px 1px #d7e4e773;
+  padding: 16px 20px 16px 20px;
+  transition: all ease-in-out 0.3s;
+}
+
+.diary__block-event:hover {
+  box-shadow: 0px 0px 3px 1px #01495973;
+}
+
+.diary__block-title {
+  font-family: 'Montserrat';
+  font-weight: 700;
+  font-size: 16px;
+  color: #0b4a56;
+  line-height: 19px;
+}
+
+.diary__block-question {
+  font-family: 'Montserrat';
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #0b4a56;
+}
+
+.diary__block-text {
+  font-family: 'Montserrat';
+  font-style: italic;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 17px;
+  color: #656565;
+}
+
+.diary__block-description {
+  font-family: 'Montserrat';
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 17px;
+}
+
+.diary__block-text-sensation {
+  color: #656565;
+  font-family: 'Montserrat';
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 17px;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+.diary__emotions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 50px;
+  flex-wrap: wrap;
+}
+
+.diary__emotions-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.diary__emotion-title {
+  font-family: 'Montserrat';
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 17px;
+  color: #2c3742;
+}
+
+.diary__emotion-container {
+  padding: 12px 20px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
+  justify-content: center;
+  align-items: center;
+  transition: all ease 0.3s;
+}
+
+.diary__emotion-container-active {
+  border: 2px solid #1f304f;
+  transition: all ease-in-out 0.3s;
+  border-radius: 8px;
+}
+.diary__emotion-container-active:hover {
+  opacity: 0.8;
+  transition: all ease-in-out 0.3s;
+}
+
+.diary__emotions-all {
+  padding: 0 32px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.diary__emotion-chip {
+  box-sizing: border-box;
+  height: 37px;
+  padding: 10px 12px 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #b2b0ab;
+  font-family: 'Montserrat';
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 17px;
+  background-color: #fffcf5;
+  color: #2c3742;
+}
+
+.diary__emotion-chip:hover {
+  transition: all ease-in-out 0.5s;
+  background-color: #f9db8e;
+}
+
+.chip_active {
+  font-weight: 700;
+  background-color: #fff5de;
+  border: 2px solid #2c3742;
+}
