@@ -12,7 +12,6 @@ export default function CardDiaryClient({ card }) {
   }
 
   const [active, setActive] = React.useState(card.visible);
-  console.log(card);
 
   return (
     <div className="diary__card" onClick={() => goDiary()}>
