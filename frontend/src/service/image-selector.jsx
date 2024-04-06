@@ -6,6 +6,7 @@ function ImageSelector({ onImageSelect, selectedImage }) {
   const [images, setImages] = useState(selectedImage ? [selectedImage] : []);
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearchDone, setIsSearchDone] = useState(false);
+  const [isSelected, setIsSelected] = useState(false);
   const [selectedImageId, setSelectedImageId] = useState(null); // Состояние для хранения ID выбранного изображения
   const accessKey = import.meta.env.VITE_APP_UNSPLASH_ACCESS_KEY;
 
@@ -13,6 +14,7 @@ function ImageSelector({ onImageSelect, selectedImage }) {
     if (selectedImage) {
       const updatedImage = { ...selectedImage, id: 1 };
       setImages([updatedImage]);
+      setIsSelected(true);
     }
   }, [selectedImage]);
 
@@ -58,7 +60,7 @@ function ImageSelector({ onImageSelect, selectedImage }) {
           images.map((image) => (
             <div
               key={image.id}
-              className={`image-item ${image.id === selectedImageId ? 'selected' : ''}`}
+              className={`image-item ${image.id === selectedImageId || isSelected ? 'selected' : ''}`}
               onClick={() => handleImageClick(image)}
             >
               <img
