@@ -18,6 +18,7 @@ export default function CardDiaryClient({ card }) {
   const handleClickDelete = async () => {
     const newItem = [...card];
     console.log(newItem);
+    
     // try {
     //   const response = await API.patch(`/diary-notes/${params.id}/`, );
     //   return response.data;
