@@ -1,0 +1,137 @@
+.diary__card {
+  width: 270px;
+  border: 1px solid #0000001a;
+  border-radius: 8px;
+  padding: 16px 14px 26px 11px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 27px;
+  transition: all ease-in-out 0.3s;
+}
+
+.diary__card:hover {
+  border: 1px solid #140303fa;
+}
+
+.diary__card-title {
+  color: #417d88;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 6px;
+  width: 180px;
+  height: 70px;
+  background-color: #fff5de;
+}
+
+.diary__card-title__day {
+  height: 100%;
+  padding-left: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 17px;
+}
+
+.diary__card-title__date {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.diary__card-text {
+  word-wrap: break-word;
+  color: #656565;
+  font-size: 16px;
+  line-height: 17px;
+  font-weight: 300;
+  font-family: 'Montserrat';
+  font-style: italic;
+  width: 249px;
+  height: 68px;
+  /* overflow: hidden */
+}
+
+.diary__card-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  max-width: 189px;
+  width: 100%;
+}
+
+.diary__card-button {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 8px 10px;
+  border-radius: 10px;
+  transition: all ease-in-out 0.3s;
+}
+
+.diary__card-button:hover {
+  opacity: 0.9;
+}
+
+.diary__card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+}
+
+.button__trash {
+  background-image: url('../../../../images/trash.svg');
+  background-repeat: no-repeat;
+  width: 36px;
+  height: 32px;
+  cursor: pointer;
+  background-size: contain;
+}
+
+.diary__card-shared {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.diary__card-shared-text {
+  font-family: 'Montserrat';
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 28px;
+  color: #656565;
+}
+
+.diary__card-shared-toggle {
+  border: 1px solid #656565;
+  display: flex;
+  align-items: center;
+  width: 32px;
+  height: 17px;
+  border-radius: 100px;
+  padding: 0.5px;
+}
+
+.icon__toogle {
+  width: 15px;
+  height: 17px;
+}
+
+.active {
+  justify-content: flex-start;
+}
+
+.unactive {
+  justify-content: flex-end;
+}

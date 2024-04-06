@@ -1,0 +1,59 @@
+.diary__header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 52px;
+  width: 100%;
+}
+
+.diary__title-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 41px;
+  align-items: center;
+}
+
+.diary__title {
+  width: 304px;
+  font-size: 34px;
+  color: #656565;
+  font-weight: 500;
+  line-height: 28px;
+}
+
+.diary__title-date {
+  width: 105px;
+  font-size: 16px;
+  color: #656565;
+  font-weight: 500;
+  line-height: 19px;
+  font-family: 'Montserrat';
+}
+
+.diary__img-back {
+  cursor: pointer;
+  transition: all ease-in-out 0.3s;
+}
+.diary__img-back:hover {
+  opacity: 0.8;
+}
+
+.buttons__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.diary__dear-message {
+  font-family: 'Montserrat';
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 16px;
+  color: #1f304f;
+  padding: 15px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
+}
