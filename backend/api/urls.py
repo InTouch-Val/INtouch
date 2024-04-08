@@ -62,4 +62,10 @@ urlpatterns = [
         DoctorUpdateClientView.as_view(),
         name="doctor_update_client",
     ),
+    path("user/update/email/", UpdateEmailView.as_view(), name="update_email"),
+    path(
+        "user/update/email/confirm/<int:pk>/<str:token>/",
+        UpdateEmailConfirmView.as_view(),
+        name="update_email_confirm",
+    ),
 ]

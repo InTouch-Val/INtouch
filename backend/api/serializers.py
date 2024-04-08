@@ -125,7 +125,7 @@ class UserSerializer(serializers.ModelSerializer):
             {"url": activation_url, "domen": current_site, "name": user.first_name},
         )
         send_by_mail(html_message, user.email)
-        remove_unverified_user.send_with_options(args=(user.pk,), delay=259200000)
+        remove_unverified_user.send_with_options(args=(user.pk,), delay=259200)
         return user
 
 
@@ -184,6 +184,24 @@ class UpdatePasswordSerializer(ChangePasswordSerializer):
         return attrs
 
 
+class UpdateEmailSerializer(serializers.Serializer):
+    """Изменение эл. почты пользователя."""
+    new_email = serializers.EmailField()
+
+    def validate(self, attrs):
+        request = self.context.get("request")
+        user = request.user
+        if attrs["new_email"] == user.email:
+            raise serializers.ValidationError(
+                "This email is already set on your account"
+            )
+        if User.objects.filter(email=attrs["new_email"]).exists():
+            raise serializers.ValidationError(
+                "User with this email is already exists"
+            )
+        return attrs
+
+
 class UpdateUserSerializer(serializers.ModelSerializer):
     """Редактирование данных в профиле пользователя"""
 
@@ -239,7 +257,7 @@ class AddClientSerializer(serializers.ModelSerializer):
             {"url": activation_url, "domen": current_site, "name": user.first_name},
         )
         send_by_mail(html_message, user.email)
-        remove_unverified_user.send_with_options(args=(user.pk,), delay=259200000)
+        remove_unverified_user.send_with_options(args=(user.pk,), delay=259200)
         return user
 
 
