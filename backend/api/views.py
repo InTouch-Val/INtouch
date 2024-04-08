@@ -175,7 +175,8 @@ class UpdateEmailConfirmView(generics.GenericAPIView):
     """Подтверждение изменения почты пользователя."""
     def get(self, request, pk, token):
         user = User.objects.get(pk=pk)
-        if user and default_token_generator.check_token(user, token):
+        if (user and default_token_generator.check_token(user, token)
+           and user.email_changing):
             user.username = user.new_email_temp
             user.email = user.new_email_temp
             user.new_email_temp = None
@@ -183,7 +184,7 @@ class UpdateEmailConfirmView(generics.GenericAPIView):
             user.save()
             return Response({"message": "Email updated successfully"})
         else:
-            return Response({"error": "Email not updated"})
+            return Response({"error": "Email not updated: unvalid token"})
 
 
 class UpdateUserView(generics.UpdateAPIView):
