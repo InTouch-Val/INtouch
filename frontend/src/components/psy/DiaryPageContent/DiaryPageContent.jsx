@@ -1,5 +1,5 @@
 import React from 'react';
-import DiaryHeader from './DiaryHeader/DiaryHeader';
+import DiaryHeader from '../../psy/DiaryPageContent/DiaryHeader/DiaryHeader';
 import './DiaryPageContent.css';
 import DiaryEventDetails from './DiaryEventDetails/DiaryEventDetails';
 import DiaryBlockAnalysis from './DiaryBlockAnalysis/DiaryBlockAnalysis';
@@ -11,6 +11,7 @@ export default function DiaryPageContent({ diary }) {
   return (
     <div className="diaryPage">
       <DiaryHeader diary={diary} />
+
       <DiaryEventDetails diary={diary} />
       <DiaryBlockAnalysis diary={diary} />
       <DiaryBlockEmotion diary={diary} />
