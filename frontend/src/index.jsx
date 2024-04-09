@@ -23,6 +23,7 @@ import { ClientAssignments } from './components/client/ClientAssignments';
 import { CompleteAssignments } from './components/client/CompleteAssignments/CompleteAssignments';
 import './index.css';
 import { DiaryPage, loaderDiaryById } from './routes/diary-page';
+import DiaryPageClient from './routes/client/my-diary-page';
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,11 @@ const router = createBrowserRouter([
         path: '/clients',
         element: <ClientPage />,
       },
+      {
+        path: '/my-diary',
+        element: <DiaryPageClient />,
+      },
+
       {
         path: '/clients/:id',
         element: <ClientDetailsPage />,
