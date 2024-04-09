@@ -14,12 +14,12 @@ export default function DiaryPageContentClient({ diary }) {
   const params = useParams();
   const methods = useForm({
     defaultValues: {
-      event_details: '',
-      thoughts_analysis: '',
-      physical_sensations: '',
-      answer_emotion: '',
-      primary_emotion: '',
-      clarifying_emotion: [],
+      event_details: diary.event_details,
+      thoughts_analysis: diary.thoughts_analysis,
+      physical_sensations: diary.physical_sensations,
+      answer_emotion: diary.answer_emotion,
+      primary_emotion: diary.primary_emotion,
+      clarifying_emotion: diary.clarifying_emotion,
       visible: false,
     },
     mode: 'all',
@@ -39,7 +39,7 @@ export default function DiaryPageContentClient({ diary }) {
   return (
     <form className="diaryPage" onSubmit={methods.handleSubmit(onSubmit)}>
       <FormProvider {...methods}>
-        <DiaryHeaderClient diary={diary} />
+        <DiaryHeaderClient diary={diary} onSubmit={onSubmit} />
         <DiaryEventDetailsClient diary={diary} />
         <DiaryBlockAnalysisClient diary={diary} />
         <DiaryBlockEmotionClient diary={diary} />

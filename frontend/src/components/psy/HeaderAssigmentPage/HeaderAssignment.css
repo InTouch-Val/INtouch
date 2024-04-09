@@ -14,13 +14,13 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  gap: 55px;
+  gap: 88px;
   align-items: center;
 }
 
 .header__icon-back {
-  width: 59px;
-  height: 39px;
+  width: 44px;
+  height: 29px;
   margin: 0;
   cursor: pointer;
   transition: 0.3 ease-in-out;
@@ -32,10 +32,11 @@
 
 .header__icon-save {
   margin: 0;
-  width: 60px;
-  height: 52px;
+  width: 36px;
+  height: 34px;
   cursor: pointer;
   transition: 0.3 ease-in-out;
+  border-radius: 0;
 }
 
 .header__icon-save:hover {
@@ -44,17 +45,19 @@
 
 .header__icon-save-disabled {
   margin: 0;
-  width: 60px;
-  height: 52px;
+  width: 36px;
+  height: 34px;
   cursor: pointer;
   opacity: 0.4;
   transition: 0.3 ease-in-out;
+  object-fit: contain;
+  border-radius: 0;
 }
 
 .header__icon-eye {
   margin: 0;
-  width: 70px;
-  height: 70px;
+  width: 46px;
+  height: 31px;
   object-fit: contain;
   cursor: pointer;
   transition: 0.3 ease-in-out;

@@ -7,6 +7,8 @@
   margin-top: 5px; /* отступ сверху, если необходимо */
   background-color: #fff;
   cursor: text;
+  box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
+  border-radius: 6px;
 }
 
 .editor-container .DraftEditor-root {

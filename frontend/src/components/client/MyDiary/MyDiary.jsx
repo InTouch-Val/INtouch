@@ -18,7 +18,7 @@ export default function MyDiary() {
       })
       .catch((error) => console.log(error))
       .finally(() => setFetching(true));
-  }, []);
+  }, [isFetching]);
 
   return (
     <div className="diary">
@@ -35,7 +35,7 @@ export default function MyDiary() {
         <div className="diary__list">
           {isFetching &&
             diarys.map((card) => {
-              return <CardDiaryClient key={card.id} card={card} />;
+              return <CardDiaryClient key={card.id} card={card} setFetching={setFetching} />;
             })}
         </div>
       </div>

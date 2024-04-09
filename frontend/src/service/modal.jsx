@@ -36,7 +36,7 @@ function Modal({
                 textAlign: 'center',
               }}
             >
-              {errorText}
+              {errorText.message}
             </p>
           )}
         </div>

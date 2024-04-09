@@ -11,6 +11,7 @@ from rest_framework.validators import UniqueValidator
 
 from api.tasks import remove_unverified_user
 from api.utils import current_site, send_by_mail
+from api.constants import TIME_DELETE_NON_ACTIVE_USER
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -125,7 +126,9 @@ class UserSerializer(serializers.ModelSerializer):
             {"url": activation_url, "domen": current_site, "name": user.first_name},
         )
         send_by_mail(html_message, user.email)
-        remove_unverified_user.send_with_options(args=(user.pk,), delay=259200000)
+        remove_unverified_user.send_with_options(
+            args=(user.pk,), delay=TIME_DELETE_NON_ACTIVE_USER
+        )
         return user
 
 
@@ -239,7 +242,9 @@ class AddClientSerializer(serializers.ModelSerializer):
             {"url": activation_url, "domen": current_site, "name": user.first_name},
         )
         send_by_mail(html_message, user.email)
-        remove_unverified_user.send_with_options(args=(user.pk,), delay=259200000)
+        remove_unverified_user.send_with_options(
+            args=(user.pk,), delay=TIME_DELETE_NON_ACTIVE_USER
+        )
         return user
 
 
@@ -513,9 +518,6 @@ class NoteSerializer(serializers.ModelSerializer):
 
 
 class DiaryNoteSerializer(serializers.ModelSerializer):
-    clarifying_emotion = serializers.ListField(
-        child=serializers.CharField(max_length=50)
-    )
     author = serializers.PrimaryKeyRelatedField(
         read_only=True, default=serializers.CurrentUserDefault()
     )

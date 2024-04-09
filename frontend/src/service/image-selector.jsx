@@ -1,13 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../css/image-selector.css';
 
-function ImageSelector({ onImageSelect }) {
-  const [images, setImages] = useState([]);
+function ImageSelector({ onImageSelect, selectedImage }) {
+  const [images, setImages] = useState(selectedImage ? [selectedImage] : []);
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearchDone, setIsSearchDone] = useState(false);
+  const [isSelected, setIsSelected] = useState(false);
   const [selectedImageId, setSelectedImageId] = useState(null); // Состояние для хранения ID выбранного изображения
   const accessKey = import.meta.env.VITE_APP_UNSPLASH_ACCESS_KEY;
+
+  useEffect(() => {
+    if (selectedImage) {
+      const updatedImage = { ...selectedImage, id: 1 };
+      setImages([updatedImage]);
+      setIsSelected(true);
+    }
+  }, [selectedImage]);
 
   const searchImages = (query) => {
     if (!accessKey) {
@@ -19,6 +28,7 @@ function ImageSelector({ onImageSelect }) {
       .get(`https://api.unsplash.com/search/photos?query=${query}&client_id=${accessKey}`)
       .then((response) => {
         setImages(response.data.results);
+        setIsSelected(false);
       })
       .catch((error) => console.error('Error searching images:', error));
   };
@@ -51,10 +61,13 @@ function ImageSelector({ onImageSelect }) {
           images.map((image) => (
             <div
               key={image.id}
-              className={`image-item ${image.id === selectedImageId ? 'selected' : ''}`}
+              className={`image-item ${image.id === selectedImageId || isSelected ? 'selected' : ''}`}
               onClick={() => handleImageClick(image)}
             >
-              <img src={image.urls.small} alt={image.alt_description} />
+              <img
+                src={image.urls.small || image.urls.full}
+                alt={image.alt_description || 'image'}
+              />
             </div>
           ))
         ) : isSearchDone ? (

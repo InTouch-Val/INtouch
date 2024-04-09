@@ -24,7 +24,6 @@ function AssignmentsPage() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [clients, setClients] = useState(currentUser?.doctor?.clients);
   const [selectedClients, setSelectedClients] = useState([]);
-  console.log(clients);
   const [selectedAssignmentId, setSelectedAssignmentId] = useState('');
   const [ifError, setIfError] = useState(false);
   const [errorText, setErrorText] = useState('');
@@ -140,7 +139,7 @@ function AssignmentsPage() {
       setSelectedAssignmentId('');
       handleModalClose();
     } catch (error) {
-      console.error('Error toggling favorites:', error);
+      console.error('Error delete assignment:', error);
       setIfError(true);
       setErrorText(error);
     }
@@ -491,9 +490,8 @@ function AssignmentsPage() {
       <Modal
         isOpen={isDeleteModalOpen}
         onClose={handleModalClose}
-        onConfirm={deleteAssignment}
+        onConfirm={() => deleteAssignment(selectedAssignmentId)}
         confirmText="Yes, delete"
-        confirmProps={selectedAssignmentId}
         ifError={ifError}
         errorText={errorText}
       >
