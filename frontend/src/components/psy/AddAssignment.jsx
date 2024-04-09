@@ -38,10 +38,6 @@ function AddAssignment() {
     file: null, // Файл изображения
     url: null, // URL изображения, полученный с помощью FileReader
   });
-  const [selectedImageForBlock, setSelectedImageForBlock] = useState({
-    file: null, // Файл изображения
-    url: null, // URL изображения, полученный с помощью FileReader
-  });
 
   const [isChangeView, setChangeView] = useState(false);
 
