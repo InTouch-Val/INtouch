@@ -92,6 +92,8 @@
   justify-content: center;
   align-items: center;
   transition: all ease 0.3s;
+  border-radius: 8px;
+  border: 2px solid transparent;
 }
 
 .diary__emotion-container-active {
@@ -125,6 +127,7 @@
   line-height: 17px;
   background-color: #fffcf5;
   color: #2c3742;
+  border: 2px solid transparent;
 }
 
 .diary__emotion-chip:hover {

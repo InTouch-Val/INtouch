@@ -2,19 +2,36 @@ import React, { useState, useRef } from 'react';
 import '../DiaryPage.css';
 import { ToolbarProvider } from '../../../../service/ToolbarContext';
 import { EditorToolbar } from '../../../../service/editors-toolbar';
-import { EditorState } from 'draft-js';
+import { EditorState, convertFromRaw } from 'draft-js';
 import { Controller, useFormContext } from 'react-hook-form';
 
 export default function EventDetailsClient({ diary }) {
   const editorRef = useRef(null);
-  const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
+  const content = {
+    blocks: [
+      {
+        key: 'abcde',
+        text: diary.event_details,
+        type: 'open',
+        depth: 0,
+        inlineStyleRanges: [],
+        entityRanges: [],
+        data: {},
+      },
+    ],
+    entityMap: {},
+  };
+
+  const contentState = convertFromRaw(content);
+  const [editorState, setEditorState] = useState(() => EditorState.createWithContent(contentState));
+
   const block = {
     type: 'open',
   };
 
   const handleEditorStateChange = (newEditorState) => {
     setEditorState(newEditorState);
-    const contentState = newEditorState.getCurrentContent();
+    const contentState = newEditorState.getCurrentContent('sasass');
     const text = contentState.getPlainText();
     console.log(text);
     setValue('event_details', text);
@@ -35,6 +52,7 @@ export default function EventDetailsClient({ diary }) {
           <ToolbarProvider>
             <EditorToolbar
               {...fieldsProps}
+              value={diary.event_details}
               ref={editorRef}
               editorState={editorState}
               setEditorState={handleEditorStateChange}
