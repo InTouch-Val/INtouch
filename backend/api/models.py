@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
-from api.constants import LANGUAGES
+from api.constants import LANGUAGES, PRIMARY_EMOTIONS, CLARIFYING_EMOTIONS
 
 
 class User(AbstractUser):
@@ -160,5 +160,7 @@ class DiaryNote(models.Model):
     event_details = models.TextField()
     thoughts_analysis = models.TextField()
     physical_sensations = models.TextField()
-    primary_emotion = models.CharField(max_length=50)
-    clarifying_emotion = ArrayField(models.CharField(max_length=50))
+    primary_emotion = models.CharField(max_length=50, choices=PRIMARY_EMOTIONS)
+    clarifying_emotion = ArrayField(
+        models.CharField(max_length=50, choices=CLARIFYING_EMOTIONS)
+    )
