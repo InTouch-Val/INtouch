@@ -61,7 +61,7 @@ function ClientAssignments() {
         </button>
         <button
           className={currentTab === 'in_progress' ? 'active' : ''}
-          onClick={() => setCurrentTab('in_progress')}
+          onClick={() => setCurrentTab('in progress')}
         >
           In Progress
         </button>

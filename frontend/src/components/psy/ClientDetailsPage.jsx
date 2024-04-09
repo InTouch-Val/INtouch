@@ -40,6 +40,7 @@ function ClientDetailsPage() {
           const response = await API.get('assignments-client/');
           const data = response.data.filter((assignment) => assignment.user === Number(id));
           setClientAssignments(data);
+          console.log(response);
         } catch (e) {
           console.error(e);
         }

@@ -11,6 +11,12 @@
   cursor: pointer;
 }
 
+.button__type_back_greenWhite {
+  border: none;
+  background-color: #417d88;
+  color: white;
+}
+
 .button__type_save {
   width: 58px;
   height: 51px;
@@ -273,4 +279,115 @@
   font-size: 20px;
   font-weight: 700;
   line-height: 17px;
+}
+
+.rating-container {
+  display: flex;
+  max-width: 712px;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 35px;
+  text-align: center;
+  padding: 20px 35px 26px;
+  margin: 52px auto 26px;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
+}
+
+.radio-label {
+  margin: 5px;
+  position: relative;
+}
+
+.radio {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.mood-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.mood-display.active {
+  border-color: #0b4a56;
+  position: relative;
+}
+
+.mood-display.active::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  position: absolute;
+  background-color: rgba(31, 48, 79, 0.3);
+  border-radius: 50%;
+}
+
+.mood-display.emoteActive::after {
+  content: '';
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: -4px;
+  left: -6px;
+  background-color: rgba(31, 48, 79, 0.3);
+  border-radius: 50%; /* Закругляем тень */
+  z-index: 0; /* Позиционируем тень за элементом */
+}
+
+.smiley {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.smiley.active {
+  position: relative;
+}
+
+.rateTask__comment-container {
+  max-width: 935px;
+  min-height: 270px;
+  border-radius: 6px;
+  padding: 20px;
+  margin: 0 auto 0;
+  box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
+  background-color: white;
+  box-sizing: border-box;
+}
+.rateTask__comment-label {
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 21px;
+  letter-spacing: -0.3199999928474426px;
+  text-align: left;
+  color: rgba(11, 74, 86, 1);
+  cursor: pointer;
+}
+.rateTask__comment-input {
+  width: 95%;
+  height: 190px;
+  border-radius: 6px;
+  border: none;
+  box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
+  margin-top: 20px;
+  padding: 15px;
+  font-size: 17px;
+  resize: none;
+  cursor: pointer;
+}
+.rateTask__comment-input::placeholder {
+  font-size: 17px;
 }
