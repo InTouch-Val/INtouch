@@ -14,7 +14,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from datetime import timedelta
 from pathlib import Path
-from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,32 +24,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-l*&rk!&cy2+6m-798lb1^2^hde_&&*u&u4_3o+z79g__%tpi_r"
-SECRET_KEY = "django-insecure-l*&rk!&cy2+6m-798lb1^2^hde_&&*u&u4_3o+z79g__%tpi_r"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["85.31.237.54", "app.intouch.care", "127.0.0.1", "localhost"]
 ALLOWED_HOSTS = ["85.31.237.54", "app.intouch.care", "127.0.0.1", "localhost"]
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
-    "django_dramatiq",
-    "api.apps.ApiConfig",
-    "rest_framework",
-    "rest_framework_simplejwt",
-    "corsheaders",  # библитотека для корректной работы запросов с реакта
-    "drf_spectacular",  # библиотека для генерации документации к API
-    "django_password_validators",
-    "django_password_validators.password_history",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -76,30 +59,12 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
-    "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "INtouch.urls"
 ROOT_URLCONF = "INtouch.urls"
 
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [],
         "APP_DIRS": True,
@@ -115,7 +80,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "INtouch.wsgi.application"
-WSGI_APPLICATION = "INtouch.wsgi.application"
 
 
 # Database
@@ -129,7 +93,7 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "HOST": "app-postgres",
-#        "HOST": "localhost",
+        # "HOST": "localhost",
         "PORT": 5432,
         "NAME": "django_app",
         "USER": "ivan",
@@ -144,48 +108,30 @@ DATABASES = {
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
         "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
     {
         "NAME": "api.validators.MaximumLengthValidator",
-        "NAME": "api.validators.MaximumLengthValidator",
     },
     {
         "NAME": "api.validators.LatinLettersValidator",
-        "NAME": "api.validators.LatinLettersValidator",
     },
     {
-        "NAME": "api.validators.NoSpaceValidator",
         "NAME": "api.validators.NoSpaceValidator",
     },
     {
         "NAME": "django_password_validators.password_history.password_validation.UniquePasswordsValidator",
         "OPTIONS": {"last_passwords": 8},
-        "NAME": "django_password_validators.password_history.password_validation.UniquePasswordsValidator",
-        "OPTIONS": {"last_passwords": 8},
     },
     {
-        "NAME": "django_password_validators.password_character_requirements.password_validation.PasswordCharacterValidator",
-        "OPTIONS": {
-            "min_length_digit": 1,
-            "min_length_alpha": 2,
-            "min_length_special": 0,
-            "min_length_lower": 1,
-            "min_length_upper": 1,
-            "special_characters": "~!?@#$%^&*_-+|/()[]{}><'.,:;",
-        },
         "NAME": "django_password_validators.password_character_requirements.password_validation.PasswordCharacterValidator",
         "OPTIONS": {
             "min_length_digit": 1,
@@ -203,10 +149,6 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
     "django.contrib.auth.hashers.Argon2PasswordHasher",
     "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
-    "django.contrib.auth.hashers.PBKDF2PasswordHasher",
-    "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
-    "django.contrib.auth.hashers.Argon2PasswordHasher",
-    "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
 ]
 
 
@@ -214,9 +156,7 @@ PASSWORD_HASHERS = [
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = "en-us"
-LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
 TIME_ZONE = "UTC"
 
 USE_I18N = True
@@ -231,27 +171,17 @@ STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "api.User"  # переопределение стандартной модели пользователя
-AUTH_USER_MODEL = "api.User"  # переопределение стандартной модели пользователя
 
-LOGIN_REDIRECT_URL = "/"
 LOGIN_REDIRECT_URL = "/"
 
 REST_FRAMEWORK = {
-    "DEFAULT_RENDERER_CLASSES": [
-        "rest_framework.renderers.JSONRenderer",
-        "rest_framework.renderers.BrowsableAPIRenderer",
     "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",
         "rest_framework.renderers.BrowsableAPIRenderer",
@@ -261,14 +191,18 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
-    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-        "rest_framework.authentication.BasicAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
     ),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.UserRateThrottle",
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.ScopedRateThrottle"
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "user": "10000/day",
+        "anon": "1000/day",
+        "email_update": "3/day",
+    }
 }
 
 SIMPLE_JWT = {
@@ -314,17 +248,9 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = [
     "https://85.31.237.54",
     "http://localhost:3000",
-    "https://85.31.237.54",
-    "http://localhost:3000",
 ]
 
 CORS_ALLOW_METHODS = [
-    "GET",
-    "POST",
-    "PUT",
-    "PATCH",
-    "DELETE",
-    "OPTIONS",
     "GET",
     "POST",
     "PUT",
@@ -338,12 +264,8 @@ CORS_ALLOW_METHODS = [
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.titan.email"
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.titan.email"
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
-EMAIL_HOST_USER = "info@intouch.care"
-EMAIL_HOST_PASSWORD = "OMG_LoveINtouch23!"
 EMAIL_HOST_USER = "info@intouch.care"
 EMAIL_HOST_PASSWORD = "OMG_LoveINtouch23!"
 
@@ -362,7 +284,6 @@ DRAMATIQ_BROKER = {
         "dramatiq.middleware.Retries",
         "django_dramatiq.middleware.DbConnectionsMiddleware",
         "django_dramatiq.middleware.AdminMiddleware",
-    ],
     ],
 }
 
