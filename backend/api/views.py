@@ -317,9 +317,8 @@ class AssignmentClientViewSet(viewsets.ModelViewSet):
     serializer_class = AssignmentClientSerializer
 
     def get_queryset(self):
-        query = AssignmentClient.objects.filter(user=user.id).values_list(
-            "assignment_root", flat=True
-        )
+        user = self.request.user
+        query = AssignmentClient.objects.filter(user=user.id)
         return query
 
     @action(detail=True, methods=["get"])
