@@ -4,11 +4,13 @@ import arrowBack from '../../../../images/assignment-page/arrowBack.svg';
 import { Link } from 'react-router-dom';
 import save from '../../../../images/assignment-page/save.svg';
 import { useAuth } from '../../../../service/authContext';
+import { useFormContext } from 'react-hook-form';
 
 const options = { weekday: 'long', day: '2-digit', month: 'short', year: 'numeric' };
 
-export default function DiaryHeaderClient({ diary }) {
+export default function DiaryHeaderClient({ diary, onSubmit }) {
   const { currentUser } = useAuth();
+  const { handleSubmit } = useFormContext();
   return (
     <>
       <div className="diary__header">
@@ -23,7 +25,12 @@ export default function DiaryHeaderClient({ diary }) {
           <Link to={-1}>
             <img src={arrowBack} alt="back" className="diary__img-back" />
           </Link>
-          <img src={save} about="save" className="diary__img-back" />
+          <img
+            src={save}
+            about="save"
+            className="diary__img-back"
+            onClick={handleSubmit(onSubmit)}
+          />
         </div>
       </div>
 
