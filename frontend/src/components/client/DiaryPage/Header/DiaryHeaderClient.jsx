@@ -17,7 +17,9 @@ export default function DiaryHeaderClient({ diary, onSubmit }) {
         <div className="diary__title-header">
           <div className="diary__title">Emotion Journal</div>
           <div className="diary__title-date">
-            {new Date(diary.add_date).toLocaleDateString('en-US', options)}
+            {diary
+              ? new Date(diary.add_date).toLocaleDateString('en-US', options)
+              : new Date().toLocaleDateString('en-US', options)}
           </div>
         </div>
 

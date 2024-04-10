@@ -12,7 +12,7 @@ export default function DiaryBlockPhysicalSensationClient({ diary }) {
     blocks: [
       {
         key: 'abcde',
-        text: diary.physical_sensations,
+        text: diary ? diary.physical_sensations : '',
         type: 'open',
         depth: 0,
         inlineStyleRanges: [],

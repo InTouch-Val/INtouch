@@ -11,7 +11,7 @@ export default function DiaryBlockAnalysisClient({ diary }) {
     blocks: [
       {
         key: 'abcde',
-        text: diary.thoughts_analysis,
+        text: diary ? diary.thoughts_analysis : '',
         type: 'open',
         depth: 0,
         inlineStyleRanges: [],
