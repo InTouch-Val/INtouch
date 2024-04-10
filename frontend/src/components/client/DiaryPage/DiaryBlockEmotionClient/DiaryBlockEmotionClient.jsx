@@ -9,13 +9,13 @@ import { EditorState, convertFromRaw } from 'draft-js';
 import { EditorToolbar } from '../../../../service/editors-toolbar';
 import { Controller, useFormContext } from 'react-hook-form';
 
-export default function DiaryBlockEmotionClient({ diary }) {
+export default function DiaryBlockEmotionClient({ diary, type }) {
   const editorRef = useRef(null);
   const content = {
     blocks: [
       {
         key: 'abcde',
-        text: diary.physical_sensations,
+        text: diary ? diary.physical_sensations : ' ',
         type: 'open',
         depth: 0,
         inlineStyleRanges: [],
@@ -27,7 +27,9 @@ export default function DiaryBlockEmotionClient({ diary }) {
   };
 
   const contentState = convertFromRaw(content);
-  const [editorState, setEditorState] = useState(() => EditorState.createWithContent(contentState));
+  const [editorState, setEditorState] = useState(() =>
+    type == 'exist' ? EditorState.createWithContent(contentState) : EditorState.createEmpty(),
+  );
   const block = {
     type: 'open',
   };

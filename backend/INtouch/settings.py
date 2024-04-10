@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-
 import os
 from datetime import timedelta
 from pathlib import Path
@@ -196,13 +195,13 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_CLASSES": [
         "rest_framework.throttling.UserRateThrottle",
         "rest_framework.throttling.AnonRateThrottle",
-        "rest_framework.throttling.ScopedRateThrottle"
+        "rest_framework.throttling.ScopedRateThrottle",
     ],
     "DEFAULT_THROTTLE_RATES": {
         "user": "10000/day",
         "anon": "1000/day",
         "email_update": "3/day",
-    }
+    },
 }
 
 SIMPLE_JWT = {

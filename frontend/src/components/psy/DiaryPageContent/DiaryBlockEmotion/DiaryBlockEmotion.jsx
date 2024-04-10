@@ -19,7 +19,7 @@ export default function DiaryBlockEmotion({ diary }) {
             return (
               <div
                 key={item.id}
-                className={`diary__emotion-container ${item.active && 'diary__emotion-container-active'}`}
+                className={`diary__emotion-container ${item.title == diary.primary_emotion && 'diary__emotion-container-active'}`}
               >
                 <img src={item.img} className="diary__emotion" alt={item.title} />
                 <div className="diary__emotion-title">{item.title}</div>
@@ -31,7 +31,10 @@ export default function DiaryBlockEmotion({ diary }) {
       <div className="diary__emotions-all">
         {listEmotionsChips.map((item, index) => {
           return (
-            <div key={index} className={`diary__emotion-chip ${item.active && 'chip_active'}`}>
+            <div
+              key={index}
+              className={`diary__emotion-chip ${diary.clarifying_emotion.find((emotion) => item.title == emotion) && 'chip_active'}`}
+            >
               {item.title}
             </div>
           );

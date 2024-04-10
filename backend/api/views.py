@@ -13,7 +13,6 @@ from api.models import *
 from api.permissions import *
 from api.serializers import *
 from api.utils import send_by_mail
-from api.constants import USER_TYPES
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -287,20 +286,6 @@ class AssignmentViewSet(viewsets.ModelViewSet):
         IsAuthorOrReadOnly,
     ]
 
-    def get_queryset(self):
-        user = self.request.user
-        if user.user_type == USER_TYPES[1]:
-            return super().get_queryset()
-        assignments_ids = list(
-            AssignmentClient.objects.filter(user=user.id).values_list(
-                "assignment_root", flat=True
-            )
-        )
-        # TODO: change shitty code below
-        # p.s Doesn't work --> Assignment.objects.filter(pk__in=assignments_ids)
-        query = [Assignment.objects.get(pk=_) for _ in assignments_ids]
-        return query
-
     def destroy(self, request, *args, **kwargs):
         assignment = self.get_object()
         if assignment.author != request.user:
@@ -329,8 +314,12 @@ class AssignmentViewSet(viewsets.ModelViewSet):
 class AssignmentClientViewSet(viewsets.ModelViewSet):
     """CRUD операции над задачами клиента"""
 
-    queryset = AssignmentClient.objects.all()
     serializer_class = AssignmentClientSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        query = AssignmentClient.objects.filter(user=user.id)
+        return query
 
     @action(detail=True, methods=["get"])
     def complete(self, request, pk):

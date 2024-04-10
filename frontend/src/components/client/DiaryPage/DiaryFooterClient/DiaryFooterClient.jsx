@@ -5,7 +5,7 @@ import Button from '../../../psy/button/ButtonHeadline';
 import { useFormContext } from 'react-hook-form';
 
 export default function DiaryFooterClient({ diary }) {
-  const [active, setActive] = React.useState(diary.visible);
+  const [active, setActive] = React.useState(diary ? diary.visible : false);
   const { control, setValue, getValue } = useFormContext();
 
   React.useEffect(() => {
@@ -15,14 +15,13 @@ export default function DiaryFooterClient({ diary }) {
     <div className="diary__footer">
       <div className="diary__footer-shared" onClick={(e) => e.stopPropagation()}>
         <div className="diary__footer-shared-text">Share with my therapist</div>
-        <div
-          className={`diary__footer-shared-toggle ${active ? 'active' : 'unactive'}`}
-          onClick={() => {
-            setActive((prev) => !prev);
-          }}
-        >
-          <img src={ellipse} alt="toggle" className="icon__footer-toggle" />
-        </div>
+
+        <input
+          type="checkbox"
+          className="footer__input-checkbox"
+          defaultChecked={active}
+          onClick={() => setActive((prev) => !prev)}
+        />
       </div>
 
       <div className="diary__footer-button-wrapper">

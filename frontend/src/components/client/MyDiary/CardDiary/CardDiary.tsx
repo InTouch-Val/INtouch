@@ -37,6 +37,23 @@ export default function CardDiaryClient({ card, setFetching }) {
     }
   };
 
+  function defineStatusClass() {
+    switch (card.visible) {
+      case 'to do': {
+        return 'card__status_status_to-do';
+      }
+      case 'in progress': {
+        return 'card__status_status_in-progress';
+      }
+      case 'done': {
+        return 'card__status_status_done';
+      }
+      default: {
+        return '';
+      }
+    }
+  }
+
   return (
     <div className="diary__card" onClick={() => goDiary()}>
       <div className="diary__card-header">
@@ -61,14 +78,16 @@ export default function CardDiaryClient({ card, setFetching }) {
           );
         })}
       </div>
-      <div className="diary__card-shared" onClick={(e) => e.stopPropagation()}>
-        <div className="diary__card-shared-text">Share with my therapist</div>
-        <div
-          className={`diary__card-shared-toggle ${active ? 'active' : 'unactive'}`}
-          onClick={handleClickVisible}
-        >
-          <img src={ellipse} alt="toggle" className="icon__toogle" />
-        </div>
+      <div onClick={(e) => e.stopPropagation()}>
+        <label className="card__input-label">
+          Share with my therapist
+          <input
+            type="checkbox"
+            className="card__input-checkbox"
+            defaultChecked={active}
+            onClick={handleClickVisible}
+          />
+        </label>
       </div>
     </div>
   );
