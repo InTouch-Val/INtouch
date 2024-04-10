@@ -104,3 +104,10 @@
   align-items: center;
   gap: 20px;
 }
+
+.diary__buttons-modal {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: row;
+}

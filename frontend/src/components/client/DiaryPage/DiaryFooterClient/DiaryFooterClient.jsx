@@ -1,6 +1,5 @@
 import React from 'react';
 import './styles.css';
-import ellipse from '../../../../images/icons/ellipse.svg';
 import Button from '../../../psy/button/ButtonHeadline';
 import { useFormContext } from 'react-hook-form';
 
