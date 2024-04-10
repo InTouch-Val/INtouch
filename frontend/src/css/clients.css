@@ -110,6 +110,7 @@ td {
 }
 
 .link-to-client {
+  width: 130px;
   display: flex;
   align-items: center;
   color: inherit;
@@ -135,6 +136,7 @@ tr:last-child {
 .actions {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .open-modal-button {
@@ -305,6 +307,9 @@ tr:last-child {
 }
 
 .icon-trash {
+  display: flex;
+  align-content: center;
+  justify-content: center;
   background-image: url('../images/icons/trash.svg');
   background-repeat: no-repeat;
   width: 30px;
@@ -327,4 +332,14 @@ tr:last-child {
 
   font-size: 16px;
   font-weight: 700;
+}
+
+.table__headColumn:first-child {
+  width: 260px;
+}
+
+.table__headColumn:last-child {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
