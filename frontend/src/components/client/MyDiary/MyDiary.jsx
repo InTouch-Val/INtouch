@@ -22,6 +22,8 @@ export default function MyDiary() {
       .finally(() => setFetching(true));
   }, [isFetching]);
 
+  console.log(diarys);
+
   return (
     <div className="diary">
       <div className="diary__header">
