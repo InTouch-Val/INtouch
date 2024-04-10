@@ -11,7 +11,7 @@ export default function EventDetailsClient({ diary }) {
     blocks: [
       {
         key: 'abcde',
-        text: diary.event_details,
+        text: diary ? diary.event_details : '',
         type: 'open',
         depth: 0,
         inlineStyleRanges: [],
@@ -52,7 +52,6 @@ export default function EventDetailsClient({ diary }) {
           <ToolbarProvider>
             <EditorToolbar
               {...fieldsProps}
-              value={diary.event_details}
               ref={editorRef}
               editorState={editorState}
               setEditorState={handleEditorStateChange}

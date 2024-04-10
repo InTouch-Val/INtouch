@@ -90,9 +90,10 @@ const router = createBrowserRouter([
       },
       {
         path: '/diary/:id',
-        element: <DiaryPage />,
+        element: <DiaryPage type="exist" />,
         loader: loaderDiaryById,
       },
+      { path: '/my-diary/create', element: <DiaryPage type="create" /> },
     ],
   },
   {

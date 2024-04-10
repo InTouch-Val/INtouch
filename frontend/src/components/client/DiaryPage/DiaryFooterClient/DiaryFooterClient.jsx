@@ -5,7 +5,7 @@ import Button from '../../../psy/button/ButtonHeadline';
 import { useFormContext } from 'react-hook-form';
 
 export default function DiaryFooterClient({ diary }) {
-  const [active, setActive] = React.useState(diary.visible);
+  const [active, setActive] = React.useState(diary ? diary.visible : false);
   const { control, setValue, getValue } = useFormContext();
 
   React.useEffect(() => {
