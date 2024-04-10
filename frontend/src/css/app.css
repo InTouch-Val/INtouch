@@ -13,6 +13,7 @@ button {
 }
 
 .app-container {
+  position: relative;
   display: flex;
   flex: 1;
 }
@@ -20,6 +21,7 @@ button {
 .content {
   width: 100vw;
   min-height: 100vh;
+  margin-left: 255px;
   flex: 1;
   background-color: rgb(225 244 248 / 17%);
   background-image: url('https://i122.fastpic.org/big/2023/1025/d2/e4e7924e98bda72edc75d27bf95bcad2.png');
@@ -44,6 +46,9 @@ button {
 }
 
 .side-bar {
+  position: fixed;
+  height: 100vh;
+  z-index: 100;
   width: 255px;
 }
 
