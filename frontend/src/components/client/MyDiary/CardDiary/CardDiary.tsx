@@ -1,11 +1,10 @@
 import React from 'react';
-import ellipse from '../../../../images/icons/ellipse.svg';
 import './CardDiary.css';
 import Button from '../../../psy/button/ButtonHeadline';
 import { useNavigate } from 'react-router-dom';
 import { API } from '../../../../service/axios';
 
-export default function CardDiaryClient({ card, setFetching }) {
+export default function CardDiaryClient({ card, setFetching, openModal }) {
   const navigate = useNavigate();
   const options = { weekday: 'short', month: 'long', year: 'numeric' };
   function goDiary() {
@@ -26,34 +25,6 @@ export default function CardDiaryClient({ card, setFetching }) {
     }
   };
 
-  const handleClickDelete = async (event) => {
-    event.stopPropagation();
-    setFetching(false);
-    try {
-      const response = await API.delete(`/diary-notes/${card.id}/`);
-      return response.data;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  function defineStatusClass() {
-    switch (card.visible) {
-      case 'to do': {
-        return 'card__status_status_to-do';
-      }
-      case 'in progress': {
-        return 'card__status_status_in-progress';
-      }
-      case 'done': {
-        return 'card__status_status_done';
-      }
-      default: {
-        return '';
-      }
-    }
-  }
-
   return (
     <div className="diary__card" onClick={() => goDiary()}>
       <div className="diary__card-header">
@@ -65,7 +36,12 @@ export default function CardDiaryClient({ card, setFetching }) {
               .replace(/,/g, '')}
           </div>
         </div>
-        <div className="button__trash" onClick={handleClickDelete} />
+        <div
+          className="button__trash"
+          onClick={(e) => {
+            openModal(e, card);
+          }}
+        />
       </div>
       <div className="diary__card-text">{card.event_details}</div>
 
