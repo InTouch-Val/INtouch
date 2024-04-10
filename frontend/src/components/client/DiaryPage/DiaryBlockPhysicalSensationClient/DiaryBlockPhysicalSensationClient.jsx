@@ -5,7 +5,7 @@ import { EditorToolbar } from '../../../../service/editors-toolbar';
 import { ToolbarProvider } from '../../../../service/ToolbarContext';
 import { Controller, useFormContext } from 'react-hook-form';
 
-export default function DiaryBlockPhysicalSensationClient({ diary }) {
+export default function DiaryBlockPhysicalSensationClient({ diary, type }) {
   const editorRef = useRef(null);
 
   const content = {
@@ -24,7 +24,9 @@ export default function DiaryBlockPhysicalSensationClient({ diary }) {
   };
 
   const contentState = convertFromRaw(content);
-  const [editorState, setEditorState] = useState(() => EditorState.createWithContent(contentState));
+  const [editorState, setEditorState] = useState(() =>
+    type == 'exist' ? EditorState.createWithContent(contentState) : EditorState.createEmpty(),
+  );
   const block = {
     type: 'open',
   };

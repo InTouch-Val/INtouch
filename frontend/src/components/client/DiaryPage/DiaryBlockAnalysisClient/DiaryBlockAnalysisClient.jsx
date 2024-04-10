@@ -5,13 +5,13 @@ import { ToolbarProvider } from '../../../../service/ToolbarContext';
 import { EditorToolbar } from '../../../../service/editors-toolbar';
 import { Controller, useFormContext } from 'react-hook-form';
 
-export default function DiaryBlockAnalysisClient({ diary }) {
+export default function DiaryBlockAnalysisClient({ diary, type }) {
   const editorRef = useRef(null);
   const content = {
     blocks: [
       {
         key: 'abcde',
-        text: diary ? diary.thoughts_analysis : '',
+        text: diary ? diary.thoughts_analysis : ' ',
         type: 'open',
         depth: 0,
         inlineStyleRanges: [],
@@ -23,7 +23,9 @@ export default function DiaryBlockAnalysisClient({ diary }) {
   };
 
   const contentState = convertFromRaw(content);
-  const [editorState, setEditorState] = useState(() => EditorState.createWithContent(contentState));
+  const [editorState, setEditorState] = useState(() =>
+    type == 'exist' ? EditorState.createWithContent(contentState) : EditorState.createEmpty(),
+  );
   const block = {
     type: 'open',
   };

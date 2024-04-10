@@ -20,29 +20,6 @@
   color: #0b4a56;
 }
 
-.diary__footer-shared-toggle {
-  border: 1px solid #656565;
-  display: flex;
-  align-items: center;
-  width: 67px;
-  height: 37px;
-  border-radius: 100px;
-  padding: 0.5px;
-}
-
-.icon__footer-toggle {
-  width: 31px;
-  height: 31px;
-}
-
-.active {
-  justify-content: flex-start;
-}
-
-.unactive {
-  justify-content: flex-end;
-}
-
 .diary__footer-button-wrapper {
   width: 100%;
   display: flex;
@@ -61,4 +38,45 @@
   font-weight: 700;
   line-height: 17px;
   color: #ffffff;
+}
+
+.footer__input-checkbox {
+  display: flex;
+  align-items: center;
+  width: 68px;
+  height: 37px;
+  padding: 0;
+  border: 1px solid #656565;
+  border-radius: 100px;
+  margin: 0;
+  appearance: none;
+  cursor: pointer;
+  transition: background-color 0.5s;
+}
+
+.footer__input-checkbox:focus-visible {
+  outline: 2px solid #00f;
+  outline-offset: 1px;
+}
+
+.footer__input-checkbox:checked {
+  background-color: #417d88;
+}
+
+.footer__input-checkbox::after {
+  display: block;
+  width: 31px;
+  height: 28px;
+  border-radius: 100%;
+  background-color: #417d88;
+  content: '';
+  transform: translate(0.1em, 0.08em);
+  transition:
+    transform 0.5s,
+    background-color 0.5s;
+}
+
+.footer__input-checkbox:checked::after {
+  background-color: #fff;
+  transform: translate(1.9em, 0.08em);
 }

@@ -15,14 +15,13 @@ export default function DiaryFooterClient({ diary }) {
     <div className="diary__footer">
       <div className="diary__footer-shared" onClick={(e) => e.stopPropagation()}>
         <div className="diary__footer-shared-text">Share with my therapist</div>
-        <div
-          className={`diary__footer-shared-toggle ${active ? 'active' : 'unactive'}`}
-          onClick={() => {
-            setActive((prev) => !prev);
-          }}
-        >
-          <img src={ellipse} alt="toggle" className="icon__footer-toggle" />
-        </div>
+
+        <input
+          type="checkbox"
+          className="footer__input-checkbox"
+          defaultChecked={active}
+          onClick={() => setActive((prev) => !prev)}
+        />
       </div>
 
       <div className="diary__footer-button-wrapper">

@@ -5,7 +5,7 @@ import { EditorToolbar } from '../../../../service/editors-toolbar';
 import { EditorState, convertFromRaw } from 'draft-js';
 import { Controller, useFormContext } from 'react-hook-form';
 
-export default function EventDetailsClient({ diary }) {
+export default function EventDetailsClient({ diary, type }) {
   const editorRef = useRef(null);
   const content = {
     blocks: [
@@ -23,7 +23,9 @@ export default function EventDetailsClient({ diary }) {
   };
 
   const contentState = convertFromRaw(content);
-  const [editorState, setEditorState] = useState(() => EditorState.createWithContent(contentState));
+  const [editorState, setEditorState] = useState(() =>
+    type == 'exist' ? EditorState.createWithContent(contentState) : EditorState.createEmpty(),
+  );
 
   const block = {
     type: 'open',
@@ -31,9 +33,8 @@ export default function EventDetailsClient({ diary }) {
 
   const handleEditorStateChange = (newEditorState) => {
     setEditorState(newEditorState);
-    const contentState = newEditorState.getCurrentContent('sasass');
+    const contentState = newEditorState.getCurrentContent();
     const text = contentState.getPlainText();
-    console.log(text);
     setValue('event_details', text);
   };
 
