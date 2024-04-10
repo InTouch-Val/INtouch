@@ -25,11 +25,13 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
     }
   };
 
+  console.log(new Date(card.add_date).getUTCDate());
+
   return (
     <div className="diary__card" onClick={() => goDiary()}>
       <div className="diary__card-header">
         <div className="diary__card-title">
-          <div className="diary__card-title__day">{new Date(card.add_date).getDay()}</div>
+          <div className="diary__card-title__day">{new Date(card.add_date).getUTCDate()}</div>
           <div className="diary__card-title__date">
             {new Date(card.add_date)
               .toLocaleDateString('en-US', { weekday: 'long', month: 'short', year: 'numeric' })
