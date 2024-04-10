@@ -16,13 +16,13 @@ function ClientPage() {
   const [messageToUser, setMessageToUser] = useState(null);
   const [activityFilter, setActivityFilter] = useState({
     id: 1,
-    text: 'Status',
+    text: 'Status ▼',
     status: 'All clients',
   });
 
   const [activityFilterDate, setActivityFilterDate] = useState({
     id: 1,
-    text: 'Added',
+    text: 'Added ▼',
     status: 'Date up',
   });
   const [searchTerm, setSearchTerm] = useState('');

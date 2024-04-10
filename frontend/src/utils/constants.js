@@ -11,7 +11,7 @@ export const menuActive = [
   },
   {
     id: 3,
-    text: 'Unactive',
+    text: 'Not active',
     status: 'false',
   },
 ];
