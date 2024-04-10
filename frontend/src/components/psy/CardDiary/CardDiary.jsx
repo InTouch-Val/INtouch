@@ -15,7 +15,7 @@ export default function CardDiary({ card }) {
   return (
     <div className="diary__card" onClick={() => goDiary()}>
       <div className="diary__card-title">
-        <div className="diary__card-title__day">{new Date(card.add_date).getDay()}</div>
+        <div className="diary__card-title__day">{new Date(card.add_date).getUTCDate()}</div>
         <div className="diary__card-title__date">
           {new Date(card.add_date).toLocaleDateString('en-US', options)}
         </div>
