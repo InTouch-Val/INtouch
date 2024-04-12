@@ -391,3 +391,33 @@
 .rateTask__comment-input::placeholder {
   font-size: 17px;
 }
+
+.assignment__share-container {
+  display: flex;
+  max-width: 446px;
+  margin: 0 auto;
+}
+
+.assignment__share-label {
+  width: 100%;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 28px;
+  color: rgba(11, 74, 86, 1);
+  justify-content: start;
+  gap: 14px;
+}
+
+.assignment__share-checkbox {
+  width: 67px;
+  height: 37px;
+}
+
+.assignment__share-checkbox::after {
+  width: 30px;
+  height: 30px;
+}
+
+.assignment__share-checkbox:checked:after {
+  transform: translate(2.22em, 0.2em);
+}

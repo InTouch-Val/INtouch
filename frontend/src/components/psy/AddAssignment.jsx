@@ -57,15 +57,7 @@ function AddAssignment() {
       const fetchedBlocks = response.data.blocks.map((block) => {
         let contentState;
         try {
-          // Проверяем, что description не пустая
-          if (block.description) {
-            const rawContent = JSON.parse(block.description);
-            contentState = convertFromRaw(rawContent);
-            console.log(contentState);
-          } else {
-            // Если description пустая, создаем пустое содержимое
-            contentState = ContentState.createFromText(block.question);
-          }
+          contentState = ContentState.createFromText(block.question);
         } catch (error) {
           console.error('Ошибка при обработке содержимого:', error);
           // Создаем ContentState с текстом из data.title для всех типов блоков, кроме 'text'

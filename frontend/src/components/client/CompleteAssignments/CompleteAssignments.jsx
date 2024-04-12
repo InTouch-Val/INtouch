@@ -13,6 +13,8 @@ import smilyEmote from '../../../images/smilyEmote.svg';
 import '../../../css/block.css';
 import '../../../css/assignments.css';
 import { ClientAssignmentBlocks } from '../../../service/ClientAssignmentBlocks';
+import { API } from '../../../service/axios';
+import { useNavigate } from 'react-router-dom';
 
 function CompleteAssignments() {
   const [isRateTask, setIsRateTask] = useState(false);
@@ -163,6 +165,65 @@ function CompleteAssignments() {
     setIsRateTask(!isRateTask);
   }
 
+  async function handleShareWithTherapist() {
+    try {
+      const res = await API.put(`assignments-client/${assignmentData.id}/visible/`);
+      if (res.status >= 200 && res.status < 300) {
+        console.log(res.data);
+      } else {
+        console.log(`Status: ${res.status}`);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
+  const navigate = useNavigate(); // Получите доступ к history
+
+  async function handleDoneWithReview() {
+    try {
+      const res = await API.put(`assignments-client/${assignmentData.id}/`, {
+        grade: parseInt(valueOfRate, 10),
+        review: document.getElementById('text').value, // Получаем значение из textarea
+        blocks: values,
+      });
+      if (res.status >= 200 && res.status < 300) {
+        console.log(res.data);
+        const resComplete = await API.get(`assignments-client/${assignmentData.id}/complete/`);
+        if (resComplete.status >= 200 && resComplete.status < 300) {
+          navigate('/my-assignments');
+        } else {
+          console.log(`Status: ${resComplete.status}`);
+        }
+      } else {
+        console.log(`Status: ${res.status}`);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
+  async function handleCompleteTask() {
+    try {
+      const res = await API.put(`assignments-client/${assignmentData.id}/`, {
+        blocks: values,
+      });
+      if (res.status >= 200 && res.status < 300) {
+        console.log(res.data);
+        const resComplete = await API.get(`assignments-client/${assignmentData.id}/complete/`);
+        if (resComplete.status >= 200 && resComplete.status < 300) {
+          navigate('/my-assignments');
+        } else {
+          console.log(`Status: ${resComplete.status}`);
+        }
+      } else {
+        console.log(`Status: ${res.status}`);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
   return isRateTask ? (
     <>
       <h1 className="assignment__name" style={{ textAlign: 'center' }}>
@@ -225,7 +286,12 @@ function CompleteAssignments() {
         >
           <img src={arrowBack}></img>
         </button>
-        <button className="button__type_back button__type_back_greenWhite">Done</button>
+        <button
+          onClick={handleDoneWithReview}
+          className="button__type_back button__type_back_greenWhite"
+        >
+          Done
+        </button>
       </div>
     </>
   ) : (
@@ -256,9 +322,21 @@ function CompleteAssignments() {
             <ClientAssignmentBlocks key={index} block={block} handleClick={handleValues} />
           ))}
       </div>
-
+      <div className="assignment__share-container">
+        <label className="card__input-label assignment__share-label">
+          Share with my therapist
+          <input
+            type="checkbox"
+            className="card__input-checkbox  assignment__share-checkbox"
+            defaultChecked={assignmentData?.visible}
+            onClick={() => handleShareWithTherapist(assignmentData?.id)}
+          />
+        </label>
+      </div>
       <div className="assignment__buttons-box">
-        <button className="action-button assignment__button">Complete Task</button>
+        <button onClick={handleCompleteTask} className="action-button assignment__button">
+          Complete Task
+        </button>
         <button onClick={handleRateTaskBtnClick} className="action-button assignment__button">
           Rate Task
         </button>
