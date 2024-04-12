@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "corsheaders",  # библитотека для корректной работы запросов с реакта
     "drf_spectacular",  # библиотека для генерации документации к API
+    "django_password_validators",
+    "django_password_validators.password_history",
 ]
 
 MIDDLEWARE = [
@@ -115,6 +117,37 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
+    {
+        "NAME": "api.validators.MaximumLengthValidator",
+    },
+    {
+        "NAME": "api.validators.LatinLettersValidator",
+    },
+    {
+        "NAME": "api.validators.NoSpaceValidator",
+    },
+    {
+        "NAME": "django_password_validators.password_history.password_validation.UniquePasswordsValidator",
+        "OPTIONS": {"last_passwords": 8},
+    },
+    {
+        "NAME": "django_password_validators.password_character_requirements.password_validation.PasswordCharacterValidator",
+        "OPTIONS": {
+            "min_length_digit": 1,
+            "min_length_alpha": 2,
+            "min_length_special": 0,
+            "min_length_lower": 1,
+            "min_length_upper": 1,
+            "special_characters": "~!?@#$%^&*_-+|/()[]{}><'.,:;",
+        },
+    },
+]
+
+PASSWORD_HASHERS = [
+    "django.contrib.auth.hashers.PBKDF2PasswordHasher",
+    "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
+    "django.contrib.auth.hashers.Argon2PasswordHasher",
+    "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
 ]
 
 
@@ -159,6 +192,16 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
     ),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.UserRateThrottle",
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.ScopedRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "user": "10000/day",
+        "anon": "1000/day",
+        "email_update": "3/day",
+    },
 }
 
 SIMPLE_JWT = {

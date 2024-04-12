@@ -46,3 +46,23 @@ sent_emails/
 
 # Logging data
 debug.log
+
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.vscode/
+
+
+# Directories with static and media
+static/
+media/
+sent_emails/
+
+# Logging data
+debug.log

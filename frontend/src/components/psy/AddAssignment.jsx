@@ -166,7 +166,7 @@ function AddAssignment() {
       tags: 'ffasd',
       language,
       image_url:
-        selectedImage?.urls.full ||
+        selectedImage?.url ||
         'https://images.unsplash.com/photo-1641531316051-30d6824c6460?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1MzE0ODh8MHwxfHNlYXJjaHwxfHxsZW9uaWR8ZW58MHx8fHwxNzAwODE4Nzc5fDA&ixlib=rb-4.0.3&q=85',
     };
 

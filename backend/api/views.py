@@ -111,7 +111,9 @@ class PasswordResetCompleteView(APIView):
     """Установка нового пароля пользователя"""
 
     def post(self, request):
-        serializer = ChangePasswordSerializer(data=request.data)
+        serializer = ChangePasswordSerializer(
+            data=request.data, context={"request": request}
+        )
         serializer.is_valid(raise_exception=True)
         new_password = serializer.validated_data["new_password"]
         user = request.user
@@ -127,7 +129,9 @@ class UpdatePasswordView(APIView):
     """Изменение существующего пароля пользователя"""
 
     def post(self, request):
-        serializer = UpdatePasswordSerializer(data=request.data)
+        serializer = UpdatePasswordSerializer(
+            data=request.data, context={"request": request}
+        )
         serializer.is_valid(raise_exception=True)
         new_password = serializer.validated_data["new_password"]
         user = request.user
@@ -310,8 +314,12 @@ class AssignmentViewSet(viewsets.ModelViewSet):
 class AssignmentClientViewSet(viewsets.ModelViewSet):
     """CRUD операции над задачами клиента"""
 
-    queryset = AssignmentClient.objects.all()
     serializer_class = AssignmentClientSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        query = AssignmentClient.objects.filter(user=user.id)
+        return query
 
     @action(detail=True, methods=["get"])
     def complete(self, request, pk):

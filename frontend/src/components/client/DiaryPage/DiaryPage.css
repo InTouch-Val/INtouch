@@ -92,6 +92,8 @@
   justify-content: center;
   align-items: center;
   transition: all ease 0.3s;
+  border-radius: 8px;
+  border: 2px solid transparent;
 }
 
 .diary__emotion-container-active {
@@ -125,6 +127,7 @@
   line-height: 17px;
   background-color: #fffcf5;
   color: #2c3742;
+  border: 2px solid transparent;
 }
 
 .diary__emotion-chip:hover {
@@ -136,4 +139,35 @@
   font-weight: 700;
   background-color: #fff5de;
   border: 2px solid #2c3742;
+}
+
+.success-message {
+  position: fixed;
+  z-index: 1000;
+  top: 20px;
+  right: 20px;
+  padding: 10px;
+  border: 1px solid #c3e6cb;
+  border-radius: 5px;
+  animation:
+    slide-in 0.5s ease forwards,
+    fade-out 0.5s 1.5s forwards;
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.error-message {
+  border: 1px solid #f5c6cb;
+  background-color: #f8d7da;
+  color: #721c24;
+  position: fixed;
+  z-index: 1000;
+  top: 20px;
+  right: 20px;
+  padding: 10px;
+  border: 1px solid #c3e6cb;
+  border-radius: 5px;
+  animation:
+    slide-in 0.5s ease forwards,
+    fade-out 0.5s 1.5s forwards;
 }

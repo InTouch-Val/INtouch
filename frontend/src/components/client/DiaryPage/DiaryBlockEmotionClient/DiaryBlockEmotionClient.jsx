@@ -5,13 +5,31 @@ import {
   listEmotionsChips,
 } from '../../../psy/DiaryPageContent/DiaryBlockEmotion/constants';
 import { ToolbarProvider } from '../../../../service/ToolbarContext';
-import EditorState from 'draft-js/lib/EditorState';
+import { EditorState, convertFromRaw } from 'draft-js';
 import { EditorToolbar } from '../../../../service/editors-toolbar';
 import { Controller, useFormContext } from 'react-hook-form';
 
-export default function DiaryBlockEmotionClient({ diary }) {
+export default function DiaryBlockEmotionClient({ diary, type }) {
   const editorRef = useRef(null);
-  const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
+  const content = {
+    blocks: [
+      {
+        key: 'abcde',
+        text: diary ? diary.physical_sensations : ' ',
+        type: 'open',
+        depth: 0,
+        inlineStyleRanges: [],
+        entityRanges: [],
+        data: {},
+      },
+    ],
+    entityMap: {},
+  };
+
+  const contentState = convertFromRaw(content);
+  const [editorState, setEditorState] = useState(() =>
+    type == 'exist' ? EditorState.createWithContent(contentState) : EditorState.createEmpty(),
+  );
   const block = {
     type: 'open',
   };
@@ -30,15 +48,12 @@ export default function DiaryBlockEmotionClient({ diary }) {
   const secondEmotionValues = getValues('clarifying_emotion');
 
   function handleClickSecondEmotion(item) {
-    if (secondEmotionActive.length == 0) {
-      return setValue('clarifying_emotion', [...secondEmotionValues, item.title]);
-    }
-    if (secondEmotionActive.find((emotion) => item.title != emotion)) {
-      return setValue('clarifying_emotion', [...secondEmotionValues, item.title]);
+    if (secondEmotionValues.includes(item.title)) {
+      const newArray = secondEmotionValues.filter((emotion) => emotion !== item.title);
+      console.log(newArray);
+      setValue('clarifying_emotion', newArray);
     } else {
-      return setValue('clarifying_emotion', [
-        ...secondEmotionValues.filter((emotion) => item.title != emotion),
-      ]);
+      setValue('clarifying_emotion', [...secondEmotionValues, item.title]);
     }
   }
 

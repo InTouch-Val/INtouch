@@ -14,7 +14,7 @@ export const loaderDiaryById = async ({ params }) => {
   }
 };
 
-export function DiaryPage() {
+export function DiaryPage({ type }) {
   const data = useLoaderData();
   const { currentUser } = useAuth();
   const user_type = currentUser.user_type;
@@ -23,6 +23,6 @@ export function DiaryPage() {
   if (user_type == 'doctor') {
     return <DiaryPageContent diary={data} />;
   } else if (user_type == 'client') {
-    return <DiaryPageContentClient diary={data} />;
+    return <DiaryPageContentClient type={type} diary={type !== 'create' ? data : null} />;
   }
 }

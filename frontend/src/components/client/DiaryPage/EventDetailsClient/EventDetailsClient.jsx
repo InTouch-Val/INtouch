@@ -2,12 +2,31 @@ import React, { useState, useRef } from 'react';
 import '../DiaryPage.css';
 import { ToolbarProvider } from '../../../../service/ToolbarContext';
 import { EditorToolbar } from '../../../../service/editors-toolbar';
-import { EditorState } from 'draft-js';
+import { EditorState, convertFromRaw } from 'draft-js';
 import { Controller, useFormContext } from 'react-hook-form';
 
-export default function EventDetailsClient({ diary }) {
+export default function EventDetailsClient({ diary, type }) {
   const editorRef = useRef(null);
-  const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
+  const content = {
+    blocks: [
+      {
+        key: 'abcde',
+        text: diary ? diary.event_details : '',
+        type: 'open',
+        depth: 0,
+        inlineStyleRanges: [],
+        entityRanges: [],
+        data: {},
+      },
+    ],
+    entityMap: {},
+  };
+
+  const contentState = convertFromRaw(content);
+  const [editorState, setEditorState] = useState(() =>
+    type == 'exist' ? EditorState.createWithContent(contentState) : EditorState.createEmpty(),
+  );
+
   const block = {
     type: 'open',
   };
@@ -16,7 +35,6 @@ export default function EventDetailsClient({ diary }) {
     setEditorState(newEditorState);
     const contentState = newEditorState.getCurrentContent();
     const text = contentState.getPlainText();
-    console.log(text);
     setValue('event_details', text);
   };
 

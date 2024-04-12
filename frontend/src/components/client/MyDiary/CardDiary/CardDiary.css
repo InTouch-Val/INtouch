@@ -102,36 +102,12 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  gap: 8px;
+  gap: 20px;
 }
 
-.diary__card-shared-text {
-  font-family: 'Montserrat';
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 28px;
-  color: #656565;
-}
-
-.diary__card-shared-toggle {
-  border: 1px solid #656565;
+.diary__buttons-modal {
   display: flex;
-  align-items: center;
-  width: 32px;
-  height: 17px;
-  border-radius: 100px;
-  padding: 0.5px;
-}
-
-.icon__toogle {
-  width: 15px;
-  height: 17px;
-}
-
-.active {
-  justify-content: flex-start;
-}
-
-.unactive {
-  justify-content: flex-end;
+  justify-content: center;
+  align-content: center;
+  flex-direction: row;
 }
