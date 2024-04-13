@@ -1,17 +1,10 @@
 version: "3.5"
+
+volumes:
+  app-postgres:
+    name: "app-postgres"
+  
 services:
-  app:
-    image: ivansitnikov1/repo:latest
-#    image: django_app
-#    build: .
-    ports:
-      - "8000:8000"
-    volumes:
-      - "/opt/media:/app/media/"
-      - "/opt/intouch_static:/app/static/"
-    depends_on:
-      app-postgres:
-          condition: service_healthy
 
   app-postgres:
     image: postgres:15-alpine
@@ -32,6 +25,13 @@ services:
   redis:
     image: redis:latest
 
-volumes:
-  app-postgres:
-    name: "app-postgres"
+  app:
+    image: ivansitnikov1/repo:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - "/opt/media:/app/media/"
+      - "/opt/intouch_static:/app/static/"
+    depends_on:
+      app-postgres:
+          condition: service_healthy
