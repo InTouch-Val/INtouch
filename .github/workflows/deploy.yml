@@ -59,6 +59,7 @@ jobs:
             docker compose down
             docker image rm ivansitnikov1/repo
             docker container restart app-redis-1
+            docker container restart app-app-postgres-1
             docker compose up -d
             docker exec -d app-app-1 python manage.py rundramatiq
 
