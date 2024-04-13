@@ -62,7 +62,6 @@ jobs:
             docker container stop app-app-postgres-1
             docker container rm app-redis-1
             docker compose up -d
-            docker exec -d app-app-1 python manage.py rundramatiq
 
   deploy-frontend:
     runs-on: ubuntu-latest
