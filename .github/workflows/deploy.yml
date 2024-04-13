@@ -58,8 +58,6 @@ jobs:
             cd /opt/app
             docker compose down
             docker image rm ivansitnikov1/repo
-            docker container stop app-redis-1
-            docker container rm app-redis-1
             docker compose up -d
             docker exec -d app-app-1 python manage.py rundramatiq
 
