@@ -13,6 +13,7 @@ from api.models import *
 from api.permissions import *
 from api.serializers import *
 from api.utils import send_by_mail
+from api.constants import USER_TYPES
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -34,6 +35,7 @@ class UserDetailsView(generics.ListAPIView):
     """Получение модели пользователя по токену"""
 
     serializer_class = UserSerializer
+    pagination_class = None
 
     def get_queryset(self):
         token = self.request.headers.get("Authorization").split(" ")[1]
@@ -91,6 +93,7 @@ class PasswordResetConfirmView(generics.GenericAPIView):
     """Подтверждение сброса пароля, выдача токенов авторизации"""
 
     permission_classes = (AllowAny,)
+    pagination_class = None
 
     def get(self, request, pk, token):
         user = User.objects.get(pk=pk)
@@ -314,12 +317,11 @@ class AssignmentViewSet(viewsets.ModelViewSet):
 class AssignmentClientViewSet(viewsets.ModelViewSet):
     """CRUD операции над задачами клиента"""
 
+    queryset = AssignmentClient.objects.all()
     serializer_class = AssignmentClientSerializer
-
-    def get_queryset(self):
-        user = self.request.user
-        query = AssignmentClient.objects.filter(user=user.id)
-        return query
+    filterset_fields = [
+        "user",
+    ]
 
     @action(detail=True, methods=["get"])
     def complete(self, request, pk):
@@ -372,5 +374,14 @@ class NoteViewSet(viewsets.ModelViewSet):
 class DiaryNoteViewSet(viewsets.ModelViewSet):
     """CRUD операции над заметками в дневнике"""
 
-    queryset = DiaryNote.objects.all()
+    queryset = DiaryNote.objects.filter(visible=True)
     serializer_class = DiaryNoteSerializer
+    filterset_fields = [
+        "author",
+    ]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.user_type == USER_TYPES[0]:
+            return DiaryNote.objects.filter(author=user)
+        return super().get_queryset()

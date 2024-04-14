@@ -372,7 +372,12 @@ class AssignmentSerializer(serializers.ModelSerializer):
 
     def get_avarage_grade(self, instance):
         try:
-            return sum(instance.grades) / len(instance.grades)
+            values = list(
+                AssignmentClient.objects.filter(assignment_root=instance)
+                .exclude(grade=None)
+                .values_list("grade", flat=True)
+            )
+            return sum(values) / len(values)
         except ZeroDivisionError:
             return 0
 
@@ -459,18 +464,15 @@ class AssignmentClientSerializer(serializers.ModelSerializer):
         ]
 
     def validate_grade(self, data):
-        if not 0 < data < 10:
+        if not 0 < data <= 10:
             raise serializers.ValidationError("Grade must be in range from 0 to 10!")
         return data
 
     def update(self, instance, validated_data):
         instance.status = "in progress"
-        grade = validated_data.get("grade")
-        if grade and instance.grade is None:
-            instance.grade = grade
-            instance.review = validated_data.get("review", "")
-            instance.assignment_root.grades.append(grade)
-            instance.assignment_root.save()
+        instance.grade = validated_data.get("grade", None)
+        instance.review = validated_data.get("review", "")
+        instance.save()
         blocks = instance.blocks.all()
         for block in blocks:
             block.delete()
@@ -533,10 +535,28 @@ class DiaryNoteSerializer(serializers.ModelSerializer):
             "visible",
             "event_details",
             "thoughts_analysis",
+            "emotion_type",
             "physical_sensations",
             "primary_emotion",
             "clarifying_emotion",
         ]
+
+    def validate(self, data):
+        if not data:
+            raise ValidationError("You can not create an empty diary note!")
+        DIARY_FIELDS_TO_CHECK = [
+            "event_details",
+            "thoughts_analysis",
+            "emotion_type",
+            "physical_sensations",
+        ]
+        if all(text not in data.keys() for text in DIARY_FIELDS_TO_CHECK):
+            raise ValidationError(
+                "You can not create a diary note without text fields!"
+            )
+        if "clarifying_emotion" not in data.keys():
+            data["clarifying_emotion"] = []
+        return data
 
     def create(self, validated_data):
         author = self.context["request"].user
