@@ -3,7 +3,7 @@ version: "3.5"
 volumes:
   app-postgres:
     name: "app-postgres"
-  
+
 services:
 
   app-postgres:
