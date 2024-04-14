@@ -111,7 +111,7 @@ WSGI_APPLICATION = "INtouch.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "HOST": "app_postgres",
+        "HOST": "app-postgres",
         "PORT": 5432,
         "NAME": "django_app",
         "USER": "ivan",
