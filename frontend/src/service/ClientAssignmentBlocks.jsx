@@ -42,6 +42,43 @@ function ClientAssignmentBlocks({ block, handleClick }) {
       </div>
     );
   }
+  if (block.type === 'open') {
+    return (
+      <div className="block assignment__block">
+        <h3 className="assignment__block-header">{block.question}</h3>
+      </div>
+    );
+  }
+  if (block.type === 'image') {
+    return (
+      <div className="block assignment__block">
+        <h3 className="assignment__block-header">{block.question}</h3>
+        <img src={block.image} alt="block.question" />
+      </div>
+    );
+  }
+  if (block.type === 'range') {
+    return (
+      <div className="block assignment__block">
+        <h3 className="assignment__block-header">{block.question}</h3>
+        <div className="range-display">
+          <span className="range-label">{block.left_pole || 'Left Pole'}</span>
+          <div className="range-options">
+            {Array.from(
+              { length: block.end_range - block.start_range + 1 },
+              (_, i) => i + block.start_range,
+            ).map((value) => (
+              <label key={value} className="range-option">
+                <input type="radio" name={`range-${block.id}`} value={value} />
+                <span className="range-option-label">{value}</span>
+              </label>
+            ))}
+          </div>
+          <span className="range-label">{block.right_pole || 'Right Pole'}</span>
+        </div>
+      </div>
+    );
+  }
   if (block.type === 'single') {
     return (
       <div className="block assignment__block">
