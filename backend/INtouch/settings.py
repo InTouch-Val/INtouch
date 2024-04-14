@@ -87,29 +87,37 @@ WSGI_APPLICATION = "INtouch.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-
-if os.environ("SQLITE") == "True":
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
+# заготовка
+# if os.environ("SQLITE") == "True":
+#     DATABASES = {
+#         "default": {
+#             "ENGINE": "django.db.backends.sqlite3",
+#             "NAME": BASE_DIR / "db.sqlite3",
+#         }
+#     }
+# else:
+#     DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "HOST": (
+#             "localhost" if os.environ("LOCALHOST") == "True" else os.environ("DB_HOST")
+#         ),
+#         "PORT": 5432,
+#         "NAME": "django_app",
+#         "USER": "ivan",
+#         "PASSWORD": "ivan",
+#     }
+# }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": "app_postgres",
+        "PORT": 5432,
+        "NAME": "django_app",
+        "USER": "ivan",
+        "PASSWORD": "ivan",
     }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "HOST": (
-                "localhost"
-                if os.environ("LOCALHOST") == "True"
-                else os.environ("DB_HOST")
-            ),
-            "PORT": 5432,
-            "NAME": "django_app",
-            "USER": "ivan",
-            "PASSWORD": "ivan",
-        }
-    }
+}
 
 
 # Password validation
