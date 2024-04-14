@@ -60,9 +60,6 @@ class Assignment(models.Model):
     is_public = models.BooleanField(
         default=True
     )  # состояние - опубликовано или в драфте
-    grades = ArrayField(
-        models.IntegerField(), default=list
-    )  # список оценок, поставленных клиентами к заданию
 
     def __str__(self):
         return self.title
@@ -157,10 +154,14 @@ class DiaryNote(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     add_date = models.DateTimeField(auto_now_add=True)
     visible = models.BooleanField(default=True)
-    event_details = models.TextField()
-    thoughts_analysis = models.TextField()
-    physical_sensations = models.TextField()
-    primary_emotion = models.CharField(max_length=50, choices=PRIMARY_EMOTIONS)
+    description = models.TextField(blank=True)
+    event_details = models.TextField(blank=True)
+    thoughts_analysis = models.TextField(blank=True)
+    emotion_type = models.TextField(blank=True)
+    physical_sensations = models.TextField(blank=True)
+    primary_emotion = models.CharField(
+        max_length=50, choices=PRIMARY_EMOTIONS, blank=True
+    )
     clarifying_emotion = ArrayField(
-        models.CharField(max_length=50, choices=CLARIFYING_EMOTIONS)
+        models.CharField(max_length=50, choices=CLARIFYING_EMOTIONS), blank=True
     )
