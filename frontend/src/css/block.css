@@ -195,3 +195,10 @@ input[type='number'] {
 .range-label {
   box-sizing: border-box; /* Добавляем это свойство к элементам */
 }
+
+.block-image {
+  max-width: 100%;
+  object-fit: contain;
+  display: flex;
+  margin: 20px auto;
+}
