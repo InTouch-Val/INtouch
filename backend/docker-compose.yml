@@ -13,11 +13,9 @@ services:
     volumes:
       - "/opt/intouch_data:/var/lib/postgresql/data"
     environment:
-      POSTGRES_DB: django_app
-      POSTGRES_USER: ivan
-      POSTGRES_PASSWORD: ivan
+      - .env
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d django_app"]
+      test: ["CMD-SHELL", "pg_isready -U ivan -d django_app"]
       interval: 1s
       timeout: 5s
       retries: 10
@@ -34,6 +32,8 @@ services:
     volumes:
       - "/opt/media:/app/media/"
       - "/opt/intouch_static:/app/static/"
+    env_file:
+      - .env
     depends_on:
       app-postgres:
           condition: service_healthy
