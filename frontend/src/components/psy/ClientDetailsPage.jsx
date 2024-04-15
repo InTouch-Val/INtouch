@@ -37,8 +37,8 @@ function ClientDetailsPage() {
     const fetchClientAssignments = async () => {
       if (activeTab === 'assignments') {
         try {
-          const response = await API.get('assignments-client/');
-          const data = response.data.filter((assignment) => assignment.user === Number(id));
+          const response = await API.get('assignments-client/?limit=1000&offset=0');
+          const data = response.data.results.filter((assignment) => assignment.user === Number(id));
           setClientAssignments(data);
           console.log(response);
         } catch (e) {

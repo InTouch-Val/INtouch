@@ -406,6 +406,7 @@
   color: rgba(11, 74, 86, 1);
   justify-content: start;
   gap: 14px;
+  margin-top: 52px;
 }
 
 .assignment__share-checkbox {

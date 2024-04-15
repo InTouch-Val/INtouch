@@ -23,6 +23,7 @@ function CompleteAssignments() {
   const [editorStateThird, setEditorStateThird] = useState(() => EditorState.createEmpty());
   const { setCurrentCard, card } = useAuth();
   const [values, setValues] = useState({});
+  const [blocks, setBlocks] = useState([]);
   const [assignmentData, setAssignmentData] = useState({
     title: '',
     text: '',
@@ -131,6 +132,7 @@ function CompleteAssignments() {
 
             return {
               ...block,
+              initialDescription: block.description,
               description: parsedContent,
             };
           }
@@ -147,6 +149,28 @@ function CompleteAssignments() {
   useEffect(() => {
     setAssignmentCredentials(card);
   }, []);
+
+  useEffect(() => {
+    setBlocks(assignmentData.blocks);
+  }, [assignmentData]);
+
+  useEffect(() => {
+    console.log(blocks);
+  }, [blocks]);
+
+  const updateBlock = (blockId, newReply, newChoices) => {
+    const updatedBlocks = blocks.map((block) => {
+      if (block.id === blockId) {
+        return {
+          ...block,
+          reply: newReply || block.reply,
+          choice_replies: newChoices || block.choice_replies,
+        };
+      }
+      return block;
+    });
+    setBlocks(updatedBlocks);
+  };
 
   function handleValues(event) {
     const { name, value } = event.target;
@@ -180,12 +204,48 @@ function CompleteAssignments() {
 
   const navigate = useNavigate(); // Получите доступ к history
 
+  function transformBlock(block) {
+    if (block.type === 'text' || block.type === 'open') {
+      return {
+        type: block.type,
+        question: block.question,
+        description: block.initialDescription,
+        reply: block.reply,
+      };
+    }
+    if (block.type === 'range') {
+      return {
+        type: block.type,
+        question: block.question,
+        start_range: block.minValue,
+        end_range: block.maxValue,
+        reply: block.reply,
+        left_pole: block.leftPole || 'Left Pole',
+        right_pole: block.rightPole || 'Right Pole',
+      };
+    }
+    if (block.type === 'image') {
+      return {
+        type: block.type,
+        question: block.question,
+        image: block.image,
+      };
+    }
+    return {
+      type: block.type,
+      question: block.question,
+      choice_replies: block.choice_replies,
+    };
+  }
+
   async function handleDoneWithReview() {
+    const blockInfo = blocks.map(transformBlock);
+
     try {
       const res = await API.put(`assignments-client/${assignmentData.id}/`, {
         grade: parseInt(valueOfRate, 10),
         review: document.getElementById('text').value, // Получаем значение из textarea
-        blocks: values,
+        blocks: blockInfo,
       });
       if (res.status >= 200 && res.status < 300) {
         console.log(res.data);
@@ -204,9 +264,12 @@ function CompleteAssignments() {
   }
 
   async function handleCompleteTask() {
+    const blockInfo = blocks.map(transformBlock);
+
     try {
+      console.log(blockInfo);
       const res = await API.put(`assignments-client/${assignmentData.id}/`, {
-        blocks: values,
+        blocks: blockInfo,
       });
       if (res.status >= 200 && res.status < 300) {
         console.log(res.data);
@@ -317,9 +380,14 @@ function CompleteAssignments() {
       )}
       <p className="aassignment__paragraph">{assignmentData.text}</p>
       <div className="assignment-blocks">
-        {assignmentData.blocks.length > 0 &&
-          assignmentData.blocks.map((block, index) => (
-            <ClientAssignmentBlocks key={index} block={block} handleClick={handleValues} />
+        {blocks.length > 0 &&
+          blocks.map((block, index) => (
+            <ClientAssignmentBlocks
+              key={index}
+              block={block}
+              handleClick={handleValues}
+              updateBlock={updateBlock}
+            />
           ))}
       </div>
       <div className="assignment__share-container">

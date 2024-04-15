@@ -149,7 +149,7 @@ function AssignmentsPage() {
     const fetchAssignments = async () => {
       try {
         const response = await API.get('assignments/');
-        const filteredAssignments = response.data.filter(
+        const filteredAssignments = response.data.results.filter(
           (assignment) => assignment.is_public || assignment.author === currentUser.id,
         );
         setAssignments(filteredAssignments);
@@ -254,7 +254,9 @@ function AssignmentsPage() {
       const clientsWithAssignments = await Promise.all(
         selectedClients.map(async (clientId) => {
           const response = await API.get('assignments-client/');
-          const data = response.data.filter((assignment) => assignment.user === Number(clientId));
+          const data = response.data.results.filter(
+            (assignment) => assignment.user === Number(clientId),
+          );
           const hasAssignment = data.some(
             (assignment) => assignment.assignment_root === assignmentId,
           );
