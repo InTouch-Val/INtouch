@@ -405,13 +405,13 @@ class AssignmentClientViewSet(viewsets.ModelViewSet):
         assignment.save()
         return Response({"message": "Assignments cleared successfully"})
 
-    @action(detail=True, methods=["get"])
+    @action(detail=True, methods=["POST"])
     def visible(self, request, pk):
         """Смена значения видимости задания для доктора"""
         assignment = self.get_object()
         assignment.visible = not assignment.visible
         assignment.save()
-        return Response({"message": "Visibility changed"})
+        return Response({"message": f"Visibility changed to {assignment.visible}"})
 
 
 class NoteViewSet(viewsets.ModelViewSet):
@@ -435,3 +435,11 @@ class DiaryNoteViewSet(viewsets.ModelViewSet):
         if user.user_type == USER_TYPES[0]:
             return DiaryNote.objects.filter(author=user)
         return super().get_queryset()
+
+    @action(detail=True, methods=["POST"])
+    def visible(self, request, pk):
+        """Смена значения видимости записи в дневнике для доктора"""
+        diary_note = self.get_object()
+        diary_note.visible = not diary_note.visible
+        diary_note.save()
+        return Response({"message": f"Visibility changed to {diary_note.visible}"})
