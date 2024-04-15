@@ -15,9 +15,9 @@ function ClientAssignments() {
   useEffect(() => {
     const fetchAssignments = async () => {
       try {
-        let response = await API.get('assignments-client/');
-        // response = response.data.filter((assignment) => assignment.user === currentUser.id);
-        response = response.data;
+        let response = await API.get('/assignments-client/?limit=1000&offset=0');
+        response = response.data.results.filter((assignment) => assignment.user === currentUser.id);
+        // response = response.data.results;
         setAssignments(response);
         setIsLoading(false);
       } catch (error) {
@@ -61,7 +61,7 @@ function ClientAssignments() {
         </button>
         <button
           className={currentTab === 'in_progress' ? 'active' : ''}
-          onClick={() => setCurrentTab('in_progress')}
+          onClick={() => setCurrentTab('in progress')}
         >
           In Progress
         </button>

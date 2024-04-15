@@ -57,15 +57,7 @@ function AddAssignment() {
       const fetchedBlocks = response.data.blocks.map((block) => {
         let contentState;
         try {
-          // Проверяем, что description не пустая
-          if (block.description) {
-            const rawContent = JSON.parse(block.description);
-            contentState = convertFromRaw(rawContent);
-            console.log(contentState);
-          } else {
-            // Если description пустая, создаем пустое содержимое
-            contentState = ContentState.createFromText(block.question);
-          }
+          contentState = ContentState.createFromText(block.question);
         } catch (error) {
           console.error('Ошибка при обработке содержимого:', error);
           // Создаем ContentState с текстом из data.title для всех типов блоков, кроме 'text'
@@ -123,15 +115,18 @@ function AddAssignment() {
     }
   }, [isEditMode, fetchAssignment]);
 
+  useEffect(() => {
+    console.log(blocks);
+  }, [blocks]);
+
   const handleSubmit = async (e, isDraft = false, isSaveAsDraft = false) => {
     e.preventDefault();
     const blockInfo = blocks.map((block) => {
-      if (block.type === 'text' || 'open') {
+      if (block.type === 'text' || block.type === 'open') {
         return {
           type: block.type,
           question: block.title,
           description: getObjectFromEditorState(block.content),
-          choice_replies: [],
         };
       }
       if (block.type === 'range') {
@@ -154,7 +149,7 @@ function AddAssignment() {
       return {
         type: block.type,
         question: block.title,
-        choice_replies: block.choices.map((choice) => ({ reply: choice })),
+        choice_replies: block.choice_replies,
       };
     });
 
@@ -302,6 +297,9 @@ function AddAssignment() {
           content: newContent || block.content,
           choices: newChoices || block.choices,
           title: newTitle || block.title,
+          choice_replies:
+            newChoices?.map((choice) => ({ reply: choice, checked: false })) ||
+            block.choice_replies,
           minValue: newMinValue === undefined ? block.minValue : newMinValue,
           maxValue: newMaxValue === undefined ? block.maxValue : newMaxValue,
           leftPole: newLeftPole === undefined ? block.leftPole : newLeftPole,
@@ -313,8 +311,6 @@ function AddAssignment() {
     });
     setBlocks(updatedBlocks);
   };
-
-  console.log(blocks);
 
   return (
     <div className="assignments-page">

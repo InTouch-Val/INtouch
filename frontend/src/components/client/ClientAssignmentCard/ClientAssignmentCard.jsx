@@ -25,16 +25,19 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
     }
   }
 
-  function handleShareWithTherapist() {
-    API.patch(`assignments-client/${assignmentData?.id}/`, { visible: !assignmentData?.visible })
-      .then(() => {
-        // TODO [2024-02-19]: прокинуть в родительский компонент и обновлять данные карточки
+  async function handleShareWithTherapist() {
+    try {
+      const res = await API.get(`assignments-client/${assignmentData?.id}/visible/`);
+      if (res.status >= 200 && res.status < 300) {
+        console.log(res.data);
         setIsShowContextMenu(false);
-      })
-      .catch((error) => {
-        console.error(error.message);
-        setIsShowContextMenu(false);
-      });
+      } else {
+        console.log(`Status: ${res.status}`);
+      }
+    } catch (error) {
+      console.error(error.message);
+      setIsShowContextMenu(false);
+    }
   }
 
   function showContextMenu() {

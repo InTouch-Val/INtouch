@@ -46,7 +46,7 @@ function ClientPage() {
       if (modalAction === 'add') {
         try {
           await API.get('assignments/').then((response) => {
-            const data = response.data.filter((assignment) =>
+            const data = response.data.results.filter((assignment) =>
               currentUser.doctor.assignments.includes(assignment.id),
             );
             setFavoriteAssignments(data);

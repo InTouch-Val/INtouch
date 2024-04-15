@@ -53,7 +53,7 @@ const EditorToolbar = forwardRef(({ editorState, setEditorState, placeholder, bl
   // Инициализация редактора при монтировании компонента
   useEffect(() => {
     initializeEditorWithText();
-    setTimeout(focusEditor, 500); // Отложенное выполнение фокусировки
+    setTimeout(focusEditor, 10000); // Отложенное выполнение фокусировки
   }, []); // Пустой массив зависимостей означает, что эффект будет вызван только при монтировании компонента
 
   return (

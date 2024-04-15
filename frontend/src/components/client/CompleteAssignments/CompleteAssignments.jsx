@@ -7,16 +7,23 @@ import save from '../../../images/save.svg';
 import image from '../../../images/image2.svg';
 import imageGirl from '../../../images/image_girl.png';
 import arrowLeft from '../../../images/arrow-left.svg';
+import arrowBack from '../../../images/arrowBackWhite.svg';
+import sadEmote from '../../../images/sadEmote.svg';
+import smilyEmote from '../../../images/smilyEmote.svg';
 import '../../../css/block.css';
 import '../../../css/assignments.css';
 import { ClientAssignmentBlocks } from '../../../service/ClientAssignmentBlocks';
+import { API } from '../../../service/axios';
+import { useNavigate } from 'react-router-dom';
 
 function CompleteAssignments() {
+  const [isRateTask, setIsRateTask] = useState(false);
   const [editorStateFirst, setEditorStateFirst] = useState(() => EditorState.createEmpty());
   const [editorStateSecond, setEditorStateSecond] = useState(() => EditorState.createEmpty());
   const [editorStateThird, setEditorStateThird] = useState(() => EditorState.createEmpty());
   const { setCurrentCard, card } = useAuth();
   const [values, setValues] = useState({});
+  const [blocks, setBlocks] = useState([]);
   const [assignmentData, setAssignmentData] = useState({
     title: '',
     text: '',
@@ -125,6 +132,7 @@ function CompleteAssignments() {
 
             return {
               ...block,
+              initialDescription: block.description,
               description: parsedContent,
             };
           }
@@ -142,13 +150,214 @@ function CompleteAssignments() {
     setAssignmentCredentials(card);
   }, []);
 
+  useEffect(() => {
+    setBlocks(assignmentData.blocks);
+  }, [assignmentData]);
+
+  useEffect(() => {
+    console.log(blocks);
+  }, [blocks]);
+
+  const updateBlock = (blockId, newReply, newChoices) => {
+    const updatedBlocks = blocks.map((block) => {
+      if (block.id === blockId) {
+        return {
+          ...block,
+          reply: newReply || block.reply,
+          choice_replies: newChoices || block.choice_replies,
+        };
+      }
+      return block;
+    });
+    setBlocks(updatedBlocks);
+  };
+
   function handleValues(event) {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
     console.log(event.target);
   }
+
+  const [valueOfRate, setValueOfRate] = useState(null);
+
+  const handleRadioChange = (event) => {
+    setValueOfRate(parseInt(event.target.value));
+  };
   //console.log(values)
-  return (
+
+  function handleRateTaskBtnClick() {
+    setIsRateTask(!isRateTask);
+  }
+
+  async function handleShareWithTherapist() {
+    try {
+      const res = await API.put(`assignments-client/${assignmentData.id}/visible/`);
+      if (res.status >= 200 && res.status < 300) {
+        console.log(res.data);
+      } else {
+        console.log(`Status: ${res.status}`);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
+  const navigate = useNavigate(); // Получите доступ к history
+
+  function transformBlock(block) {
+    if (block.type === 'text' || block.type === 'open') {
+      return {
+        type: block.type,
+        question: block.question,
+        description: block.initialDescription,
+        reply: block.reply,
+      };
+    }
+    if (block.type === 'range') {
+      return {
+        type: block.type,
+        question: block.question,
+        start_range: block.minValue,
+        end_range: block.maxValue,
+        reply: block.reply,
+        left_pole: block.leftPole || 'Left Pole',
+        right_pole: block.rightPole || 'Right Pole',
+      };
+    }
+    if (block.type === 'image') {
+      return {
+        type: block.type,
+        question: block.question,
+        image: block.image,
+      };
+    }
+    return {
+      type: block.type,
+      question: block.question,
+      choice_replies: block.choice_replies,
+    };
+  }
+
+  async function handleDoneWithReview() {
+    const blockInfo = blocks.map(transformBlock);
+
+    try {
+      const res = await API.put(`assignments-client/${assignmentData.id}/`, {
+        grade: parseInt(valueOfRate, 10),
+        review: document.getElementById('text').value, // Получаем значение из textarea
+        blocks: blockInfo,
+      });
+      if (res.status >= 200 && res.status < 300) {
+        console.log(res.data);
+        const resComplete = await API.get(`assignments-client/${assignmentData.id}/complete/`);
+        if (resComplete.status >= 200 && resComplete.status < 300) {
+          navigate('/my-assignments');
+        } else {
+          console.log(`Status: ${resComplete.status}`);
+        }
+      } else {
+        console.log(`Status: ${res.status}`);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
+  async function handleCompleteTask() {
+    const blockInfo = blocks.map(transformBlock);
+
+    try {
+      console.log(blockInfo);
+      const res = await API.put(`assignments-client/${assignmentData.id}/`, {
+        blocks: blockInfo,
+      });
+      if (res.status >= 200 && res.status < 300) {
+        console.log(res.data);
+        const resComplete = await API.get(`assignments-client/${assignmentData.id}/complete/`);
+        if (resComplete.status >= 200 && resComplete.status < 300) {
+          navigate('/my-assignments');
+        } else {
+          console.log(`Status: ${resComplete.status}`);
+        }
+      } else {
+        console.log(`Status: ${res.status}`);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
+  return isRateTask ? (
+    <>
+      <h1 className="assignment__name" style={{ textAlign: 'center' }}>
+        How helpful was the task?
+      </h1>
+      <div className="rating-container">
+        {Array.from({ length: 11 }, (_, index) => index).map((num) => (
+          <label key={num} className="radio-label">
+            {num !== 0 && num !== 10 && <div className="mood-number">{num}</div>}
+            <input
+              type="radio"
+              name="mood"
+              value={num}
+              checked={valueOfRate === num}
+              onChange={handleRadioChange}
+              className="radio"
+            />
+            <div
+              className={`mood-display ${valueOfRate === num && (num === 0 || num === 10) ? 'emoteActive' : valueOfRate === num ? 'active' : ''}`}
+              style={num === 0 || num === 10 ? { border: 'none' } : { display: 'flex' }}
+            >
+              {num === 0 ? (
+                <img
+                  src={sadEmote}
+                  alt="Грустный смайлик"
+                  className={`smiley ${valueOfRate === num ? 'active' : ''}`}
+                />
+              ) : (
+                ''
+              )}
+              {num === 10 ? (
+                <img
+                  src={smilyEmote}
+                  alt="Весёлый смайлик"
+                  className={`smiley ${valueOfRate === num ? 'active' : ''}`}
+                />
+              ) : (
+                ''
+              )}
+            </div>
+          </label>
+        ))}
+      </div>
+      <div className="rateTask__comment-container">
+        <label className="rateTask__comment-label" htmlFor="text">
+          You can share your feedback with your therapist after completing this task:
+        </label>
+        <textarea
+          className="rateTask__comment-input"
+          type="text"
+          name="text"
+          id="text"
+          placeholder="Add some notes here..."
+        />
+      </div>
+      <div className="assignment__buttons-box">
+        <button
+          onClick={handleRateTaskBtnClick}
+          className="button__type_back button__type_back_greenWhite"
+        >
+          <img src={arrowBack}></img>
+        </button>
+        <button
+          onClick={handleDoneWithReview}
+          className="button__type_back button__type_back_greenWhite"
+        >
+          Done
+        </button>
+      </div>
+    </>
+  ) : (
     <>
       <div className="assignment-header">
         <div className="assignment__container_button">
@@ -171,210 +380,34 @@ function CompleteAssignments() {
       )}
       <p className="aassignment__paragraph">{assignmentData.text}</p>
       <div className="assignment-blocks">
-        {assignmentData.blocks.length > 0 &&
-          assignmentData.blocks.map((block, index) => (
-            <ClientAssignmentBlocks key={index} block={block} handleClick={handleValues} />
+        {blocks.length > 0 &&
+          blocks.map((block, index) => (
+            <ClientAssignmentBlocks
+              key={index}
+              block={block}
+              handleClick={handleValues}
+              updateBlock={updateBlock}
+            />
           ))}
       </div>
-      {/*
-      <div className="block assignment__block">
-        <h4 className="assignment__block-header">Thought to be questioned:</h4>
-        <EditorToolbar editorState={editorStateFirst} setEditorState={setEditorStateFirst} />
+      <div className="assignment__share-container">
+        <label className="card__input-label assignment__share-label">
+          Share with my therapist
+          <input
+            type="checkbox"
+            className="card__input-checkbox  assignment__share-checkbox"
+            defaultChecked={assignmentData?.visible}
+            onClick={() => handleShareWithTherapist(assignmentData?.id)}
+          />
+        </label>
       </div>
-  */}
-      {/*
-      <div className="block assignment__block">
-        <h4 className="assignment__block-header">#4 Question</h4>
-        <fieldset className="assignments__block-radio">
-          <div className="block-radio__input-container">
-            <input
-              type="radio"
-              className="block-radio__input"
-              id="1"
-              name="#4 Question"
-              value="Answer 1"
-              style={{ opacity: 0.8 }}
-            ></input>
-            <label className="block-radio__label" htmlFor="1">
-              Answer 1
-            </label>
-          </div>
-          <div className="block-radio__input-container ">
-            <input
-              type="radio"
-              className="block-radio__input"
-              id="2"
-              name="#4 Question"
-              value="Answer 2"
-              style={{ opacity: 0.8 }}
-            />
-            <label htmlFor="2" className="block-radio__label">
-              Answer 2
-            </label>
-          </div>
-          <div className="block-radio__input-container">
-            <input
-              type="radio"
-              className="block-radio__input"
-              id="3"
-              name="#4 Question"
-              value="Answer 3"
-              style={{ opacity: 0.8 }}
-            />
-            <label htmlFor="3" className="block-radio__label">
-              Answer 3
-            </label>
-          </div>
-        </fieldset>
-       </div>
-  */}
-      {/* <div className="block assignment__block">
-        <h4 className="assignment__block-header header_margin">#5 Question</h4>
-        <p className="assignment__block-note">more than one answer possible</p>
-        <fieldset className="assignments__block-radio">
-          <div className="block-radio__input-container">
-            <input
-              type="checkbox"
-              className="block-checkbox__input"
-              id="1"
-              name="#4 Question"
-              value="Answer 1"
-              style={{ opacity: 0.8 }}
-            ></input>
-            <label className="block-radio__label" htmlFor="1">
-              Answer 1
-            </label>
-          </div>
-          <div className="block-radio__input-container">
-            <input
-              type="checkbox"
-              className="block-checkbox__input"
-              id="2"
-              name="#4 Question"
-              value="Answer 2"
-              style={{ opacity: 0.8 }}
-            />
-            <label htmlFor="2" className="block-radio__label">
-              Answer 2
-            </label>
-          </div>
-          <div className="block-radio__input-container">
-            <input
-              type="checkbox"
-              className="block-checkbox__input"
-              id="3"
-              name="#4 Question"
-              value="Answer 3"
-              style={{ opacity: 0.8 }}
-            />
-            <label htmlFor="3" className="block-radio__label">
-              Answer 3
-            </label>
-          </div>
-        </fieldset>
-      </div>
-  */}
-      {/*
-      <div className="block assignment__block">
-        <h4 className="assignment__block-header">#6 Question</h4>
-        <fieldset className="assignments__block-radio block-radio__rate">
-          <p className="block-radio_rate-text">Левый полюс</p>
-          <div className="block-radio__input-container block-radio__rate-container">
-            <label className="block-radio__label_rate" htmlFor="1">
-              1
-            </label>
-            <input
-              type="radio"
-              className="block-radio__input"
-              id="1"
-              name="#6 Question"
-              value="Answer 1"
-              style={{ opacity: 0.8 }}
-            ></input>
-          </div>
-          <div className="block-radio__input-container block-radio__rate-container">
-            <label htmlFor="2" className="block-radio__label_rate">
-              2
-            </label>
-            <input
-              type="radio"
-              className="block-radio__input"
-              id="2"
-              name="#6 Question"
-              value="Answer 2"
-              style={{ opacity: 0.8 }}
-            />
-            style={{ opacity: 0.8 }}
-
-          </div>
-          <div className="block-radio__input-container block-radio__rate-container">
-            <label htmlFor="3" className="block-radio__label_rate">
-              3
-            </label>
-            <input
-              type="radio"
-              className="block-radio__input"
-              id="3"
-              name="#6 Question"
-              value="Answer 3"
-              style={{ opacity: 0.8 }}
-            />
-            style={{ opacity: 0.8 }}
-
-          </div>
-          <div className="block-radio__input-container block-radio__rate-container">
-            <label htmlFor="3" className="block-radio__label_rate">
-              4
-            </label>
-            <input
-              type="radio"
-              className="block-radio__input"
-              id="4"
-              name="#6 Question"
-              value="Answer 3"
-              style={{ opacity: 0.8 }}
-            />
-          </div>
-          <div className="block-radio__input-container block-radio__rate-container">
-            <label htmlFor="3" className="block-radio__label_rate">
-              5
-            </label>
-            <input
-              type="radio"
-              className="block-radio__input"
-              id="5"
-              name="#6 Question"
-              value="Answer 3"
-              style={{ opacity: 0.8 }}
-            />
-          </div>
-          <p className="block-radio_rate-text">Правый полюс</p>
-        </fieldset>
-      </div>
-      */}
-      {/*
-      <div className="block assignment__block">
-        <h4 className="assignment__block-header">#7 Text</h4>
-        <p className="block__text">Lorem Ipsum dolor sit amet</p>
-      </div>
-      <div className="block assignment__block">
-        <h4 className="assignment__block-header">#7 Image</h4>
-        <img className="block__image" src={imageGirl} />
-      </div>
-      <div className="assignment__share-box">
-        <p className="assignment__share-text">Share this task with my therapist</p>
-        <input
-          type="checkbox"
-          className="assignment__share-checkbox_invisible"
-          id="share"
-          name="share"
-        />
-        <span className="visible-checkbox"></span>
-      </div>
-    */}
       <div className="assignment__buttons-box">
-        <button className="action-button assignment__button">Complete Task</button>
-        <button className="action-button assignment__button">Rate Task</button>
+        <button onClick={handleCompleteTask} className="action-button assignment__button">
+          Complete Task
+        </button>
+        <button onClick={handleRateTaskBtnClick} className="action-button assignment__button">
+          Rate Task
+        </button>
       </div>
     </>
   );
