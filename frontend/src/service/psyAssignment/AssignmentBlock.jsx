@@ -48,8 +48,11 @@ function AssignmentBlock({
         <div className="block-header">
           <h3 className="block-title">{isView ? block.title : block.question}</h3>
         </div>
-        {block.type === 'text' || block.type == 'open' || (
-          <div dangerouslySetInnerHTML={{ __html: block.description }} />
+        {(block.type === 'text' || block.type == 'open') && (
+          <div className="block-text" dangerouslySetInnerHTML={{ __html: block.description }} />
+        )}
+        {block.type === 'image' && (
+          <img className="block-image" src={block.image} alt={block.question} />
         )}
         {(block.type === 'single' || block.type === 'multiple') && (
           <ul className={`choices-container ${block.type}`}>
@@ -341,7 +344,7 @@ function AssignmentBlock({
         moveBlockBackward={moveBlockBackward}
         index={index}
       >
-        <HeadlinerImg setSelectedImageForBlock={setSelectedImageForBlock} />
+        <HeadlinerImg setSelectedImageForBlock={setSelectedImageForBlock} image={block.image} />
       </Block>
     );
   }

@@ -166,6 +166,7 @@ function AddAssignment() {
     };
 
     try {
+      console.log(blockInfo);
       let response;
       if (!isEditMode) {
         // Если задание создается впервые, выполняем POST запрос

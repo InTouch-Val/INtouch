@@ -4,9 +4,9 @@ import IconCopy from '../../../images/IconCopy.svg';
 import Button from '../button/ButtonHeadline';
 import './HeadlinerImg.css';
 
-function HeadlinerImg({ setSelectedImageForBlock }) {
+function HeadlinerImg({ setSelectedImageForBlock, image }) {
   const [blockVisible, setBlockVisible] = useState(true);
-  const [uploadedImage, setUploadedImage] = useState(CloudUploadSignal);
+  const [uploadedImage, setUploadedImage] = useState(image || CloudUploadSignal);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
 

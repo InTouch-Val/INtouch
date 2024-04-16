@@ -34,6 +34,11 @@ function ClientAssignmentBlocks({ block, handleClick, updateBlock }) {
     updateBlock(block.id, event.target.value, []);
   }
 
+  function handleOpenChange(event) {
+    console.log(event.target.value);
+    updateBlock(block.id, event.target.value, []);
+  }
+
   function handleSingleMultipleClick(event) {
     // Создаём новый массив newChoices, обновляя соответствующий элемент
     const newChoices = block.choice_replies.map((choice) => {
@@ -69,6 +74,15 @@ function ClientAssignmentBlocks({ block, handleClick, updateBlock }) {
     return (
       <div className="block assignment__block">
         <h3 className="assignment__block-header">{block.question}</h3>
+        <textarea
+          className="block-text answer-input"
+          name="openAnswer"
+          id=""
+          placeholder="Write your answer here..."
+          onChange={handleOpenChange}
+        >
+          {block.reply}
+        </textarea>
       </div>
     );
   }
@@ -76,7 +90,7 @@ function ClientAssignmentBlocks({ block, handleClick, updateBlock }) {
     return (
       <div className="block assignment__block">
         <h3 className="assignment__block-header">{block.question}</h3>
-        <img src={block.image} alt="block.question" />
+        <img className="block-image" src={block.image} alt={block.question} />
       </div>
     );
   }
