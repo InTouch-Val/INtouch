@@ -24,7 +24,7 @@ function Modal({
                 Cancel
               </button>
             )}
-            <button className="action-button" onClick={onConfirm}>
+            <button className="action-button" onClick={onConfirm} disabled={ifError}>
               {confirmText}
             </button>
           </div>
@@ -36,7 +36,7 @@ function Modal({
                 textAlign: 'center',
               }}
             >
-              {errorText.message}
+              {errorText.message || errorText}
             </p>
           )}
         </div>

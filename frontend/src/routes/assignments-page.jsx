@@ -9,7 +9,11 @@ import { useAuth } from '../service/authContext';
 import { Modal } from '../service/modal';
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
-function AssignmentsPage() {
+function AssignmentsPage({
+  isShareModal = false,
+  setSelectedAssignmentIdForShareModalOnClientPage = '',
+  selectedAssignmentIdForShareModalOnClientPage = '',
+}) {
   const { currentUser } = useAuth();
   const [activeTab, setActiveTab] = useState('library');
   const [searchTerm, setSearchTerm] = useState('');
@@ -232,8 +236,12 @@ function AssignmentsPage() {
   };
 
   const handleShareButton = (assignmentId) => {
-    setSelectedAssignmentId(assignmentId);
-    setIsShareModalOpen(true);
+    if (isShareModal) {
+      setSelectedAssignmentIdForShareModalOnClientPage(assignmentId);
+    } else {
+      setSelectedAssignmentId(assignmentId);
+      setIsShareModalOpen(true);
+    }
   };
 
   const handleShareSubmit = async () => {
@@ -287,18 +295,21 @@ function AssignmentsPage() {
         (clientId, index) => !clientsWithAssignments[index].hasAssignment,
       );
 
-      await Promise.all(
+      const res = await Promise.all(
         clientsWithoutAssignment.map(async (clientId) => {
           await API.get(`assignments/set-client/${assignmentId}/${clientId}/`);
         }),
       );
-      setIfError(false);
-      setErrorText('');
-      setIsShareModalOpen(false);
-      setIsSuccessModalOpen(true);
-      setSelectedClients([]); // Очищаем выбранные клиенты после успешной отправки
-      setSelectedAssignmentId('');
-      console.log('handleShareSubmit completed');
+
+      if (res.status > 200 && res.status < 300) {
+        setIfError(false);
+        setErrorText('');
+        setIsShareModalOpen(false);
+        setIsSuccessModalOpen(true);
+        setSelectedClients([]); // Очищаем выбранные клиенты после успешной отправки
+        setSelectedAssignmentId('');
+        console.log('handleShareSubmit completed');
+      }
     } catch (error) {
       console.error('Error assigning assignment to clients:', error);
       setSelectedClients([]);
@@ -319,12 +330,14 @@ function AssignmentsPage() {
 
   return (
     <div className="assignments-page">
-      <header>
-        <h1>Assignments</h1>
-        <button className="action-button" onClick={handleAddAssignment}>
-          <FontAwesomeIcon icon={faPlus} /> Add Assignment
-        </button>
-      </header>
+      {!isShareModal && (
+        <header>
+          <h1>Assignments</h1>
+          <button className="action-button" onClick={handleAddAssignment}>
+            <FontAwesomeIcon icon={faPlus} /> Add Assignment
+          </button>
+        </header>
+      )}
       <div className="tabs">
         <button
           className={activeTab === 'library' ? 'active' : ''}
@@ -345,46 +358,50 @@ function AssignmentsPage() {
           My Tasks
         </button>
       </div>
-      <div className="search-bar">
-        <input
-          type="text"
-          placeholder="Search..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
-      <div className="filter-dropdowns">
-        <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
-          <option value="all">All Types</option>
-          <option value="lesson">Lesson</option>
-          <option value="exercise">Exercise</option>
-          <option value="metaphor">Essay</option>
-          <option value="study">Study</option>
-          <option value="quiz">Quiz</option>
-          <option value="methology">Methodology</option>
-          <option value="metaphor">Metaphors</option>
-        </select>
-        {/* <select
+      {!isShareModal && (
+        <div className="search-bar">
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+      )}
+      {!isShareModal && (
+        <div className="filter-dropdowns">
+          <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
+            <option value="all">All Types</option>
+            <option value="lesson">Lesson</option>
+            <option value="exercise">Exercise</option>
+            <option value="metaphor">Essay</option>
+            <option value="study">Study</option>
+            <option value="quiz">Quiz</option>
+            <option value="methology">Methodology</option>
+            <option value="metaphor">Metaphors</option>
+          </select>
+          {/* <select
           value={filterTags}
           onChange={(e) => setFilterTags(e.target.value)}
         >
           <option value="all">All Tags</option>
         </select> */}
-        <select value={filterLanguage} onChange={(e) => setFilterLanguage(e.target.value)}>
-          <option value="all">All Languages</option>
-          <option value="en">English</option>
-          <option value="es">Spanish</option>
-          <option value="fr">French</option>
-          <option value="ge">German</option>
-          <option value="it">Italian</option>
-        </select>
-        <select value={sortMethod} onChange={(e) => handleSortMethodChange(e)}>
-          <option value="date_asc">Date Created ↑</option>
-          <option value="date_desc">Date Created ↓</option>
-          <option value="popularity_asc">Popularity ↑</option>
-          <option value="popularity_desc">Popularity ↓</option>
-        </select>
-      </div>
+          <select value={filterLanguage} onChange={(e) => setFilterLanguage(e.target.value)}>
+            <option value="all">All Languages</option>
+            <option value="en">English</option>
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
+            <option value="ge">German</option>
+            <option value="it">Italian</option>
+          </select>
+          <select value={sortMethod} onChange={(e) => handleSortMethodChange(e)}>
+            <option value="date_asc">Date Created ↑</option>
+            <option value="date_desc">Date Created ↓</option>
+            <option value="popularity_asc">Popularity ↑</option>
+            <option value="popularity_desc">Popularity ↓</option>
+          </select>
+        </div>
+      )}
       {activeTab === 'library' && (
         <div className="assignment-grid">
           {filteredAssignments.length > 0 ? (
@@ -398,6 +415,10 @@ function AssignmentsPage() {
                 onDeleteClick={handleDeleteClick}
                 onCopyClick={duplicateAssignment}
                 onShareClick={handleShareButton}
+                isShareModal={isShareModal}
+                selectedAssignmentIdForShareModalOnClientPage={
+                  selectedAssignmentIdForShareModalOnClientPage
+                }
               />
             ))
           ) : (
@@ -420,6 +441,10 @@ function AssignmentsPage() {
                   onDeleteClick={handleDeleteClick}
                   onCopyClick={duplicateAssignment}
                   onShareClick={handleShareButton}
+                  isShareModal={isShareModal}
+                  selectedAssignmentIdForShareModalOnClientPage={
+                    selectedAssignmentIdForShareModalOnClientPage
+                  }
                 />
               ))
           ) : (
@@ -441,6 +466,10 @@ function AssignmentsPage() {
                 onDeleteClick={handleDeleteClick}
                 onCopyClick={duplicateAssignment}
                 onShareClick={handleShareButton}
+                isShareModal={isShareModal}
+                selectedAssignmentIdForShareModalOnClientPage={
+                  selectedAssignmentIdForShareModalOnClientPage
+                }
               />
             ))}
         </div>

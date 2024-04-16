@@ -12,6 +12,10 @@
   box-sizing: border-box;
 }
 
+.assignment-tile_selected {
+  box-shadow: 0 4px 8px rgba(18, 179, 39, 0.433);
+}
+
 .assignment-image-container {
   display: flex;
   flex-direction: column;
@@ -128,6 +132,11 @@
   background-size: contain;
   margin-left: auto;
   cursor: pointer;
+}
+
+.assignment-actions__share-with-client_recall {
+  transform: scaleX(-1);
+  margin: 0;
 }
 
 .favorite-button {
@@ -343,6 +352,27 @@
   cursor: pointer;
 }
 
+.assignment__review-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: url(../images/message-check.svg) no-repeat;
+  background-size: contain;
+  background-position: center;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.assignment__view-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: url(../images/assignment-page/eye.svg) no-repeat;
+  background-size: contain;
+  background-position: center;
+  cursor: pointer;
+}
+
 /* Блок: Контейнер списка */
 .share-assignment {
   display: flex;
@@ -351,6 +381,17 @@
   width: 564px;
   padding: 10px;
   position: relative;
+}
+
+.share-assignment_clientDetailsPage {
+  width: 90vw;
+  height: 70vh;
+}
+
+.share-assignment__content-container {
+  width: 90%;
+  height: 100%;
+  overflow: scroll;
 }
 
 .share-assignment__list-wrapper {
