@@ -18,7 +18,7 @@ export default function MyDiary() {
     const response = API.get('diary-notes/')
       .then((res) => {
         if (res.status == 200) {
-          setDiarys(res.data);
+          setDiarys(res.data.results);
         }
       })
       .catch((error) => console.log(error))
@@ -62,16 +62,18 @@ export default function MyDiary() {
         <div className="diary__section">
           <div className="diary__list">
             {isFetching &&
-              diarys.map((card) => {
-                return (
-                  <CardDiaryClient
-                    key={card.id}
-                    card={card}
-                    setFetching={setFetching}
-                    openModal={openModal}
-                  />
-                );
-              })}
+              diarys
+                .sort((a, b) => new Date(b.add_date) - new Date(a.add_date))
+                .map((card) => {
+                  return (
+                    <CardDiaryClient
+                      key={card.id}
+                      card={card}
+                      setFetching={setFetching}
+                      openModal={openModal}
+                    />
+                  );
+                })}
           </div>
         </div>
       </div>

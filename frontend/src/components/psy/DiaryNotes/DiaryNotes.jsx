@@ -14,7 +14,7 @@ export default function DiaryNotes({ clientId }) {
     const response = API.get('diary-notes/')
       .then((res) => {
         if (res.status == 200) {
-          setDiarys(res.data);
+          setDiarys(res.data.results);
         }
       })
       .catch((error) => console.log(error))
@@ -25,9 +25,11 @@ export default function DiaryNotes({ clientId }) {
     <section className="diarySection">
       <div className="diary__list">
         {isFetching &&
-          diarys.map((card) => {
-            return <CardDiary key={card.id} card={card} />;
-          })}
+          diarys
+            .sort((a, b) => new Date(b.add_date) - new Date(a.add_date))
+            .map((card) => {
+              if (card.visible) return <CardDiary key={card.id} card={card} />;
+            })}
       </div>
     </section>
   );

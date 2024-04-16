@@ -9,7 +9,6 @@ export default function DiaryBlockAnalysis({ diary }) {
         Reflect on your thoughts related to the situation. What were you thinking?
       </div>
       <div className="diary__block-description">{diary.thoughts_analysis}</div>
-      <div className="diary__block-text">{diary.event_details}</div>
     </div>
   );
 }
