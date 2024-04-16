@@ -69,7 +69,7 @@ class UserSerializer(serializers.ModelSerializer):
     )
     user_type = serializers.CharField(read_only=True)
     photo = serializers.ImageField(required=False)
-    new_email_changing = serializers.BooleanField(read_only=True, default=False)
+    new_email_changing = serializers.BooleanField(read_only=True)
     new_email_temp = serializers.EmailField(read_only=True)
 
     class Meta:
