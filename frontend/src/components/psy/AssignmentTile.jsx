@@ -19,14 +19,28 @@ function AssignmentTile({
   isAuthor,
   onCopyClick,
   onDeleteClick,
+  isShareModal,
+  selectedAssignmentIdForShareModalOnClientPage,
 }) {
+  const [isSelected, setIsSelected] = useState(
+    assignment.id === selectedAssignmentIdForShareModalOnClientPage,
+  );
+
+  useEffect(() => {
+    setIsSelected(assignment.id === selectedAssignmentIdForShareModalOnClientPage);
+  }, [selectedAssignmentIdForShareModalOnClientPage]);
+
   const displayDate = formatDate(assignment.update_date);
   const navigate = useNavigate();
 
   const handleOnTileClick = (assignmentId) => () => {
-    assignment.is_public
-      ? navigate(`/assignment/${assignmentId}`)
-      : navigate(`/edit-assignment/${assignmentId}`);
+    if (isShareModal) {
+      onShareClick(assignmentId);
+    } else {
+      assignment.is_public
+        ? navigate(`/assignment/${assignmentId}`)
+        : navigate(`/edit-assignment/${assignmentId}`);
+    }
   };
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -46,8 +60,11 @@ function AssignmentTile({
   }, [isDropdownOpen]);
 
   return (
-    <div className="assignment-tile">
-      <div className="assignment-image-container" onClick={handleOnTileClick(assignment.id)}>
+    <div
+      className={`assignment-tile ${isSelected && 'assignment-tile_selected'}`}
+      onClick={handleOnTileClick(assignment.id)}
+    >
+      <div className="assignment-image-container">
         <div className="date-and-type">
           <span>{displayDate}</span>
           {assignment.assignment_type && <span className="type">{assignment.assignment_type}</span>}
@@ -119,7 +136,7 @@ function AssignmentTile({
         <h3>{assignment.title}</h3>
         <p>{assignment.author_name}</p>
         <div className="assignment-actions">
-          {assignment.is_public === false ? (
+          {assignment.is_public === false && isShareModal ? (
             <>
               <button
                 className="assignment__edit-btn"
@@ -150,13 +167,15 @@ function AssignmentTile({
               >
                 {assignment.share}
               </span>
-              <button
-                className="assignment-actions__share-with-client"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  onShareClick(assignment.id);
-                }}
-              ></button>
+              {isShareModal === false && (
+                <button
+                  className="assignment-actions__share-with-client"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    onShareClick(assignment.id);
+                  }}
+                ></button>
+              )}
             </>
           )}
         </div>
@@ -198,26 +217,53 @@ function ClientAssignmentTile({ assignment, onDeleteSuccess }) {
     >
       <div className="assignment-image-container">
         <div className="date-and-type">
+          <span>Sent: {formatDate(assignment.add_date)}</span>
           <span className={`status ${statusOneWord}`}>{assignment.status}</span>
-          {assignment.assignment_type && <span className="type">{assignment.assignment_type}</span>}
         </div>
         <img alt="Loading..." src={assignment.image_url} />
       </div>
       <div className="assignment-info">
         <h3>{assignment.title}</h3>
+        <p>UPD: {assignment.update_date}</p>
       </div>
-      {isHovered && (
-        <button className="delete-button" onClick={handleToggleModal}>
-          <FontAwesomeIcon icon={faTrashCan} />
-        </button>
-      )}
+      <div className="assignment-actions">
+        {assignment.visible ? (
+          <>
+            <button
+              className="assignment__review-btn"
+              title="view task rate"
+              onClick={(event) => {
+                event.stopPropagation();
+              }}
+            ></button>
+            <button
+              className="assignment__view-btn"
+              title="view done assignment"
+              onClick={(event) => {
+                event.stopPropagation();
+              }}
+            ></button>
+          </>
+        ) : (
+          <>
+            <button
+              className="assignment-actions__share-with-client assignment-actions__share-with-client_recall"
+              title="recall assignment"
+              onClick={(event) => {
+                event.stopPropagation();
+                onDeleteClick(assignment.id);
+              }}
+            ></button>
+          </>
+        )}
+      </div>
       <Modal
         isOpen={showModal}
         onClose={handleToggleModal}
         onConfirm={deleteClientsAssignment}
-        confirmText="Delete"
+        confirmText="Recall"
       >
-        <p>Are you sure you want to delete this assignment from client?</p>
+        <p>Are you sure you want to recall this assignment from client?</p>
       </Modal>
     </div>
   );

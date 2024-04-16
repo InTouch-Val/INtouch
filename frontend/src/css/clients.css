@@ -157,6 +157,23 @@ tr:last-child {
   cursor: pointer;
 }
 
+.action-button:disabled {
+  background: rgba(65, 125, 136, 0.6);
+}
+
+.action-button_header {
+  display: flex;
+  max-height: 29px;
+  padding: 6px 10px;
+}
+
+.action-button__icon {
+  height: 17px !important;
+  width: 20px !important;
+  object-fit: contain !important;
+  margin-right: 5px;
+}
+
 .modal-overlay {
   position: fixed;
   z-index: 1000;

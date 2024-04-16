@@ -361,6 +361,7 @@ class AssignmentClientViewSet(viewsets.ModelViewSet):
         """Смена значения видимости задания для доктора"""
         assignment = self.get_object()
         assignment.visible = not assignment.visible
+        assignment.save()
         return Response({"message": "Visibility changed"})
 
 
