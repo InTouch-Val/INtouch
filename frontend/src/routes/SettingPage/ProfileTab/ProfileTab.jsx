@@ -17,11 +17,15 @@ export function ProfileTab() {
       firstName: currentUser.first_name || '',
       lastName: currentUser.last_name || '',
       email: currentUser.email || '',
+      dateOfBirth: currentUser.date_of_birth || '',
     },
     resolver: yupResolver(updateUserForm),
     mode: 'all',
   });
   const [statusMessageText, setStatusMessageText] = React.useState('');
+  const [selectedFile, setSelectedFile] = React.useState([]);
+  const [previewImage, setPreviewImage] = React.useState(currentUser.photo || 'default-avatar.png');
+  const fileInputRef = React.createRef();
 
   const onSubmit = async (data) => {
     console.log(data);
@@ -31,6 +35,8 @@ export function ProfileTab() {
         {
           first_name: data.firstName,
           last_name: data.lastName,
+          photo: selectedFile,
+          date_of_birth: data.dateOfBirth,
         },
         {
           headers: {
@@ -64,10 +70,38 @@ export function ProfileTab() {
     }
   };
 
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      setPreviewImage(URL.createObjectURL(file));
+    }
+  };
+
+  const handleChooseFileClick = () => {
+    fileInputRef.current.click();
+  };
+
   return (
     <>
       {statusMessageText != '' && <div className="success-message">{statusMessageText}</div>}
       <div className="settings-profile-tab">
+        {currentUser.type == 'doctor' && (
+          <div className="left-column">
+            <img src={previewImage} alt="Profile" className="avatar" />
+            <input
+              type="file"
+              id="photo"
+              ref={fileInputRef}
+              style={{ display: 'none' }}
+              onChange={handleFileSelect}
+            />
+
+            <button className="action-button" onClick={handleChooseFileClick}>
+              Change Photo
+            </button>
+          </div>
+        )}
         <div className="right-column">
           <form onSubmit={handleSubmit(onSubmit)}>
             <Controller
@@ -126,6 +160,25 @@ export function ProfileTab() {
                 </div>
               )}
             />
+            {currentUser.type == 'doctor' && (
+              <Controller
+                name="dateOfBirth"
+                control={control}
+                render={({ field: { ...fieldsProps } }) => (
+                  <div className="input__container">
+                    <label htmlFor="dateOfBirt">Date Of Birth</label>
+                    <input
+                      {...fieldsProps}
+                      type="date"
+                      name="dateOfBirth"
+                      placeholder="Date of Birth"
+                      className="settings-input"
+                    />
+                  </div>
+                )}
+              />
+            )}
+
             <div className="profile__errorMessages">
               <div className="profile__fieldError">
                 {!!errors.firstName && (
@@ -136,6 +189,9 @@ export function ProfileTab() {
                 )}
                 {!!errors.email && (
                   <span className="profile__errorText">{errors.email?.message}</span>
+                )}
+                {!!errors.dateOfBirth && (
+                  <span className="profile__errorText">{errors.dateOfBirth?.message}</span>
                 )}
                 {currentUser.new_email_changing && (
                   <span className="profile__errorText">
