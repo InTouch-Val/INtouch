@@ -151,7 +151,7 @@ class UpdatePasswordView(APIView):
 
 class UpdateEmailView(APIView):
     """Изменение почты пользователя."""
-#    throttle_scope = "email_update"
+    throttle_scope = "email_update"
 
     def post(self, request):
         serializer = UpdateEmailSerializer(
@@ -222,6 +222,7 @@ def user_delete_soft(request):
 
 class ClientDeleteView(APIView):
     """Удаление аккаунта клиента из интерфейса доктора"""
+    permission_classes = (IsDoctorUser,)
 
     def delete(self, request, pk):
         try:
@@ -234,6 +235,7 @@ class ClientDeleteView(APIView):
 
 class AddClientView(APIView):
     """Добавление нового клиента из интерфейса доктора"""
+    permission_classes = (IsDoctorUser,)
 
     def post(self, request):
         serializer = AddClientSerializer(data=request.data)
@@ -253,6 +255,7 @@ class UpdateClientView(generics.UpdateAPIView):
 
 class DoctorUpdateClientView(generics.UpdateAPIView):
     """Редактирование доктором данных о клиенте"""
+    permission_classes = (IsDoctorUser,)
 
     queryset = User.objects.all()
     serializer_class = DoctorUpdateClientSerializer
@@ -260,6 +263,7 @@ class DoctorUpdateClientView(generics.UpdateAPIView):
 
 class AssignmentAddUserMyListView(APIView):
     """Добавление задачи в свой список"""
+    permission_classes = (IsDoctorUser,)
 
     def get(self, request, pk):
         user = request.user
@@ -269,7 +273,8 @@ class AssignmentAddUserMyListView(APIView):
 
 
 class AssignmentDeleteUserMyListView(APIView):
-    """Удаение задачи из своего списка"""
+    """Удаление задачи из своего списка"""
+    permission_classes = (IsDoctorUser,)
 
     def get(self, request, pk):
         user = request.user
@@ -280,6 +285,7 @@ class AssignmentDeleteUserMyListView(APIView):
 
 class AddAssignmentClientView(APIView):
     """Назначение задачи клиенту"""
+    permission_classes = (IsDoctorUser,)
 
     def get(self, request, pk, client_pk):
         assignment = Assignment.objects.get(pk=pk)
@@ -324,6 +330,7 @@ class AddAssignmentClientView(APIView):
 
 class AssignmentViewSet(viewsets.ModelViewSet):
     """CRUD операции над задачами доктора"""
+    permission_classes = (IsDoctorUser,)
 
     queryset = Assignment.objects.all()
     serializer_class = AssignmentSerializer
