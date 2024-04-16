@@ -151,7 +151,7 @@ class UpdatePasswordView(APIView):
 
 class UpdateEmailView(APIView):
     """Изменение почты пользователя."""
-    throttle_scope = "email_update"
+#    throttle_scope = "email_update"
 
     def post(self, request):
         serializer = UpdateEmailSerializer(
@@ -160,7 +160,7 @@ class UpdateEmailView(APIView):
         serializer.is_valid(raise_exception=True)
         email = serializer.validated_data["new_email"]
         user = request.user
-        user.email_changing = True
+        user.new_email_changing = True
         user.new_email_temp = email
         user.save()
         token = default_token_generator.make_token(user)
@@ -179,11 +179,11 @@ class UpdateEmailConfirmView(generics.GenericAPIView):
     def get(self, request, pk, token):
         user = User.objects.get(pk=pk)
         if (user and default_token_generator.check_token(user, token)
-           and user.email_changing):
+           and user.new_email_changing):
             user.username = user.new_email_temp
             user.email = user.new_email_temp
             user.new_email_temp = None
-            user.email_changing = False
+            user.new_email_changing = False
             user.save()
             return Response({"message": "Email updated successfully"})
         else:
