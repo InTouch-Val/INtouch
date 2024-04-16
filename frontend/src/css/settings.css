@@ -62,6 +62,7 @@ header img {
 .settings-input {
   padding: 10px 15px;
   border: none;
+  border: 1px solid transparent;
   border-radius: 10px;
   margin: 10px;
   background-color: #fff;
@@ -70,7 +71,7 @@ header img {
   font-size: 17px;
 }
 
-#save-settings {
+.save-settings {
   width: 148px;
   align-self: flex-end;
   padding: 10px 16px;
@@ -81,6 +82,9 @@ header img {
   color: #fff;
   cursor: pointer;
   font-size: 16px;
+}
+.save-settings:disabled {
+  opacity: 0.5;
 }
 
 /* SECURITY TAB */
@@ -131,4 +135,35 @@ header img {
 
 .danger-zone button:hover {
   background-color: #f33;
+}
+
+.input__container {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile__errorText {
+  margin: 5px;
+  font-family: 'Montserrat';
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 17px;
+  color: #ff0000;
+}
+
+.profile__inputError {
+  border: 1px solid #ff0000;
+}
+
+.profile__errorMessages {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.profile__fieldError {
+  display: flex;
+  flex-direction: column;
+  height: 250px;
 }

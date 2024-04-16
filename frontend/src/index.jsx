@@ -13,7 +13,7 @@ import { AfterRegistrationPage } from './service/forms/after-registration-welcom
 import { ClientPage } from './routes/client-page';
 import { AssignmentsPage } from './routes/assignments-page';
 import { CommunityPage } from './routes/community-page';
-import { SettingsPage } from './routes/settings-page';
+import { SettingsPage } from './routes/SettingPage/settings-page';
 import { App } from './components/App';
 import { AddAssignment, ViewAssignment } from './components/psy/AddAssignment';
 import { AddClient } from './components/psy/AddClient';
@@ -24,6 +24,7 @@ import { CompleteAssignments } from './components/client/CompleteAssignments/Com
 import './index.css';
 import { DiaryPage, loaderDiaryById } from './routes/diary-page';
 import DiaryPageClient from './routes/client/my-diary-page';
+import ConfirmEmail from './service/forms/confirm-email';
 
 const router = createBrowserRouter([
   {
@@ -129,6 +130,11 @@ const router = createBrowserRouter([
   {
     path: '/reset-password/:pk/:token',
     element: <PasswordResetMock />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/email-update/:pk/:token',
+    element: <ConfirmEmail />,
     errorElement: <ErrorPage />,
   },
   {
