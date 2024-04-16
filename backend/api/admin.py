@@ -11,7 +11,7 @@ class CustomUserAdmin(admin.ModelAdmin):
                     "last_name",
                     "email",
                     "add_date",
-                    "email_changing",
+                    "new_email_changing",
                     "new_email_temp")
     list_display_links = ("username",)
     search_fields = ("username",)

@@ -16,7 +16,7 @@ class User(AbstractUser):
         default="user_photos/default_user_photo.jpg",
         blank=True,
     )
-    email_changing = models.BooleanField(default=False)
+    new_email_changing = models.BooleanField(default=False)
     new_email_temp = models.EmailField(null=True)
 
     def __str__(self):
