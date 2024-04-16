@@ -129,7 +129,6 @@ class UserSerializer(serializers.ModelSerializer):
         remove_unverified_user.send_with_options(
             args=(user.pk,), delay=TIME_DELETE_NON_ACTIVE_USER
         )
-        return user
 
 
 class PasswordResetSerializer(serializers.Serializer):
@@ -184,6 +183,24 @@ class UpdatePasswordSerializer(ChangePasswordSerializer):
             validate_password(password=attrs["new_password"], user=user)
         except ValidationError as err:
             raise serializers.ValidationError({"new_password": err.messages})
+        return attrs
+
+
+class UpdateEmailSerializer(serializers.Serializer):
+    """Изменение эл. почты пользователя."""
+    new_email = serializers.EmailField()
+
+    def validate(self, attrs):
+        request = self.context.get("request")
+        user = request.user
+        if attrs["new_email"] == user.email:
+            raise serializers.ValidationError(
+                "This email is already set on your account"
+            )
+        if User.objects.filter(email=attrs["new_email"]).exists():
+            raise serializers.ValidationError(
+                "User with this email is already exists"
+            )
         return attrs
 
 
@@ -245,7 +262,6 @@ class AddClientSerializer(serializers.ModelSerializer):
         remove_unverified_user.send_with_options(
             args=(user.pk,), delay=TIME_DELETE_NON_ACTIVE_USER
         )
-        return user
 
 
 class UpdateClientSerializer(serializers.ModelSerializer):

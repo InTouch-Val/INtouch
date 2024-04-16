@@ -14,6 +14,7 @@ from api.permissions import *
 from api.serializers import *
 from api.utils import send_by_mail
 from api.constants import USER_TYPES
+from api.tasks import reset_email_update_status
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -146,6 +147,47 @@ class UpdatePasswordView(APIView):
             return Response({"message": "Password changed successfully"})
         else:
             return Response({"error": "Password not changed"})
+
+
+class UpdateEmailView(APIView):
+    """Изменение почты пользователя."""
+    throttle_scope = "email_update"
+
+    def post(self, request):
+        serializer = UpdateEmailSerializer(
+            data=request.data, context={"request": request}
+        )
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data["new_email"]
+        user = request.user
+        user.email_changing = True
+        user.new_email_temp = email
+        user.save()
+        token = default_token_generator.make_token(user)
+        url = f"/email-update/{user.pk}/{token}/"
+        html_message = render_to_string(
+            "registration/email_update.html",
+            {"url": url, "domen": current_site, "name": user.first_name},
+        )
+        send_by_mail(html_message, email)
+        reset_email_update_status.send_with_options(args=(user.pk,), delay=259200)
+        return Response({"message": "Email update confirmation sent."})
+
+
+class UpdateEmailConfirmView(generics.GenericAPIView):
+    """Подтверждение изменения почты пользователя."""
+    def get(self, request, pk, token):
+        user = User.objects.get(pk=pk)
+        if (user and default_token_generator.check_token(user, token)
+           and user.email_changing):
+            user.username = user.new_email_temp
+            user.email = user.new_email_temp
+            user.new_email_temp = None
+            user.email_changing = False
+            user.save()
+            return Response({"message": "Email updated successfully"})
+        else:
+            return Response({"error": "Email not updated: unvalid token"})
 
 
 class UpdateUserView(generics.UpdateAPIView):
