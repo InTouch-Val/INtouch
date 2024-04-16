@@ -25,7 +25,6 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
     }
   };
 
-
   return (
     <div className="diary__card" onClick={() => goDiary()}>
       <div className="diary__card-header">
