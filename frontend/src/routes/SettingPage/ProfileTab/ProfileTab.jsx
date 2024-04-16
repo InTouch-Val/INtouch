@@ -137,7 +137,7 @@ export function ProfileTab() {
                 {!!errors.email && (
                   <span className="profile__errorText">{errors.email?.message}</span>
                 )}
-                {!currentUser.email_changing && (
+                {currentUser.email_changing && (
                   <span className="profile__errorText">
                     We’ve sent a confirmation email to your new email address —{' '}
                     {currentUser.new_email_temp}. Please check and confirm to complete the email
