@@ -15,4 +15,5 @@ export const updateUserForm = yup.object({
     .string()
     .email('Please make sure your email address is in the format example@example.com')
     .trim(),
+  dateOfBirth: yup.string(),
 });
