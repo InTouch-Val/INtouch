@@ -10,7 +10,6 @@ export default function DiaryBlockPhysicalSensation({ diary }) {
         butterflies, etc.
       </div>
       <div className="diary__block-text-sensation">{diary.physical_sensations}</div>
-      <div className="diary__block-text-sensation">{diary.physical_sensations}</div>
     </div>
   );
 }

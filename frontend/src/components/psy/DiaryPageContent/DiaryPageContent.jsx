@@ -7,7 +7,6 @@ import DiaryBlockPhysicalSensation from './DiaryBlockPhysicalSensation/DiaryBloc
 import DiaryBlockEmotion from './DiaryBlockEmotion/DiaryBlockEmotion';
 
 export default function DiaryPageContent({ diary }) {
-  console.log(diary);
   return (
     <div className="diaryPage">
       <DiaryHeader diary={diary} />

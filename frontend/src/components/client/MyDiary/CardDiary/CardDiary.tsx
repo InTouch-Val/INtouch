@@ -25,8 +25,6 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
     }
   };
 
-  console.log(new Date(card.add_date).getUTCDate());
-
   return (
     <div className="diary__card" onClick={() => goDiary()}>
       <div className="diary__card-header">
