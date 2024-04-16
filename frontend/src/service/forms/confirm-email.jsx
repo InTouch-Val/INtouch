@@ -36,31 +36,15 @@ export default function ConfirmEmail() {
     return <div className="welcome-container">Loading...</div>;
   }
 
-  if (message?.error) {
-    return (
-      <div className="welcome-container">
-        <div className="welcome-content">
-          <h1>New email not update </h1>
-          <p>{message.error}</p>
-          <button className="action-button" onClick={handleGoButton}>
-            Go to Settings
-          </button>
-        </div>
+  return (
+    <div className="welcome-container">
+      <div className="welcome-content">
+        <h1>New email confirmed</h1>
+        <p> {message.message}</p>
+        <button className="action-button" onClick={handleGoButton}>
+          Go to Settings
+        </button>
       </div>
-    );
-  }
-
-  if (message?.message) {
-    return (
-      <div className="welcome-container">
-        <div className="welcome-content">
-          <h1>New email confirmed</h1>
-          <p> {message.message}</p>
-          <button className="action-button" onClick={handleGoButton}>
-            Go to Settings
-          </button>
-        </div>
-      </div>
-    );
-  }
+    </div>
+  );
 }
