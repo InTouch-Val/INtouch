@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { API } from '../axios';
 
 export default function ConfirmEmail() {
   const { pk, token } = useParams();
@@ -7,21 +8,33 @@ export default function ConfirmEmail() {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    const verifyResetLink = async () => {
-      try {
-        const response = await API.get(`password/reset/confirm/${pk}/${token}/`);
-        if (response.status === 200) {
-          setIsValidLink(true);
-        }
-      } catch (error) {
-        console.error('Error verifying reset link:', error);
-      } finally {
-        setLoading(false);
+    // const verifyResetLink = async () => {
+    //   try {
+    //     const response = await API.get(`email/update/${pk}/${token}/`);
+    //     debugger;
+    //     if (response.status === 200) {
+    //       setIsValidLink(true);
+    //     }
+    //   } catch (error) {
+    //     console.error('Error verifying reset link:', error);
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
+    try {
+      const response = API.get(`email/update/${pk}/${token}/`);
+      if (response.status === 200) {
+        setIsValidLink(true);
       }
-    };
+    } catch (error) {
+      console.error('Error verifying reset link:', error);
+    } finally {
+      setLoading(false);
+    }
 
-    verifyResetLink();
+    // verifyResetLink();
   }, [pk, token]);
+
   if (loading) {
     return <div className="welcome-container">Loading...</div>;
   }
