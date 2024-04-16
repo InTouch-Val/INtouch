@@ -13,5 +13,6 @@ export const updateUserForm = yup.object({
     .max(50, 'Please enter a valid name (2-50 characters)'),
   email: yup
     .string()
-    .email('Please make sure your email address is in the format example@example.com'),
+    .email('Please make sure your email address is in the format example@example.com')
+    .trim(),
 });
