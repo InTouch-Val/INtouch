@@ -69,6 +69,8 @@ class UserSerializer(serializers.ModelSerializer):
     )
     user_type = serializers.CharField(read_only=True)
     photo = serializers.ImageField(required=False)
+    email_changing = serializers.BooleanField(read_only=True)
+    new_email_temp = serializers.EmailField(read_only=True)
 
     class Meta:
         model = User
@@ -88,6 +90,8 @@ class UserSerializer(serializers.ModelSerializer):
             "user_type",
             "is_active",
             "photo",
+            "email_changing",
+            "new_email_temp"
         )
 
     def validate(self, attrs):
