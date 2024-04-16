@@ -133,7 +133,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: '/email-confirm/:pk/:token',
+    path: '/email-update/:pk/:token',
     element: <ConfirmEmail />,
     errorElement: <ErrorPage />,
   },
