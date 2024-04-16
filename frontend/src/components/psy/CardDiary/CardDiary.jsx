@@ -23,8 +23,13 @@ export default function CardDiary({ card }) {
       <div className="diary__card-text">{card.event_details}</div>
 
       <div className="diary__card-buttons" onClick={(e) => e.stopPropagation()}>
-        <Button className="diary__card-button">Okay</Button>
-        <Button className="diary__card-button">Enthusiasm</Button>
+        {card.clarifying_emotion.slice(0, 2).map((item, index) => {
+          return (
+            <Button key={index} className="diary__card-button">
+              {item}
+            </Button>
+          );
+        })}
       </div>
     </div>
   );
