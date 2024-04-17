@@ -288,7 +288,7 @@ class AddAssignmentClientView(APIView):
     permission_classes = (IsDoctorUser,)
 
     def get(self, request, pk, client_pk):
-        assignment = Assignment.objects.get(pk=pk)
+        assignment = get_object_or_404(Assignment, pk=pk)
         client = User.objects.get(pk=client_pk)
         assignments_copy = AssignmentClient.objects.create(
             title=assignment.title,
@@ -308,6 +308,7 @@ class AddAssignmentClientView(APIView):
             block_copy = Block.objects.create(
                 question=block.question,
                 type=block.type,
+                image=block.image,
                 description=block.description,
                 reply=block.reply,
                 start_range=block.start_range,
