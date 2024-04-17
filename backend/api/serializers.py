@@ -11,7 +11,7 @@ from rest_framework.validators import UniqueValidator
 
 from api.tasks import remove_unverified_user
 from api.utils import current_site, send_by_mail
-from api.constants import TIME_DELETE_NON_ACTIVE_USER
+from api.constants import TIME_DELETE_NON_ACTIVE_USER, USER_TYPES
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -114,7 +114,7 @@ class UserSerializer(serializers.ModelSerializer):
             email=validated_data["email"],
             password=(validated_data["password"]),
             accept_policy=validated_data["accept_policy"],
-            user_type="doctor",
+            user_type=USER_TYPES[1],
             is_active=False,
         )
         try:
@@ -252,7 +252,7 @@ class AddClientSerializer(serializers.ModelSerializer):
             last_name=validated_data["last_name"].title(),
             email=validated_data["email"],
             password=uuid.uuid4(),
-            user_type="client",
+            user_type=USER_TYPES[0],
             is_active=False,
         )
         Client.objects.create(user=user)
@@ -266,6 +266,7 @@ class AddClientSerializer(serializers.ModelSerializer):
         remove_unverified_user.send_with_options(
             args=(user.pk,), delay=TIME_DELETE_NON_ACTIVE_USER
         )
+        return user
 
 
 class UpdateClientSerializer(serializers.ModelSerializer):
