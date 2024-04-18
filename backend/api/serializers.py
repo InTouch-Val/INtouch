@@ -91,7 +91,7 @@ class UserSerializer(serializers.ModelSerializer):
             "is_active",
             "photo",
             "new_email_changing",
-            "new_email_temp"
+            "new_email_temp",
         )
 
     def validate(self, attrs):
@@ -192,6 +192,7 @@ class UpdatePasswordSerializer(ChangePasswordSerializer):
 
 class UpdateEmailSerializer(serializers.Serializer):
     """Изменение эл. почты пользователя."""
+
     new_email = serializers.EmailField()
 
     def validate(self, attrs):
@@ -202,9 +203,7 @@ class UpdateEmailSerializer(serializers.Serializer):
                 "This email is already set on your account"
             )
         if User.objects.filter(email=attrs["new_email"]).exists():
-            raise serializers.ValidationError(
-                "User with this email is already exists"
-            )
+            raise serializers.ValidationError("User with this email is already exists")
         return attrs
 
 

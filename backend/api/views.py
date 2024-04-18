@@ -1,7 +1,8 @@
 from django.contrib.auth.hashers import check_password
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, viewsets
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics, viewsets, filters
 from rest_framework.decorators import action, api_view
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -151,6 +152,7 @@ class UpdatePasswordView(APIView):
 
 class UpdateEmailView(APIView):
     """Изменение почты пользователя."""
+
     throttle_scope = "email_update"
 
     def post(self, request):
@@ -176,10 +178,14 @@ class UpdateEmailView(APIView):
 
 class UpdateEmailConfirmView(generics.GenericAPIView):
     """Подтверждение изменения почты пользователя."""
+
     def get(self, request, pk, token):
         user = User.objects.get(pk=pk)
-        if (user and default_token_generator.check_token(user, token)
-           and user.new_email_changing):
+        if (
+            user
+            and default_token_generator.check_token(user, token)
+            and user.new_email_changing
+        ):
             user.username = user.new_email_temp
             user.email = user.new_email_temp
             user.new_email_temp = None
@@ -222,6 +228,7 @@ def user_delete_soft(request):
 
 class ClientDeleteView(APIView):
     """Удаление аккаунта клиента из интерфейса доктора"""
+
     permission_classes = (IsDoctorUser,)
 
     def delete(self, request, pk):
@@ -235,6 +242,7 @@ class ClientDeleteView(APIView):
 
 class AddClientView(APIView):
     """Добавление нового клиента из интерфейса доктора"""
+
     permission_classes = (IsDoctorUser,)
 
     def post(self, request):
@@ -255,6 +263,7 @@ class UpdateClientView(generics.UpdateAPIView):
 
 class DoctorUpdateClientView(generics.UpdateAPIView):
     """Редактирование доктором данных о клиенте"""
+
     permission_classes = (IsDoctorUser,)
 
     queryset = User.objects.all()
@@ -263,6 +272,7 @@ class DoctorUpdateClientView(generics.UpdateAPIView):
 
 class AssignmentAddUserMyListView(APIView):
     """Добавление задачи в свой список"""
+
     permission_classes = (IsDoctorUser,)
 
     def get(self, request, pk):
@@ -274,6 +284,7 @@ class AssignmentAddUserMyListView(APIView):
 
 class AssignmentDeleteUserMyListView(APIView):
     """Удаление задачи из своего списка"""
+
     permission_classes = (IsDoctorUser,)
 
     def get(self, request, pk):
@@ -285,11 +296,12 @@ class AssignmentDeleteUserMyListView(APIView):
 
 class AddAssignmentClientView(APIView):
     """Назначение задачи клиенту"""
+
     permission_classes = (IsDoctorUser,)
 
     def get(self, request, pk, client_pk):
         assignment = get_object_or_404(Assignment, pk=pk)
-        client = User.objects.get(pk=client_pk)
+        client = get_object_or_404(User, pk=client_pk)
         assignments_copy = AssignmentClient.objects.create(
             title=assignment.title,
             text=assignment.text,
@@ -331,12 +343,25 @@ class AddAssignmentClientView(APIView):
 
 class AssignmentViewSet(viewsets.ModelViewSet):
     """CRUD операции над задачами доктора"""
+
     permission_classes = (IsDoctorUser,)
 
     queryset = Assignment.objects.all()
     serializer_class = AssignmentSerializer
     permission_classes = [
         IsAuthorOrReadOnly,
+    ]
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.OrderingFilter,
+    ]
+    filterset_fields = [
+        "assignment_type",
+        "language",
+    ]
+    ordering_fields = [
+        "add_date",
+        "share",
     ]
 
     def destroy(self, request, *args, **kwargs):
