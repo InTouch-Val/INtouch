@@ -3,6 +3,16 @@ USER_TYPES = {
     1: "doctor",
 }
 
+ASSIGNMENT_TYPES = [
+    ("lesson", "Lesson"),
+    ("exercise", "Exercise"),
+    ("essay", "Essay"),
+    ("study", "Study"),
+    ("quiz", "Quiz"),
+    ("methodology", "Methodology"),
+    ("metaphors", "Metaphors"),
+]
+
 LANGUAGES = [
     ("fr", "French"),
     ("en", "English"),

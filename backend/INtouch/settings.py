@@ -102,7 +102,9 @@ else:
         "default": {
             "ENGINE": os.getenv("DB_ENGINE"),
             "HOST": (
-                "localhost" if os.getenv("LOCAL_HOST_DB") == "True" else os.getenv("DB_HOST")
+                "localhost"
+                if os.getenv("LOCAL_HOST_DB") == "True"
+                else os.getenv("DB_HOST")
             ),
             "PORT": os.getenv("DB_PORT"),
             "NAME": os.getenv("POSTGRES_DB"),
@@ -301,20 +303,20 @@ DRAMATIQ_BROKER = {
 DRAMATIQ_TASKS_DATABASE = "default"
 
 LOGGING = {
-     "version": 1,
-     "disable_existing_loggers": False,
-     "handlers": {
-         "file": {
-             "level": "ERROR",
-             "class": "logging.FileHandler",
-             "filename": f"{BASE_DIR}/debug.log",
-         },
-     },
-     "loggers": {
-         "django": {
-             "handlers": ["file"],
-             "level": "ERROR",
-             "propagate": True,
-         },
-     },
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "file": {
+            "level": "ERROR",
+            "class": "logging.FileHandler",
+            "filename": f"{BASE_DIR}/debug.log",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["file"],
+            "level": "ERROR",
+            "propagate": True,
+        },
+    },
 }

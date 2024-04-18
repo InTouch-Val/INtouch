@@ -2,7 +2,12 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
-from api.constants import LANGUAGES, PRIMARY_EMOTIONS, CLARIFYING_EMOTIONS
+from api.constants import (
+    ASSIGNMENT_TYPES,
+    LANGUAGES,
+    PRIMARY_EMOTIONS,
+    CLARIFYING_EMOTIONS,
+)
 
 
 class User(AbstractUser):
@@ -50,7 +55,7 @@ class Assignment(models.Model):
         related_name="assignments",
         null=True,
     )
-    assignment_type = models.CharField(max_length=100)
+    assignment_type = models.CharField(max_length=100, choices=ASSIGNMENT_TYPES)
     status = models.CharField(max_length=100)
     tags = models.CharField(max_length=255)
     language = models.CharField(max_length=100, choices=LANGUAGES)
