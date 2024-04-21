@@ -2,7 +2,6 @@ import React from 'react';
 import { useAuth } from '../../../service/authContext';
 import './DiaryNotes.css';
 import CardDiary from '../CardDiary/CardDiary';
-import axios from 'axios';
 import { API } from '../../../service/axios';
 import { useObserve } from '../../../utils/hook/useObserve';
 
@@ -23,11 +22,10 @@ export default function DiaryNotes({ clientId }) {
   useObserve(observeElement, isTotal, handleTakeUpdate);
 
   React.useEffect(() => {
-    const response = API.get(`diary-notes/?limit=${limit}`)
+    const response = API.get(`diary-notes/?limit=${limit}&author=${clientId}`)
       .then((res) => {
-        let data = res.data.results.filter((diary) => diary.author === clientId);
         if (res.status == 200) {
-          setDiarys(data);
+          setDiarys(res.data.results);
         }
       })
       .catch((error) => console.log(error))
