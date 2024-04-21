@@ -6,27 +6,28 @@ import { API } from '../../../service/axios';
 import CardDiaryClient from './CardDiary/CardDiary';
 import { useNavigate } from 'react-router-dom';
 import { useObserve } from '../../../utils/hook/useObserve';
+import { useAuth } from '../../../service/authContext';
 
 export default function MyDiary() {
   const [diarys, setDiarys] = React.useState([]);
   const [isFetching, setFetching] = React.useState(false);
   const [isShowModal, setShowModal] = React.useState(false);
   const [idCardDelete, setIdCardDelete] = React.useState(false);
-  const [offset, setOffset] = React.useState(0);
-
+  const [limit, setLimit] = React.useState(20);
+  const { currentUser } = useAuth();
   const [isTotal, setTotal] = React.useState(false);
   const observeElement = React.useRef(null);
 
   const navigate = useNavigate();
 
   const handleTakeUpdate = React.useCallback(() => {
-    setOffset((prevOffset) => prevOffset + 20);
+    setLimit((prev) => prev + 20);
   }, []);
 
   useObserve(observeElement, isTotal, handleTakeUpdate);
 
   React.useEffect(() => {
-    const response = API.get(`diary-notes/?offset=${offset}`)
+    const response = API.get(`diary-notes/?limit=${limit}&offset=0&author=${currentUser.id}`)
       .then((res) => {
         if (res.status == 200) {
           if (res.data.count === diarys.length) {
@@ -41,7 +42,7 @@ export default function MyDiary() {
       })
       .catch((error) => console.log(error))
       .finally(() => setFetching(true));
-  }, [isFetching, offset]);
+  }, [isFetching, limit]);
 
   const handleClickDelete = async (event) => {
     event.stopPropagation();
