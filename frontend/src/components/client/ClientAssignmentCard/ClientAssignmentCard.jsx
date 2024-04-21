@@ -27,7 +27,7 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
 
   async function handleShareWithTherapist() {
     try {
-      const res = await API.get(`assignments-client/${assignmentData?.id}/visible/`);
+      const res = await API.post(`assignments-client/${assignmentData?.id}/visible/`);
       if (res.status >= 200 && res.status < 300) {
         console.log(res.data);
         setIsShowContextMenu(false);
