@@ -1,8 +1,9 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef, useCallback } from 'react';
 import { useAuth } from '../../service/authContext';
 import { API } from '../../service/axios';
 import { ClientAssignmentCard } from './ClientAssignmentCard/ClientAssignmentCard';
 import { AuthProvider } from '../../service/authContext';
+import { useObserve } from '../../utils/hook/useObserve';
 
 function ClientAssignments() {
   const { currentUser } = useAuth();
@@ -11,14 +12,24 @@ function ClientAssignments() {
   const [filteredAssignments, setFilteredAssignments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { setCurrentCard, card } = useAuth();
+  const [limit, setLimit] = useState(50);
+  const observeElement = useRef(null);
+  const [isTotal, setTotal] = useState(false);
+
+  const handleTakeUpdate = useCallback(() => {
+    setLimit((prevLimit) => prevLimit + 10);
+  }, []);
+
+  useObserve(observeElement, isTotal, handleTakeUpdate);
 
   useEffect(() => {
     const fetchAssignments = async () => {
       try {
-        let response = await API.get('/assignments-client/?limit=1000&offset=0');
+        let response = await API.get(`/assignments-client/?limit=${limit}&offset=0`);
         response = response.data.results.filter((assignment) => assignment.user === currentUser.id);
         // response = response.data.results;
         setAssignments(response);
+
         setIsLoading(false);
       } catch (error) {
         console.error(error.message);
@@ -27,7 +38,7 @@ function ClientAssignments() {
     };
 
     fetchAssignments();
-  }, [currentUser.id]);
+  }, [currentUser.id, limit]);
 
   useEffect(() => {
     // let updatedAssignments = [...assignments];
@@ -86,6 +97,7 @@ function ClientAssignments() {
         ) : (
           <div className="nothing-to-show">You have no assignments. Contact your doctor</div>
         )}
+        <div className="assignment__observeElement" ref={observeElement} />
       </div>
     </div>
   );

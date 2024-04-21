@@ -5,25 +5,43 @@ import addEntry from '../../../images/add_entry.svg';
 import { API } from '../../../service/axios';
 import CardDiaryClient from './CardDiary/CardDiary';
 import { useNavigate } from 'react-router-dom';
+import { useObserve } from '../../../utils/hook/useObserve';
 
 export default function MyDiary() {
-  const [diarys, setDiarys] = React.useState();
+  const [diarys, setDiarys] = React.useState([]);
   const [isFetching, setFetching] = React.useState(false);
   const [isShowModal, setShowModal] = React.useState(false);
   const [idCardDelete, setIdCardDelete] = React.useState(false);
+  const [offset, setOffset] = React.useState(0);
+
+  const [isTotal, setTotal] = React.useState(false);
+  const observeElement = React.useRef(null);
 
   const navigate = useNavigate();
 
+  const handleTakeUpdate = React.useCallback(() => {
+    setOffset((prevOffset) => prevOffset + 20);
+  }, []);
+
+  useObserve(observeElement, isTotal, handleTakeUpdate);
+
   React.useEffect(() => {
-    const response = API.get('diary-notes/')
+    const response = API.get(`diary-notes/?offset=${offset}`)
       .then((res) => {
         if (res.status == 200) {
-          setDiarys(res.data.results);
+          if (res.data.count === diarys.length) {
+            setTotal(true);
+          } else if (res.data.results.length > 0) {
+            setDiarys([...diarys, ...res.data.results]);
+            setTotal(false);
+          }
+
+          console.log(diarys);
         }
       })
       .catch((error) => console.log(error))
       .finally(() => setFetching(true));
-  }, [isFetching]);
+  }, [isFetching, offset]);
 
   const handleClickDelete = async (event) => {
     event.stopPropagation();
@@ -62,7 +80,7 @@ export default function MyDiary() {
         <div className="diary__section">
           <div className="diary__list">
             {isFetching &&
-              diarys
+              Array.from(diarys)
                 .sort((a, b) => new Date(b.add_date) - new Date(a.add_date))
                 .map((card) => {
                   return (
@@ -75,6 +93,7 @@ export default function MyDiary() {
                   );
                 })}
           </div>
+          <div className="diary__observe-element" ref={observeElement} />
         </div>
       </div>
 

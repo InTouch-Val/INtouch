@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -7,6 +7,7 @@ import { AssignmentTile } from '../components/psy/AssignmentTile';
 import '../css/assignments.css';
 import { useAuth } from '../service/authContext';
 import { Modal } from '../service/modal';
+import { useObserve } from '../utils/hook/useObserve';
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
 function AssignmentsPage({
@@ -31,6 +32,16 @@ function AssignmentsPage({
   const [selectedAssignmentId, setSelectedAssignmentId] = useState('');
   const [ifError, setIfError] = useState(false);
   const [errorText, setErrorText] = useState('');
+
+  const [limit, setLimit] = useState(30);
+  const observeElement = useRef(null);
+  const [isTotal, setTotal] = useState(false);
+
+  const handleTakeUpdate = useCallback(() => {
+    setLimit((prevLimit) => prevLimit + 10);
+  }, []);
+
+  useObserve(observeElement, isTotal, handleTakeUpdate);
 
   const navigate = useNavigate();
 
@@ -152,7 +163,7 @@ function AssignmentsPage({
   useEffect(() => {
     const fetchAssignments = async () => {
       try {
-        const response = await API.get('assignments/');
+        const response = await API.get(`assignments/?limit=${limit}&offset=0`);
         const filteredAssignments = response.data.results.filter(
           (assignment) => assignment.is_public || assignment.author === currentUser.id,
         );
@@ -165,7 +176,7 @@ function AssignmentsPage({
       }
     };
     fetchAssignments();
-  }, [navigate, currentUser.id]);
+  }, [navigate, currentUser.id, limit]);
 
   useEffect(() => {
     let updatedAssignments = [...assignments];
@@ -424,6 +435,7 @@ function AssignmentsPage({
           ) : (
             <div className="nothing-to-show">There is nothing to show yet</div>
           )}
+          <div ref={observeElement} />
         </div>
       )}
       {activeTab === 'favorites' && (
