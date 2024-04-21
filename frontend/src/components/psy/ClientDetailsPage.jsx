@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { faNoteSticky } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,6 +11,7 @@ import { AssignmentsPage } from '../../routes/assignments-page';
 import shareImage from '../../images/shareArrow_white.svg';
 import '../../css/clients.css';
 import DiaryNotes from './DiaryNotes/DiaryNotes';
+import { useObserve } from '../../utils/hook/useObserve';
 
 function ClientDetailsPage() {
   const { id } = useParams();
@@ -32,6 +33,16 @@ function ClientDetailsPage() {
 
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
+  const [limit, setLimit] = useState(50);
+  const observeElement = useRef(null);
+  const [isTotal, setTotal] = useState(false);
+
+  const handleTakeUpdate = useCallback(() => {
+    setLimit((prevLimit) => prevLimit + 10);
+  }, []);
+
+  useObserve(observeElement, isTotal, handleTakeUpdate);
+
   const switchToProfileTab = () => {
     setActiveTab('profile');
   };
@@ -49,7 +60,7 @@ function ClientDetailsPage() {
     const fetchClientAssignments = async () => {
       if (activeTab === 'assignments') {
         try {
-          const response = await API.get('assignments-client/?limit=1000&offset=0');
+          const response = await API.get(`assignments-client/?limit=${limit}&offset=0`);
           const data = response.data.results.filter((assignment) => assignment.user === Number(id));
           setClientAssignments(data);
           console.log(response);
@@ -60,7 +71,7 @@ function ClientDetailsPage() {
     };
 
     fetchClientAssignments();
-  }, [id, activeTab]);
+  }, [id, activeTab, limit]);
   // const sendMessage = () => {
   //     if (newMessage.trim() !== '') {
   //         const message = {
@@ -280,6 +291,7 @@ function ClientDetailsPage() {
             )}
           </div>
         )}
+        <div ref={observeElement} />
         {/*Notes Tab View */}
         {activeTab === 'notes' && <Notes clientId={client.id} />}
         {activeTab === 'diary' && <DiaryNotes clientId={client.id} />}
