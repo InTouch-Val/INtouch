@@ -16,7 +16,8 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
   const handleClickVisible = async () => {
     setActive((prev) => !prev);
 
-    const newCard = { ...card, visible: active };
+    const newCard = { ...card, visible: !card.visible };
+    debugger;
     try {
       const response = await API.patch(`/diary-notes/${card.id}/`, newCard);
       return response.data;
@@ -46,13 +47,16 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
       <div className="diary__card-text">{card.event_details}</div>
 
       <div className="diary__card-buttons" onClick={(e) => e.stopPropagation()}>
-        {/* {card.clarifying_emotion && Array.from(card.clarifying_emotion).slice(0, 2).map((item, index) => {
-          return (
-            <Button key={index} className="diary__card-button">
-              {item}
-            </Button>
-          );
-        })} */}
+        {card.clarifying_emotion &&
+          Array.from(card.clarifying_emotion)
+            .slice(0, 2)
+            .map((item, index) => {
+              return (
+                <Button key={index} className="diary__card-button">
+                  {item}
+                </Button>
+              );
+            })}
       </div>
       <div onClick={(e) => e.stopPropagation()}>
         <label className="card__input-label">
