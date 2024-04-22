@@ -310,15 +310,14 @@ function AssignmentsPage({
         (clientId, index) => !clientsWithAssignments[index].hasAssignment,
       );
 
-      const res = await Promise.all(
-        clientsWithoutAssignment.map(async (clientId) => {
-          await API.get(`assignments/set-client/${assignmentId}/${clientId}/`);
-        }),
+      const allResponsesSuccessful = res.every(
+        (response) => response.status >= 200 && response.status <= 300,
       );
 
-      if (res.status > 200 && res.status < 300) {
+      if (allResponsesSuccessful) {
         setIfError(false);
         setErrorText('');
+        handleModalClose();
         setIsShareModalOpen(false);
         setIsSuccessModalOpen(true);
         setSelectedClients([]); // Очищаем выбранные клиенты после успешной отправки

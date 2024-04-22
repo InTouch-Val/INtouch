@@ -202,7 +202,7 @@ function CompleteAssignments() {
     }
   }
 
-  const navigate = useNavigate(); // Получите доступ к history
+  const navigate = useNavigate();
 
   function transformBlock(block) {
     if (block.type === 'text' || block.type === 'open') {
