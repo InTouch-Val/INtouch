@@ -136,7 +136,7 @@ function AssignmentTile({
         <h3>{assignment.title}</h3>
         <p>{assignment.author_name}</p>
         <div className="assignment-actions">
-          {assignment.is_public === false && isShareModal ? (
+          {assignment.is_public === false ? (
             <>
               <button
                 className="assignment__edit-btn"

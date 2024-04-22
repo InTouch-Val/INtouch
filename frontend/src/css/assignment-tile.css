@@ -13,7 +13,7 @@
 }
 
 .assignment-tile_selected {
-  box-shadow: 0 4px 8px rgba(18, 179, 39, 0.433);
+  border: 1.5px solid rgba(65, 125, 136, 1);
 }
 
 .assignment-image-container {
@@ -391,7 +391,7 @@
 .share-assignment__content-container {
   width: 90%;
   height: 100%;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 
 .share-assignment__list-wrapper {
@@ -487,6 +487,7 @@
 
 .share-assignment__close-button {
   position: absolute;
+  display: flex;
   top: 0px;
   right: 0px;
   width: 23px;
@@ -501,6 +502,8 @@
   cursor: pointer;
   outline: none;
   padding: 0;
+  align-items: center;
+  justify-content: center;
 }
 
 .share-assignment__close-button:hover {

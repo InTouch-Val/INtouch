@@ -306,7 +306,7 @@ function ClientDetailsPage() {
         >
           <div className="share-assignment share-assignment_clientDetailsPage">
             <button className="share-assignment__close-button" onClick={handleModalClose}>
-              x
+              X
             </button>
             <h3 className="share-assignment__title">Choose assignment you want to share</h3>
             <div className="share-assignment__content-container">

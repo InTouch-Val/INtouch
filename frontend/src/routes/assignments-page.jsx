@@ -164,9 +164,13 @@ function AssignmentsPage({
     const fetchAssignments = async () => {
       try {
         const response = await API.get(`assignments/?limit=${limit}&offset=0`);
-        const filteredAssignments = response.data.results.filter(
-          (assignment) => assignment.is_public || assignment.author === currentUser.id,
-        );
+        const filteredAssignments = response.data.results.filter((assignment) => {
+          if (isShareModal) {
+            return assignment.is_public;
+          } else {
+            return assignment.is_public || assignment.author === currentUser.id;
+          }
+        });
         setAssignments(filteredAssignments);
         setFilteredAssignments(filteredAssignments);
         console.log(filteredAssignments);
