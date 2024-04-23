@@ -5,7 +5,7 @@ import { EditorToolbar } from '../service/editors-toolbar';
 import '../css/block.css';
 import '../css/assignments.css';
 
-function ClientAssignmentBlocks({ block, handleClick, updateBlock }) {
+function ClientAssignmentBlocks({ block, handleClick, updateBlock, isView }) {
   const [choices, setChoices] = useState(block.choices || []);
   const [choiceRefs, setChoiceRefs] = useState([]);
   const [selectedValue, setSelectedValue] = useState(block.reply || null);
@@ -80,6 +80,7 @@ function ClientAssignmentBlocks({ block, handleClick, updateBlock }) {
           id=""
           placeholder="Write your answer here..."
           onChange={handleOpenChange}
+          disabled={isView}
         >
           {block.reply}
         </textarea>
@@ -112,6 +113,7 @@ function ClientAssignmentBlocks({ block, handleClick, updateBlock }) {
                   value={value}
                   onChange={handleRangeClick}
                   defaultChecked={value.toString() === block.reply}
+                  disabled={isView}
                 />
                 <span className="range-option-label">{value}</span>
               </label>
@@ -139,6 +141,7 @@ function ClientAssignmentBlocks({ block, handleClick, updateBlock }) {
                   style={{ opacity: 0.8 }}
                   onChange={handleSingleMultipleClick}
                   defaultChecked={radio.checked}
+                  disabled={isView}
                 ></input>
                 <label className="block-radio__label" htmlFor={radio.id}>
                   {radio.reply}
@@ -168,6 +171,7 @@ function ClientAssignmentBlocks({ block, handleClick, updateBlock }) {
                   style={{ opacity: 0.8 }}
                   onChange={handleSingleMultipleClick}
                   defaultChecked={checkbox.checked}
+                  disabled={isView}
                 ></input>
                 <label className="block-radio__label" htmlFor={checkbox.id}>
                   {checkbox.reply}

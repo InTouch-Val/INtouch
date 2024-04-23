@@ -18,7 +18,7 @@ function ClientDetailsPage() {
   const navigate = useNavigate();
   const { currentUser, updateUserData } = useAuth();
   const client = currentUser?.doctor.clients.find((client) => client.id === Number(id));
-
+  const { setCurrentCard, card } = useAuth();
   const [activeTab, setActiveTab] = useState('profile');
   const [clientAssignments, setClientAssignments] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
@@ -178,6 +178,10 @@ function ClientDetailsPage() {
     }
   };
 
+  function openAssignment(card) {
+    setCurrentCard(card);
+  }
+
   return (
     <>
       <div className="client-detail-page">
@@ -284,6 +288,8 @@ function ClientDetailsPage() {
                   key={assignment.id}
                   assignment={assignment}
                   onDeleteSuccess={handleDeleteAssignment}
+                  openAssignment={openAssignment}
+                  clientId={id}
                 />
               ))
             ) : (
