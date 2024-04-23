@@ -478,7 +478,7 @@ class DiaryNoteViewSet(viewsets.ModelViewSet):
 
 @require_GET
 def assetlink(request):
-    path = f'{settings.STATIC_ROOT}/assetlinks.json'
+    path = f'{settings.STATIC_ROOT}/api/assetlinks.json'
     with open(path, 'r') as f:
         data = json.loads(f.read())
     response = JsonResponse(data, safe=False)
