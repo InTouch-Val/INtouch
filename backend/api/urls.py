@@ -68,5 +68,5 @@ urlpatterns = [
         UpdateEmailConfirmView.as_view(),
         name="update_email_confirm",
     ),
-    path(".well-known/assetlinks.json/", assetlink)
+    path(".well-known/assetlinks.json", assetlink)
 ]
