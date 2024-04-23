@@ -184,18 +184,32 @@ function AssignmentTile({
   );
 }
 
-function ClientAssignmentTile({ assignment, onDeleteSuccess }) {
+function ClientAssignmentTile({ assignment, onDeleteSuccess, openAssignment, clientId }) {
   const [isHovered, setIsHovered] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [ifError, setIfError] = useState(false);
+  const [errorText, setErrorText] = useState('Can`t Recall');
   const [statusOneWord, setStatusOneWord] = useState('to-do');
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (assignment.status === 'to do') {
       setStatusOneWord('to-do');
     } else if (assignment.status === 'in progress') {
       setStatusOneWord('in-progress');
+    } else if (assignment.status === 'done') {
+      setStatusOneWord('done');
     }
   }, [assignment]);
+
+  function onCardClick() {
+    navigate(`/clients/${clientId}/assignments/${assignment?.id}`);
+    openAssignment(assignment);
+  }
+
+  function onRecallClick() {
+    handleToggleModal();
+  }
 
   const deleteClientsAssignment = async () => {
     try {
@@ -215,7 +229,7 @@ function ClientAssignmentTile({ assignment, onDeleteSuccess }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="assignment-image-container">
+      <div className="assignment-image-container assignment-image-container_client">
         <div className="date-and-type">
           <span>Sent: {formatDate(assignment.add_date)}</span>
           <span className={`status ${statusOneWord}`}>{assignment.status}</span>
@@ -227,20 +241,23 @@ function ClientAssignmentTile({ assignment, onDeleteSuccess }) {
         <p>UPD: {assignment.update_date}</p>
       </div>
       <div className="assignment-actions">
-        {assignment.visible ? (
+        {assignment.status !== 'to do' ? (
           <>
             <button
               className="assignment__review-btn"
               title="view task rate"
               onClick={(event) => {
                 event.stopPropagation();
+                onCardClick();
               }}
+              disabled={assignment.review === '' || undefined || null}
             ></button>
             <button
               className="assignment__view-btn"
               title="view done assignment"
               onClick={(event) => {
                 event.stopPropagation();
+                onCardClick();
               }}
             ></button>
           </>
@@ -251,7 +268,7 @@ function ClientAssignmentTile({ assignment, onDeleteSuccess }) {
               title="recall assignment"
               onClick={(event) => {
                 event.stopPropagation();
-                onDeleteClick(assignment.id);
+                onRecallClick();
               }}
             ></button>
           </>
@@ -261,7 +278,10 @@ function ClientAssignmentTile({ assignment, onDeleteSuccess }) {
         isOpen={showModal}
         onClose={handleToggleModal}
         onConfirm={deleteClientsAssignment}
-        confirmText="Recall"
+        confirmText="Yes, Recall"
+        showCancel={true}
+        ifError={ifError}
+        errorText={errorText}
       >
         <p>Are you sure you want to recall this assignment from client?</p>
       </Modal>

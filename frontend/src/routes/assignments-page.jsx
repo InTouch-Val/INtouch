@@ -103,7 +103,7 @@ function AssignmentsPage({
         return {
           type: block.type,
           question: block.question,
-          choice_replies: block.choices.map((choice) => ({ reply: choice })),
+          choice_replies: block.choice_replies,
         };
       });
 

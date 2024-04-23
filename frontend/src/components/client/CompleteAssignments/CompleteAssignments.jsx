@@ -14,9 +14,20 @@ import '../../../css/block.css';
 import '../../../css/assignments.css';
 import { ClientAssignmentBlocks } from '../../../service/ClientAssignmentBlocks';
 import { API } from '../../../service/axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function CompleteAssignments() {
+  const location = useLocation();
+  const pathParts = location.pathname.split('/');
+
+  // Проверяем, соответствует ли путь шаблону /clients/{id}/assignments/{id}
+  const isClientsAssignmentsPath =
+    pathParts.length === 5 && pathParts[1] === 'clients' && pathParts[3] === 'assignments';
+
+  const goBack = () => {
+    navigate(-1); // Переход назад
+  };
+
   const [isRateTask, setIsRateTask] = useState(false);
   const [editorStateFirst, setEditorStateFirst] = useState(() => EditorState.createEmpty());
   const [editorStateSecond, setEditorStateSecond] = useState(() => EditorState.createEmpty());
@@ -202,7 +213,7 @@ function CompleteAssignments() {
     }
   }
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Получите доступ к history
 
   function transformBlock(block) {
     if (block.type === 'text' || block.type === 'open') {
@@ -361,14 +372,15 @@ function CompleteAssignments() {
     <>
       <div className="assignment-header">
         <div className="assignment__container_button">
-          <NavLink to={'/my-assignments'}>
-            <button className="button__type_back">
-              <img src={arrowLeft}></img>
-            </button>
-          </NavLink>
-          <button className="button__type_save">
-            <img src={save}></img>
+          <button className="button__type_back" onClick={goBack}>
+            <img src={arrowLeft}></img>
           </button>
+
+          {!isClientsAssignmentsPath && (
+            <button className="button__type_save">
+              <img src={save}></img>
+            </button>
+          )}
         </div>
         <h1 className="assignment__name">{assignmentData.title}</h1>
         <p className="assignment__progress">{assignmentData.status}</p>
@@ -378,7 +390,73 @@ function CompleteAssignments() {
       ) : (
         ''
       )}
+
       <p className="aassignment__paragraph">{assignmentData.text}</p>
+      {isClientsAssignmentsPath && (assignmentData.review || assignmentData.grade) && (
+        <>
+          <h1 className="assignment__name" style={{ textAlign: 'center' }}>
+            Client`s Rating:
+          </h1>
+          <div className="rating-container">
+            {Array.from({ length: 11 }, (_, index) => index).map((num) => (
+              <label key={num} className="radio-label">
+                {num !== 0 && num !== 10 && <div className="mood-number">{num}</div>}
+                <input
+                  type="radio"
+                  name="mood"
+                  value={num}
+                  checked={assignmentData.grade === num}
+                  onChange={handleRadioChange}
+                  className="radio"
+                  disabled
+                />
+                <div
+                  className={`mood-display ${assignmentData.grade === num && (num === 0 || num === 10) ? 'emoteActive' : assignmentData.grade === num ? 'active' : ''}`}
+                  style={num === 0 || num === 10 ? { border: 'none' } : { display: 'flex' }}
+                >
+                  {num === 0 ? (
+                    <img
+                      src={sadEmote}
+                      alt="Грустный смайлик"
+                      className={`smiley ${assignmentData.grade === num ? 'active' : ''}`}
+                    />
+                  ) : (
+                    ''
+                  )}
+                  {num === 10 ? (
+                    <img
+                      src={smilyEmote}
+                      alt="Весёлый смайлик"
+                      className={`smiley ${assignmentData.grade === num ? 'active' : ''}`}
+                    />
+                  ) : (
+                    ''
+                  )}
+                </div>
+              </label>
+            ))}
+          </div>
+
+          <div className="rateTask__comment-container">
+            <label className="rateTask__comment-label" htmlFor="text">
+              Feedback from client:
+            </label>
+            <textarea
+              className="rateTask__comment-input"
+              type="text"
+              name="text"
+              id="text"
+              placeholder="Add some notes here..."
+              value={assignmentData.review || 'Client doesn`t send feedback'}
+              disabled
+            />
+          </div>
+          <h1 className="assignment__name" style={{ textAlign: 'center', margin: '50px 0' }}>
+            Completed Assignment:
+          </h1>
+        </>
+      )}
+
       <div className="assignment-blocks">
         {blocks.length > 0 &&
           blocks.map((block, index) => (
@@ -387,27 +465,34 @@ function CompleteAssignments() {
               block={block}
               handleClick={handleValues}
               updateBlock={updateBlock}
+              isView={isClientsAssignmentsPath}
             />
           ))}
       </div>
-      <div className="assignment__share-container">
-        <label className="card__input-label assignment__share-label">
-          Share with my therapist
-          <input
-            type="checkbox"
-            className="card__input-checkbox  assignment__share-checkbox"
-            defaultChecked={assignmentData?.visible}
-            onClick={() => handleShareWithTherapist(assignmentData?.id)}
-          />
-        </label>
-      </div>
+      {!isClientsAssignmentsPath && (
+        <div className="assignment__share-container">
+          <label className="card__input-label assignment__share-label">
+            Share with my therapist
+            <input
+              type="checkbox"
+              className="card__input-checkbox  assignment__share-checkbox"
+              defaultChecked={assignmentData?.visible}
+              onClick={() => handleShareWithTherapist(assignmentData?.id)}
+            />
+          </label>
+        </div>
+      )}
       <div className="assignment__buttons-box">
-        <button onClick={handleCompleteTask} className="action-button assignment__button">
-          Complete Task
-        </button>
-        <button onClick={handleRateTaskBtnClick} className="action-button assignment__button">
-          Rate Task
-        </button>
+        {!isClientsAssignmentsPath && (
+          <>
+            <button onClick={handleCompleteTask} className="action-button assignment__button">
+              Complete Task
+            </button>
+            <button onClick={handleRateTaskBtnClick} className="action-button assignment__button">
+              Rate Task
+            </button>
+          </>
+        )}
       </div>
     </>
   );

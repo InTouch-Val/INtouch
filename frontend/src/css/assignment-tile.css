@@ -22,6 +22,10 @@
   cursor: pointer;
 }
 
+.assignment-image-container_client {
+  cursor: default;
+}
+
 .assignment-tile .assignment-image-container img {
   width: 270px;
   height: 146px;
@@ -293,12 +297,22 @@
 }
 
 .status {
-  padding: 10px 15px;
+  padding: 5px 22px;
   border-radius: 20px;
 }
 
 .status.to-do {
   background-color: #f7cfa4;
+  color: #fff;
+}
+
+.status.done {
+  background-color: rgba(65, 126, 136, 1);
+  color: #fff;
+}
+
+.status.in-progress {
+  background-color: rgba(31, 48, 79, 1);
   color: #fff;
 }
 
@@ -361,6 +375,11 @@
   background-position: center;
   cursor: pointer;
   margin-left: auto;
+}
+
+.assignment__review-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
 }
 
 .assignment__view-btn {
