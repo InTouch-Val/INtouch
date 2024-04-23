@@ -164,9 +164,13 @@ function AssignmentsPage({
     const fetchAssignments = async () => {
       try {
         const response = await API.get(`assignments/?limit=${limit}&offset=0`);
-        const filteredAssignments = response.data.results.filter(
-          (assignment) => assignment.is_public || assignment.author === currentUser.id,
-        );
+        const filteredAssignments = response.data.results.filter((assignment) => {
+          if (isShareModal) {
+            return assignment.is_public;
+          } else {
+            return assignment.is_public || assignment.author === currentUser.id;
+          }
+        });
         setAssignments(filteredAssignments);
         setFilteredAssignments(filteredAssignments);
         console.log(filteredAssignments);
@@ -306,15 +310,14 @@ function AssignmentsPage({
         (clientId, index) => !clientsWithAssignments[index].hasAssignment,
       );
 
-      const res = await Promise.all(
-        clientsWithoutAssignment.map(async (clientId) => {
-          await API.get(`assignments/set-client/${assignmentId}/${clientId}/`);
-        }),
+      const allResponsesSuccessful = res.every(
+        (response) => response.status >= 200 && response.status <= 300,
       );
 
-      if (res.status > 200 && res.status < 300) {
+      if (allResponsesSuccessful) {
         setIfError(false);
         setErrorText('');
+        handleModalClose();
         setIsShareModalOpen(false);
         setIsSuccessModalOpen(true);
         setSelectedClients([]); // Очищаем выбранные клиенты после успешной отправки

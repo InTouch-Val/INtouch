@@ -97,7 +97,7 @@
 
 .assignment__block {
   max-width: 935px;
-  max-height: 265px;
+  max-height: fit-content;
   margin-right: auto;
   margin-left: auto;
   font-family: Montserrat, Arial, sans-serif;

@@ -1,6 +1,11 @@
+import json
+
 from django.contrib.auth.hashers import check_password
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from django.views.decorators.http import require_GET
+from django.conf import settings
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, viewsets, filters
 from rest_framework.decorators import action, api_view
@@ -469,3 +474,12 @@ class DiaryNoteViewSet(viewsets.ModelViewSet):
         diary_note.visible = not diary_note.visible
         diary_note.save()
         return Response({"message": f"Visibility changed to {diary_note.visible}"})
+
+
+@require_GET
+def assetlink(request):
+    path = f'{settings.STATIC_ROOT}/assetlinks.json'
+    with open(path, 'r') as f:
+        data = json.loads(f.read())
+    response = JsonResponse(data, safe=False)
+    return response
