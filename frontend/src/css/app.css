@@ -27,14 +27,71 @@ button {
   background-image: url('https://i122.fastpic.org/big/2023/1025/d2/e4e7924e98bda72edc75d27bf95bcad2.png');
 }
 
+@media screen and (width >=320px) and (width <=480px) {
+  .toggle-button {
+    position: fixed;
+    top: 22px;
+    left: 28px;
+    right: auto;
+    display: block;
+    z-index: 101;
+    transition:
+      left 0.26s ease-in-out,
+      right 0.26s ease-in-out;
+  }
+
+  .toggle-button.opened {
+    left: calc(100% - 52px - 28px);
+    right: 52px;
+    transition:
+      left 0.26s ease-in-out,
+      right 0.26s ease-in-out;
+  }
+}
+
+@media screen and (width >=320px) and (width <=480px) {
+  .content {
+    margin-left: 0;
+  }
+}
+
+@media screen and (width >=320px) and (width <=480px) {
+  .mobile-nav-header {
+    height: 70px;
+    width: 100%;
+    background-color: white;
+    position: fixed;
+    z-index: 100;
+  }
+}
+
 .user-profile {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+@media screen and (width >=320px) and (width <=480px) {
+  .user-profile {
+    justify-content: flex-start;
+    padding-left: 40px;
+  }
+}
+
 .user-profile h3 {
   color: #656565;
+}
+
+@media screen and (width >=320px) and (width <=480px) {
+  .user-profile h3 {
+    margin: 0;
+    margin-bottom: 18px;
+    color: #0b4a56;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 17px;
+    text-align: left;
+  }
 }
 
 .user-avatar {
@@ -45,6 +102,12 @@ button {
   object-fit: cover;
 }
 
+@media screen and (width >=320px) and (width <=480px) {
+  .user-avatar {
+    display: none;
+  }
+}
+
 .side-bar {
   position: fixed;
   height: 100vh;
@@ -52,23 +115,71 @@ button {
   width: 255px;
 }
 
+@media screen and (width >=320px) and (width <=480px) {
+  .side-bar {
+    left: -500px;
+    transition: left 0.35s ease-in-out;
+    background-color: white;
+    padding: 68px 40px 100px 0;
+    background-image: url('../images/logoMobileSidebar.svg');
+    background-position: bottom 40px left 40px;
+    background-repeat: no-repeat;
+    background-size: 198px auto;
+  }
+
+  .side-bar.opened {
+    position: fixed;
+    top: 0;
+    right: 24px;
+    left: 0;
+    width: calc(100vw - 24px);
+    height: 100%;
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: 68px 40px 100px 0;
+    box-shadow: 0 0 4px 0 #417d8833;
+    transition: left 0.25s ease-in-out;
+  }
+}
+
 .menu ul {
   padding: 0;
-  list-style: none; /* Remove bullet points */
+  list-style: none;
+  /* Remove bullet points */
 }
 
 .menu ul li {
   width: 210px;
 }
 
+@media screen and (width >=320px) and (width <=480px) {
+  .menu ul li {
+    width: 100%;
+  }
+}
+
 .menu ul li a {
   display: block;
   padding: 8px 12px;
   margin-left: 45px;
-  color: #656565; /* Text color for menu links */
+  color: #656565;
+  /* Text color for menu links */
   line-height: 28px;
-  text-align: flex-end; /* Add spacing above and below each menu item */
-  text-decoration: none; /* Remove underlines from menu links */
+  text-align: flex-end;
+  /* Add spacing above and below each menu item */
+  text-decoration: none;
+  /* Remove underlines from menu links */
+}
+
+@media screen and (width >=320px) and (width <=480px) {
+  .menu ul li a {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 28px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    margin-left: 40px;
+  }
 }
 
 .menu ul li a.active {
@@ -85,11 +196,21 @@ button {
   border: none;
   margin-left: 45px;
   background: transparent;
-  color: #656565; /* Цвет текста */
+  color: #656565;
+  /* Цвет текста */
   cursor: pointer;
   font-size: 16px;
   line-height: 28px;
   text-align: flex-end;
+}
+
+@media screen and (width >=320px) and (width <=480px) {
+  #logout {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 28px;
+    margin-left: 40px;
+  }
 }
 
 input:focus,

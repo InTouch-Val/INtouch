@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -8,6 +8,8 @@ import {
   faList,
   faBookMedical,
   faNoteSticky,
+  faXmark,
+  faBars,
 } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../service/authContext';
 import '../css/app.css';
@@ -16,6 +18,11 @@ function App() {
   const { currentUser, logout, isLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [sideBarOpened, setSideBarOpened] = useState(false);
+  const handleSideBar = () => {
+    sideBarOpened ? setSideBarOpened(false) : setSideBarOpened(true);
+  };
 
   const handleLogout = useCallback(() => {
     logout();
@@ -42,7 +49,15 @@ function App() {
 
   return (
     <div className="app-container">
-      <div className="side-bar">
+      <span className="mobile-nav-header"></span>
+      <div className={`side-bar ${sideBarOpened ? 'opened' : ''}`}>
+        <span className={`toggle-button ${sideBarOpened ? 'opened' : ''}`} onClick={handleSideBar}>
+          {sideBarOpened ? (
+            <FontAwesomeIcon icon={faXmark} style={{ color: '#417D88' }} size="2xl" />
+          ) : (
+            <FontAwesomeIcon icon={faBars} style={{ color: '#417D88' }} size="2xl" />
+          )}
+        </span>
         <div className="user-profile">
           <img className="user-avatar" src={currentUser?.photo} alt="Something" />
           <h3>
@@ -53,12 +68,12 @@ function App() {
           <nav>
             {isDoctor && (
               <ul>
-                <li>
+                <li onClick={() => setSideBarOpened(false)}>
                   <NavLink to="/clients" className={({ isActive }) => (isActive ? 'active' : '')}>
                     <FontAwesomeIcon icon={faUser} /> Clients
                   </NavLink>
                 </li>
-                <li>
+                <li onClick={() => setSideBarOpened(false)}>
                   <NavLink
                     to="/assignments"
                     className={({ isActive }) => (isActive ? 'active' : '')}
@@ -70,7 +85,7 @@ function App() {
             )}
             {!isDoctor && (
               <ul>
-                <li>
+                <li onClick={() => setSideBarOpened(false)}>
                   <NavLink
                     to="/my-assignments"
                     className={({ isActive }) => (isActive ? 'active' : '')}
@@ -78,12 +93,12 @@ function App() {
                     <FontAwesomeIcon icon={faList} /> Assignments
                   </NavLink>
                 </li>
-                <li>
+                <li onClick={() => setSideBarOpened(false)}>
                   <NavLink to="/my-diary" className={({ isActive }) => (isActive ? 'active' : '')}>
                     <FontAwesomeIcon icon={faBookMedical} /> Diary
                   </NavLink>
                 </li>
-                <li>
+                <li onClick={() => setSideBarOpened(false)}>
                   <NavLink
                     to="/my-notes"
                     className={({ isActive }) => 'disabled' + (isActive ? 'active' : '')}
@@ -98,7 +113,7 @@ function App() {
         <div className="menu lower">
           <nav>
             <ul>
-              <li>
+              <li onClick={() => setSideBarOpened(false)}>
                 <NavLink to="/settings" className={({ isActive }) => (isActive ? 'active' : '')}>
                   <FontAwesomeIcon icon={faGear} /> Settings
                 </NavLink>
@@ -109,7 +124,7 @@ function App() {
                 </NavLink>
               </li> */}
 
-              <li>
+              <li onClick={() => setSideBarOpened(false)}>
                 <button id="logout" onClick={handleLogout}>
                   <FontAwesomeIcon icon={faArrowRightFromBracket} /> Logout
                 </button>
