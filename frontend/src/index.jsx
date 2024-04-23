@@ -46,6 +46,10 @@ const router = createBrowserRouter([
         element: <ClientDetailsPage />,
       },
       {
+        path: '/clients/:id/assignments/:id',
+        element: <CompleteAssignments />,
+      },
+      {
         path: '/assignments',
         element: <AssignmentsPage />,
       },
