@@ -75,6 +75,29 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
     };
   }, [isShowContextMenu]);
 
+  //Changing card content and menu
+  const [isMobileWidth, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width >= 320 && width <= 480) {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
+    };
+
+    // Sets the initial state based on the current window size
+    handleResize();
+
+    // Adds event listener
+    window.addEventListener('resize', handleResize);
+
+    // Cleans up event listener
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <article className="card">
       <NavLink
@@ -109,46 +132,68 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
             aria-label="More actions..."
             onClick={showContextMenu}
           />
-          <menu // eslint-disable-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events
-            ref={menuReference}
-            className={`card__action-menu${isShowContextMenu ? '' : ' card__action-menu_disabled'}`}
-            onClick={(event) => event.stopPropagation()}
-          >
-            <li className="card__action-menu-item">
-              <NavLink
-                to={`/my-assignments/${assignmentData?.id}`}
-                className="card__action-menu-text"
-              >
-                Edit
-                <div
-                  className="card__action-menu-icon card__action-menu-icon_type_edit"
-                  aria-label="Edit"
-                />
-              </NavLink>
-            </li>
-            <li className="card__action-menu-item disabled">
-              <button type="button" className="card__action-menu-text" disabled={true}>
-                Clear
-                <div
-                  className="card__action-menu-icon card__action-menu-icon_type_clear"
-                  aria-label="Clear"
-                />
-              </button>
-            </li>
-            <li className="card__action-menu-item disabled">
-              <button type="button" className="card__action-menu-text" disabled={true}>
-                Duplicate
-                <div
-                  className="card__action-menu-icon card__action-menu-icon_type_duplicate"
-                  aria-label="Duplicate"
-                />
-              </button>
-            </li>
-          </menu>
+
+          {!isMobileWidth ? ( //Show menu only when not mobile width
+            <menu // eslint-disable-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events
+              ref={menuReference}
+              className={`card__action-menu${isShowContextMenu ? '' : ' card__action-menu_disabled'}`}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <li className="card__action-menu-item">
+                <NavLink
+                  to={`/my-assignments/${assignmentData?.id}`}
+                  className="card__action-menu-text"
+                >
+                  Edit
+                  <div
+                    className="card__action-menu-icon card__action-menu-icon_type_edit"
+                    aria-label="Edit"
+                  />
+                </NavLink>
+              </li>
+              <li className="card__action-menu-item disabled">
+                <button type="button" className="card__action-menu-text" disabled={true}>
+                  Clear
+                  <div
+                    className="card__action-menu-icon card__action-menu-icon_type_clear"
+                    aria-label="Clear"
+                  />
+                </button>
+              </li>
+              <li className="card__action-menu-item disabled">
+                <button type="button" className="card__action-menu-text" disabled={true}>
+                  Duplicate
+                  <div
+                    className="card__action-menu-icon card__action-menu-icon_type_duplicate"
+                    aria-label="Duplicate"
+                  />
+                </button>
+              </li>
+            </menu>
+          ) : null}
         </div>
       </div>
       <label className="card__input-label">
-        Share with my therapist
+        {isMobileWidth ? (
+          // Show menu options when on mobile width
+          <div className="mobile_menu_container">
+            <button type="button" className="card__action-menu-text" disabled={true}>
+              <div
+                className="card__action-menu-icon card__action-menu-icon_type_duplicate"
+                aria-label="Duplicate"
+              />
+            </button>
+            <button type="button" className="card__action-menu-text" disabled={true}>
+              <div
+                className="card__action-menu-icon card__action-menu-icon_type_clear"
+                aria-label="Clear"
+              />
+            </button>
+          </div>
+        ) : (
+          // Show the original label when not on mobile width
+          <span>Share with my therapist</span>
+        )}
         <input
           type="checkbox"
           className="card__input-checkbox"

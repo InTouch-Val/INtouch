@@ -273,41 +273,11 @@ function AssignmentsPage({
         return;
       }
 
-      // Проверяем наличие задания у каждого клиента
-      const clientsWithAssignments = await Promise.all(
+      const res = await Promise.all(
         selectedClients.map(async (clientId) => {
-          const response = await API.get('assignments-client/');
-          const data = response.data.results.filter(
-            (assignment) => assignment.user === Number(clientId),
-          );
-          const hasAssignment = data.some(
-            (assignment) => assignment.assignment_root === assignmentId,
-          );
-          return { clientId, hasAssignment };
+          const response = await API.get(`assignments/set-client/${assignmentId}/${clientId}/`);
+          return response;
         }),
-      );
-
-      // Обрабатываем клиентов, у которых уже есть задание
-      const clientsWithAssignmentNames = clientsWithAssignments
-        .filter(({ hasAssignment }) => hasAssignment)
-        .map(({ clientId }) => {
-          // Получаем имя и фамилию клиента по его ID из массива clients
-          const client = clients.find((client) => client.id === clientId);
-          return `${client.first_name} ${client.last_name}`;
-        });
-
-      if (clientsWithAssignmentNames.length > 0) {
-        const errorText = `The following clients already have a assignment: ${clientsWithAssignmentNames.join(', ')}.`;
-        setIfError(true);
-        setErrorText(errorText);
-        // Здесь мы не очищаем выбранные клиенты и не сбрасываем состояние ошибки,
-        // чтобы пользователь мог повторно выбрать клиентов
-        return;
-      }
-
-      // Если не все клиенты уже имеют задание, удаляем из selectedClients тех, у кого уже есть задание
-      const clientsWithoutAssignment = selectedClients.filter(
-        (clientId, index) => !clientsWithAssignments[index].hasAssignment,
       );
 
       const allResponsesSuccessful = res.every(
