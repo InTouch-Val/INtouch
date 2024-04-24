@@ -11,7 +11,6 @@ function Block({
   removeBlock,
   heading,
   question,
-  handleTitleChange,
   placeholder,
   copyBlock,
   moveBlockForward,
@@ -23,12 +22,11 @@ function Block({
   const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
 
   const handleEditorStateChange = (newEditorState) => {
-    updateBlock(block.id, newEditorState, block.choices);
     setEditorState(newEditorState);
     // Конвертируем editorState в строку и обновляем title
     const contentState = newEditorState.getCurrentContent();
     const text = contentState.getPlainText();
-    handleTitleChange({ target: { value: text } });
+    updateBlock(block.id, contentState, block.choices, text);
   };
 
   const editorRef = useRef(null);
@@ -41,7 +39,6 @@ function Block({
           <input
             type="text"
             value={block.question}
-            onChange={handleTitleChange}
             placeholder={placeholder}
             className="block-title-input"
             style={{ display: 'none' }}

@@ -65,15 +65,22 @@ function ClientAssignmentBlocks({ block, handleClick, updateBlock, isView }) {
   if (block.type === 'text') {
     return (
       <div className="block assignment__block">
-        <h3 className="assignment__block-header">{block.question}</h3>
-        <div className="block__text" dangerouslySetInnerHTML={{ __html: block.description }} />
+        {!block.description ? (
+          <h3 className="assignment__block-header">{block.question}</h3>
+        ) : (
+          <div className="block__text" dangerouslySetInnerHTML={{ __html: block.description }} />
+        )}
       </div>
     );
   }
   if (block.type === 'open') {
     return (
       <div className="block assignment__block">
-        <h3 className="assignment__block-header">{block.question}</h3>
+        {!block.description ? (
+          <h3 className="assignment__block-header">{block.question}</h3>
+        ) : (
+          <div className="block__text" dangerouslySetInnerHTML={{ __html: block.description }} />
+        )}
         <textarea
           className="block-text answer-input"
           name="openAnswer"
@@ -90,7 +97,11 @@ function ClientAssignmentBlocks({ block, handleClick, updateBlock, isView }) {
   if (block.type === 'image') {
     return (
       <div className="block assignment__block">
-        <h3 className="assignment__block-header">{block.question}</h3>
+        {!block.description ? (
+          <h3 className="assignment__block-header">{block.question}</h3>
+        ) : (
+          <div className="block__text" dangerouslySetInnerHTML={{ __html: block.description }} />
+        )}
         <img className="block-image" src={block.image} alt={block.question} />
       </div>
     );
@@ -98,7 +109,11 @@ function ClientAssignmentBlocks({ block, handleClick, updateBlock, isView }) {
   if (block.type === 'range') {
     return (
       <div className="block assignment__block">
-        <h3 className="assignment__block-header">{block.question}</h3>
+        {!block.description ? (
+          <h3 className="assignment__block-header">{block.question}</h3>
+        ) : (
+          <div className="block__text" dangerouslySetInnerHTML={{ __html: block.description }} />
+        )}
         <div className="range-display">
           <span className="range-label">{block.left_pole || 'Left Pole'}</span>
           <div className="range-options">
@@ -127,7 +142,11 @@ function ClientAssignmentBlocks({ block, handleClick, updateBlock, isView }) {
   if (block.type === 'single') {
     return (
       <div className="block assignment__block">
-        <h4 className="assignment__block-header">{block.question}</h4>
+        {!block.description ? (
+          <h4 className="assignment__block-header">{block.question}</h4>
+        ) : (
+          <div className="block__text" dangerouslySetInnerHTML={{ __html: block.description }} />
+        )}
         <fieldset className="assignments__block-radio">
           {block.choice_replies.map((radio, index) => {
             return (
@@ -156,7 +175,11 @@ function ClientAssignmentBlocks({ block, handleClick, updateBlock, isView }) {
   if (block.type === 'multiple') {
     return (
       <div className="block assignment__block">
-        <h4 className="assignment__block-header header_margin">{block.question}</h4>
+        {!block.description ? (
+          <h4 className="assignment__block-header">{block.question}</h4>
+        ) : (
+          <div className="block__text" dangerouslySetInnerHTML={{ __html: block.description }} />
+        )}
         <p className="assignment__block-note">more than one answer possible</p>
         <fieldset className="assignments__block-radio">
           {block.choice_replies.map((checkbox, index) => {

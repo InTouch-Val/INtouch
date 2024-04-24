@@ -48,13 +48,11 @@ function CompleteAssignments() {
   console.log(card);
 
   function decodeStyledText(jsonData) {
-    // Parse the JSON data
     const data = JSON.parse(jsonData);
-
-    // Initialize an empty string to hold the HTML
     let html = '';
+    let isList = false;
+    let listType = '';
 
-    // Function to apply styles
     const applyStyles = (char, styles) => {
       if (styles.includes('BOLD')) {
         char = `<b>${char}</b>`;
@@ -68,76 +66,87 @@ function CompleteAssignments() {
       return char;
     };
 
-    // Traverse each block in the blockMap
-    for (const blockKey in data._immutable.currentContent.blockMap) {
-      const block = data._immutable.currentContent.blockMap[blockKey];
-
-      // Determine the block type
+    for (const blockKey in data.blockMap) {
+      const block = data.blockMap[blockKey];
       const blockType = block.type;
+
+      // Определение типа списка
+      let currentListType = '';
+      if (blockType === 'unordered-list-item') {
+        currentListType = 'ul';
+      } else if (blockType === 'ordered-list-item') {
+        currentListType = 'ol';
+      }
+
+      // Если текущий блок является началом нового списка
+      if (currentListType && (!isList || listType !== currentListType)) {
+        // Закрываем предыдущий список, если он открыт
+        if (isList) {
+          html += '</li></' + listType + '>';
+        }
+        // Начинаем новый список
+        isList = true;
+        listType = currentListType;
+        html += `<${listType}>`;
+      } else if (!currentListType && isList) {
+        // Если текущий блок не является частью списка, но список открыт
+        html += '</li></' + listType + '>';
+        isList = false;
+      }
+
       let openTag = '';
       let closeTag = '';
       switch (blockType) {
-        case 'unstyled': {
+        case 'unstyled':
           openTag = '<p>';
           closeTag = '</p>';
           break;
-        }
-        case 'header-one': {
+        case 'header-one':
           openTag = '<h1>';
           closeTag = '</h1>';
           break;
-        }
-        case 'header-two': {
+        case 'header-two':
           openTag = '<h2>';
           closeTag = '</h2>';
           break;
-        }
-        case 'header-three': {
+        case 'header-three':
           openTag = '<h3>';
           closeTag = '</h3>';
           break;
-        }
-        case 'unordered-list-item': {
+        case 'unordered-list-item':
+        case 'ordered-list-item':
           openTag = '<li>';
           closeTag = '</li>';
           break;
-        }
-        case 'ordered-list-item': {
-          openTag = '<li>';
-          closeTag = '</li>';
+        default:
           break;
-        }
-        default: {
-          break;
-        }
       }
 
-      // Start the block
       html += openTag;
 
-      // Process each character in the block
       for (let index = 0; index < block.text.length; index++) {
         let char = block.text[index];
         const { style } = block.characterList[index];
-
-        // Apply styles
         char = applyStyles(char, style);
-
-        // Add the character to the HTML string
         html += char;
       }
 
-      // Close the block
       html += closeTag;
     }
-    //  console.log(html);
+
+    // Закрываем список, если он открыт
+    if (isList) {
+      html += '</li></' + listType + '>';
+    }
+
+    console.log(html);
     return html;
   }
 
   const setAssignmentCredentials = useCallback((data) => {
     const restoredBlocks = data.blocks
       ? data.blocks.map((block) => {
-          if (block.type === 'text') {
+          if (block.description) {
             // Используем функцию парсинга для получения HTML-текста из JSON Draft.js
             const parsedContent = decodeStyledText(block.description);
 
@@ -239,7 +248,6 @@ function CompleteAssignments() {
       return {
         type: block.type,
         question: block.question,
-        image: block.image,
       };
     }
     return {
@@ -253,7 +261,7 @@ function CompleteAssignments() {
     const blockInfo = blocks.map(transformBlock);
 
     try {
-      const res = await API.put(`assignments-client/${assignmentData.id}/`, {
+      const res = await API.patch(`assignments-client/${assignmentData.id}/`, {
         grade: parseInt(valueOfRate, 10),
         review: document.getElementById('text').value, // Получаем значение из textarea
         blocks: blockInfo,
@@ -279,7 +287,7 @@ function CompleteAssignments() {
 
     try {
       console.log(blockInfo);
-      const res = await API.put(`assignments-client/${assignmentData.id}/`, {
+      const res = await API.patch(`assignments-client/${assignmentData.id}/`, {
         blocks: blockInfo,
       });
       if (res.status >= 200 && res.status < 300) {
