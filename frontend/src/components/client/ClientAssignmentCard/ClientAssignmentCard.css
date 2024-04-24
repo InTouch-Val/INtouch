@@ -7,6 +7,12 @@
   box-shadow: 0 0 3px 1px rgb(215 228 231 / 45%);
 }
 
+@media screen and (width >=320px) and (width <=480px) {
+  .card {
+    width: 100%;
+  }
+}
+
 .card__clickable-container {
   cursor: pointer;
   text-decoration: none;
@@ -83,6 +89,12 @@
   cursor: pointer;
 }
 
+@media screen and (width >=320px) and (width <=480px) {
+  .card__action-button {
+    display: none;
+  }
+}
+
 .card__action-menu {
   position: absolute;
   z-index: 1;
@@ -100,8 +112,25 @@
   row-gap: 2px;
 }
 
-.card__action-menu_disabled {
-  display: none;
+@media screen and (width >=320px) and (width <=480px) {
+  .card__action-menu {
+    display: none;
+  }
+
+  .mobile_menu_container {
+    display: flex;
+    column-gap: 20px;
+  }
+
+  .mobile_menu_container button {
+    padding: 0;
+  }
+}
+
+@media screen and (width > 480px) {
+  .card__action-menu_disabled {
+    display: none;
+  }
 }
 
 .card__action-menu-item {
@@ -179,6 +208,12 @@
 
 .card__input-checkbox:checked {
   background-color: #417d88;
+}
+
+@media screen and (width >=320px) and (width <=480px) {
+  .card__input-checkbox:checked {
+    min-width: 32px;
+  }
 }
 
 .card__input-checkbox::after {

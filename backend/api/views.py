@@ -5,7 +5,6 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
-from django.conf import settings
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, viewsets, filters
 from rest_framework.decorators import action, api_view
@@ -478,7 +477,7 @@ class DiaryNoteViewSet(viewsets.ModelViewSet):
 
 @require_GET
 def assetlink(request):
-    path = f'{settings.STATIC_ROOT}/assetlinks.json'
+    path = 'static/api/.well-known/assetlinks.json'
     with open(path, 'r') as f:
         data = json.loads(f.read())
     response = JsonResponse(data, safe=False)

@@ -42,10 +42,22 @@
   width: 935px;
 }
 
+@media screen and (width >= 320px) and (width <= 480px) {
+  .diary__section {
+    width: 100%;
+  }
+}
+
 .diary__list {
   padding: 20px 30px;
   display: grid;
   grid-template-columns: auto auto auto;
   column-gap: 30px;
   row-gap: 20px;
+}
+
+@media screen and (width >= 320px) and (width <= 480px) {
+  .diary__list {
+    grid-template-columns: auto;
+  }
 }
