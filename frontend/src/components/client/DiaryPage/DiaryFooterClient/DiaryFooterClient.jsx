@@ -1,12 +1,28 @@
 import React from 'react';
 import './styles.css';
 import Button from '../../../psy/button/ButtonHeadline';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 export default function DiaryFooterClient({ diary }) {
   const [active, setActive] = React.useState(diary ? diary.visible : false);
-  const { control, setValue, getValue } = useFormContext();
+  const { control, setValue } = useFormContext();
 
+  const [isValid, setValid] = React.useState(false);
+  const [isHover, setHover] = React.useState(false);
+  const form = useWatch({ control });
+
+  React.useEffect(() => {
+    if (
+      form.emotion_type != '' ||
+      form.event_details != '' ||
+      form.thoughts_analysis != '' ||
+      form.physical_sensations != ''
+    ) {
+      setValid(true);
+    } else {
+      setValid(false);
+    }
+  }, [form]);
   React.useEffect(() => {
     setValue('visible', active);
   }, [active]);
@@ -14,7 +30,6 @@ export default function DiaryFooterClient({ diary }) {
     <div className="diary__footer">
       <div className="diary__footer-shared" onClick={(e) => e.stopPropagation()}>
         <div className="diary__footer-shared-text">Share with my therapist</div>
-
         <input
           type="checkbox"
           className="footer__input-checkbox"
@@ -23,10 +38,20 @@ export default function DiaryFooterClient({ diary }) {
         />
       </div>
 
-      <div className="diary__footer-button-wrapper">
-        <Button type="submit" className="diary__footer-button">
+      <div
+        className="diary__footer-button-wrapper"
+        onMouseLeave={(e) => setHover(false)}
+        onMouseEnter={(e) => setHover(true)}
+      >
+        <Button type="submit" className="diary__footer-button" disabled={!isValid}>
           SAVE
         </Button>
+
+        <span
+          className={`${!isValid && `diary__message-valid ${!isHover && 'diary__message-valid-hidden'}`}`}
+        >
+          Please fill in at least one question to save your diary entry
+        </span>
       </div>
     </div>
   );
