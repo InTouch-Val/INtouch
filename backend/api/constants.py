@@ -69,5 +69,20 @@ CLARIFYING_EMOTIONS = [
     ("Gratitude", "Gratitude"),
 ]
 
+BLOCK_TYPES = [
+    ("image", "Image"),
+    ("open", "Open"),
+    ("single", "Single"),
+    ("range", "Range"),
+    ("multiple", "Multiple"),
+]
+
+DIARY_FIELDS_TO_CHECK = [
+    "event_details",
+    "thoughts_analysis",
+    "emotion_type",
+    "physical_sensations",
+]
+
 TIME_DELETE_NON_ACTIVE_USER = 604800  # 7 days
 DEFAULT_PAGE_SIZE = 10
