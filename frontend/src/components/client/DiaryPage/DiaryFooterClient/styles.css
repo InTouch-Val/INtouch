@@ -21,23 +21,28 @@
 }
 
 .diary__footer-button-wrapper {
-  width: 100%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: flex-start;
   align-items: center;
+  position: relative;
 }
 
 .diary__footer-button {
   margin: 0;
   box-sizing: border-box;
-  width: 180px;
-  height: 70px;
+  width: 164px;
+  height: 40px;
   background-color: #417d88;
   font-family: 'Montserrat';
-  font-size: 30px;
+  font-size: 16px;
   font-weight: 700;
   line-height: 17px;
   color: #ffffff;
+}
+.diary__footer-button:disabled {
+  opacity: 0.3;
 }
 
 .footer__input-checkbox {
@@ -79,4 +84,26 @@
 .footer__input-checkbox:checked::after {
   background-color: #fff;
   transform: translate(1.9em, 0.08em);
+}
+
+.diary__message-valid {
+  position: absolute;
+  width: 476px;
+  height: 35px;
+  top: 55px;
+  padding: 2px 6px 2px 6px;
+  border-radius: 6px;
+  border: 1px solid #417d88;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all ease-in-out 0.3s;
+  overflow: hidden;
+}
+
+.diary__message-valid-hidden {
+  border: 1px solid transparent;
+  border-radius: none;
+  padding: 0px;
+  height: 0px;
 }
