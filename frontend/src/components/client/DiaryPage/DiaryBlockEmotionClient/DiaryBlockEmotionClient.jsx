@@ -7,15 +7,20 @@ import {
 import { ToolbarProvider } from '../../../../service/ToolbarContext';
 import { EditorState, convertFromRaw } from 'draft-js';
 import { EditorToolbar } from '../../../../service/editors-toolbar';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
 export default function DiaryBlockEmotionClient({ diary, type }) {
   const editorRef = useRef(null);
+  const { control, setValue, watch, getValues } = useFormContext();
+  const primaryEmotionActive = useWatch({ control, name: 'primary_emotion' });
+  const primaryEmotionValue = getValues('primary_emotion');
+  const secondEmotionActive = watch('clarifying_emotion');
+  const secondEmotionValues = getValues('clarifying_emotion');
   const content = {
     blocks: [
       {
         key: 'abcde',
-        text: diary ? diary.physical_sensations : ' ',
+        text: diary ? diary.emotion_type : ' ',
         type: 'open',
         depth: 0,
         inlineStyleRanges: [],
@@ -38,14 +43,8 @@ export default function DiaryBlockEmotionClient({ diary, type }) {
     setEditorState(newEditorState);
     const contentState = newEditorState.getCurrentContent();
     const text = contentState.getPlainText();
-    setValue('answer_emotion', text);
+    setValue('emotion_type', text);
   };
-
-  const { control, setValue, watch, getValues } = useFormContext();
-
-  const primaryEmotionActive = watch('primary_emotion');
-  const secondEmotionActive = watch('clarifying_emotion');
-  const secondEmotionValues = getValues('clarifying_emotion');
 
   function handleClickSecondEmotion(item) {
     if (secondEmotionValues.includes(item.title)) {
@@ -94,7 +93,7 @@ export default function DiaryBlockEmotionClient({ diary, type }) {
                   <div
                     onClick={() => setValue('primary_emotion', item.title)}
                     key={item.id}
-                    className={`diary__emotion-container ${item.title == primaryEmotionActive && 'diary__emotion-container-active'}`}
+                    className={`${item.title === primaryEmotionValue ? 'diary__emotion-container diary__emotion-container-active' : 'diary__emotion-container'}`}
                   >
                     <img src={item.img} className="diary__emotion" alt={item.title} />
                     <div className="diary__emotion-title">{item.title}</div>
@@ -114,7 +113,7 @@ export default function DiaryBlockEmotionClient({ diary, type }) {
               return (
                 <div
                   key={index}
-                  className={`diary__emotion-chip ${secondEmotionActive.find((emotion) => item.title == emotion) && 'chip_active'}`}
+                  className={`${secondEmotionValues.find((emotion) => item.title === emotion) ? 'diary__emotion-chip chip_active' : 'diary__emotion-chip'}`}
                   onClick={() => handleClickSecondEmotion(item)}
                 >
                   {item.title}

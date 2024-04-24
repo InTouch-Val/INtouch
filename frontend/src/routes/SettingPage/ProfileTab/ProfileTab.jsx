@@ -82,11 +82,13 @@ export function ProfileTab() {
     fileInputRef.current.click();
   };
 
+  console.log(currentUser);
+
   return (
     <>
       {statusMessageText != '' && <div className="success-message">{statusMessageText}</div>}
       <div className="settings-profile-tab">
-        {currentUser.type == 'doctor' && (
+        {currentUser.user_type == 'doctor' && (
           <div className="left-column">
             <img src={previewImage} alt="Profile" className="avatar" />
             <input
@@ -160,7 +162,7 @@ export function ProfileTab() {
                 </div>
               )}
             />
-            {currentUser.type == 'doctor' && (
+            {currentUser.user_type == 'doctor' && (
               <Controller
                 name="dateOfBirth"
                 control={control}
