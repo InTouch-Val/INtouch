@@ -55,7 +55,6 @@ export default function MyDiary() {
       console.log(error);
     }
   };
-  console.log(diarys);
 
   function openModal(e, card) {
     e.stopPropagation();

@@ -49,7 +49,6 @@ export default function DiaryBlockEmotionClient({ diary, type }) {
   function handleClickSecondEmotion(item) {
     if (secondEmotionValues.includes(item.title)) {
       const newArray = secondEmotionValues.filter((emotion) => emotion !== item.title);
-      console.log(newArray);
       setValue('clarifying_emotion', newArray);
     } else {
       setValue('clarifying_emotion', [...secondEmotionValues, item.title]);

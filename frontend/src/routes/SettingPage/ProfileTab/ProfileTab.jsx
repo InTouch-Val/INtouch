@@ -82,8 +82,6 @@ export function ProfileTab() {
     fileInputRef.current.click();
   };
 
-  console.log(currentUser);
-
   return (
     <>
       {statusMessageText != '' && <div className="success-message">{statusMessageText}</div>}

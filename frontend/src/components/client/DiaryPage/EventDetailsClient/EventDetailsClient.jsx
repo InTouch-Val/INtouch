@@ -5,10 +5,7 @@ import { EditorToolbar } from '../../../../service/editors-toolbar';
 import { EditorState, convertFromRaw } from 'draft-js';
 import { Controller, useFormContext } from 'react-hook-form';
 
-const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
-
 export default function EventDetailsClient({ diary, type }) {
-  console.log(diary);
   const editorRef = useRef(null);
   const content = {
     blocks: [
