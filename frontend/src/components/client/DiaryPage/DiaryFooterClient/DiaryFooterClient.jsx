@@ -30,7 +30,6 @@ export default function DiaryFooterClient({ diary }) {
     <div className="diary__footer">
       <div className="diary__footer-shared" onClick={(e) => e.stopPropagation()}>
         <div className="diary__footer-shared-text">Share with my therapist</div>
-
         <input
           type="checkbox"
           className="footer__input-checkbox"
@@ -47,7 +46,10 @@ export default function DiaryFooterClient({ diary }) {
         <Button type="submit" className="diary__footer-button" disabled={!isValid}>
           SAVE
         </Button>
-        <span className={`diary__message-valid  ${!isHover && 'diary__message-valid-hidden'}`}>
+
+        <span
+          className={`${!isValid && `diary__message-valid ${!isHover && 'diary__message-valid-hidden'}`}`}
+        >
           Please fill in at least one question to save your diary entry
         </span>
       </div>

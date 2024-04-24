@@ -33,7 +33,7 @@ export default function MyDiary() {
           if (res.data.count === diarys.length) {
             setTotal(true);
           } else if (res.data.results.length > 0) {
-            setDiarys([...diarys, ...res.data.results]);
+            setDiarys(res.data.results);
             setTotal(false);
           }
 
@@ -55,6 +55,7 @@ export default function MyDiary() {
       console.log(error);
     }
   };
+  console.log(diarys);
 
   function openModal(e, card) {
     e.stopPropagation();
