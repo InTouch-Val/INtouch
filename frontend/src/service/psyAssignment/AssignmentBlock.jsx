@@ -46,11 +46,12 @@ function AssignmentBlock({
     return (
       <div className="block">
         <div className="block-header">
-          <h3 className="block-title">{isView ? block.title : block.question}</h3>
+          {!block.description ? (
+            <h3 className="block-title">{isView ? block.title : block.question}</h3>
+          ) : (
+            <div className="block__text" dangerouslySetInnerHTML={{ __html: block.description }} />
+          )}
         </div>
-        {(block.type === 'text' || block.type == 'open') && (
-          <div className="block-text" dangerouslySetInnerHTML={{ __html: block.description }} />
-        )}
         {block.type === 'image' && (
           <img className="block-image" src={block.image} alt={block.question} />
         )}

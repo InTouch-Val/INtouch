@@ -14,6 +14,7 @@ import '@draft-js-plugins/static-toolbar/lib/plugin.css';
 import '../css/editorsBar.css';
 import { useToolbar } from './ToolbarContext'; // Импортируем хук для использования контекста
 import { EditorState, ContentState } from 'draft-js';
+import { SelectionState } from 'draft-js';
 
 const EditorToolbar = forwardRef(({ editorState, setEditorState, placeholder, block }, ref) => {
   const { toolbarPlugin, setToolbarPlugin } = useToolbar(); // Используем контекст
@@ -23,21 +24,6 @@ const EditorToolbar = forwardRef(({ editorState, setEditorState, placeholder, bl
   const focusEditor = () => {
     if (ref.current) {
       ref.current.focus();
-      // Получаем текущее состояние редактора
-      const currentState = editorState;
-      // Получаем текущий контент
-      const contentState = currentState.getCurrentContent();
-      // Получаем длину текста
-      const textLength = contentState.getPlainText().length;
-      // Создаем новое состояние выделения, устанавливающее курсор в конец текста
-      const selectionState = SelectionState.createEmpty(contentState.getLastBlock()).merge({
-        anchorOffset: textLength,
-        focusOffset: textLength,
-      });
-      // Создаем новое состояние редактора с новым состоянием выделения
-      const newEditorState = EditorState.forceSelection(currentState, selectionState);
-      // Обновляем состояние редактора
-      setEditorState(newEditorState);
     }
   };
 
