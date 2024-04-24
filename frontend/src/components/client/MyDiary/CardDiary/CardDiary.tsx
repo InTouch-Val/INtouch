@@ -3,10 +3,10 @@ import './CardDiary.css';
 import Button from '../../../psy/button/ButtonHeadline';
 import { useNavigate } from 'react-router-dom';
 import { API } from '../../../../service/axios';
+import { getDate } from '../../../../utils/helperFunction/getDate';
 
 export default function CardDiaryClient({ card, setFetching, openModal }) {
   const navigate = useNavigate();
-  const options = { weekday: 'short', month: 'long', year: 'numeric' };
   function goDiary() {
     navigate(`/diary/${card.id}`);
   }
@@ -28,13 +28,9 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
   return (
     <div className="diary__card" onClick={() => goDiary()}>
       <div className="diary__card-header">
-        <div className="diary__card-title">
+        <div className="diary__card-title-client">
           <div className="diary__card-title__day">{new Date(card.add_date).getUTCDate()}</div>
-          <div className="diary__card-title__date">
-            {new Date(card.add_date)
-              .toLocaleDateString('en-US', { weekday: 'long', month: 'short', year: 'numeric' })
-              .replace(/,/g, '')}
-          </div>
+          <div className="diary__card-title__date">{getDate(card)}</div>
         </div>
         <div
           className="button__trash"

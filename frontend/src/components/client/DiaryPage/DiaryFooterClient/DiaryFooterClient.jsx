@@ -8,6 +8,7 @@ export default function DiaryFooterClient({ diary }) {
   const { control, setValue } = useFormContext();
 
   const [isValid, setValid] = React.useState(false);
+  const [isHover, setHover] = React.useState(false);
   const form = useWatch({ control });
 
   React.useEffect(() => {
@@ -38,11 +39,15 @@ export default function DiaryFooterClient({ diary }) {
         />
       </div>
 
-      <div className="diary__footer-button-wrapper">
+      <div
+        className="diary__footer-button-wrapper"
+        onMouseLeave={(e) => setHover(false)}
+        onMouseEnter={(e) => setHover(true)}
+      >
         <Button type="submit" className="diary__footer-button" disabled={!isValid}>
           SAVE
         </Button>
-        <span className="diary__message-valid">
+        <span className={`diary__message-valid  ${!isHover && 'diary__message-valid-hidden'}`}>
           Please fill in at least one question to save your diary entry
         </span>
       </div>
