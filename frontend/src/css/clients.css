@@ -63,13 +63,15 @@ select {
   /* border: 1px solid #d1d1d1; */
   border-radius: 10px;
   margin-left: 10px;
-  appearance: none; /* Удаление стандартного вида */
+  appearance: none;
+  /* Удаление стандартного вида */
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%23656565'><path d='M7 10L12 3H2z'/></svg>");
   background-position: right 10px center;
   background-repeat: no-repeat;
   background-size: 12px;
   color: #656565;
-  cursor: pointer; /* Изменение курсора при наведении */
+  cursor: pointer;
+  /* Изменение курсора при наведении */
   font-size: 16px;
 }
 
@@ -280,6 +282,15 @@ tr:last-child {
   font-size: 16px;
 }
 
+@media screen and (width >=320px) and (width <=480px) {
+  .tabs button {
+    border: none;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 28px;
+  }
+}
+
 .tabs button.active {
   border-bottom: 4px solid #417d88;
   color: #417d88;
@@ -291,11 +302,20 @@ tr:last-child {
   cursor: pointer;
 }
 
+@media screen and (width >=320px) and (width <=480px) {
+  .tabs button.active {
+    border-bottom: 2px solid #0b4a56;
+    color: #0b4a56;
+    font-weight: 500;
+    font-size: 22px;
+  }
+}
+
 .assignments-tab {
   display: grid;
   margin-bottom: 20px;
   grid-gap: 20px;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, 1fr);
 }
 
 .table__show-result {
