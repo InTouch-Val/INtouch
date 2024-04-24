@@ -49,6 +49,12 @@ button {
   }
 }
 
+@media screen and (width > 480px) {
+  .toggle-button {
+    display: none;
+  }
+}
+
 @media screen and (width >=320px) and (width <=480px) {
   .content {
     margin-left: 0;
@@ -146,6 +152,16 @@ button {
   padding: 0;
   list-style: none;
   /* Remove bullet points */
+}
+
+@media screen and (width >=320px) and (width <=480px) {
+  .menu.lower ul {
+    margin: 0;
+  }
+
+  .menu.upper ul {
+    margin-bottom: 0;
+  }
 }
 
 .menu ul li {
