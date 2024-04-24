@@ -58,6 +58,29 @@ function ClientAssignments() {
     setCurrentCard(card);
   }
 
+  //Changing text on the tab
+  const [buttonText, setButtonText] = useState('All Assignments');
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width >= 320 && width <= 480) {
+        setButtonText('All');
+      } else {
+        setButtonText('All Assignments');
+      }
+    };
+
+    // Sets the initial state based on the current window size
+    handleResize();
+
+    // Adds event listener
+    window.addEventListener('resize', handleResize);
+
+    // Cleans up event listener
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <div className="assignments-page">
       <header>
@@ -68,11 +91,11 @@ function ClientAssignments() {
           className={currentTab === 'all' ? 'active' : ''}
           onClick={() => setCurrentTab('all')}
         >
-          All Assignments
+          {buttonText}
         </button>
         <button
           className={currentTab === 'in_progress' ? 'active' : ''}
-          onClick={() => setCurrentTab('in progress')}
+          onClick={() => setCurrentTab('in_progress')}
         >
           In Progress
         </button>
