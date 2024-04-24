@@ -7,6 +7,7 @@ from api.constants import (
     LANGUAGES,
     PRIMARY_EMOTIONS,
     CLARIFYING_EMOTIONS,
+    BLOCK_TYPES,
 )
 
 
@@ -109,8 +110,8 @@ class AssignmentClient(models.Model):
 class Block(models.Model):
     question = models.CharField(max_length=250)
     reply = models.TextField(blank=True)
-    type = models.CharField(max_length=100)
-    description = models.TextField(blank=True)
+    reply_tags = models.TextField(blank=True)
+    type = models.CharField(max_length=10, choices=BLOCK_TYPES)
     choice_replies = models.ManyToManyField("BlockChoice", blank=True)
     start_range = models.IntegerField(default=1)
     end_range = models.IntegerField(default=10)
@@ -161,11 +162,14 @@ class DiaryNote(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     add_date = models.DateTimeField(auto_now_add=True)
     visible = models.BooleanField(default=True)
-    description = models.TextField(blank=True)
     event_details = models.TextField(blank=True)
+    event_details_tags = models.TextField(blank=True)
     thoughts_analysis = models.TextField(blank=True)
+    thoughts_analysis_tags = models.TextField(blank=True)
     emotion_type = models.TextField(blank=True)
+    emotion_type_tags = models.TextField(blank=True)
     physical_sensations = models.TextField(blank=True)
+    physical_sensations_tags = models.TextField(blank=True)
     primary_emotion = models.CharField(
         max_length=50, choices=PRIMARY_EMOTIONS, blank=True
     )
