@@ -375,7 +375,7 @@ class AssignmentViewSet(viewsets.ModelViewSet):
     ]
 
     def get_queryset(self):
-        favourites = self.request.query_params.get("favourites").lower() == "true"
+        favourites = self.request.query_params.get("favourites") == "true"
         if favourites:
             return self.request.user.doctor.assignments
         return super().get_queryset()
