@@ -3,7 +3,7 @@
   color: #656565;
 }
 
-@media screen and (width >=320px) and (width <=480px) {
+@media screen and (min-width: 320px) and (max-width: 480px) {
   .assignments-page {
     padding: 70px 28px;
   }
@@ -16,7 +16,7 @@
   margin-bottom: 25px;
 }
 
-@media screen and (width >=320px) and (width <=480px) {
+@media screen and (min-width: 320px) and (max-width: 480px) {
   .assignments-page header {
     margin: 0;
   }
@@ -26,7 +26,7 @@
   font-size: 36px;
 }
 
-@media screen and (width >=320px) and (width <=480px) {
+@media screen and (min-width: 320px) and (max-width: 480px) {
   .assignments-page h1 {
     margin: 0;
     margin-top: 18px;
@@ -42,7 +42,7 @@
   width: 33%;
 }
 
-@media screen and (width >=320px) and (width <=480px) {
+@media screen and (min-width: 320px) and (max-width: 480px) {
   .assignments-page .tabs {
     display: flex;
     width: 100%;
@@ -101,7 +101,7 @@
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
 }
 
-@media screen and (width >=320px) and (width <=480px) {
+@media screen and (min-width: 320px) and (max-width: 480px) {
   .assignment-grid {
     margin: 0 17px;
     width: auto;

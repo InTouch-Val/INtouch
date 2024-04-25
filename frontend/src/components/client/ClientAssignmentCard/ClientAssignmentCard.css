@@ -7,7 +7,7 @@
   box-shadow: 0 0 3px 1px rgb(215 228 231 / 45%);
 }
 
-@media screen and (width >=320px) and (width <=480px) {
+@media screen and (min-width: 320px) and (max-width: 480px) {
   .card {
     width: 100%;
   }
@@ -89,7 +89,7 @@
   cursor: pointer;
 }
 
-@media screen and (width >=320px) and (width <=480px) {
+@media screen and (min-width: 320px) and (max-width: 480px) {
   .card__action-button {
     display: none;
   }
@@ -112,7 +112,7 @@
   row-gap: 2px;
 }
 
-@media screen and (width >=320px) and (width <=480px) {
+@media screen and (min-width: 320px) and (max-width: 480px) {
   .card__action-menu {
     display: none;
   }
@@ -127,7 +127,7 @@
   }
 }
 
-@media screen and (width > 480px) {
+@media screen and (min-width: 480px) {
   .card__action-menu_disabled {
     display: none;
   }
@@ -196,6 +196,7 @@
   border: 1px solid #656565;
   border-radius: 100px;
   margin: 0;
+  -webkit-appearance: none;
   appearance: none;
   cursor: pointer;
   transition: background-color 0.5s;
@@ -210,7 +211,7 @@
   background-color: #417d88;
 }
 
-@media screen and (width >=320px) and (width <=480px) {
+@media screen and (min-width: 320px) and (max-width: 480px) {
   .card__input-checkbox:checked {
     min-width: 32px;
   }

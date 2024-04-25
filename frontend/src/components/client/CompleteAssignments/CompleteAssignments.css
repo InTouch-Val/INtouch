@@ -45,6 +45,12 @@
   margin-right: 30px;
 }
 
+@media screen and (width >=320px) and (width <=480px) {
+  .assignment-header {
+    padding-top: 82px;
+  }
+}
+
 .assignment__name {
   padding: 0;
   margin-top: 22px;
@@ -101,6 +107,14 @@
   margin-right: auto;
   margin-left: auto;
   font-family: Montserrat, Arial, sans-serif;
+}
+
+@media screen and (width >=320px) and (width <=480px) {
+  .assignment__block {
+    margin-right: 28px;
+    margin-left: 28px;
+    width: auto;
+  }
 }
 
 .assignments__block-radio {
@@ -273,12 +287,34 @@
   row-gap: 60px;
 }
 
+@media screen and (width >=320px) and (width <=480px) {
+  .assignment__buttons-box {
+    padding-right: 28px;
+    padding-left: 28px;
+    width: auto;
+    justify-content: space-between;
+    column-gap: 20px;
+  }
+}
+
 .assignment__button {
   width: 180px;
   height: 70px;
   font-size: 20px;
   font-weight: 700;
   line-height: 17px;
+}
+
+@media screen and (width >=320px) and (width <=480px) {
+  .assignment__button {
+    width: auto;
+    height: auto;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 21px;
+    text-align: center;
+    flex: 1;
+  }
 }
 
 .rating-container {
@@ -342,8 +378,10 @@
   top: -4px;
   left: -6px;
   background-color: rgba(31, 48, 79, 0.3);
-  border-radius: 50%; /* Закругляем тень */
-  z-index: 0; /* Позиционируем тень за элементом */
+  border-radius: 50%;
+  /* Закругляем тень */
+  z-index: 0;
+  /* Позиционируем тень за элементом */
 }
 
 .smiley {
@@ -367,6 +405,7 @@
   background-color: white;
   box-sizing: border-box;
 }
+
 .rateTask__comment-label {
   font-size: 22px;
   font-weight: 500;
@@ -376,6 +415,7 @@
   color: rgba(11, 74, 86, 1);
   cursor: pointer;
 }
+
 .rateTask__comment-input {
   width: 95%;
   height: 190px;
@@ -388,6 +428,7 @@
   resize: none;
   cursor: pointer;
 }
+
 .rateTask__comment-input::placeholder {
   font-size: 17px;
 }
@@ -407,6 +448,17 @@
   justify-content: start;
   gap: 14px;
   margin-top: 52px;
+}
+
+@media screen and (width >=320px) and (width <=480px) {
+  .assignment__share-label {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 21px;
+    justify-content: space-between;
+    padding-left: 28px;
+    padding-right: 28px;
+  }
 }
 
 .assignment__share-checkbox {
