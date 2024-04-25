@@ -15,6 +15,8 @@ import '../../../css/assignments.css';
 import { ClientAssignmentBlocks } from '../../../service/ClientAssignmentBlocks';
 import { API } from '../../../service/axios';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 
 function CompleteAssignments() {
   const location = useLocation();
@@ -306,6 +308,29 @@ function CompleteAssignments() {
     }
   }
 
+  //Changing "back" icon in header
+  const [isMobileWidth, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width >= 320 && width <= 480) {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
+    };
+
+    // Sets the initial state based on the current window size
+    handleResize();
+
+    // Adds event listener
+    window.addEventListener('resize', handleResize);
+
+    // Cleans up event listener
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return isRateTask ? (
     <>
       <h1 className="assignment__name" style={{ textAlign: 'center' }}>
@@ -366,7 +391,7 @@ function CompleteAssignments() {
           onClick={handleRateTaskBtnClick}
           className="button__type_back button__type_back_greenWhite"
         >
-          <img src={arrowBack}></img>
+          <img src={arrowBack} />
         </button>
         <button
           onClick={handleDoneWithReview}
@@ -381,12 +406,20 @@ function CompleteAssignments() {
       <div className="assignment-header">
         <div className="assignment__container_button">
           <button className="button__type_back" onClick={goBack}>
-            <img src={arrowLeft}></img>
+            {isMobileWidth ? ( //different icons depending on window width
+              <FontAwesomeIcon icon={faArrowLeft} style={{ color: '#417D88' }} size="2xl" />
+            ) : (
+              <img src={arrowLeft} />
+            )}
           </button>
 
           {!isClientsAssignmentsPath && (
             <button className="button__type_save">
-              <img src={save}></img>
+              {isMobileWidth ? ( //different icons depending on window width
+                <FontAwesomeIcon icon={faFloppyDisk} style={{ color: '#417D88' }} size="2xl" />
+              ) : (
+                <img src={save} />
+              )}
             </button>
           )}
         </div>

@@ -314,6 +314,24 @@
   cursor: pointer;
 }
 
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .answer-input {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 13px;
+  }
+}
+
 .answer-input::placeholder {
   font-size: 17px;
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .answer-input::placeholder {
+    font-family: Montserrat, Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 17px;
+    color: #e5e5e5;
+  }
 }

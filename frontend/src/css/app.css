@@ -131,6 +131,7 @@ button {
     background-position: bottom 40px left 40px;
     background-repeat: no-repeat;
     background-size: 198px auto;
+    height: 100dvh;
   }
 
   .side-bar.opened {
