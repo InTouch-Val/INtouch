@@ -58,6 +58,8 @@ button {
 @media screen and (min-width: 320px) and (max-width: 480px) {
   .content {
     margin-left: 0;
+    background-image: linear-gradient(white 50px, transparent 50px),
+      url('https://i122.fastpic.org/big/2023/1025/d2/e4e7924e98bda72edc75d27bf95bcad2.png');
   }
 }
 
