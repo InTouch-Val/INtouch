@@ -127,6 +127,9 @@ class BlockChoice(models.Model):
     reply = models.CharField(max_length=100)
     checked = models.BooleanField(default=False)
 
+    class Meta:
+        ordering = ["pk"]
+
 
 class Note(models.Model):
     title = models.CharField(max_length=100)

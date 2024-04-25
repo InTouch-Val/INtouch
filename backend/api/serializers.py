@@ -341,7 +341,8 @@ class BlockChoiceSerializer(serializers.ModelSerializer):
         return block_choice
 
     def update(self, instance, validated_data):
-        instance.reply = validated_data["reply"]
+        # instance.reply = validated_data.pop["reply"]
+        print(validated_data)
         instance.checked = validated_data.pop("checked", False)
         instance.save()
         return instance
@@ -365,6 +366,7 @@ class BlockSerializerForClient(serializers.ModelSerializer):
 
 
 class BlockSerializer(BlockSerializerForClient):
+    image = Base64ImageField(default=None)
 
     class Meta:
         model = Block
@@ -523,15 +525,13 @@ class AssignmentClientSerializer(serializers.ModelSerializer):
                 block,
                 data,
             )
-            if updated_block.type == BLOCK_TYPES[4][0]:
-                for choice_data in choice_replies_data:
-                    block_choice = BlockChoiceSerializer.update(
-                        BlockChoiceSerializer(),
-                        updated_block,
-                        choice_data,
-                    )
-                    updated_block.choice_replies.add(block_choice)
-                instance.blocks.add(updated_block)
+            choice_blocks = updated_block.choice_replies.all()
+            for block, choice_data in zip(choice_blocks, choice_replies_data):
+                BlockChoiceSerializer.update(
+                    BlockChoiceSerializer(),
+                    block,
+                    choice_data,
+                )
         instance.save()
         return instance
 

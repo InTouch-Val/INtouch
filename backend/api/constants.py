@@ -75,6 +75,7 @@ BLOCK_TYPES = [
     ("single", "Single"),
     ("range", "Range"),
     ("multiple", "Multiple"),
+    ("text", "Text"),
 ]
 
 DIARY_FIELDS_TO_CHECK = [
