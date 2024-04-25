@@ -6,33 +6,33 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0012_alter_block_type'),
+        ("api", "0012_alter_block_type"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='block',
-            old_name='description',
-            new_name='reply_tags',
+            model_name="block",
+            old_name="description",
+            new_name="reply_tags",
         ),
         migrations.RenameField(
-            model_name='diarynote',
-            old_name='description',
-            new_name='emotion_type_tags',
+            model_name="diarynote",
+            old_name="description",
+            new_name="emotion_type_tags",
         ),
         migrations.AddField(
-            model_name='diarynote',
-            name='event_details_tags',
+            model_name="diarynote",
+            name="event_details_tags",
             field=models.TextField(blank=True),
         ),
         migrations.AddField(
-            model_name='diarynote',
-            name='physical_sensations_tags',
+            model_name="diarynote",
+            name="physical_sensations_tags",
             field=models.TextField(blank=True),
         ),
         migrations.AddField(
-            model_name='diarynote',
-            name='thoughts_analysis_tags',
+            model_name="diarynote",
+            name="thoughts_analysis_tags",
             field=models.TextField(blank=True),
         ),
     ]

@@ -6,13 +6,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0011_alter_assignment_assignment_type'),
+        ("api", "0011_alter_assignment_assignment_type"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='block',
-            name='type',
-            field=models.CharField(choices=[('image', 'Image'), ('open', 'Open'), ('single', 'Single'), ('range', 'Range'), ('multiple', 'Multiple')], max_length=10),
+            model_name="block",
+            name="type",
+            field=models.CharField(
+                choices=[
+                    ("image", "Image"),
+                    ("open", "Open"),
+                    ("single", "Single"),
+                    ("range", "Range"),
+                    ("multiple", "Multiple"),
+                ],
+                max_length=10,
+            ),
         ),
     ]
