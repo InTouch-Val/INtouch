@@ -358,6 +358,7 @@ class AssignmentViewSet(viewsets.ModelViewSet):
     filter_backends = [
         DjangoFilterBackend,
         filters.OrderingFilter,
+        filters.SearchFilter,
     ]
     filterset_fields = [
         "assignment_type",
@@ -367,6 +368,9 @@ class AssignmentViewSet(viewsets.ModelViewSet):
     ordering_fields = [
         "add_date",
         "share",
+    ]
+    search_fields = [
+        "title",
     ]
 
     def get_queryset(self):
