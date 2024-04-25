@@ -14,7 +14,6 @@ from api.utils import current_site, send_by_mail
 from api.constants import (
     TIME_DELETE_NON_ACTIVE_USER,
     USER_TYPES,
-    BLOCK_TYPES,
     DIARY_FIELDS_TO_CHECK,
 )
 

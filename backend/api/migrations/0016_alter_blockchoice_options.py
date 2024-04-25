@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0015_alter_block_type'),
+        ("api", "0015_alter_block_type"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='blockchoice',
-            options={'ordering': ['pk']},
+            name="blockchoice",
+            options={"ordering": ["pk"]},
         ),
     ]
