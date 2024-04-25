@@ -110,7 +110,7 @@ class AssignmentClient(models.Model):
 class Block(models.Model):
     question = models.CharField(max_length=250)
     reply = models.TextField(blank=True)
-    reply_tags = models.TextField(blank=True)
+    description = models.TextField(blank=True)
     type = models.CharField(max_length=10, choices=BLOCK_TYPES)
     choice_replies = models.ManyToManyField("BlockChoice", blank=True)
     start_range = models.IntegerField(default=1)
