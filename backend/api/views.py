@@ -113,7 +113,7 @@ class PasswordResetConfirmView(generics.GenericAPIView):
                 }
             )
         else:
-            return Response({"error": "Password not reset"})
+            return Response({"error": "Password did not reset"})
 
 
 class PasswordResetCompleteView(APIView):
@@ -358,15 +358,26 @@ class AssignmentViewSet(viewsets.ModelViewSet):
     filter_backends = [
         DjangoFilterBackend,
         filters.OrderingFilter,
+        filters.SearchFilter,
     ]
     filterset_fields = [
         "assignment_type",
         "language",
+        "author",
     ]
     ordering_fields = [
         "add_date",
         "share",
     ]
+    search_fields = [
+        "title",
+    ]
+
+    def get_queryset(self):
+        favourites = self.request.query_params.get("favourites").lower() == "true"
+        if favourites:
+            return self.request.user.doctor.assignments
+        return super().get_queryset()
 
     def destroy(self, request, *args, **kwargs):
         assignment = self.get_object()
@@ -401,6 +412,11 @@ class AssignmentClientViewSet(viewsets.ModelViewSet):
     filterset_fields = [
         "user",
     ]
+
+    def get_queryset(self):
+        if self.request.user.user_type == USER_TYPES[0]:
+            return self.request.user.client.assignments
+        return super().get_queryset()
 
     @action(detail=True, methods=["get"])
     def complete(self, request, pk):
@@ -477,8 +493,8 @@ class DiaryNoteViewSet(viewsets.ModelViewSet):
 
 @require_GET
 def assetlink(request):
-    path = 'static/api/.well-known/assetlinks.json'
-    with open(path, 'r') as f:
+    path = f"{settings.STATIC_ROOT}/assetlinks.json"
+    with open(path, "r") as f:
         data = json.loads(f.read())
     response = JsonResponse(data, safe=False)
     return response
