@@ -138,12 +138,20 @@ function AddAssignment() {
         };
       }
       if (block.type === 'image') {
-        return {
-          type: block.type,
-          question: block.question || block.title,
-          ...(selectedImageForBlock && { image: selectedImageForBlock.url }),
-          description: getObjectFromEditorState(block.content),
-        };
+        if (selectedImageForBlock && selectedImageForBlock.url) {
+          return {
+            type: block.type,
+            question: block.question || block.title,
+            image: selectedImageForBlock.url,
+            description: getObjectFromEditorState(block.content),
+          };
+        } else {
+          return {
+            type: block.type,
+            question: block.question || block.title,
+            description: getObjectFromEditorState(block.content),
+          };
+        }
       }
       return {
         type: block.type,

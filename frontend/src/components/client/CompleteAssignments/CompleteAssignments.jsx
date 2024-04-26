@@ -230,7 +230,6 @@ function CompleteAssignments() {
     if (block.type === 'text' || block.type === 'open') {
       return {
         type: block.type,
-        question: block.question,
         description: block.initialDescription,
         reply: block.reply,
       };
@@ -238,23 +237,16 @@ function CompleteAssignments() {
     if (block.type === 'range') {
       return {
         type: block.type,
-        question: block.question,
-        start_range: block.minValue,
-        end_range: block.maxValue,
         reply: block.reply,
-        left_pole: block.leftPole || 'Left Pole',
-        right_pole: block.rightPole || 'Right Pole',
       };
     }
     if (block.type === 'image') {
       return {
         type: block.type,
-        question: block.question,
       };
     }
     return {
       type: block.type,
-      question: block.question,
       choice_replies: block.choice_replies,
     };
   }
