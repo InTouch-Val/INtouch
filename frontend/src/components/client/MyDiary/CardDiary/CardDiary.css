@@ -8,6 +8,7 @@
   flex-direction: column;
   gap: 27px;
   transition: all ease-in-out 0.3s;
+  justify-content: space-between;
 }
 
 @media screen and (width >=320px) and (width <=480px) {
@@ -20,7 +21,7 @@
   border: 1px solid #140303fa;
 }
 
-.diary__card-title {
+.diary__card-title-client {
   color: #417d88;
   border-radius: 15px;
   display: flex;
@@ -50,7 +51,7 @@
   align-items: center;
   font-weight: 400;
   font-size: 16px;
-  line-height: 20px;
+  line-height: 19px;
 }
 
 .diary__card-text {

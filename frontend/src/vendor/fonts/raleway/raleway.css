@@ -8,3 +8,14 @@
     local('Raleway Regular'),
     url('./Raleway-Regular.woff2') format('woff2');
 }
+
+@font-face {
+  font-display: swap;
+  font-family: Raleway;
+  font-style: normal;
+  font-weight: 600;
+  src:
+    local('Raleway'),
+    local('Raleway Semibold'),
+    url('./raleway-semibold.woff2') format('woff2');
+}

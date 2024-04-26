@@ -180,7 +180,7 @@ function ClientAssignmentBlocks({ block, handleClick, updateBlock, isView }) {
         ) : (
           <div className="block__text" dangerouslySetInnerHTML={{ __html: block.description }} />
         )}
-        <p className="assignment__block-note">more than one answer possible</p>
+        <p className="assignment__block-note">More than one answer possible</p>
         <fieldset className="assignments__block-radio">
           {block.choice_replies.map((checkbox, index) => {
             return (

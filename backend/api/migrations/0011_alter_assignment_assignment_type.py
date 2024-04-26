@@ -6,13 +6,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0010_remove_user_email_changing_user_new_email_changing'),
+        ("api", "0010_remove_user_email_changing_user_new_email_changing"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='assignment',
-            name='assignment_type',
-            field=models.CharField(choices=[('lesson', 'Lesson'), ('exercise', 'Exercise'), ('essay', 'Essay'), ('study', 'Study'), ('quiz', 'Quiz'), ('methodology', 'Methodology'), ('metaphors', 'Metaphors')], max_length=100),
+            model_name="assignment",
+            name="assignment_type",
+            field=models.CharField(
+                choices=[
+                    ("lesson", "Lesson"),
+                    ("exercise", "Exercise"),
+                    ("essay", "Essay"),
+                    ("study", "Study"),
+                    ("quiz", "Quiz"),
+                    ("methodology", "Methodology"),
+                    ("metaphors", "Metaphors"),
+                ],
+                max_length=100,
+            ),
         ),
     ]

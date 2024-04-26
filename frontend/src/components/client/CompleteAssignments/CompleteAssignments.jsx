@@ -15,6 +15,8 @@ import '../../../css/assignments.css';
 import { ClientAssignmentBlocks } from '../../../service/ClientAssignmentBlocks';
 import { API } from '../../../service/axios';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 
 function CompleteAssignments() {
   const location = useLocation();
@@ -250,6 +252,7 @@ function CompleteAssignments() {
   }
 
   async function handleDoneWithReview() {
+    //sends complete task WITH review
     const blockInfo = blocks.map(transformBlock);
 
     try {
@@ -275,6 +278,7 @@ function CompleteAssignments() {
   }
 
   async function handleCompleteTask() {
+    //sends complete task
     const blockInfo = blocks.map(transformBlock);
 
     try {
@@ -298,9 +302,38 @@ function CompleteAssignments() {
     }
   }
 
+  //Changing "back" icon in header
+  const [isMobileWidth, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width >= 320 && width <= 480) {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
+    };
+
+    // Sets the initial state based on the current window size
+    handleResize();
+
+    // Adds event listener
+    window.addEventListener('resize', handleResize);
+
+    // Cleans up event listener
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return isRateTask ? (
     <>
-      <h1 className="assignment__name" style={{ textAlign: 'center' }}>
+      {isMobileWidth ? ( //display this button only on mobile
+        <button onClick={handleRateTaskBtnClick} className="button__type_back button-back-mobile">
+          <FontAwesomeIcon icon={faArrowLeft} style={{ color: '#417D88' }} size="2xl" />
+        </button>
+      ) : null}
+
+      <h1 className="assignment__name assignment__name--rate" style={{ textAlign: 'center' }}>
         How helpful was the task?
       </h1>
       <div className="rating-container">
@@ -354,15 +387,23 @@ function CompleteAssignments() {
         />
       </div>
       <div className="assignment__buttons-box">
-        <button
-          onClick={handleRateTaskBtnClick}
-          className="button__type_back button__type_back_greenWhite"
-        >
-          <img src={arrowBack}></img>
+        {isMobileWidth ? null : ( //display this button only on desktop
+          <button
+            onClick={handleRateTaskBtnClick}
+            className="button__type_back button__type_back_greenWhite"
+          >
+            <img src={arrowBack} />
+          </button>
+        )}
+
+        <button onClick={handleCompleteTask} className="button__type_back button__type_skip">
+          Skip
         </button>
+
         <button
           onClick={handleDoneWithReview}
-          className="button__type_back button__type_back_greenWhite"
+          className="button__type_back button__type_back_greenWhite button_done"
+          disabled={valueOfRate === null} //disabled when no rate is selected
         >
           Done
         </button>
@@ -373,12 +414,20 @@ function CompleteAssignments() {
       <div className="assignment-header">
         <div className="assignment__container_button">
           <button className="button__type_back" onClick={goBack}>
-            <img src={arrowLeft}></img>
+            {isMobileWidth ? ( //different icons depending on window width
+              <FontAwesomeIcon icon={faArrowLeft} style={{ color: '#417D88' }} size="2xl" />
+            ) : (
+              <img src={arrowLeft} />
+            )}
           </button>
 
           {!isClientsAssignmentsPath && (
             <button className="button__type_save">
-              <img src={save}></img>
+              {isMobileWidth ? ( //different icons depending on window width
+                <FontAwesomeIcon icon={faFloppyDisk} style={{ color: '#417D88' }} size="2xl" />
+              ) : (
+                <img src={save} />
+              )}
             </button>
           )}
         </div>
@@ -485,11 +534,8 @@ function CompleteAssignments() {
       <div className="assignment__buttons-box">
         {!isClientsAssignmentsPath && (
           <>
-            <button onClick={handleCompleteTask} className="action-button assignment__button">
-              Complete Task
-            </button>
             <button onClick={handleRateTaskBtnClick} className="action-button assignment__button">
-              Rate Task
+              Complete Task
             </button>
           </>
         )}

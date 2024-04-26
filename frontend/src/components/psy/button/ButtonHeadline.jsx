@@ -1,7 +1,13 @@
 import './ButtonHeadline.css';
 import PropTypes from 'prop-types';
 
-export default function Button({ children, className, onClick, type = 'button' }) {
+export default function Button({
+  children,
+  className,
+  onClick,
+  type = 'button',
+  disabled = false,
+}) {
   function handleClick() {
     if (onClick) {
       onClick();
@@ -9,7 +15,7 @@ export default function Button({ children, className, onClick, type = 'button' }
   }
 
   return (
-    <button type={type} className={`browse ${className}`} onClick={handleClick}>
+    <button type={type} className={`browse ${className}`} onClick={handleClick} disabled={disabled}>
       {children}
     </button>
   );

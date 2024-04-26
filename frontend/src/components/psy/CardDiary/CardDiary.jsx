@@ -2,8 +2,7 @@ import React from 'react';
 import './CardDiary.css';
 import Button from '../button/ButtonHeadline';
 import { useNavigate } from 'react-router-dom';
-
-export const options = { weekday: 'short', month: 'long', year: 'numeric' };
+import { getDate } from '../../../utils/helperFunction/getDate';
 
 export default function CardDiary({ card }) {
   const navigate = useNavigate();
@@ -16,9 +15,7 @@ export default function CardDiary({ card }) {
     <div className="diary__card" onClick={() => goDiary()}>
       <div className="diary__card-title">
         <div className="diary__card-title__day">{new Date(card.add_date).getUTCDate()}</div>
-        <div className="diary__card-title__date">
-          {new Date(card.add_date).toLocaleDateString('en-US', options)}
-        </div>
+        <div className="diary__card-title__date"> {getDate(card)}</div>
       </div>
       <div className="diary__card-text">{card.event_details}</div>
 
