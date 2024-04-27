@@ -30,7 +30,7 @@ button {
 @media screen and (min-width: 320px) and (max-width: 480px) {
   .toggle-button {
     position: fixed;
-    top: 22px;
+    top: 15px;
     left: 28px;
     right: auto;
     display: block;
@@ -65,7 +65,7 @@ button {
 
 @media screen and (min-width: 320px) and (max-width: 480px) {
   .mobile-nav-header {
-    height: 70px;
+    height: 50px;
     width: 100%;
     background-color: white;
     position: fixed;
