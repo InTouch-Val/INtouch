@@ -46,8 +46,13 @@ function CompleteAssignments() {
     author: '',
     blocks: [],
   });
+  const [textareaValue, setTextareaValue] = useState(''); // State to hold the textarea value
 
-  console.log(card);
+  console.log(textareaValue);
+
+  const handleTextareaChange = (event) => {
+    setTextareaValue(event.target.value); // Updates the state when textarea changes
+  };
 
   function decodeStyledText(jsonData) {
     const data = JSON.parse(jsonData);
@@ -329,50 +334,56 @@ function CompleteAssignments() {
     <>
       {isMobileWidth ? ( //display this button only on mobile
         <button onClick={handleRateTaskBtnClick} className="button__type_back button-back-mobile">
-          <FontAwesomeIcon icon={faArrowLeft} style={{ color: '#417D88' }} size="2xl" />
+          <FontAwesomeIcon icon={faArrowLeft} style={{ color: '#417D88' }} size="xl" />
         </button>
       ) : null}
 
       <h1 className="assignment__name assignment__name--rate" style={{ textAlign: 'center' }}>
         How helpful was the task?
       </h1>
-      <div className="rating-container">
-        {Array.from({ length: 11 }, (_, index) => index).map((num) => (
-          <label key={num} className="radio-label">
-            {num !== 0 && num !== 10 && <div className="mood-number">{num}</div>}
-            <input
-              type="radio"
-              name="mood"
-              value={num}
-              checked={valueOfRate === num}
-              onChange={handleRadioChange}
-              className="radio"
-            />
-            <div
-              className={`mood-display ${valueOfRate === num && (num === 0 || num === 10) ? 'emoteActive' : valueOfRate === num ? 'active' : ''}`}
-              style={num === 0 || num === 10 ? { border: 'none' } : { display: 'flex' }}
-            >
-              {num === 0 ? (
-                <img
-                  src={sadEmote}
-                  alt="Грустный смайлик"
-                  className={`smiley ${valueOfRate === num ? 'active' : ''}`}
-                />
-              ) : (
-                ''
-              )}
-              {num === 10 ? (
-                <img
-                  src={smilyEmote}
-                  alt="Весёлый смайлик"
-                  className={`smiley ${valueOfRate === num ? 'active' : ''}`}
-                />
-              ) : (
-                ''
-              )}
-            </div>
-          </label>
-        ))}
+      <div className="rating_section">
+        <div className="rating-container">
+          {Array.from({ length: 11 }, (_, index) => index).map((num) => (
+            <label key={num} className="radio-label">
+              {num !== 0 && num !== 10 && <div className="mood-number">{num}</div>}
+              <input
+                type="radio"
+                name="mood"
+                value={num}
+                checked={valueOfRate === num}
+                onChange={handleRadioChange}
+                className="radio"
+              />
+              <div
+                className={`mood-display ${valueOfRate === num && (num === 0 || num === 10) ? 'emoteActive' : valueOfRate === num ? 'active' : ''}`}
+                style={num === 0 || num === 10 ? { border: 'none' } : { display: 'flex' }}
+              >
+                {num === 0 ? (
+                  <img
+                    src={sadEmote}
+                    alt="Грустный смайлик"
+                    className={`smiley ${valueOfRate === num ? 'active' : ''}`}
+                  />
+                ) : (
+                  ''
+                )}
+                {num === 10 ? (
+                  <img
+                    src={smilyEmote}
+                    alt="Весёлый смайлик"
+                    className={`smiley ${valueOfRate === num ? 'active' : ''}`}
+                  />
+                ) : (
+                  ''
+                )}
+              </div>
+            </label>
+          ))}
+        </div>
+        <div className="rating_values_container">
+          <span>Dissatisfied</span>
+          <span>Satisfied</span>
+        </div>
       </div>
       <div className="rateTask__comment-container">
         <label className="rateTask__comment-label" htmlFor="text">
@@ -384,6 +395,7 @@ function CompleteAssignments() {
           name="text"
           id="text"
           placeholder="Add some notes here..."
+          onChange={handleTextareaChange}
         />
       </div>
       <div className="assignment__buttons-box">
@@ -396,17 +408,35 @@ function CompleteAssignments() {
           </button>
         )}
 
-        <button onClick={handleCompleteTask} className="button__type_back button__type_skip">
-          Skip
-        </button>
+        {isMobileWidth ? (
+          <>
+            <button
+              onClick={handleDoneWithReview}
+              className="button__type_back button__type_back_greenWhite button_done"
+              disabled={valueOfRate === null && textareaValue.trim() === ''} //disabled when no rate is selected and no comment is written
+            >
+              Done
+            </button>
 
-        <button
-          onClick={handleDoneWithReview}
-          className="button__type_back button__type_back_greenWhite button_done"
-          disabled={valueOfRate === null} //disabled when no rate is selected
-        >
-          Done
-        </button>
+            <button onClick={handleCompleteTask} className="button__type_back button__type_skip">
+              Skip
+            </button>
+          </>
+        ) : (
+          <>
+            <button onClick={handleCompleteTask} className="button__type_back button__type_skip">
+              Skip
+            </button>
+
+            <button
+              onClick={handleDoneWithReview}
+              className="button__type_back button__type_back_greenWhite button_done"
+              disabled={valueOfRate === null} //disabled when no rate is selected
+            >
+              Done
+            </button>
+          </>
+        )}
       </div>
     </>
   ) : (
