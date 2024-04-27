@@ -330,6 +330,8 @@ class AddAssignmentClientView(APIView):
                 reply=block.reply,
                 start_range=block.start_range,
                 end_range=block.end_range,
+                left_pole=block.left_pole,
+                right_pole=block.right_pole,
             )
             choice_replies = block.choice_replies.all()
             for choice_reply in choice_replies:
