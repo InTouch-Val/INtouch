@@ -11,7 +11,11 @@ from rest_framework.validators import UniqueValidator
 
 from api.tasks import remove_unverified_user
 from api.utils import current_site, send_by_mail
-from api.constants import TIME_DELETE_NON_ACTIVE_USER, USER_TYPES
+from api.constants import (
+    TIME_DELETE_NON_ACTIVE_USER,
+    USER_TYPES,
+    DIARY_FIELDS_TO_CHECK,
+)
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -336,17 +340,32 @@ class BlockChoiceSerializer(serializers.ModelSerializer):
         return block_choice
 
     def update(self, instance, validated_data):
-        instance.reply = validated_data["reply"]
+        # instance.reply = validated_data.pop["reply"]
+        print(validated_data)
         instance.checked = validated_data.pop("checked", False)
         instance.save()
         return instance
 
 
-class BlockSerializer(serializers.ModelSerializer):
+class BlockSerializerForClient(serializers.ModelSerializer):
+    """Block serializer for updating values in AssignmentClient"""
+
     choice_replies = BlockChoiceSerializer(many=True, required=False)
     left_pole = serializers.CharField(required=False)
     right_pole = serializers.CharField(required=False)
-    image = Base64ImageField(required=False)
+    image = Base64ImageField(read_only=True)
+
+    class Meta:
+        model = Block
+        fields = "__all__"
+        read_only_fields = [
+            "question",
+            "type",
+        ]
+
+
+class BlockSerializer(BlockSerializerForClient):
+    image = Base64ImageField(default=None)
 
     class Meta:
         model = Block
@@ -443,11 +462,10 @@ class AssignmentSerializer(serializers.ModelSerializer):
 
 
 class AssignmentClientSerializer(serializers.ModelSerializer):
-    blocks = BlockSerializer(many=True, required=False)
+    blocks = BlockSerializerForClient(many=True, required=False)
     author_name = serializers.StringRelatedField(source="author", read_only=True)
     grade = serializers.IntegerField(required=False)
     review = serializers.CharField(required=False)
-    assignment_root = serializers.PrimaryKeyRelatedField(read_only=True)
     visible = serializers.BooleanField(read_only=True)
 
     class Meta:
@@ -481,6 +499,8 @@ class AssignmentClientSerializer(serializers.ModelSerializer):
             "text",
             "title",
             "image_url",
+            "author",
+            "author_name",
         ]
 
     def validate_grade(self, data):
@@ -492,24 +512,25 @@ class AssignmentClientSerializer(serializers.ModelSerializer):
         instance.status = "in progress"
         instance.grade = validated_data.get("grade", None)
         instance.review = validated_data.get("review", "")
-        instance.save()
-        blocks = instance.blocks.all()
-        for block in blocks:
-            block.delete()
+        if "blocks" not in validated_data:
+            instance.save()
+            return instance
+        initial_blocks = instance.blocks.all()
         blocks_data = validated_data.pop("blocks", [])
-        for block_data in blocks_data:
-            choice_replies_data = block_data.pop("choice_replies", [])
-            block = BlockSerializer.create(
-                BlockSerializer(),
-                block_data,
+        for block, data in zip(initial_blocks, blocks_data):
+            choice_replies_data = data.pop("choice_replies", [])
+            updated_block = BlockSerializerForClient.update(
+                BlockSerializerForClient(),
+                block,
+                data,
             )
-            for choice_data in choice_replies_data:
-                block_choice = BlockChoiceSerializer.create(
+            choice_blocks = updated_block.choice_replies.all()
+            for block, choice_data in zip(choice_blocks, choice_replies_data):
+                BlockChoiceSerializer.update(
                     BlockChoiceSerializer(),
+                    block,
                     choice_data,
                 )
-                block.choice_replies.add(block_choice)
-            instance.blocks.add(block)
         instance.save()
         return instance
 
@@ -547,29 +568,11 @@ class DiaryNoteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DiaryNote
-        fields = [
-            "id",
-            "author",
-            "author_name",
-            "add_date",
-            "visible",
-            "event_details",
-            "thoughts_analysis",
-            "emotion_type",
-            "physical_sensations",
-            "primary_emotion",
-            "clarifying_emotion",
-        ]
+        fields = "__all__"
 
     def validate(self, data):
         if not data:
             raise ValidationError("You can not create an empty diary note!")
-        DIARY_FIELDS_TO_CHECK = [
-            "event_details",
-            "thoughts_analysis",
-            "emotion_type",
-            "physical_sensations",
-        ]
         if all(text not in data.keys() for text in DIARY_FIELDS_TO_CHECK):
             raise ValidationError(
                 "You can not create a diary note without text fields!"

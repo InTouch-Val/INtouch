@@ -22,7 +22,7 @@ export default function DiaryPageContentClient({ diary, type }) {
       event_details: type == 'create' ? '' : diary.event_details,
       thoughts_analysis: type == 'create' ? '' : diary.thoughts_analysis,
       physical_sensations: type == 'create' ? '' : diary.physical_sensations,
-      answer_emotion: type == 'create' ? '' : diary.answer_emotion,
+      emotion_type: type == 'create' ? '' : diary.emotion_type,
       primary_emotion: type == 'create' ? '' : diary.primary_emotion,
       clarifying_emotion: type == 'create' ? [] : diary.clarifying_emotion,
       visible: false,

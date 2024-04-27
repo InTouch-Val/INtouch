@@ -95,9 +95,6 @@ function AddAssignment() {
             ...block,
             content: EditorState.createWithContent(contentState),
             image: block.image,
-            // title: block.question,
-            // minValue: block.start_range,
-            // maxValue: block.end_range,
           };
         }
         return block;
@@ -125,31 +122,42 @@ function AddAssignment() {
       if (block.type === 'text' || block.type === 'open') {
         return {
           type: block.type,
-          question: block.title,
+          question: block.question || block.title,
           description: getObjectFromEditorState(block.content),
         };
       }
       if (block.type === 'range') {
         return {
           type: block.type,
-          question: block.title,
+          question: block.question || block.title,
           start_range: block.minValue,
           end_range: block.maxValue,
           left_pole: block.leftPole || 'Left Pole',
           right_pole: block.rightPole || 'Right Pole',
+          description: getObjectFromEditorState(block.content),
         };
       }
       if (block.type === 'image') {
-        return {
-          type: block.type,
-          question: block.title,
-          image: selectedImageForBlock.url,
-        };
+        if (selectedImageForBlock && selectedImageForBlock.url) {
+          return {
+            type: block.type,
+            question: block.question || block.title,
+            image: selectedImageForBlock.url,
+            description: getObjectFromEditorState(block.content),
+          };
+        } else {
+          return {
+            type: block.type,
+            question: block.question || block.title,
+            description: getObjectFromEditorState(block.content),
+          };
+        }
       }
       return {
         type: block.type,
-        question: block.title,
+        question: block.question || block.title,
         choice_replies: block.choice_replies,
+        description: getObjectFromEditorState(block.content),
       };
     });
 
@@ -161,6 +169,7 @@ function AddAssignment() {
       tags: 'ffasd',
       language,
       image_url:
+        selectedImage?.urls.small ||
         selectedImage?.urls.full ||
         'https://images.unsplash.com/photo-1641531316051-30d6824c6460?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1MzE0ODh8MHwxfHNlYXJjaHwxfHxsZW9uaWR8ZW58MHx8fHwxNzAwODE4Nzc5fDA&ixlib=rb-4.0.3&q=85',
     };
@@ -183,7 +192,7 @@ function AddAssignment() {
         }
       } else {
         // Если задание уже существует, выполняем PUT запрос
-        response = await API.put(`assignments/${id}/`, requestData);
+        response = await API.patch(`assignments/${id}/`, requestData);
         if (isDraft || isSaveAsDraft) {
           // Если задание должно быть перемещено в черновик, выполняем GET запрос
           await API.get(`assignments/${id}/draft/`);
@@ -482,13 +491,11 @@ function ViewAssignment() {
   });
 
   function decodeStyledText(jsonData) {
-    // Parse the JSON data
     const data = JSON.parse(jsonData);
-
-    // Initialize an empty string to hold the HTML
     let html = '';
+    let isList = false;
+    let listType = '';
 
-    // Function to apply styles
     const applyStyles = (char, styles) => {
       if (styles.includes('BOLD')) {
         char = `<b>${char}</b>`;
@@ -502,68 +509,79 @@ function ViewAssignment() {
       return char;
     };
 
-    // Traverse each block in the blockMap
-    for (const blockKey in data._immutable.currentContent.blockMap) {
-      const block = data._immutable.currentContent.blockMap[blockKey];
-
-      // Determine the block type
+    for (const blockKey in data.blockMap) {
+      const block = data.blockMap[blockKey];
       const blockType = block.type;
+
+      // Определение типа списка
+      let currentListType = '';
+      if (blockType === 'unordered-list-item') {
+        currentListType = 'ul';
+      } else if (blockType === 'ordered-list-item') {
+        currentListType = 'ol';
+      }
+
+      // Если текущий блок является началом нового списка
+      if (currentListType && (!isList || listType !== currentListType)) {
+        // Закрываем предыдущий список, если он открыт
+        if (isList) {
+          html += '</li></' + listType + '>';
+        }
+        // Начинаем новый список
+        isList = true;
+        listType = currentListType;
+        html += `<${listType}>`;
+      } else if (!currentListType && isList) {
+        // Если текущий блок не является частью списка, но список открыт
+        html += '</li></' + listType + '>';
+        isList = false;
+      }
+
       let openTag = '';
       let closeTag = '';
       switch (blockType) {
-        case 'unstyled': {
+        case 'unstyled':
           openTag = '<p>';
           closeTag = '</p>';
           break;
-        }
-        case 'header-one': {
+        case 'header-one':
           openTag = '<h1>';
           closeTag = '</h1>';
           break;
-        }
-        case 'header-two': {
+        case 'header-two':
           openTag = '<h2>';
           closeTag = '</h2>';
           break;
-        }
-        case 'header-three': {
+        case 'header-three':
           openTag = '<h3>';
           closeTag = '</h3>';
           break;
-        }
-        case 'unordered-list-item': {
+        case 'unordered-list-item':
+        case 'ordered-list-item':
           openTag = '<li>';
           closeTag = '</li>';
           break;
-        }
-        case 'ordered-list-item': {
-          openTag = '<li>';
-          closeTag = '</li>';
+        default:
           break;
-        }
-        default: {
-          break;
-        }
       }
 
-      // Start the block
       html += openTag;
 
-      // Process each character in the block
       for (let index = 0; index < block.text.length; index++) {
         let char = block.text[index];
         const { style } = block.characterList[index];
-
-        // Apply styles
         char = applyStyles(char, style);
-
-        // Add the character to the HTML string
         html += char;
       }
 
-      // Close the block
       html += closeTag;
     }
+
+    // Закрываем список, если он открыт
+    if (isList) {
+      html += '</li></' + listType + '>';
+    }
+
     console.log(html);
     return html;
   }
@@ -571,7 +589,7 @@ function ViewAssignment() {
   const setAssignmentCredentials = useCallback((data) => {
     const restoredBlocks = data.blocks
       ? data.blocks.map((block) => {
-          if (block.type === 'text') {
+          if (block.description) {
             // Используем функцию парсинга для получения HTML-текста из JSON Draft.js
             const parsedContent = decodeStyledText(block.description);
 

@@ -9,7 +9,6 @@ export const useObserve = (ref, isTotal = false, callback) => {
         if (isTotal) {
           observer.current.disconnect();
         }
-        console.log('div В зоне видимости');
       }
     };
 

@@ -159,6 +159,13 @@ tr:last-child {
   cursor: pointer;
 }
 
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .action-button {
+    padding: 12px 24px;
+    border-radius: 30px;
+  }
+}
+
 .action-button:disabled {
   background: rgba(65, 125, 136, 0.6);
 }
@@ -282,7 +289,7 @@ tr:last-child {
   font-size: 16px;
 }
 
-@media screen and (width >=320px) and (width <=480px) {
+@media screen and (min-width: 320px) and (max-width: 480px) {
   .tabs button {
     border: none;
     font-size: 18px;
@@ -302,7 +309,7 @@ tr:last-child {
   cursor: pointer;
 }
 
-@media screen and (width >=320px) and (width <=480px) {
+@media screen and (min-width: 320px) and (max-width: 480px) {
   .tabs button.active {
     border-bottom: 2px solid #0b4a56;
     color: #0b4a56;

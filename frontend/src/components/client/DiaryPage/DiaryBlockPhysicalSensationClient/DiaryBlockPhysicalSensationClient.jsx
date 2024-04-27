@@ -3,11 +3,11 @@ import '../DiaryPage.css';
 import { EditorState, convertFromRaw } from 'draft-js';
 import { EditorToolbar } from '../../../../service/editors-toolbar';
 import { ToolbarProvider } from '../../../../service/ToolbarContext';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
 export default function DiaryBlockPhysicalSensationClient({ diary, type }) {
   const editorRef = useRef(null);
-
+  const { control, setValue } = useFormContext();
   const content = {
     blocks: [
       {
@@ -39,7 +39,6 @@ export default function DiaryBlockPhysicalSensationClient({ diary, type }) {
     setValue('physical_sensations', text);
   };
 
-  const { control, setValue } = useFormContext();
   return (
     <div className="diary__block-event">
       <div className="diary__block-title">Physical Sensations</div>

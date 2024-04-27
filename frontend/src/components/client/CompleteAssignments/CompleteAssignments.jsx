@@ -15,6 +15,8 @@ import '../../../css/assignments.css';
 import { ClientAssignmentBlocks } from '../../../service/ClientAssignmentBlocks';
 import { API } from '../../../service/axios';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 
 function CompleteAssignments() {
   const location = useLocation();
@@ -48,13 +50,11 @@ function CompleteAssignments() {
   console.log(card);
 
   function decodeStyledText(jsonData) {
-    // Parse the JSON data
     const data = JSON.parse(jsonData);
-
-    // Initialize an empty string to hold the HTML
     let html = '';
+    let isList = false;
+    let listType = '';
 
-    // Function to apply styles
     const applyStyles = (char, styles) => {
       if (styles.includes('BOLD')) {
         char = `<b>${char}</b>`;
@@ -68,76 +68,87 @@ function CompleteAssignments() {
       return char;
     };
 
-    // Traverse each block in the blockMap
-    for (const blockKey in data._immutable.currentContent.blockMap) {
-      const block = data._immutable.currentContent.blockMap[blockKey];
-
-      // Determine the block type
+    for (const blockKey in data.blockMap) {
+      const block = data.blockMap[blockKey];
       const blockType = block.type;
+
+      // Определение типа списка
+      let currentListType = '';
+      if (blockType === 'unordered-list-item') {
+        currentListType = 'ul';
+      } else if (blockType === 'ordered-list-item') {
+        currentListType = 'ol';
+      }
+
+      // Если текущий блок является началом нового списка
+      if (currentListType && (!isList || listType !== currentListType)) {
+        // Закрываем предыдущий список, если он открыт
+        if (isList) {
+          html += '</li></' + listType + '>';
+        }
+        // Начинаем новый список
+        isList = true;
+        listType = currentListType;
+        html += `<${listType}>`;
+      } else if (!currentListType && isList) {
+        // Если текущий блок не является частью списка, но список открыт
+        html += '</li></' + listType + '>';
+        isList = false;
+      }
+
       let openTag = '';
       let closeTag = '';
       switch (blockType) {
-        case 'unstyled': {
+        case 'unstyled':
           openTag = '<p>';
           closeTag = '</p>';
           break;
-        }
-        case 'header-one': {
+        case 'header-one':
           openTag = '<h1>';
           closeTag = '</h1>';
           break;
-        }
-        case 'header-two': {
+        case 'header-two':
           openTag = '<h2>';
           closeTag = '</h2>';
           break;
-        }
-        case 'header-three': {
+        case 'header-three':
           openTag = '<h3>';
           closeTag = '</h3>';
           break;
-        }
-        case 'unordered-list-item': {
+        case 'unordered-list-item':
+        case 'ordered-list-item':
           openTag = '<li>';
           closeTag = '</li>';
           break;
-        }
-        case 'ordered-list-item': {
-          openTag = '<li>';
-          closeTag = '</li>';
+        default:
           break;
-        }
-        default: {
-          break;
-        }
       }
 
-      // Start the block
       html += openTag;
 
-      // Process each character in the block
       for (let index = 0; index < block.text.length; index++) {
         let char = block.text[index];
         const { style } = block.characterList[index];
-
-        // Apply styles
         char = applyStyles(char, style);
-
-        // Add the character to the HTML string
         html += char;
       }
 
-      // Close the block
       html += closeTag;
     }
-    //  console.log(html);
+
+    // Закрываем список, если он открыт
+    if (isList) {
+      html += '</li></' + listType + '>';
+    }
+
+    console.log(html);
     return html;
   }
 
   const setAssignmentCredentials = useCallback((data) => {
     const restoredBlocks = data.blocks
       ? data.blocks.map((block) => {
-          if (block.type === 'text') {
+          if (block.description) {
             // Используем функцию парсинга для получения HTML-текста из JSON Draft.js
             const parsedContent = decodeStyledText(block.description);
 
@@ -219,7 +230,6 @@ function CompleteAssignments() {
     if (block.type === 'text' || block.type === 'open') {
       return {
         type: block.type,
-        question: block.question,
         description: block.initialDescription,
         reply: block.reply,
       };
@@ -227,33 +237,26 @@ function CompleteAssignments() {
     if (block.type === 'range') {
       return {
         type: block.type,
-        question: block.question,
-        start_range: block.minValue,
-        end_range: block.maxValue,
         reply: block.reply,
-        left_pole: block.leftPole || 'Left Pole',
-        right_pole: block.rightPole || 'Right Pole',
       };
     }
     if (block.type === 'image') {
       return {
         type: block.type,
-        question: block.question,
-        image: block.image,
       };
     }
     return {
       type: block.type,
-      question: block.question,
       choice_replies: block.choice_replies,
     };
   }
 
   async function handleDoneWithReview() {
+    //sends complete task WITH review
     const blockInfo = blocks.map(transformBlock);
 
     try {
-      const res = await API.put(`assignments-client/${assignmentData.id}/`, {
+      const res = await API.patch(`assignments-client/${assignmentData.id}/`, {
         grade: parseInt(valueOfRate, 10),
         review: document.getElementById('text').value, // Получаем значение из textarea
         blocks: blockInfo,
@@ -275,11 +278,12 @@ function CompleteAssignments() {
   }
 
   async function handleCompleteTask() {
+    //sends complete task
     const blockInfo = blocks.map(transformBlock);
 
     try {
       console.log(blockInfo);
-      const res = await API.put(`assignments-client/${assignmentData.id}/`, {
+      const res = await API.patch(`assignments-client/${assignmentData.id}/`, {
         blocks: blockInfo,
       });
       if (res.status >= 200 && res.status < 300) {
@@ -298,9 +302,38 @@ function CompleteAssignments() {
     }
   }
 
+  //Changing "back" icon in header
+  const [isMobileWidth, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width >= 320 && width <= 480) {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
+    };
+
+    // Sets the initial state based on the current window size
+    handleResize();
+
+    // Adds event listener
+    window.addEventListener('resize', handleResize);
+
+    // Cleans up event listener
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return isRateTask ? (
     <>
-      <h1 className="assignment__name" style={{ textAlign: 'center' }}>
+      {isMobileWidth ? ( //display this button only on mobile
+        <button onClick={handleRateTaskBtnClick} className="button__type_back button-back-mobile">
+          <FontAwesomeIcon icon={faArrowLeft} style={{ color: '#417D88' }} size="2xl" />
+        </button>
+      ) : null}
+
+      <h1 className="assignment__name assignment__name--rate" style={{ textAlign: 'center' }}>
         How helpful was the task?
       </h1>
       <div className="rating-container">
@@ -354,15 +387,23 @@ function CompleteAssignments() {
         />
       </div>
       <div className="assignment__buttons-box">
-        <button
-          onClick={handleRateTaskBtnClick}
-          className="button__type_back button__type_back_greenWhite"
-        >
-          <img src={arrowBack}></img>
+        {isMobileWidth ? null : ( //display this button only on desktop
+          <button
+            onClick={handleRateTaskBtnClick}
+            className="button__type_back button__type_back_greenWhite"
+          >
+            <img src={arrowBack} />
+          </button>
+        )}
+
+        <button onClick={handleCompleteTask} className="button__type_back button__type_skip">
+          Skip
         </button>
+
         <button
           onClick={handleDoneWithReview}
-          className="button__type_back button__type_back_greenWhite"
+          className="button__type_back button__type_back_greenWhite button_done"
+          disabled={valueOfRate === null} //disabled when no rate is selected
         >
           Done
         </button>
@@ -373,12 +414,20 @@ function CompleteAssignments() {
       <div className="assignment-header">
         <div className="assignment__container_button">
           <button className="button__type_back" onClick={goBack}>
-            <img src={arrowLeft}></img>
+            {isMobileWidth ? ( //different icons depending on window width
+              <FontAwesomeIcon icon={faArrowLeft} style={{ color: '#417D88' }} size="2xl" />
+            ) : (
+              <img src={arrowLeft} />
+            )}
           </button>
 
           {!isClientsAssignmentsPath && (
             <button className="button__type_save">
-              <img src={save}></img>
+              {isMobileWidth ? ( //different icons depending on window width
+                <FontAwesomeIcon icon={faFloppyDisk} style={{ color: '#417D88' }} size="2xl" />
+              ) : (
+                <img src={save} />
+              )}
             </button>
           )}
         </div>
@@ -485,11 +534,8 @@ function CompleteAssignments() {
       <div className="assignment__buttons-box">
         {!isClientsAssignmentsPath && (
           <>
-            <button onClick={handleCompleteTask} className="action-button assignment__button">
-              Complete Task
-            </button>
             <button onClick={handleRateTaskBtnClick} className="action-button assignment__button">
-              Rate Task
+              Complete Task
             </button>
           </>
         )}
