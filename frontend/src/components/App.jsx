@@ -55,7 +55,7 @@ function App() {
           {sideBarOpened ? (
             <FontAwesomeIcon icon={faXmark} style={{ color: '#417D88' }} size="2xl" />
           ) : (
-            <FontAwesomeIcon icon={faBars} style={{ color: '#417D88' }} size="2xl" />
+            <FontAwesomeIcon icon={faBars} style={{ color: '#417D88' }} size="xl" />
           )}
         </span>
         <div className="user-profile">
