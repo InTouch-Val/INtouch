@@ -5,7 +5,7 @@
 
 @media screen and (min-width: 320px) and (max-width: 480px) {
   .assignments-page {
-    padding: 70px 28px;
+    padding: 50px 28px;
   }
 }
 
@@ -29,8 +29,8 @@
 @media screen and (min-width: 320px) and (max-width: 480px) {
   .assignments-page h1 {
     margin: 0;
-    margin-top: 18px;
-    margin-bottom: 20px;
+    margin-top: 26px;
+    margin-bottom: 5px;
     font-size: 22px;
     font-weight: 500;
     line-height: 28px;
@@ -103,7 +103,8 @@
 
 @media screen and (min-width: 320px) and (max-width: 480px) {
   .assignment-grid {
-    margin: 0 17px;
+    margin: 0;
+    margin-top: 25px;
     width: auto;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   }
