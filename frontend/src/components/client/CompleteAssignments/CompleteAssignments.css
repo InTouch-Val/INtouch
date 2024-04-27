@@ -16,11 +16,12 @@
   .button__type_back {
     border: none;
     width: auto;
+    margin-top: 0;
   }
 }
 
 .button-back-mobile {
-  margin-top: 98px;
+  margin-top: 78px;
   margin-left: 28px;
 }
 
@@ -129,8 +130,10 @@
   }
 
   .assignment__name--rate {
-    padding-top: 32px;
+    padding-top: 25px;
     margin-top: 0;
+    padding-left: 28px;
+    padding-right: 28px;
   }
 }
 
@@ -190,7 +193,6 @@
 
 @media screen and (min-width: 320px) and (max-width: 480px) {
   .aassignment__paragraph {
-    font-family: Raleway, Arial, sans-serif;
     font-size: 15px;
     font-weight: 600;
     line-height: 21px;
@@ -201,7 +203,6 @@
   }
 
   .assignment__block-header {
-    font-family: Raleway, Arial, sans-serif;
     font-size: 15px;
     font-weight: 600;
     line-height: 21px;
@@ -359,7 +360,6 @@
   .assignment__block-note {
     padding: 0;
     margin-top: 6px;
-    font-family: Raleway, Arial, sans-serif;
     font-size: 13px;
     font-weight: 400;
     line-height: 15.5px;
@@ -394,7 +394,6 @@
 
 @media screen and (min-width: 320px) and (max-width: 480px) {
   .block-radio__label {
-    font-family: Raleway, Arial, sans-serif;
     font-size: 15px;
     font-weight: 400;
     line-height: 21px;
@@ -486,10 +485,10 @@
   .assignment__buttons-box {
     flex-direction: column;
     row-gap: 8px;
-    margin-top: 40px;
+    margin-top: 24px;
     margin-bottom: 130px;
-    padding-left: 90px;
-    padding-right: 90px;
+    padding-left: 28px;
+    padding-right: 28px;
     box-sizing: border-box;
     align-items: center;
   }
@@ -529,18 +528,59 @@
   box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
 }
 
+.rating_values_container {
+  display: none;
+}
+
 @media screen and (min-width: 320px) and (max-width: 480px) {
   .rating-container {
     width: auto;
     gap: 5px;
-    margin-right: 10px;
-    margin-left: 10px;
+    justify-content: space-between;
+    margin-right: 0;
+    margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  .rating_section {
+    width: auto;
+    margin-right: 28px;
+    margin-left: 28px;
+    margin-top: 36px;
+    margin-bottom: 19px;
+    padding: 21px 0 15px 0;
+    box-sizing: border-box;
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
+  }
+
+  .rating_values_container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 19px;
+    color: #1f304f;
   }
 }
 
 .radio-label {
   margin: 5px;
   position: relative;
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .radio-label {
+    margin: 0;
+  }
 }
 
 .radio {
@@ -558,6 +598,20 @@
   border: 1px solid #ccc;
   border-radius: 50%;
   cursor: pointer;
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .mood-display {
+    display: none;
+  }
+
+  .mood-number {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 19px;
+    color: #1f304f;
+    margin-bottom: 7px;
+  }
 }
 
 .mood-display.active {
@@ -633,7 +687,6 @@
 
 @media screen and (min-width: 320px) and (max-width: 480px) {
   .rateTask__comment-label {
-    font-family: Raleway, Arial, sans-serif;
     font-size: 15px;
     font-weight: 600;
     line-height: 21px;
