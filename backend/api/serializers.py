@@ -339,9 +339,9 @@ class BlockChoiceSerializer(serializers.ModelSerializer):
         block_choice = BlockChoice.objects.create(**validated_data)
         return block_choice
 
+    # TODO: с комментарием действовать по ситуации
     def update(self, instance, validated_data):
-        # instance.reply = validated_data.pop["reply"]
-        print(validated_data)
+        # instance.reply = validated_data.pop("reply")
         instance.checked = validated_data.pop("checked", False)
         instance.save()
         return instance
@@ -410,15 +410,9 @@ class AssignmentSerializer(serializers.ModelSerializer):
         ]
 
     def get_avarage_grade(self, instance):
-        try:
-            values = list(
-                AssignmentClient.objects.filter(assignment_root=instance)
-                .exclude(grade=None)
-                .values_list("grade", flat=True)
-            )
-            return sum(values) / len(values)
-        except ZeroDivisionError:
+        if instance.avarage_grade is None:
             return 0
+        return instance.avarage_grade
 
     def create(self, validated_data):
         blocks_data = validated_data.pop("blocks", [])
