@@ -18,7 +18,7 @@ from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from api.models import *
 from api.permissions import *
 from api.serializers import *
-from api.utils import send_by_mail
+from api.utils import send_by_mail, avg_grade_annotation
 from api.constants import USER_TYPES
 from api.tasks import reset_email_update_status
 
@@ -330,6 +330,8 @@ class AddAssignmentClientView(APIView):
                 reply=block.reply,
                 start_range=block.start_range,
                 end_range=block.end_range,
+                left_pole=block.left_pole,
+                right_pole=block.right_pole,
             )
             choice_replies = block.choice_replies.all()
             for choice_reply in choice_replies:
@@ -367,6 +369,7 @@ class AssignmentViewSet(viewsets.ModelViewSet):
         "author",
     ]
     ordering_fields = [
+        "avarage_grade",
         "add_date",
         "share",
     ]
@@ -377,8 +380,8 @@ class AssignmentViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         favourites = self.request.query_params.get("favourites") == "true"
         if favourites:
-            return self.request.user.doctor.assignments
-        return super().get_queryset()
+            return avg_grade_annotation(self.request.user.doctor.assignments)
+        return avg_grade_annotation(super().get_queryset())
 
     def destroy(self, request, *args, **kwargs):
         assignment = self.get_object()
