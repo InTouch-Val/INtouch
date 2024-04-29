@@ -42,6 +42,7 @@ function Block({
             placeholder={placeholder}
             className="block-title-input"
             style={{ display: 'none' }}
+            onChange={() => {}}
           />
           <ToolbarProvider>
             <EditorToolbar

@@ -20,11 +20,11 @@ function AssignmentBlock({
 }) {
   const [title, setTitle] = useState(block.title);
   const [choices, setChoices] = useState(block.choices || []);
-  const [minValue, setMinValue] = useState(block.minValue || 1);
+  const [minValue, setMinValue] = useState(block.minValue !== undefined ? block.minValue : 1);
   const [maxValue, setMaxValue] = useState(block.maxValue || 10);
   const [choiceRefs, setChoiceRefs] = useState([]);
-  const [leftPole, setLeftPole] = useState(block.leftPole || '');
-  const [rightPole, setRightPole] = useState(block.rightPole || '');
+  const [leftPole, setLeftPole] = useState(block.leftPole || block.left_pole || '');
+  const [rightPole, setRightPole] = useState(block.rightPole || block.right_pole || '');
   const [image, setImage] = useState(block.image);
 
   useEffect(() => {
