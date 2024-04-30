@@ -137,6 +137,7 @@ class UserSerializer(serializers.ModelSerializer):
         remove_unverified_user.send_with_options(
             args=(user.pk,), delay=TIME_DELETE_NON_ACTIVE_USER
         )
+        return user
 
 
 class PasswordResetSerializer(serializers.Serializer):
@@ -339,9 +340,9 @@ class BlockChoiceSerializer(serializers.ModelSerializer):
         block_choice = BlockChoice.objects.create(**validated_data)
         return block_choice
 
+    # TODO: с комментарием действовать по ситуации
     def update(self, instance, validated_data):
-        # instance.reply = validated_data.pop["reply"]
-        print(validated_data)
+        # instance.reply = validated_data.pop("reply")
         instance.checked = validated_data.pop("checked", False)
         instance.save()
         return instance
@@ -410,15 +411,9 @@ class AssignmentSerializer(serializers.ModelSerializer):
         ]
 
     def get_avarage_grade(self, instance):
-        try:
-            values = list(
-                AssignmentClient.objects.filter(assignment_root=instance)
-                .exclude(grade=None)
-                .values_list("grade", flat=True)
-            )
-            return sum(values) / len(values)
-        except ZeroDivisionError:
+        if instance.avarage_grade is None:
             return 0
+        return instance.avarage_grade
 
     def create(self, validated_data):
         blocks_data = validated_data.pop("blocks", [])
@@ -438,25 +433,33 @@ class AssignmentSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.is_public = True
-        instance.title = validated_data["title"]
-        instance.text = validated_data["text"]
-        instance.assignment_type = validated_data["assignment_type"]
-        instance.tags = validated_data["tags"]
-        instance.language = validated_data["language"]
-        instance.image_url = validated_data["image_url"]
-        blocks = instance.blocks.all()
-        for block in blocks:
-            block.delete()
+        instance.title = validated_data.get("title", instance.title)
+        instance.text = validated_data.get("text", instance.text)
+        instance.assignment_type = validated_data.get(
+            "assignment_type", instance.assignment_type
+        )
+        instance.tags = validated_data.get("tags", instance.tags)
+        instance.language = validated_data.get("language", instance.language)
+        instance.image_url = validated_data.get("image_url", instance.image_url)
+        if "blocks" not in validated_data:
+            instance.save()
+            return instance
+        initial_blocks = instance.blocks.all()
         blocks_data = validated_data.pop("blocks", [])
-        for block_data in blocks_data:
-            choice_replies_data = block_data.pop("choice_replies", [])
-            block = BlockSerializer.create(BlockSerializer(), block_data)
-            for choice_data in choice_replies_data:
-                block_choice = BlockChoiceSerializer.create(
-                    BlockChoiceSerializer(), choice_data
+        for block, data in zip(initial_blocks, blocks_data):
+            choice_replies_data = data.pop("choice_replies", [])
+            updated_block = BlockSerializerForClient.update(
+                BlockSerializerForClient(),
+                block,
+                data,
+            )
+            choice_blocks = updated_block.choice_replies.all()
+            for block, choice_data in zip(choice_blocks, choice_replies_data):
+                BlockChoiceSerializer.update(
+                    BlockChoiceSerializer(),
+                    block,
+                    choice_data,
                 )
-                block.choice_replies.add(block_choice)
-            instance.blocks.add(block)
         instance.save()
         return instance
 
