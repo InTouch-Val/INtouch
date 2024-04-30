@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { useCallback } from 'react';
 import { EditorState } from 'draft-js';
 import { EditorToolbar } from '../../editors-toolbar';
 import { ToolbarProvider } from '../../ToolbarContext';
@@ -21,13 +22,16 @@ function Block({
 }) {
   const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
 
-  const handleEditorStateChange = (newEditorState) => {
-    setEditorState(newEditorState);
-    // Конвертируем editorState в строку и обновляем title
-    const contentState = newEditorState.getCurrentContent();
-    const text = contentState.getPlainText();
-    updateBlock(block.id, contentState, block.choices, text);
-  };
+  const handleEditorStateChange = useCallback(
+    (newEditorState) => {
+      setEditorState(newEditorState);
+      // Конвертируем editorState в строку и обновляем title
+      const contentState = newEditorState.getCurrentContent();
+      const text = contentState.getPlainText();
+      updateBlock(block.id, contentState, block.choices, text);
+    },
+    [block.id, block.content, block.choices, updateBlock],
+  );
 
   const editorRef = useRef(null);
 
@@ -42,6 +46,7 @@ function Block({
             placeholder={placeholder}
             className="block-title-input"
             style={{ display: 'none' }}
+            onChange={() => {}}
           />
           <ToolbarProvider>
             <EditorToolbar

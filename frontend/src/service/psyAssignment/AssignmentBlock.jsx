@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { EditorToolbar } from '../editors-toolbar';
@@ -20,11 +21,11 @@ function AssignmentBlock({
 }) {
   const [title, setTitle] = useState(block.title);
   const [choices, setChoices] = useState(block.choices || []);
-  const [minValue, setMinValue] = useState(block.minValue || 1);
+  const [minValue, setMinValue] = useState(block.minValue !== undefined ? block.minValue : 1);
   const [maxValue, setMaxValue] = useState(block.maxValue || 10);
   const [choiceRefs, setChoiceRefs] = useState([]);
-  const [leftPole, setLeftPole] = useState(block.leftPole || '');
-  const [rightPole, setRightPole] = useState(block.rightPole || '');
+  const [leftPole, setLeftPole] = useState(block.leftPole || block.left_pole || '');
+  const [rightPole, setRightPole] = useState(block.rightPole || block.right_pole || '');
   const [image, setImage] = useState(block.image);
 
   useEffect(() => {
@@ -102,88 +103,106 @@ function AssignmentBlock({
     );
   }
 
-  const handleTitleChange = (event) => {
-    setTitle(event.target.value);
-    updateBlock(block.id, block.content, choices, event.target.value);
-  };
+  const handleTitleChange = useCallback(
+    (event) => {
+      setTitle(event.target.value);
+      updateBlock(block.id, block.content, choices, event.target.value);
+    },
+    [block.id, block.content, choices, updateBlock],
+  );
 
-  const handleChoiceChange = (index, event) => {
-    const newChoices = [...choices];
-    newChoices[index] = event.target.value;
-    setChoices(newChoices);
-    updateBlock(block.id, block.content, newChoices, title);
-  };
+  const handleChoiceChange = useCallback(
+    (index, event) => {
+      const newChoices = [...choices];
+      newChoices[index] = event.target.value;
+      setChoices(newChoices);
+      updateBlock(block.id, block.content, newChoices, title);
+    },
+    [block.id, block.content, choices, updateBlock],
+  );
 
-  const handleMinChange = (change, e) => {
-    e.preventDefault();
-    let newValue = Math.max(0, minValue + change);
-    // Добавляем проверку, чтобы ограничить максимальное значение
-    newValue = Math.min(1, newValue);
-    setMinValue(newValue);
-    updateBlock(block.id, block.content, block.choices, title, newValue, maxValue);
-  };
+  const handleMinChange = useCallback(
+    (change, e) => {
+      e.preventDefault();
+      let newValue = Math.max(0, minValue + change);
+      // Добавляем проверку, чтобы ограничить максимальное значение
+      newValue = Math.min(1, newValue);
+      setMinValue(newValue);
+      updateBlock(block.id, block.content, block.choices, title, newValue, maxValue);
+    },
+    [block.id, block.content, choices, updateBlock],
+  );
 
-  const handleMaxChange = (change, e) => {
-    e.preventDefault();
-    // Используем Math.min и Math.max для ограничения значения в диапазоне от 2 до 10
-    const newValue = Math.min(Math.max(maxValue + change, 2), 10);
-    setMaxValue(newValue);
-    updateBlock(block.id, block.content, block.choices, title, minValue, newValue);
-  };
+  const handleMaxChange = useCallback(
+    (change, e) => {
+      e.preventDefault();
+      // Используем Math.min и Math.max для ограничения значения в диапазоне от 2 до 10
+      const newValue = Math.min(Math.max(maxValue + change, 2), 10);
+      setMaxValue(newValue);
+      updateBlock(block.id, block.content, block.choices, title, minValue, newValue);
+    },
+    [block.id, block.content, choices, updateBlock],
+  );
 
-  const handleNumberChange = (event, type) => {
-    let value = parseInt(event.target.value, 10);
-    // Если тип ввода равен 'min', ограничиваем диапазон от 0 до 1
-    if (type === 'min') {
-      if (isNaN(value) || value < 0) {
-        value = 0;
-      } else if (value > 1) {
-        value = 1;
+  const handleNumberChange = useCallback(
+    (event, type) => {
+      let value = parseInt(event.target.value, 10);
+      // Если тип ввода равен 'min', ограничиваем диапазон от 0 до 1
+      if (type === 'min') {
+        if (isNaN(value) || value < 0) {
+          value = 0;
+        } else if (value > 1) {
+          value = 1;
+        }
+      } else {
+        if (isNaN(value) || value < 2) {
+          value = 2;
+        } else if (value > 10) {
+          value = 10;
+        }
       }
-    } else {
-      if (isNaN(value) || value < 2) {
-        value = 2;
-      } else if (value > 10) {
-        value = 10;
+
+      if (type === 'min') {
+        setMinValue(value);
+        updateBlock(block.id, block.content, block.choices, title, value, maxValue);
+      } else {
+        setMaxValue(value);
+        updateBlock(block.id, block.content, block.choices, title, minValue, value);
       }
-    }
+    },
+    [block.id, block.content, choices, updateBlock],
+  );
 
-    if (type === 'min') {
-      setMinValue(value);
-      updateBlock(block.id, block.content, block.choices, title, value, maxValue);
-    } else {
-      setMaxValue(value);
-      updateBlock(block.id, block.content, block.choices, title, minValue, value);
-    }
-  };
-
-  const handlePoleChange = (pole, value) => {
-    if (pole === 'left') {
-      setLeftPole(value);
-      updateBlock(
-        block.id,
-        block.content,
-        block.choices,
-        title,
-        minValue,
-        maxValue,
-        value,
-        rightPole,
-      );
-    } else {
-      setRightPole(value);
-      updateBlock(
-        block.id,
-        block.content,
-        block.choices,
-        title,
-        minValue,
-        maxValue,
-        leftPole,
-        value,
-      );
-    }
-  };
+  const handlePoleChange = useCallback(
+    (pole, value) => {
+      if (pole === 'left') {
+        setLeftPole(value);
+        updateBlock(
+          block.id,
+          block.content,
+          block.choices,
+          title,
+          minValue,
+          maxValue,
+          value,
+          rightPole,
+        );
+      } else {
+        setRightPole(value);
+        updateBlock(
+          block.id,
+          block.content,
+          block.choices,
+          title,
+          minValue,
+          maxValue,
+          leftPole,
+          value,
+        );
+      }
+    },
+    [block.id, block.content, choices, updateBlock],
+  );
 
   const handleNewChoiceFocus = (event) => {
     if (event.target.value === '') {
@@ -191,7 +210,7 @@ function AssignmentBlock({
     }
   };
 
-  const addChoice = () => {
+  const addChoice = useCallback(() => {
     if (choices.some((choice) => choice.trim() === '')) {
       // Не добавлять новый выбор, если есть пустой
       return;
@@ -204,13 +223,16 @@ function AssignmentBlock({
       updateBlock(block.id, block.content, updatedChoices, title);
       return updatedChoices;
     });
-  };
+  }, [block.id, block.content, choices, updateBlock]);
 
-  const removeChoice = (index) => {
-    const newChoices = choices.filter((_, i) => i !== index);
-    setChoices(newChoices);
-    updateBlock(block.id, block.content, newChoices, title);
-  };
+  const removeChoice = useCallback(
+    (index) => {
+      const newChoices = choices.filter((_, i) => i !== index);
+      setChoices(newChoices);
+      updateBlock(block.id, block.content, newChoices, title);
+    },
+    [block.id, block.content, choices, updateBlock],
+  );
 
   if (block.type === 'text') {
     return (
