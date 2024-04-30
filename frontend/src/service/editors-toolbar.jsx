@@ -79,6 +79,7 @@ const EditorToolbar = forwardRef(({ editorState, setEditorState, placeholder, bl
         const contentStateWithStyles = applyStylesFromCharacterList(contentState, rawContentState);
         console.log(contentStateWithStyles);
         const newEditorState = EditorState.createWithContent(contentStateWithStyles);
+        console.log(newEditorState);
         setEditorState(newEditorState);
       } catch (error) {
         console.error('Ошибка при преобразовании строки в объект:', error);
@@ -98,7 +99,7 @@ const EditorToolbar = forwardRef(({ editorState, setEditorState, placeholder, bl
 
   useEffect(() => {
     // Проверяем, если редактор пуст и не содержит текст block.question, добавляем плейсхолдер
-    if (!block.question) {
+    if (!block.question && !block.description) {
       setEditorState(
         EditorState.push(
           editorState,

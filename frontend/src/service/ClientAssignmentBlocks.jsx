@@ -4,8 +4,11 @@ import { faTrashCan, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { EditorToolbar } from '../service/editors-toolbar';
 import '../css/block.css';
 import '../css/assignments.css';
+import decodeStyledText from './decodeStyledText';
 
-function ClientAssignmentBlocks({ block, handleClick, updateBlock, isView }) {
+const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
+
+function ClientAssignmentBlocks({ block, updateBlock, isView, isViewPsy }) {
   const [choices, setChoices] = useState(block.choices || []);
   const [choiceRefs, setChoiceRefs] = useState([]);
   const [selectedValue, setSelectedValue] = useState(block.reply || null);
@@ -24,11 +27,6 @@ function ClientAssignmentBlocks({ block, handleClick, updateBlock, isView }) {
       setChoiceRefs(choices.map(() => React.createRef()));
     }
   }, [choices]);
-
-  function handleValues(event) {
-    handleClick(event);
-    //  console.log(event.target)
-  }
 
   function handleRangeClick(event) {
     updateBlock(block.id, event.target.value, []);
@@ -65,10 +63,19 @@ function ClientAssignmentBlocks({ block, handleClick, updateBlock, isView }) {
   if (block.type === 'text') {
     return (
       <div className="block assignment__block">
-        {!block.description ? (
+        {!block.description && !isViewPsy ? (
           <h3 className="assignment__block-header">{block.question}</h3>
         ) : (
-          <div className="block__text" dangerouslySetInnerHTML={{ __html: block.description }} />
+          <div
+            className="block__text"
+            dangerouslySetInnerHTML={{
+              __html: block.description
+                ? !isViewPsy
+                  ? block.description
+                  : decodeStyledText(block.description)
+                : decodeStyledText(getObjectFromEditorState(block.content)),
+            }}
+          />
         )}
       </div>
     );
@@ -76,10 +83,19 @@ function ClientAssignmentBlocks({ block, handleClick, updateBlock, isView }) {
   if (block.type === 'open') {
     return (
       <div className="block assignment__block">
-        {!block.description ? (
+        {!block.description && !isViewPsy ? (
           <h3 className="assignment__block-header">{block.question}</h3>
         ) : (
-          <div className="block__text" dangerouslySetInnerHTML={{ __html: block.description }} />
+          <div
+            className="block__text"
+            dangerouslySetInnerHTML={{
+              __html: block.description
+                ? !isViewPsy
+                  ? block.description
+                  : decodeStyledText(block.description)
+                : decodeStyledText(getObjectFromEditorState(block.content)),
+            }}
+          />
         )}
         <textarea
           className="block-text answer-input"
@@ -97,10 +113,19 @@ function ClientAssignmentBlocks({ block, handleClick, updateBlock, isView }) {
   if (block.type === 'image') {
     return (
       <div className="block assignment__block">
-        {!block.description ? (
+        {!block.description && !isViewPsy ? (
           <h3 className="assignment__block-header">{block.question}</h3>
         ) : (
-          <div className="block__text" dangerouslySetInnerHTML={{ __html: block.description }} />
+          <div
+            className="block__text"
+            dangerouslySetInnerHTML={{
+              __html: block.description
+                ? !isViewPsy
+                  ? block.description
+                  : decodeStyledText(block.description)
+                : decodeStyledText(getObjectFromEditorState(block.content)),
+            }}
+          />
         )}
         <img className="block-image" src={block.image} alt={block.question} />
       </div>
@@ -109,10 +134,19 @@ function ClientAssignmentBlocks({ block, handleClick, updateBlock, isView }) {
   if (block.type === 'range') {
     return (
       <div className="block assignment__block">
-        {!block.description ? (
+        {!block.description && !isViewPsy ? (
           <h3 className="assignment__block-header">{block.question}</h3>
         ) : (
-          <div className="block__text" dangerouslySetInnerHTML={{ __html: block.description }} />
+          <div
+            className="block__text"
+            dangerouslySetInnerHTML={{
+              __html: block.description
+                ? !isViewPsy
+                  ? block.description
+                  : decodeStyledText(block.description)
+                : decodeStyledText(getObjectFromEditorState(block.content)),
+            }}
+          />
         )}
         <div className="range-display">
           <span className="range-label">{block.left_pole || 'Left Pole'}</span>
@@ -142,10 +176,19 @@ function ClientAssignmentBlocks({ block, handleClick, updateBlock, isView }) {
   if (block.type === 'single') {
     return (
       <div className="block assignment__block">
-        {!block.description ? (
-          <h4 className="assignment__block-header">{block.question}</h4>
+        {!block.description && !isViewPsy ? (
+          <h3 className="assignment__block-header">{block.question}</h3>
         ) : (
-          <div className="block__text" dangerouslySetInnerHTML={{ __html: block.description }} />
+          <div
+            className="block__text"
+            dangerouslySetInnerHTML={{
+              __html: block.description
+                ? !isViewPsy
+                  ? block.description
+                  : decodeStyledText(block.description)
+                : decodeStyledText(getObjectFromEditorState(block.content)),
+            }}
+          />
         )}
         <fieldset className="assignments__block-radio">
           {block.choice_replies.map((radio, index) => {
@@ -175,10 +218,19 @@ function ClientAssignmentBlocks({ block, handleClick, updateBlock, isView }) {
   if (block.type === 'multiple') {
     return (
       <div className="block assignment__block">
-        {!block.description ? (
-          <h4 className="assignment__block-header">{block.question}</h4>
+        {!block.description && !isViewPsy ? (
+          <h3 className="assignment__block-header">{block.question}</h3>
         ) : (
-          <div className="block__text" dangerouslySetInnerHTML={{ __html: block.description }} />
+          <div
+            className="block__text"
+            dangerouslySetInnerHTML={{
+              __html: block.description
+                ? !isViewPsy
+                  ? block.description
+                  : decodeStyledText(block.description)
+                : decodeStyledText(getObjectFromEditorState(block.content)),
+            }}
+          />
         )}
         <p className="assignment__block-note">More than one answer possible</p>
         <fieldset className="assignments__block-radio">
