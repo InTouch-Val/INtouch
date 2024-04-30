@@ -137,6 +137,7 @@ class UserSerializer(serializers.ModelSerializer):
         remove_unverified_user.send_with_options(
             args=(user.pk,), delay=TIME_DELETE_NON_ACTIVE_USER
         )
+        return user
 
 
 class PasswordResetSerializer(serializers.Serializer):
