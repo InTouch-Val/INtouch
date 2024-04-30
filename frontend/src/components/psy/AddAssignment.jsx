@@ -17,6 +17,8 @@ import { useAuth } from '../../service/authContext';
 import { Modal } from '../../service/modal';
 import { Headline } from './Headline';
 import { ImageQuestionBlock } from './ImageQuestionBlock';
+import { ClientAssignmentBlocks } from '../../service/ClientAssignmentBlocks';
+import decodeStyledText from '../../service/decodeStyledText';
 import HeadlinerImg from './HeadlinerImg/HeadlinerImg';
 import '../../css/assignments.css';
 import HeaderAssignment from './HeaderAssigmentPage/HeaderAssignment';
@@ -123,7 +125,7 @@ function AddAssignment() {
         return {
           type: block.type,
           question: block.question || block.title,
-          description: getObjectFromEditorState(block.content),
+          description: block.description,
         };
       }
       if (block.type === 'range') {
@@ -134,30 +136,22 @@ function AddAssignment() {
           end_range: block.maxValue,
           left_pole: block.leftPole || 'Left Pole',
           right_pole: block.rightPole || 'Right Pole',
-          description: getObjectFromEditorState(block.content),
+          description: block.description,
         };
       }
       if (block.type === 'image') {
-        if (selectedImageForBlock && selectedImageForBlock.url) {
-          return {
-            type: block.type,
-            question: block.question || block.title,
-            image: selectedImageForBlock.url,
-            description: getObjectFromEditorState(block.content),
-          };
-        } else {
-          return {
-            type: block.type,
-            question: block.question || block.title,
-            description: getObjectFromEditorState(block.content),
-          };
-        }
+        return {
+          type: block.type,
+          question: block.question || block.title,
+          ...(selectedImageForBlock && { image: selectedImageForBlock.url }),
+          description: block.description,
+        };
       }
       return {
         type: block.type,
         question: block.question || block.title,
         choice_replies: block.choice_replies,
-        description: getObjectFromEditorState(block.content),
+        description: block.description,
       };
     });
 
@@ -236,7 +230,7 @@ function AddAssignment() {
       id: blocks.length + 1,
       type,
       title: '',
-      content: type === 'text' || 'open' ? EditorState.createEmpty() : '',
+      content: EditorState.createEmpty(),
       choices: type === 'text' || 'open' ? [] : [''],
       minValue: type === 'range' ? 1 : null,
       maxValue: type === 'range' ? 10 : null,
@@ -300,26 +294,27 @@ function AddAssignment() {
     newRightPole,
     newImage,
   ) => {
-    const updatedBlocks = blocks.map((block) => {
-      if (block.id === blockId) {
-        return {
-          ...block,
-          content: newContent || block.content,
-          choices: newChoices || block.choices,
-          title: newTitle || block.title,
-          choice_replies:
-            newChoices?.map((choice) => ({ reply: choice, checked: false })) ||
-            block.choice_replies,
-          minValue: newMinValue === undefined ? block.minValue : newMinValue,
-          maxValue: newMaxValue === undefined ? block.maxValue : newMaxValue,
-          leftPole: newLeftPole === undefined ? block.leftPole : newLeftPole,
-          rightPole: newRightPole === undefined ? block.rightPole : newRightPole,
-          image: newImage === undefined ? block.image : newImage,
-        };
-      }
-      return block;
-    });
-    setBlocks(updatedBlocks);
+    setBlocks((prevBlocks) =>
+      prevBlocks.map((block) =>
+        block.id === blockId
+          ? {
+              ...block,
+              content: newContent || block.content,
+              description: getObjectFromEditorState(newContent) || block.description,
+              choices: newChoices || block.choices,
+              title: newTitle || block.title,
+              choice_replies:
+                newChoices?.map((choice) => ({ reply: choice, checked: false })) ||
+                block.choice_replies,
+              minValue: newMinValue ?? block.minValue,
+              maxValue: newMaxValue ?? block.maxValue,
+              leftPole: newLeftPole ?? block.leftPole,
+              rightPole: newRightPole ?? block.rightPole,
+              image: newImage ?? block.image,
+            }
+          : block,
+      ),
+    );
   };
 
   return (
@@ -400,18 +395,12 @@ function AddAssignment() {
           {isChangeView ? (
             <>
               {Array.from(blocks).map((block, index) => (
-                <AssignmentBlock
-                  key={block.id}
+                <ClientAssignmentBlocks
+                  key={index}
                   block={block}
                   updateBlock={updateBlock}
-                  removeBlock={removeBlock}
-                  copyBlock={copyBlock}
-                  moveBlockForward={moveBlockForward}
-                  moveBlockBackward={moveBlockBackward}
-                  index={index}
-                  readOnly={true}
                   isView={true}
-                  setSelectedImageForBlock={setSelectedImageForBlock}
+                  isViewPsy={true}
                 />
               ))}
             </>
@@ -489,102 +478,6 @@ function ViewAssignment() {
     author: '',
     blocks: [],
   });
-
-  function decodeStyledText(jsonData) {
-    const data = JSON.parse(jsonData);
-    let html = '';
-    let isList = false;
-    let listType = '';
-
-    const applyStyles = (char, styles) => {
-      if (styles.includes('BOLD')) {
-        char = `<b>${char}</b>`;
-      }
-      if (styles.includes('ITALIC')) {
-        char = `<em>${char}</em>`;
-      }
-      if (styles.includes('UNDERLINE')) {
-        char = `<u>${char}</u>`;
-      }
-      return char;
-    };
-
-    for (const blockKey in data.blockMap) {
-      const block = data.blockMap[blockKey];
-      const blockType = block.type;
-
-      // Определение типа списка
-      let currentListType = '';
-      if (blockType === 'unordered-list-item') {
-        currentListType = 'ul';
-      } else if (blockType === 'ordered-list-item') {
-        currentListType = 'ol';
-      }
-
-      // Если текущий блок является началом нового списка
-      if (currentListType && (!isList || listType !== currentListType)) {
-        // Закрываем предыдущий список, если он открыт
-        if (isList) {
-          html += '</li></' + listType + '>';
-        }
-        // Начинаем новый список
-        isList = true;
-        listType = currentListType;
-        html += `<${listType}>`;
-      } else if (!currentListType && isList) {
-        // Если текущий блок не является частью списка, но список открыт
-        html += '</li></' + listType + '>';
-        isList = false;
-      }
-
-      let openTag = '';
-      let closeTag = '';
-      switch (blockType) {
-        case 'unstyled':
-          openTag = '<p>';
-          closeTag = '</p>';
-          break;
-        case 'header-one':
-          openTag = '<h1>';
-          closeTag = '</h1>';
-          break;
-        case 'header-two':
-          openTag = '<h2>';
-          closeTag = '</h2>';
-          break;
-        case 'header-three':
-          openTag = '<h3>';
-          closeTag = '</h3>';
-          break;
-        case 'unordered-list-item':
-        case 'ordered-list-item':
-          openTag = '<li>';
-          closeTag = '</li>';
-          break;
-        default:
-          break;
-      }
-
-      html += openTag;
-
-      for (let index = 0; index < block.text.length; index++) {
-        let char = block.text[index];
-        const { style } = block.characterList[index];
-        char = applyStyles(char, style);
-        html += char;
-      }
-
-      html += closeTag;
-    }
-
-    // Закрываем список, если он открыт
-    if (isList) {
-      html += '</li></' + listType + '>';
-    }
-
-    console.log(html);
-    return html;
-  }
 
   const setAssignmentCredentials = useCallback((data) => {
     const restoredBlocks = data.blocks
