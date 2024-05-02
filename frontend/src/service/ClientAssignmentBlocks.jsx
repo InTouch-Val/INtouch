@@ -8,10 +8,23 @@ import decodeStyledText from './decodeStyledText';
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
-function ClientAssignmentBlocks({ block, updateBlock, isView, isViewPsy }) {
+function ClientAssignmentBlocks({
+  block,
+  handleClick,
+  updateBlock,
+  isView,
+  inputValidationStates,
+  showInvalidInputs,
+  isViewPsy,
+}) {
   const [choices, setChoices] = useState(block.choices || []);
   const [choiceRefs, setChoiceRefs] = useState([]);
-  const [selectedValue, setSelectedValue] = useState(block.reply || null);
+  const [selectedValue, setSelectedValue] = useState(block.reply || '');
+
+  // Determines if the block is filled in
+  const isValid =
+    inputValidationStates[block.type + 'Inputs'] &&
+    inputValidationStates[block.type + 'Inputs'][block.id];
 
   useEffect(() => {
     if (choices && choices.length > 0) {
@@ -32,8 +45,11 @@ function ClientAssignmentBlocks({ block, updateBlock, isView, isViewPsy }) {
     updateBlock(block.id, event.target.value, []);
   }
 
+  const maxInputLength = 1000;
+
   function handleOpenChange(event) {
-    console.log(event.target.value);
+    const inputText = event.target.value;
+    setSelectedValue(inputText.length > maxInputLength ? inputText.slice(0, 1000) : inputText);
     updateBlock(block.id, event.target.value, []);
   }
 
@@ -82,7 +98,9 @@ function ClientAssignmentBlocks({ block, updateBlock, isView, isViewPsy }) {
   }
   if (block.type === 'open') {
     return (
-      <div className="block assignment__block">
+      <div
+        className={`block assignment__block ${!isValid && showInvalidInputs ? 'uncompleted' : ''}`}
+      >
         {!block.description && !isViewPsy ? (
           <h3 className="assignment__block-header">{block.question}</h3>
         ) : (
@@ -104,9 +122,8 @@ function ClientAssignmentBlocks({ block, updateBlock, isView, isViewPsy }) {
           placeholder="Write your answer here..."
           onChange={handleOpenChange}
           disabled={isView}
-        >
-          {block.reply}
-        </textarea>
+          value={selectedValue}
+        ></textarea>
       </div>
     );
   }
@@ -133,7 +150,9 @@ function ClientAssignmentBlocks({ block, updateBlock, isView, isViewPsy }) {
   }
   if (block.type === 'range') {
     return (
-      <div className="block assignment__block">
+      <div
+        className={`block assignment__block ${!isValid && showInvalidInputs ? 'uncompleted' : ''}`}
+      >
         {!block.description && !isViewPsy ? (
           <h3 className="assignment__block-header">{block.question}</h3>
         ) : (
@@ -175,9 +194,11 @@ function ClientAssignmentBlocks({ block, updateBlock, isView, isViewPsy }) {
   }
   if (block.type === 'single') {
     return (
-      <div className="block assignment__block">
+      <div
+        className={`block assignment__block ${!isValid && showInvalidInputs ? 'uncompleted' : ''}`}
+      >
         {!block.description && !isViewPsy ? (
-          <h3 className="assignment__block-header">{block.question}</h3>
+          <h4 className="assignment__block-header">{block.question}</h4>
         ) : (
           <div
             className="block__text"
@@ -217,9 +238,11 @@ function ClientAssignmentBlocks({ block, updateBlock, isView, isViewPsy }) {
   }
   if (block.type === 'multiple') {
     return (
-      <div className="block assignment__block">
+      <div
+        className={`block assignment__block ${!isValid && showInvalidInputs ? 'uncompleted' : ''}`}
+      >
         {!block.description && !isViewPsy ? (
-          <h3 className="assignment__block-header">{block.question}</h3>
+          <h4 className="assignment__block-header">{block.question}</h4>
         ) : (
           <div
             className="block__text"
