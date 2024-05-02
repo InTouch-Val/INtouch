@@ -20,3 +20,6 @@ export const menuDate = [
   { id: 1, text: `Date ▼`, status: 'Date up' },
   { id: 2, text: 'Date ▲', status: 'Date down' },
 ];
+
+export const minMobWidth = 320;
+export const maxMobWidth = 480;

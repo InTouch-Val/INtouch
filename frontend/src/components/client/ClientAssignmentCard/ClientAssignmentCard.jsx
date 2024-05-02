@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import './ClientAssignmentCard.css';
 import { API } from '../../../service/axios';
+import { minMobWidth, maxMobWidth } from '../../../utils/constants';
 
 function ClientAssignmentCard({ assignmentData, openAssignment }) {
   const [isShowContextMenu, setIsShowContextMenu] = useState(false);
@@ -81,7 +82,7 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      if (width >= 320 && width <= 480) {
+      if (width >= minMobWidth && width <= maxMobWidth) {
         setIsMobile(true);
       } else {
         setIsMobile(false);
