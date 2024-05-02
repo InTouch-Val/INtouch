@@ -5,6 +5,8 @@ import { EditorToolbar } from '../service/editors-toolbar';
 import '../css/block.css';
 import '../css/assignments.css';
 import decodeStyledText from './decodeStyledText';
+import '../components/client/CompleteAssignments/CompleteAssignments.css';
+import { minMobWidth, maxMobWidth } from '../utils/constants';
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
@@ -52,6 +54,25 @@ function ClientAssignmentBlocks({
     setSelectedValue(inputText.length > maxInputLength ? inputText.slice(0, 1000) : inputText);
     updateBlock(block.id, event.target.value, []);
   }
+
+  const [isMobileWidth, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width >= minMobWidth && width <= maxMobWidth) {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
+    };
+
+    // Sets the initial state based on the current window size
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   function handleSingleMultipleClick(event) {
     // Создаём новый массив newChoices, обновляя соответствующий элемент
@@ -175,15 +196,32 @@ function ClientAssignmentBlocks({
               (_, i) => i + block.start_range,
             ).map((value) => (
               <label key={value} className="range-option">
-                <input
-                  type="radio"
-                  name={`range-${block.id}`}
-                  value={value}
-                  onChange={handleRangeClick}
-                  defaultChecked={value.toString() === block.reply}
-                  disabled={isView}
-                />
-                <span className="range-option-label">{value}</span>
+                {isMobileWidth ? (
+                  <>
+                    <span className="range-option-label">{value}</span>
+                    <input
+                      type="radio"
+                      name={`range-${block.id}`}
+                      value={value}
+                      onChange={handleRangeClick}
+                      defaultChecked={value.toString() === block.reply}
+                      disabled={isView}
+                      className="block-radio__input"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <input
+                      type="radio"
+                      name={`range-${block.id}`}
+                      value={value}
+                      onChange={handleRangeClick}
+                      defaultChecked={value.toString() === block.reply}
+                      disabled={isView}
+                    />
+                    <span className="range-option-label">{value}</span>
+                  </>
+                )}
               </label>
             ))}
           </div>
