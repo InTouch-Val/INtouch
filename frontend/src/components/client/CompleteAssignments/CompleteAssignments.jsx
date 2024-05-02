@@ -21,6 +21,7 @@ import decodeStyledText from '../../../service/decodeStyledText';
 import Modal from '../../modals/Modal/Modal';
 import AssignmentNotComplete from '../../modals/Notifications/assignmentNotComplete';
 import AssignmentExit from '../../modals/Notifications/assgnmentExit';
+import { minMobWidth, maxMobWidth } from '../../../utils/constants';
 
 function CompleteAssignments() {
   const location = useLocation();
@@ -315,7 +316,7 @@ function CompleteAssignments() {
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      if (width >= 320 && width <= 480) {
+      if (width >= minMobWidth && width <= maxMobWidth) {
         setIsMobile(true);
       } else {
         setIsMobile(false);

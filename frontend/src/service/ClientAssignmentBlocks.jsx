@@ -6,6 +6,7 @@ import '../css/block.css';
 import '../css/assignments.css';
 import decodeStyledText from './decodeStyledText';
 import '../components/client/CompleteAssignments/CompleteAssignments.css';
+import { minMobWidth, maxMobWidth } from '../utils/constants';
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
@@ -59,7 +60,7 @@ function ClientAssignmentBlocks({
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      if (width >= 320 && width <= 480) {
+      if (width >= minMobWidth && width <= maxMobWidth) {
         setIsMobile(true);
       } else {
         setIsMobile(false);
