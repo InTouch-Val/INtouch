@@ -61,3 +61,39 @@
     grid-template-columns: auto;
   }
 }
+
+.close-modal__text {
+  width: 611px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  font-family: 'Montserrat';
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 28px;
+  color: #656565;
+}
+
+.diary__button {
+  font-family: 'Montserrat';
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 17px;
+  text-align: center;
+  color: #fff;
+
+  width: 163px;
+  height: 39px;
+  margin: 0;
+}
+
+.diary__buttons-modal {
+  padding-top: 27px;
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+  justify-content: center;
+  align-items: center;
+}
