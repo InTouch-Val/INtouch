@@ -348,9 +348,11 @@ function CompleteAssignments() {
       </h1>
       <div className="rating_section">
         <div className="rating-container">
-          {Array.from({ length: 11 }, (_, index) => index).map((num) => (
+          {isMobileWidth ? null : <img src={sadEmote} alt="Грустный смайлик" className="smiley" />}
+
+          {Array.from({ length: 10 }, (_, index) => index + 1).map((num) => (
             <label key={num} className="radio-label">
-              {num !== 0 && num !== 10 && <div className="mood-number">{num}</div>}
+              <div className="mood-number">{num}</div>
               <input
                 type="radio"
                 name="mood"
@@ -360,30 +362,11 @@ function CompleteAssignments() {
                 className="radio"
               />
               <div
-                className={`mood-display ${valueOfRate === num && (num === 0 || num === 10) ? 'emoteActive' : valueOfRate === num ? 'active' : ''}`}
-                style={num === 0 || num === 10 ? { border: 'none' } : { display: 'flex' }}
-              >
-                {num === 0 ? (
-                  <img
-                    src={sadEmote}
-                    alt="Грустный смайлик"
-                    className={`smiley ${valueOfRate === num ? 'active' : ''}`}
-                  />
-                ) : (
-                  ''
-                )}
-                {num === 10 ? (
-                  <img
-                    src={smilyEmote}
-                    alt="Весёлый смайлик"
-                    className={`smiley ${valueOfRate === num ? 'active' : ''}`}
-                  />
-                ) : (
-                  ''
-                )}
-              </div>
+                className={`mood-display ${valueOfRate === num ? 'emoteActive' : valueOfRate === num ? 'active' : ''}`}
+              ></div>
             </label>
           ))}
+          {isMobileWidth ? null : <img src={smilyEmote} alt="Весёлый смайлик" className="smiley" />}
         </div>
         <div className="rating_values_container">
           <span>Dissatisfied</span>
