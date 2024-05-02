@@ -30,7 +30,6 @@ function CompleteAssignments() {
   const isClientsAssignmentsPath =
     pathParts.length === 5 && pathParts[1] === 'clients' && pathParts[3] === 'assignments';
 
-  // State for opening and closing modal if assignment not complete
   const [modalExitIsOpen, setModalExitOpen] = useState(false);
 
   const [assignmentData, setAssignmentData] = useState({
@@ -104,8 +103,6 @@ function CompleteAssignments() {
 
   const goBack = () => {
     if (checkIfChangesMade()) {
-      console.log('assignmentData.blocks', assignmentData.blocks);
-      console.log('initialData.blocks', initialData);
       if (isSaved) {
         // Changes were made and saved
         navigate(-1);
@@ -117,13 +114,12 @@ function CompleteAssignments() {
         setModalExitOpen(true);
       }
     } else {
-      navigate(-1); // No changes made, safe to navigate back
+      navigate(-1); // NO changes made, safe to navigate back
       setInitialData(null);
       setShowInvalidInputs(false);
     }
   };
 
-  // State for checking if all inputs in the assignment are filled in
   const [inputValidationStates, setInputValidationStates] = useState({
     openInputs: {},
     multipleInputs: {},
@@ -131,7 +127,6 @@ function CompleteAssignments() {
     rangeInputs: {},
   });
 
-  // State for checking if all inputs in the assignment are filled in
   const [allInputsFilled, setAllInputsFilled] = useState(false);
 
   useEffect(() => {
@@ -211,9 +206,7 @@ function CompleteAssignments() {
   const handleRadioChange = (event) => {
     setValueOfRate(parseInt(event.target.value));
   };
-  //console.log(values)
 
-  // State for opening and closing modal if assignment not complete
   const [modalIsOpen, setModalOpen] = useState(false);
 
   function handleRateTaskBtnClick() {
@@ -317,7 +310,6 @@ function CompleteAssignments() {
     }
   }
 
-  //Changing "back" icon in header
   const [isMobileWidth, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -333,16 +325,13 @@ function CompleteAssignments() {
     // Sets the initial state based on the current window size
     handleResize();
 
-    // Adds event listener
     window.addEventListener('resize', handleResize);
-
-    // Cleans up event listener
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return isRateTask ? (
     <>
-      {isMobileWidth ? ( //display this button only on mobile
+      {isMobileWidth ? (
         <button
           onClick={() => {
             setIsRateTask(!isRateTask);
@@ -415,7 +404,7 @@ function CompleteAssignments() {
         />
       </div>
       <div className="assignment__buttons-box">
-        {isMobileWidth ? null : ( //display this button only on desktop
+        {isMobileWidth ? null : (
           <button
             onClick={() => {
               setIsRateTask(!isRateTask);
@@ -463,7 +452,7 @@ function CompleteAssignments() {
       <div className="assignment-header">
         <div className="assignment__container_button">
           <button className="button__type_back" onClick={goBack}>
-            {isMobileWidth ? ( //different icons depending on window width
+            {isMobileWidth ? (
               <FontAwesomeIcon icon={faArrowLeft} style={{ color: '#417D88' }} size="xl" />
             ) : (
               <img src={arrowLeft} />
@@ -472,7 +461,7 @@ function CompleteAssignments() {
 
           {!isClientsAssignmentsPath && (
             <button className="button__type_save" onClick={() => setIsSaved(true)}>
-              {isMobileWidth ? ( //different icons depending on window width
+              {isMobileWidth ? (
                 <FontAwesomeIcon icon={faFloppyDisk} style={{ color: '#417D88' }} size="2xl" />
               ) : (
                 <img src={save} />

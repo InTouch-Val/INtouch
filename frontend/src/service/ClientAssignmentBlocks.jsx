@@ -15,7 +15,7 @@ function ClientAssignmentBlocks({
   isView,
   inputValidationStates,
   showInvalidInputs,
-  isViewPsy
+  isViewPsy,
 }) {
   const [choices, setChoices] = useState(block.choices || []);
   const [choiceRefs, setChoiceRefs] = useState([]);
@@ -25,7 +25,6 @@ function ClientAssignmentBlocks({
   const isValid =
     inputValidationStates[block.type + 'Inputs'] &&
     inputValidationStates[block.type + 'Inputs'][block.id];
-  console.log(inputValidationStates);
 
   useEffect(() => {
     if (choices && choices.length > 0) {
@@ -46,10 +45,11 @@ function ClientAssignmentBlocks({
     updateBlock(block.id, event.target.value, []);
   }
 
+  const maxInputLength = 1000;
+
   function handleOpenChange(event) {
     const inputText = event.target.value;
-    // max text length is 1000
-    setSelectedValue(inputText.length > 1000 ? inputText.slice(0, 1000) : inputText);
+    setSelectedValue(inputText.length > maxInputLength ? inputText.slice(0, 1000) : inputText);
     updateBlock(block.id, event.target.value, []);
   }
 
@@ -123,9 +123,7 @@ function ClientAssignmentBlocks({
           onChange={handleOpenChange}
           disabled={isView}
           value={selectedValue}
-        >
-          {/* {block.reply} */}
-        </textarea>
+        ></textarea>
       </div>
     );
   }
