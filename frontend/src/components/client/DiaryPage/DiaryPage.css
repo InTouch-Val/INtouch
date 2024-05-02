@@ -7,7 +7,7 @@
 .diary__block-event {
   margin-top: 26px;
   display: flex;
-  min-width: 935px;
+  width: 100%;
   max-width: 1050px;
   flex-direction: column;
   gap: 20px;
