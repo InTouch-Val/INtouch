@@ -573,9 +573,10 @@ class AssignmentClientViewSet(
     ]
 
     def get_queryset(self):
-        if self.request.user.user_type == USER_TYPES[0]:
-            return self.request.user.client.assignments
-        return super().get_queryset()
+        user = self.request.user
+        if user.user_type == USER_TYPES[0]:
+            return user.client.assignments
+        return super().get_queryset().filter(visible=True)
 
     @action(detail=True, methods=["get"])
     def complete(self, request, pk):
