@@ -106,6 +106,9 @@ class AssignmentClient(models.Model):
         null=True,
     )  # ссылка на задание, с которого назначено текущее
 
+    class Meta:
+        ordering = ["-add_date"]
+
 
 class Block(models.Model):
     question = models.CharField(max_length=250)
@@ -179,3 +182,6 @@ class DiaryNote(models.Model):
     clarifying_emotion = ArrayField(
         models.CharField(max_length=50, choices=CLARIFYING_EMOTIONS), blank=True
     )
+
+    class Meta:
+        ordering = ["-add_date"]
