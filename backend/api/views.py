@@ -1,5 +1,7 @@
 import json
+from http import HTTPStatus
 
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from django.conf import settings
 from django.contrib.auth.hashers import check_password
 from django.core.exceptions import PermissionDenied
@@ -7,7 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics, viewsets, filters
+from rest_framework import generics, viewsets, filters, mixins
 from rest_framework.decorators import action, api_view
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -23,12 +25,34 @@ from api.constants import USER_TYPES
 from api.tasks import reset_email_update_status
 
 
-class UserViewSet(viewsets.ModelViewSet):
+@extend_schema_view(
+    create=extend_schema(
+        tags=["Users"],
+        summary="User registration (doctor)",
+        request=UserSerializer,
+        responses={int(HTTPStatus.CREATED): UserSerializer},
+    ),
+    list=extend_schema(
+        tags=["Users"],
+        summary="Get list of users",
+        responses={int(HTTPStatus.OK): UserSerializer},
+    ),
+    retrieve=extend_schema(
+        tags=["Users"],
+        summary="Get user by id",
+        responses={int(HTTPStatus.OK): UserSerializer},
+    ),
+)
+class UserViewSet(
+    viewsets.GenericViewSet,
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+):
     """Создание и получение пользователей"""
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    http_method_names = ["get", "post"]
 
     def get_permissions(self):
         if self.request.method == "POST":
@@ -38,6 +62,9 @@ class UserViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
+@extend_schema_view(
+    get=extend_schema(tags=["Users"], summary="Get user as authorized / authenticated")
+)
 class UserDetailsView(generics.ListAPIView):
     """Получение модели пользователя по токену"""
 
@@ -55,6 +82,12 @@ class UserDetailsView(generics.ListAPIView):
         return queryset
 
 
+@extend_schema_view(
+    get=extend_schema(
+        tags=["Email", "Users"],
+        summary="Confirm email reset",
+    )
+)
 class UserConfirmEmailView(APIView):
     """Активация аккаунта, выдача токенов авторизации"""
 
@@ -84,6 +117,13 @@ class UserConfirmEmailView(APIView):
             return Response({"error": "Account not activated"})
 
 
+@extend_schema_view(
+    post=extend_schema(
+        tags=["Password", "Users"],
+        summary="Request password reset",
+        request=PasswordResetSerializer,
+    )
+)
 class PasswordResetRequestView(APIView):
     """Запрос на сброс пароля"""
 
@@ -96,6 +136,12 @@ class PasswordResetRequestView(APIView):
         return Response(response_data)
 
 
+@extend_schema_view(
+    get=extend_schema(
+        tags=["Password", "Users"],
+        summary="Confirm password reset",
+    )
+)
 class PasswordResetConfirmView(generics.GenericAPIView):
     """Подтверждение сброса пароля, выдача токенов авторизации"""
 
@@ -117,6 +163,13 @@ class PasswordResetConfirmView(generics.GenericAPIView):
             return Response({"error": "Password did not reset"})
 
 
+@extend_schema_view(
+    post=extend_schema(
+        tags=["Password", "Users"],
+        summary="Set the new password",
+        request=ChangePasswordSerializer,
+    )
+)
 class PasswordResetCompleteView(APIView):
     """Установка нового пароля пользователя"""
 
@@ -135,6 +188,13 @@ class PasswordResetCompleteView(APIView):
             return Response({"error": "Password not reset"})
 
 
+@extend_schema_view(
+    post=extend_schema(
+        tags=["Password", "Users"],
+        summary="Change password",
+        request=UpdatePasswordSerializer,
+    )
+)
 class UpdatePasswordView(APIView):
     """Изменение существующего пароля пользователя"""
 
@@ -155,6 +215,13 @@ class UpdatePasswordView(APIView):
             return Response({"error": "Password not changed"})
 
 
+@extend_schema_view(
+    post=extend_schema(
+        tags=["Email", "Users"],
+        summary="Change the email",
+        request=UpdateEmailSerializer(),
+    )
+)
 class UpdateEmailView(APIView):
     """Изменение почты пользователя."""
 
@@ -181,6 +248,12 @@ class UpdateEmailView(APIView):
         return Response({"message": "Email update confirmation sent."})
 
 
+@extend_schema_view(
+    get=extend_schema(
+        tags=["Email", "Users"],
+        summary="Confierm email changing",
+    )
+)
 class UpdateEmailConfirmView(generics.GenericAPIView):
     """Подтверждение изменения почты пользователя."""
 
@@ -201,6 +274,10 @@ class UpdateEmailConfirmView(generics.GenericAPIView):
             return Response({"error": "Email not updated: unvalid token"})
 
 
+@extend_schema_view(
+    patch=extend_schema(tags=["Users"], summary="Redact user's data"),
+    put=extend_schema(tags=["Users"], summary="Redact user's data"),
+)
 class UpdateUserView(generics.UpdateAPIView):
     """Редактирование пользовательских данных"""
 
@@ -208,6 +285,10 @@ class UpdateUserView(generics.UpdateAPIView):
     serializer_class = UpdateUserSerializer
 
 
+@extend_schema(
+    tags=["Users"],
+    summary="Delete user",
+)
 @api_view(["GET"])
 def user_delete_hard(request):
     """Полное удаление пользователя"""
@@ -219,6 +300,7 @@ def user_delete_hard(request):
         return Response({"error": "User not found"})
 
 
+@extend_schema(tags=["Users"], summary="Deactivate user")
 @api_view(["GET"])
 def user_delete_soft(request):
     """Перевод пользователя в неактивные"""
@@ -231,6 +313,11 @@ def user_delete_soft(request):
         return Response({"error": "User not found"})
 
 
+@extend_schema_view(
+    delete=extend_schema(
+        tags=["Clients"], summary="Delete user from doctor's interface"
+    )
+)
 class ClientDeleteView(APIView):
     """Удаление аккаунта клиента из интерфейса доктора"""
 
@@ -245,6 +332,11 @@ class ClientDeleteView(APIView):
             return Response({"error": "Client not found"})
 
 
+@extend_schema_view(
+    post=extend_schema(
+        tags=["Clients"], summary="Add someone as a Client", request=AddClientSerializer
+    )
+)
 class AddClientView(APIView):
     """Добавление нового клиента из интерфейса доктора"""
 
@@ -259,6 +351,16 @@ class AddClientView(APIView):
         return Response({"message": "Confirm email sent."})
 
 
+@extend_schema_view(
+    patch=extend_schema(
+        tags=["Clients"],
+        summary="Redact client's profile / final part of the registration",
+    ),
+    put=extend_schema(
+        tags=["Clients"],
+        summary="Redact client's profile / final part of the registration",
+    ),
+)
 class UpdateClientView(generics.UpdateAPIView):
     """Завершение регистрации из интерфейса клиента, установка пароля"""
 
@@ -266,15 +368,21 @@ class UpdateClientView(generics.UpdateAPIView):
     serializer_class = UpdateClientSerializer
 
 
+@extend_schema_view(
+    patch=extend_schema(tags=["Clients"], summary="Redact client's info"),
+    put=extend_schema(tags=["Clients"], summary="Redact client's info"),
+)
 class DoctorUpdateClientView(generics.UpdateAPIView):
     """Редактирование доктором данных о клиенте"""
 
     permission_classes = (IsDoctorUser,)
-
     queryset = User.objects.all()
     serializer_class = DoctorUpdateClientSerializer
 
 
+@extend_schema_view(
+    get=extend_schema(tags=["Assignments"], summary="Add assignemt to favourites")
+)
 class AssignmentAddUserMyListView(APIView):
     """Добавление задачи в свой список"""
 
@@ -287,6 +395,9 @@ class AssignmentAddUserMyListView(APIView):
         return Response({"message": "Assignment added successfully."})
 
 
+@extend_schema_view(
+    get=extend_schema(tags=["Assignments"], summary="Delete assignment from favourites")
+)
 class AssignmentDeleteUserMyListView(APIView):
     """Удаление задачи из своего списка"""
 
@@ -299,6 +410,9 @@ class AssignmentDeleteUserMyListView(APIView):
         return Response({"message": "Assignment deleted successfully."})
 
 
+@extend_schema_view(
+    get=extend_schema(tags=["Assignments"], summary="Set assignment to a client")
+)
 class AddAssignmentClientView(APIView):
     """Назначение задачи клиенту"""
 
@@ -348,11 +462,19 @@ class AddAssignmentClientView(APIView):
         return Response({"message": "Assignment set client successfully."})
 
 
+@extend_schema_view(
+    create=extend_schema(tags=["Assignments"], summary="Create assignment"),
+    list=extend_schema(tags=["Assignments"], summary="Get list of assignments"),
+    retrieve=extend_schema(tags=["Assignments"], summary="Get assignment by id"),
+    update=extend_schema(tags=["Assignments"], summary="Update assignment"),
+    partial_update=extend_schema(tags=["Assignments"], summary="Update assignment"),
+    destroy=extend_schema(tags=["Assignments"], summary="Delete assignment"),
+    draft=extend_schema(tags=["Assignments"], summary="Move assignment to draft"),
+)
 class AssignmentViewSet(viewsets.ModelViewSet):
     """CRUD операции над задачами доктора"""
 
     permission_classes = (IsDoctorUser,)
-
     queryset = Assignment.objects.all()
     serializer_class = AssignmentSerializer
     permission_classes = [
@@ -408,7 +530,40 @@ class AssignmentViewSet(viewsets.ModelViewSet):
         return Response({"message": "Assignments saved in draft"})
 
 
-class AssignmentClientViewSet(viewsets.ModelViewSet):
+@extend_schema_view(
+    list=extend_schema(
+        tags=["Client's Assignments"], summary="List of client's assignments"
+    ),
+    retrieve=extend_schema(
+        tags=["Client's Assignments"], summary="Get client's assignment by id"
+    ),
+    update=extend_schema(
+        tags=["Client's Assignments"], summary="Update client's assignment"
+    ),
+    partial_update=extend_schema(
+        tags=["Client's Assignments"], summary="Update client's assignment"
+    ),
+    destroy=extend_schema(
+        tags=["Client's Assignments"], summary="Delete client's assignment"
+    ),
+    clear=extend_schema(
+        tags=["Client's Assignments"], summary="Clear answers in client's assignment"
+    ),
+    complete=extend_schema(
+        tags=["Client's Assignments"], summary="Complete client's assignment"
+    ),
+    visible=extend_schema(
+        tags=["Client's Assignments"],
+        summary="Change visibility of a client's assignment",
+    ),
+)
+class AssignmentClientViewSet(
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+):
     """CRUD операции над задачами клиента"""
 
     queryset = AssignmentClient.objects.all()
@@ -464,6 +619,7 @@ class AssignmentClientViewSet(viewsets.ModelViewSet):
         return Response({"message": f"Visibility changed to {assignment.visible}"})
 
 
+# TODO : To be added, not implemented in V1
 class NoteViewSet(viewsets.ModelViewSet):
     """CRUD операции над заметками"""
 
@@ -471,6 +627,19 @@ class NoteViewSet(viewsets.ModelViewSet):
     serializer_class = NoteSerializer
 
 
+@extend_schema_view(
+    list=extend_schema(tags=["Diaries"], summary="Get diary notes"),
+    retrieve=extend_schema(tags=["Diaries"], summary="Get diary note by id"),
+    create=extend_schema(tags=["Diaries"], summary="Create diary note"),
+    destroy=extend_schema(tags=["Diaries"], summary="Delete diary note"),
+    update=extend_schema(
+        tags=["Diaries"],
+        summary="Update diary note",
+        description="Deletes values of non passed fields",
+    ),
+    partial_update=extend_schema(tags=["Diaries"], summary="Update diary note"),
+    visible=extend_schema(tags=["Diaries"], summary="Change diary note visibility"),
+)
 class DiaryNoteViewSet(viewsets.ModelViewSet):
     """CRUD операции над заметками в дневнике"""
 
