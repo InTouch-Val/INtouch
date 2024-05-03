@@ -10,7 +10,7 @@ class IsAuthorOrReadOnly(IsAuthenticated):
         return request.method in SAFE_METHODS or request.user == obj.author
 
 
-class IsDoctorUser(BasePermission):
+class IsDoctorOnly(BasePermission):
     """Пермишн, дающий права только доктору."""
 
     def has_permission(self, request, view):
@@ -18,3 +18,16 @@ class IsDoctorUser(BasePermission):
 
     def has_object_permission(self, request, view, obj):
         return request.user.is_authenticated and request.user.user_type == "doctor"
+
+
+class DoctorRelClient(BasePermission):
+    """Пермишн, позволяющий доктору просматривать информацию только
+    о его клиентах"""
+    def has_permission(self, request, view):
+        return request.user.is_staff
+
+    def has_object_permission(self, request, view, obj):
+        return ((request.user.is_authenticated and request.user.user_type == "doctor"
+                and request.user.doctor.get(id) == obj.client.get(id))
+                or (request.user.is_authenticated and request.user.user_type == "client"
+                    and request.client.get(id) == obj.doctor.get(id)))

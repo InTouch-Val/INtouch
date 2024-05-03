@@ -33,6 +33,8 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.request.method == "POST":
             permission_classes = [AllowAny]
+        #elif self.request.method == "GET":
+            #permission_classes = [DoctorRelClient]
         else:
             permission_classes = self.permission_classes
         return [permission() for permission in permission_classes]
@@ -158,8 +160,6 @@ class UpdatePasswordView(APIView):
 class UpdateEmailView(APIView):
     """Изменение почты пользователя."""
 
-    throttle_scope = "email_update"
-
     def post(self, request):
         serializer = UpdateEmailSerializer(
             data=request.data, context={"request": request}
@@ -234,7 +234,7 @@ def user_delete_soft(request):
 class ClientDeleteView(APIView):
     """Удаление аккаунта клиента из интерфейса доктора"""
 
-    permission_classes = (IsDoctorUser,)
+    permission_classes = (IsDoctorOnly,)
 
     def delete(self, request, pk):
         try:
@@ -248,7 +248,7 @@ class ClientDeleteView(APIView):
 class AddClientView(APIView):
     """Добавление нового клиента из интерфейса доктора"""
 
-    permission_classes = (IsDoctorUser,)
+    permission_classes = (IsDoctorOnly,)
 
     def post(self, request):
         serializer = AddClientSerializer(data=request.data)
@@ -269,7 +269,7 @@ class UpdateClientView(generics.UpdateAPIView):
 class DoctorUpdateClientView(generics.UpdateAPIView):
     """Редактирование доктором данных о клиенте"""
 
-    permission_classes = (IsDoctorUser,)
+    permission_classes = (IsDoctorOnly,)
 
     queryset = User.objects.all()
     serializer_class = DoctorUpdateClientSerializer
@@ -278,7 +278,7 @@ class DoctorUpdateClientView(generics.UpdateAPIView):
 class AssignmentAddUserMyListView(APIView):
     """Добавление задачи в свой список"""
 
-    permission_classes = (IsDoctorUser,)
+    permission_classes = (IsDoctorOnly,)
 
     def get(self, request, pk):
         user = request.user
@@ -290,7 +290,7 @@ class AssignmentAddUserMyListView(APIView):
 class AssignmentDeleteUserMyListView(APIView):
     """Удаление задачи из своего списка"""
 
-    permission_classes = (IsDoctorUser,)
+    permission_classes = (IsDoctorOnly,)
 
     def get(self, request, pk):
         user = request.user
@@ -302,7 +302,7 @@ class AssignmentDeleteUserMyListView(APIView):
 class AddAssignmentClientView(APIView):
     """Назначение задачи клиенту"""
 
-    permission_classes = (IsDoctorUser,)
+    permission_classes = (IsDoctorOnly,)
 
     def get(self, request, pk, client_pk):
         assignment = get_object_or_404(Assignment, pk=pk)
@@ -351,7 +351,7 @@ class AddAssignmentClientView(APIView):
 class AssignmentViewSet(viewsets.ModelViewSet):
     """CRUD операции над задачами доктора"""
 
-    permission_classes = (IsDoctorUser,)
+    permission_classes = (IsDoctorOnly,)
 
     queryset = Assignment.objects.all()
     serializer_class = AssignmentSerializer
