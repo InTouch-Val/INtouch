@@ -9,6 +9,7 @@ function HeadlinerImg({ setSelectedImageForBlock, image, errorText, setErrorText
   const [uploadedImage, setUploadedImage] = useState(image || CloudUploadSignal);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
+  const oneMbyte = 1048576; // 1 МБ в байтах
 
   const handleDragOver = (event) => {
     event.preventDefault();
@@ -25,7 +26,7 @@ function HeadlinerImg({ setSelectedImageForBlock, image, errorText, setErrorText
 
   // Функция для проверки размера файла
   const isFileSizeValid = (file) => {
-    return file.size <= 1048576; // 1 МБ в байтах
+    return file.size <= oneMbyte; // 1 МБ
   };
 
   // Функция для проверки формата файла
