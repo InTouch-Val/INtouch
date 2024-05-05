@@ -76,6 +76,12 @@
   cursor: pointer;
 }
 
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .button__type_save {
+    margin: 0;
+  }
+}
+
 .assignment__container_button {
   display: flex;
   flex-direction: row;
@@ -210,6 +216,10 @@
     padding: 0;
     margin: 0;
   }
+}
+
+.uncompleted {
+  outline: 1px solid #c86b7c; /* Example style */
 }
 
 .assignment__block {
@@ -518,8 +528,7 @@
   display: flex;
   max-width: 712px;
   align-items: flex-end;
-  justify-content: center;
-  gap: 35px;
+  justify-content: space-between;
   text-align: center;
   padding: 20px 35px 26px;
   margin: 52px auto 26px;
@@ -551,7 +560,7 @@
     margin-left: 28px;
     margin-top: 36px;
     margin-bottom: 19px;
-    padding: 21px 0 15px 0;
+    padding: 21px 11px 15px 11px;
     box-sizing: border-box;
     background-color: white;
     border-radius: 6px;
@@ -562,7 +571,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 90%;
+    width: 100%;
     margin: 0 auto;
     margin-top: 10px;
     font-size: 13px;
@@ -601,16 +610,16 @@
 }
 
 @media screen and (min-width: 320px) and (max-width: 480px) {
-  .mood-display {
-    display: none;
-  }
-
   .mood-number {
     font-size: 14px;
     font-weight: 600;
     line-height: 19px;
     color: #1f304f;
     margin-bottom: 7px;
+  }
+
+  .mood-display {
+    border: 1px solid rgba(11 74 86 /40%);
   }
 }
 
@@ -633,12 +642,13 @@
 
 .mood-display.emoteActive::after {
   content: '';
-  width: 40px;
-  height: 40px;
+  width: 13px;
+  height: 13px;
   position: absolute;
-  top: -4px;
-  left: -6px;
-  background-color: rgba(31, 48, 79, 0.3);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 25%);
+  background-color: rgba(18, 18, 20, 0.3);
   border-radius: 50%;
   /* Закругляем тень */
   z-index: 0;
@@ -650,6 +660,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  display: block;
 }
 
 .smiley.active {
@@ -672,6 +683,11 @@
     margin-right: 28px;
     margin-left: 28px;
     padding: 10px;
+  }
+
+  .mood-display.emoteActive::after {
+    transform: translate(-50%, 50%);
+    background-color: #0b4a56;
   }
 }
 
@@ -724,11 +740,11 @@
 
 .rateTask__comment-input::placeholder {
   font-size: 17px;
+  font-family: Montserrat, Arial, sans-serif;
 }
 
 @media screen and (min-width: 320px) and (max-width: 480px) {
   .rateTask__comment-input::placeholder {
-    font-family: Montserrat, Arial, sans-serif;
     font-size: 15px;
     font-weight: 500;
     line-height: 17px;

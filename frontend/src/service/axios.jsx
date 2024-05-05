@@ -58,38 +58,20 @@ API.interceptors.request.use(
 );
 
 API.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    return response;
+  },
   async (error) => {
+    console.error('Response error:', error);
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
-      if (isRefreshing) {
-        return new Promise(function (resolve, reject) {
-          failedRequestsQueue.push({ resolve, reject });
-        })
-          .then((token) => {
-            originalRequest.headers['Authorization'] = 'Bearer ' + token;
-            return API(originalRequest);
-          })
-          .catch((error_) => {
-            throw error_;
-          });
-      }
-
-      originalRequest._retry = true;
-      isRefreshing = true;
-
+    if (error.response.status === 401 && originalRequest._retry) {
       try {
-        const newAccessToken = await refreshTokens();
-        processQueue(null, newAccessToken);
-        originalRequest.headers['Authorization'] = 'Bearer ' + newAccessToken;
+        const token = await refreshTokens();
+        originalRequest.headers['Authorization'] = 'Bearer ' + token;
         return API(originalRequest);
       } catch (refreshError) {
-        processQueue(refreshError, null);
-        localStorage.clear();
-        window.location.href = '/login';
+        console.error('Token refresh failed:', refreshError);
         throw refreshError;
-      } finally {
-        isRefreshing = false;
       }
     }
 

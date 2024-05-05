@@ -330,11 +330,11 @@
 
 .answer-input::placeholder {
   font-size: 17px;
+  font-family: Montserrat, Arial, sans-serif;
 }
 
 @media screen and (min-width: 320px) and (max-width: 480px) {
   .answer-input::placeholder {
-    font-family: Montserrat, Arial, sans-serif;
     font-size: 15px;
     font-weight: 500;
     line-height: 17px;

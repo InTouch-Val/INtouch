@@ -18,6 +18,10 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 import decodeStyledText from '../../../service/decodeStyledText';
+import Modal from '../../modals/Modal/Modal';
+import AssignmentNotComplete from '../../modals/Notifications/assignmentNotComplete';
+import AssignmentExit from '../../modals/Notifications/assgnmentExit';
+import { minMobWidth, maxMobWidth } from '../../../utils/constants';
 
 function CompleteAssignments() {
   const location = useLocation();
@@ -27,17 +31,8 @@ function CompleteAssignments() {
   const isClientsAssignmentsPath =
     pathParts.length === 5 && pathParts[1] === 'clients' && pathParts[3] === 'assignments';
 
-  const goBack = () => {
-    navigate(-1); // Переход назад
-  };
+  const [modalExitIsOpen, setModalExitOpen] = useState(false);
 
-  const [isRateTask, setIsRateTask] = useState(false);
-  const [editorStateFirst, setEditorStateFirst] = useState(() => EditorState.createEmpty());
-  const [editorStateSecond, setEditorStateSecond] = useState(() => EditorState.createEmpty());
-  const [editorStateThird, setEditorStateThird] = useState(() => EditorState.createEmpty());
-  const { setCurrentCard, card } = useAuth();
-  const [values, setValues] = useState({});
-  const [blocks, setBlocks] = useState([]);
   const [assignmentData, setAssignmentData] = useState({
     title: '',
     text: '',
@@ -47,9 +42,15 @@ function CompleteAssignments() {
     author: '',
     blocks: [],
   });
-  const [textareaValue, setTextareaValue] = useState(''); // State to hold the textarea value
 
-  console.log(textareaValue);
+  const [isRateTask, setIsRateTask] = useState(false);
+  const [editorStateFirst, setEditorStateFirst] = useState(() => EditorState.createEmpty());
+  const [editorStateSecond, setEditorStateSecond] = useState(() => EditorState.createEmpty());
+  const [editorStateThird, setEditorStateThird] = useState(() => EditorState.createEmpty());
+  const { setCurrentCard, card } = useAuth();
+  const [values, setValues] = useState({});
+  const [blocks, setBlocks] = useState([]);
+  const [textareaValue, setTextareaValue] = useState(''); // State to hold the textarea value
 
   const handleTextareaChange = (event) => {
     setTextareaValue(event.target.value); // Updates the state when textarea changes
@@ -86,9 +87,100 @@ function CompleteAssignments() {
     setBlocks(assignmentData.blocks);
   }, [assignmentData]);
 
+  //tracks if there are any changes in inputs
+  const [initialData, setInitialData] = useState(null);
+
   useEffect(() => {
-    console.log(blocks);
+    setInitialData(blocks);
   }, [blocks]);
+
+  const checkIfChangesMade = () => {
+    // Here we compare deep equality of current data and initial data
+    return JSON.stringify(assignmentData.blocks) !== JSON.stringify(initialData);
+  };
+
+  //track if the user has saved assignment changes
+  const [isSaved, setIsSaved] = useState(false);
+
+  const goBack = () => {
+    if (checkIfChangesMade()) {
+      if (isSaved) {
+        // Changes were made and saved
+        navigate(-1);
+        setShowInvalidInputs(false);
+        setInitialData(null);
+        setModalExitOpen(false);
+      } else {
+        // Changes were made and NOT saved
+        setModalExitOpen(true);
+      }
+    } else {
+      navigate(-1); // NO changes made, safe to navigate back
+      setInitialData(null);
+      setShowInvalidInputs(false);
+    }
+  };
+
+  const [inputValidationStates, setInputValidationStates] = useState({
+    openInputs: {},
+    multipleInputs: {},
+    singleInputs: {},
+    rangeInputs: {},
+  });
+
+  const [allInputsFilled, setAllInputsFilled] = useState(false);
+
+  useEffect(() => {
+    let newState = {
+      openInputs: {},
+      multipleInputs: {},
+      singleInputs: {},
+      rangeInputs: {},
+    };
+
+    let allFilled = true;
+
+    // Checks 'open' type blocks
+    const openReplies = blocks.filter((block) => block.type === 'open');
+    if (openReplies.some((block) => !block.reply || block.reply.trim() === '')) {
+      allFilled = false;
+    }
+    openReplies?.forEach((block) => {
+      newState.openInputs[block.id] = block.reply && block.reply.trim() !== '';
+    });
+
+    // Checks 'multiple' type blocks
+    const multipleChoices = blocks.filter((block) => block.type === 'multiple');
+    if (multipleChoices.some((block) => !block.choice_replies.some((option) => option.checked))) {
+      allFilled = false;
+    }
+    multipleChoices?.forEach((block) => {
+      newState.multipleInputs[block.id] = block.choice_replies.some((option) => option.checked);
+    });
+
+    // Checks 'single' type blocks
+    const singleChoices = blocks.filter((block) => block.type === 'single');
+    if (singleChoices.some((block) => !block.choice_replies.some((option) => option.checked))) {
+      allFilled = false;
+    }
+    singleChoices?.forEach((block) => {
+      newState.singleInputs[block.id] = block.choice_replies.some((option) => option.checked);
+    });
+
+    // Checks 'range' type blocks
+    const rangeChoices = blocks.filter((block) => block.type === 'range');
+    if (rangeChoices.some((block) => block.reply === undefined || block.reply.trim() === '')) {
+      allFilled = false;
+    }
+    rangeChoices?.forEach((block) => {
+      newState.rangeInputs[block.id] = block.reply !== undefined && block.reply.trim() !== '';
+    });
+
+    setInputValidationStates(newState);
+    setAllInputsFilled(allFilled);
+  }, [blocks]);
+
+  const [showInvalidInputs, setShowInvalidInputs] = useState(false);
 
   const updateBlock = (blockId, newReply, newChoices) => {
     const updatedBlocks = blocks.map((block) => {
@@ -115,10 +207,17 @@ function CompleteAssignments() {
   const handleRadioChange = (event) => {
     setValueOfRate(parseInt(event.target.value));
   };
-  //console.log(values)
+
+  const [modalIsOpen, setModalOpen] = useState(false);
 
   function handleRateTaskBtnClick() {
-    setIsRateTask(!isRateTask);
+    if (allInputsFilled) {
+      setIsRateTask(!isRateTask);
+      setShowInvalidInputs(false);
+    } else {
+      setModalOpen(true);
+      setShowInvalidInputs(true);
+    }
   }
 
   async function handleShareWithTherapist() {
@@ -162,7 +261,7 @@ function CompleteAssignments() {
   }
 
   async function handleDoneWithReview() {
-    //sends complete task WITH review
+    //sends complete task WITH rate
     const blockInfo = blocks.map(transformBlock);
 
     try {
@@ -188,7 +287,7 @@ function CompleteAssignments() {
   }
 
   async function handleCompleteTask() {
-    //sends complete task
+    //sends complete task without rate
     const blockInfo = blocks.map(transformBlock);
 
     try {
@@ -212,13 +311,12 @@ function CompleteAssignments() {
     }
   }
 
-  //Changing "back" icon in header
   const [isMobileWidth, setIsMobile] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      if (width >= 320 && width <= 480) {
+      if (width >= minMobWidth && width <= maxMobWidth) {
         setIsMobile(true);
       } else {
         setIsMobile(false);
@@ -228,17 +326,20 @@ function CompleteAssignments() {
     // Sets the initial state based on the current window size
     handleResize();
 
-    // Adds event listener
     window.addEventListener('resize', handleResize);
-
-    // Cleans up event listener
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return isRateTask ? (
     <>
-      {isMobileWidth ? ( //display this button only on mobile
-        <button onClick={handleRateTaskBtnClick} className="button__type_back button-back-mobile">
+      {isMobileWidth ? (
+        <button
+          onClick={() => {
+            setIsRateTask(!isRateTask);
+            setModalOpen(false);
+          }}
+          className="button__type_back button-back-mobile"
+        >
           <FontAwesomeIcon icon={faArrowLeft} style={{ color: '#417D88' }} size="xl" />
         </button>
       ) : null}
@@ -248,9 +349,11 @@ function CompleteAssignments() {
       </h1>
       <div className="rating_section">
         <div className="rating-container">
-          {Array.from({ length: 11 }, (_, index) => index).map((num) => (
+          {isMobileWidth ? null : <img src={sadEmote} alt="Грустный смайлик" className="smiley" />}
+
+          {Array.from({ length: 10 }, (_, index) => index + 1).map((num) => (
             <label key={num} className="radio-label">
-              {num !== 0 && num !== 10 && <div className="mood-number">{num}</div>}
+              <div className="mood-number">{num}</div>
               <input
                 type="radio"
                 name="mood"
@@ -260,30 +363,11 @@ function CompleteAssignments() {
                 className="radio"
               />
               <div
-                className={`mood-display ${valueOfRate === num && (num === 0 || num === 10) ? 'emoteActive' : valueOfRate === num ? 'active' : ''}`}
-                style={num === 0 || num === 10 ? { border: 'none' } : { display: 'flex' }}
-              >
-                {num === 0 ? (
-                  <img
-                    src={sadEmote}
-                    alt="Грустный смайлик"
-                    className={`smiley ${valueOfRate === num ? 'active' : ''}`}
-                  />
-                ) : (
-                  ''
-                )}
-                {num === 10 ? (
-                  <img
-                    src={smilyEmote}
-                    alt="Весёлый смайлик"
-                    className={`smiley ${valueOfRate === num ? 'active' : ''}`}
-                  />
-                ) : (
-                  ''
-                )}
-              </div>
+                className={`mood-display ${valueOfRate === num ? 'emoteActive' : valueOfRate === num ? 'active' : ''}`}
+              ></div>
             </label>
           ))}
+          {isMobileWidth ? null : <img src={smilyEmote} alt="Весёлый смайлик" className="smiley" />}
         </div>
         <div className="rating_values_container">
           <span>Dissatisfied</span>
@@ -304,9 +388,12 @@ function CompleteAssignments() {
         />
       </div>
       <div className="assignment__buttons-box">
-        {isMobileWidth ? null : ( //display this button only on desktop
+        {isMobileWidth ? null : (
           <button
-            onClick={handleRateTaskBtnClick}
+            onClick={() => {
+              setIsRateTask(!isRateTask);
+              setModalOpen(false);
+            }}
             className="button__type_back button__type_back_greenWhite"
           >
             <img src={arrowBack} />
@@ -349,16 +436,16 @@ function CompleteAssignments() {
       <div className="assignment-header">
         <div className="assignment__container_button">
           <button className="button__type_back" onClick={goBack}>
-            {isMobileWidth ? ( //different icons depending on window width
-              <FontAwesomeIcon icon={faArrowLeft} style={{ color: '#417D88' }} size="2xl" />
+            {isMobileWidth ? (
+              <FontAwesomeIcon icon={faArrowLeft} style={{ color: '#417D88' }} size="xl" />
             ) : (
               <img src={arrowLeft} />
             )}
           </button>
 
           {!isClientsAssignmentsPath && (
-            <button className="button__type_save">
-              {isMobileWidth ? ( //different icons depending on window width
+            <button className="button__type_save" onClick={() => setIsSaved(true)}>
+              {isMobileWidth ? (
                 <FontAwesomeIcon icon={faFloppyDisk} style={{ color: '#417D88' }} size="2xl" />
               ) : (
                 <img src={save} />
@@ -450,6 +537,8 @@ function CompleteAssignments() {
               handleClick={handleValues}
               updateBlock={updateBlock}
               isView={isClientsAssignmentsPath}
+              inputValidationStates={inputValidationStates}
+              showInvalidInputs={showInvalidInputs}
             />
           ))}
       </div>
@@ -475,6 +564,27 @@ function CompleteAssignments() {
           </>
         )}
       </div>
+
+      {modalIsOpen ? (
+        <Modal>
+          <AssignmentNotComplete
+            completeClick={() => setIsRateTask(!isRateTask)}
+            backClick={() => setModalOpen(false)}
+          />
+        </Modal>
+      ) : null}
+
+      {modalExitIsOpen ? (
+        <Modal>
+          <AssignmentExit
+            saveClick={() => {
+              setIsSaved(true);
+              navigate(-1);
+            }}
+            discardClick={() => navigate(-1)}
+          />
+        </Modal>
+      ) : null}
     </>
   );
 }

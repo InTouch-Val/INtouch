@@ -320,3 +320,14 @@ LOGGING = {
         },
     },
 }
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "INtouch API",
+    "DESCRIPTION": "To be added",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SWAGGER_UI_SETTINGS": {
+        "filter": True,
+    },
+    "COMPONENT_SPLIT_REQUEST": True,
+}
