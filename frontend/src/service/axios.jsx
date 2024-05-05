@@ -62,7 +62,7 @@ API.interceptors.response.use(
     return response;
   },
   async (error) => {
-    console.log('Response error:', error);
+    console.error('Response error:', error);
     const originalRequest = error.config;
     if (error.response.status === 401 && originalRequest._retry) {
       try {
