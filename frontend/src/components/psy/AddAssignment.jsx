@@ -42,6 +42,20 @@ function AddAssignment() {
   });
 
   const [isChangeView, setChangeView] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    console.log(title, description);
+    if (title.length > 2 && description.length > 2) {
+      setErrorText('');
+
+      const titleElement = document.getElementById('title');
+
+      const textElement = document.getElementById('text');
+      titleElement.classList.remove('error');
+      textElement.classList.remove('error');
+    }
+  }, [title, description]);
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -118,8 +132,52 @@ function AddAssignment() {
     console.log(blocks);
   }, [blocks]);
 
+  function parseErrorText(errorText) {
+    const errors = JSON.parse(errorText);
+    const errorMessages = {};
+
+    errors.title.forEach((message) => {
+      errorMessages.title = message;
+    });
+
+    errors.text.forEach((message) => {
+      errorMessages.description = message;
+    });
+
+    errors.blocks?.forEach((block, index) => {
+      if (block.image) {
+        errorMessages[`blocks #${index + 1} image`] = block.image[0];
+      }
+      if (block.description) {
+        errorMessages[`blocks #${index + 1} description`] = block.description[0];
+      }
+      if (block.question) {
+        errorMessages[`blocks #${index + 1} question`] = block.question[0];
+      }
+      if (block.choice_replies) {
+        errorMessages[`blocks #${index + 1} choice_replies`] = block.choice_replies[0];
+      }
+      if (block.end_range) {
+        errorMessages[`blocks #${index + 1} end_range`] = block.end_range[0];
+      }
+      if (block.left_pole) {
+        errorMessages[`blocks #${index + 1} left_pole`] = block.left_pole[0];
+      }
+      if (block.right_pole) {
+        errorMessages[`blocks #${index + 1} right_pole`] = block.right_pole[0];
+      }
+      if (block.start_range) {
+        errorMessages[`blocks #${index + 1} start_range`] = block.start_range[0];
+      }
+    });
+    setHasScrolled(true);
+
+    return errorMessages;
+  }
+
   const handleSubmit = async (e, isDraft = false, isSaveAsDraft = false) => {
     e.preventDefault();
+
     const blockInfo = blocks.map((block) => {
       if (block.type === 'text' || block.type === 'open') {
         return {
@@ -214,12 +272,50 @@ function AddAssignment() {
         }
       }
     } catch (error) {
-      setErrorText('Fill in all the fields..');
+      const parsedError = parseErrorText(error.request.responseText);
+      console.log(parsedError);
+      // Преобразование объекта ошибок в строку для обновления состояния
+      const errorTextString = Object.entries(parsedError)
+        .map(([key, message]) => `${key}: ${message}`)
+        .join(', ');
+      setErrorText(`Please correct the following errors: ${errorTextString}`);
       console.error('Error creating assignment', error);
+      displayErrorMessages(parsedError);
     }
   };
 
   const [errorText, setErrorText] = useState('');
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  useEffect(() => {
+    const targetElement = document.getElementById('errorText');
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: 'smooth' });
+    }
+    setHasScrolled(false);
+  }, [hasScrolled]);
+
+  function displayErrorMessages(errorMessages) {
+    console.log(errorMessages);
+    if (errorMessages.title) {
+      const titleElement = document.getElementById('title');
+      titleElement.classList.add('error');
+    }
+    if (errorMessages.description) {
+      const textElement = document.getElementById('text');
+      textElement.classList.add('error');
+    }
+    const blockContainers = document.querySelectorAll('.block');
+    blockContainers.forEach((blockContainer, index) => {
+      const blockErrorKey = `blocks #${index + 1}`;
+      const blockErrorExists = Object.keys(errorMessages).some((key) =>
+        key.startsWith(blockErrorKey),
+      );
+      if (blockErrorExists) {
+        blockContainer.classList.add('error');
+      }
+    });
+  }
 
   const handleImageSelect = (image) => {
     setSelectedImage(image);
@@ -242,6 +338,7 @@ function AddAssignment() {
   const removeBlock = (blockId) => {
     const updatedBlocks = blocks.filter((block) => block.id !== blockId);
     setBlocks(updatedBlocks);
+    setIsError(false);
   };
 
   const copyBlock = (block) => {
@@ -324,6 +421,7 @@ function AddAssignment() {
         blocks={blocks}
         handleSubmit={(e) => handleSubmit(e, true, false)}
         errorText={errorText}
+        isError={isError}
         changeView={() => {
           setChangeView((prev) => !prev);
         }}
@@ -336,6 +434,7 @@ function AddAssignment() {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
+          id="title"
         />
         <input
           type="text"
@@ -344,6 +443,7 @@ function AddAssignment() {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
+          id="text"
         />
       </div>
       <div className="add-assignment-body">
@@ -417,6 +517,7 @@ function AddAssignment() {
                   moveBlockBackward={moveBlockBackward}
                   index={index}
                   setSelectedImageForBlock={setSelectedImageForBlock}
+                  setIsError={setIsError}
                 />
               ))}
             </>
@@ -444,6 +545,11 @@ function AddAssignment() {
             </button>
           </div>
         </div>
+        {(isError || errorText) && (
+          <span className="error__text error__text_header error__text_footer">
+            Please check all fields
+          </span>
+        )}
         <div className="buttons-save-as-draft-and-publish-container">
           <button
             className="buttons-save-as-draft-and-publish"
@@ -454,6 +560,7 @@ function AddAssignment() {
           <button
             className="buttons-save-as-draft-and-publish"
             onClick={(e) => handleSubmit(e, false, false)}
+            disabled={errorText || isError}
           >
             Complete & Publish
           </button>

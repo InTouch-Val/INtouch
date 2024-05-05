@@ -303,6 +303,11 @@
   cursor: pointer;
 }
 
+.buttons-save-as-draft-and-publish:disabled {
+  background-color: #a7acad;
+  cursor: default;
+}
+
 .answer-input {
   width: 95%;
   height: 100px;
@@ -335,4 +340,16 @@
     line-height: 17px;
     color: #e5e5e5;
   }
+}
+
+.form-creator {
+  width: 100%;
+}
+
+.error {
+  border: 2px red solid !important;
+}
+
+.errorCheckboxRadio {
+  outline: 1px red solid;
 }

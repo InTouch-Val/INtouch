@@ -5,7 +5,7 @@ import save from '../../../images/assignment-page/save.svg';
 import eye from '../../../images/assignment-page/eye.svg';
 import { useNavigate } from 'react-router-dom';
 
-export default function HeaderAssignment({ blocks, handleSubmit, errorText, changeView }) {
+export default function HeaderAssignment({ blocks, handleSubmit, errorText, changeView, isError }) {
   const navigate = useNavigate();
 
   function onBack() {
@@ -28,7 +28,9 @@ export default function HeaderAssignment({ blocks, handleSubmit, errorText, chan
             <img className="header__icon-eye" alt="changeView" src={eye} onClick={changeView} />
           </div>
         </div>
-        <span className="error__text">{errorText}</span>
+        <span id="errorText" className="error__text error__text_header">
+          {errorText || (isError && 'Please check all fields')}
+        </span>
       </header>
     </>
   );
