@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { API } from '../axios';
 import '../../css/registration.css';
+import { isValidEmail, isValidPassword } from './regex';
 
 //TODO: PopUp windows
 
@@ -29,12 +30,16 @@ function RegistrationForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Проверка наличия букв и цифр в пароле
-    const passwordRegex = /^(?=(?:.*[a-zA-Z]+))(?=(?:.*\d+))(?!.*(.)\1{3,}).{8,}$/;
-
-    if (!passwordRegex.test(formData.password)) {
+    if (!isValidPassword(formData.password)) {
       setError(
         'Password must contain letters, numbers, and no more than 3 consecutive identical characters.',
+      );
+      return;
+    }
+
+    if (!isValidEmail(formData.email)) {
+      setError(
+        'Please make sure your email address is in the format               example@example.com',
       );
       return;
     }
@@ -136,7 +141,7 @@ function RegistrationForm() {
             I agree with the terms and conditions
           </label>
         </div>
-        <button type="submit" className="action-button">
+        <button type="submit" className="action-button action-button_register-login">
           Register
         </button>
         <p>
