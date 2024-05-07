@@ -125,6 +125,9 @@ class Block(models.Model):
         blank=True,
     )
 
+    class Meta:
+        ordering = ["-pk"]
+
 
 class BlockChoice(models.Model):
     reply = models.CharField(max_length=100)
