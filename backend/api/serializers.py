@@ -332,7 +332,22 @@ class DoctorUpdateClientSerializer(serializers.ModelSerializer):
         return user
 
 
-class BlockChoiceSerializer(serializers.ModelSerializer):
+class BlockChoiceSerializerForClient(serializers.ModelSerializer):
+    """Block choice serializer for updating values in AssignmentClient"""
+
+    class Meta:
+        model = BlockChoice
+        fields = "__all__"
+        read_only_fields = ["reply"]
+
+    def update(self, instance, validated_data):
+        instance.checked = validated_data.pop("checked", False)
+        instance.save()
+        return instance
+
+
+class BlockChoiceSerializer(BlockChoiceSerializerForClient):
+
     class Meta:
         model = BlockChoice
         fields = "__all__"
@@ -341,9 +356,8 @@ class BlockChoiceSerializer(serializers.ModelSerializer):
         block_choice = BlockChoice.objects.create(**validated_data)
         return block_choice
 
-    # TODO: с комментарием действовать по ситуации
     def update(self, instance, validated_data):
-        # instance.reply = validated_data.pop("reply")
+        instance.reply = validated_data.pop("reply")
         instance.checked = validated_data.pop("checked", False)
         instance.save()
         return instance
@@ -352,7 +366,7 @@ class BlockChoiceSerializer(serializers.ModelSerializer):
 class BlockSerializerForClient(serializers.ModelSerializer):
     """Block serializer for updating values in AssignmentClient"""
 
-    choice_replies = BlockChoiceSerializer(many=True, required=False)
+    choice_replies = BlockChoiceSerializerForClient(many=True, required=False)
     left_pole = serializers.CharField(required=False)
     right_pole = serializers.CharField(required=False)
     image = Base64ImageField(read_only=True)
@@ -363,15 +377,21 @@ class BlockSerializerForClient(serializers.ModelSerializer):
         read_only_fields = [
             "question",
             "type",
+            "start_range",
+            "end_range",
         ]
 
 
 class BlockSerializer(BlockSerializerForClient):
+    choice_replies = BlockChoiceSerializer(many=True, required=False)
     image = Base64ImageField(default=None)
 
     class Meta:
         model = Block
         fields = "__all__"
+        read_only_fields = [
+            "reply",
+        ]
 
     def create(self, validated_data):
         choice_replies_data = validated_data.pop("choice_replies", [])
@@ -409,6 +429,13 @@ class AssignmentSerializer(serializers.ModelSerializer):
             "author_name",
             "is_public",
             "avarage_grade",
+        ]
+        read_only_fields = [
+            "id",
+            "update_date",
+            "add_date",
+            "share",
+            "author",
         ]
 
     def create(self, validated_data):
@@ -491,15 +518,22 @@ class AssignmentClientSerializer(serializers.ModelSerializer):
             "assignment_root",
         ]
         read_only_fields = [
-            "user",
-            "language",
-            "tags",
-            "assignment_type",
-            "text",
+            "id",
             "title",
+            "text",
+            "update_date",
+            "add_date",
+            "assignment_type",
+            "status",
+            "tags",
+            "language",
+            "share",
             "image_url",
             "author",
             "author_name",
+            "user",
+            "visible",
+            "assignment_root",
         ]
 
     def validate_grade(self, data):
@@ -525,8 +559,8 @@ class AssignmentClientSerializer(serializers.ModelSerializer):
             )
             choice_blocks = updated_block.choice_replies.all()
             for block, choice_data in zip(choice_blocks, choice_replies_data):
-                BlockChoiceSerializer.update(
-                    BlockChoiceSerializer(),
+                BlockChoiceSerializerForClient.update(
+                    BlockChoiceSerializerForClient(),
                     block,
                     choice_data,
                 )
