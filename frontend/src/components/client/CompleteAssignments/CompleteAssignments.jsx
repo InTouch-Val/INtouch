@@ -550,7 +550,7 @@ function CompleteAssignments() {
               type="checkbox"
               className="card__input-checkbox  assignment__share-checkbox"
               defaultChecked={assignmentData?.visible}
-              onClick={() => handleShareWithTherapist(assignmentData?.id)}
+              onClick={() => handleShareWithTherapist()}
             />
           </label>
         </div>
