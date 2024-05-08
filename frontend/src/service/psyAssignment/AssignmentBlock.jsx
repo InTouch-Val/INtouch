@@ -18,6 +18,7 @@ function AssignmentBlock({
   readOnly,
   isView,
   setSelectedImageForBlock,
+  setIsError,
 }) {
   const [title, setTitle] = useState(block.title);
   const [choices, setChoices] = useState(block.choices || []);
@@ -27,6 +28,7 @@ function AssignmentBlock({
   const [leftPole, setLeftPole] = useState(block.leftPole || block.left_pole || '');
   const [rightPole, setRightPole] = useState(block.rightPole || block.right_pole || '');
   const [image, setImage] = useState(block.image);
+  const [errorText, setErrorText] = useState('');
 
   useEffect(() => {
     if (choices && choices.length > 0) {
@@ -42,6 +44,18 @@ function AssignmentBlock({
       setChoiceRefs(choices.map(() => React.createRef()));
     }
   }, [choices]);
+
+  const validateChoices = () => {
+    if ((block.type === 'single' || block.type === 'multiple') && choices.length < 2) {
+      setIsError(true);
+      setErrorText(
+        `${errorText.includes(' Please enter at least two options') ? errorText.replace(' Please enter at least two options', '') : errorText} Please enter at least two options`,
+      );
+    } else {
+      setIsError(false);
+      setErrorText(errorText.replace(' Please enter at least two options', ''));
+    }
+  };
 
   if (readOnly) {
     return (
@@ -248,6 +262,9 @@ function AssignmentBlock({
         moveBlockForward={moveBlockForward}
         moveBlockBackward={moveBlockBackward}
         index={index}
+        errorText={errorText}
+        setErrorText={setErrorText}
+        setIsError={setIsError}
       ></Block>
     );
   }
@@ -266,6 +283,9 @@ function AssignmentBlock({
         moveBlockForward={moveBlockForward}
         moveBlockBackward={moveBlockBackward}
         index={index}
+        errorText={errorText}
+        setErrorText={setErrorText}
+        setIsError={setIsError}
       ></Block>
     );
   }
@@ -284,6 +304,9 @@ function AssignmentBlock({
         moveBlockForward={moveBlockForward}
         moveBlockBackward={moveBlockBackward}
         index={index}
+        errorText={errorText}
+        setErrorText={setErrorText}
+        setIsError={setIsError}
       >
         <div className="range-inputs">
           <input
@@ -366,8 +389,17 @@ function AssignmentBlock({
         moveBlockForward={moveBlockForward}
         moveBlockBackward={moveBlockBackward}
         index={index}
+        errorText={errorText}
+        setErrorText={setErrorText}
+        setIsError={setIsError}
       >
-        <HeadlinerImg setSelectedImageForBlock={setSelectedImageForBlock} image={block.image} />
+        <HeadlinerImg
+          setSelectedImageForBlock={setSelectedImageForBlock}
+          image={block.image}
+          errorText={errorText}
+          setErrorText={setErrorText}
+          setIsError={setIsError}
+        />
       </Block>
     );
   }
@@ -385,13 +417,24 @@ function AssignmentBlock({
       moveBlockForward={moveBlockForward}
       moveBlockBackward={moveBlockBackward}
       index={index}
+      errorText={errorText}
+      setErrorText={setErrorText}
+      setIsError={setIsError}
     >
       {choices.map((choice, index) => (
         <div key={index} className="choice-option">
           {block.type === 'multiple' ? (
-            <input type="checkbox" disabled />
+            <input
+              type="checkbox"
+              disabled
+              className={`${errorText.includes('Please enter at least two options') ? 'errorCheckboxRadio' : ''}`}
+            />
           ) : (
-            <input type="radio" disabled />
+            <input
+              type="radio"
+              disabled
+              className={`${errorText.includes('Please enter at least two options') ? 'errorCheckboxRadio' : ''}`}
+            />
           )}
           <input
             ref={choiceRefs[index]}
@@ -400,6 +443,7 @@ function AssignmentBlock({
             onChange={(event) => handleChoiceChange(index, event)}
             placeholder={`Option ${index + 1}`}
             className="choice-input"
+            onBlur={validateChoices}
           />
           <button type="button" onClick={() => removeChoice(index)} className="button">
             <FontAwesomeIcon icon={faXmark} />
@@ -408,9 +452,19 @@ function AssignmentBlock({
       ))}
       <div className="choice-option">
         {block.type === 'single' ? (
-          <input type="radio" disabled style={{ opacity: 0.8 }} />
+          <input
+            type="radio"
+            disabled
+            style={{ opacity: 0.8 }}
+            className={`${errorText.includes('Please enter at least two options') ? 'errorCheckboxRadio' : ''}`}
+          />
         ) : (
-          <input type="checkbox" disabled style={{ opacity: 0.8 }} />
+          <input
+            type="checkbox"
+            disabled
+            style={{ opacity: 0.8 }}
+            className={`${errorText.includes('Please enter at least two options') ? 'errorCheckboxRadio' : ''}`}
+          />
         )}
         <input
           type="text"
