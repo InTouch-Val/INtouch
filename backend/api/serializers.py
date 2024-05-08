@@ -490,8 +490,6 @@ class AssignmentSerializer(serializers.ModelSerializer):
 class AssignmentClientSerializer(serializers.ModelSerializer):
     blocks = BlockSerializerForClient(many=True, required=False)
     author_name = serializers.StringRelatedField(source="author", read_only=True)
-    grade = serializers.IntegerField(required=False)
-    review = serializers.CharField(required=False)
     visible = serializers.BooleanField(read_only=True)
 
     class Meta:
@@ -543,8 +541,8 @@ class AssignmentClientSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.status = "in progress"
-        instance.grade = validated_data.get("grade", None)
-        instance.review = validated_data.get("review", "")
+        instance.grade = validated_data.get("grade", instance.grade)
+        instance.review = validated_data.get("review", instance.review)
         if "blocks" not in validated_data:
             instance.save()
             return instance
