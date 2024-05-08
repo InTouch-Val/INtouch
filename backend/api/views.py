@@ -656,7 +656,7 @@ class AssignmentClientViewSet(
             return user.client.assignments
         query = AssignmentClient.objects.none()
         for client_user in user.doctor.clients.all():
-            query = (query | client_user.client.assignments.all()).distinct()
+            query = query | client_user.client.assignments.all()
         return query
 
     @action(detail=True, methods=["get"])
