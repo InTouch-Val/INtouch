@@ -657,7 +657,7 @@ class AssignmentClientViewSet(
         query = AssignmentClient.objects.none()
         for client_user in user.doctor.clients.all():
             query = query | client_user.client.assignments.all()
-        return query
+        return query.filter(visible=True)
 
     @action(detail=True, methods=["get"])
     def complete(self, request, pk):
