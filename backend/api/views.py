@@ -655,7 +655,10 @@ class AssignmentClientViewSet(
         user = self.request.user
         if user.user_type == USER_TYPES[0]:
             return user.client.assignments
-        return super().get_queryset().filter(visible=True)
+        query = AssignmentClient.objects.none()
+        for user in user.doctor.clients.all():
+            query = (query | user.client.assignments.all()).distinct()
+        return query
 
     @action(detail=True, methods=["get"])
     def complete(self, request, pk):
