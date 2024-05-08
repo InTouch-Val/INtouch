@@ -21,7 +21,6 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
-
 from api.models import *
 from api.permissions import *
 from api.serializers import *
