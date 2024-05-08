@@ -236,6 +236,7 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         model = User
         fields = ["first_name", "last_name", "email", "date_of_birth", "photo"]
 
+    # TODO: настроить валидацию при необязательном введении одного из полей
     # def validate(self, attrs):
         # if len(attrs["first_name"]) < 2 or len(attrs["last_name"]) < 2:
             # raise serializers.ValidationError(
