@@ -33,8 +33,10 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.request.method == "POST":
             permission_classes = [AllowAny]
-        #elif self.request.method == "GET":
-            #permission_classes = [DoctorRelClient]
+        elif self.action == 'retrieve':
+            permission_classes = [DoctorRelClient]
+        elif self.action == 'list':
+            permission_classes = [IsStaffOnly]
         else:
             permission_classes = self.permission_classes
         return [permission() for permission in permission_classes]
@@ -204,6 +206,7 @@ class UpdateEmailConfirmView(generics.GenericAPIView):
 class UpdateUserView(generics.UpdateAPIView):
     """Редактирование пользовательских данных"""
 
+    permission_classes = (IsOwnerOnly,)
     queryset = User.objects.all()
     serializer_class = UpdateUserSerializer
 
@@ -270,7 +273,6 @@ class DoctorUpdateClientView(generics.UpdateAPIView):
     """Редактирование доктором данных о клиенте"""
 
     permission_classes = (IsDoctorOnly,)
-
     queryset = User.objects.all()
     serializer_class = DoctorUpdateClientSerializer
 
@@ -302,11 +304,13 @@ class AssignmentDeleteUserMyListView(APIView):
 class AddAssignmentClientView(APIView):
     """Назначение задачи клиенту"""
 
-    permission_classes = (IsDoctorOnly,)
-
     def get(self, request, pk, client_pk):
         assignment = get_object_or_404(Assignment, pk=pk)
         client = get_object_or_404(User, pk=client_pk)
+        if not request.user.doctor.clients.filter(id=client_pk).exists():
+            return Response(
+                {"message": "You cannot add assignment to not-yours client."}
+            )
         assignments_copy = AssignmentClient.objects.create(
             title=assignment.title,
             text=assignment.text,
@@ -351,13 +355,10 @@ class AddAssignmentClientView(APIView):
 class AssignmentViewSet(viewsets.ModelViewSet):
     """CRUD операции над задачами доктора"""
 
-    permission_classes = (IsDoctorOnly,)
-
+    # TODO: ограничить выдачу по связке доктор-задания его клиентов
+    permission_classes = (AssignmentDiaryDoctorOnly,)
     queryset = Assignment.objects.all()
     serializer_class = AssignmentSerializer
-    permission_classes = [
-        IsAuthorOrReadOnly,
-    ]
     filter_backends = [
         DjangoFilterBackend,
         filters.OrderingFilter,
@@ -416,6 +417,7 @@ class AssignmentClientViewSet(viewsets.ModelViewSet):
     filterset_fields = [
         "user",
     ]
+    permission_classes = (AssignmentAuthorOnly,)
 
     def get_queryset(self):
         if self.request.user.user_type == USER_TYPES[0]:
@@ -474,11 +476,13 @@ class NoteViewSet(viewsets.ModelViewSet):
 class DiaryNoteViewSet(viewsets.ModelViewSet):
     """CRUD операции над заметками в дневнике"""
 
+    # TODO: ограничить выдачу по связке доктор-заметки его клиентов
     queryset = DiaryNote.objects.filter(visible=True)
     serializer_class = DiaryNoteSerializer
     filterset_fields = [
         "author",
     ]
+    permission_classes = (AssignmentDiaryDoctorOnly,)
 
     def get_queryset(self):
         user = self.request.user

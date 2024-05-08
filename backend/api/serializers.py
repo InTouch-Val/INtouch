@@ -64,7 +64,7 @@ class DoctorSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    client = ClientSerializer(required=False)
+    client = serializers.SerializerMethodField()
     doctor = DoctorSerializer(required=False)
     password = serializers.CharField(write_only=True)
     confirm_password = serializers.CharField(write_only=True)
@@ -98,10 +98,27 @@ class UserSerializer(serializers.ModelSerializer):
             "new_email_temp",
         )
 
+    def get_client(self, obj):
+        user = None
+        request = self.context.get("request")
+        if request and hasattr(request, "user"):
+            user = request.user
+        if user.user_type == "client":
+            return None
+        else:
+            try:
+                return ClientSerializer(obj.client).data
+            except User.client.RelatedObjectDoesNotExist:
+                return None
+
     def validate(self, attrs):
         if len(attrs["first_name"]) < 2 or len(attrs["last_name"]) < 2:
             raise serializers.ValidationError(
                 "First and last names must be at least two-symbols words"
+            )
+        if len(attrs["first_name"]) > 50 or len(attrs["last_name"]) > 50:
+            raise serializers.ValidationError(
+                "First and last names cannot exceed 50 characters"
             )
         if attrs["password"] != attrs["confirm_password"]:
             raise serializers.ValidationError("Passwords do not match")
@@ -116,7 +133,7 @@ class UserSerializer(serializers.ModelSerializer):
             first_name=validated_data["first_name"].title(),
             last_name=validated_data["last_name"].title(),
             email=validated_data["email"],
-            password=(validated_data["password"]),
+            password=validated_data["password"],
             accept_policy=validated_data["accept_policy"],
             user_type=USER_TYPES[1],
             is_active=False,
@@ -219,12 +236,12 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         model = User
         fields = ["first_name", "last_name", "email", "date_of_birth", "photo"]
 
-    def validate(self, attrs):
-        if len(attrs["first_name"]) < 2 or len(attrs["last_name"]) < 2:
-            raise serializers.ValidationError(
-                "First and last names must be at least two-symbols words"
-            )
-        return attrs
+    # def validate(self, attrs):
+        # if len(attrs["first_name"]) < 2 or len(attrs["last_name"]) < 2:
+            # raise serializers.ValidationError(
+                # "First and last names must be at least two-symbols words"
+            # )
+        # return attrs
 
     def update(self, user, validated_data):
         user.first_name = validated_data.get("first_name", user.first_name)

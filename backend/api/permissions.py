@@ -1,13 +1,4 @@
-from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, BasePermission
-
-
-class IsAuthorOrReadOnly(IsAuthenticated):
-
-    def has_object_permission(self, request, view, obj):
-        """
-        Return `True` if permission is granted, `False` otherwise.
-        """
-        return request.method in SAFE_METHODS or request.user == obj.author
+from rest_framework.permissions import SAFE_METHODS, BasePermission
 
 
 class IsDoctorOnly(BasePermission):
@@ -22,12 +13,54 @@ class IsDoctorOnly(BasePermission):
 
 class DoctorRelClient(BasePermission):
     """Пермишн, позволяющий доктору просматривать информацию только
-    о его клиентах"""
+    о его клиентах, а клиенту - только о его докторе."""
+
+    def has_object_permission(self, request, view, obj):
+        return (
+            (request.user.is_authenticated and request.user.user_type == "doctor"
+             and obj.user_type == "client"
+             and request.user.doctor.clients.filter(id=obj.client.id).exists())
+            or (request.user.id == obj.id)
+            or (request.user.is_authenticated and request.user.user_type == "client"
+                and obj.doctor.clients.filter(id=request.user.id).exists())
+        )
+
+
+class IsStaffOnly(BasePermission):
+    """Пермишн, дающий права только админам."""
+
     def has_permission(self, request, view):
         return request.user.is_staff
 
+
+class IsOwnerOnly(BasePermission):
+    """Пермишн, дающий права на редактирование учетки только самому юзеру."""
+
+    def has_permission(self, request, view):
+        return request.user.is_authenticated
+
     def has_object_permission(self, request, view, obj):
-        return ((request.user.is_authenticated and request.user.user_type == "doctor"
-                and request.user.doctor.get(id) == obj.client.get(id))
-                or (request.user.is_authenticated and request.user.user_type == "client"
-                    and request.client.get(id) == obj.doctor.get(id)))
+        return request.user.id == obj.id
+
+
+class AssignmentAuthorOnly(BasePermission):
+    """Пермишн, дающий права на операции над задачами только целевому
+    клиенту или его доктору."""
+
+    def has_permission(self, request, view):
+        return request.user.is_authenticated
+
+    def has_object_permission(self, request, view, obj):
+        return (request.user.id == obj.user.id
+                or request.user.doctor.clients.filter(id=obj.user.client.id).exists())
+
+
+class AssignmentDiaryDoctorOnly(BasePermission):
+    """Пермишн, дающий права на просмотр только докторам, а на
+    редактирование - только автору задания и заметки"""
+
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.user_type == "doctor"
+
+    def has_object_permission(self, request, view, obj):
+        return request.method in SAFE_METHODS or request.user == obj.author
