@@ -350,7 +350,7 @@ class AddClientView(APIView):
     serializer_class = AddClientSerializer
 
     def post(self, request):
-        serializer = AddClientSerializer(data=request.data)
+        serializer = AddClientSerializer(data=request.data, context={"request": request})
         serializer.is_valid(raise_exception=True)
         client = serializer.save()
         user = request.user

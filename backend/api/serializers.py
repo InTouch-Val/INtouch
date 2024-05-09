@@ -251,6 +251,10 @@ class AddClientSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Создание пользователя-клиента"""
+        doctor = None
+        request = self.context.get("request")
+        if request and hasattr(request, "user"):
+            doctor = request.user
         user = User.objects.create(
             username=validated_data["email"],
             first_name=validated_data["first_name"].title(),
@@ -264,8 +268,13 @@ class AddClientSerializer(serializers.ModelSerializer):
         token = default_token_generator.make_token(user)
         activation_url = f"/activate-client/{user.pk}/{token}/"
         html_message = render_to_string(
-            "registration/confirm_mail_client.html",
-            {"url": activation_url, "domen": current_site, "name": user.first_name},
+            "registration/client_invitation.html",
+            {"url": activation_url,
+             "domen": current_site,
+             "name": user.first_name,
+             "doctor_name": doctor.first_name,
+             "doctor_lname": doctor.last_name,
+             },
         )
         send_by_mail(html_message, user.email)
         remove_unverified_user.send_with_options(
