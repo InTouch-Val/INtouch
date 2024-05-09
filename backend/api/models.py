@@ -96,7 +96,7 @@ class AssignmentClient(models.Model):
     )
     comments = models.ManyToManyField("Comment", blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    visible = models.BooleanField(default=True)  # состояние - видит доктор или нет
+    visible = models.BooleanField(default=False)  # состояние - видит доктор или нет
     grade = models.IntegerField(null=True, blank=True)  # оценка клиента
     review = models.TextField(null=True, blank=True)
     assignment_root = models.ForeignKey(
