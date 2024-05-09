@@ -1,5 +1,5 @@
 from rest_framework.permissions import SAFE_METHODS, BasePermission
-from constants import USER_TYPES
+from api.constants import USER_TYPES
 
 
 class IsDoctorOnly(BasePermission):
