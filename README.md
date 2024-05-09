@@ -98,7 +98,9 @@ pk, token из url из письма. Возвращает access и refresh т�
 Тело запроса: password, new_password, confirm_new_password  
 **DELETE: api/v1/client/delete/{pk}/** - удаление клиента  
 **PUT: api/v1/client/update/{pk}/** - редактирование данных о клиенте  
-Тело запроса: date_of_birth, client{diagnosis, about}  
+Тело запроса: date_of_birth, client{diagnosis, about}
+**POST: api/v1/user/update/email/** - запрос на смену эл.почты. Тело запроса: new_email
+**GET: api/v1/user/update/email/confirm/{pk}/{token}/** - подтверждение смены почты. pk, token из url письма подтверждения.
 
 ### Задачи
 **POST: api/v1/assignments/** - создание задачи  
