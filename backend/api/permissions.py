@@ -62,7 +62,7 @@ class AssignmentDiaryDoctorOnly(BasePermission):
     редактирование - только автору задания и заметки"""
 
     def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.user_type == USER_TYPES[1]
+        return request.user.is_authenticated
 
     def has_object_permission(self, request, view, obj):
         return request.method in SAFE_METHODS or request.user == obj.author
