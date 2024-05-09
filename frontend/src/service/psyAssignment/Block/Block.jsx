@@ -17,6 +17,9 @@ function Block({
   moveBlockForward,
   moveBlockBackward,
   updateBlock,
+  errorText,
+  setErrorText,
+  setIsError,
   index = { index },
   ...props
 }) {
@@ -55,47 +58,53 @@ function Block({
               setEditorState={handleEditorStateChange}
               placeholder={placeholder}
               block={block}
+              errorText={errorText}
+              setErrorText={setErrorText}
+              setIsError={setIsError}
             />
           </ToolbarProvider>
         </div>
         {props.children}
-        <div className="buttons">
-          <button
-            type="button"
-            onClick={() => {
-              moveBlockBackward(index);
-            }}
-            className="button"
-          >
-            <img src={arrow} alt="arrow-icon" style={{ transform: 'rotate(180deg)' }}></img>
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              moveBlockForward(index);
-            }}
-            className="button"
-          >
-            <img src={arrow} alt="arrow-icon"></img>
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              copyBlock(block);
-            }}
-            className="button"
-          >
-            <img src={copy} alt="arrow-icon"></img>
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              removeBlock(block.id);
-            }}
-            className="button"
-          >
-            <img src={trash} alt="arrow-icon"></img>
-          </button>
+        <div className="block__below-container">
+          {errorText && <span className="error__text error__text_block">{errorText}</span>}
+          <div className="buttons">
+            <button
+              type="button"
+              onClick={() => {
+                moveBlockBackward(index);
+              }}
+              className="button"
+            >
+              <img src={arrow} alt="arrow-icon" style={{ transform: 'rotate(180deg)' }}></img>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                moveBlockForward(index);
+              }}
+              className="button"
+            >
+              <img src={arrow} alt="arrow-icon"></img>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                copyBlock(block);
+              }}
+              className="button"
+            >
+              <img src={copy} alt="arrow-icon"></img>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                removeBlock(block.id);
+              }}
+              className="button"
+            >
+              <img src={trash} alt="arrow-icon"></img>
+            </button>
+          </div>
         </div>
       </div>
     </div>

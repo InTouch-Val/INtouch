@@ -4,11 +4,12 @@ import IconCopy from '../../../images/IconCopy.svg';
 import Button from '../button/ButtonHeadline';
 import './HeadlinerImg.css';
 
-function HeadlinerImg({ setSelectedImageForBlock, image }) {
+function HeadlinerImg({ setSelectedImageForBlock, image, errorText, setErrorText, setIsError }) {
   const [blockVisible, setBlockVisible] = useState(true);
   const [uploadedImage, setUploadedImage] = useState(image || CloudUploadSignal);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
+  const oneMbyte = 1048576; // 1 МБ в байтах
 
   const handleDragOver = (event) => {
     event.preventDefault();
@@ -19,51 +20,72 @@ function HeadlinerImg({ setSelectedImageForBlock, image }) {
     setIsDragging(false);
   };
 
+  const handleClick = () => {
+    fileInputRef.current.click();
+  };
+
+  // Функция для проверки размера файла
+  const isFileSizeValid = (file) => {
+    return file.size <= oneMbyte; // 1 МБ
+  };
+
+  // Функция для проверки формата файла
+  const isImageFormatValid = (file) => {
+    const validFormats = ['image/png', 'image/jpeg', 'image/gif'];
+    return validFormats.includes(file.type);
+  };
+
+  // Функция для чтения файла и установки его в состояние
+  const handleFileUploadOrDrop = (file, callback) => {
+    if (isImageFormatValid(file) && isFileSizeValid(file)) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        callback(reader.result); // Вызываем функцию обратного вызова с URL изображения
+      };
+      reader.readAsDataURL(file); // Читаем файл как Data URL
+      setIsError(false);
+      setErrorText(
+        errorText.replace(
+          'Unsupported file format or image is too big. Please use JPG, PNG, or GIF files under 1 MB',
+          '',
+        ),
+      );
+    } else {
+      setIsError(true);
+      setErrorText(
+        `${errorText.includes('Unsupported file format or image is too big. Please use JPG, PNG, or GIF files under 1 MB') ? errorText.replace('Unsupported file format or image is too big. Please use JPG, PNG, or GIF files under 1 MBUnsupported file format or image is too big. Please use JPG, PNG, or GIF files under 1 MB', '') : errorText} Unsupported file format or image is too big. Please use JPG, PNG, or GIF files under 1 MB`,
+      );
+    }
+  };
+
+  // Обновленные функции handleDrop и handleFileUpload
   const handleDrop = (event) => {
     event.preventDefault();
     setIsDragging(false);
     const files = event.dataTransfer.files;
     if (files.length > 0) {
       const file = files[0]; // Получаем первый файл
-      if (file.type.startsWith('image/')) {
-        // Проверяем, что файл является изображением
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setUploadedImage(reader.result); // Устанавливаем URL изображения в состояние
-          setSelectedImageForBlock({
-            file: file, // Сохраняем файл изображения
-            url: reader.result, // Сохраняем URL изображения
-          });
-        };
-        reader.readAsDataURL(file); // Читаем файл как Data URL
-      } else {
-        console.log('Файл не является изображением');
-      }
+      handleFileUploadOrDrop(file, (uploadedImage) => {
+        setUploadedImage(uploadedImage); // Устанавливаем URL изображения в состояние
+        setSelectedImageForBlock({
+          file: file, // Сохраняем файл изображения
+          url: uploadedImage, // Сохраняем URL изображения
+        });
+      });
     }
-  };
-
-  const handleClick = () => {
-    fileInputRef.current.click();
   };
 
   const handleFileUpload = (event) => {
     const files = event.target.files; // Используйте event.target.files для доступа к файлам
     if (files.length > 0) {
       const file = files[0]; // Получаем первый файл
-      if (file.type.startsWith('image/')) {
-        // Проверяем, что файл является изображением
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setUploadedImage(reader.result); // Устанавливаем URL изображения в состояние
-          setSelectedImageForBlock({
-            file: file, // Сохраняем файл изображения
-            url: reader.result, // Сохраняем URL изображения
-          });
-        };
-        reader.readAsDataURL(file); // Читаем файл как Data URL
-      } else {
-        console.log('Файл не является изображением');
-      }
+      handleFileUploadOrDrop(file, (uploadedImage) => {
+        setUploadedImage(uploadedImage); // Устанавливаем URL изображения в состояние
+        setSelectedImageForBlock({
+          file: file, // Сохраняем файл изображения
+          url: uploadedImage, // Сохраняем URL изображения
+        });
+      });
     }
   };
 
@@ -80,7 +102,9 @@ function HeadlinerImg({ setSelectedImageForBlock, image }) {
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
         >
-          <div className="headline__img-container">
+          <div
+            className={`headline__img-container ${errorText.includes('Unsupported file format or image is too big. Please use JPG, PNG, or GIF files under 1 MB') && 'error'}`}
+          >
             <input
               onChange={handleFileUpload}
               id="fileInput"

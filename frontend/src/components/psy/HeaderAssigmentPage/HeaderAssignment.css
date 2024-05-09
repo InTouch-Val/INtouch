@@ -68,7 +68,24 @@
 }
 
 .error__text {
+  width: fit-content;
   text-align: left;
   color: red;
-  font-size: 12px;
+  font-size: 16px;
+}
+
+.error__text_header {
+  text-align: right;
+  background: rgba(255, 0, 0, 0.1);
+  padding: 0px 5px;
+}
+
+.error__text_footer {
+  text-align: left;
+}
+
+.error__text_block {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 17px;
 }

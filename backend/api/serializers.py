@@ -65,7 +65,7 @@ class DoctorSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     client = serializers.SerializerMethodField()
-    doctor = DoctorSerializer(required=False)
+    doctor = DoctorSerializer(required=False, read_only=True)
     password = serializers.CharField(write_only=True)
     confirm_password = serializers.CharField(write_only=True)
     email = serializers.EmailField(
@@ -97,6 +97,7 @@ class UserSerializer(serializers.ModelSerializer):
             "new_email_changing",
             "new_email_temp",
         )
+        extra_kwargs = {"is_active": {"read_only": True}}
 
     def get_client(self, obj):
         user = None
@@ -405,7 +406,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
     tags = serializers.CharField(required=False)
     image_url = serializers.CharField(required=False)
     is_public = serializers.BooleanField(read_only=True)
-    avarage_grade = serializers.SerializerMethodField(method_name="get_avarage_grade")
+    avarage_grade = serializers.FloatField(read_only=True)
 
     class Meta:
         model = Assignment
@@ -427,11 +428,6 @@ class AssignmentSerializer(serializers.ModelSerializer):
             "is_public",
             "avarage_grade",
         ]
-
-    def get_avarage_grade(self, instance):
-        if instance.avarage_grade is None:
-            return 0
-        return instance.avarage_grade
 
     def create(self, validated_data):
         blocks_data = validated_data.pop("blocks", [])
