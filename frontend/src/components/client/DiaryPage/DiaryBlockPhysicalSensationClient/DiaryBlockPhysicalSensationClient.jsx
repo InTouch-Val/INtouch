@@ -29,6 +29,8 @@ export default function DiaryBlockPhysicalSensationClient({ diary, type }) {
   );
   const block = {
     type: 'open',
+    question: 'd',
+    description: 'd',
   };
 
   const handleEditorStateChange = (newEditorState) => {

@@ -47,11 +47,11 @@ export default function DiaryFooterClient({ diary }) {
           SAVE
         </Button>
 
-        <span
-          className={`${!isValid && `diary__message-valid ${!isHover && 'diary__message-valid-hidden'}`}`}
-        >
-          Please fill in at least one question to save your diary entry
-        </span>
+        {!isValid && (
+          <span className={`diary__message-valid ${!isHover && 'diary__message-valid-hidden'}`}>
+            Please fill in at least one question to save your diary entry
+          </span>
+        )}
       </div>
     </div>
   );

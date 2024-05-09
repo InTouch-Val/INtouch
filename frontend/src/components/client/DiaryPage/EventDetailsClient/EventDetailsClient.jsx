@@ -21,7 +21,6 @@ export default function EventDetailsClient({ diary, type }) {
     ],
     entityMap: {},
   };
-
   const contentState = convertFromRaw(content);
   const [editorState, setEditorState] = useState(() =>
     type == 'exist' ? EditorState.createWithContent(contentState) : EditorState.createEmpty(),
@@ -29,6 +28,8 @@ export default function EventDetailsClient({ diary, type }) {
 
   const block = {
     type: 'open',
+    question: 'd',
+    description: 'd',
   };
 
   const handleEditorStateChange = (newEditorState) => {

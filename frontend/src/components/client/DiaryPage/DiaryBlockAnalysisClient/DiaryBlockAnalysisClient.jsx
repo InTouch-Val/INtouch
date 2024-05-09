@@ -28,6 +28,8 @@ export default function DiaryBlockAnalysisClient({ diary, type }) {
   );
   const block = {
     type: 'open',
+    question: 'd',
+    description: 'd',
   };
 
   const handleEditorStateChange = (newEditorState) => {

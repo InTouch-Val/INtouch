@@ -37,6 +37,8 @@ export default function DiaryBlockEmotionClient({ diary, type }) {
   );
   const block = {
     type: 'open',
+    question: 'd',
+    description: 'd',
   };
 
   const handleEditorStateChange = (newEditorState) => {
@@ -60,10 +62,6 @@ export default function DiaryBlockEmotionClient({ diary, type }) {
       <div className="diary__block-title">Emotion Type</div>
       <div className="diary__block-question">
         How are you feeling? Describe your emotions or choose from our prompt.
-      </div>
-      <div className="diary__block-text">
-        Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem
-        Ipsum dolor sit amet.
       </div>
       <Controller
         name="answer_emotion"
