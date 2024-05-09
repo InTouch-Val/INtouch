@@ -31,7 +31,7 @@ class User(AbstractUser):
 
 class Doctor(models.Model):
     user = models.OneToOneField("User", on_delete=models.CASCADE)
-    clients = models.ManyToManyField("User", blank=True, related_name="clients")
+    clients = models.ManyToManyField("User", blank=True, related_name="doctors")
     assignments = models.ManyToManyField(
         "Assignment", blank=True
     )  # задания, добавленные в избранное
@@ -98,13 +98,16 @@ class AssignmentClient(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     visible = models.BooleanField(default=True)  # состояние - видит доктор или нет
     grade = models.IntegerField(null=True, blank=True)  # оценка клиента
-    review = models.TextField()
+    review = models.TextField(null=True, blank=True)
     assignment_root = models.ForeignKey(
         "Assignment",
         on_delete=models.SET_NULL,
         related_name="assignments_clients",
         null=True,
     )  # ссылка на задание, с которого назначено текущее
+
+    class Meta:
+        ordering = ["-add_date"]
 
 
 class Block(models.Model):
@@ -121,6 +124,9 @@ class Block(models.Model):
         upload_to="block_images",
         blank=True,
     )
+
+    class Meta:
+        ordering = ["pk"]
 
 
 class BlockChoice(models.Model):
@@ -179,3 +185,6 @@ class DiaryNote(models.Model):
     clarifying_emotion = ArrayField(
         models.CharField(max_length=50, choices=CLARIFYING_EMOTIONS), blank=True
     )
+
+    class Meta:
+        ordering = ["-add_date"]

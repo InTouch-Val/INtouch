@@ -1,7 +1,11 @@
 import json
 from http import HTTPStatus
 
-from drf_spectacular.utils import extend_schema, extend_schema_view
+from drf_spectacular.utils import (
+    extend_schema,
+    extend_schema_view,
+    OpenApiParameter,
+)
 from django.conf import settings
 from django.contrib.auth.hashers import check_password
 from django.core.exceptions import PermissionDenied
@@ -325,6 +329,7 @@ class ClientDeleteView(APIView):
     """Удаление аккаунта клиента из интерфейса доктора"""
 
     permission_classes = (IsDoctorOnly,)
+    serializer_class = None
 
     def delete(self, request, pk):
         try:
@@ -337,7 +342,8 @@ class ClientDeleteView(APIView):
 
 @extend_schema_view(
     post=extend_schema(
-        tags=["Clients"], summary="Add someone as a Client", request=AddClientSerializer
+        tags=["Clients"],
+        summary="Add someone as a Client",
     )
 )
 class AddClientView(APIView):
@@ -346,7 +352,7 @@ class AddClientView(APIView):
     permission_classes = (IsDoctorOnly,)
 
     def post(self, request):
-        serializer = AddClientSerializer(data=request.data)
+        serializer = AddClientSerializer(data=request.data, context={"request": request})
         serializer.is_valid(raise_exception=True)
         client = serializer.save()
         user = request.user
@@ -384,12 +390,16 @@ class DoctorUpdateClientView(generics.UpdateAPIView):
 
 
 @extend_schema_view(
-    get=extend_schema(tags=["Assignments"], summary="Add assignemt to favourites")
+    get=extend_schema(
+        tags=["Assignments"],
+        summary="Add assignment to favourites",
+    )
 )
 class AssignmentAddUserMyListView(APIView):
     """Добавление задачи в свой список"""
 
     permission_classes = (IsDoctorOnly,)
+    serializer_class = None
 
     def get(self, request, pk):
         user = request.user
@@ -405,6 +415,7 @@ class AssignmentDeleteUserMyListView(APIView):
     """Удаление задачи из своего списка"""
 
     permission_classes = (IsDoctorOnly,)
+    serializer_class = None
 
     def get(self, request, pk):
         user = request.user
@@ -414,10 +425,15 @@ class AssignmentDeleteUserMyListView(APIView):
 
 
 @extend_schema_view(
-    get=extend_schema(tags=["Assignments"], summary="Set assignment to a client")
+    get=extend_schema(
+        tags=["Assignments"],
+        summary="Set assignment to a client",
+    )
 )
 class AddAssignmentClientView(APIView):
     """Назначение задачи клиенту"""
+
+    serializer_class = None
 
     def get(self, request, pk, client_pk):
         assignment = get_object_or_404(Assignment, pk=pk)
@@ -468,13 +484,58 @@ class AddAssignmentClientView(APIView):
 
 
 @extend_schema_view(
-    create=extend_schema(tags=["Assignments"], summary="Create assignment"),
-    list=extend_schema(tags=["Assignments"], summary="Get list of assignments"),
-    retrieve=extend_schema(tags=["Assignments"], summary="Get assignment by id"),
-    update=extend_schema(tags=["Assignments"], summary="Update assignment"),
-    partial_update=extend_schema(tags=["Assignments"], summary="Update assignment"),
-    destroy=extend_schema(tags=["Assignments"], summary="Delete assignment"),
-    draft=extend_schema(tags=["Assignments"], summary="Move assignment to draft"),
+    create=extend_schema(
+        tags=["Assignments"], summary="Create assignment", request=AssignmentSerializer
+    ),
+    list=extend_schema(
+        tags=["Assignments"],
+        summary="Get list of assignments",
+        request=None,
+        parameters=[
+            OpenApiParameter(
+                "ordering",
+                description=(
+                    "Which field to use when ordering the results. \n"
+                    "- `-avarage_grade / avarage_grade` \n"
+                    "- `-share / share` \n"
+                    "- `-add_date / add_date` \n"
+                ),
+                enum=[
+                    "-avarage_grade",
+                    "avarage_grade",
+                    "-share",
+                    "share",
+                    "-add_date",
+                    "add_date",
+                ],
+            )
+        ],
+    ),
+    retrieve=extend_schema(
+        tags=["Assignments"],
+        summary="Get assignment by id",
+        request=None,
+    ),
+    update=extend_schema(
+        tags=["Assignments"],
+        summary="Update assignment",
+        request=AssignmentSerializer,
+    ),
+    partial_update=extend_schema(
+        tags=["Assignments"],
+        summary="Update assignment",
+        request=AssignmentSerializer,
+    ),
+    destroy=extend_schema(
+        tags=["Assignments"],
+        summary="Delete assignment",
+        request=None,
+    ),
+    draft=extend_schema(
+        tags=["Assignments"],
+        summary="Move assignment to draft",
+        request=None,
+    ),
 )
 class AssignmentViewSet(viewsets.ModelViewSet):
     """CRUD операции над задачами доктора"""
@@ -535,29 +596,46 @@ class AssignmentViewSet(viewsets.ModelViewSet):
 
 @extend_schema_view(
     list=extend_schema(
-        tags=["Client's Assignments"], summary="List of client's assignments"
+        tags=["Client's Assignments"],
+        summary="List of client's assignments",
+        request=None,
     ),
     retrieve=extend_schema(
-        tags=["Client's Assignments"], summary="Get client's assignment by id"
+        tags=["Client's Assignments"],
+        summary="Get client's assignment by id",
+        request=None,
     ),
     update=extend_schema(
-        tags=["Client's Assignments"], summary="Update client's assignment"
+        tags=["Client's Assignments"],
+        summary="Update client's assignment",
+        request=AssignmentClientSerializer,
     ),
     partial_update=extend_schema(
-        tags=["Client's Assignments"], summary="Update client's assignment"
+        tags=["Client's Assignments"],
+        summary="Update client's assignment",
+        request=AssignmentClientSerializer,
     ),
     destroy=extend_schema(
-        tags=["Client's Assignments"], summary="Delete client's assignment"
+        tags=["Client's Assignments"],
+        summary="Delete client's assignment",
+        request=None,
     ),
     clear=extend_schema(
-        tags=["Client's Assignments"], summary="Clear answers in client's assignment"
+        tags=["Client's Assignments"],
+        summary="Clear answers in client's assignment",
+        request=None,
     ),
     complete=extend_schema(
-        tags=["Client's Assignments"], summary="Complete client's assignment"
+        tags=["Client's Assignments"],
+        summary="Complete client's assignment",
+        request=None,
+        responses={int(HTTPStatus.OK): {"message": "Status is 'done'"}},
     ),
     visible=extend_schema(
         tags=["Client's Assignments"],
         summary="Change visibility of a client's assignment",
+        request=None,
+        responses={int(HTTPStatus.OK): {"message": "Visibility changed to false/true"}},
     ),
 )
 class AssignmentClientViewSet(
@@ -577,9 +655,13 @@ class AssignmentClientViewSet(
     permission_classes = (AssignmentAuthorOnly,)
 
     def get_queryset(self):
-        if self.request.user.user_type == USER_TYPES[0]:
-            return self.request.user.client.assignments
-        return super().get_queryset()
+        user = self.request.user
+        if user.user_type == USER_TYPES[0]:
+            return user.client.assignments
+        query = AssignmentClient.objects.none()
+        for client_user in user.doctor.clients.all():
+            query = query | client_user.client.assignments.all()
+        return query.filter(visible=True)
 
     @action(detail=True, methods=["get"])
     def complete(self, request, pk):
@@ -587,7 +669,7 @@ class AssignmentClientViewSet(
         assignment = self.get_object()
         assignment.status = "done"
         assignment.save()
-        return Response({"message": 'Status is "done"'})
+        return Response({"message": "Status is 'done'"})
 
     @action(detail=True, methods=["get"])
     def clear(self, request, pk):
@@ -595,7 +677,7 @@ class AssignmentClientViewSet(
         assignment = self.get_object()
 
         if assignment.status == "to do":
-            return Response({"message": 'No cleaning required. Status is "to do"'})
+            return Response({"message": "No cleaning required. Status is 'to do'"})
 
         for block in assignment.blocks:
             if block.type == "text":

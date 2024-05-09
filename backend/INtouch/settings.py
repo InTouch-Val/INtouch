@@ -200,7 +200,7 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.BrowsableAPIRenderer",
     ],
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",  # replace to api.pagination.CustomPagination in future
     "PAGE_SIZE": DEFAULT_PAGE_SIZE,
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_AUTHENTICATION_CLASSES": (
