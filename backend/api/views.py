@@ -5,6 +5,7 @@ from drf_spectacular.utils import (
     extend_schema,
     extend_schema_view,
     OpenApiParameter,
+    OpenApiExample,
 )
 from django.conf import settings
 from django.contrib.auth.hashers import check_password
@@ -480,7 +481,44 @@ class AddAssignmentClientView(APIView):
 
 @extend_schema_view(
     create=extend_schema(
-        tags=["Assignments"], summary="Create assignment", request=AssignmentSerializer
+        tags=["Assignments"],
+        summary="Create assignment",
+        request=AssignmentSerializer,
+        examples=[
+            OpenApiExample(
+                "Example input",
+                description="Creation of an alias",
+                value={
+                    "title": "Test Assignment",
+                    "text": "Some test text",
+                    "assignment_type": "quiz",
+                    "tags": "SomeTagLOL",
+                    "language": "en",
+                    "blocks": [
+                        {
+                            "question": "What's the point of doing examples?",
+                            "image": (
+                                "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk"
+                                "+A8AAQUBAScY42YAAAAASUVORK5CYII="
+                            ),
+                            "choice_replies": [
+                                {"reply": "one", "checked": False},
+                                {"reply": "two", "checked": False},
+                            ],
+                            "type": "image",
+                        }
+                    ],
+                    "left_pole": "1",
+                    "right_pole": "10",
+                    "type": "multiple",
+                    "start_range": 1,
+                    "end_range": 10,
+                },
+                request_only=True,
+                response_only=False,
+            ),
+        ],
+        responses={},
     ),
     list=extend_schema(
         tags=["Assignments"],
