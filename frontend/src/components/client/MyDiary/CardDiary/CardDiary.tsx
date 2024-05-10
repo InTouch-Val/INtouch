@@ -42,16 +42,16 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
       <div className="diary__card-text">{card.event_details}</div>
 
       <div className="diary__card-buttons" onClick={(e) => e.stopPropagation()}>
-        {card.clarifying_emotion &&
-          Array.from(card.clarifying_emotion)
-            .slice(0, 2)
-            .map((item, index) => {
-              return (
-                <Button key={index} className="diary__card-button">
-                  {item}
-                </Button>
-              );
-            })}
+        {card.primary_emotion != '' && (
+          <Button className="diary__card-button">
+            {card.primary_emotion
+              .toLowerCase()
+              .replace(/(^\w)(\w+)/, (a, b, c) => b.toUpperCase() + c)}
+          </Button>
+        )}
+        {card.clarifying_emotion.length > 0 && (
+          <Button className="diary__card-button">{card.clarifying_emotion[0]}</Button>
+        )}
       </div>
       <div onClick={(e) => e.stopPropagation()}>
         <label className="card__input-label">
