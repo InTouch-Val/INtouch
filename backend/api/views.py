@@ -6,6 +6,7 @@ from drf_spectacular.utils import (
     extend_schema_view,
     OpenApiParameter,
     OpenApiExample,
+    OpenApiResponse,
 )
 from django.conf import settings
 from django.contrib.auth.hashers import check_password
@@ -25,6 +26,7 @@ from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from api.models import *
 from api.permissions import *
 from api.serializers import *
+from api.swagger_serializers import SwaggerErrorHandlerSerializer
 from api.utils import send_by_mail, avg_grade_annotation
 from api.constants import USER_TYPES
 from api.tasks import reset_email_update_status
@@ -578,6 +580,19 @@ class AddAssignmentClientView(APIView):
         tags=["Assignments"],
         summary="Move assignment to draft",
         request=None,
+        responses={
+            200: OpenApiResponse(
+                response=SwaggerErrorHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Successful draft request",
+                        value={"message": "Assignments saved in draft"},
+                        status_codes=[200],
+                        response_only=True,
+                    )
+                ],
+            ),
+        },
     ),
 )
 class AssignmentViewSet(viewsets.ModelViewSet):
