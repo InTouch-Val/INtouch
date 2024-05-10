@@ -487,13 +487,18 @@ class AddAssignmentClientView(APIView):
         examples=[
             OpenApiExample(
                 "Example input",
-                description="Creation of an alias",
+                description=(
+                    "POST request for Assignment model, all fields are indicated. \n"
+                    "Chossing for fields like languages / assignment_type "
+                    "you can view at 'Get list of assignments' route."
+                ),
                 value={
                     "title": "Test Assignment",
                     "text": "Some test text",
                     "assignment_type": "quiz",
                     "tags": "SomeTagLOL",
                     "language": "en",
+                    "image_url": "Ask_Frontend_Developers_What_URL_To_Use",
                     "blocks": [
                         {
                             "question": "What's the point of doing examples?",
