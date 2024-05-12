@@ -1,5 +1,5 @@
 from rest_framework import serializers
 
 
-class SwaggerErrorHandlerSerializer(serializers.Serializer):
+class SwaggerMessageHandlerSerializer(serializers.Serializer):
     message = serializers.CharField()
