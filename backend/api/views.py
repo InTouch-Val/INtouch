@@ -26,7 +26,7 @@ from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from api.models import *
 from api.permissions import *
 from api.serializers import *
-from api.swagger_serializers import SwaggerErrorHandlerSerializer
+from api.swagger_serializers import SwaggerMessageHandlerSerializer
 from api.utils import send_by_mail, avg_grade_annotation
 from api.constants import USER_TYPES
 from api.tasks import reset_email_update_status
@@ -396,10 +396,24 @@ class DoctorUpdateClientView(generics.UpdateAPIView):
     get=extend_schema(
         tags=["Assignments"],
         summary="Add assignment to favourites",
+        request=None,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Successful addition request",
+                        value={"message": "Assignment was added to favourites."},
+                        status_codes=[int(HTTPStatus.OK)],
+                        response_only=True,
+                    )
+                ],
+            ),
+        },
     )
 )
 class AssignmentAddUserMyListView(APIView):
-    """Добавление задачи в свой список"""
+    """Добавление задачи в избранное"""
 
     permission_classes = (IsDoctorOnly,)
     serializer_class = None
@@ -408,14 +422,31 @@ class AssignmentAddUserMyListView(APIView):
         user = request.user
         assignment = Assignment.objects.get(pk=pk)
         user.doctor.assignments.add(assignment)
-        return Response({"message": "Assignment added successfully."})
+        return Response({"message": "Assignment was added to favourites."})
 
 
 @extend_schema_view(
-    get=extend_schema(tags=["Assignments"], summary="Delete assignment from favourites")
+    get=extend_schema(
+        tags=["Assignments"],
+        summary="Delete assignment from favourites",
+        request=None,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Successful deletion request",
+                        value={"message": "Assignment was deleted from favourites."},
+                        status_codes=[int(HTTPStatus.OK)],
+                        response_only=True,
+                    )
+                ],
+            ),
+        },
+    )
 )
 class AssignmentDeleteUserMyListView(APIView):
-    """Удаление задачи из своего списка"""
+    """Удаление задачи из избранного"""
 
     permission_classes = (IsDoctorOnly,)
     serializer_class = None
@@ -424,13 +455,31 @@ class AssignmentDeleteUserMyListView(APIView):
         user = request.user
         assignment = Assignment.objects.get(pk=pk)
         user.doctor.assignments.remove(assignment)
-        return Response({"message": "Assignment deleted successfully."})
+        return Response(
+            {"message": "Assignment was deleted from favourites."}, HTTPStatus.OK
+        )
 
 
 @extend_schema_view(
     get=extend_schema(
         tags=["Assignments"],
         summary="Set assignment to a client",
+        request=None,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Successful assignment set request",
+                        value={
+                            "message": "Assignment was set to the client successfully."
+                        },
+                        status_codes=[int(HTTPStatus.OK)],
+                        response_only=True,
+                    )
+                ],
+            ),
+        },
     )
 )
 class AddAssignmentClientView(APIView):
@@ -483,7 +532,7 @@ class AddAssignmentClientView(APIView):
         client.client.assignments.add(assignments_copy)
         assignment.share += 1
         assignment.save()
-        return Response({"message": "Assignment set client successfully."})
+        return Response({"message": "Assignment was set to the client successfully."})
 
 
 @extend_schema_view(
@@ -581,13 +630,13 @@ class AddAssignmentClientView(APIView):
         summary="Move assignment to draft",
         request=None,
         responses={
-            200: OpenApiResponse(
-                response=SwaggerErrorHandlerSerializer,
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
                 examples=[
                     OpenApiExample(
                         "Successful draft request",
-                        value={"message": "Assignments saved in draft"},
-                        status_codes=[200],
+                        value={"message": "Assignment was saved in draft."},
+                        status_codes=[int(HTTPStatus.OK)],
                         response_only=True,
                     )
                 ],
@@ -649,7 +698,7 @@ class AssignmentViewSet(viewsets.ModelViewSet):
         assignments = self.get_object()
         assignments.is_public = False
         assignments.save()
-        return Response({"message": "Assignments saved in draft"})
+        return Response({"message": "Assignment was saved in draft."})
 
 
 @extend_schema_view(
@@ -678,22 +727,70 @@ class AssignmentViewSet(viewsets.ModelViewSet):
         summary="Delete client's assignment",
         request=None,
     ),
-    clear=extend_schema(
-        tags=["Client's Assignments"],
-        summary="Clear answers in client's assignment",
-        request=None,
-    ),
     complete=extend_schema(
         tags=["Client's Assignments"],
         summary="Complete client's assignment",
         request=None,
-        responses={int(HTTPStatus.OK): {"message": "Status is 'done'"}},
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Successful request for completion",
+                        value={"message": "Status is 'done'."},
+                        status_codes=[int(HTTPStatus.OK)],
+                        response_only=True,
+                    )
+                ],
+            ),
+        },
+    ),
+    clear=extend_schema(
+        tags=["Client's Assignments"],
+        summary="Clear answers in client's assignment",
+        request=None,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Successful clearing request",
+                        value={"message": "Assignments cleared successfully."},
+                        status_codes=[int(HTTPStatus.OK)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+            int(HTTPStatus.BAD_REQUEST): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Bad request for clearing",
+                        value={"message": "No cleaning required. Status is 'to do'."},
+                        status_codes=[int(HTTPStatus.BAD_REQUEST)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+        },
     ),
     visible=extend_schema(
         tags=["Client's Assignments"],
         summary="Change visibility of a client's assignment",
         request=None,
-        responses={int(HTTPStatus.OK): {"message": "Visibility changed to false/true"}},
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Successful visible request",
+                        value={"message": "Visibility changed to true / false."},
+                        status_codes=[int(HTTPStatus.OK)],
+                        response_only=True,
+                    )
+                ],
+            ),
+        },
     ),
 )
 class AssignmentClientViewSet(
@@ -727,7 +824,7 @@ class AssignmentClientViewSet(
         assignment = self.get_object()
         assignment.status = "done"
         assignment.save()
-        return Response({"message": "Status is 'done'"})
+        return Response({"message": "Status is 'done'."}, HTTPStatus.OK)
 
     @action(detail=True, methods=["get"])
     def clear(self, request, pk):
@@ -735,7 +832,10 @@ class AssignmentClientViewSet(
         assignment = self.get_object()
 
         if assignment.status == "to do":
-            return Response({"message": "No cleaning required. Status is 'to do'"})
+            return Response(
+                {"message": "No cleaning required. Status is 'to do'."},
+                HTTPStatus.BAD_REQUEST,
+            )
 
         for block in assignment.blocks:
             if block.type == "text":
@@ -752,7 +852,7 @@ class AssignmentClientViewSet(
 
         assignment.status = "to do"
         assignment.save()
-        return Response({"message": "Assignments cleared successfully"})
+        return Response({"message": "Assignments cleared successfully."}, HTTPStatus.OK)
 
     @action(detail=True, methods=["POST"])
     def visible(self, request, pk):
@@ -760,7 +860,9 @@ class AssignmentClientViewSet(
         assignment = self.get_object()
         assignment.visible = not assignment.visible
         assignment.save()
-        return Response({"message": f"Visibility changed to {assignment.visible}"})
+        return Response(
+            {"message": f"Visibility changed to {assignment.visible}"}, HTTPStatus.OK
+        )
 
 
 # TODO : To be added, not implemented in V1
