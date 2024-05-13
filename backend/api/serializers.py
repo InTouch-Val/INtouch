@@ -65,7 +65,10 @@ class DoctorSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     client = serializers.SerializerMethodField()
-    doctor = DoctorSerializer(required=False, read_only=True)
+    doctor = DoctorSerializer(
+        required=False,
+        read_only=True,
+    )
     password = serializers.CharField(write_only=True)
     confirm_password = serializers.CharField(write_only=True)
     email = serializers.EmailField(
@@ -239,11 +242,11 @@ class UpdateUserSerializer(serializers.ModelSerializer):
 
     # TODO: настроить валидацию при необязательном введении одного из полей
     # def validate(self, attrs):
-        # if len(attrs["first_name"]) < 2 or len(attrs["last_name"]) < 2:
-            # raise serializers.ValidationError(
-                # "First and last names must be at least two-symbols words"
-            # )
-        # return attrs
+    # if len(attrs["first_name"]) < 2 or len(attrs["last_name"]) < 2:
+    # raise serializers.ValidationError(
+    # "First and last names must be at least two-symbols words"
+    # )
+    # return attrs
 
     def update(self, user, validated_data):
         user.first_name = validated_data.get("first_name", user.first_name)
@@ -287,12 +290,13 @@ class AddClientSerializer(serializers.ModelSerializer):
         activation_url = f"/activate-client/{user.pk}/{token}/"
         html_message = render_to_string(
             "registration/client_invitation.html",
-            {"url": activation_url,
-             "domen": current_site,
-             "name": user.first_name,
-             "doctor_name": doctor.first_name,
-             "doctor_lname": doctor.last_name,
-             },
+            {
+                "url": activation_url,
+                "domen": current_site,
+                "name": user.first_name,
+                "doctor_name": doctor.first_name,
+                "doctor_lname": doctor.last_name,
+            },
         )
         send_by_mail(html_message, user.email)
         remove_unverified_user.send_with_options(
@@ -627,6 +631,9 @@ class DiaryNoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = DiaryNote
         fields = "__all__"
+        read_only_fields = [
+            "visible",
+        ]
 
     def validate(self, data):
         if not data:
