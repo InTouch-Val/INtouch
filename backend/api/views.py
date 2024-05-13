@@ -396,13 +396,13 @@ class DoctorUpdateClientView(generics.UpdateAPIView):
         summary="Add assignment to favourites",
         request=None,
         responses={
-            int(HTTPStatus.OK): OpenApiResponse(
+            int(HTTPStatus.CREATED): OpenApiResponse(
                 response=SwaggerMessageHandlerSerializer,
                 examples=[
                     OpenApiExample(
                         "Successful addition request",
                         value={"message": "Assignment was added to favourites."},
-                        status_codes=[int(HTTPStatus.OK)],
+                        status_codes=[int(HTTPStatus.CREATED)],
                         response_only=True,
                     )
                 ],
@@ -420,7 +420,9 @@ class AssignmentAddUserMyListView(APIView):
         user = request.user
         assignment = Assignment.objects.get(pk=pk)
         user.doctor.assignments.add(assignment)
-        return Response({"message": "Assignment was added to favourites."})
+        return Response(
+            {"message": "Assignment was added to favourites."}, HTTPStatus.CREATED
+        )
 
 
 @extend_schema_view(
@@ -429,13 +431,13 @@ class AssignmentAddUserMyListView(APIView):
         summary="Delete assignment from favourites",
         request=None,
         responses={
-            int(HTTPStatus.OK): OpenApiResponse(
+            int(HTTPStatus.NO_CONTENT): OpenApiResponse(
                 response=SwaggerMessageHandlerSerializer,
                 examples=[
                     OpenApiExample(
                         "Successful deletion request",
                         value={"message": "Assignment was deleted from favourites."},
-                        status_codes=[int(HTTPStatus.OK)],
+                        status_codes=[int(HTTPStatus.NO_CONTENT)],
                         response_only=True,
                     )
                 ],
@@ -454,7 +456,8 @@ class AssignmentDeleteUserMyListView(APIView):
         assignment = Assignment.objects.get(pk=pk)
         user.doctor.assignments.remove(assignment)
         return Response(
-            {"message": "Assignment was deleted from favourites."}, HTTPStatus.OK
+            {"message": "Assignment was deleted from favourites."},
+            HTTPStatus.NO_CONTENT,
         )
 
 
@@ -464,7 +467,7 @@ class AssignmentDeleteUserMyListView(APIView):
         summary="Set assignment to a client",
         request=None,
         responses={
-            int(HTTPStatus.OK): OpenApiResponse(
+            int(HTTPStatus.CREATED): OpenApiResponse(
                 response=SwaggerMessageHandlerSerializer,
                 examples=[
                     OpenApiExample(
@@ -472,7 +475,7 @@ class AssignmentDeleteUserMyListView(APIView):
                         value={
                             "message": "Assignment was set to the client successfully."
                         },
-                        status_codes=[int(HTTPStatus.OK)],
+                        status_codes=[int(HTTPStatus.CREATED)],
                         response_only=True,
                     )
                 ],
@@ -527,7 +530,10 @@ class AddAssignmentClientView(APIView):
         client.client.assignments.add(assignments_copy)
         assignment.share += 1
         assignment.save()
-        return Response({"message": "Assignment was set to the client successfully."})
+        return Response(
+            {"message": "Assignment was set to the client successfully."},
+            HTTPStatus.CREATED,
+        )
 
 
 @extend_schema_view(
@@ -695,7 +701,7 @@ class AssignmentViewSet(viewsets.ModelViewSet):
         assignments = self.get_object()
         assignments.is_public = False
         assignments.save()
-        return Response({"message": "Assignment was saved in draft."})
+        return Response({"message": "Assignment was saved in draft."}, HTTPStatus.OK)
 
 
 @extend_schema_view(
