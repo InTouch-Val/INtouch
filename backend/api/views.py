@@ -64,9 +64,9 @@ class UserViewSet(
     def get_permissions(self):
         if self.request.method == "POST":
             permission_classes = [AllowAny]
-        elif self.action == 'retrieve':
+        elif self.action == "retrieve":
             permission_classes = [DoctorRelClient]
-        elif self.action == 'list':
+        elif self.action == "list":
             permission_classes = [IsStaffOnly]
         else:
             permission_classes = self.permission_classes
@@ -355,7 +355,9 @@ class AddClientView(APIView):
     permission_classes = (IsDoctorOnly,)
 
     def post(self, request):
-        serializer = AddClientSerializer(data=request.data, context={"request": request})
+        serializer = AddClientSerializer(
+            data=request.data, context={"request": request}
+        )
         serializer.is_valid(raise_exception=True)
         client = serializer.save()
         user = request.user
@@ -653,7 +655,6 @@ class AddAssignmentClientView(APIView):
 class AssignmentViewSet(viewsets.ModelViewSet):
     """CRUD операции над задачами доктора"""
 
-    # TODO: ограничить выдачу по связке доктор-задания его клиентов
     permission_classes = (AssignmentDiaryDoctorOnly,)
     queryset = Assignment.objects.all()
     serializer_class = AssignmentSerializer
@@ -808,7 +809,6 @@ class AssignmentClientViewSet(
 ):
     """CRUD операции над задачами клиента"""
 
-    queryset = AssignmentClient.objects.all()
     serializer_class = AssignmentClientSerializer
     filterset_fields = [
         "user",
@@ -821,8 +821,8 @@ class AssignmentClientViewSet(
             return user.client.assignments
         query = AssignmentClient.objects.none()
         for client_user in user.doctor.clients.all():
-            query = query | client_user.client.assignments.all()
-        return query.filter(visible=True)
+            query = query | client_user.client.assignments.all().filter(visible=True)
+        return query
 
     @action(detail=True, methods=["get"])
     def complete(self, request, pk):
@@ -882,21 +882,27 @@ class NoteViewSet(viewsets.ModelViewSet):
 @extend_schema_view(
     list=extend_schema(tags=["Diaries"], summary="Get diary notes"),
     retrieve=extend_schema(tags=["Diaries"], summary="Get diary note by id"),
-    create=extend_schema(tags=["Diaries"], summary="Create diary note"),
-    destroy=extend_schema(tags=["Diaries"], summary="Delete diary note"),
+    create=extend_schema(
+        tags=["Diaries"],
+        summary="Create diary note",
+        description="To create a diary note you have to pass text in one of the arguments below.",
+    ),
+    destroy=extend_schema(
+        tags=["Diaries"], summary="Delete diary note", responses=None, request=None
+    ),
     update=extend_schema(
         tags=["Diaries"],
         summary="Update diary note",
         description="Deletes values of non passed fields",
     ),
     partial_update=extend_schema(tags=["Diaries"], summary="Update diary note"),
-    visible=extend_schema(tags=["Diaries"], summary="Change diary note visibility"),
+    visible=extend_schema(
+        tags=["Diaries"], summary="Change diary note visibility", request=None
+    ),
 )
 class DiaryNoteViewSet(viewsets.ModelViewSet):
     """CRUD операции над заметками в дневнике"""
 
-    # TODO: ограничить выдачу по связке доктор-заметки его клиентов
-    queryset = DiaryNote.objects.filter(visible=True)
     serializer_class = DiaryNoteSerializer
     filterset_fields = [
         "author",
@@ -906,8 +912,11 @@ class DiaryNoteViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         if user.user_type == USER_TYPES[0]:
-            return DiaryNote.objects.filter(author=user)
-        return super().get_queryset()
+            return user.diary_notes
+        query = DiaryNote.objects.none()
+        for client_user in user.doctor.clients.all():
+            query = query | client_user.diary_notes.all().filter(visible=True)
+        return query
 
     @action(detail=True, methods=["POST"])
     def visible(self, request, pk):
