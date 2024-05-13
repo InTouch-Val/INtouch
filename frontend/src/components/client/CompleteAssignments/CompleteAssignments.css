@@ -91,6 +91,7 @@
 @media screen and (min-width: 320px) and (max-width: 480px) {
   .assignment__container_button {
     justify-content: space-between;
+    align-items: center;
   }
 }
 

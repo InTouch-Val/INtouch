@@ -1,11 +1,31 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import '../DiaryPage.css';
 import { EditorState, convertFromRaw } from 'draft-js';
 import { ToolbarProvider } from '../../../../service/ToolbarContext';
 import { EditorToolbar } from '../../../../service/editors-toolbar';
 import { Controller, useFormContext } from 'react-hook-form';
+import { minMobWidth, maxMobWidth } from '../../../../utils/constants';
 
 export default function DiaryBlockAnalysisClient({ diary, type }) {
+  const [isMobileWidth, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width >= minMobWidth && width <= maxMobWidth) {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
+    };
+
+    // Sets the initial state based on the current window size
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const editorRef = useRef(null);
   const content = {
     blocks: [
@@ -57,8 +77,9 @@ export default function DiaryBlockAnalysisClient({ diary, type }) {
               ref={editorRef}
               editorState={editorState}
               setEditorState={handleEditorStateChange}
-              placeholder={'Write you answer here...'}
+              placeholder={'Write your answer here...'}
               block={block}
+              isMobileWidth={isMobileWidth}
             />
           </ToolbarProvider>
         )}

@@ -1,0 +1,27 @@
+.swiper-wrapper {
+  align-items: center;
+}
+
+.swiper-slide {
+  opacity: 0 !important;
+  transition: opacity 0.5s ease-in-out !important;
+}
+
+.swiper-slide img {
+  width: 100%;
+  transition: width 0.5s ease-in-out;
+  margin-bottom: 16px;
+}
+
+.swiper-slide-prev,
+.swiper-slide-next {
+  opacity: 1 !important;
+  z-index: 1;
+  transition: opacity 0.5s ease-in-out !important;
+}
+
+.swiper-slide-active {
+  opacity: 1 !important;
+  z-index: 2;
+  transition: opacity 0.5s ease-in-out !important;
+}
