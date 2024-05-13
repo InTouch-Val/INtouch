@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { API } from '../axios';
 import { useAuth } from '../authContext';
 import '../../css/registration.css';
 import { isValidEmail, isValidPassword } from './regex';
+import eyeIcon from '../../images/icons/eye.svg';
+import eyeSlashIcon from '../../images/icons/eyeSlash.svg';
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -129,9 +129,9 @@ function LoginPage() {
             />
             <button type="button" onClick={(e) => handleTogglePassword(e)}>
               {passwordShown ? (
-                <FontAwesomeIcon icon={faEyeSlash} />
+                <img src={eyeIcon} alt="eye-slash-icon" />
               ) : (
-                <FontAwesomeIcon icon={faEye} />
+                <img src={eyeSlashIcon} alt="eye-icon" />
               )}
             </button>
           </div>

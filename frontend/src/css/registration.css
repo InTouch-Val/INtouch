@@ -9,7 +9,7 @@
 }
 
 .registration-form img {
-  margin-bottom: 90px;
+  margin-bottom: 22px;
   object-fit: cover;
 }
 
@@ -56,13 +56,14 @@
 
 .password-field button {
   position: absolute;
-  top: 18%;
+  top: 25%;
+  transform: translateY(-25%);
   right: 15px;
   height: calc(100% - 30px);
   padding: 0;
   border: none;
   border-radius: 0 10px 10px 0;
-  background-color: #fff;
+  background: none;
   cursor: pointer;
 }
 
@@ -73,7 +74,14 @@
 .registration-form label {
   display: flex;
   align-items: center; /* Выровняйте checkbox и текст по вертикали */
-  font-size: 12px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 19.99px;
+  text-align: left;
+  text-decoration: underline;
+  color: rgba(101, 101, 101, 1);
+  gap: 6px;
+  padding: 0 3px 0 3px;
 }
 
 .registration-form h2 {
@@ -102,6 +110,8 @@ input[type='checkbox'],
 input[type='checkbox']:focus {
   margin: 0;
   box-shadow: none;
+  width: 22px;
+  height: 22px;
 }
 
 @media (width <= 600px) {

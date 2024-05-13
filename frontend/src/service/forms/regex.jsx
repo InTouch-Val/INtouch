@@ -4,6 +4,7 @@ export const isValidEmail = (email) => {
 };
 
 export const isValidPassword = (password) => {
-  const passwordRegex = /^(?=(?:.*[a-zA-Z]+))(?=(?:.*\d+))(?!.*(.)\1{3,}).{8,}$/;
+  const passwordRegex =
+    /^(?=.*[a-zA-Z])(?=.*\d)(?!.*(.)(?=\1\1\1)).{8,128}[a-zA-Z0-9~!?@#$%^&*_\-+(){}\[\]><\/|'.,:;]$/;
   return passwordRegex.test(password);
 };
