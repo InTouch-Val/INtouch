@@ -1,11 +1,31 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import '../DiaryPage.css';
 import { EditorState, convertFromRaw } from 'draft-js';
 import { EditorToolbar } from '../../../../service/editors-toolbar';
 import { ToolbarProvider } from '../../../../service/ToolbarContext';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
+import { minMobWidth, maxMobWidth } from '../../../../utils/constants';
 
 export default function DiaryBlockPhysicalSensationClient({ diary, type }) {
+  const [isMobileWidth, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width >= minMobWidth && width <= maxMobWidth) {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
+    };
+
+    // Sets the initial state based on the current window size
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const editorRef = useRef(null);
   const { control, setValue } = useFormContext();
   const content = {
@@ -58,8 +78,9 @@ export default function DiaryBlockPhysicalSensationClient({ diary, type }) {
               ref={editorRef}
               editorState={editorState}
               setEditorState={handleEditorStateChange}
-              placeholder={'Write you answer here...'}
+              placeholder={'Write your answer here...'}
               block={block}
+              isMobileWidth={isMobileWidth}
             />
           </ToolbarProvider>
         )}

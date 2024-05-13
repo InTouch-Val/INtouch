@@ -17,10 +17,7 @@ import { EditorState, ContentState, convertFromRaw } from 'draft-js';
 import { Modifier, SelectionState } from 'draft-js';
 
 const EditorToolbar = forwardRef(
-  (
-    { editorState, setEditorState, placeholder, block, errorText, setErrorText, setIsError },
-    ref,
-  ) => {
+  ({ editorState, setEditorState, placeholder, block, isMobileWidth,  errorText, setErrorText, setIsError }, ref) => {
     const { toolbarPlugin, setToolbarPlugin } = useToolbar(); // Используем контекст
     const { Toolbar } = toolbarPlugin;
     const plugins = [toolbarPlugin];
@@ -166,42 +163,41 @@ const EditorToolbar = forwardRef(
       validateTextLength(text);
     };
 
-    return (
-      <div
+  return (
+    <div
         className={`editor-container ${(errorText.includes(' Please enter 20-1000 characters') || errorText.includes(' Please enter 20-200 characters')) && 'error'}`}
         onClick={focusEditor}
       >
-        <Editor
-          editorState={editorState}
-          onChange={onChange}
-          plugins={plugins}
-          placeholder={placeholder}
-          ref={ref}
-          handleBeforeInput={handleBeforeInput}
-          onBlur={handleBlur}
-        />
-        <Toolbar>
-          {(externalProps) => (
-            <>
-              <BoldButton {...externalProps} />
-              <ItalicButton {...externalProps} />
-              <UnderlineButton {...externalProps} />
-              {block.type === 'text' ? (
-                <>
-                  <Separator {...externalProps} />
-                  <HeadlineOneButton {...externalProps} />
-                  <HeadlineTwoButton {...externalProps} />
-                  <Separator {...externalProps} />
-                  <UnorderedListButton {...externalProps} />
-                  <OrderedListButton {...externalProps} />
-                </>
-              ) : null}
-            </>
-          )}
-        </Toolbar>
-      </div>
-    );
-  },
-);
+      <Editor
+        editorState={editorState}
+        onChange={onChange}
+        plugins={plugins}
+        placeholder={placeholder}
+        ref={ref}
+        handleBeforeInput={handleBeforeInput}
+        onBlur={handleBlur}
+      />
+      <Toolbar>
+        {(externalProps) => (
+          <>
+            <BoldButton {...externalProps} />
+            <ItalicButton {...externalProps} />
+            <UnderlineButton {...externalProps} />
+            {block.type === 'text' ? (
+              <>
+                <Separator {...externalProps} />
+                <HeadlineOneButton {...externalProps} />
+                <HeadlineTwoButton {...externalProps} />
+                <Separator {...externalProps} />
+                <UnorderedListButton {...externalProps} />
+                <OrderedListButton {...externalProps} />
+              </>
+            ) : null}
+          </>
+        )}
+      </Toolbar>
+    </div>
+  );
+});
 
 export { EditorToolbar };

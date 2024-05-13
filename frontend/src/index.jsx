@@ -23,8 +23,11 @@ import { ClientAssignments } from './components/client/ClientAssignments';
 import { CompleteAssignments } from './components/client/CompleteAssignments/CompleteAssignments';
 import './index.css';
 import { DiaryPage, loaderDiaryById } from './routes/diary-page';
+import { loaderEmotionsById } from './components/client/MyDiary/MobileEmotionPage/EmotionsRouteHandler';
 import DiaryPageClient from './routes/client/my-diary-page';
 import ConfirmEmail from './service/forms/confirm-email';
+import MobileEmotionsRouteHandler from './components/client/MyDiary/MobileEmotionPage/EmotionsRouteHandler';
+import MobileEmotionPage from './components/client/MyDiary/MobileEmotionPage/MobileEmotionPage';
 
 const router = createBrowserRouter([
   {
@@ -99,6 +102,15 @@ const router = createBrowserRouter([
         loader: loaderDiaryById,
       },
       { path: '/my-diary/create', element: <DiaryPage type="create" /> },
+      {
+        path: '/diary/:id/choose-emotions',
+        element: <MobileEmotionPage type="exist" />,
+        loader: loaderEmotionsById,
+      },
+      {
+        path: '/my-diary/create/add-emotions',
+        element: <MobileEmotionPage type="create" />,
+      },
     ],
   },
   {

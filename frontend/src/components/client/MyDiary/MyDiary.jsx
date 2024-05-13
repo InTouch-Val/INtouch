@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '../../psy/button/ButtonHeadline';
 import './MyDiary.css';
 import addEntry from '../../../images/add_entry.svg';
@@ -7,6 +7,7 @@ import CardDiaryClient from './CardDiary/CardDiary';
 import { useNavigate } from 'react-router-dom';
 import { useObserve } from '../../../utils/hook/useObserve';
 import { useAuth } from '../../../service/authContext';
+import { minMobWidth, maxMobWidth } from '../../../utils/constants';
 
 export default function MyDiary() {
   const [diarys, setDiarys] = React.useState([]);
@@ -17,6 +18,25 @@ export default function MyDiary() {
   const { currentUser } = useAuth();
   const [isTotal, setTotal] = React.useState(false);
   const observeElement = React.useRef(null);
+
+  const [isMobileWidth, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width >= minMobWidth && width <= maxMobWidth) {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
+    };
+
+    // Sets the initial state based on the current window size
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const navigate = useNavigate();
 
@@ -101,15 +121,23 @@ export default function MyDiary() {
       {isShowModal && (
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <div className="close-modal__text">
+          {isMobileWidth ? null : (
+              <button className="close-modal-button" onClick={closeModal}>
+                &times;
+              </button>
+            )}
+             <div className="close-modal__text">
               <div>Are you sure you want to delete this entry?</div>
               <div>All your entered data will be permanently removed.</div>
             </div>
             <div className="diary__buttons-modal">
-              <Button className="diary__button" onClick={(e) => handleClickDelete(e)}>
+            <Button
+                className="action-button diary_button diary_button--delete"
+                onClick={(e) => handleClickDelete(e)}
+              >
                 Yes, Delete
               </Button>
-              <Button className="diary__button" onClick={() => setShowModal(false)}>
+              <Button className="action-button diary_button" onClick={() => setShowModal(false)}>
                 Cancel
               </Button>
             </div>

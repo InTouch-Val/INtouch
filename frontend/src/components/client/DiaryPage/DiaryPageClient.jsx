@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import DiaryHeaderClient from './Header/DiaryHeaderClient';
 import './DiaryPage.css';
 import DiaryEventDetailsClient from './EventDetailsClient/EventDetailsClient';
@@ -9,6 +9,8 @@ import DiaryFooterClient from './DiaryFooterClient/DiaryFooterClient';
 import { FormProvider, useForm } from 'react-hook-form';
 import { API } from '../../../service/axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import MobileEmotionPage from '../MyDiary/MobileEmotionPage/MobileEmotionPage';
+import { minMobWidth, maxMobWidth } from '../../../utils/constants';
 
 export default function DiaryPageContentClient({ diary, type }) {
   const navigate = useNavigate();
@@ -30,6 +32,25 @@ export default function DiaryPageContentClient({ diary, type }) {
     mode: 'all',
   });
 
+  const [isMobileWidth, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width >= minMobWidth && width <= maxMobWidth) {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
+    };
+
+    // Sets the initial state based on the current window size
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const onSubmit = async (data) => {
     console.log(data);
 
@@ -40,9 +61,11 @@ export default function DiaryPageContentClient({ diary, type }) {
           text: 'Entry successfully saved',
           status: 'success',
         });
-        setTimeout(() => {
-          navigate('/my-diary');
-        }, 1000);
+        if (!showEmotionsPage) {
+          setTimeout(() => {
+            navigate('/my-diary');
+          }, 1000);
+        }
 
         return response.data;
       } catch (error) {
@@ -70,9 +93,12 @@ export default function DiaryPageContentClient({ diary, type }) {
           text: 'Diary changed successfully',
           status: 'success',
         });
-        setTimeout(() => {
-          navigate('/my-diary');
-        }, 1000);
+        if (!showEmotionsPage) {
+          setTimeout(() => {
+            navigate('/my-diary');
+          }, 1000);
+        }
+
         return response.data;
       } catch (error) {
         if (error.response.status == 400) {
@@ -93,6 +119,10 @@ export default function DiaryPageContentClient({ diary, type }) {
     }
   };
 
+  const [showEmotionsPage, setShowEmotionsPage] = useState(false);
+
+  console.log(showEmotionsPage, isMobileWidth);
+
   return (
     <form className="diaryPage" onSubmit={methods.handleSubmit(onSubmit)}>
       <FormProvider {...methods}>
@@ -103,12 +133,28 @@ export default function DiaryPageContentClient({ diary, type }) {
             {statusMessageText.text}
           </div>
         )}
-        <DiaryHeaderClient diary={diary} onSubmit={onSubmit} />
-        <DiaryEventDetailsClient diary={diary} type={type} />
-        <DiaryBlockAnalysisClient diary={diary} type={type} />
-        <DiaryBlockEmotionClient diary={diary} type={type} />
-        <DiaryBlockPhysicalSensationClient diary={diary} type={type} />
-        <DiaryFooterClient diary={diary} />
+
+        {!showEmotionsPage ? (
+          <>
+            <DiaryHeaderClient diary={diary} onSubmit={onSubmit} />
+            <DiaryEventDetailsClient diary={diary} type={type} />
+            <DiaryBlockAnalysisClient diary={diary} type={type} />
+            <DiaryBlockEmotionClient
+              diary={diary}
+              type={type}
+              setShowEmotionsPage={setShowEmotionsPage}
+            />
+            <DiaryBlockPhysicalSensationClient diary={diary} type={type} />
+            <DiaryFooterClient diary={diary} />
+          </>
+        ) : (
+          <MobileEmotionPage
+            type={type}
+            id={params.id}
+            setShowEmotionsPage={setShowEmotionsPage}
+            diary={diary}
+          />
+        )}
       </FormProvider>
     </form>
   );

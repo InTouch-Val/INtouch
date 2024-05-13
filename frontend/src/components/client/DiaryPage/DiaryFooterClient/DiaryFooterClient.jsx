@@ -1,9 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles.css';
 import Button from '../../../psy/button/ButtonHeadline';
 import { useFormContext, useWatch } from 'react-hook-form';
+import { minMobWidth, maxMobWidth } from '../../../../utils/constants';
 
 export default function DiaryFooterClient({ diary }) {
+  const [isMobileWidth, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width >= minMobWidth && width <= maxMobWidth) {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
+    };
+
+    // Sets the initial state based on the current window size
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const [active, setActive] = React.useState(diary ? diary.visible : false);
   const { control, setValue } = useFormContext();
 
@@ -44,12 +64,14 @@ export default function DiaryFooterClient({ diary }) {
         onMouseEnter={(e) => setHover(true)}
       >
         <Button type="submit" className="diary__footer-button" disabled={!isValid}>
-          SAVE
+          Save
         </Button>
 
         {!isValid && (
           <span className={`diary__message-valid ${!isHover && 'diary__message-valid-hidden'}`}>
-            Please fill in at least one question to save your diary entry
+            {isMobileWidth
+            ? 'Fill in at least one question to save'
+            : 'Please fill in at least one question to save your diary entry'}
           </span>
         )}
       </div>
