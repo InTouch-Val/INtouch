@@ -42,8 +42,6 @@ export default function DiaryBlockEmotionClient({ diary, type, setShowEmotionsPa
   const secondEmotionActive = watch('clarifying_emotion');
   const secondEmotionValues = getValues('clarifying_emotion');
 
-  console.log(primaryEmotionValue, 'page');
-
   const content = {
     blocks: [
       {

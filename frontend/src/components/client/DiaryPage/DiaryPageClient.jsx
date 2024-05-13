@@ -121,8 +121,6 @@ export default function DiaryPageContentClient({ diary, type }) {
 
   const [showEmotionsPage, setShowEmotionsPage] = useState(false);
 
-  console.log(showEmotionsPage, isMobileWidth);
-
   return (
     <form className="diaryPage" onSubmit={methods.handleSubmit(onSubmit)}>
       <FormProvider {...methods}>
