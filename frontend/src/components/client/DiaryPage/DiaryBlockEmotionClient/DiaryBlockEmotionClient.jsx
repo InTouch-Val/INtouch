@@ -85,152 +85,152 @@ export default function DiaryBlockEmotionClient({ diary, type, setShowEmotionsPa
 
   return (
     <>
-    <div className="diary__block-event">
-      <div className="diary__block-title">Emotion Type</div>
-      <div className="diary__block-question">
-        How are you feeling? Describe your emotions or choose from our prompt.
-      </div>
-      <Controller
-        name="answer_emotion"
-        control={control}
-        render={({ field: { ...fieldsProps } }) => (
-          <ToolbarProvider>
-            <EditorToolbar
-              {...fieldsProps}
-              ref={editorRef}
-              editorState={editorState}
-              setEditorState={handleEditorStateChange}
-              placeholder={'Write your answer here...'}
-              block={block}
-              isMobileWidth={isMobileWidth}
-            />
-          </ToolbarProvider>
-        )}
-      />
-      {isMobileWidth ? null : (
-        <>
-          <div className="diary__emotions-wrapper">
-            <div className="diary__emotions">
+      <div className="diary__block-event">
+        <div className="diary__block-title">Emotion Type</div>
+        <div className="diary__block-question">
+          How are you feeling? Describe your emotions or choose from our prompt.
+        </div>
+        <Controller
+          name="answer_emotion"
+          control={control}
+          render={({ field: { ...fieldsProps } }) => (
+            <ToolbarProvider>
+              <EditorToolbar
+                {...fieldsProps}
+                ref={editorRef}
+                editorState={editorState}
+                setEditorState={handleEditorStateChange}
+                placeholder={'Write your answer here...'}
+                block={block}
+                isMobileWidth={isMobileWidth}
+              />
+            </ToolbarProvider>
+          )}
+        />
+        {isMobileWidth ? null : (
+          <>
+            <div className="diary__emotions-wrapper">
+              <div className="diary__emotions">
+                <Controller
+                  name="primary_emotion"
+                  control={control}
+                  render={({ field: { ...fieldsProps } }) =>
+                    listEmotions.map((item) => {
+                      return (
+                        <div
+                          onClick={() => setValue('primary_emotion', item.title)}
+                          key={item.id}
+                          className={`${item.title === primaryEmotionValue ? 'diary__emotion-container diary__emotion-container-active' : 'diary__emotion-container'}`}
+                        >
+                          <img src={item.img} className="diary__emotion" alt={item.title} />
+                          <div className="diary__emotion-title">{item.title}</div>
+                        </div>
+                      );
+                    })
+                  }
+                />
+              </div>
+            </div>
+            <div className="diary__emotions-all">
               <Controller
-                name="primary_emotion"
+                name="clarifying_emotion"
                 control={control}
                 render={({ field: { ...fieldsProps } }) =>
-                  listEmotions.map((item) => {
+                  listEmotionsChips.map((item, index) => {
                     return (
                       <div
-                        onClick={() => setValue('primary_emotion', item.title)}
-                        key={item.id}
-                        className={`${item.title === primaryEmotionValue ? 'diary__emotion-container diary__emotion-container-active' : 'diary__emotion-container'}`}
+                        key={index}
+                        className={`${secondEmotionValues.find((emotion) => item.title === emotion) ? 'diary__emotion-chip chip_active' : 'diary__emotion-chip'}`}
+                        onClick={() => handleClickSecondEmotion(item)}
                       >
-                        <img src={item.img} className="diary__emotion" alt={item.title} />
-                        <div className="diary__emotion-title">{item.title}</div>
+                        {item.title}
                       </div>
                     );
                   })
                 }
               />
             </div>
-          </div>
-          <div className="diary__emotions-all">
-            <Controller
-              name="clarifying_emotion"
-              control={control}
-              render={({ field: { ...fieldsProps } }) =>
-                listEmotionsChips.map((item, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className={`${secondEmotionValues.find((emotion) => item.title === emotion) ? 'diary__emotion-chip chip_active' : 'diary__emotion-chip'}`}
-                      onClick={() => handleClickSecondEmotion(item)}
-                    >
-                      {item.title}
-                    </div>
-                  );
-                })
-              }
-            />
-          </div>
-        </>
-      )}
-    </div>
+          </>
+        )}
+      </div>
 
-    {isMobileWidth ? (
-      <div className="diary__block-event">
-        <div className="diary__emotions-wrapper--mobile">
-          {listEmotions.some((item) => item.title === primaryEmotionValue) ? (
-            <span
-              className="diary__emotions-mobile-link"
-              onClick={() => setShowEmotionsPage(true)}
-            >
-              <ul className="diary__emotions-list--mobile">
-                {listEmotions
-                  .filter((item) => item.title === primaryEmotionValue)
-                  .map((filteredItem) => (
-                    <li key={filteredItem.id}>
-                      <div className="diary__emotion-container--mobile">
-                        <img
-                          src={filteredItem.img}
-                          className="diary__emotion--mobile"
-                          alt={filteredItem.title}
-                        />
-                      </div>
-                    </li>
-                  ))}
-              </ul>
-              <FontAwesomeIcon
-                icon={faPencil}
-                style={{ color: '#417D88', paddingRight: '5px' }}
-                size="xl"
-              />
-            </span>
-          ) : (
-            <div className="diary__empty-emotion">
+      {isMobileWidth ? (
+        <div className="diary__block-event">
+          <div className="diary__emotions-wrapper--mobile">
+            {listEmotions.some((item) => item.title === primaryEmotionValue) ? (
               <span
+                className="diary__emotions-mobile-link"
                 onClick={() => setShowEmotionsPage(true)}
-                className="diary__empty-emotion--link"
               >
+                <ul className="diary__emotions-list--mobile">
+                  {listEmotions
+                    .filter((item) => item.title === primaryEmotionValue)
+                    .map((filteredItem) => (
+                      <li key={filteredItem.id}>
+                        <div className="diary__emotion-container--mobile">
+                          <img
+                            src={filteredItem.img}
+                            className="diary__emotion--mobile"
+                            alt={filteredItem.title}
+                          />
+                        </div>
+                      </li>
+                    ))}
+                </ul>
                 <FontAwesomeIcon
-                  icon={faPlus}
-                  style={{ color: 'rgba(255 255 255 / 85%)', marginRight: '7px' }}
-                  size="lg"
+                  icon={faPencil}
+                  style={{ color: '#417D88', paddingRight: '5px' }}
+                  size="xl"
                 />
-                Add emotions
               </span>
+            ) : (
+              <div className="diary__empty-emotion">
+                <span
+                  onClick={() => setShowEmotionsPage(true)}
+                  className="diary__empty-emotion--link"
+                >
+                  <FontAwesomeIcon
+                    icon={faPlus}
+                    style={{ color: 'rgba(255 255 255 / 85%)', marginRight: '7px' }}
+                    size="lg"
+                  />
+                  Add emotions
+                </span>
 
-              <ul className="diary__empty-emotion--list">
-                {listEmotions.slice(0, 3).map((item) => {
-                  return (
-                    <li key={item.id}>
-                      <img
-                        src={item.img}
-                        className="diary__empty-emotion--item"
-                        alt={item.title}
-                      />
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          )}
+                <ul className="diary__empty-emotion--list">
+                  {listEmotions.slice(0, 3).map((item) => {
+                    return (
+                      <li key={item.id}>
+                        <img
+                          src={item.img}
+                          className="diary__empty-emotion--item"
+                          alt={item.title}
+                        />
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-    ) : null}
+      ) : null}
 
-    {isMobileWidth && secondEmotionValues.length > 0 ? (
-      <div className="diary__emotions-names-wrapper--mobile">
-        <ul className="diary__emotions-names-list--mobile">
-          {listEmotionsChips
-            .filter((item) => secondEmotionValues.includes(item.title))
-            .map((filteredItem, index) => (
-              <li key={index}>
-                <div className="diary__emotion-name-container--mobile">
-                  <span className="diary__emotion-name--mobile">{filteredItem.title}</span>
-                </div>
-              </li>
-            ))}
-        </ul>
-      </div>
-    ) : null}
-  </>
+      {isMobileWidth && secondEmotionValues.length > 0 ? (
+        <div className="diary__emotions-names-wrapper--mobile">
+          <ul className="diary__emotions-names-list--mobile">
+            {listEmotionsChips
+              .filter((item) => secondEmotionValues.includes(item.title))
+              .map((filteredItem, index) => (
+                <li key={index}>
+                  <div className="diary__emotion-name-container--mobile">
+                    <span className="diary__emotion-name--mobile">{filteredItem.title}</span>
+                  </div>
+                </li>
+              ))}
+          </ul>
+        </div>
+      ) : null}
+    </>
   );
 }
