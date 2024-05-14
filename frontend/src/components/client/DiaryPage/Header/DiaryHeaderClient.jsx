@@ -9,7 +9,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { minMobWidth, maxMobWidth } from '../../../../utils/constants';
 
-
 const options = { weekday: 'long', day: '2-digit', month: 'short', year: 'numeric' };
 
 export default function DiaryHeaderClient({ diary, onSubmit }) {
@@ -73,17 +72,16 @@ export default function DiaryHeaderClient({ diary, onSubmit }) {
               <img src={arrowBack} alt="back" className="diary__img-back" />
             )}
           </Link>
-          
+
           {isValid ? (
-          
-          {isMobileWidth ? null : (
-            <img
-              src={save}
-              about="save"
-              className="diary__img-back"
-              onClick={handleSubmit(onSubmit)}
-            />
-          )}
+            isMobileWidth ? null : (
+              <img
+                src={save}
+                about="save"
+                className="diary__img-back"
+                onClick={handleSubmit(onSubmit)}
+              />
+            )
           ) : (
             <img src={save} about="save" className="diary__img-back-unactive" />
           )}
