@@ -320,6 +320,7 @@ function CompleteAssignments() {
     }
   }
 
+
   async function handleSaveTask() {
     //saves changes in task
     const blockInfo = blocks.map(transformBlock);
@@ -328,7 +329,7 @@ function CompleteAssignments() {
         blocks: blockInfo,
       });
       if (res.status >= 200 && res.status < 300) {
-        console.log("saved");
+        console.log('saved');
       } else {
         console.log(`Status: ${res.status}`);
       }
