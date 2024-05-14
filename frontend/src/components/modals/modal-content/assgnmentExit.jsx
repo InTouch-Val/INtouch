@@ -1,4 +1,4 @@
-import NotificationStyles from '../Notifications/notifications.module.css';
+import NotificationStyles from './notifications.module.scss';
 
 const AssignmentExit = ({ saveClick, discardClick }) => {
   return (
