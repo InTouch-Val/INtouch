@@ -75,8 +75,8 @@ export default function DiaryFooterClient({ diary }) {
         {!isValid && (
           <span className={`diary__message-valid ${!isHover && 'diary__message-valid-hidden'}`}>
             {isMobileWidth
-            ? 'Fill in at least one question to save'
-            : 'Please fill in at least one question to save your diary entry'}
+              ? 'Fill in at least one question to save'
+              : 'Please fill in at least one question to save your diary entry'}
           </span>
         )}
       </div>

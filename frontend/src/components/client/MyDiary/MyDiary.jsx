@@ -121,17 +121,17 @@ export default function MyDiary() {
       {isShowModal && (
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-          {isMobileWidth ? null : (
+            {isMobileWidth ? null : (
               <button className="close-modal-button" onClick={closeModal}>
                 &times;
               </button>
             )}
-             <div className="close-modal__text">
+            <div className="close-modal__text">
               <div>Are you sure you want to delete this entry?</div>
               <div>All your entered data will be permanently removed.</div>
             </div>
             <div className="diary__buttons-modal">
-            <Button
+              <Button
                 className="action-button diary_button diary_button--delete"
                 onClick={(e) => handleClickDelete(e)}
               >

@@ -45,7 +45,7 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
       <div className="diary__card-text">{card.event_details}</div>
 
       <div className="diary__card-buttons" onClick={(e) => e.stopPropagation()}>
-      {card.primary_emotion != '' && (
+        {card.primary_emotion != '' && (
           <Button className="diary__card-button">
             {card.primary_emotion
               .toLowerCase()
@@ -53,7 +53,9 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
           </Button>
         )}
         {card.clarifying_emotion.length > 0 && (
-          <Button className="diary__card-button"><p className="diary__button-text">{card.clarifying_emotion[0]}</p></Button>
+          <Button className="diary__card-button">
+            <p className="diary__button-text">{card.clarifying_emotion[0]}</p>
+          </Button>
         )}
       </div>
       <div onClick={(e) => e.stopPropagation()}>
