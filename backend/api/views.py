@@ -18,8 +18,10 @@ from rest_framework.decorators import action, api_view
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.throttling import AnonRateThrottle
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from api.models import *
 from api.permissions import *
@@ -27,6 +29,12 @@ from api.serializers import *
 from api.utils import send_by_mail, avg_grade_annotation
 from api.constants import USER_TYPES
 from api.tasks import reset_email_update_status
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    """Кастомное получение токенов с добавлением ограничения запросов."""
+
+    throttle_classes = (AnonRateThrottle,)
 
 
 @extend_schema_view(
@@ -61,9 +69,9 @@ class UserViewSet(
     def get_permissions(self):
         if self.request.method == "POST":
             permission_classes = [AllowAny]
-        elif self.action == 'retrieve':
+        elif self.action == "retrieve":
             permission_classes = [DoctorRelClient]
-        elif self.action == 'list':
+        elif self.action == "list":
             permission_classes = [IsStaffOnly]
         else:
             permission_classes = self.permission_classes
@@ -352,7 +360,9 @@ class AddClientView(APIView):
     permission_classes = (IsDoctorOnly,)
 
     def post(self, request):
-        serializer = AddClientSerializer(data=request.data, context={"request": request})
+        serializer = AddClientSerializer(
+            data=request.data, context={"request": request}
+        )
         serializer.is_valid(raise_exception=True)
         client = serializer.save()
         user = request.user
@@ -754,6 +764,7 @@ class DiaryNoteViewSet(viewsets.ModelViewSet):
 
 @require_GET
 def assetlink(request):
+    """Вью-функция для деплоя файла конфигурации мобильного предложения."""
     path = f"{settings.STATIC_ROOT}/assetlinks.json"
     with open(path, "r") as f:
         data = json.loads(f.read())
