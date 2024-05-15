@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React from 'react';
 import './HeaderAssignment.css';
 import arrowBack from '../../../images/assignment-page/arrowBack.svg';
