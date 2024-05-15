@@ -125,6 +125,10 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Passwords do not match")
         if not attrs["accept_policy"]:
             raise serializers.ValidationError("Accept with company policy")
+        if User.objects.filter(email=attrs["email"]).exists():
+            raise serializers.ValidationError(
+                "This email address already exists.Please use a unique one."
+            )
         return attrs
 
     def create(self, validated_data):
