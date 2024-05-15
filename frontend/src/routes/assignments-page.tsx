@@ -9,7 +9,6 @@ import '../css/assignments.css';
 import { useAuth } from '../service/authContext';
 import { Modal } from '../service/modal';
 import { useObserve } from '../utils/hook/useObserve';
-import { useGetAssignmentsQuery, assignmentApi } from '../store/entities';
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
@@ -40,17 +39,6 @@ function AssignmentsPage({
   const observeElement = useRef(null);
   const [isTotal, setTotal] = useState(false);
 
-  // const {data: listAssignment} = useGetAssignmentsQuery({limit: limit, author: currentUser.id})
-
-  function getFavorites() {
-  const {data: listAssignment} = useGetAssignmentsQuery({limit: limit, author: currentUser.id})
-    
-  return listAssignment;
-  }
-
-
-// const listAssignment = getFavorites();
-//   console.log(listAssignment)
 
   const handleTakeUpdate = useCallback(() => {
     setLimit((prevLimit) => prevLimit + 10);
