@@ -663,8 +663,7 @@ class AddAssignmentClientView(APIView):
 class AssignmentViewSet(viewsets.ModelViewSet):
     """CRUD операции над задачами доктора"""
 
-    # TODO: ограничить выдачу по связке доктор-задания его клиентов
-    permission_classes = (AssignmentDiaryDoctorOnly,)
+    permission_classes = (AssignmentDoctorOnly,)
     queryset = Assignment.objects.all()
     serializer_class = AssignmentSerializer
     filter_backends = [
@@ -818,6 +817,7 @@ class AssignmentClientViewSet(
 ):
     """CRUD операции над задачами клиента"""
 
+    # TODO: ограничить выдачу по связке доктор-задания его клиентов
     queryset = AssignmentClient.objects.all()
     serializer_class = AssignmentClientSerializer
     filterset_fields = [
@@ -911,7 +911,7 @@ class DiaryNoteViewSet(viewsets.ModelViewSet):
     filterset_fields = [
         "author",
     ]
-    permission_classes = (AssignmentDiaryDoctorOnly,)
+    permission_classes = (DiaryAuthorOnly,)
 
     def get_queryset(self):
         user = self.request.user

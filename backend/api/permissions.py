@@ -65,7 +65,18 @@ class AssignmentAuthorOnly(BasePermission):
         )
 
 
-class AssignmentDiaryDoctorOnly(BasePermission):
+class AssignmentDoctorOnly(BasePermission):
+    """Пермишн, дающий права на просмотр только докторам, а на
+    редактирование - только автору задания или заметки."""
+
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.user_type == USER_TYPES[1]
+
+    def has_object_permission(self, request, view, obj):
+        return request.method in SAFE_METHODS or request.user == obj.author
+
+
+class DiaryAuthorOnly(BasePermission):
     """Пермишн, дающий права на просмотр только докторам, а на
     редактирование - только автору задания или заметки."""
 
