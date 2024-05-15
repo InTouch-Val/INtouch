@@ -236,10 +236,8 @@ npm run build
 - Константы: Используйте UPPER_CASE для констант.
 - Компоненты: Для именования используйте PascalCase.
 - Современный JS: Используйте синтаксис ES6+ для объявления переменных (const, let) и стрелочные функции.
-
-#### Комментарии и документация:
-
 - Обеспечьте код комментариями в сложных или непонятных местах.
+
 
 Примеры:
 const userName = 'Ivan'; // Хорошо: camelCase и понятное имя
@@ -247,6 +245,24 @@ const MAX_USERS = 25;    // Хорошо: константы в UPPER_CASE
 function calculateTotal(sum, tax) { 
   return sum + tax; 
 } // Хорошо: функция с глаголом в названии, описывающим действие
+
+#### Наименование файлов и папок
+
+- Папки именуются в нижнем регистре, слова разделяются дефисами (например, `components`, `utils`).
+- Имена файлов компонентов записываются в PascalCase (например, `MyComponent.tsx`).
+- Файлы стилей называются в соответствии с именем компонента и расширением `.module.css` или `.module.scss` (например, `MyComponent.module.scss`).
+- Хуки и утилиты именуются в camelCase (например, `useFetchData.ts`, `formatDate.ts`).
+
+Пример структуры директорий:
+/src
+/components
+/MyComponent
+- MyComponent.tsx
+- MyComponent.module.css
+/utils
+- formatDate.ts
+- useFetchData.ts
+
 
 ### Методология БЭМ
 

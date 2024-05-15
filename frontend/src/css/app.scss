@@ -1,3 +1,6 @@
+@import url("../scss-styles/variables.scss");
+@import url("../scss-styles/mixins.scss");
+
 body {
   padding: 0;
   margin: 0;
@@ -27,7 +30,7 @@ button {
   background-image: url('https://i122.fastpic.org/big/2023/1025/d2/e4e7924e98bda72edc75d27bf95bcad2.png');
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile-media($mobile-min-width, $mobile-max-width) {
   .toggle-button {
     position: fixed;
     top: 15px;
@@ -38,14 +41,14 @@ button {
     transition:
       left 0.26s ease-in-out,
       right 0.26s ease-in-out;
-  }
 
-  .toggle-button.opened {
-    left: calc(100% - 52px - 28px);
-    right: 52px;
-    transition:
-      left 0.26s ease-in-out,
-      right 0.26s ease-in-out;
+      &.opened {
+        left: calc(100% - 52px - 28px);
+        right: 52px;
+        transition:
+          left 0.26s ease-in-out,
+          right 0.26s ease-in-out;
+      }
   }
 }
 
