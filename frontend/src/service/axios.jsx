@@ -27,7 +27,7 @@ function checkTokenExpiration(accessToken) {
     const decodedToken = JSON.parse(atob(accessToken.split('.')[1]));
     const currentTime = Math.floor(Date.now() / 1000);
     if (decodedToken.exp < currentTime) {
-      return false;
+      return !(decodedToken.exp < currentTime);
     }
     return true;
   } catch (error) {
