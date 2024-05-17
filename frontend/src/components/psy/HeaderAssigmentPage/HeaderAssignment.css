@@ -89,3 +89,20 @@
   font-weight: 500;
   line-height: 17px;
 }
+
+.error__text_login {
+  min-height: 80px;
+  max-height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 338px;
+  text-align: center;
+  gap: 5px;
+  font-family: Montserrat;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 17px;
+  padding: 5px 0;
+}

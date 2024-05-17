@@ -22,7 +22,7 @@ class DoctorRelClient(BasePermission):
                 request.user.is_authenticated
                 and request.user.user_type == USER_TYPES[1]
                 and obj.user_type == USER_TYPES[0]
-                and request.user.doctor.clients.filter(id=obj.client.id).exists()
+                and request.user.doctor.clients.filter(id=obj.id).exists()
             )
             or (request.user.id == obj.id)
             or (
@@ -61,11 +61,22 @@ class AssignmentAuthorOnly(BasePermission):
     def has_object_permission(self, request, view, obj):
         return (
             request.user.id == obj.user.id
-            or request.user.doctor.clients.filter(id=obj.user.client.id).exists()
+            or request.user.doctor == obj.user.doctors.first()
         )
 
 
-class AssignmentDiaryDoctorOnly(BasePermission):
+class AssignmentDoctorOnly(BasePermission):
+    """Пермишн, дающий права на просмотр только докторам, а на
+    редактирование - только автору задания или заметки."""
+
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.user_type == USER_TYPES[1]
+
+    def has_object_permission(self, request, view, obj):
+        return request.method in SAFE_METHODS or request.user == obj.author
+
+
+class DiaryAuthorOnly(BasePermission):
     """Пермишн, дающий права на просмотр только докторам, а на
     редактирование - только автору задания или заметки."""
 
