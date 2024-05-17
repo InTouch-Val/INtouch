@@ -23,3 +23,11 @@ export const menuDate = [
 
 export const minMobWidth = 320;
 export const maxMobWidth = 480;
+
+
+export enum Status  {
+  Success = 'success',
+  Init = 'init',
+  Loading = 'loading',
+  Error = 'error',
+}

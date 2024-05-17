@@ -1,18 +1,21 @@
 import { ActionReducerMapBuilder, createSlice } from "@reduxjs/toolkit";
 import { AssignmentsType } from "../../entities/assignments/types";
 import { changeAssignmentFavoriteByIdAction } from "../../actions/assignment/assignmentActions";
+import { Status } from "../../../utils/constants";
+
+export type IStatusState = "init" | "success" | "loading" | "error"
 
 interface AssignmentState {
   assignments: AssignmentsType[] | null;
   activeTab: "library" | "favorites" | "my-list";
-  status: "init" | "success" | "loading" | "error";
+  status: IStatusState;
   message: string | undefined;
 }
 
 const initialState: AssignmentState = {
   assignments: null,
   activeTab: "library",
-  status: "init",
+  status: Status.Init,
   message: "default",
 };
 
@@ -32,14 +35,14 @@ const assignmentSlice = createSlice({
       .addCase(
         changeAssignmentFavoriteByIdAction.fulfilled,
         (state, action) => {
-          state.status = "success";
+          state.status = Status.Success;
         }
       )
       .addCase(changeAssignmentFavoriteByIdAction.pending, (state, action) => {
-        state.status = "loading";
+        state.status = Status.Loading;
       })
       .addCase(changeAssignmentFavoriteByIdAction.rejected, (state, action) => {
-        state.status = "error";
+        state.status = Status.Error;
       });
   },
 });

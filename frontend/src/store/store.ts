@@ -3,7 +3,7 @@ import { configureStore, createAsyncThunk } from "@reduxjs/toolkit";
 import assignmentSlice, {
   setAssignments,
 } from "./slices/assignments/assignmentSlice";
-import { authSlice } from "./entities/auth/auth";
+import { authSlice } from "./slices/index";
 import { assignmentApi } from "./entities";
 import { authApi } from "./entities/auth/auth";
 

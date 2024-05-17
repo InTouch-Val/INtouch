@@ -19,7 +19,8 @@ export default function AssignmentsPageRefactor({ isShareModal = false }) {
   const [searchTerm, setSearchTerm] = React.useState<string>("");
   const navigate = useNavigate();
 
-  const { activeTab } = useAppSelector((state) => state.assignment);
+  const { activeTab, status } = useAppSelector((state) => state.assignment);
+
 
 
   const { data: listAssignment } = useGetAssignmentsQuery({
@@ -28,7 +29,6 @@ export default function AssignmentsPageRefactor({ isShareModal = false }) {
     favorite: activeTab == 'favorites' && true
   });
 
-  console.log(listAssignment);
 
 
   const handleAddAssignment = () => {
