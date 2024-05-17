@@ -9,8 +9,19 @@
 }
 
 .registration-form img {
-  margin-bottom: 22px;
   object-fit: cover;
+}
+
+.registration-logo {
+  margin-bottom: 22px;
+}
+
+.login-logo {
+  margin-bottom: 90px;
+}
+
+.reset-logo {
+  margin-bottom: 47px;
 }
 
 .registration-form {
@@ -286,7 +297,4 @@ input[type='checkbox']:focus {
   color: rgba(71, 101, 73, 1);
   background: rgba(210, 238, 216, 1);
   margin-bottom: 18px;
-}
-.reset-logo {
-  margin-bottom: 47px !important;
 }

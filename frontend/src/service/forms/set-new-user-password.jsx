@@ -4,6 +4,7 @@ import { API } from '../axios';
 import { isValidPassword } from './regex';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import logo from '../../images/LogoBig.svg';
 
 function SetNewUserPassword({ accessToken }) {
   const [password, setPassword] = useState('');
@@ -84,13 +85,7 @@ function SetNewUserPassword({ accessToken }) {
   return (
     <div className="welcome-container">
       <form className="registration-form" onSubmit={handleSubmit}>
-        <img
-          alt="in"
-          src="https://i122.fastpic.org/big/2023/1030/7b/1e679a924edf77196513a8491eb5f37b.jpg"
-          width="100px"
-          border="0"
-          className="reset-logo"
-        />
+        <img alt="inTouch logo" src={logo} className="reset-logo" />
         <h1 className="reset-password__heading reset-password__heading_reset">
           Set Your New Password
         </h1>

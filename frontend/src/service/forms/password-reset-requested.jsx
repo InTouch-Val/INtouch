@@ -4,6 +4,7 @@ import { useState } from 'react';
 import '../../css/registration.css';
 import { isValidEmail, isValidPassword } from './regex';
 import { API } from '../axios';
+import logo from '../../images/LogoBig.svg';
 
 function PasswordResetRequested() {
   const navigate = useNavigate();
@@ -45,12 +46,7 @@ function PasswordResetRequested() {
   return (
     <div className="registration-page">
       <div className="registration-form">
-        <img
-          alt="in"
-          src="https://i122.fastpic.org/big/2023/1030/7b/1e679a924edf77196513a8491eb5f37b.jpg"
-          width="100px"
-          border="0"
-        />
+        <img alt="inTouch logo" src={logo} className="reset-logo" />
         {isSucces && (
           <div className="reset-password__succes">
             We've sent you an email with instructions on how to reset your password

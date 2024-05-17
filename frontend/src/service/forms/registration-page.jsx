@@ -5,6 +5,7 @@ import '../../css/registration.css';
 import { isValidEmail, isValidPassword } from './regex';
 import eyeIcon from '../../images/icons/eye.svg';
 import eyeSlashIcon from '../../images/icons/eyeSlash.svg';
+import logo from '../../images/LogoBig.svg';
 
 function RegistrationForm() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -26,6 +27,10 @@ function RegistrationForm() {
   const [passwordShown, setPasswordShown] = useState(false);
   const [isValidCredentials, setIsValidCredentials] = useState(false);
   const navigate = useNavigate();
+  const numberOfMinLengthOfPassword = 8;
+  const numberOfMaxLengthOfPassword = 128;
+  const numberOfMinLengthOfName = 2;
+  const numberOfMaxLengthOfName = 50;
 
   const handleCredentialsBlur = (field, value) => {
     let newError = { ...validationError };
@@ -33,11 +38,13 @@ function RegistrationForm() {
       newError.email =
         'Please make sure your email address is in the format        example@example.com';
     } else if (field === 'password' && !isValidPassword(value)) {
-      console.log(!isValidPassword(value));
       const hasUppercase = /[A-Z]/.test(value);
       const hasLowercase = /[a-z]/.test(value);
       const hasDigit = /\d/.test(value);
-      if (value.length < 8 || value.length > 128) {
+      if (
+        value.length < numberOfMinLengthOfPassword ||
+        value.length > numberOfMaxLengthOfPassword
+      ) {
         newError.password =
           'Password must be at least 8 characters long and cannot exceed 128 characters.';
       } else if (!hasUppercase || !hasLowercase || !hasDigit) {
@@ -49,7 +56,7 @@ function RegistrationForm() {
       }
     } else if (
       (field === 'name' || field === 'second') &&
-      (value.length < 2 || value.length > 50)
+      (value.length < numberOfMinLengthOfName || value.length > numberOfMaxLengthOfName)
     ) {
       if (field === 'name') {
         newError.name = 'Please write a valid name. Only 2-50 letters are allowed.';
@@ -145,12 +152,7 @@ function RegistrationForm() {
   return (
     <div className="registration-page">
       <form className="registration-form" onSubmit={handleSubmit}>
-        <img
-          alt="in"
-          src="https://i122.fastpic.org/big/2023/1030/7b/1e679a924edf77196513a8491eb5f37b.jpg"
-          width="140px"
-          border="0"
-        />
+        <img alt="inTouch logo" src={logo} className="registration-logo" />
         <div className="input-fields">
           <input
             type="text"
@@ -161,8 +163,8 @@ function RegistrationForm() {
             onChange={handleChange}
             onBlur={(e) => handleCredentialsBlur('name', e.target.value)}
             required
-            min={2}
-            max={50}
+            min={numberOfMinLengthOfName}
+            max={numberOfMaxLengthOfName}
           />
           <input
             type="text"
@@ -173,8 +175,8 @@ function RegistrationForm() {
             onChange={handleChange}
             onBlur={(e) => handleCredentialsBlur('second', e.target.value)}
             required
-            min={2}
-            max={50}
+            min={numberOfMinLengthOfName}
+            max={numberOfMaxLengthOfName}
           />
           <input
             type="email"
@@ -196,7 +198,8 @@ function RegistrationForm() {
               onChange={handleChange}
               onBlur={(e) => handleCredentialsBlur('password', e.target.value)}
               required
-              minLength="8"
+              minLength={numberOfMinLengthOfPassword}
+              maxLength={numberOfMaxLengthOfPassword}
             />
             <button type="button" onClick={(e) => handleTogglePassword(e)}>
               {passwordShown ? (
@@ -215,7 +218,8 @@ function RegistrationForm() {
               value={formData.confirmPassword}
               onChange={handleChange}
               required
-              minLength="8"
+              minLength={numberOfMinLengthOfPassword}
+              maxLength={numberOfMaxLengthOfPassword}
             />
             <button type="button" onClick={(e) => handleTogglePassword(e)}>
               {passwordShown ? (

@@ -6,6 +6,7 @@ import '../../css/registration.css';
 import { isValidEmail, isValidPassword } from './regex';
 import eyeIcon from '../../images/icons/eye.svg';
 import eyeSlashIcon from '../../images/icons/eyeSlash.svg';
+import logo from '../../images/LogoBig.svg';
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ function LoginPage() {
   const [isValidCredentials, setIsValidCredentials] = useState(false);
   const [loginAttempts, setLoginAttempts] = useState(0);
   const [waitTime, setWaitTime] = useState(60);
+  const numberOfMaxLoginAttempts = 3;
 
   const handleCredentialsBlur = (field, value) => {
     let newError = { ...error };
@@ -42,7 +44,7 @@ function LoginPage() {
 
   useEffect(() => {
     let timerId;
-    if (loginAttempts >= 3) {
+    if (loginAttempts >= numberOfMaxLoginAttempts) {
       timerId = setInterval(() => {
         setWaitTime((prevTime) => prevTime - 1);
         if (waitTime === 0) {
@@ -58,7 +60,7 @@ function LoginPage() {
     e.preventDefault();
 
     // Если количество попыток достигло 3, отключаем кнопку входа
-    if (loginAttempts >= 3) {
+    if (loginAttempts >= numberOfMaxLoginAttempts) {
       return;
     }
 
@@ -101,12 +103,7 @@ function LoginPage() {
   return (
     <div className="registration-page">
       <form className="registration-form" onSubmit={handleLogin}>
-        <img
-          alt="in"
-          src="https://i122.fastpic.org/big/2023/1030/7b/1e679a924edf77196513a8491eb5f37b.jpg"
-          width="100px"
-          border="0"
-        />
+        <img alt="inTouch Logo" src={logo} className="login-logo" />
         <div className="input-fields login">
           <input
             className={`input ${error.email || error.login ? 'error' : ''}`}
@@ -143,7 +140,7 @@ function LoginPage() {
           {error.email && <div>{error.email}</div>}
           {error.password && <div>{error.password}</div>}
           {error.login && <div>{error.login}</div>}
-          {loginAttempts >= 3 && (
+          {loginAttempts >= numberOfMaxLoginAttempts && (
             <div>Too many login attempts. Please try again in {waitTime} seconds.</div>
           )}
         </div>
@@ -152,7 +149,7 @@ function LoginPage() {
           <button
             type="submit"
             className="action-button action-button_register-login"
-            disabled={!isValidCredentials || loginAttempts >= 3}
+            disabled={!isValidCredentials || loginAttempts >= numberOfMaxLoginAttempts}
           >
             Login
           </button>
