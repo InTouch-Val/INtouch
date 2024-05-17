@@ -117,8 +117,8 @@
   margin-bottom: 20px;
 }
 
-input[type='checkbox'],
-input[type='checkbox']:focus {
+.registration-client__checkbox-input,
+.registration-client__checkbox-input:focus {
   margin: 0;
   box-shadow: none;
   width: 22px;

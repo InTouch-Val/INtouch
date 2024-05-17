@@ -5,7 +5,12 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 export default function DiaryFooterClient({ diary }) {
   const [active, setActive] = React.useState(diary ? diary.visible : false);
-  const { control, setValue } = useFormContext();
+  const { control, setValue, getValues, watch } = useFormContext();
+
+  const primaryEmotionValue = getValues('primary_emotion');
+  const secondEmotionValues = getValues('clarifying_emotion');
+
+  console.log(primaryEmotionValue);
 
   const [isValid, setValid] = React.useState(false);
   const [isHover, setHover] = React.useState(false);
