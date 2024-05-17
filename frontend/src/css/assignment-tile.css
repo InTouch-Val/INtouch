@@ -83,6 +83,7 @@
   font-weight: 500;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-wrap: nowrap;
 }
 
 .assignment-info p {
@@ -299,7 +300,7 @@
 }
 
 .status {
-  padding: 5px 22px;
+  padding: 5px 12px;
   border-radius: 20px;
 }
 
