@@ -587,7 +587,6 @@ class AddAssignmentClientView(APIView):
                 response_only=False,
             ),
         ],
-        responses={},
     ),
     list=extend_schema(
         tags=["Assignments"],
@@ -600,17 +599,17 @@ class AddAssignmentClientView(APIView):
                     "Which field to use when ordering the results. \n"
                     "- `-avarage_grade / avarage_grade` \n"
                     "- `-share / share` \n"
-                    "- `-add_date / add_date` \n"
+                    "- `-add_date / add_date` \n \n "
+                    "example: `-add_date,-avarage_grade,-share`"
                 ),
+            ),
+            OpenApiParameter(
+                "favourites",
+                description=("To return favourites of a doctor."),
                 enum=[
-                    "-avarage_grade",
-                    "avarage_grade",
-                    "-share",
-                    "share",
-                    "-add_date",
-                    "add_date",
+                    "true",
                 ],
-            )
+            ),
         ],
     ),
     retrieve=extend_schema(
@@ -809,6 +808,7 @@ class AssignmentClientViewSet(
 ):
     """CRUD операции над задачами клиента"""
 
+    queryset = AssignmentClient.objects.all()
     serializer_class = AssignmentClientSerializer
     filterset_fields = [
         "user",
@@ -886,6 +886,55 @@ class NoteViewSet(viewsets.ModelViewSet):
         tags=["Diaries"],
         summary="Create diary note",
         description="To create a diary note you have to pass text in one of the arguments below.",
+        request=DiaryNoteSerializer,
+        examples=[
+            OpenApiExample(
+                "Succesful creation request",
+                description=(
+                    "In the primary emotion choices are: \n"
+                    " - TERRIBLE \n - GOOD \n - OKAY \n - BAD \n - GREAT \n \n"
+                    "In the clarifying emotions choices are equal to Frontend. "
+                    "So check them out there, because there is **A LOT** to cover."
+                ),
+                value={
+                    "event_details": "your_text",
+                    "event_details_tags": "some_text_tags",
+                    "thoughts_analysis": "your_text",
+                    "thoughts_analysis_tags": "some_text_tags",
+                    "emotion_type": "your_text",
+                    "emotion_type_tags": "some_text_tags",
+                    "physical_sensations": "your_text",
+                    "physical_sensations_tags": "some_text_tags",
+                    "primary_emotion": "TERRIBLE",
+                    "clarifying_emotion": [
+                        "Loss",
+                        "Anxiety",
+                        "Anger",
+                    ],
+                },
+                request_only=True,
+            ),
+        ],
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(response=DiaryNoteSerializer),
+            int(HTTPStatus.BAD_REQUEST): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "When you pass emotion only",
+                        value={
+                            "message": "You can not create a diary note without text fields!"
+                        },
+                        response_only=True,
+                    ),
+                    OpenApiExample(
+                        "When you pass nothing",
+                        value={"message": "You can not create an empty diary note!"},
+                        response_only=True,
+                    ),
+                ],
+            ),
+        },
     ),
     destroy=extend_schema(
         tags=["Diaries"], summary="Delete diary note", responses=None, request=None
@@ -893,16 +942,30 @@ class NoteViewSet(viewsets.ModelViewSet):
     update=extend_schema(
         tags=["Diaries"],
         summary="Update diary note",
-        description="Deletes values of non passed fields",
+        description="Deletes values of non passed fields.",
     ),
     partial_update=extend_schema(tags=["Diaries"], summary="Update diary note"),
     visible=extend_schema(
-        tags=["Diaries"], summary="Change diary note visibility", request=None
+        tags=["Diaries"],
+        summary="Change diary note visibility",
+        request=None,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Good request",
+                        value={"message": "Visibility changed to true / false"},
+                    ),
+                ],
+            )
+        },
     ),
 )
 class DiaryNoteViewSet(viewsets.ModelViewSet):
     """CRUD операции над заметками в дневнике"""
 
+    queryset = DiaryNote.objects.all()
     serializer_class = DiaryNoteSerializer
     filterset_fields = [
         "author",
@@ -924,7 +987,9 @@ class DiaryNoteViewSet(viewsets.ModelViewSet):
         diary_note = self.get_object()
         diary_note.visible = not diary_note.visible
         diary_note.save()
-        return Response({"message": f"Visibility changed to {diary_note.visible}"})
+        return Response(
+            {"message": f"Visibility changed to {diary_note.visible}"}, HTTPStatus.OK
+        )
 
 
 @require_GET
