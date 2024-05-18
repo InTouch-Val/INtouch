@@ -2,27 +2,10 @@ import React, { useState, useEffect } from 'react';
 import './styles.css';
 import Button from '../../../psy/button/ButtonHeadline';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { minMobWidth, maxMobWidth } from '../../../../utils/constants';
+import useMobileWidth from '../../../../utils/hook/useMobileWidth';
 
 export default function DiaryFooterClient({ diary }) {
-  const [isMobileWidth, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      if (width >= minMobWidth && width <= maxMobWidth) {
-        setIsMobile(true);
-      } else {
-        setIsMobile(false);
-      }
-    };
-
-    // Sets the initial state based on the current window size
-    handleResize();
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  const isMobileWidth = useMobileWidth();
 
   const [active, setActive] = React.useState(diary ? diary.visible : false);
   const { control, setValue, getValues, watch } = useFormContext();

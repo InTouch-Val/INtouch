@@ -239,8 +239,14 @@
     align-items: center;
   }
 
+  .diary__emotion-container--mobile {
+    align-items: center;
+    display: flex;
+  }
+
   .diary__emotion-container--mobile img {
     width: 34px;
+    margin-right: 14px;
   }
 
   .diary__emotions-names-list--mobile {

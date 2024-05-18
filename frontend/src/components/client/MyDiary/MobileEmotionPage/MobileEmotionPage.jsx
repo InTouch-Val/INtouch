@@ -25,6 +25,10 @@ export default function MobileEmotionPage({ type, id, setShowEmotionsPage }) {
   const swiperRef = useRef(null);
   const [prevTranslate, setPrevTranslate] = useState(0);
 
+  const initialSlideIndex = listEmotions.findIndex(
+    (emotion) => emotion.title === primaryEmotionValue,
+  );
+
   const handleSaveClick = () => {
     setValue('primary_emotion', currentPrimaryEmotion);
     setShowEmotionsPage(false);
@@ -76,6 +80,7 @@ export default function MobileEmotionPage({ type, id, setShowEmotionsPage }) {
     modules: [EffectCreative],
 
     slidesPerView: 2.5,
+    initialSlide: initialSlideIndex,
     onSliderMove: handleTouchMove,
     onSlideChange: handleSlideChange,
   };

@@ -8,32 +8,11 @@ import { ToolbarProvider } from '../../../../service/ToolbarContext';
 import { EditorState, convertFromRaw } from 'draft-js';
 import { EditorToolbar } from '../../../../service/editors-toolbar';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
-import { minMobWidth, maxMobWidth } from '../../../../utils/constants';
-import { Link, useParams } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPencil, faPlus } from '@fortawesome/free-solid-svg-icons';
+import DiaryBlockEmotionClientMobile from './DiaryBlockEmotionClientMobile';
+import useMobileWidth from '../../../../utils/hook/useMobileWidth';
 
 export default function DiaryBlockEmotionClient({ diary, type, setShowEmotionsPage }) {
-  const params = useParams();
-
-  const [isMobileWidth, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      if (width >= minMobWidth && width <= maxMobWidth) {
-        setIsMobile(true);
-      } else {
-        setIsMobile(false);
-      }
-    };
-
-    // Sets the initial state based on the current window size
-    handleResize();
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  const isMobileWidth = useMobileWidth();
 
   const editorRef = useRef(null);
   const { control, setValue, watch, getValues } = useFormContext();
@@ -155,65 +134,10 @@ export default function DiaryBlockEmotionClient({ diary, type, setShowEmotionsPa
       </div>
 
       {isMobileWidth ? (
-        <div className="diary__block-event">
-          <div className="diary__emotions-wrapper--mobile">
-            {listEmotions.some((item) => item.title === primaryEmotionValue) ? (
-              <span
-                className="diary__emotions-mobile-link"
-                onClick={() => setShowEmotionsPage(true)}
-              >
-                <ul className="diary__emotions-list--mobile">
-                  {listEmotions
-                    .filter((item) => item.title === primaryEmotionValue)
-                    .map((filteredItem) => (
-                      <li key={filteredItem.id}>
-                        <div className="diary__emotion-container--mobile">
-                          <img
-                            src={filteredItem.img}
-                            className="diary__emotion--mobile"
-                            alt={filteredItem.title}
-                          />
-                        </div>
-                      </li>
-                    ))}
-                </ul>
-                <FontAwesomeIcon
-                  icon={faPencil}
-                  style={{ color: '#417D88', paddingRight: '5px' }}
-                  size="xl"
-                />
-              </span>
-            ) : (
-              <div className="diary__empty-emotion">
-                <span
-                  onClick={() => setShowEmotionsPage(true)}
-                  className="diary__empty-emotion--link"
-                >
-                  <FontAwesomeIcon
-                    icon={faPlus}
-                    style={{ color: 'rgba(255 255 255 / 85%)', marginRight: '7px' }}
-                    size="lg"
-                  />
-                  Add emotions
-                </span>
-
-                <ul className="diary__empty-emotion--list">
-                  {listEmotions.slice(0, 3).map((item) => {
-                    return (
-                      <li key={item.id}>
-                        <img
-                          src={item.img}
-                          className="diary__empty-emotion--item"
-                          alt={item.title}
-                        />
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            )}
-          </div>
-        </div>
+        <DiaryBlockEmotionClientMobile
+          primaryEmotionValue={primaryEmotionValue}
+          setShowEmotionsPage={setShowEmotionsPage}
+        />
       ) : null}
 
       {isMobileWidth && secondEmotionValues.length > 0 ? (

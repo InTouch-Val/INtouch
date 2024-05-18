@@ -26,7 +26,6 @@ import { DiaryPage, loaderDiaryById } from './routes/diary-page';
 import { loaderEmotionsById } from './components/client/MyDiary/MobileEmotionPage/EmotionsRouteHandler';
 import DiaryPageClient from './routes/client/my-diary-page';
 import ConfirmEmail from './service/forms/confirm-email';
-import MobileEmotionsRouteHandler from './components/client/MyDiary/MobileEmotionPage/EmotionsRouteHandler';
 import MobileEmotionPage from './components/client/MyDiary/MobileEmotionPage/MobileEmotionPage';
 
 const router = createBrowserRouter([

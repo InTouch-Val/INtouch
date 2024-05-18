@@ -7,7 +7,7 @@ import CardDiaryClient from './CardDiary/CardDiary';
 import { useNavigate } from 'react-router-dom';
 import { useObserve } from '../../../utils/hook/useObserve';
 import { useAuth } from '../../../service/authContext';
-import { minMobWidth, maxMobWidth } from '../../../utils/constants';
+import useMobileWidth from '../../../utils/hook/useMobileWidth';
 
 export default function MyDiary() {
   const [diarys, setDiarys] = React.useState([]);
@@ -19,24 +19,7 @@ export default function MyDiary() {
   const [isTotal, setTotal] = React.useState(false);
   const observeElement = React.useRef(null);
 
-  const [isMobileWidth, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      if (width >= minMobWidth && width <= maxMobWidth) {
-        setIsMobile(true);
-      } else {
-        setIsMobile(false);
-      }
-    };
-
-    // Sets the initial state based on the current window size
-    handleResize();
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  const isMobileWidth = useMobileWidth();
 
   const navigate = useNavigate();
 

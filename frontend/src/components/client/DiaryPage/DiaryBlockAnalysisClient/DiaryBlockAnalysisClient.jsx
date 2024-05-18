@@ -4,27 +4,10 @@ import { EditorState, convertFromRaw } from 'draft-js';
 import { ToolbarProvider } from '../../../../service/ToolbarContext';
 import { EditorToolbar } from '../../../../service/editors-toolbar';
 import { Controller, useFormContext } from 'react-hook-form';
-import { minMobWidth, maxMobWidth } from '../../../../utils/constants';
+import useMobileWidth from '../../../../utils/hook/useMobileWidth';
 
 export default function DiaryBlockAnalysisClient({ diary, type }) {
-  const [isMobileWidth, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      if (width >= minMobWidth && width <= maxMobWidth) {
-        setIsMobile(true);
-      } else {
-        setIsMobile(false);
-      }
-    };
-
-    // Sets the initial state based on the current window size
-    handleResize();
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  const isMobileWidth = useMobileWidth();
 
   const editorRef = useRef(null);
   const content = {

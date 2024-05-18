@@ -7,29 +7,12 @@ import { useAuth } from '../../../../service/authContext';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { minMobWidth, maxMobWidth } from '../../../../utils/constants';
+import useMobileWidth from '../../../../utils/hook/useMobileWidth';
 
 const options = { weekday: 'long', day: '2-digit', month: 'short', year: 'numeric' };
 
 export default function DiaryHeaderClient({ diary, onSubmit }) {
-  const [isMobileWidth, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      if (width >= minMobWidth && width <= maxMobWidth) {
-        setIsMobile(true);
-      } else {
-        setIsMobile(false);
-      }
-    };
-
-    // Sets the initial state based on the current window size
-    handleResize();
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  const isMobileWidth = useMobileWidth();
 
   const { currentUser } = useAuth();
   const { handleSubmit, control } = useFormContext();
