@@ -10,11 +10,9 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { API } from '../../../service/axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import MobileEmotionPage from '../MyDiary/MobileEmotionPage/MobileEmotionPage';
-import useMobileWidth from '../../../utils/hook/useMobileWidth';
 
 export default function DiaryPageContentClient({ diary, type }) {
   //Changing card content and menu
-  const isMobileWidth = useMobileWidth();
 
   const navigate = useNavigate();
   const [statusMessageText, setStatusMessageText] = React.useState({
