@@ -21,6 +21,8 @@ import decodeStyledText from '../../../service/decodeStyledText';
 import Modal from '../../modals/Modal/Modal';
 import AssignmentNotComplete from '../../modals/modal-content/assignmentNotComplete';
 import AssignmentExit from '../../modals/modal-content/assgnmentExit';
+import AssignmentNotComplete from '../../modals/modal-content/assignmentNotComplete';
+import AssignmentExit from '../../modals/modal-content/assgnmentExit';
 import { minMobWidth, maxMobWidth } from '../../../utils/constants';
 
 function CompleteAssignments() {
