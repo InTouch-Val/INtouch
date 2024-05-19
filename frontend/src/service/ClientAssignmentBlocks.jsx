@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { EditorToolbar } from '../service/editors-toolbar';
+import { EditorToolbar } from './editors-toolbar';
+import { ToolbarProvider } from './ToolbarContext';
+import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 import '../css/block.css';
 import '../css/assignments.css';
 import decodeStyledText from './decodeStyledText';
@@ -22,6 +24,22 @@ function ClientAssignmentBlocks({
   const [choices, setChoices] = useState(block.choices || []);
   const [choiceRefs, setChoiceRefs] = useState([]);
   const [selectedValue, setSelectedValue] = useState(block.reply || '');
+  const editorRef = useRef(null);
+
+  const [editorState, setEditorState] = useState(() => {
+    if (block.content) {
+      const content = convertFromRaw(JSON.parse(block.content));
+      return EditorState.createWithContent(content);
+    }
+    return EditorState.createEmpty();
+  });
+
+  const handleEditorChange = (newEditorState) => {
+    setEditorState(newEditorState);
+    const contentState = newEditorState.getCurrentContent();
+    const rawContent = convertToRaw(contentState);
+    updateBlock(block.id, JSON.stringify(rawContent), choices);
+  };
 
   // Determines if the block is filled in
   const isValid =
@@ -105,32 +123,22 @@ function ClientAssignmentBlocks({
       <div
         className={`block assignment__block ${!isValid && showInvalidInputs ? 'uncompleted' : ''}`}
       >
-        {!block.description && !isViewPsy ? (
-          <h3 className="assignment__block-header">{block.question}</h3>
-        ) : (
-          <div
-            className="block__text"
-            dangerouslySetInnerHTML={{
-              __html: block.description
-                ? !isViewPsy
-                  ? block.description
-                  : decodeStyledText(block.description)
-                : decodeStyledText(getObjectFromEditorState(block.content)),
-            }}
+        <h3 className="assignment__block-header">{block.question}</h3>
+        <ToolbarProvider>
+          <EditorToolbar
+            editorState={editorState}
+            ref={editorRef}
+            onChange={handleEditorChange}
+            placeholder="Write your answer here..."
+            readOnly={isView}
+            block={block}
+            setEditorState={setEditorState}
           />
-        )}
-        <textarea
-          className="block-text answer-input"
-          name="openAnswer"
-          id=""
-          placeholder="Write your answer here..."
-          onChange={handleOpenChange}
-          disabled={isView}
-          value={selectedValue}
-        ></textarea>
+        </ToolbarProvider>
       </div>
     );
   }
+
   if (block.type === 'image') {
     return (
       <div className="block assignment__block">
