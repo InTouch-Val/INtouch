@@ -150,8 +150,8 @@ const EditorToolbar = forwardRef(
         setIsError(true);
         setErrorText(
           maxLength === 1000
-            ? `${errorText.includes(' Please enter 20-1000 characters') ? errorText.replace(' Please enter 20-1000 characters', '') : errorText} Please enter 20-1000 characters`
-            : `${errorText.includes(' Please enter 20-200 characters') ? errorText.replace(' Please enter 20-200 characters', '') : errorText} Please enter 20-200 characters`,
+            ? `${errorText?.includes(' Please enter 20-1000 characters') ? errorText.replace(' Please enter 20-1000 characters', '') : errorText} Please enter 20-1000 characters`
+            : `${errorText?.includes(' Please enter 20-200 characters') ? errorText.replace(' Please enter 20-200 characters', '') : errorText} Please enter 20-200 characters`,
         );
         return false;
       }
@@ -168,7 +168,7 @@ const EditorToolbar = forwardRef(
 
     return (
       <div
-        className={`editor-container ${(errorText.includes(' Please enter 20-1000 characters') || errorText.includes(' Please enter 20-200 characters')) && 'error'}`}
+        className={`editor-container ${(errorText?.includes(' Please enter 20-1000 characters') || errorText?.includes(' Please enter 20-200 characters')) && 'error'}`}
         onClick={focusEditor}
       >
         <Editor
