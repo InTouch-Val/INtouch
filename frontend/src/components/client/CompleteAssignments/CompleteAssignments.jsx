@@ -595,8 +595,12 @@ function CompleteAssignments() {
         <Modal>
           <AssignmentExit
             saveClick={async () => {
-              await handleSaveTask();
-              navigate(-1);
+              try {
+                await handleSaveTask();
+                navigate(-1);
+              } catch (error) {
+                console.error('Failed to save:', error);
+              }
             }}
             discardClick={() => navigate(-1)}
           />
