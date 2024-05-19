@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '../../psy/button/ButtonHeadline';
 import './MyDiary.css';
 import addEntry from '../../../images/add_entry.svg';

@@ -43,12 +43,35 @@
   }
 }
 
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .diary__block-event {
+    margin-top: 20px;
+    padding: 10px;
+    gap: 8px;
+    margin-right: 28px;
+    margin-left: 28px;
+    width: auto;
+  }
+
+  .diary__block-event:hover {
+    box-shadow: 0px 0px 3px 1px #d7e4e773;
+  }
+}
+
 .diary__block-title {
   font-family: 'Montserrat';
   font-weight: 700;
   font-size: 16px;
   color: #0b4a56;
   line-height: 19px;
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .diary__block-title {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 16px;
+  }
 }
 
 @media screen and (min-width: 320px) and (max-width: 480px) {
@@ -75,6 +98,14 @@
   }
 }
 
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .diary__block-question {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 16px;
+  }
+}
+
 .diary__block-text {
   font-family: 'Montserrat';
   font-style: italic;
@@ -82,6 +113,14 @@
   font-weight: 500;
   line-height: 17px;
   color: #656565;
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .diary__block-text {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 16px;
+  }
 }
 
 @media screen and (min-width: 320px) and (max-width: 480px) {
