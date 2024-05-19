@@ -10,9 +10,12 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { API } from '../../../service/axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import MobileEmotionPage from '../MyDiary/MobileEmotionPage/MobileEmotionPage';
-import { minMobWidth, maxMobWidth } from '../../../utils/constants';
+import useMobileWidth from '../../../utils/hook/useMobileWidth';
 
 export default function DiaryPageContentClient({ diary, type }) {
+  //Changing card content and menu
+  const isMobileWidth = useMobileWidth();
+
   const navigate = useNavigate();
   const [statusMessageText, setStatusMessageText] = React.useState({
     text: null,
@@ -31,26 +34,6 @@ export default function DiaryPageContentClient({ diary, type }) {
     },
     mode: 'all',
   });
-
-  const [isMobileWidth, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      if (width >= minMobWidth && width <= maxMobWidth) {
-        setIsMobile(true);
-      } else {
-        setIsMobile(false);
-      }
-    };
-
-    // Sets the initial state based on the current window size
-    handleResize();
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
   const onSubmit = async (data) => {
     console.log(data);
 
