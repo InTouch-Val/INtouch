@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import React, { useState, useEffect } from 'react';
 import Button from '../../psy/button/ButtonHeadline';
 import './MyDiary.css';
 import addEntry from '../../../images/add_entry.svg';
@@ -8,7 +7,6 @@ import CardDiaryClient from './CardDiary/CardDiary';
 import { useNavigate } from 'react-router-dom';
 import { useObserve } from '../../../utils/hook/useObserve';
 import { useAuth } from '../../../service/authContext';
-import useMobileWidth from '../../../utils/hook/useMobileWidth';
 
 export default function MyDiary() {
   const [diarys, setDiarys] = React.useState([]);
@@ -19,9 +17,6 @@ export default function MyDiary() {
   const { currentUser } = useAuth();
   const [isTotal, setTotal] = React.useState(false);
   const observeElement = React.useRef(null);
-
-  const isMobileWidth = useMobileWidth();
-
   const navigate = useNavigate();
 
   const handleTakeUpdate = React.useCallback(() => {
@@ -105,20 +100,12 @@ export default function MyDiary() {
       {isShowModal && (
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            {isMobileWidth ? null : (
-              <button className="close-modal-button" onClick={closeModal}>
-                &times;
-              </button>
-            )}
             <div className="close-modal__text">
               <div>Are you sure you want to delete this entry?</div>
               <div>All your entered data will be permanently removed.</div>
             </div>
             <div className="diary__buttons-modal">
-              <Button
-                className="action-button diary_button diary_button--delete"
-                onClick={(e) => handleClickDelete(e)}
-              >
+              <Button className="diary__button" onClick={(e) => handleClickDelete(e)}>
                 Yes, Delete
               </Button>
               <Button className="action-button diary_button" onClick={() => setShowModal(false)}>
