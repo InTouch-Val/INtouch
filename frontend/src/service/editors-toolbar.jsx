@@ -102,6 +102,10 @@ const EditorToolbar = forwardRef(
         } catch (error) {
           console.error('Ошибка при преобразовании строки в объект:', error);
         }
+      } else if (block.reply) {
+        const contentState = ContentState.createFromText(block.reply);
+        const newEditorState = EditorState.createWithContent(contentState);
+        setEditorState(newEditorState);
       } else if (block.question) {
         const contentState = ContentState.createFromText(block.question);
         const newEditorState = EditorState.createWithContent(contentState);

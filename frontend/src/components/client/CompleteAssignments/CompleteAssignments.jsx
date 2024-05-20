@@ -44,9 +44,6 @@ function CompleteAssignments() {
   });
 
   const [isRateTask, setIsRateTask] = useState(false);
-  const [editorStateFirst, setEditorStateFirst] = useState(() => EditorState.createEmpty());
-  const [editorStateSecond, setEditorStateSecond] = useState(() => EditorState.createEmpty());
-  const [editorStateThird, setEditorStateThird] = useState(() => EditorState.createEmpty());
   const { setCurrentCard, card } = useAuth();
   const [values, setValues] = useState({});
   const [blocks, setBlocks] = useState([]);
@@ -187,7 +184,7 @@ function CompleteAssignments() {
       if (block.id === blockId) {
         return {
           ...block,
-          reply: newReply || block.reply,
+          reply: newReply ?? block.reply,
           choice_replies: newChoices || block.choice_replies,
         };
       }

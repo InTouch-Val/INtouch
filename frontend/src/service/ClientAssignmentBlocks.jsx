@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { EditorToolbar } from './editors-toolbar';
 import { ToolbarProvider } from './ToolbarContext';
-import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
+import { EditorState, convertToRaw, convertFromRaw, ContentState } from 'draft-js';
 import '../css/block.css';
 import '../css/assignments.css';
 import decodeStyledText from './decodeStyledText';
@@ -34,12 +34,36 @@ function ClientAssignmentBlocks({
     return EditorState.createEmpty();
   });
 
-  const handleEditorChange = (newEditorState) => {
-    setEditorState(newEditorState);
-    const contentState = newEditorState.getCurrentContent();
-    const rawContent = convertToRaw(contentState);
-    updateBlock(block.id, JSON.stringify(rawContent), choices);
-  };
+  useEffect(() => {
+    setSelectedValue(editorState.getCurrentContent().getPlainText());
+  }, [editorState]);
+
+  const MAX_INPUT_LENGTH = 1000;
+
+  const handleEditorChange = useCallback(
+    (newEditorState) => {
+      const contentState = newEditorState.getCurrentContent();
+      const inputText = contentState.getPlainText();
+      if (inputText.length > MAX_INPUT_LENGTH) {
+        const truncatedText = inputText.slice(0, MAX_INPUT_LENGTH);
+        const newContentState = ContentState.createFromText(truncatedText);
+        const truncatedEditorState = EditorState.createWithContent(newContentState);
+        setEditorState(truncatedEditorState);
+        updateBlock(block.id, truncatedText, []);
+      } else {
+        setEditorState(newEditorState);
+        updateBlock(block.id, inputText, []);
+      }
+    },
+    [updateBlock, block.id],
+  );
+
+  const interceptSetEditorState = useCallback(
+    (newEditorState) => {
+      handleEditorChange(newEditorState);
+    },
+    [handleEditorChange],
+  );
 
   // Determines if the block is filled in
   const isValid =
@@ -65,13 +89,6 @@ function ClientAssignmentBlocks({
     updateBlock(block.id, event.target.value, []);
   }
 
-  const maxInputLength = 1000;
-
-  function handleOpenChange(event) {
-    const inputText = event.target.value;
-    setSelectedValue(inputText.length > maxInputLength ? inputText.slice(0, 1000) : inputText);
-    updateBlock(block.id, event.target.value, []);
-  }
 
   const isMobileWidth = useMobileWidth();
 
@@ -132,7 +149,7 @@ function ClientAssignmentBlocks({
             placeholder="Write your answer here..."
             readOnly={isView}
             block={block}
-            setEditorState={setEditorState}
+            setEditorState={interceptSetEditorState}
           />
         </ToolbarProvider>
       </div>

@@ -45,7 +45,6 @@ export default function DiaryBlockEmotionClient({ diary, type, setShowEmotionsPa
     question: 'd',
     description: 'd',
   };
-
   const handleEditorStateChange = (newEditorState) => {
     setEditorState(newEditorState);
     const contentState = newEditorState.getCurrentContent();
