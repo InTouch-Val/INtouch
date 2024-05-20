@@ -1,14 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles.css';
 import arrowBack from '../../../../images/assignment-page/arrowBack.svg';
 import { Link } from 'react-router-dom';
 import save from '../../../../images/assignment-page/save.svg';
 import { useAuth } from '../../../../service/authContext';
 import { useFormContext, useWatch } from 'react-hook-form';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import useMobileWidth from '../../../../utils/hook/useMobileWidth';
 
 const options = { weekday: 'long', day: '2-digit', month: 'short', year: 'numeric' };
 
 export default function DiaryHeaderClient({ diary, onSubmit }) {
+  const isMobileWidth = useMobileWidth();
+
   const { currentUser } = useAuth();
   const { handleSubmit, control } = useFormContext();
   const [isValid, setValid] = React.useState(false);
@@ -32,7 +37,7 @@ export default function DiaryHeaderClient({ diary, onSubmit }) {
 
   return (
     <>
-      <div className="diary__header">
+      <div className="diary__header diary__header--complete">
         <div className="diary__title-header">
           <div className="diary__title">Emotion Journal</div>
           <div className="diary__title-date">
@@ -44,15 +49,22 @@ export default function DiaryHeaderClient({ diary, onSubmit }) {
 
         <div className="buttons__container">
           <Link to={-1}>
-            <img src={arrowBack} alt="back" className="diary__img-back" />
+            {isMobileWidth ? (
+              <FontAwesomeIcon icon={faArrowLeft} style={{ color: '#417D88' }} size="xl" />
+            ) : (
+              <img src={arrowBack} alt="back" className="diary__img-back" />
+            )}
           </Link>
+
           {isValid ? (
-            <img
-              src={save}
-              about="save"
-              className="diary__img-back"
-              onClick={handleSubmit(onSubmit)}
-            />
+            isMobileWidth ? null : (
+              <img
+                src={save}
+                about="save"
+                className="diary__img-back"
+                onClick={handleSubmit(onSubmit)}
+              />
+            )
           ) : (
             <img src={save} about="save" className="diary__img-back-unactive" />
           )}

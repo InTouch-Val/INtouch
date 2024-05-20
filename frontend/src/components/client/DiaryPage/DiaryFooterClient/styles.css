@@ -1,6 +1,8 @@
 .diary__footer {
   display: flex;
   flex-direction: column;
+  padding-right: 28px;
+  padding-left: 28px;
 }
 
 .diary__footer-shared {
@@ -12,12 +14,29 @@
   gap: 20px;
 }
 
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .diary__footer-shared {
+    width: auto;
+    padding: 0;
+    margin-top: 28px;
+    margin-bottom: 28px;
+    justify-content: space-between;
+  }
+}
+
 .diary__footer-shared-text {
   font-family: 'Montserrat';
   font-size: 22px;
   font-weight: 500;
   line-height: 28px;
   color: #0b4a56;
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .diary__footer-shared-text {
+    font-size: 15px;
+    line-height: 21px;
+  }
 }
 
 .diary__footer-button-wrapper {
@@ -27,6 +46,16 @@
   justify-content: flex-start;
   align-items: center;
   position: relative;
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .diary__footer-button-wrapper span {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 15.5px;
+    text-align: center;
+    color: #0b4a56;
+  }
 }
 
 .diary__footer-button {
@@ -41,6 +70,14 @@
   line-height: 17px;
   color: #ffffff;
 }
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .diary__footer-button {
+    width: 100%;
+    height: 46px;
+  }
+}
+
 .diary__footer-button:disabled {
   opacity: 0.3;
 }
@@ -84,6 +121,26 @@
 .footer__input-checkbox:checked::after {
   background-color: #fff;
   transform: translate(1.9em, 0.08em);
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .footer__input-checkbox {
+    width: 32px;
+    height: 17px;
+  }
+
+  .footer__input-checkbox::after {
+    width: 13px;
+    height: 13px;
+    transform: translate(0.1em, 0);
+    transition:
+      transform 0.5s,
+      background-color 0.5s;
+  }
+
+  .footer__input-checkbox:checked::after {
+    transform: translate(1.2em, 0);
+  }
 }
 
 .diary__message-valid {

@@ -1,11 +1,14 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import '../DiaryPage.css';
 import { ToolbarProvider } from '../../../../service/ToolbarContext';
 import { EditorToolbar } from '../../../../service/editors-toolbar';
 import { EditorState, convertFromRaw } from 'draft-js';
 import { Controller, useFormContext } from 'react-hook-form';
+import useMobileWidth from '../../../../utils/hook/useMobileWidth';
 
 export default function EventDetailsClient({ diary, type }) {
+  const isMobileWidth = useMobileWidth();
+
   const editorRef = useRef(null);
   const content = {
     blocks: [
@@ -57,8 +60,9 @@ export default function EventDetailsClient({ diary, type }) {
               ref={editorRef}
               editorState={editorState}
               setEditorState={handleEditorStateChange}
-              placeholder={'Write you answer here...'}
+              placeholder={'Write your answer here...'}
               block={block}
+              isMobileWidth={isMobileWidth}
             />
           </ToolbarProvider>
         )}

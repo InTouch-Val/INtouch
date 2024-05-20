@@ -203,11 +203,27 @@ tr:last-child {
   inset: 0;
 }
 
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .modal-overlay {
+    background-color: rgba(174, 174, 174, 0.5);
+  }
+}
+
 .modal {
   z-index: 1001;
   padding: 20px;
   border-radius: 5px;
   background: white;
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .modal {
+    width: calc(100% - 20px);
+    box-sizing: border-box;
+    border-radius: 20px;
+    box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.12);
+    padding: 35px 53px;
+  }
 }
 
 .close-modal-button {
@@ -219,6 +235,27 @@ tr:last-child {
   color: red;
   cursor: pointer;
   font-size: 20px;
+}
+
+.close-modal__text {
+  text-align: center;
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .diary_button {
+    margin: 0;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .close-modal__text {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 21px;
+    color: #656565;
+    margin: 0;
+    margin-bottom: 46px;
+  }
 }
 
 .delete-modal-div {
