@@ -1,10 +1,10 @@
 //@ts-nocheck
-import React from 'react';
-import { useAuth } from '../../../service/authContext';
-import './DiaryNotes.css';
-import CardDiary from '../CardDiary/CardDiary';
-import { API } from '../../../service/axios';
-import { useObserve } from '../../../utils/hook/useObserve';
+import React from "react";
+import { useAuth } from "../../../service/authContext";
+import "./DiaryNotes.css";
+import CardDiary from "../CardDiary/CardDiary";
+import { API } from "../../../service/axios";
+import { useObserve } from "../../../utils/hook/useObserve";
 
 export default function DiaryNotes({ clientId }) {
   const { currentUser } = useAuth();

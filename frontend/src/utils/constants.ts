@@ -1,33 +1,32 @@
 export const menuActive = [
   {
     id: 1,
-    text: 'All clients',
-    status: 'All clients',
+    text: "All clients",
+    status: "All clients",
   },
   {
     id: 2,
-    text: 'Active',
-    status: 'true',
+    text: "Active",
+    status: "true",
   },
   {
     id: 3,
-    text: 'Not active',
-    status: 'false',
+    text: "Not active",
+    status: "false",
   },
 ];
 
 export const menuDate = [
-  { id: 1, text: `Date ▼`, status: 'Date up' },
-  { id: 2, text: 'Date ▲', status: 'Date down' },
+  { id: 1, text: `Date ▼`, status: "Date up" },
+  { id: 2, text: "Date ▲", status: "Date down" },
 ];
 
 export const minMobWidth = 320;
 export const maxMobWidth = 480;
 
-
-export enum Status  {
-  Success = 'success',
-  Init = 'init',
-  Loading = 'loading',
-  Error = 'error',
+export enum Status {
+  Success = "success",
+  Init = "init",
+  Loading = "loading",
+  Error = "error",
 }

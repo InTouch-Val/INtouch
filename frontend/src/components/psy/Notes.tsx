@@ -1,14 +1,14 @@
 //@ts-nocheck
-import { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
-import { API } from '../../service/axios';
-import { useAuth } from '../../service/authContext';
+import { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { API } from "../../service/axios";
+import { useAuth } from "../../service/authContext";
 
 function Notes({ clientId }) {
   const { currentUser } = useAuth();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterDate, setFilterDate] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterDate, setFilterDate] = useState("all");
   const [uniqueDates, setUniqueDates] = useState([]);
   const [notes, setNotes] = useState([]);
   const [filteredNotes, setFilteredNotes] = useState([]);
@@ -16,18 +16,23 @@ function Notes({ clientId }) {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const response = await API.get('notes/');
+        const response = await API.get("notes/");
         let fetchedNotes = response.data;
 
-        if (currentUser.user_type === 'doctor') {
-          const clientNotesIds = currentUser.doctor.clients.find((client) => client.id === clientId)
-            .client.notes;
+        if (currentUser.user_type === "doctor") {
+          const clientNotesIds = currentUser.doctor.clients.find(
+            (client) => client.id === clientId,
+          ).client.notes;
           console.log(clientNotesIds);
-          fetchedNotes = fetchedNotes.filter((note) => clientNotesIds.includes(note.id));
+          fetchedNotes = fetchedNotes.filter((note) =>
+            clientNotesIds.includes(note.id),
+          );
         }
 
         const dates = [
-          ...new Set(fetchedNotes.map((note) => new Date(note.add_date).toDateString())),
+          ...new Set(
+            fetchedNotes.map((note) => new Date(note.add_date).toDateString()),
+          ),
         ];
         setUniqueDates(dates);
 
@@ -45,7 +50,7 @@ function Notes({ clientId }) {
     const filter = () => {
       let tempNotes = [...notes];
 
-      if (filterDate !== 'all') {
+      if (filterDate !== "all") {
         tempNotes = tempNotes.filter(
           (note) => new Date(note.add_date).toDateString() === filterDate,
         );
@@ -55,7 +60,9 @@ function Notes({ clientId }) {
         tempNotes = tempNotes.filter(
           (note) =>
             note.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            convertContentToText(note.content).toLowerCase().includes(searchTerm.toLowerCase()),
+            convertContentToText(note.content)
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase()),
         );
       }
 
@@ -77,13 +84,13 @@ function Notes({ clientId }) {
 
       // Находим первый непустой блок текста
       for (const blockKey in blocks) {
-        if (blocks[blockKey].text.trim() !== '') {
+        if (blocks[blockKey].text.trim() !== "") {
           return blocks[blockKey].text;
         }
       }
       return content;
     } catch (e) {
-      console.error('Error parsing content:', e);
+      console.error("Error parsing content:", e);
       return content;
     }
   };

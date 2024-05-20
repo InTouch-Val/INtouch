@@ -1,4 +1,4 @@
-import react from '@vitejs/plugin-react';
+import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
 export default {
@@ -9,6 +9,6 @@ export default {
   },
   // Fix for `draft-js` package (https://github.com/facebook/fbjs/issues/290)
   define: {
-    global: 'window',
+    global: "window",
   },
 };

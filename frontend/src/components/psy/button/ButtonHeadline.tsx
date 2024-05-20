@@ -1,12 +1,12 @@
 //@ts-nocheck
-import './ButtonHeadline.css';
-import PropTypes from 'prop-types';
+import "./ButtonHeadline.css";
+import PropTypes from "prop-types";
 
 export default function Button({
   children,
   className,
   onClick,
-  type = 'button',
+  type = "button",
   disabled = false,
 }) {
   function handleClick() {
@@ -16,7 +16,12 @@ export default function Button({
   }
 
   return (
-    <button type={type} className={`browse ${className}`} onClick={handleClick} disabled={disabled}>
+    <button
+      type={type}
+      className={`browse ${className}`}
+      onClick={handleClick}
+      disabled={disabled}
+    >
       {children}
     </button>
   );

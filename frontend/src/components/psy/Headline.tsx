@@ -11,7 +11,9 @@ function Headline({ block, updateBlock }) {
       <textarea
         placeholder="Enter text..."
         value={block.text}
-        onChange={(e) => updateBlock(block.id, null, null, null, e.target.value)}
+        onChange={(e) =>
+          updateBlock(block.id, null, null, null, e.target.value)
+        }
       />
     </div>
   );

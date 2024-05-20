@@ -1,15 +1,15 @@
 //@ts-nocheck
-import { useState, createRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import FormData from 'form-data';
-import { useAuth } from '../service/authContext';
-import { API } from '../service/axios';
-import '../css/settings.css';
+import { useState, createRef } from "react";
+import { useNavigate } from "react-router-dom";
+import FormData from "form-data";
+import { useAuth } from "../service/authContext";
+import { API } from "../service/axios";
+import "../css/settings.css";
 
 // TODO: PopUp windows for users
 
 function SettingsPage() {
-  const [activeTab, setActiveTab] = useState('profile');
+  const [activeTab, setActiveTab] = useState("profile");
   const { currentUser } = useAuth();
 
   const handleTabClick = (tab) => {
@@ -19,26 +19,26 @@ function SettingsPage() {
   return (
     <div className="settings-page">
       <header>
-        <img alt="img" src={currentUser.photo || 'default-avatar.png'}></img>
+        <img alt="img" src={currentUser.photo || "default-avatar.png"}></img>
         <h2>{`${currentUser.first_name} ${currentUser.last_name}`}</h2>
       </header>
       <div className="tabs">
         <button
-          onClick={() => handleTabClick('profile')}
-          className={activeTab === 'profile' ? 'active' : ''}
+          onClick={() => handleTabClick("profile")}
+          className={activeTab === "profile" ? "active" : ""}
         >
           Profile
         </button>
         <button
-          onClick={() => handleTabClick('security')}
-          className={activeTab === 'security' ? 'active' : ''}
+          onClick={() => handleTabClick("security")}
+          className={activeTab === "security" ? "active" : ""}
         >
           Security
         </button>
       </div>
       <div>
-        {activeTab === 'profile' && <ProfileTab />}
-        {activeTab === 'security' && <SecurityTab />}
+        {activeTab === "profile" && <ProfileTab />}
+        {activeTab === "security" && <SecurityTab />}
       </div>
     </div>
   );
@@ -47,13 +47,15 @@ function SettingsPage() {
 function ProfileTab() {
   const { currentUser, updateUserData } = useAuth();
   const [userData, setUserData] = useState({
-    firstName: currentUser.first_name || '',
-    lastName: currentUser.last_name || '',
-    email: currentUser.email || '',
-    dateOfBirth: currentUser.date_of_birth || '',
+    firstName: currentUser.first_name || "",
+    lastName: currentUser.last_name || "",
+    email: currentUser.email || "",
+    dateOfBirth: currentUser.date_of_birth || "",
   });
   const [selectedFile, setSelectedFile] = useState([]);
-  const [previewImage, setPreviewImage] = useState(currentUser.photo || 'default-avatar.png');
+  const [previewImage, setPreviewImage] = useState(
+    currentUser.photo || "default-avatar.png",
+  );
   const fileInputRef = createRef();
 
   const handleFileSelect = (e) => {
@@ -76,24 +78,28 @@ function ProfileTab() {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append('first_name', userData.firstName);
-    formData.append('last_name', userData.lastName);
-    formData.append('email', userData.email);
-    formData.append('date_of_birth', userData.dateOfBirth);
+    formData.append("first_name", userData.firstName);
+    formData.append("last_name", userData.lastName);
+    formData.append("email", userData.email);
+    formData.append("date_of_birth", userData.dateOfBirth);
     if (selectedFile) {
-      formData.append('photo', selectedFile);
+      formData.append("photo", selectedFile);
     }
 
     try {
-      const response = await API.put(`user/update/${currentUser.id}/`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
+      const response = await API.put(
+        `user/update/${currentUser.id}/`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         },
-      }).then(() => updateUserData());
+      ).then(() => updateUserData());
 
       console.log(response);
     } catch (error) {
-      console.error('Error updating profile:' + error);
+      console.error("Error updating profile:" + error);
     }
   };
 
@@ -108,7 +114,7 @@ function ProfileTab() {
         <input
           type="file"
           ref={fileInputRef}
-          style={{ display: 'none' }}
+          style={{ display: "none" }}
           onChange={handleFileSelect}
         />
         <button className="action-button" onClick={handleChooseFileClick}>
@@ -167,11 +173,11 @@ function ProfileTab() {
 
 const SecurityTab = () => {
   const [userPassword, setUserPassword] = useState({
-    password: '',
-    new_password: '',
-    confirm_new_password: '',
+    password: "",
+    new_password: "",
+    confirm_new_password: "",
   });
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const { logout } = useAuth();
   const navigate = useNavigate();
@@ -197,7 +203,7 @@ const SecurityTab = () => {
       setMessage(response.data.message);
     } catch (e) {
       console.error(e);
-      setMessage('Error updating password: ' + e.data?.message);
+      setMessage("Error updating password: " + e.data?.message);
     }
   };
 
@@ -208,11 +214,11 @@ const SecurityTab = () => {
       setMessage(response.data.message);
       setTimeout(() => {
         logout();
-        navigate('/login');
+        navigate("/login");
       }, 1500);
     } catch (e) {
       console.error(e);
-      setMessage('Error deleting profile: ' + e.data?.message);
+      setMessage("Error deleting profile: " + e.data?.message);
     }
   };
 
@@ -265,19 +271,25 @@ const SecurityTab = () => {
         {showModal && (
           <div className="modal-overlay" onClick={handleModalToggle}>
             <div className="modal" onClick={(e) => e.stopPropagation()}>
-              <button className="close-modal-button" onClick={handleModalToggle}>
+              <button
+                className="close-modal-button"
+                onClick={handleModalToggle}
+              >
                 &times;
               </button>
               <div className="delete-modal-div">
                 <p>
-                  Are you sure you want to delete your profile forever?{' '}
+                  Are you sure you want to delete your profile forever?{" "}
                   <strong>This action is irrevertable!</strong>
                 </p>
                 <div>
                   <button className="action-button" onClick={handleModalToggle}>
                     Cancel
                   </button>
-                  <button className="action-button" onClick={handleDeleteProfile}>
+                  <button
+                    className="action-button"
+                    onClick={handleDeleteProfile}
+                  >
                     Delete Forever
                   </button>
                 </div>

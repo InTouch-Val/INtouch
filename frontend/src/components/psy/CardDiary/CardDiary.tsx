@@ -1,10 +1,10 @@
 //@ts-nocheck
 
-import React from 'react';
-import './CardDiary.css';
-import Button from '../button/ButtonHeadline';
-import { useNavigate } from 'react-router-dom';
-import { getDate } from '../../../utils/helperFunction/getDate';
+import React from "react";
+import "./CardDiary.css";
+import Button from "../button/ButtonHeadline";
+import { useNavigate } from "react-router-dom";
+import { getDate } from "../../../utils/helperFunction/getDate";
 
 export default function CardDiary({ card }) {
   const navigate = useNavigate();
@@ -16,7 +16,9 @@ export default function CardDiary({ card }) {
   return (
     <div className="diary__card" onClick={() => goDiary()}>
       <div className="diary__card-title">
-        <div className="diary__card-title__day">{new Date(card.add_date).getUTCDate()}</div>
+        <div className="diary__card-title__day">
+          {new Date(card.add_date).getUTCDate()}
+        </div>
         <div className="diary__card-title__date"> {getDate(card)}</div>
       </div>
       <div className="diary__card-text">{card.event_details}</div>

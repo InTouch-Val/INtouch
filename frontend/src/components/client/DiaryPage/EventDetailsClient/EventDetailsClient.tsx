@@ -1,11 +1,11 @@
 //@ts-nocheck
-import React, { useState, useRef } from 'react';
-import '../DiaryPage.css';
-import { ToolbarProvider } from '../../../../service/ToolbarContext';
-import { EditorToolbar } from '../../../../service/editors-toolbar';
-import { EditorState, convertFromRaw } from 'draft-js';
-import { Controller, useFormContext } from 'react-hook-form';
-import useMobileWidth from '../../../../utils/hook/useMobileWidth';
+import React, { useState, useRef } from "react";
+import "../DiaryPage.css";
+import { ToolbarProvider } from "../../../../service/ToolbarContext";
+import { EditorToolbar } from "../../../../service/editors-toolbar";
+import { EditorState, convertFromRaw } from "draft-js";
+import { Controller, useFormContext } from "react-hook-form";
+import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 
 export default function EventDetailsClient({ diary, type }) {
   const isMobileWidth = useMobileWidth();
@@ -14,9 +14,9 @@ export default function EventDetailsClient({ diary, type }) {
   const content = {
     blocks: [
       {
-        key: 'abcde',
-        text: diary ? diary.event_details : '',
-        type: 'open',
+        key: "abcde",
+        text: diary ? diary.event_details : "",
+        type: "open",
         depth: 0,
         inlineStyleRanges: [],
         entityRanges: [],
@@ -27,20 +27,22 @@ export default function EventDetailsClient({ diary, type }) {
   };
   const contentState = convertFromRaw(content);
   const [editorState, setEditorState] = useState(() =>
-    type == 'exist' ? EditorState.createWithContent(contentState) : EditorState.createEmpty(),
+    type == "exist"
+      ? EditorState.createWithContent(contentState)
+      : EditorState.createEmpty(),
   );
 
   const block = {
-    type: 'open',
-    question: 'd',
-    description: 'd',
+    type: "open",
+    question: "d",
+    description: "d",
   };
 
   const handleEditorStateChange = (newEditorState) => {
     setEditorState(newEditorState);
     const contentState = newEditorState.getCurrentContent();
     const text = contentState.getPlainText();
-    setValue('event_details', text);
+    setValue("event_details", text);
   };
 
   const { control, setValue } = useFormContext();
@@ -61,7 +63,7 @@ export default function EventDetailsClient({ diary, type }) {
               ref={editorRef}
               editorState={editorState}
               setEditorState={handleEditorStateChange}
-              placeholder={'Write your answer here...'}
+              placeholder={"Write your answer here..."}
               block={block}
               isMobileWidth={isMobileWidth}
             />

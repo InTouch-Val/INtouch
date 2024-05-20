@@ -1,29 +1,29 @@
 //@ts-nocheck
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { API } from '../axios';
-import '../../css/registration.css';
-import { isValidEmail, isValidPassword } from './regex';
-import eyeIcon from '../../images/icons/eye.svg';
-import eyeSlashIcon from '../../images/icons/eyeSlash.svg';
-import logo from '../../images/LogoBig.svg';
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { API } from "../axios";
+import "../../css/registration.css";
+import { isValidEmail, isValidPassword } from "./regex";
+import eyeIcon from "../../images/icons/eye.svg";
+import eyeSlashIcon from "../../images/icons/eyeSlash.svg";
+import logo from "../../images/LogoBig.svg";
 
 function RegistrationForm() {
   const [successMessage, setSuccessMessage] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
     acceptPolicy: false,
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [validationError, setValidationError] = useState({
-    email: '',
-    password: '',
-    name: '',
-    second: '',
+    email: "",
+    password: "",
+    name: "",
+    second: "",
   });
   const [passwordShown, setPasswordShown] = useState(false);
   const [isValidCredentials, setIsValidCredentials] = useState(false);
@@ -35,10 +35,10 @@ function RegistrationForm() {
 
   const handleCredentialsBlur = (field, value) => {
     let newError = { ...validationError };
-    if (field === 'email' && !isValidEmail(value)) {
+    if (field === "email" && !isValidEmail(value)) {
       newError.email =
-        'Please make sure your email address is in the format        example@example.com';
-    } else if (field === 'password' && !isValidPassword(value)) {
+        "Please make sure your email address is in the format        example@example.com";
+    } else if (field === "password" && !isValidPassword(value)) {
       const hasUppercase = /[A-Z]/.test(value);
       const hasLowercase = /[a-z]/.test(value);
       const hasDigit = /\d/.test(value);
@@ -47,32 +47,35 @@ function RegistrationForm() {
         value.length > numberOfMaxLengthOfPassword
       ) {
         newError.password =
-          'Password must be at least 8 characters long and cannot exceed 128 characters.';
+          "Password must be at least 8 characters long and cannot exceed 128 characters.";
       } else if (!hasUppercase || !hasLowercase || !hasDigit) {
         newError.password =
-          'Password must contain at least one uppercase letter, one lowercase letter, and one digit.';
+          "Password must contain at least one uppercase letter, one lowercase letter, and one digit.";
       } else {
         newError.password =
           "Password can only contain Latin letters, Arabic numerals, and the characters: ~!? @ # $ % ^ & * _ - + ( ) [ ] { } > < / \\ | '., : ;";
       }
     } else if (
-      (field === 'name' || field === 'second') &&
-      (value.length < numberOfMinLengthOfName || value.length > numberOfMaxLengthOfName)
+      (field === "name" || field === "second") &&
+      (value.length < numberOfMinLengthOfName ||
+        value.length > numberOfMaxLengthOfName)
     ) {
-      if (field === 'name') {
-        newError.name = 'Please write a valid name. Only 2-50 letters are allowed.';
+      if (field === "name") {
+        newError.name =
+          "Please write a valid name. Only 2-50 letters are allowed.";
       } else {
-        newError.second = 'Please write a valid second name. Only 2-50 letters are allowed.';
+        newError.second =
+          "Please write a valid second name. Only 2-50 letters are allowed.";
       }
     } else {
-      if (field === 'email') {
-        newError.email = '';
-      } else if (field === 'password') {
-        newError.password = '';
-      } else if (field === 'name') {
-        newError.name = '';
-      } else if (field === 'second') {
-        newError.second = '';
+      if (field === "email") {
+        newError.email = "";
+      } else if (field === "password") {
+        newError.password = "";
+      } else if (field === "name") {
+        newError.name = "";
+      } else if (field === "second") {
+        newError.second = "";
       }
     }
     setValidationError(newError);
@@ -88,34 +91,37 @@ function RegistrationForm() {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: type === "checkbox" ? checked : value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setError('');
+    setError("");
 
     if (formData.password !== formData.confirmPassword) {
       setValidationError({
         ...validationError,
-        password: 'Password and Confirm Password must match.',
+        password: "Password and Confirm Password must match.",
       });
       return;
     }
 
-    if (formData.password === formData.firstName || formData.password === formData.lastName) {
+    if (
+      formData.password === formData.firstName ||
+      formData.password === formData.lastName
+    ) {
       setValidationError({
         ...validationError,
-        password: 'The password is too similar to your name',
+        password: "The password is too similar to your name",
       });
       return;
     }
 
     // Проверка согласия с политикой
     if (!formData.acceptPolicy) {
-      setError('You must accept the terms and conditions.');
+      setError("You must accept the terms and conditions.");
       return;
     }
 
@@ -130,22 +136,24 @@ function RegistrationForm() {
     };
 
     try {
-      await API.post('users/', requestData, {
+      await API.post("users/", requestData, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         withCredentials: true,
       });
-      setSuccessMessage('Account is activated');
-      navigate('/welcome-to-intouch');
+      setSuccessMessage("Account is activated");
+      navigate("/welcome-to-intouch");
     } catch (error) {
-      console.error('Registration error:', error);
+      console.error("Registration error:", error);
       if (error.response?.data?.email[0]) {
-        setError('This email address already exists. Please use a unique one.');
+        setError("This email address already exists. Please use a unique one.");
       } else if (error.response?.status >= 500) {
-        setError('Some error occurs from the server, we’re fixing it. Sorry for inconvenience ');
+        setError(
+          "Some error occurs from the server, we’re fixing it. Sorry for inconvenience ",
+        );
       } else {
-        setError('Account isn’t activated');
+        setError("Account isn’t activated");
       }
     }
   };
@@ -159,10 +167,10 @@ function RegistrationForm() {
             type="text"
             name="firstName"
             placeholder="First Name"
-            className={`input ${validationError.name ? 'error' : ''}`}
+            className={`input ${validationError.name ? "error" : ""}`}
             value={formData.firstName}
             onChange={handleChange}
-            onBlur={(e) => handleCredentialsBlur('name', e.target.value)}
+            onBlur={(e) => handleCredentialsBlur("name", e.target.value)}
             required
             min={numberOfMinLengthOfName}
             max={numberOfMaxLengthOfName}
@@ -171,10 +179,10 @@ function RegistrationForm() {
             type="text"
             name="lastName"
             placeholder="Last Name"
-            className={`input ${validationError.second ? 'error' : ''}`}
+            className={`input ${validationError.second ? "error" : ""}`}
             value={formData.lastName}
             onChange={handleChange}
-            onBlur={(e) => handleCredentialsBlur('second', e.target.value)}
+            onBlur={(e) => handleCredentialsBlur("second", e.target.value)}
             required
             min={numberOfMinLengthOfName}
             max={numberOfMaxLengthOfName}
@@ -183,21 +191,21 @@ function RegistrationForm() {
             type="email"
             name="email"
             placeholder="Email"
-            className={`input ${validationError.email ? 'error' : ''}`}
+            className={`input ${validationError.email ? "error" : ""}`}
             value={formData.email}
             onChange={handleChange}
-            onBlur={(e) => handleCredentialsBlur('email', e.target.value)}
+            onBlur={(e) => handleCredentialsBlur("email", e.target.value)}
             required
           />
           <div className="password-field">
             <input
-              className={`input ${validationError.password ? 'error' : ''}`}
-              type={passwordShown ? 'text' : 'password'}
+              className={`input ${validationError.password ? "error" : ""}`}
+              type={passwordShown ? "text" : "password"}
               name="password"
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              onBlur={(e) => handleCredentialsBlur('password', e.target.value)}
+              onBlur={(e) => handleCredentialsBlur("password", e.target.value)}
               required
               minLength={numberOfMinLengthOfPassword}
               maxLength={numberOfMaxLengthOfPassword}
@@ -212,8 +220,8 @@ function RegistrationForm() {
           </div>
           <div className="password-field">
             <input
-              className={`input ${validationError.password ? 'error' : ''}`}
-              type={passwordShown ? 'text' : 'password'}
+              className={`input ${validationError.password ? "error" : ""}`}
+              type={passwordShown ? "text" : "password"}
               name="confirmPassword"
               placeholder="Confirm Password"
               value={formData.confirmPassword}
@@ -254,10 +262,12 @@ function RegistrationForm() {
           Register
         </button>
         <p>
-          Already have an account? <Link to={'/login'}>Log in</Link>
+          Already have an account? <Link to={"/login"}>Log in</Link>
         </p>
         {error && <p className="error-message">{error}</p>}
-        {successMessage && <div className="success-message">{successMessageText}</div>}
+        {successMessage && (
+          <div className="success-message">{successMessageText}</div>
+        )}
       </form>
     </div>
   );

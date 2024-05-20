@@ -1,15 +1,15 @@
 //@ts-nocheck
-import { useState, useEffect, useContext, useRef, useCallback } from 'react';
-import { useAuth } from '../../service/authContext';
-import { API } from '../../service/axios';
-import { ClientAssignmentCard } from './ClientAssignmentCard/ClientAssignmentCard';
-import { AuthProvider } from '../../service/authContext';
-import { useObserve } from '../../utils/hook/useObserve';
-import { useGetAssignmentsQuery } from '../../store/entities';
+import { useState, useEffect, useContext, useRef, useCallback } from "react";
+import { useAuth } from "../../service/authContext";
+import { API } from "../../service/axios";
+import { ClientAssignmentCard } from "./ClientAssignmentCard/ClientAssignmentCard";
+import { AuthProvider } from "../../service/authContext";
+import { useObserve } from "../../utils/hook/useObserve";
+import { useGetAssignmentsQuery } from "../../store/entities";
 
 function ClientAssignments() {
   const { currentUser } = useAuth();
-  const [currentTab, setCurrentTab] = useState('all');
+  const [currentTab, setCurrentTab] = useState("all");
   const [assignments, setAssignments] = useState([]);
   const [filteredAssignments, setFilteredAssignments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -17,8 +17,6 @@ function ClientAssignments() {
   const [limit, setLimit] = useState(10);
   const observeElement = useRef(null);
   const [isTotal, setTotal] = useState(false);
-
-
 
   const handleTakeUpdate = useCallback(() => {
     setLimit((prevLimit) => prevLimit + 10);
@@ -29,8 +27,12 @@ function ClientAssignments() {
   useEffect(() => {
     const fetchAssignments = async () => {
       try {
-        let response = await API.get(`/assignments-client/?limit=${limit}&offset=0`);
-        response = response.data.results.filter((assignment) => assignment.user === currentUser.id);
+        let response = await API.get(
+          `/assignments-client/?limit=${limit}&offset=0`,
+        );
+        response = response.data.results.filter(
+          (assignment) => assignment.user === currentUser.id,
+        );
         // response = response.data.results;
         setAssignments(response);
 
@@ -49,7 +51,7 @@ function ClientAssignments() {
     let updatedAssignments = assignments;
 
     // Filter assignments based on status
-    if (currentTab !== 'all') {
+    if (currentTab !== "all") {
       updatedAssignments = updatedAssignments.filter(
         (assignment) => assignment.status === currentTab, // Assuming 'status' field in assignment
       );
@@ -63,15 +65,15 @@ function ClientAssignments() {
   }
 
   //Changing text on the tab
-  const [buttonText, setButtonText] = useState('All Assignments');
+  const [buttonText, setButtonText] = useState("All Assignments");
 
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
       if (width >= 320 && width <= 480) {
-        setButtonText('All');
+        setButtonText("All");
       } else {
-        setButtonText('All Assignments');
+        setButtonText("All Assignments");
       }
     };
 
@@ -79,10 +81,10 @@ function ClientAssignments() {
     handleResize();
 
     // Adds event listener
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     // Cleans up event listener
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
@@ -92,20 +94,20 @@ function ClientAssignments() {
       </header>
       <div className="client tabs">
         <button
-          className={currentTab === 'all' ? 'active' : ''}
-          onClick={() => setCurrentTab('all')}
+          className={currentTab === "all" ? "active" : ""}
+          onClick={() => setCurrentTab("all")}
         >
           {buttonText}
         </button>
         <button
-          className={currentTab === 'in_progress' ? 'active' : ''}
-          onClick={() => setCurrentTab('in_progress')}
+          className={currentTab === "in_progress" ? "active" : ""}
+          onClick={() => setCurrentTab("in_progress")}
         >
           In Progress
         </button>
         <button
-          className={currentTab === 'done' ? 'active' : ''}
-          onClick={() => setCurrentTab('done')}
+          className={currentTab === "done" ? "active" : ""}
+          onClick={() => setCurrentTab("done")}
         >
           Done
         </button>
@@ -122,7 +124,9 @@ function ClientAssignments() {
             />
           ))
         ) : (
-          <div className="nothing-to-show">You have no assignments. Contact your doctor</div>
+          <div className="nothing-to-show">
+            You have no assignments. Contact your doctor
+          </div>
         )}
         <div className="assignment__observeElement" ref={observeElement} />
       </div>

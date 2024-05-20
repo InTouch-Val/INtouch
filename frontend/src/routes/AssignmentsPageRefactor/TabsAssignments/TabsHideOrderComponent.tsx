@@ -31,7 +31,7 @@ export default function TabsHideOrderComponent({
       changeAssignmentFavoriteByIdAction({
         isFavorite: isFavorite,
         assignmentId: assignmentId,
-      })
+      }),
     );
   };
 

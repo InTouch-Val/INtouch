@@ -1,7 +1,7 @@
 //@ts-nocheck
-import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { API } from '../axios';
+import React from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { API } from "../axios";
 
 export default function ConfirmEmail() {
   const { pk, token } = useParams();
@@ -13,13 +13,15 @@ export default function ConfirmEmail() {
   React.useEffect(() => {
     const verifyResetLink = async () => {
       try {
-        const response = await API.get(`user/update/email/confirm/${pk}/${token}/`);
+        const response = await API.get(
+          `user/update/email/confirm/${pk}/${token}/`,
+        );
         console.log(response);
         if (response.status === 200) {
           setMessage(response.data);
         }
       } catch (error) {
-        console.error('Error verifying reset link:', error);
+        console.error("Error verifying reset link:", error);
         setMessage(response.data.error);
       } finally {
         setLoading(false);
@@ -30,7 +32,7 @@ export default function ConfirmEmail() {
   }, [pk, token]);
 
   function handleGoButton() {
-    navigate('/settings');
+    navigate("/settings");
   }
 
   if (loading) {

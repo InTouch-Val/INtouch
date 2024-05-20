@@ -1,13 +1,13 @@
 //@ts-nocheck
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
-import { useAuth } from '../service/authContext';
-import { API } from '../service/axios';
-import '../css/clients.css';
-import Select from '../components/psy/Select/Select';
-import { menuActive, menuDate } from '../utils/constants';
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "../service/authContext";
+import { API } from "../service/axios";
+import "../css/clients.css";
+import Select from "../components/psy/Select/Select";
+import { menuActive, menuDate } from "../utils/constants";
 
 function ClientPage() {
   const [showModal, setShowModal] = useState(false);
@@ -17,16 +17,16 @@ function ClientPage() {
   const [messageToUser, setMessageToUser] = useState(null);
   const [activityFilter, setActivityFilter] = useState({
     id: 1,
-    text: 'Status ▼',
-    status: 'All clients',
+    text: "Status ▼",
+    status: "All clients",
   });
 
   const [activityFilterDate, setActivityFilterDate] = useState({
     id: 1,
-    text: 'Added ▼',
-    status: 'Date up',
+    text: "Added ▼",
+    status: "Date up",
   });
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const { currentUser, updateUserData } = useAuth();
   const [isSelectActive, setSelectActive] = useState(false);
   const [isSelectDateActive, setSelectDateActive] = useState(false);
@@ -44,9 +44,9 @@ function ClientPage() {
 
   useEffect(() => {
     const fetchAssignments = async () => {
-      if (modalAction === 'add') {
+      if (modalAction === "add") {
         try {
-          await API.get('assignments/').then((response) => {
+          await API.get("assignments/").then((response) => {
             const data = response.data.results.filter((assignment) =>
               currentUser.doctor.assignments.includes(assignment.id),
             );
@@ -64,7 +64,7 @@ function ClientPage() {
   const filteredClients =
     currentUser?.doctor?.clients
       .sort((a, b) =>
-        activityFilterDate.status === 'Date up'
+        activityFilterDate.status === "Date up"
           ? new Date(b.date_joined) - new Date(a.date_joined)
           : new Date(a.date_joined) - new Date(b.date_joined),
       )
@@ -73,12 +73,12 @@ function ClientPage() {
           `${client.first_name} ${client.last_name}`
             .toLowerCase()
             .includes(searchTerm.toLowerCase()) &&
-          (activityFilter.status === 'All clients' ||
+          (activityFilter.status === "All clients" ||
             client.is_active.toString() === activityFilter.status),
       ) || [];
 
   const openModal = (clientId) => {
-    handleActionSelect('delete');
+    handleActionSelect("delete");
     setShowModal(true);
     setSelectedClientId(clientId);
   };
@@ -94,7 +94,7 @@ function ClientPage() {
   };
 
   const handleAddClient = () => {
-    navigate('/add-client');
+    navigate("/add-client");
   };
 
   const handleDeleteClient = async () => {
@@ -105,13 +105,15 @@ function ClientPage() {
       closeModal();
     } catch (e) {
       console.error(e);
-      setMessageToUser('There was an error deleting the client');
+      setMessageToUser("There was an error deleting the client");
     }
   };
 
   const handleAssignmentAddToClient = async (assignment) => {
     try {
-      const response = await API.get(`assignments/set-client/${assignment}/${selectedClientId}/`);
+      const response = await API.get(
+        `assignments/set-client/${assignment}/${selectedClientId}/`,
+      );
       closeModal();
       setMessageToUser(response.data.detail);
     } catch (e) {
@@ -150,20 +152,32 @@ function ClientPage() {
             <tr onClick={(e) => e.stopPropagation()}>
               <th className="table__headColumn">Full Name</th>
               <th className="table__headColumn">
-                <div className="button-select" onClick={() => setSelectActive((prev) => !prev)}>
+                <div
+                  className="button-select"
+                  onClick={() => setSelectActive((prev) => !prev)}
+                >
                   {activityFilter.text}
                 </div>
 
                 {isSelectActive && (
-                  <Select menu={menuActive} setActivityFilter={setActivityFilter} />
+                  <Select
+                    menu={menuActive}
+                    setActivityFilter={setActivityFilter}
+                  />
                 )}
               </th>
               <th className="table__headColumn">
-                <div className="button-select" onClick={() => setSelectDateActive((prev) => !prev)}>
+                <div
+                  className="button-select"
+                  onClick={() => setSelectDateActive((prev) => !prev)}
+                >
                   {activityFilterDate.text}
                 </div>
                 {isSelectDateActive && (
-                  <Select menu={menuDate} setActivityFilter={setActivityFilterDate} />
+                  <Select
+                    menu={menuDate}
+                    setActivityFilter={setActivityFilterDate}
+                  />
                 )}
               </th>
               <th className="table__headColumn">Actions</th>
@@ -177,7 +191,7 @@ function ClientPage() {
                     {`${client.first_name} ${client.last_name}`}
                   </Link>
                 </td>
-                <td>{client.is_active ? 'Active' : 'Inactive'}</td>
+                <td>{client.is_active ? "Active" : "Inactive"}</td>
                 <td>{new Date(client.date_joined).toLocaleDateString()}</td>
                 <td className="actions">
                   <button
@@ -186,15 +200,21 @@ function ClientPage() {
                   ></button>
                   {showModal && (
                     <div className="modal-overlay" onClick={closeModal}>
-                      <div className="modal" onClick={(e) => e.stopPropagation()}>
-                        <button className="close-modal-button" onClick={closeModal}>
+                      <div
+                        className="modal"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <button
+                          className="close-modal-button"
+                          onClick={closeModal}
+                        >
                           &times;
                         </button>
                         {!modalAction && (
                           <div>
                             <button
                               className="action-button"
-                              onClick={() => handleActionSelect('delete')}
+                              onClick={() => handleActionSelect("delete")}
                             >
                               Delete Client
                             </button>
@@ -203,29 +223,35 @@ function ClientPage() {
                             но сказали, что где то будут ее использовать еще */}
                             <button
                               className="action-button"
-                              onClick={() => handleActionSelect('add')}
+                              onClick={() => handleActionSelect("add")}
                             >
                               Add Assignment
                             </button>
                           </div>
                         )}
-                        {modalAction === 'delete' && (
+                        {modalAction === "delete" && (
                           <div className="delete-modal-div">
                             <p>
-                              Are you sure you want to delete this client? This action is
-                              irrevertable!
+                              Are you sure you want to delete this client? This
+                              action is irrevertable!
                             </p>
                             <div>
-                              <button className="action-button" onClick={handleDeleteClient}>
+                              <button
+                                className="action-button"
+                                onClick={handleDeleteClient}
+                              >
                                 Delete
                               </button>
-                              <button className="action-button" onClick={closeModal}>
+                              <button
+                                className="action-button"
+                                onClick={closeModal}
+                              >
                                 Cancel
                               </button>
                             </div>
                           </div>
                         )}
-                        {modalAction === 'add' && (
+                        {modalAction === "add" && (
                           <div>
                             <p>Choose the assignment you want to assign:</p>
                             <table>
@@ -249,13 +275,17 @@ function ClientPage() {
                                     <td>
                                       {assignment.author_name
                                         ? assignment.author_name
-                                        : 'Unknow Author'}
+                                        : "Unknow Author"}
                                     </td>
                                     <td>{assignment.update_date}</td>
                                     <td>
                                       <button
                                         className="action-button"
-                                        onClick={() => handleAssignmentAddToClient(assignment.id)}
+                                        onClick={() =>
+                                          handleAssignmentAddToClient(
+                                            assignment.id,
+                                          )
+                                        }
                                       >
                                         Assign
                                       </button>

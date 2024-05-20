@@ -1,2 +1,2 @@
-export * from './assignments/assingmentsApi';
-export * from './auth/auth';
+export * from "./assignments/assingmentsApi";
+export * from "./auth/auth";

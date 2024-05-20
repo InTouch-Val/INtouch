@@ -1,12 +1,12 @@
 //@ts-nocheck
-import React, { useState, useEffect } from 'react';
-import { useCallback } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashCan, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { EditorToolbar } from '../editors-toolbar';
-import '../../css/block.css';
-import HeadlinerImg from '../../components/psy/HeadlinerImg/HeadlinerImg';
-import Block from './Block/Block';
+import React, { useState, useEffect } from "react";
+import { useCallback } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { EditorToolbar } from "../editors-toolbar";
+import "../../css/block.css";
+import HeadlinerImg from "../../components/psy/HeadlinerImg/HeadlinerImg";
+import Block from "./Block/Block";
 
 function AssignmentBlock({
   block,
@@ -23,13 +23,19 @@ function AssignmentBlock({
 }) {
   const [title, setTitle] = useState(block.title);
   const [choices, setChoices] = useState(block.choices || []);
-  const [minValue, setMinValue] = useState(block.minValue !== undefined ? block.minValue : 1);
+  const [minValue, setMinValue] = useState(
+    block.minValue !== undefined ? block.minValue : 1,
+  );
   const [maxValue, setMaxValue] = useState(block.maxValue || 10);
   const [choiceRefs, setChoiceRefs] = useState([]);
-  const [leftPole, setLeftPole] = useState(block.leftPole || block.left_pole || '');
-  const [rightPole, setRightPole] = useState(block.rightPole || block.right_pole || '');
+  const [leftPole, setLeftPole] = useState(
+    block.leftPole || block.left_pole || "",
+  );
+  const [rightPole, setRightPole] = useState(
+    block.rightPole || block.right_pole || "",
+  );
   const [image, setImage] = useState(block.image);
-  const [errorText, setErrorText] = useState('');
+  const [errorText, setErrorText] = useState("");
 
   useEffect(() => {
     if (choices && choices.length > 0) {
@@ -47,14 +53,17 @@ function AssignmentBlock({
   }, [choices]);
 
   const validateChoices = () => {
-    if ((block.type === 'single' || block.type === 'multiple') && choices.length < 2) {
+    if (
+      (block.type === "single" || block.type === "multiple") &&
+      choices.length < 2
+    ) {
       setIsError(true);
       setErrorText(
-        `${errorText.includes(' Please enter at least two options') ? errorText.replace(' Please enter at least two options', '') : errorText} Please enter at least two options`,
+        `${errorText.includes(" Please enter at least two options") ? errorText.replace(" Please enter at least two options", "") : errorText} Please enter at least two options`,
       );
     } else {
       setIsError(false);
-      setErrorText(errorText.replace(' Please enter at least two options', ''));
+      setErrorText(errorText.replace(" Please enter at least two options", ""));
     }
   };
 
@@ -63,20 +72,25 @@ function AssignmentBlock({
       <div className="block">
         <div className="block-header">
           {!block.description ? (
-            <h3 className="block-title">{isView ? block.title : block.question}</h3>
+            <h3 className="block-title">
+              {isView ? block.title : block.question}
+            </h3>
           ) : (
-            <div className="block__text" dangerouslySetInnerHTML={{ __html: block.description }} />
+            <div
+              className="block__text"
+              dangerouslySetInnerHTML={{ __html: block.description }}
+            />
           )}
         </div>
-        {block.type === 'image' && (
+        {block.type === "image" && (
           <img className="block-image" src={block.image} alt={block.question} />
         )}
-        {(block.type === 'single' || block.type === 'multiple') && (
+        {(block.type === "single" || block.type === "multiple") && (
           <ul className={`choices-container ${block.type}`}>
             {isView == true &&
               block.choices.map((choice, index) => (
                 <li key={index} className="choice-option">
-                  {block.type === 'single' ? (
+                  {block.type === "single" ? (
                     <input type="radio" disabled />
                   ) : (
                     <input type="checkbox" disabled />
@@ -87,7 +101,7 @@ function AssignmentBlock({
             {block.choice_replies &&
               block.choice_replies.map((choice, index) => (
                 <li key={index} className="choice-option">
-                  {block.type === 'single' ? (
+                  {block.type === "single" ? (
                     <input type="radio" disabled />
                   ) : (
                     <input type="checkbox" disabled />
@@ -97,21 +111,29 @@ function AssignmentBlock({
               ))}
           </ul>
         )}
-        {block.type === 'range' && (
+        {block.type === "range" && (
           <div className="range-display">
-            <span className="range-label">{block.left_pole || 'Left Pole'}</span>
+            <span className="range-label">
+              {block.left_pole || "Left Pole"}
+            </span>
             <div className="range-options">
               {Array.from(
                 { length: block.end_range - block.start_range + 1 },
                 (_, i) => i + block.start_range,
               ).map((value) => (
                 <label key={value} className="range-option">
-                  <input type="radio" name={`range-${block.id}`} value={value} />
+                  <input
+                    type="radio"
+                    name={`range-${block.id}`}
+                    value={value}
+                  />
                   <span className="range-option-label">{value}</span>
                 </label>
               ))}
             </div>
-            <span className="range-label">{block.right_pole || 'Right Pole'}</span>
+            <span className="range-label">
+              {block.right_pole || "Right Pole"}
+            </span>
           </div>
         )}
       </div>
@@ -143,7 +165,14 @@ function AssignmentBlock({
       // Добавляем проверку, чтобы ограничить максимальное значение
       newValue = Math.min(1, newValue);
       setMinValue(newValue);
-      updateBlock(block.id, block.content, block.choices, title, newValue, maxValue);
+      updateBlock(
+        block.id,
+        block.content,
+        block.choices,
+        title,
+        newValue,
+        maxValue,
+      );
     },
     [block.id, block.content, choices, updateBlock],
   );
@@ -154,7 +183,14 @@ function AssignmentBlock({
       // Используем Math.min и Math.max для ограничения значения в диапазоне от 2 до 10
       const newValue = Math.min(Math.max(maxValue + change, 2), 10);
       setMaxValue(newValue);
-      updateBlock(block.id, block.content, block.choices, title, minValue, newValue);
+      updateBlock(
+        block.id,
+        block.content,
+        block.choices,
+        title,
+        minValue,
+        newValue,
+      );
     },
     [block.id, block.content, choices, updateBlock],
   );
@@ -163,7 +199,7 @@ function AssignmentBlock({
     (event, type) => {
       let value = parseInt(event.target.value, 10);
       // Если тип ввода равен 'min', ограничиваем диапазон от 0 до 1
-      if (type === 'min') {
+      if (type === "min") {
         if (isNaN(value) || value < 0) {
           value = 0;
         } else if (value > 1) {
@@ -177,12 +213,26 @@ function AssignmentBlock({
         }
       }
 
-      if (type === 'min') {
+      if (type === "min") {
         setMinValue(value);
-        updateBlock(block.id, block.content, block.choices, title, value, maxValue);
+        updateBlock(
+          block.id,
+          block.content,
+          block.choices,
+          title,
+          value,
+          maxValue,
+        );
       } else {
         setMaxValue(value);
-        updateBlock(block.id, block.content, block.choices, title, minValue, value);
+        updateBlock(
+          block.id,
+          block.content,
+          block.choices,
+          title,
+          minValue,
+          value,
+        );
       }
     },
     [block.id, block.content, choices, updateBlock],
@@ -190,7 +240,7 @@ function AssignmentBlock({
 
   const handlePoleChange = useCallback(
     (pole, value) => {
-      if (pole === 'left') {
+      if (pole === "left") {
         setLeftPole(value);
         updateBlock(
           block.id,
@@ -220,13 +270,13 @@ function AssignmentBlock({
   );
 
   const handleNewChoiceFocus = (event) => {
-    if (event.target.value === '') {
+    if (event.target.value === "") {
       addChoice();
     }
   };
 
   const addChoice = useCallback(() => {
-    if (choices.some((choice) => choice.trim() === '')) {
+    if (choices.some((choice) => choice.trim() === "")) {
       // Не добавлять новый выбор, если есть пустой
       return;
     }
@@ -234,7 +284,7 @@ function AssignmentBlock({
     const newChoiceRef = React.createRef();
     setChoiceRefs((refs) => [...refs, newChoiceRef]);
     setChoices((currentChoices) => {
-      const updatedChoices = [...currentChoices, ''];
+      const updatedChoices = [...currentChoices, ""];
       updateBlock(block.id, block.content, updatedChoices, title);
       return updatedChoices;
     });
@@ -249,7 +299,7 @@ function AssignmentBlock({
     [block.id, block.content, choices, updateBlock],
   );
 
-  if (block.type === 'text') {
+  if (block.type === "text") {
     return (
       <Block
         block={block}
@@ -270,7 +320,7 @@ function AssignmentBlock({
     );
   }
 
-  if (block.type === 'open') {
+  if (block.type === "open") {
     return (
       <Block
         block={block}
@@ -291,7 +341,7 @@ function AssignmentBlock({
     );
   }
 
-  if (block.type === 'range') {
+  if (block.type === "range") {
     return (
       <Block
         block={block}
@@ -314,7 +364,7 @@ function AssignmentBlock({
             className="number-input-container"
             type="text"
             value={leftPole}
-            onChange={(e) => handlePoleChange('left', e.target.value)}
+            onChange={(e) => handlePoleChange("left", e.target.value)}
             placeholder="Left pole..."
             maxLength={15}
           />
@@ -329,7 +379,7 @@ function AssignmentBlock({
               className="number-input-container-input"
               type="number"
               value={minValue}
-              onChange={(e) => handleNumberChange(e, 'min')}
+              onChange={(e) => handleNumberChange(e, "min")}
               min={0}
               max={1}
             />
@@ -352,7 +402,7 @@ function AssignmentBlock({
               className="number-input-container-input"
               type="number"
               value={maxValue}
-              onChange={(e) => handleNumberChange(e, 'max')}
+              onChange={(e) => handleNumberChange(e, "max")}
               min={2}
               max={10}
             />
@@ -367,7 +417,7 @@ function AssignmentBlock({
             className="number-input-container"
             type="text"
             value={rightPole}
-            onChange={(e) => handlePoleChange('right', e.target.value)}
+            onChange={(e) => handlePoleChange("right", e.target.value)}
             placeholder="Right pole..."
             maxLength={15}
           />
@@ -376,7 +426,7 @@ function AssignmentBlock({
     );
   }
 
-  if (block.type === 'image') {
+  if (block.type === "image") {
     return (
       <Block
         block={block}
@@ -410,7 +460,7 @@ function AssignmentBlock({
       block={block}
       removeBlock={removeBlock}
       copyBlock={copyBlock}
-      heading={block.type === 'multiple' ? 'Multiple-choice' : 'Single-choice'}
+      heading={block.type === "multiple" ? "Multiple-choice" : "Single-choice"}
       question={title}
       updateBlock={updateBlock}
       handleTitleChange={handleTitleChange}
@@ -424,17 +474,17 @@ function AssignmentBlock({
     >
       {choices.map((choice, index) => (
         <div key={index} className="choice-option">
-          {block.type === 'multiple' ? (
+          {block.type === "multiple" ? (
             <input
               type="checkbox"
               disabled
-              className={`${errorText.includes('Please enter at least two options') ? 'errorCheckboxRadio' : ''}`}
+              className={`${errorText.includes("Please enter at least two options") ? "errorCheckboxRadio" : ""}`}
             />
           ) : (
             <input
               type="radio"
               disabled
-              className={`${errorText.includes('Please enter at least two options') ? 'errorCheckboxRadio' : ''}`}
+              className={`${errorText.includes("Please enter at least two options") ? "errorCheckboxRadio" : ""}`}
             />
           )}
           <input
@@ -446,25 +496,29 @@ function AssignmentBlock({
             className="choice-input"
             onBlur={validateChoices}
           />
-          <button type="button" onClick={() => removeChoice(index)} className="button">
+          <button
+            type="button"
+            onClick={() => removeChoice(index)}
+            className="button"
+          >
             <FontAwesomeIcon icon={faXmark} />
           </button>
         </div>
       ))}
       <div className="choice-option">
-        {block.type === 'single' ? (
+        {block.type === "single" ? (
           <input
             type="radio"
             disabled
             style={{ opacity: 0.8 }}
-            className={`${errorText.includes('Please enter at least two options') ? 'errorCheckboxRadio' : ''}`}
+            className={`${errorText.includes("Please enter at least two options") ? "errorCheckboxRadio" : ""}`}
           />
         ) : (
           <input
             type="checkbox"
             disabled
             style={{ opacity: 0.8 }}
-            className={`${errorText.includes('Please enter at least two options') ? 'errorCheckboxRadio' : ''}`}
+            className={`${errorText.includes("Please enter at least two options") ? "errorCheckboxRadio" : ""}`}
           />
         )}
         <input

@@ -1,16 +1,16 @@
 //@ts-nocheck
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { API } from '../axios';
-import { isValidPassword } from './regex';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import logo from '../../images/LogoBig.svg';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { API } from "../axios";
+import { isValidPassword } from "./regex";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import logo from "../../images/LogoBig.svg";
 
 function SetNewUserPassword({ accessToken }) {
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState({ password: '', server: '' });
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState({ password: "", server: "" });
   const [passwordShown, setPasswordShown] = useState(false);
   const [isValidCredentials, setIsValidCredentials] = useState(false);
 
@@ -25,36 +25,36 @@ function SetNewUserPassword({ accessToken }) {
     let newError = { ...error };
     if (!isValidPassword(value)) {
       newError.password =
-        'Password must contain letters, numbers, no more than 3 consecutive identical characters and must be at least 8 characters long.';
+        "Password must contain letters, numbers, no more than 3 consecutive identical characters and must be at least 8 characters long.";
     } else {
-      newError.password = '';
+      newError.password = "";
     }
     setError(newError);
     setIsValidCredentials(!newError.password);
   };
 
   const validatePassword = () => {
-    setError({ password: '', server: '' });
+    setError({ password: "", server: "" });
     if (password !== confirmPassword) {
       setError({
         ...error,
         password:
-          'Password and confirmation password do not match.                     Please try again.',
+          "Password and confirmation password do not match.                     Please try again.",
       });
       return false;
     }
-    setError({ password: '', server: '' });
+    setError({ password: "", server: "" });
     return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError({ password: '', server: '' });
+    setError({ password: "", server: "" });
 
     if (validatePassword()) {
       try {
         const response = await API.post(
-          'password/reset/complete/',
+          "password/reset/complete/",
           {
             new_password: password,
             confirm_new_password: confirmPassword,
@@ -67,17 +67,20 @@ function SetNewUserPassword({ accessToken }) {
         );
 
         if (response.status === 200) {
-          setError({ ...error, server: 'Password set successfully!' });
+          setError({ ...error, server: "Password set successfully!" });
           setTimeout(() => {
-            navigate('/login');
+            navigate("/login");
           }, 1500);
         }
       } catch (error) {
-        console.error('Error resetting password:', error);
+        console.error("Error resetting password:", error);
         if (error.response?.data?.detail) {
           setError({ ...error, server: error.response?.data?.detail });
         } else {
-          setError({ ...error, server: 'Error resetting password. Please try again.' });
+          setError({
+            ...error,
+            server: "Error resetting password. Please try again.",
+          });
         }
       }
     }
@@ -94,8 +97,8 @@ function SetNewUserPassword({ accessToken }) {
         <div className="input-fields login">
           <div className="password-field">
             <input
-              className={`input ${error.password ? 'error' : ''}`}
-              type={passwordShown ? 'text' : 'password'}
+              className={`input ${error.password ? "error" : ""}`}
+              type={passwordShown ? "text" : "password"}
               id="password"
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
@@ -112,8 +115,8 @@ function SetNewUserPassword({ accessToken }) {
           </div>
           <div className="password-field">
             <input
-              className={`input ${error.password ? 'error' : ''}`}
-              type={passwordShown ? 'text' : 'password'}
+              className={`input ${error.password ? "error" : ""}`}
+              type={passwordShown ? "text" : "password"}
               id="confirmPassword"
               placeholder="Confirm Password"
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -130,7 +133,7 @@ function SetNewUserPassword({ accessToken }) {
         </div>
 
         <div className="error__text error__text_login">
-          {error.password && <div>{error.password}</div>}{' '}
+          {error.password && <div>{error.password}</div>}{" "}
           {error.server && <div>{error.server}</div>}
         </div>
 

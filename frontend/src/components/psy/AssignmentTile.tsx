@@ -1,15 +1,15 @@
 //@ts-nocheck
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookmark, faTrashCan } from '@fortawesome/free-solid-svg-icons';
-import { API } from '../../service/axios';
-import { Modal } from '../../service/modal';
-import '../../css/assignment-tile.css';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBookmark, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { API } from "../../service/axios";
+import { Modal } from "../../service/modal";
+import "../../css/assignment-tile.css";
 
 const formatDate = (dateString) => {
-  const options = { year: 'numeric', month: 'short', day: 'numeric' };
-  return new Date(dateString).toLocaleDateString('en-US', options);
+  const options = { year: "numeric", month: "short", day: "numeric" };
+  return new Date(dateString).toLocaleDateString("en-US", options);
 };
 
 function AssignmentTile({
@@ -28,7 +28,9 @@ function AssignmentTile({
   );
 
   useEffect(() => {
-    setIsSelected(assignment.id === selectedAssignmentIdForShareModalOnClientPage);
+    setIsSelected(
+      assignment.id === selectedAssignmentIdForShareModalOnClientPage,
+    );
   }, [selectedAssignmentIdForShareModalOnClientPage]);
 
   const displayDate = formatDate(assignment.update_date);
@@ -48,27 +50,32 @@ function AssignmentTile({
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (isDropdownOpen && event.target.closest('.assignment__dropdown-btn') === null) {
+      if (
+        isDropdownOpen &&
+        event.target.closest(".assignment__dropdown-btn") === null
+      ) {
         setIsDropdownOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isDropdownOpen]);
 
   return (
     <div
-      className={`assignment-tile ${isSelected && 'assignment-tile_selected'}`}
+      className={`assignment-tile ${isSelected && "assignment-tile_selected"}`}
       onClick={handleOnTileClick(assignment.id)}
     >
       <div className="assignment-image-container">
         <div className="date-and-type">
           <span>{displayDate}</span>
-          {assignment.assignment_type && <span className="type">{assignment.assignment_type}</span>}
+          {assignment.assignment_type && (
+            <span className="type">{assignment.assignment_type}</span>
+          )}
           {assignment.is_public === false ? null : (
             <>
               {isAuthor ? (
@@ -84,8 +91,8 @@ function AssignmentTile({
                       <button
                         className={
                           isFavorite
-                            ? 'favorite-button favorite-button_dropdown_selected favorite-button_dropdown'
-                            : 'favorite-button favorite-button_dropdown'
+                            ? "favorite-button favorite-button_dropdown_selected favorite-button_dropdown"
+                            : "favorite-button favorite-button_dropdown"
                         }
                         onClick={(event) => {
                           event.stopPropagation();
@@ -120,7 +127,9 @@ function AssignmentTile({
               ) : (
                 <button
                   className={
-                    isFavorite ? 'favorite-button favorite-button_selected' : 'favorite-button'
+                    isFavorite
+                      ? "favorite-button favorite-button_selected"
+                      : "favorite-button"
                   }
                   onClick={(event) => {
                     event.stopPropagation();
@@ -185,21 +194,26 @@ function AssignmentTile({
   );
 }
 
-function ClientAssignmentTile({ assignment, onDeleteSuccess, openAssignment, clientId }) {
+function ClientAssignmentTile({
+  assignment,
+  onDeleteSuccess,
+  openAssignment,
+  clientId,
+}) {
   const [isHovered, setIsHovered] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [ifError, setIfError] = useState(false);
-  const [errorText, setErrorText] = useState('Can`t Recall');
-  const [statusOneWord, setStatusOneWord] = useState('to-do');
+  const [errorText, setErrorText] = useState("Can`t Recall");
+  const [statusOneWord, setStatusOneWord] = useState("to-do");
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (assignment.status === 'to do') {
-      setStatusOneWord('to-do');
-    } else if (assignment.status === 'in progress') {
-      setStatusOneWord('in-progress');
-    } else if (assignment.status === 'done') {
-      setStatusOneWord('done');
+    if (assignment.status === "to do") {
+      setStatusOneWord("to-do");
+    } else if (assignment.status === "in progress") {
+      setStatusOneWord("in-progress");
+    } else if (assignment.status === "done") {
+      setStatusOneWord("done");
     }
   }, [assignment]);
 
@@ -242,7 +256,7 @@ function ClientAssignmentTile({ assignment, onDeleteSuccess, openAssignment, cli
         <p>UPD: {assignment.update_date}</p>
       </div>
       <div className="assignment-actions">
-        {assignment.status !== 'to do' ? (
+        {assignment.status !== "to do" ? (
           <>
             <button
               className="assignment__review-btn"
@@ -251,7 +265,7 @@ function ClientAssignmentTile({ assignment, onDeleteSuccess, openAssignment, cli
                 event.stopPropagation();
                 onCardClick();
               }}
-              disabled={assignment.review === '' || undefined || null}
+              disabled={assignment.review === "" || undefined || null}
             ></button>
             <button
               className="assignment__view-btn"

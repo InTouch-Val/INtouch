@@ -1,33 +1,36 @@
 //@ts-nocheck
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
-import '../../css/registration.css';
-import { isValidEmail, isValidPassword } from './regex';
-import { API } from '../axios';
-import logo from '../../images/LogoBig.svg';
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import "../../css/registration.css";
+import { isValidEmail, isValidPassword } from "./regex";
+import { API } from "../axios";
+import logo from "../../images/LogoBig.svg";
 
 function PasswordResetRequested() {
   const navigate = useNavigate();
-  const [credentials, setCredentials] = useState({ email: '' });
-  const [error, setError] = useState({ email: '', login: '' });
+  const [credentials, setCredentials] = useState({ email: "" });
+  const [error, setError] = useState({ email: "", login: "" });
   const [isValidCredentials, setIsValidCredentials] = useState(false);
   const [isSucces, setIsSucces] = useState(false);
 
   const handleForgotPassword = async (e) => {
     e.preventDefault();
 
-    setError({ email: '', login: '' });
+    setError({ email: "", login: "" });
 
     try {
-      const response = await API.post('password/reset/', { email: credentials.email });
+      const response = await API.post("password/reset/", {
+        email: credentials.email,
+      });
       if (response.status === 200) {
         setIsSucces(true);
       }
     } catch (error) {
       const message =
-        error.response?.data?.email[0] || 'An error occurred during password reset request.';
-      console.error('Password reset request error:', error);
+        error.response?.data?.email[0] ||
+        "An error occurred during password reset request.";
+      console.error("Password reset request error:", error);
       setError({ ...error, login: message });
     }
   };
@@ -36,9 +39,9 @@ function PasswordResetRequested() {
     let newError = { ...error };
     if (!isValidEmail(value)) {
       newError.email =
-        'Please make sure your email address is in the format        example@example.com';
+        "Please make sure your email address is in the format        example@example.com";
     } else {
-      newError.email = '';
+      newError.email = "";
     }
     setError(newError); // Обновляем состояние с новыми ошибками
     setIsValidCredentials(!newError.email);
@@ -50,18 +53,23 @@ function PasswordResetRequested() {
         <img alt="inTouch logo" src={logo} className="reset-logo" />
         {isSucces && (
           <div className="reset-password__succes">
-            We've sent you an email with instructions on how to reset your password
+            We've sent you an email with instructions on how to reset your
+            password
           </div>
         )}
         <h1 className="reset-password__heading">Reset Password</h1>
-        <p className="reset-password__paragraph">Enter your email to get a reset link</p>
+        <p className="reset-password__paragraph">
+          Enter your email to get a reset link
+        </p>
         <div className="input-fields login">
           <input
-            className={`input ${error.email || error.login ? 'error' : ''}`}
+            className={`input ${error.email || error.login ? "error" : ""}`}
             type="text"
             id="email"
             placeholder="Email"
-            onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
+            onChange={(e) =>
+              setCredentials({ ...credentials, email: e.target.value })
+            }
             onBlur={(e) => handleCredentialsBlur(e.target.value)}
             required
           />

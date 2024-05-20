@@ -1,12 +1,12 @@
 //@ts-nocheck
-import React, { useState, useRef } from 'react';
-import { useCallback } from 'react';
-import { EditorState } from 'draft-js';
-import { EditorToolbar } from '../../editors-toolbar';
-import { ToolbarProvider } from '../../ToolbarContext';
-import arrow from '../../../images/arrow.svg';
-import copy from '../../../images/block-copy-btn.svg';
-import trash from '../../../images/block-trash-btn.svg';
+import React, { useState, useRef } from "react";
+import { useCallback } from "react";
+import { EditorState } from "draft-js";
+import { EditorToolbar } from "../../editors-toolbar";
+import { ToolbarProvider } from "../../ToolbarContext";
+import arrow from "../../../images/arrow.svg";
+import copy from "../../../images/block-copy-btn.svg";
+import trash from "../../../images/block-trash-btn.svg";
 
 function Block({
   block,
@@ -24,7 +24,9 @@ function Block({
   index = { index },
   ...props
 }) {
-  const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty(),
+  );
 
   const handleEditorStateChange = useCallback(
     (newEditorState) => {
@@ -49,7 +51,7 @@ function Block({
             value={block.question}
             placeholder={placeholder}
             className="block-title-input"
-            style={{ display: 'none' }}
+            style={{ display: "none" }}
             onChange={() => {}}
           />
           <ToolbarProvider>
@@ -67,7 +69,9 @@ function Block({
         </div>
         {props.children}
         <div className="block__below-container">
-          {errorText && <span className="error__text error__text_block">{errorText}</span>}
+          {errorText && (
+            <span className="error__text error__text_block">{errorText}</span>
+          )}
           <div className="buttons">
             <button
               type="button"
@@ -76,7 +80,11 @@ function Block({
               }}
               className="button"
             >
-              <img src={arrow} alt="arrow-icon" style={{ transform: 'rotate(180deg)' }}></img>
+              <img
+                src={arrow}
+                alt="arrow-icon"
+                style={{ transform: "rotate(180deg)" }}
+              ></img>
             </button>
             <button
               type="button"

@@ -8,7 +8,7 @@ function Modal({
   confirmText,
   ifError,
   errorText,
-  showCancel = 'true',
+  showCancel = "true",
 }) {
   if (!isOpen) return null;
 
@@ -17,7 +17,11 @@ function Modal({
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <div
           className="modal-content"
-          style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
         >
           {children}
           <div className="modal-actions">
@@ -26,16 +30,20 @@ function Modal({
                 Cancel
               </button>
             )}
-            <button className="action-button" onClick={onConfirm} disabled={ifError}>
+            <button
+              className="action-button"
+              onClick={onConfirm}
+              disabled={ifError}
+            >
               {confirmText}
             </button>
           </div>
           {ifError && (
             <p
               style={{
-                color: 'red',
-                fontWeight: '600',
-                textAlign: 'center',
+                color: "red",
+                fontWeight: "600",
+                textAlign: "center",
               }}
             >
               {errorText.message || errorText}

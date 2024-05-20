@@ -1,18 +1,18 @@
 //@ts-nocheck
-import { useState, createRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../../service/authContext';
-import { API } from '../../../service/axios';
-import '../../../css/settings.css';
-import FormData from 'form-data';
+import { useState, createRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../service/authContext";
+import { API } from "../../../service/axios";
+import "../../../css/settings.css";
+import FormData from "form-data";
 
 export const SecurityTab = () => {
   const [userPassword, setUserPassword] = useState({
-    password: '',
-    new_password: '',
-    confirm_new_password: '',
+    password: "",
+    new_password: "",
+    confirm_new_password: "",
   });
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const { logout } = useAuth();
   const navigate = useNavigate();
@@ -38,7 +38,7 @@ export const SecurityTab = () => {
       setMessage(response.data.message);
     } catch (e) {
       console.error(e);
-      setMessage('Error updating password: ' + e.data?.message);
+      setMessage("Error updating password: " + e.data?.message);
     }
   };
 
@@ -49,11 +49,11 @@ export const SecurityTab = () => {
       setMessage(response.data.message);
       setTimeout(() => {
         logout();
-        navigate('/login');
+        navigate("/login");
       }, 1500);
     } catch (e) {
       console.error(e);
-      setMessage('Error deleting profile: ' + e.data?.message);
+      setMessage("Error deleting profile: " + e.data?.message);
     }
   };
 
@@ -106,19 +106,25 @@ export const SecurityTab = () => {
         {showModal && (
           <div className="modal-overlay" onClick={handleModalToggle}>
             <div className="modal" onClick={(e) => e.stopPropagation()}>
-              <button className="close-modal-button" onClick={handleModalToggle}>
+              <button
+                className="close-modal-button"
+                onClick={handleModalToggle}
+              >
                 &times;
               </button>
               <div className="delete-modal-div">
                 <p>
-                  Are you sure you want to delete your profile forever?{' '}
+                  Are you sure you want to delete your profile forever?{" "}
                   <strong>This action is irrevertable!</strong>
                 </p>
                 <div>
                   <button className="action-button" onClick={handleModalToggle}>
                     Cancel
                   </button>
-                  <button className="action-button" onClick={handleDeleteProfile}>
+                  <button
+                    className="action-button"
+                    onClick={handleDeleteProfile}
+                  >
                     Delete Forever
                   </button>
                 </div>

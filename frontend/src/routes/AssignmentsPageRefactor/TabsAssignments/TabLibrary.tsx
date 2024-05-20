@@ -11,13 +11,11 @@ export default function TabLibrary({
   toggleFavorite,
   handleDeleteClick,
   duplicateAssignment,
-  handleShareButton
-
+  handleShareButton,
 }) {
   //@ts-ignore
   const { currentUser } = useAuth();
   const [userFavorites, setUserFavorites] = React.useState<string[]>([]);
-
 
   return (
     <div className="assignment-grid">

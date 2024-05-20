@@ -1,2 +1,2 @@
-export * from './assignments/assignmentSlice';
-export * from './auth/authSlice';
+export * from "./assignments/assignmentSlice";
+export * from "./auth/authSlice";

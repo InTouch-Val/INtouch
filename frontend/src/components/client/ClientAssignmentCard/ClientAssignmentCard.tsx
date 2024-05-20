@@ -1,9 +1,9 @@
 //@ts-nocheck
-import { useEffect, useRef, useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import './ClientAssignmentCard.css';
-import { API } from '../../../service/axios';
-import useMobileWidth from '../../../utils/hook/useMobileWidth';
+import { useEffect, useRef, useState } from "react";
+import { NavLink } from "react-router-dom";
+import "./ClientAssignmentCard.css";
+import { API } from "../../../service/axios";
+import useMobileWidth from "../../../utils/hook/useMobileWidth";
 
 function ClientAssignmentCard({ assignmentData, openAssignment }) {
   const [isShowContextMenu, setIsShowContextMenu] = useState(false);
@@ -12,24 +12,26 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
 
   function defineStatusClass() {
     switch (assignmentData?.status) {
-      case 'to do': {
-        return 'card__status_status_to-do';
+      case "to do": {
+        return "card__status_status_to-do";
       }
-      case 'in progress': {
-        return 'card__status_status_in-progress';
+      case "in progress": {
+        return "card__status_status_in-progress";
       }
-      case 'done': {
-        return 'card__status_status_done';
+      case "done": {
+        return "card__status_status_done";
       }
       default: {
-        return '';
+        return "";
       }
     }
   }
 
   async function handleShareWithTherapist() {
     try {
-      const res = await API.post(`assignments-client/${assignmentData?.id}/visible/`);
+      const res = await API.post(
+        `assignments-client/${assignmentData?.id}/visible/`,
+      );
       if (res.status >= 200 && res.status < 300) {
         console.log(res.data);
         setIsShowContextMenu(false);
@@ -51,7 +53,7 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
       const isOffScreen = menuRectangle.right > window.innerWidth;
 
       if (isOffScreen) {
-        menuReference.current.style.left = '-120px';
+        menuReference.current.style.left = "-120px";
       }
     }, 0);
   }
@@ -69,11 +71,11 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
     }
 
     if (isShowContextMenu) {
-      window.addEventListener('click', handleClickOutside);
+      window.addEventListener("click", handleClickOutside);
     }
 
     return () => {
-      window.removeEventListener('click', handleClickOutside);
+      window.removeEventListener("click", handleClickOutside);
     };
   }, [isShowContextMenu]);
 
@@ -89,18 +91,23 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
       >
         <div className="card__wrapper-container">
           <span className="card__date">
-            {new Date(assignmentData?.add_date)?.toLocaleString('en-US', {
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric',
+            {new Date(assignmentData?.add_date)?.toLocaleString("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
             })}
           </span>
           <span className={`card__status ${defineStatusClass()}`}>
             {/* eslint-disable-next-line no-unsafe-optional-chaining */}
-            {assignmentData?.status[0]?.toUpperCase() + assignmentData?.status?.slice(1)}
+            {assignmentData?.status[0]?.toUpperCase() +
+              assignmentData?.status?.slice(1)}
           </span>
         </div>
-        <img className="card__image" src={assignmentData?.image_url} alt="assignment" />
+        <img
+          className="card__image"
+          src={assignmentData?.image_url}
+          alt="assignment"
+        />
       </NavLink>
       <div className="card__wrapper-container">
         <h3 className="card__title" title={assignmentData?.title}>
@@ -118,7 +125,7 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
           {!isMobileWidth ? ( //Show menu only when not mobile width
             <menu // eslint-disable-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events
               ref={menuReference}
-              className={`card__action-menu${isShowContextMenu ? '' : ' card__action-menu_disabled'}`}
+              className={`card__action-menu${isShowContextMenu ? "" : " card__action-menu_disabled"}`}
               onClick={(event) => event.stopPropagation()}
             >
               <li className="card__action-menu-item">
@@ -134,7 +141,11 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
                 </NavLink>
               </li>
               <li className="card__action-menu-item disabled">
-                <button type="button" className="card__action-menu-text" disabled={true}>
+                <button
+                  type="button"
+                  className="card__action-menu-text"
+                  disabled={true}
+                >
                   Clear
                   <div
                     className="card__action-menu-icon card__action-menu-icon_type_clear"
@@ -143,7 +154,11 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
                 </button>
               </li>
               <li className="card__action-menu-item disabled">
-                <button type="button" className="card__action-menu-text" disabled={true}>
+                <button
+                  type="button"
+                  className="card__action-menu-text"
+                  disabled={true}
+                >
                   Duplicate
                   <div
                     className="card__action-menu-icon card__action-menu-icon_type_duplicate"
@@ -159,13 +174,21 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
         {isMobileWidth ? (
           // Show menu options when on mobile width
           <div className="mobile_menu_container">
-            <button type="button" className="card__action-menu-text" disabled={true}>
+            <button
+              type="button"
+              className="card__action-menu-text"
+              disabled={true}
+            >
               <div
                 className="card__action-menu-icon card__action-menu-icon_type_duplicate"
                 aria-label="Duplicate"
               />
             </button>
-            <button type="button" className="card__action-menu-text" disabled={true}>
+            <button
+              type="button"
+              className="card__action-menu-text"
+              disabled={true}
+            >
               <div
                 className="card__action-menu-icon card__action-menu-icon_type_clear"
                 aria-label="Clear"

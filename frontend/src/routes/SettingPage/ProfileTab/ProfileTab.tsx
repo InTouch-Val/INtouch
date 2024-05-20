@@ -1,11 +1,11 @@
 //@ts-nocheck
-import React from 'react';
-import { useAuth } from '../../../service/authContext';
-import { API } from '../../../service/axios';
-import '../../../css/settings.css';
-import { useForm, Controller } from 'react-hook-form';
-import { updateUserForm } from './schemaValid';
-import { yupResolver } from '@hookform/resolvers/yup';
+import React from "react";
+import { useAuth } from "../../../service/authContext";
+import { API } from "../../../service/axios";
+import "../../../css/settings.css";
+import { useForm, Controller } from "react-hook-form";
+import { updateUserForm } from "./schemaValid";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 export function ProfileTab() {
   const { currentUser, updateUserData } = useAuth();
@@ -15,17 +15,19 @@ export function ProfileTab() {
     formState: { errors, isValid, isDirty },
   } = useForm({
     defaultValues: {
-      firstName: currentUser.first_name || '',
-      lastName: currentUser.last_name || '',
-      email: currentUser.email || '',
-      dateOfBirth: currentUser.date_of_birth || '',
+      firstName: currentUser.first_name || "",
+      lastName: currentUser.last_name || "",
+      email: currentUser.email || "",
+      dateOfBirth: currentUser.date_of_birth || "",
     },
     resolver: yupResolver(updateUserForm),
-    mode: 'all',
+    mode: "all",
   });
-  const [statusMessageText, setStatusMessageText] = React.useState('');
+  const [statusMessageText, setStatusMessageText] = React.useState("");
   const [selectedFile, setSelectedFile] = React.useState([]);
-  const [previewImage, setPreviewImage] = React.useState(currentUser.photo || 'default-avatar.png');
+  const [previewImage, setPreviewImage] = React.useState(
+    currentUser.photo || "default-avatar.png",
+  );
   const fileInputRef = React.createRef();
 
   const onSubmit = async (data) => {
@@ -41,15 +43,15 @@ export function ProfileTab() {
         },
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
         },
       ).then(() => updateUserData());
-      setStatusMessageText('Changes saved successfully');
+      setStatusMessageText("Changes saved successfully");
 
       console.log(response);
     } catch (error) {
-      console.error('Error updating profile:' + error);
+      console.error("Error updating profile:" + error);
     }
 
     try {
@@ -60,14 +62,14 @@ export function ProfileTab() {
         },
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
         },
       ).then(() => updateUserData());
 
       console.log(response);
     } catch (error) {
-      console.error('Error updating profile:' + error);
+      console.error("Error updating profile:" + error);
     }
   };
 
@@ -85,16 +87,18 @@ export function ProfileTab() {
 
   return (
     <>
-      {statusMessageText != '' && <div className="success-message">{statusMessageText}</div>}
+      {statusMessageText != "" && (
+        <div className="success-message">{statusMessageText}</div>
+      )}
       <div className="settings-profile-tab">
-        {currentUser.user_type == 'doctor' && (
+        {currentUser.user_type == "doctor" && (
           <div className="left-column">
             <img src={previewImage} alt="Profile" className="avatar" />
             <input
               type="file"
               id="photo"
               ref={fileInputRef}
-              style={{ display: 'none' }}
+              style={{ display: "none" }}
               onChange={handleFileSelect}
             />
 
@@ -117,7 +121,9 @@ export function ProfileTab() {
                     name="firstName"
                     placeholder="First Name"
                     className={
-                      !!errors.firstName ? 'settings-input profile__inputError' : 'settings-input'
+                      !!errors.firstName
+                        ? "settings-input profile__inputError"
+                        : "settings-input"
                     }
                   />
                 </div>
@@ -136,7 +142,9 @@ export function ProfileTab() {
                     name="lastName"
                     placeholder="Last Name"
                     className={
-                      !!errors.lastName ? 'settings-input profile__inputError' : 'settings-input'
+                      !!errors.lastName
+                        ? "settings-input profile__inputError"
+                        : "settings-input"
                     }
                   />
                 </div>
@@ -155,13 +163,15 @@ export function ProfileTab() {
                     name="email"
                     placeholder="Email"
                     className={
-                      !!errors.email ? 'settings-input profile__inputError' : 'settings-input'
+                      !!errors.email
+                        ? "settings-input profile__inputError"
+                        : "settings-input"
                     }
                   />
                 </div>
               )}
             />
-            {currentUser.user_type == 'doctor' && (
+            {currentUser.user_type == "doctor" && (
               <Controller
                 name="dateOfBirth"
                 control={control}
@@ -183,27 +193,40 @@ export function ProfileTab() {
             <div className="profile__errorMessages">
               <div className="profile__fieldError">
                 {!!errors.firstName && (
-                  <span className="profile__errorText">{errors.firstName?.message}</span>
+                  <span className="profile__errorText">
+                    {errors.firstName?.message}
+                  </span>
                 )}
                 {!!errors.lastName && (
-                  <span className="profile__errorText">{errors.lastName?.message}</span>
+                  <span className="profile__errorText">
+                    {errors.lastName?.message}
+                  </span>
                 )}
                 {!!errors.email && (
-                  <span className="profile__errorText">{errors.email?.message}</span>
+                  <span className="profile__errorText">
+                    {errors.email?.message}
+                  </span>
                 )}
                 {!!errors.dateOfBirth && (
-                  <span className="profile__errorText">{errors.dateOfBirth?.message}</span>
+                  <span className="profile__errorText">
+                    {errors.dateOfBirth?.message}
+                  </span>
                 )}
                 {currentUser.new_email_changing && (
                   <span className="profile__errorText">
-                    We’ve sent a confirmation email to your new email address —{' '}
-                    {currentUser.new_email_temp}. Please check and confirm to complete the email
-                    update process. Your current email will remain active until then.
+                    We’ve sent a confirmation email to your new email address —{" "}
+                    {currentUser.new_email_temp}. Please check and confirm to
+                    complete the email update process. Your current email will
+                    remain active until then.
                   </span>
                 )}
               </div>
               <div>
-                <button className={`save-settings`} type="submit" disabled={!(isValid && isDirty)}>
+                <button
+                  className={`save-settings`}
+                  type="submit"
+                  disabled={!(isValid && isDirty)}
+                >
                   Save Changes
                 </button>
               </div>

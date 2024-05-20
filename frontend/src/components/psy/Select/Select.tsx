@@ -1,6 +1,6 @@
 //@ts-nocheck
-import React from 'react';
-import './Select.css';
+import React from "react";
+import "./Select.css";
 
 export default function Select({ menu, setActivityFilter }) {
   return (

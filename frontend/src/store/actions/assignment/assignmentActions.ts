@@ -18,5 +18,5 @@ export const changeAssignmentFavoriteByIdAction = createAsyncThunk(
       console.error("Error toggling favorites:", error);
       return rejectWithValue;
     }
-  }
+  },
 );

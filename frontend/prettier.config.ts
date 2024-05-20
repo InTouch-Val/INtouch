@@ -1,10 +1,10 @@
 export default {
-  plugins: ['@awmottaz/prettier-plugin-void-html'],
+  plugins: ["@awmottaz/prettier-plugin-void-html"],
   singleQuote: true,
   printWidth: 100,
   overrides: [
     {
-      files: ['dist'],
+      files: ["dist"],
       options: { requirePragma: true },
     },
   ],

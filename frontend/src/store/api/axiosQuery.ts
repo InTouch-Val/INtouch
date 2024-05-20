@@ -1,8 +1,8 @@
 import axios, { AxiosRequestConfig, AxiosError } from "axios";
 import { retry, type BaseQueryFn, BaseQueryApi } from "@reduxjs/toolkit/query";
-import { RootState } from '../store';
+import { RootState } from "../store";
 
-const BASE_URL = 'https://app.intouch.care/api/v1/';
+const BASE_URL = "https://app.intouch.care/api/v1/";
 
 interface AxiosQueryParams {
   url: string;
@@ -18,12 +18,12 @@ interface AxiosBaseQueryError {
 }
 
 const withBailOutRetryCallback = (
-  queryFn: BaseQueryFn<AxiosQueryParams, unknown, AxiosBaseQueryError>
+  queryFn: BaseQueryFn<AxiosQueryParams, unknown, AxiosBaseQueryError>,
 ) => {
   return async (
     args: AxiosQueryParams,
     api: BaseQueryApi,
-    extraOptions: any
+    extraOptions: any,
   ) => {
     const result = await queryFn(args, api, extraOptions);
     if (result.error?.status === 401) {
@@ -36,7 +36,7 @@ const withBailOutRetryCallback = (
 
 export const axiosBaseQuery =
   (
-    { baseUrl }: { baseUrl: string } = { baseUrl: BASE_URL }
+    { baseUrl }: { baseUrl: string } = { baseUrl: BASE_URL },
   ): BaseQueryFn<AxiosQueryParams, unknown, AxiosBaseQueryError> =>
   async ({ url, method, data, params, headers }) => {
     try {
@@ -59,16 +59,16 @@ export const axiosBaseQuery =
     }
   };
 
-  export const axiosAuthorizedBaseQuery =
+export const axiosAuthorizedBaseQuery =
   (
-    { baseUrl }: { baseUrl: string } = { baseUrl: BASE_URL }
+    { baseUrl }: { baseUrl: string } = { baseUrl: BASE_URL },
   ): BaseQueryFn<
     {
       url: string;
-      method: AxiosRequestConfig['method'];
-      data?: AxiosRequestConfig['data'];
-      params?: AxiosRequestConfig['params'];
-      headers?: AxiosRequestConfig['headers'];
+      method: AxiosRequestConfig["method"];
+      data?: AxiosRequestConfig["data"];
+      params?: AxiosRequestConfig["params"];
+      headers?: AxiosRequestConfig["headers"];
     },
     unknown,
     AxiosBaseQueryError
@@ -80,7 +80,10 @@ export const axiosBaseQuery =
         method,
         data,
         params,
-        headers: { ...headers, Authorization: `Bearer ${(getState() as RootState).auth.token}` },
+        headers: {
+          ...headers,
+          Authorization: `Bearer ${(getState() as RootState).auth.token}`,
+        },
       });
       return { data: result.data };
     } catch (axiosError) {
@@ -94,15 +97,16 @@ export const axiosBaseQuery =
     }
   };
 
-
-  export const axiosStaggeredBaseQuery = retry(withBailOutRetryCallback(axiosBaseQuery()), {
+export const axiosStaggeredBaseQuery = retry(
+  withBailOutRetryCallback(axiosBaseQuery()),
+  {
     maxRetries: 3,
-  });
-  
-  export const axiosStaggeredAuthorizedBaseQuery = retry(
-    withBailOutRetryCallback(axiosAuthorizedBaseQuery()),
-    {
-      maxRetries: 3,
-    }
-  );
-  
+  },
+);
+
+export const axiosStaggeredAuthorizedBaseQuery = retry(
+  withBailOutRetryCallback(axiosAuthorizedBaseQuery()),
+  {
+    maxRetries: 3,
+  },
+);

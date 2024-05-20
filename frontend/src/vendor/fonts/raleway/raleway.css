@@ -4,9 +4,9 @@
   font-style: normal;
   font-weight: 400;
   src:
-    local('Raleway'),
-    local('Raleway Regular'),
-    url('./Raleway-Regular.woff2') format('woff2');
+    local("Raleway"),
+    local("Raleway Regular"),
+    url("./Raleway-Regular.woff2") format("woff2");
 }
 
 @font-face {
@@ -15,7 +15,7 @@
   font-style: normal;
   font-weight: 600;
   src:
-    local('Raleway'),
-    local('Raleway Semibold'),
-    url('./raleway-semibold.woff2') format('woff2');
+    local("Raleway"),
+    local("Raleway Semibold"),
+    url("./raleway-semibold.woff2") format("woff2");
 }

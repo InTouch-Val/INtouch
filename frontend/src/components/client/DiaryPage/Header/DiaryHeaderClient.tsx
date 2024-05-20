@@ -1,16 +1,21 @@
 //@ts-nocheck
-import React,  { useState, useEffect } from 'react';
-import './styles.css';
-import arrowBack from '../../../../images/assignment-page/arrowBack.svg';
-import { Link } from 'react-router-dom';
-import save from '../../../../images/assignment-page/save.svg';
-import { useAuth } from '../../../../service/authContext';
-import { useFormContext, useWatch } from 'react-hook-form';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import useMobileWidth from '../../../../utils/hook/useMobileWidth';
+import React, { useState, useEffect } from "react";
+import "./styles.css";
+import arrowBack from "../../../../images/assignment-page/arrowBack.svg";
+import { Link } from "react-router-dom";
+import save from "../../../../images/assignment-page/save.svg";
+import { useAuth } from "../../../../service/authContext";
+import { useFormContext, useWatch } from "react-hook-form";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 
-const options = { weekday: 'long', day: '2-digit', month: 'short', year: 'numeric' };
+const options = {
+  weekday: "long",
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+};
 
 export default function DiaryHeaderClient({ diary, onSubmit }) {
   const isMobileWidth = useMobileWidth();
@@ -23,10 +28,10 @@ export default function DiaryHeaderClient({ diary, onSubmit }) {
 
   React.useEffect(() => {
     if (
-      form.emotion_type != '' ||
-      form.event_details != '' ||
-      form.thoughts_analysis != '' ||
-      form.physical_sensations != ''
+      form.emotion_type != "" ||
+      form.event_details != "" ||
+      form.thoughts_analysis != "" ||
+      form.physical_sensations != ""
     ) {
       setValid(true);
     } else {
@@ -41,15 +46,19 @@ export default function DiaryHeaderClient({ diary, onSubmit }) {
           <div className="diary__title">Emotion Journal</div>
           <div className="diary__title-date">
             {diary
-              ? new Date(diary.add_date).toLocaleDateString('en-US', options)
-              : new Date().toLocaleDateString('en-US', options)}
+              ? new Date(diary.add_date).toLocaleDateString("en-US", options)
+              : new Date().toLocaleDateString("en-US", options)}
           </div>
         </div>
 
         <div className="buttons__container">
           <Link to={-1}>
             {isMobileWidth ? (
-              <FontAwesomeIcon icon={faArrowLeft} style={{ color: '#417D88' }} size="xl" />
+              <FontAwesomeIcon
+                icon={faArrowLeft}
+                style={{ color: "#417D88" }}
+                size="xl"
+              />
             ) : (
               <img src={arrowBack} alt="back" className="diary__img-back" />
             )}
@@ -73,7 +82,8 @@ export default function DiaryHeaderClient({ diary, onSubmit }) {
       <div className="diary__dear-message">
         <div className="diary__dear-name">Dear {currentUser.first_name},</div>
         <div className="diary__dear-text">
-          Capture your emotional experiences and thoughtfully analyze situations.
+          Capture your emotional experiences and thoughtfully analyze
+          situations.
         </div>
       </div>
     </>

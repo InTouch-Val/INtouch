@@ -1,22 +1,22 @@
 //@ts-nocheck
-import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { API } from '../axios';
-import { useAuth } from '../authContext';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import '../../css/registration.css';
-import logo from '../../images/logo.svg';
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { API } from "../axios";
+import { useAuth } from "../authContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import "../../css/registration.css";
+import logo from "../../images/logo.svg";
 
 function ClientRegistrationPage() {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [userId, setUserId] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [userId, setUserId] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [acceptTerms, setAcceptTerms] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [passwordShown, setPasswordShown] = useState(false);
   const [confirmPasswordShown, setConfirmPasswordShown] = useState(false);
 
@@ -27,11 +27,13 @@ function ClientRegistrationPage() {
 
   useEffect(() => {
     if (!accessToken) {
-      navigate('/login');
+      navigate("/login");
       return;
     }
 
-    API.get(`/get-user`, { headers: { Authorization: `Bearer ${accessToken}` } })
+    API.get(`/get-user`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    })
       .then((response) => {
         setFirstName(response.data[0].first_name);
         setLastName(response.data[0].last_name);
@@ -39,22 +41,22 @@ function ClientRegistrationPage() {
         setUserId(response.data[0].id);
       })
       .catch((error) => {
-        console.error('Error fetching user data', error);
+        console.error("Error fetching user data", error);
       });
   }, [accessToken, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!acceptTerms) {
-      setError('You must accept the terms and conditions.');
+      setError("You must accept the terms and conditions.");
       return;
     }
     if (password.length < 8) {
-      setError('You must have at least 8 characters in your password.');
+      setError("You must have at least 8 characters in your password.");
       return;
     }
     if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError("Passwords do not match.");
       return;
     }
 
@@ -76,15 +78,21 @@ function ClientRegistrationPage() {
         },
       );
       if (response.status === 200) {
-        setError('Updated Sueccessfully');
+        setError("Updated Sueccessfully");
         setTimeout(() => {
-          login(localStorage.getItem('accessToken'), localStorage.getItem('refreshToken'));
-          navigate('/');
+          login(
+            localStorage.getItem("accessToken"),
+            localStorage.getItem("refreshToken"),
+          );
+          navigate("/");
         }, 1500);
       }
     } catch (error) {
-      console.error('Error updating client:', error);
-      setError(error.response?.data?.message || 'An error occurred during the client update.');
+      console.error("Error updating client:", error);
+      setError(
+        error.response?.data?.message ||
+          "An error occurred during the client update.",
+      );
     }
   };
 
@@ -104,7 +112,7 @@ function ClientRegistrationPage() {
       <div onSubmit={handleSubmit} className="registration-client">
         <img src={logo} className="registration__logo" alt="logo"></img>
         <h2 className="registration__header">
-          {`Hello, ${firstName + ' ' + lastName}!`}
+          {`Hello, ${firstName + " " + lastName}!`}
           <br />
           Welcome to INtouch!
         </h2>
@@ -113,7 +121,7 @@ function ClientRegistrationPage() {
           <div className="registration__password-field">
             <input
               className="registartion-client__input"
-              type={passwordShown ? 'text' : 'password'}
+              type={passwordShown ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
@@ -124,17 +132,17 @@ function ClientRegistrationPage() {
               type="button"
               onClick={(e) => handleTogglePassword(e)}
             >
-              {' '}
+              {" "}
               {passwordShown ? (
                 <FontAwesomeIcon icon={faEyeSlash} />
               ) : (
                 <FontAwesomeIcon icon={faEye} />
-              )}{' '}
+              )}{" "}
             </button>
           </div>
           <div className="registration__password-field">
             <input
-              type={confirmPasswordShown ? 'text' : 'password'}
+              type={confirmPasswordShown ? "text" : "password"}
               className="registartion-client__input"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -146,12 +154,12 @@ function ClientRegistrationPage() {
               type="button"
               onClick={(e) => handleToggleConfirmPassword(e)}
             >
-              {' '}
+              {" "}
               {confirmPasswordShown ? (
                 <FontAwesomeIcon icon={faEyeSlash} />
               ) : (
                 <FontAwesomeIcon icon={faEye} />
-              )}{' '}
+              )}{" "}
             </button>
           </div>
           <div className="registration-client__checkbox-box">

@@ -1,8 +1,8 @@
 //@ts-nocheck
-import { useState, useEffect, useCallback } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { EditorState, ContentState, convertFromRaw } from 'draft-js';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState, useEffect, useCallback } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { EditorState, ContentState, convertFromRaw } from "draft-js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faComment,
   faSquareCheck,
@@ -10,33 +10,33 @@ import {
   faEllipsis,
   faImage,
   faQuestion,
-} from '@fortawesome/free-solid-svg-icons';
-import { API } from '../../service/axios';
-import { AssignmentBlock } from '../../service/psyAssignment/AssignmentBlock';
-import { ImageSelector } from '../../service/image-selector';
-import { useAuth } from '../../service/authContext';
-import { Modal } from '../../service/modal';
-import { Headline } from './Headline';
-import { ImageQuestionBlock } from './ImageQuestionBlock';
-import { ClientAssignmentBlocks } from '../../service/ClientAssignmentBlocks';
-import decodeStyledText from '../../service/decodeStyledText';
-import HeadlinerImg from './HeadlinerImg/HeadlinerImg';
-import '../../css/assignments.css';
-import HeaderAssignment from './HeaderAssigmentPage/HeaderAssignment';
+} from "@fortawesome/free-solid-svg-icons";
+import { API } from "../../service/axios";
+import { AssignmentBlock } from "../../service/psyAssignment/AssignmentBlock";
+import { ImageSelector } from "../../service/image-selector";
+import { useAuth } from "../../service/authContext";
+import { Modal } from "../../service/modal";
+import { Headline } from "./Headline";
+import { ImageQuestionBlock } from "./ImageQuestionBlock";
+import { ClientAssignmentBlocks } from "../../service/ClientAssignmentBlocks";
+import decodeStyledText from "../../service/decodeStyledText";
+import HeadlinerImg from "./HeadlinerImg/HeadlinerImg";
+import "../../css/assignments.css";
+import HeaderAssignment from "./HeaderAssigmentPage/HeaderAssignment";
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
 function AddAssignment() {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [type, setType] = useState('lesson');
-  const [language, setLanguage] = useState('en');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [type, setType] = useState("lesson");
+  const [language, setLanguage] = useState("en");
   // const [tags, setTags] = useState('');
 
   const [blocks, setBlocks] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(false);
-  const [successMessageText, setSuccessMessageText] = useState('');
+  const [successMessageText, setSuccessMessageText] = useState("");
   const [selectedImageForBlock, setSelectedImageForBlock] = useState({
     file: null, // Файл изображения
     url: null, // URL изображения, полученный с помощью FileReader
@@ -48,13 +48,13 @@ function AddAssignment() {
   useEffect(() => {
     console.log(title, description);
     if (title.length > 2 && description.length > 2) {
-      setErrorText('');
+      setErrorText("");
 
-      const titleElement = document.getElementById('title');
+      const titleElement = document.getElementById("title");
 
-      const textElement = document.getElementById('text');
-      titleElement.classList.remove('error');
-      textElement.classList.remove('error');
+      const textElement = document.getElementById("text");
+      titleElement.classList.remove("error");
+      textElement.classList.remove("error");
     }
   }, [title, description]);
 
@@ -76,9 +76,9 @@ function AddAssignment() {
         try {
           contentState = ContentState.createFromText(block.question);
         } catch (error) {
-          console.error('Ошибка при обработке содержимого:', error);
+          console.error("Ошибка при обработке содержимого:", error);
           // Создаем ContentState с текстом из data.title для всех типов блоков, кроме 'text'
-          if (block.type !== 'text') {
+          if (block.type !== "text") {
             contentState = ContentState.createFromText(block.question);
           } else {
             // Для типа 'text' создаем пустое содержимое, если описание не может быть обработано
@@ -86,20 +86,20 @@ function AddAssignment() {
           }
         }
 
-        if (block.type === 'text') {
+        if (block.type === "text") {
           return {
             ...block,
             content: EditorState.createWithContent(contentState),
           };
         }
-        if (block.type === 'single' || block.type === 'multiple') {
+        if (block.type === "single" || block.type === "multiple") {
           return {
             ...block,
             choices: block.choice_replies.map((choice) => choice.reply),
             content: EditorState.createWithContent(contentState),
           };
         }
-        if (block.type === 'range') {
+        if (block.type === "range") {
           return {
             ...block,
             minValue: block.start_range,
@@ -107,7 +107,7 @@ function AddAssignment() {
             content: EditorState.createWithContent(contentState),
           };
         }
-        if (block.type === 'image') {
+        if (block.type === "image") {
           return {
             ...block,
             content: EditorState.createWithContent(contentState),
@@ -150,13 +150,15 @@ function AddAssignment() {
         errorMessages[`blocks #${index + 1} image`] = block.image[0];
       }
       if (block.description) {
-        errorMessages[`blocks #${index + 1} description`] = block.description[0];
+        errorMessages[`blocks #${index + 1} description`] =
+          block.description[0];
       }
       if (block.question) {
         errorMessages[`blocks #${index + 1} question`] = block.question[0];
       }
       if (block.choice_replies) {
-        errorMessages[`blocks #${index + 1} choice_replies`] = block.choice_replies[0];
+        errorMessages[`blocks #${index + 1} choice_replies`] =
+          block.choice_replies[0];
       }
       if (block.end_range) {
         errorMessages[`blocks #${index + 1} end_range`] = block.end_range[0];
@@ -168,7 +170,8 @@ function AddAssignment() {
         errorMessages[`blocks #${index + 1} right_pole`] = block.right_pole[0];
       }
       if (block.start_range) {
-        errorMessages[`blocks #${index + 1} start_range`] = block.start_range[0];
+        errorMessages[`blocks #${index + 1} start_range`] =
+          block.start_range[0];
       }
     });
     setHasScrolled(true);
@@ -180,25 +183,25 @@ function AddAssignment() {
     e.preventDefault();
 
     const blockInfo = blocks.map((block) => {
-      if (block.type === 'text' || block.type === 'open') {
+      if (block.type === "text" || block.type === "open") {
         return {
           type: block.type,
           question: block.question || block.title,
           description: block.description,
         };
       }
-      if (block.type === 'range') {
+      if (block.type === "range") {
         return {
           type: block.type,
           question: block.question || block.title,
           start_range: block.minValue,
           end_range: block.maxValue,
-          left_pole: block.leftPole || 'Left Pole',
-          right_pole: block.rightPole || 'Right Pole',
+          left_pole: block.leftPole || "Left Pole",
+          right_pole: block.rightPole || "Right Pole",
           description: block.description,
         };
       }
-      if (block.type === 'image') {
+      if (block.type === "image") {
         return {
           type: block.type,
           question: block.question || block.title,
@@ -219,12 +222,12 @@ function AddAssignment() {
       title,
       text: description,
       assignment_type: type,
-      tags: 'ffasd',
+      tags: "ffasd",
       language,
       image_url:
         selectedImage?.urls.small ||
         selectedImage?.urls.full ||
-        'https://images.unsplash.com/photo-1641531316051-30d6824c6460?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1MzE0ODh8MHwxfHNlYXJjaHwxfHxsZW9uaWR8ZW58MHx8fHwxNzAwODE4Nzc5fDA&ixlib=rb-4.0.3&q=85',
+        "https://images.unsplash.com/photo-1641531316051-30d6824c6460?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1MzE0ODh8MHwxfHNlYXJjaHwxfHxsZW9uaWR8ZW58MHx8fHwxNzAwODE4Nzc5fDA&ixlib=rb-4.0.3&q=85",
     };
 
     try {
@@ -232,9 +235,9 @@ function AddAssignment() {
       let response;
       if (!isEditMode) {
         // Если задание создается впервые, выполняем POST запрос
-        response = await API.post('assignments/', requestData);
+        response = await API.post("assignments/", requestData);
         if (!response || !response.data || !response.data.id) {
-          throw new Error('Failed to create assignment');
+          throw new Error("Failed to create assignment");
         }
         // Получаем ID созданного задания
         const assignmentId = response.data.id;
@@ -254,21 +257,21 @@ function AddAssignment() {
 
       if ([200, 201].includes(response.status)) {
         if (isDraft) {
-          setSuccessMessageText('Saved succesfully');
+          setSuccessMessageText("Saved succesfully");
           setSuccessMessage(true);
         } else if (isSaveAsDraft) {
           setTimeout(() => {
-            navigate('/assignments');
+            navigate("/assignments");
           }, 2000);
 
-          setSuccessMessageText('Draft created succesfully');
+          setSuccessMessageText("Draft created succesfully");
           setSuccessMessage(true);
         } else {
           setTimeout(() => {
-            navigate('/assignments');
+            navigate("/assignments");
           }, 2000);
 
-          setSuccessMessageText('Assignment created succesfully');
+          setSuccessMessageText("Assignment created succesfully");
           setSuccessMessage(true);
         }
       }
@@ -278,20 +281,20 @@ function AddAssignment() {
       // Преобразование объекта ошибок в строку для обновления состояния
       const errorTextString = Object.entries(parsedError)
         .map(([key, message]) => `${key}: ${message}`)
-        .join(', ');
+        .join(", ");
       setErrorText(`Please correct the following errors: ${errorTextString}`);
-      console.error('Error creating assignment', error);
+      console.error("Error creating assignment", error);
       displayErrorMessages(parsedError);
     }
   };
 
-  const [errorText, setErrorText] = useState('');
+  const [errorText, setErrorText] = useState("");
   const [hasScrolled, setHasScrolled] = useState(false);
 
   useEffect(() => {
-    const targetElement = document.getElementById('errorText');
+    const targetElement = document.getElementById("errorText");
     if (targetElement) {
-      targetElement.scrollIntoView({ behavior: 'smooth' });
+      targetElement.scrollIntoView({ behavior: "smooth" });
     }
     setHasScrolled(false);
   }, [hasScrolled]);
@@ -299,21 +302,21 @@ function AddAssignment() {
   function displayErrorMessages(errorMessages) {
     console.log(errorMessages);
     if (errorMessages.title) {
-      const titleElement = document.getElementById('title');
-      titleElement.classList.add('error');
+      const titleElement = document.getElementById("title");
+      titleElement.classList.add("error");
     }
     if (errorMessages.description) {
-      const textElement = document.getElementById('text');
-      textElement.classList.add('error');
+      const textElement = document.getElementById("text");
+      textElement.classList.add("error");
     }
-    const blockContainers = document.querySelectorAll('.block');
+    const blockContainers = document.querySelectorAll(".block");
     blockContainers.forEach((blockContainer, index) => {
       const blockErrorKey = `blocks #${index + 1}`;
       const blockErrorExists = Object.keys(errorMessages).some((key) =>
         key.startsWith(blockErrorKey),
       );
       if (blockErrorExists) {
-        blockContainer.classList.add('error');
+        blockContainer.classList.add("error");
       }
     });
   }
@@ -326,12 +329,12 @@ function AddAssignment() {
     const newBlock = {
       id: blocks.length + 1,
       type,
-      title: '',
+      title: "",
       content: EditorState.createEmpty(),
-      choices: type === 'text' || 'open' ? [] : [''],
-      minValue: type === 'range' ? 1 : null,
-      maxValue: type === 'range' ? 10 : null,
-      image: type === 'image' ? '' : null,
+      choices: type === "text" || "open" ? [] : [""],
+      minValue: type === "range" ? 1 : null,
+      maxValue: type === "range" ? 10 : null,
+      image: type === "image" ? "" : null,
     };
     setBlocks([...blocks, newBlock]);
   };
@@ -398,12 +401,15 @@ function AddAssignment() {
           ? {
               ...block,
               content: newContent || block.content,
-              description: getObjectFromEditorState(newContent) || block.description,
+              description:
+                getObjectFromEditorState(newContent) || block.description,
               choices: newChoices || block.choices,
               title: newTitle || block.title,
               choice_replies:
-                newChoices?.map((choice) => ({ reply: choice, checked: false })) ||
-                block.choice_replies,
+                newChoices?.map((choice) => ({
+                  reply: choice,
+                  checked: false,
+                })) || block.choice_replies,
               minValue: newMinValue ?? block.minValue,
               maxValue: newMaxValue ?? block.maxValue,
               leftPole: newLeftPole ?? block.leftPole,
@@ -417,7 +423,9 @@ function AddAssignment() {
 
   return (
     <div className="assignments-page">
-      {successMessage && <div className="success-message">{successMessageText}</div>}
+      {successMessage && (
+        <div className="success-message">{successMessageText}</div>
+      )}
       <HeaderAssignment
         blocks={blocks}
         handleSubmit={(e) => handleSubmit(e, true, false)}
@@ -448,15 +456,23 @@ function AddAssignment() {
         />
       </div>
       <div className="add-assignment-body">
-        <ImageSelector onImageSelect={handleImageSelect} selectedImage={selectedImage} />
-        <form onSubmit={(e) => handleSubmit(e, false, false)} className="form-creator">
+        <ImageSelector
+          onImageSelect={handleImageSelect}
+          selectedImage={selectedImage}
+        />
+        <form
+          onSubmit={(e) => handleSubmit(e, false, false)}
+          className="form-creator"
+        >
           {blocks.map((block, index) => (
             <div key={index}>
-              {block.type === 'headline' && <Headline block={block} updateBlock={updateBlock} />}
-              {block.type === 'imageQuestion' && (
+              {block.type === "headline" && (
+                <Headline block={block} updateBlock={updateBlock} />
+              )}
+              {block.type === "imageQuestion" && (
                 <ImageQuestionBlock block={block} updateBlock={updateBlock} />
               )}
-              {block.type === 'headlinerImg' && (
+              {block.type === "headlinerImg" && (
                 <HeadlinerImg
                   block={block}
                   updateBlock={updateBlock}
@@ -480,7 +496,10 @@ function AddAssignment() {
             </div>
             <div className="form-setting">
               <label>Language</label>
-              <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+              <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+              >
                 <option value="en">English</option>
                 <option value="es">Spanish</option>
                 <option value="fr">French</option>
@@ -526,22 +545,34 @@ function AddAssignment() {
         </form>
         <div className="block-buttons-container">
           <div className="block-buttons">
-            <button title="Add Text Block" onClick={() => addBlock('text')}>
-              <FontAwesomeIcon icon={faComment} />{' '}
+            <button title="Add Text Block" onClick={() => addBlock("text")}>
+              <FontAwesomeIcon icon={faComment} />{" "}
             </button>
-            <button title="Add Open-Question Block" onClick={() => addBlock('open')}>
-              <FontAwesomeIcon icon={faQuestion} />{' '}
+            <button
+              title="Add Open-Question Block"
+              onClick={() => addBlock("open")}
+            >
+              <FontAwesomeIcon icon={faQuestion} />{" "}
             </button>
-            <button title="Add Multiple Choice Block" onClick={() => addBlock('multiple')}>
-              <FontAwesomeIcon icon={faSquareCheck} />{' '}
+            <button
+              title="Add Multiple Choice Block"
+              onClick={() => addBlock("multiple")}
+            >
+              <FontAwesomeIcon icon={faSquareCheck} />{" "}
             </button>
-            <button title="Add Single Choice Block" onClick={() => addBlock('single')}>
-              <FontAwesomeIcon icon={faCircleDot} />{' '}
+            <button
+              title="Add Single Choice Block"
+              onClick={() => addBlock("single")}
+            >
+              <FontAwesomeIcon icon={faCircleDot} />{" "}
             </button>
-            <button title="Add Linear Scale Question Block" onClick={() => addBlock('range')}>
+            <button
+              title="Add Linear Scale Question Block"
+              onClick={() => addBlock("range")}
+            >
               <FontAwesomeIcon icon={faEllipsis} />
             </button>
-            <button title="Add Image" onClick={() => addBlock('image')}>
+            <button title="Add Image" onClick={() => addBlock("image")}>
               <FontAwesomeIcon icon={faImage} />
             </button>
           </div>
@@ -578,12 +609,12 @@ function ViewAssignment() {
 
   const [showModal, setShowModal] = useState();
   const [assignmentData, setAssignmentData] = useState({
-    title: '',
-    text: '',
-    type: '',
-    language: '',
-    image_url: '',
-    author: '',
+    title: "",
+    text: "",
+    type: "",
+    language: "",
+    image_url: "",
+    author: "",
     blocks: [],
   });
 
@@ -616,7 +647,7 @@ function ViewAssignment() {
   const handleDeleteAssignment = async () => {
     try {
       await API.delete(`assignments/${id}/`);
-      navigate('/assignments');
+      navigate("/assignments");
     } catch (error) {
       console.error(error.message);
     }
@@ -628,15 +659,15 @@ function ViewAssignment() {
         const response = await API.get(`assignments/${id}/`);
         setAssignmentCredentials(response.data);
       } catch (error) {
-        console.error('Error fetching assignment data', error);
-        navigate('/assignments'); // Redirect if error
+        console.error("Error fetching assignment data", error);
+        navigate("/assignments"); // Redirect if error
       }
     };
 
     fetchAssignmentData();
   }, [id, navigate, setAssignmentCredentials]);
 
-  console.log('data', assignmentData);
+  console.log("data", assignmentData);
 
   return (
     <div className="assignments-page">
@@ -647,7 +678,10 @@ function ViewAssignment() {
             <button className="action-button" onClick={handleToggleModal}>
               Delete Assignment
             </button>
-            <button className="action-button" onClick={() => navigate(`/edit-assignment/${id}`)}>
+            <button
+              className="action-button"
+              onClick={() => navigate(`/edit-assignment/${id}`)}
+            >
               Edit Assignment
             </button>
           </div>
@@ -683,7 +717,7 @@ function ViewAssignment() {
         confirmText="Delete forever"
       >
         <p>
-          Are you sure you want to delete this assignment?{' '}
+          Are you sure you want to delete this assignment?{" "}
           <strong>This action is irrevertable!</strong>
         </p>
       </Modal>

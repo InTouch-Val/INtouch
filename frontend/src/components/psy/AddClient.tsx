@@ -1,19 +1,19 @@
 //@ts-nocheck
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { useAuth } from '../../service/authContext';
-import { API } from '../../service/axios';
-import '../../css/add-client.css';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "../../service/authContext";
+import { API } from "../../service/axios";
+import "../../css/add-client.css";
 
 function AddClient() {
   const [clientData, setClientData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
+    firstName: "",
+    lastName: "",
+    email: "",
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
   const { updateUserData } = useAuth();
@@ -33,7 +33,7 @@ function AddClient() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await API.post('clients/add/', {
+      const response = await API.post("clients/add/", {
         first_name: clientData.firstName,
         last_name: clientData.lastName,
         email: clientData.email,
@@ -41,16 +41,16 @@ function AddClient() {
 
       if (response.status === 200) {
         setSuccess(true);
-        setError('');
+        setError("");
         await updateUserData();
         setTimeout(() => {
-          navigate('/clients');
+          navigate("/clients");
         }, 1500);
       }
     } catch (error) {
       if (error.response && error.response.status === 401) {
         try {
-          const retryResponse = await API.post('clients/add/', {
+          const retryResponse = await API.post("clients/add/", {
             first_name: clientData.firstName,
             last_name: clientData.lastName,
             email: clientData.email,
@@ -58,20 +58,20 @@ function AddClient() {
 
           if (retryResponse.status === 200) {
             setSuccess(true);
-            setError('');
+            setError("");
             await updateUserData();
             setTimeout(() => {
-              navigate('/clients');
+              navigate("/clients");
             }, 1500);
           }
         } catch (retryError) {
           // Обработка ошибок повторного запроса, если он тоже не удался
-          setError('Error adding client occurred after retry');
+          setError("Error adding client occurred after retry");
         }
       } else if (error.response && error.response.status === 400) {
-        setError('User with such email already exists');
+        setError("User with such email already exists");
       } else {
-        setError('Error adding client occurred');
+        setError("Error adding client occurred");
       }
       setSuccess(false);
     }
@@ -109,7 +109,9 @@ function AddClient() {
           required
         />
         {error && <div className="error-message">{error}</div>}
-        {success && <div className="success-message">Client created succesfully!</div>}
+        {success && (
+          <div className="success-message">Client created succesfully!</div>
+        )}
         <button type="submit">Add Client</button>
       </form>
     </div>

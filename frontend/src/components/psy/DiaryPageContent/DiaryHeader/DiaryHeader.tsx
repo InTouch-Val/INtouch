@@ -1,10 +1,15 @@
 //@ts-nocheck
-import React from 'react';
-import './styles.css';
-import arrowBack from '../../../../images/assignment-page/arrowBack.svg';
-import { Link } from 'react-router-dom';
+import React from "react";
+import "./styles.css";
+import arrowBack from "../../../../images/assignment-page/arrowBack.svg";
+import { Link } from "react-router-dom";
 
-const options = { weekday: 'long', day: '2-digit', month: 'short', year: 'numeric' };
+const options = {
+  weekday: "long",
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+};
 
 export default function DiaryHeader({ diary }) {
   return (
@@ -12,7 +17,7 @@ export default function DiaryHeader({ diary }) {
       <div className="diary__title-header">
         <div className="diary__title">Emotion Journal</div>
         <div className="diary__title-date">
-          {new Date(diary.add_date).toLocaleDateString('en-US', options)}
+          {new Date(diary.add_date).toLocaleDateString("en-US", options)}
         </div>
       </div>
 

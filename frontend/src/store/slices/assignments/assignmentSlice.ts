@@ -3,7 +3,7 @@ import { AssignmentsType } from "../../entities/assignments/types";
 import { changeAssignmentFavoriteByIdAction } from "../../actions/assignment/assignmentActions";
 import { Status } from "../../../utils/constants";
 
-export type IStatusState = "init" | "success" | "loading" | "error"
+export type IStatusState = "init" | "success" | "loading" | "error";
 
 interface AssignmentState {
   assignments: AssignmentsType[] | null;
@@ -36,7 +36,7 @@ const assignmentSlice = createSlice({
         changeAssignmentFavoriteByIdAction.fulfilled,
         (state, action) => {
           state.status = Status.Success;
-        }
+        },
       )
       .addCase(changeAssignmentFavoriteByIdAction.pending, (state, action) => {
         state.status = Status.Loading;

@@ -1,13 +1,21 @@
 //@ts-nocheck
-import { useState, useRef } from 'react';
-import CloudUploadSignal from '../../../images/CloudUploadSignal.svg';
-import IconCopy from '../../../images/IconCopy.svg';
-import Button from '../button/ButtonHeadline';
-import './HeadlinerImg.css';
+import { useState, useRef } from "react";
+import CloudUploadSignal from "../../../images/CloudUploadSignal.svg";
+import IconCopy from "../../../images/IconCopy.svg";
+import Button from "../button/ButtonHeadline";
+import "./HeadlinerImg.css";
 
-function HeadlinerImg({ setSelectedImageForBlock, image, errorText, setErrorText, setIsError }) {
+function HeadlinerImg({
+  setSelectedImageForBlock,
+  image,
+  errorText,
+  setErrorText,
+  setIsError,
+}) {
   const [blockVisible, setBlockVisible] = useState(true);
-  const [uploadedImage, setUploadedImage] = useState(image || CloudUploadSignal);
+  const [uploadedImage, setUploadedImage] = useState(
+    image || CloudUploadSignal,
+  );
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
   const oneMbyte = 1048576; // 1 МБ в байтах
@@ -32,7 +40,7 @@ function HeadlinerImg({ setSelectedImageForBlock, image, errorText, setErrorText
 
   // Функция для проверки формата файла
   const isImageFormatValid = (file) => {
-    const validFormats = ['image/png', 'image/jpeg', 'image/gif'];
+    const validFormats = ["image/png", "image/jpeg", "image/gif"];
     return validFormats.includes(file.type);
   };
 
@@ -47,14 +55,14 @@ function HeadlinerImg({ setSelectedImageForBlock, image, errorText, setErrorText
       setIsError(false);
       setErrorText(
         errorText.replace(
-          'Unsupported file format or image is too big. Please use JPG, PNG, or GIF files under 1 MB',
-          '',
+          "Unsupported file format or image is too big. Please use JPG, PNG, or GIF files under 1 MB",
+          "",
         ),
       );
     } else {
       setIsError(true);
       setErrorText(
-        `${errorText.includes('Unsupported file format or image is too big. Please use JPG, PNG, or GIF files under 1 MB') ? errorText.replace('Unsupported file format or image is too big. Please use JPG, PNG, or GIF files under 1 MBUnsupported file format or image is too big. Please use JPG, PNG, or GIF files under 1 MB', '') : errorText} Unsupported file format or image is too big. Please use JPG, PNG, or GIF files under 1 MB`,
+        `${errorText.includes("Unsupported file format or image is too big. Please use JPG, PNG, or GIF files under 1 MB") ? errorText.replace("Unsupported file format or image is too big. Please use JPG, PNG, or GIF files under 1 MBUnsupported file format or image is too big. Please use JPG, PNG, or GIF files under 1 MB", "") : errorText} Unsupported file format or image is too big. Please use JPG, PNG, or GIF files under 1 MB`,
       );
     }
   };
@@ -97,14 +105,16 @@ function HeadlinerImg({ setSelectedImageForBlock, image, errorText, setErrorText
         <div
           id="customFileInput"
           className={
-            isDragging ? 'headline__img-input-custom dragging' : 'headline__img-input-custom'
+            isDragging
+              ? "headline__img-input-custom dragging"
+              : "headline__img-input-custom"
           }
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
         >
           <div
-            className={`headline__img-container ${errorText.includes('Unsupported file format or image is too big. Please use JPG, PNG, or GIF files under 1 MB') && 'error'}`}
+            className={`headline__img-container ${errorText.includes("Unsupported file format or image is too big. Please use JPG, PNG, or GIF files under 1 MB") && "error"}`}
           >
             <input
               onChange={handleFileUpload}
@@ -113,12 +123,16 @@ function HeadlinerImg({ setSelectedImageForBlock, image, errorText, setErrorText
               type="file"
               ref={fileInputRef}
             />
-            <img className="headline__img" src={uploadedImage} alt="CloudUpload" />
+            <img
+              className="headline__img"
+              src={uploadedImage}
+              alt="CloudUpload"
+            />
           </div>
 
           <div className="headline__browse-container">
             <Button className="headline__browse-btn">
-              <label htmlFor="fileInput" style={{ cursor: 'pointer' }}>
+              <label htmlFor="fileInput" style={{ cursor: "pointer" }}>
                 Browse
               </label>
             </Button>

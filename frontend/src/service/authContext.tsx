@@ -1,6 +1,6 @@
 //@ts-nocheck
-import { createContext, useContext, useState, useEffect } from 'react';
-import { API } from './axios';
+import { createContext, useContext, useState, useEffect } from "react";
+import { API } from "./axios";
 
 const AuthContext = createContext(null);
 
@@ -16,23 +16,23 @@ function AuthProvider({ children }) {
   const isLoggedIn = currentUser != null;
 
   const logout = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     setCurrentUser(null);
-    window.location.href = '/login';
+    window.location.href = "/login";
   };
 
   const login = async (accessToken, refreshToken) => {
     setIsLoading(true); // Установка перед началом запроса
-    localStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('refreshToken', refreshToken);
+    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("refreshToken", refreshToken);
     try {
-      const response = await API.get('get-user/');
+      const response = await API.get("get-user/");
       console.log(response);
       setCurrentUser(response.data[0]);
       console.log(currentUser);
     } catch (error) {
-      console.error('Error during login:', error);
+      console.error("Error during login:", error);
       if (error.response.status === 401) {
         logout();
       }
@@ -42,13 +42,13 @@ function AuthProvider({ children }) {
 
   const updateUserData = async () => {
     try {
-      const response = await API.get('get-user/');
+      const response = await API.get("get-user/");
       setCurrentUser(response.data[0]);
     } catch (error) {
-      console.error('Error during user data update:', error);
+      console.error("Error during user data update:", error);
       if (error.response.status === 401) {
         logout();
-        window.location.href = '/login'; // Redirect to login page on update failure
+        window.location.href = "/login"; // Redirect to login page on update failure
       }
     }
   };
@@ -59,17 +59,17 @@ function AuthProvider({ children }) {
 
   useEffect(() => {
     const initAuth = async () => {
-      const accessToken = localStorage.getItem('accessToken');
+      const accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
         setIsLoading(false);
         return;
       }
 
       try {
-        const response = await API.get('get-user/');
+        const response = await API.get("get-user/");
         setCurrentUser(response.data[0]);
       } catch (error) {
-        console.error('Error during initial auth check:', error);
+        console.error("Error during initial auth check:", error);
         logout();
       }
       setIsLoading(false);

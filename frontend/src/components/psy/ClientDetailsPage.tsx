@@ -1,33 +1,35 @@
 //@ts-nocheck
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { faNoteSticky } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useAuth } from '../../service/authContext';
-import { API } from '../../service/axios';
-import { ClientAssignmentTile } from './AssignmentTile';
-import { Notes } from './Notes';
-import { Modal } from '../../service/modal';
-import { AssignmentsPage } from '../../routes/assignments-page';
-import shareImage from '../../images/shareArrow_white.svg';
-import '../../css/clients.css';
-import DiaryNotes from './DiaryNotes/DiaryNotes';
-import { useObserve } from '../../utils/hook/useObserve';
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { faNoteSticky } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useAuth } from "../../service/authContext";
+import { API } from "../../service/axios";
+import { ClientAssignmentTile } from "./AssignmentTile";
+import { Notes } from "./Notes";
+import { Modal } from "../../service/modal";
+import { AssignmentsPage } from "../../routes/assignments-page";
+import shareImage from "../../images/shareArrow_white.svg";
+import "../../css/clients.css";
+import DiaryNotes from "./DiaryNotes/DiaryNotes";
+import { useObserve } from "../../utils/hook/useObserve";
 
 function ClientDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { currentUser, updateUserData } = useAuth();
-  const client = currentUser?.doctor.clients.find((client) => client.id === Number(id));
+  const client = currentUser?.doctor.clients.find(
+    (client) => client.id === Number(id),
+  );
   const { setCurrentCard, card } = useAuth();
-  const [activeTab, setActiveTab] = useState('profile');
+  const [activeTab, setActiveTab] = useState("profile");
   const [clientAssignments, setClientAssignments] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editableClient, setEditableClient] = useState({ ...client.client });
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [ifError, setIfError] = useState(true);
-  const [errorText, setErrorText] = useState('');
-  const [selectedAssignment, setSelectedAssignment] = useState('');
+  const [errorText, setErrorText] = useState("");
+  const [selectedAssignment, setSelectedAssignment] = useState("");
   useEffect(() => {
     selectedAssignment && setIfError(false);
   }, [selectedAssignment]);
@@ -45,24 +47,28 @@ function ClientDetailsPage() {
   useObserve(observeElement, isTotal, handleTakeUpdate);
 
   const switchToProfileTab = () => {
-    setActiveTab('profile');
+    setActiveTab("profile");
   };
   const switchToAssignmentsTab = () => {
-    setActiveTab('assignments');
+    setActiveTab("assignments");
   };
   const switchToNotesTab = () => {
-    setActiveTab('notes');
+    setActiveTab("notes");
   };
   const switchToDiaryTab = () => {
-    setActiveTab('diary');
+    setActiveTab("diary");
   };
 
   useEffect(() => {
     const fetchClientAssignments = async () => {
-      if (activeTab === 'assignments') {
+      if (activeTab === "assignments") {
         try {
-          const response = await API.get(`assignments-client/?limit=${limit}&offset=0`);
-          const data = response.data.results.filter((assignment) => assignment.user === Number(id));
+          const response = await API.get(
+            `assignments-client/?limit=${limit}&offset=0`,
+          );
+          const data = response.data.results.filter(
+            (assignment) => assignment.user === Number(id),
+          );
           setClientAssignments(data);
           console.log(response);
         } catch (e) {
@@ -109,7 +115,9 @@ function ClientDetailsPage() {
 
   const saveClientChanges = async () => {
     const requestBody = {
-      date_of_birth: editableClient.date_of_birth ? editableClient.date_of_birth : null,
+      date_of_birth: editableClient.date_of_birth
+        ? editableClient.date_of_birth
+        : null,
       client: {
         diagnosis: editableClient.diagnosis,
         about: editableClient.about,
@@ -120,7 +128,7 @@ function ClientDetailsPage() {
       const response = await API.put(`client/update/${id}/`, requestBody);
       console.log(response);
     } catch (e) {
-      console.error('Error saving client', e.message);
+      console.error("Error saving client", e.message);
     }
   };
 
@@ -131,16 +139,18 @@ function ClientDetailsPage() {
 
   const handleDeleteAssignment = (deletedAssignmentId) => {
     setClientAssignments((currentAssignments) =>
-      currentAssignments.filter((assignment) => assignment.id !== deletedAssignmentId),
+      currentAssignments.filter(
+        (assignment) => assignment.id !== deletedAssignmentId,
+      ),
     );
   };
 
   const handleModalClose = () => {
     setIsShareModalOpen(false);
     setIsSuccessModalOpen(false);
-    setSelectedAssignment('');
+    setSelectedAssignment("");
     setIfError(true);
-    setErrorText('');
+    setErrorText("");
   };
 
   const handleShareBtn = () => {
@@ -152,30 +162,32 @@ function ClientDetailsPage() {
       const assignmentId = selectedAssignment;
 
       if (!assignmentId) {
-        console.error('No assignment ID selected for sharing.');
-        const errorText = 'No assignment ID selected for sharing.';
+        console.error("No assignment ID selected for sharing.");
+        const errorText = "No assignment ID selected for sharing.";
         setIfError(true);
         setErrorText(errorText);
         return;
       } else {
         setIfError(false);
-        setErrorText('');
+        setErrorText("");
       }
 
-      const res = await API.get(`assignments/set-client/${assignmentId}/${id}/`);
+      const res = await API.get(
+        `assignments/set-client/${assignmentId}/${id}/`,
+      );
 
       if (res.status >= 200 && res.status <= 300) {
         setIfError(false);
-        setErrorText('');
+        setErrorText("");
         setIsShareModalOpen(false);
         setIsSuccessModalOpen(true);
-        setSelectedAssignment('');
+        setSelectedAssignment("");
       }
     } catch (error) {
-      console.error('Error assigning assignment to clients:', error);
-      setSelectedAssignment('');
+      console.error("Error assigning assignment to clients:", error);
+      setSelectedAssignment("");
       setIfError(true);
-      setErrorText('Something happened');
+      setErrorText("Something happened");
     }
   };
 
@@ -188,40 +200,64 @@ function ClientDetailsPage() {
       <div className="client-detail-page">
         <header>
           <div>
-            <img alt="avatar" src={client.photo} className="avatar" style={{ width: '46px' }} />
+            <img
+              alt="avatar"
+              src={client.photo}
+              className="avatar"
+              style={{ width: "46px" }}
+            />
             <h2>{`${client.first_name} ${client.last_name}`}</h2>
           </div>
           <div>
-            {activeTab === 'profile' && (
-              <button onClick={handleEditToggle} className="action-button action-button_header">
-                {isEditing ? 'Save Changes' : 'Edit Client'}
+            {activeTab === "profile" && (
+              <button
+                onClick={handleEditToggle}
+                className="action-button action-button_header"
+              >
+                {isEditing ? "Save Changes" : "Edit Client"}
               </button>
             )}
-            {activeTab === 'profile' && isEditing && (
-              <button className="action-button action-button_header" onClick={handleCancelEdit}>
+            {activeTab === "profile" && isEditing && (
+              <button
+                className="action-button action-button_header"
+                onClick={handleCancelEdit}
+              >
                 Cancel
               </button>
             )}
-            {activeTab === 'assignments' && (
-              <button className="action-button action-button_header" onClick={handleShareBtn}>
-                <img className="action-button__icon" src={shareImage} alt="share icon" /> Share
-                assignment
+            {activeTab === "assignments" && (
+              <button
+                className="action-button action-button_header"
+                onClick={handleShareBtn}
+              >
+                <img
+                  className="action-button__icon"
+                  src={shareImage}
+                  alt="share icon"
+                />{" "}
+                Share assignment
               </button>
             )}
           </div>
-          {activeTab === 'notes' && (
-            <button onClick={() => navigate(`/add-note/${client.id}/`)} className="client-button">
+          {activeTab === "notes" && (
+            <button
+              onClick={() => navigate(`/add-note/${client.id}/`)}
+              className="client-button"
+            >
               <FontAwesomeIcon icon={faNoteSticky} /> Add Note
             </button>
           )}
         </header>
         <div className="tabs">
-          <button className={activeTab === 'profile' ? 'active' : ''} onClick={switchToProfileTab}>
+          <button
+            className={activeTab === "profile" ? "active" : ""}
+            onClick={switchToProfileTab}
+          >
             Profile
           </button>
           {/* <button className={activeTab === 'chat'? 'active' : ''} onClick={switchToChatTab}>Chat</button> */}
           <button
-            className={activeTab === 'assignments' ? 'active' : ''}
+            className={activeTab === "assignments" ? "active" : ""}
             onClick={switchToAssignmentsTab}
           >
             Assignments
@@ -230,40 +266,46 @@ function ClientDetailsPage() {
           {/* <button className={activeTab === 'notes' ? 'active' : ''} onClick={switchToNotesTab}>
           Notes
         </button> */}
-          <button className={activeTab === 'diary' ? 'active' : ''} onClick={switchToDiaryTab}>
+          <button
+            className={activeTab === "diary" ? "active" : ""}
+            onClick={switchToDiaryTab}
+          >
             Diary
           </button>
         </div>
         {/*Profile Tab View */}
-        {activeTab === 'profile' && (
+        {activeTab === "profile" && (
           <div className="profile-tab">
             <h3>Date Of Birth</h3>
             {isEditing ? (
               <input
                 type="date"
                 name="date_of_birth"
-                value={editableClient.date_of_birth || ''}
+                value={editableClient.date_of_birth || ""}
                 onChange={handleInputChange}
                 className="settings-input"
               />
             ) : (
-              <p>{client.date_of_birth || 'No info yet'}</p>
+              <p>{client.date_of_birth || "No info yet"}</p>
             )}
 
             <h3>Last Update</h3>
-            <p>{new Date(client.last_update).toLocaleDateString() || 'No info yet'}</p>
+            <p>
+              {new Date(client.last_update).toLocaleDateString() ||
+                "No info yet"}
+            </p>
 
             <h3>Diagnosis</h3>
             {isEditing ? (
               <input
                 type="text"
                 name="diagnosis"
-                value={editableClient.diagnosis || ''}
+                value={editableClient.diagnosis || ""}
                 onChange={handleInputChange}
                 className="settings-input"
               />
             ) : (
-              <p>{client.client?.diagnosis || 'No info yet'}</p>
+              <p>{client.client?.diagnosis || "No info yet"}</p>
             )}
 
             <h3>About Client</h3>
@@ -271,17 +313,17 @@ function ClientDetailsPage() {
               <input
                 type="text"
                 name="about"
-                value={editableClient.about || ''}
+                value={editableClient.about || ""}
                 onChange={handleInputChange}
                 className="settings-input"
               />
             ) : (
-              <p>{client.client?.about || 'No info yet'}</p>
+              <p>{client.client?.about || "No info yet"}</p>
             )}
           </div>
         )}
         {/*Assignments Tab View */}
-        {activeTab === 'assignments' && (
+        {activeTab === "assignments" && (
           <div className="assignments-tab">
             {clientAssignments.length > 0 ? (
               clientAssignments.map((assignment) => (
@@ -294,14 +336,16 @@ function ClientDetailsPage() {
                 />
               ))
             ) : (
-              <div className="nothing-to-show">There is nothing to show yet</div>
+              <div className="nothing-to-show">
+                There is nothing to show yet
+              </div>
             )}
           </div>
         )}
         <div ref={observeElement} />
         {/*Notes Tab View */}
-        {activeTab === 'notes' && <Notes clientId={client.id} />}
-        {activeTab === 'diary' && <DiaryNotes clientId={client.id} />}
+        {activeTab === "notes" && <Notes clientId={client.id} />}
+        {activeTab === "diary" && <DiaryNotes clientId={client.id} />}
         <Modal
           showCancel={false}
           isOpen={isShareModalOpen}
@@ -312,15 +356,24 @@ function ClientDetailsPage() {
           errorText={errorText}
         >
           <div className="share-assignment share-assignment_clientDetailsPage">
-            <button className="share-assignment__close-button" onClick={handleModalClose}>
+            <button
+              className="share-assignment__close-button"
+              onClick={handleModalClose}
+            >
               X
             </button>
-            <h3 className="share-assignment__title">Choose assignment you want to share</h3>
+            <h3 className="share-assignment__title">
+              Choose assignment you want to share
+            </h3>
             <div className="share-assignment__content-container">
               <AssignmentsPage
                 isShareModal={true}
-                setSelectedAssignmentIdForShareModalOnClientPage={setSelectedAssignment}
-                selectedAssignmentIdForShareModalOnClientPage={selectedAssignment}
+                setSelectedAssignmentIdForShareModalOnClientPage={
+                  setSelectedAssignment
+                }
+                selectedAssignmentIdForShareModalOnClientPage={
+                  selectedAssignment
+                }
               ></AssignmentsPage>
             </div>
           </div>

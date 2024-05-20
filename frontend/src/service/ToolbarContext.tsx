@@ -1,7 +1,7 @@
 //@ts-nocheck
 
-import React, { createContext, useContext, useState } from 'react';
-import createToolbarPlugin from '@draft-js-plugins/static-toolbar';
+import React, { createContext, useContext, useState } from "react";
+import createToolbarPlugin from "@draft-js-plugins/static-toolbar";
 
 // Создаем контекст для инструментов
 const ToolbarContext = createContext();

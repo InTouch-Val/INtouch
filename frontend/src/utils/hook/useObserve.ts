@@ -1,6 +1,6 @@
 //@ts-nocheck
 
-import React from 'react';
+import React from "react";
 
 export const useObserve = (ref, isTotal = false, callback) => {
   const observer = React.useRef();

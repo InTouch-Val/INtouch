@@ -1,12 +1,12 @@
 //@ts-nocheck
-import { useNavigate } from 'react-router-dom';
-import '../../css/app.css';
+import { useNavigate } from "react-router-dom";
+import "../../css/app.css";
 
 function AfterRegistrationPage() {
   const navigate = useNavigate();
 
   const handleGoButton = () => {
-    navigate('/login');
+    navigate("/login");
   };
   return (
     <div className="welcome-container">
@@ -16,7 +16,10 @@ function AfterRegistrationPage() {
         </div>
         <div>
           <p>Welcome to InTouch! We are thrilled to have you here!</p>
-          <p>Please follow intstructions sent to your e-mail to finish registration!</p>
+          <p>
+            Please follow intstructions sent to your e-mail to finish
+            registration!
+          </p>
         </div>
         <div>
           <button className="action-button" onClick={handleGoButton}>

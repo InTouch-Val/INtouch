@@ -1,16 +1,16 @@
 //@ts-nocheck
-import React, { useState, useEffect } from 'react';
-import DiaryHeaderClient from './Header/DiaryHeaderClient';
-import './DiaryPage.css';
-import DiaryEventDetailsClient from './EventDetailsClient/EventDetailsClient';
-import DiaryBlockAnalysisClient from './DiaryBlockAnalysisClient/DiaryBlockAnalysisClient';
-import DiaryBlockEmotionClient from './DiaryBlockEmotionClient/DiaryBlockEmotionClient';
-import DiaryBlockPhysicalSensationClient from './DiaryBlockPhysicalSensationClient/DiaryBlockPhysicalSensationClient';
-import DiaryFooterClient from './DiaryFooterClient/DiaryFooterClient';
-import { FormProvider, useForm } from 'react-hook-form';
-import { API } from '../../../service/axios';
-import { useNavigate, useParams } from 'react-router-dom';
-import MobileEmotionPage from '../MyDiary/MobileEmotionPage/MobileEmotionPage';
+import React, { useState, useEffect } from "react";
+import DiaryHeaderClient from "./Header/DiaryHeaderClient";
+import "./DiaryPage.css";
+import DiaryEventDetailsClient from "./EventDetailsClient/EventDetailsClient";
+import DiaryBlockAnalysisClient from "./DiaryBlockAnalysisClient/DiaryBlockAnalysisClient";
+import DiaryBlockEmotionClient from "./DiaryBlockEmotionClient/DiaryBlockEmotionClient";
+import DiaryBlockPhysicalSensationClient from "./DiaryBlockPhysicalSensationClient/DiaryBlockPhysicalSensationClient";
+import DiaryFooterClient from "./DiaryFooterClient/DiaryFooterClient";
+import { FormProvider, useForm } from "react-hook-form";
+import { API } from "../../../service/axios";
+import { useNavigate, useParams } from "react-router-dom";
+import MobileEmotionPage from "../MyDiary/MobileEmotionPage/MobileEmotionPage";
 
 export default function DiaryPageContentClient({ diary, type }) {
   //Changing card content and menu
@@ -23,29 +23,29 @@ export default function DiaryPageContentClient({ diary, type }) {
   const params = useParams();
   const methods = useForm({
     defaultValues: {
-      event_details: type == 'create' ? '' : diary.event_details,
-      thoughts_analysis: type == 'create' ? '' : diary.thoughts_analysis,
-      physical_sensations: type == 'create' ? '' : diary.physical_sensations,
-      emotion_type: type == 'create' ? '' : diary.emotion_type,
-      primary_emotion: type == 'create' ? '' : diary.primary_emotion,
-      clarifying_emotion: type == 'create' ? [] : diary.clarifying_emotion,
+      event_details: type == "create" ? "" : diary.event_details,
+      thoughts_analysis: type == "create" ? "" : diary.thoughts_analysis,
+      physical_sensations: type == "create" ? "" : diary.physical_sensations,
+      emotion_type: type == "create" ? "" : diary.emotion_type,
+      primary_emotion: type == "create" ? "" : diary.primary_emotion,
+      clarifying_emotion: type == "create" ? [] : diary.clarifying_emotion,
       visible: false,
     },
-    mode: 'all',
+    mode: "all",
   });
   const onSubmit = async (data) => {
     console.log(data);
 
-    if (type == 'create') {
+    if (type == "create") {
       try {
         const response = await API.post(`/diary-notes/`, data);
         setStatusMessageText({
-          text: 'Entry successfully saved',
-          status: 'success',
+          text: "Entry successfully saved",
+          status: "success",
         });
         if (!showEmotionsPage) {
           setTimeout(() => {
-            navigate('/my-diary');
+            navigate("/my-diary");
           }, 1000);
         }
 
@@ -54,30 +54,30 @@ export default function DiaryPageContentClient({ diary, type }) {
         console.log(error);
         if (error.response.status == 400) {
           setStatusMessageText({
-            text: 'Please fill in at least one question to save your diary entry',
-            status: 'error',
+            text: "Please fill in at least one question to save your diary entry",
+            status: "error",
           });
         }
         if (error.response.status > 500) {
           setStatusMessageText({
-            text: 'Error server...',
-            status: 'error',
+            text: "Error server...",
+            status: "error",
           });
         }
 
         console.log(error);
       }
     }
-    if (type == 'exist') {
+    if (type == "exist") {
       try {
         const response = await API.patch(`/diary-notes/${params.id}/`, data);
         setStatusMessageText({
-          text: 'Diary changed successfully',
-          status: 'success',
+          text: "Diary changed successfully",
+          status: "success",
         });
         if (!showEmotionsPage) {
           setTimeout(() => {
-            navigate('/my-diary');
+            navigate("/my-diary");
           }, 1000);
         }
 
@@ -85,15 +85,15 @@ export default function DiaryPageContentClient({ diary, type }) {
       } catch (error) {
         if (error.response.status == 400) {
           setStatusMessageText({
-            text: 'Please fill in at least one question to save your diary entry',
-            status: 'error',
+            text: "Please fill in at least one question to save your diary entry",
+            status: "error",
           });
         }
 
         if (error.response.status > 500) {
           setStatusMessageText({
-            text: 'Error server...',
-            status: 'error',
+            text: "Error server...",
+            status: "error",
           });
         }
         console.log(error);
@@ -108,7 +108,11 @@ export default function DiaryPageContentClient({ diary, type }) {
       <FormProvider {...methods}>
         {statusMessageText.status != null && (
           <div
-            className={statusMessageText.status == 'success' ? `success-message` : 'error-message'}
+            className={
+              statusMessageText.status == "success"
+                ? `success-message`
+                : "error-message"
+            }
           >
             {statusMessageText.text}
           </div>

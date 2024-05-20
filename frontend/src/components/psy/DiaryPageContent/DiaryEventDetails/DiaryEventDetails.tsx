@@ -1,6 +1,6 @@
 //@ts-nocheck
-import React from 'react';
-import '../DiaryPageContent.css';
+import React from "react";
+import "../DiaryPageContent.css";
 
 export default function DiaryEventDetails({ diary }) {
   return (

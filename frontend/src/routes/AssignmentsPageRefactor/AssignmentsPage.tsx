@@ -21,20 +21,15 @@ export default function AssignmentsPageRefactor({ isShareModal = false }) {
 
   const { activeTab, status } = useAppSelector((state) => state.assignment);
 
-
-
   const { data: listAssignment } = useGetAssignmentsQuery({
-     limit: limit,
-     author: activeTab == 'my-list' ? currentUser.id : undefined,
-    favorite: activeTab == 'favorites' && true
+    limit: limit,
+    author: activeTab == "my-list" ? currentUser.id : undefined,
+    favorite: activeTab == "favorites" && true,
   });
-
-
 
   const handleAddAssignment = () => {
     navigate("/add-assignment");
   };
-
 
   return (
     <>

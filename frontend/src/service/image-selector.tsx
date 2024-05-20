@@ -1,11 +1,11 @@
 //@ts-nocheck
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import '../css/image-selector.css';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import "../css/image-selector.css";
 
 function ImageSelector({ onImageSelect, selectedImage }) {
   const [images, setImages] = useState(selectedImage ? [selectedImage] : []);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [isSearchDone, setIsSearchDone] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
   const [selectedImageId, setSelectedImageId] = useState(null); // Состояние для хранения ID выбранного изображения
@@ -21,17 +21,21 @@ function ImageSelector({ onImageSelect, selectedImage }) {
 
   const searchImages = (query) => {
     if (!accessKey) {
-      console.error('Unsplash Access Key is missing. Please add it to .env file.');
+      console.error(
+        "Unsplash Access Key is missing. Please add it to .env file.",
+      );
       return;
     }
 
     axios
-      .get(`https://api.unsplash.com/search/photos?query=${query}&client_id=${accessKey}`)
+      .get(
+        `https://api.unsplash.com/search/photos?query=${query}&client_id=${accessKey}`,
+      )
       .then((response) => {
         setImages(response.data.results);
         setIsSelected(false);
       })
-      .catch((error) => console.error('Error searching images:', error));
+      .catch((error) => console.error("Error searching images:", error));
   };
 
   const handleSearch = (e) => {
@@ -62,12 +66,12 @@ function ImageSelector({ onImageSelect, selectedImage }) {
           images.map((image) => (
             <div
               key={image.id}
-              className={`image-item ${image.id === selectedImageId || isSelected ? 'selected' : ''}`}
+              className={`image-item ${image.id === selectedImageId || isSelected ? "selected" : ""}`}
               onClick={() => handleImageClick(image)}
             >
               <img
                 src={image.urls.small || image.urls.full}
-                alt={image.alt_description || 'image'}
+                alt={image.alt_description || "image"}
               />
             </div>
           ))

@@ -43,14 +43,14 @@ export default function ModalAssignments() {
       const res = await Promise.all(
         selectedClients.map(async (clientId) => {
           const response = await API.get(
-            `assignments/set-client/${assignmentId}/${clientId}/`
+            `assignments/set-client/${assignmentId}/${clientId}/`,
           );
           return response;
-        })
+        }),
       );
 
       const allResponsesSuccessful = res.every(
-        (response) => response.status >= 200 && response.status <= 300
+        (response) => response.status >= 200 && response.status <= 300,
       );
 
       if (allResponsesSuccessful) {
