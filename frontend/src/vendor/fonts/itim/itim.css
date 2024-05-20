@@ -4,7 +4,7 @@
   font-style: normal;
   font-weight: 400;
   src:
-    local('Itim'),
-    local('Itim Regular'),
-    url('./Itim-Regular.woff2') format('woff2');
+    local("Itim"),
+    local("Itim Regular"),
+    url("./Itim-Regular.woff2") format("woff2");
 }

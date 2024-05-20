@@ -289,7 +289,7 @@
 
   .block-radio__input:checked::after {
     position: absolute;
-    content: '';
+    content: "";
     top: 3.5px;
     left: 3.5px;
     background-color: #0b4a56;
@@ -331,7 +331,7 @@
   }
 
   .block-checkbox__input:checked::after {
-    content: '';
+    content: "";
     position: absolute;
     left: 8px;
     top: 3px;
@@ -474,13 +474,13 @@
 .visible-checkbox {
   width: 67px;
   height: 38px;
-  background-image: url('../../../images/share.svg');
+  background-image: url("../../../images/share.svg");
   background-repeat: no-repeat;
   cursor: pointer;
 }
 
 .assignment__share-checkbox_invisible:checked + .visible-checkbox {
-  background-image: url('../../../images/shareoff.svg');
+  background-image: url("../../../images/shareoff.svg");
 }
 
 .assignment__buttons-box {
@@ -630,7 +630,7 @@
 }
 
 .mood-display.active::after {
-  content: '';
+  content: "";
   width: 10px;
   height: 10px;
   top: 50%;
@@ -642,7 +642,7 @@
 }
 
 .mood-display.emoteActive::after {
-  content: '';
+  content: "";
   width: 13px;
   height: 13px;
   position: absolute;
