@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '../../psy/button/ButtonHeadline';
 import './MyDiary.css';
 import addEntry from '../../../images/add_entry.svg';
@@ -17,7 +17,6 @@ export default function MyDiary() {
   const { currentUser } = useAuth();
   const [isTotal, setTotal] = React.useState(false);
   const observeElement = React.useRef(null);
-
   const navigate = useNavigate();
 
   const handleTakeUpdate = React.useCallback(() => {
@@ -109,7 +108,7 @@ export default function MyDiary() {
               <Button className="diary__button" onClick={(e) => handleClickDelete(e)}>
                 Yes, Delete
               </Button>
-              <Button className="diary__button" onClick={() => setShowModal(false)}>
+              <Button className="action-button diary_button" onClick={() => setShowModal(false)}>
                 Cancel
               </Button>
             </div>

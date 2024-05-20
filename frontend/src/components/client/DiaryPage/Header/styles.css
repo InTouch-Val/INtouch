@@ -7,11 +7,32 @@
   width: 100%;
 }
 
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .diary__header.diary__header--complete {
+    flex-direction: column-reverse;
+    row-gap: 40px;
+    margin-top: 90px;
+    margin-bottom: 28px;
+    height: auto;
+    padding-right: 28px;
+    padding-left: 28px;
+  }
+}
+
 .diary__title-header {
   display: flex;
   justify-content: space-between;
   gap: 41px;
   align-items: center;
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .diary__title-header {
+    flex-direction: column;
+    width: 100%;
+    gap: 2px;
+    align-items: start;
+  }
 }
 
 .diary__title {
@@ -22,13 +43,33 @@
   line-height: 28px;
 }
 
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .diary__title {
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 28px;
+    align-self: start;
+    color: #0b4a56;
+    width: auto;
+  }
+}
+
 .diary__title-date {
   width: 105px;
   font-size: 16px;
   color: #656565;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 19px;
   font-family: 'Montserrat';
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .diary__title-date {
+    width: auto;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 16px;
+  }
 }
 
 .diary__img-back {
@@ -36,10 +77,6 @@
   transition: all ease-in-out 0.3s;
 }
 
-.diary__img-back-unactive {
-  cursor: pointer;
-  opacity: 0.4;
-}
 .diary__img-back:hover {
   opacity: 0.8;
 }
@@ -49,6 +86,14 @@
   flex-direction: row;
   justify-content: space-between;
   gap: 40px;
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .buttons__container {
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+  }
 }
 
 .diary__dear-message {
@@ -61,4 +106,18 @@
   display: flex;
   flex-direction: column;
   gap: 19px;
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .diary__dear-message {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 21px;
+    color: #0b4a56;
+    background-color: white;
+    padding: 13px 8px;
+    border-radius: 6px;
+    gap: 6px;
+    margin: 0 28px;
+  }
 }

@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles.css';
 import Button from '../../../psy/button/ButtonHeadline';
 import { useFormContext, useWatch } from 'react-hook-form';
+import useMobileWidth from '../../../../utils/hook/useMobileWidth';
 
 export default function DiaryFooterClient({ diary }) {
+  const isMobileWidth = useMobileWidth();
+
   const [active, setActive] = React.useState(diary ? diary.visible : false);
-  const { control, setValue } = useFormContext();
+  const { control, setValue, getValues, watch } = useFormContext();
+
+  const primaryEmotionValue = getValues('primary_emotion');
+  const secondEmotionValues = getValues('clarifying_emotion');
+
+  console.log(primaryEmotionValue);
 
   const [isValid, setValid] = React.useState(false);
   const [isHover, setHover] = React.useState(false);
@@ -44,12 +52,14 @@ export default function DiaryFooterClient({ diary }) {
         onMouseEnter={(e) => setHover(true)}
       >
         <Button type="submit" className="diary__footer-button" disabled={!isValid}>
-          SAVE
+          Save
         </Button>
 
         {!isValid && (
           <span className={`diary__message-valid ${!isHover && 'diary__message-valid-hidden'}`}>
-            Please fill in at least one question to save your diary entry
+            {isMobileWidth
+              ? 'Fill in at least one question to save'
+              : 'Please fill in at least one question to save your diary entry'}
           </span>
         )}
       </div>
