@@ -18,13 +18,19 @@ class DoctorRelClient(BasePermission):
 
     def has_object_permission(self, request, view, obj):
         return (
-            (request.user.is_authenticated and request.user.user_type == USER_TYPES[1]
-             and obj.user_type == USER_TYPES[0]
-             and request.user.doctor.clients.filter(id=obj.id).exists())
+            (
+                request.user.is_authenticated
+                and request.user.user_type == USER_TYPES[1]
+                and obj.user_type == USER_TYPES[0]
+                and request.user.doctor.clients.filter(id=obj.id).exists()
+            )
             or (request.user.id == obj.id)
-            or (request.user.is_authenticated and request.user.user_type == USER_TYPES[0]
+            or (
+                request.user.is_authenticated
+                and request.user.user_type == USER_TYPES[0]
                 and obj.user_type == USER_TYPES[1]
-                and obj.doctor.clients.filter(id=request.user.id).exists())
+                and obj.doctor.clients.filter(id=request.user.id).exists()
+            )
         )
 
 
@@ -53,11 +59,24 @@ class AssignmentAuthorOnly(BasePermission):
         return request.user.is_authenticated
 
     def has_object_permission(self, request, view, obj):
-        return (request.user.id == obj.user.id
-                or request.user.doctor == obj.user.doctors.first())
+        return (
+            request.user.id == obj.user.id
+            or request.user.doctor == obj.user.doctors.first()
+        )
 
 
-class AssignmentDiaryDoctorOnly(BasePermission):
+class AssignmentDoctorOnly(BasePermission):
+    """Пермишн, дающий права на просмотр только докторам, а на
+    редактирование - только автору задания или заметки."""
+
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.user_type == USER_TYPES[1]
+
+    def has_object_permission(self, request, view, obj):
+        return request.method in SAFE_METHODS or request.user == obj.author
+
+
+class DiaryAuthorOnly(BasePermission):
     """Пермишн, дающий права на просмотр только докторам, а на
     редактирование - только автору задания или заметки."""
 

@@ -39,15 +39,7 @@ class AssignmentsAdmin(admin.ModelAdmin):
 
 @admin.register(AssignmentClient)
 class AssignmentClientAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "tags",
-        "assignment_type",
-        "text",
-        "author",
-        "title",
-        "user"
-    )
+    list_display = ("id", "tags", "assignment_type", "text", "author", "title", "user")
     list_display_links = ("title",)
     search_fields = ("title",)
     list_filter = ("title", "tags")

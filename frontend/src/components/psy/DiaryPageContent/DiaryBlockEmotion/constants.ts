@@ -54,3 +54,46 @@ export const listEmotionsChips = [
   { title: 'Self-love', active: false },
   { title: 'Gratitude', active: false },
 ];
+
+export const listEmotionsChipsMobile = [
+  { title: 'Loss', active: false },
+  { title: 'Fear', active: false },
+  { title: 'Guilt', active: false },
+  { title: 'Disappointment', active: false },
+  { title: 'Laziness', active: false },
+  { title: 'Interest', active: false },
+  { title: 'Happiness', active: false },
+  { title: 'Joy', active: false },
+
+  { title: 'Humility', active: false },
+  { title: 'Anger', active: false },
+  { title: 'Nervousness', active: false },
+  { title: 'Confusion', active: false },
+  { title: 'Pride', active: false },
+  { title: 'Respect', active: false },
+  { title: 'Inspiration', active: false },
+  { title: 'Love', active: false },
+
+  { title: 'Anxiety', active: false },
+  { title: 'Excitement', active: false },
+  { title: 'Sadness', active: false },
+  { title: 'Loneliness', active: false },
+  { title: 'Hope', active: false },
+  { title: 'Enthusiasm', active: false },
+  { title: 'Amazement', active: false },
+
+  { title: 'Embarrassment', active: false },
+  { title: 'Shame', active: false },
+  { title: 'Exhaustion', active: false },
+  { title: 'Acceptance', active: false },
+  { title: 'Calmness', active: false },
+  { title: 'Satisfaction', active: false },
+
+  { title: 'Depression', active: false },
+  { title: 'Disgust', active: false },
+  { title: 'Impatience', active: false },
+  { title: 'Frustration', active: false },
+  { title: 'Gratitude', active: false },
+  { title: 'Self-love', active: false },
+  { title: 'Euphoria', active: false },
+];

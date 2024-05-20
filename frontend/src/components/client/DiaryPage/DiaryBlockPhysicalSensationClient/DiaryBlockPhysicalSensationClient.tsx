@@ -5,8 +5,11 @@ import { EditorState, convertFromRaw } from 'draft-js';
 import { EditorToolbar } from '../../../../service/editors-toolbar';
 import { ToolbarProvider } from '../../../../service/ToolbarContext';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
+import useMobileWidth from '../../../../utils/hook/useMobileWidth';
 
 export default function DiaryBlockPhysicalSensationClient({ diary, type }) {
+  const isMobileWidth = useMobileWidth();
+
   const editorRef = useRef(null);
   const { control, setValue } = useFormContext();
   const content = {
@@ -59,8 +62,9 @@ export default function DiaryBlockPhysicalSensationClient({ diary, type }) {
               ref={editorRef}
               editorState={editorState}
               setEditorState={handleEditorStateChange}
-              placeholder={'Write you answer here...'}
+              placeholder={'Write your answer here...'}
               block={block}
+              isMobileWidth={isMobileWidth}
             />
           </ToolbarProvider>
         )}

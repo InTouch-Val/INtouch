@@ -30,7 +30,10 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
       <div className="diary__card-header">
         <div className="diary__card-title-client">
           <div className="diary__card-title__day">{new Date(card.add_date).getUTCDate()}</div>
-          <div className="diary__card-title__date">{getDate(card)}</div>
+          <div>
+            <span>{getDate(card).dayOfWeek}</span> <br />
+            <span>{getDate(card).monthYear}</span>
+          </div>
         </div>
         <div
           className="button__trash"
@@ -50,7 +53,9 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
           </Button>
         )}
         {card.clarifying_emotion.length > 0 && (
-          <Button className="diary__card-button">{card.clarifying_emotion[0]}</Button>
+          <Button className="diary__card-button">
+            <p className="diary__button-text">{card.clarifying_emotion[0]}</p>
+          </Button>
         )}
       </div>
       <div onClick={(e) => e.stopPropagation()}>

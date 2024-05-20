@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import './ClientAssignmentCard.css';
 import { API } from '../../../service/axios';
-import { minMobWidth, maxMobWidth } from '../../../utils/constants';
+import useMobileWidth from '../../../utils/hook/useMobileWidth';
 
 function ClientAssignmentCard({ assignmentData, openAssignment }) {
   const [isShowContextMenu, setIsShowContextMenu] = useState(false);
@@ -78,27 +78,7 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
   }, [isShowContextMenu]);
 
   //Changing card content and menu
-  const [isMobileWidth, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      if (width >= minMobWidth && width <= maxMobWidth) {
-        setIsMobile(true);
-      } else {
-        setIsMobile(false);
-      }
-    };
-
-    // Sets the initial state based on the current window size
-    handleResize();
-
-    // Adds event listener
-    window.addEventListener('resize', handleResize);
-
-    // Cleans up event listener
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  const isMobileWidth = useMobileWidth();
 
   return (
     <article className="card">

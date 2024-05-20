@@ -1,6 +1,6 @@
 from django.urls import include, path
 from rest_framework import routers
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenRefreshView
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularSwaggerView,
@@ -21,7 +21,7 @@ router.register("diary-notes", DiaryNoteViewSet, basename="diary_notes")
 urlpatterns = [
     path("", include(router.urls)),
     path("drf-auth/", include("rest_framework.urls")),
-    path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("token/", CustomTokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("get-user/", UserDetailsView.as_view(), name="user_details"),
     path(

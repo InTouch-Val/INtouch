@@ -1,12 +1,12 @@
-import React from 'react';
-import Button from '../../psy/button/ButtonHeadline';
-import './MyDiary.css';
-import addEntry from '../../../images/add_entry.svg';
-import { API } from '../../../service/axios';
-import CardDiaryClient from './CardDiary/CardDiary';
-import { useNavigate } from 'react-router-dom';
-import { useObserve } from '../../../utils/hook/useObserve';
-import { useAuth } from '../../../service/authContext';
+import React, { useState, useEffect } from "react";
+import Button from "../../psy/button/ButtonHeadline";
+import "./MyDiary.css";
+import addEntry from "../../../images/add_entry.svg";
+import { API } from "../../../service/axios";
+import CardDiaryClient from "./CardDiary/CardDiary";
+import { useNavigate } from "react-router-dom";
+import { useObserve } from "../../../utils/hook/useObserve";
+import { useAuth } from "../../../service/authContext";
 
 export default function MyDiary() {
   const [diarys, setDiarys] = React.useState([]);
@@ -17,7 +17,6 @@ export default function MyDiary() {
   const { currentUser } = useAuth();
   const [isTotal, setTotal] = React.useState(false);
   const observeElement = React.useRef(null);
-
   const navigate = useNavigate();
 
   const handleTakeUpdate = React.useCallback(() => {
@@ -27,7 +26,9 @@ export default function MyDiary() {
   useObserve(observeElement, isTotal, handleTakeUpdate);
 
   React.useEffect(() => {
-    const response = API.get(`diary-notes/?limit=${limit}&offset=0&author=${currentUser.id}`)
+    const response = API.get(
+      `diary-notes/?limit=${limit}&offset=0&author=${currentUser.id}`,
+    )
       .then((res) => {
         if (res.status == 200) {
           if (res.data.count === diarys.length) {
@@ -72,7 +73,10 @@ export default function MyDiary() {
         <div className="diary__header">
           <div className="diary__header-title">My Diary</div>
 
-          <Button className="button__container" onClick={() => navigate('/my-diary/create')}>
+          <Button
+            className="button__container"
+            onClick={() => navigate("/my-diary/create")}
+          >
             <img src={addEntry} alt="icon add" className="button__image" />
             <div> Add entry</div>
           </Button>
@@ -106,10 +110,16 @@ export default function MyDiary() {
               <div>All your entered data will be permanently removed.</div>
             </div>
             <div className="diary__buttons-modal">
-              <Button className="diary__button" onClick={(e) => handleClickDelete(e)}>
+              <Button
+                className="diary__button"
+                onClick={(e) => handleClickDelete(e)}
+              >
                 Yes, Delete
               </Button>
-              <Button className="diary__button" onClick={() => setShowModal(false)}>
+              <Button
+                className="action-button diary_button"
+                onClick={() => setShowModal(false)}
+              >
                 Cancel
               </Button>
             </div>

@@ -7,7 +7,7 @@ import '../css/block.css';
 import '../css/assignments.css';
 import decodeStyledText from './decodeStyledText';
 import '../components/client/CompleteAssignments/CompleteAssignments.css';
-import { minMobWidth, maxMobWidth } from '../utils/constants';
+import useMobileWidth from '../utils/hook/useMobileWidth';
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
@@ -56,24 +56,7 @@ function ClientAssignmentBlocks({
     updateBlock(block.id, event.target.value, []);
   }
 
-  const [isMobileWidth, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      if (width >= minMobWidth && width <= maxMobWidth) {
-        setIsMobile(true);
-      } else {
-        setIsMobile(false);
-      }
-    };
-
-    // Sets the initial state based on the current window size
-    handleResize();
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  const isMobileWidth = useMobileWidth();
 
   function handleSingleMultipleClick(event) {
     // Создаём новый массив newChoices, обновляя соответствующий элемент

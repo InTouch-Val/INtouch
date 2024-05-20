@@ -5,12 +5,23 @@
   align-items: center;
   justify-content: center;
   background-color: rgb(225 244 248 / 35%);
-  background-image: url('https://i122.fastpic.org/big/2023/1025/d2/e4e7924e98bda72edc75d27bf95bcad2.png');
+  background-image: url("https://i122.fastpic.org/big/2023/1025/d2/e4e7924e98bda72edc75d27bf95bcad2.png");
 }
 
 .registration-form img {
-  margin-bottom: 15px;
   object-fit: cover;
+}
+
+.registration-logo {
+  margin-bottom: 22px;
+}
+
+.login-logo {
+  margin-bottom: 90px;
+}
+
+.reset-logo {
+  margin-bottom: 47px;
 }
 
 .registration-form {
@@ -26,19 +37,20 @@
 .input-fields {
   display: flex;
   flex-direction: column;
+  width: 338px;
+  max-width: 100%;
 }
 
 .input-fields input {
-  padding: 8px 10px;
-  border: 1px solid #ccc;
+  border: 1px solid rgba(101, 101, 101, 0.7);
   border-radius: 10px;
-  margin: 10px 0;
+  margin-bottom: 10px;
   box-shadow: 0 0 3px 1px #d7e4e773;
 }
 
 .input-fields.login input,
 .password-field input {
-  width: calc(100% - 20px); /* Adjust width to account for padding */
+  max-width: calc(100% - 20px); /* Adjust width to account for padding */
 }
 
 /* Align button inside password field */
@@ -55,12 +67,14 @@
 
 .password-field button {
   position: absolute;
+  top: 25%;
+  transform: translateY(-25%);
   right: 15px;
   height: calc(100% - 30px);
   padding: 0;
   border: none;
   border-radius: 0 10px 10px 0;
-  background-color: #fff;
+  background: none;
   cursor: pointer;
 }
 
@@ -71,7 +85,14 @@
 .registration-form label {
   display: flex;
   align-items: center; /* Выровняйте checkbox и текст по вертикали */
-  font-size: 12px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 19.99px;
+  text-align: left;
+  text-decoration: underline;
+  color: rgba(101, 101, 101, 1);
+  gap: 6px;
+  padding: 0 3px 0 3px;
 }
 
 .registration-form h2 {
@@ -96,10 +117,12 @@
   margin-bottom: 20px;
 }
 
-input[type='checkbox'],
-input[type='checkbox']:focus {
+.registration-client__checkbox-input,
+.registration-client__checkbox-input:focus {
   margin: 0;
   box-shadow: none;
+  width: 22px;
+  height: 22px;
 }
 
 @media (width <= 600px) {
@@ -210,4 +233,68 @@ input[type='checkbox']:focus {
   font-family: Raleway, Arial, sans-serif;
   font-size: 18px;
   font-weight: 700px;
+}
+.forgot-button {
+  border: none;
+  background: none;
+  text-decoration: underline;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 19.99px;
+  text-align: left;
+  color: rgba(101, 101, 101, 1);
+}
+.input {
+  padding: 15px 20px;
+}
+.link {
+  font-family: Montserrat;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 29.99px;
+  text-align: center;
+  color: rgba(65, 125, 136, 1);
+}
+.link a {
+  color: rgba(65, 125, 136, 1);
+}
+.reset-password__heading {
+  font-family: Montserrat;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 29.99px;
+  text-align: center;
+  color: rgba(65, 125, 136, 1);
+  margin: 0;
+  margin-bottom: 8px;
+}
+.reset-password__heading_reset {
+  margin-bottom: 14px;
+}
+.reset-password__paragraph {
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 29.99px;
+  text-align: center;
+  color: rgba(65, 125, 136, 1);
+  margin: 0;
+  margin-bottom: 14px;
+}
+.reset-password__succes {
+  width: 452px;
+  height: 30px;
+  padding: 0px 4px 0px 4px;
+  gap: 10px;
+  border-radius: 3px;
+
+  font-family: Montserrat;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 29.99px;
+  text-align: center;
+  color: rgba(71, 101, 73, 1);
+  background: rgba(210, 238, 216, 1);
+  margin-bottom: 18px;
 }

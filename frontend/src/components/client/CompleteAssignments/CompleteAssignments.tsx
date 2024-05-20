@@ -22,7 +22,7 @@ import decodeStyledText from '../../../service/decodeStyledText';
 import Modal from '../../modals/Modal/Modal';
 import AssignmentNotComplete from '../../modals/Notifications/assignmentNotComplete';
 import AssignmentExit from '../../modals/Notifications/assgnmentExit';
-import { minMobWidth, maxMobWidth } from '../../../utils/constants';
+import useMobileWidth from '../../../utils/hook/useMobileWidth';
 
 function CompleteAssignments() {
   const location = useLocation();
@@ -312,24 +312,7 @@ function CompleteAssignments() {
     }
   }
 
-  const [isMobileWidth, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      if (width >= minMobWidth && width <= maxMobWidth) {
-        setIsMobile(true);
-      } else {
-        setIsMobile(false);
-      }
-    };
-
-    // Sets the initial state based on the current window size
-    handleResize();
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  const isMobileWidth = useMobileWidth();
 
   return isRateTask ? (
     <>
@@ -551,7 +534,7 @@ function CompleteAssignments() {
               type="checkbox"
               className="card__input-checkbox  assignment__share-checkbox"
               defaultChecked={assignmentData?.visible}
-              onClick={() => handleShareWithTherapist(assignmentData?.id)}
+              onClick={() => handleShareWithTherapist()}
             />
           </label>
         </div>

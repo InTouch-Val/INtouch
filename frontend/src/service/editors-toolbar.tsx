@@ -20,7 +20,16 @@ import { Modifier, SelectionState } from 'draft-js';
 
 const EditorToolbar = forwardRef(
   (
-    { editorState, setEditorState, placeholder, block, errorText, setErrorText, setIsError },
+    {
+      editorState,
+      setEditorState,
+      placeholder,
+      block,
+      isMobileWidth,
+      errorText,
+      setErrorText,
+      setIsError,
+    },
     ref,
   ) => {
     const { toolbarPlugin, setToolbarPlugin } = useToolbar(); // Используем контекст
@@ -32,6 +41,8 @@ const EditorToolbar = forwardRef(
         ref.current.focus();
       }
     };
+
+    const effectiveErrorText = errorText || 'Error occured';
 
     const applyStylesFromCharacterList = (contentState, rawContentState) => {
       let newContentState = contentState;
@@ -152,13 +163,13 @@ const EditorToolbar = forwardRef(
         setIsError(true);
         setErrorText(
           maxLength === 1000
-            ? `${errorText.includes(' Please enter 20-1000 characters') ? errorText.replace(' Please enter 20-1000 characters', '') : errorText} Please enter 20-1000 characters`
-            : `${errorText.includes(' Please enter 20-200 characters') ? errorText.replace(' Please enter 20-200 characters', '') : errorText} Please enter 20-200 characters`,
+            ? `${effectiveErrorText.includes(' Please enter 20-1000 characters') ? effectiveErrorText.replace(' Please enter 20-1000 characters', '') : effectiveErrorText} Please enter 20-1000 characters`
+            : `${effectiveErrorText.includes(' Please enter 20-200 characters') ? effectiveErrorText.replace(' Please enter 20-200 characters', '') : effectiveErrorText} Please enter 20-200 characters`,
         );
         return false;
       }
       setIsError(false);
-      setErrorText(errorText.replace(' Please enter 20-200 characters', ''));
+      setErrorText(effectiveErrorText.replace(' Please enter 20-200 characters', ''));
       return true;
     };
 
@@ -170,7 +181,7 @@ const EditorToolbar = forwardRef(
 
     return (
       <div
-        className={`editor-container ${(errorText.includes(' Please enter 20-1000 characters') || errorText.includes(' Please enter 20-200 characters')) && 'error'}`}
+        className={`editor-container ${(effectiveErrorText.includes(' Please enter 20-1000 characters') || effectiveErrorText.includes(' Please enter 20-200 characters')) && 'error'}`}
         onClick={focusEditor}
       >
         <Editor
@@ -182,25 +193,27 @@ const EditorToolbar = forwardRef(
           handleBeforeInput={handleBeforeInput}
           onBlur={handleBlur}
         />
-        <Toolbar>
-          {(externalProps) => (
-            <>
-              <BoldButton {...externalProps} />
-              <ItalicButton {...externalProps} />
-              <UnderlineButton {...externalProps} />
-              {block.type === 'text' ? (
-                <>
-                  <Separator {...externalProps} />
-                  <HeadlineOneButton {...externalProps} />
-                  <HeadlineTwoButton {...externalProps} />
-                  <Separator {...externalProps} />
-                  <UnorderedListButton {...externalProps} />
-                  <OrderedListButton {...externalProps} />
-                </>
-              ) : null}
-            </>
-          )}
-        </Toolbar>
+        {!isMobileWidth && (
+          <Toolbar>
+            {(externalProps) => (
+              <>
+                <BoldButton {...externalProps} />
+                <ItalicButton {...externalProps} />
+                <UnderlineButton {...externalProps} />
+                {block.type === 'text' ? (
+                  <>
+                    <Separator {...externalProps} />
+                    <HeadlineOneButton {...externalProps} />
+                    <HeadlineTwoButton {...externalProps} />
+                    <Separator {...externalProps} />
+                    <UnorderedListButton {...externalProps} />
+                    <OrderedListButton {...externalProps} />
+                  </>
+                ) : null}
+              </>
+            )}
+          </Toolbar>
+        )}
       </div>
     );
   },

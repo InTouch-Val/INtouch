@@ -4,5 +4,5 @@ export function getDate(card) {
   const month = date.toLocaleDateString('en-US', { month: 'short' });
   const year = date.getFullYear();
 
-  return `${dayOfWeek}\n${month} ${year}`;
+  return { dayOfWeek, monthYear: `${month} ${year}` };
 }
