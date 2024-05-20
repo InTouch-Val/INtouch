@@ -40,7 +40,7 @@ const EditorToolbar = forwardRef(
       }
     };
 
-    const effectiveErrorText = errorText || 'Error occured';
+    const effectiveErrorText = errorText || '';
 
     const applyStylesFromCharacterList = (contentState, rawContentState) => {
       let newContentState = contentState;
@@ -99,6 +99,8 @@ const EditorToolbar = forwardRef(
           const newEditorState = EditorState.createWithContent(contentStateWithStyles);
           console.log(newEditorState);
           setEditorState(newEditorState);
+          const text = contentState.getPlainText();
+          validateTextLength(text);
         } catch (error) {
           console.error('Ошибка при преобразовании строки в объект:', error);
         }
@@ -106,6 +108,8 @@ const EditorToolbar = forwardRef(
         const contentState = ContentState.createFromText(block.question);
         const newEditorState = EditorState.createWithContent(contentState);
         setEditorState(newEditorState);
+        const text = contentState.getPlainText();
+        validateTextLength(text);
       }
     };
 
@@ -157,6 +161,7 @@ const EditorToolbar = forwardRef(
 
     const validateTextLength = (text) => {
       const maxLength = block.type === 'text' ? 1000 : 200;
+      console.log(maxLength);
       if (text.length < 20 || text.length > maxLength) {
         setIsError(true);
         setErrorText(
@@ -167,7 +172,11 @@ const EditorToolbar = forwardRef(
         return false;
       }
       setIsError(false);
-      setErrorText(effectiveErrorText.replace(' Please enter 20-200 characters', ''));
+      setErrorText(
+        maxLength === 1000
+          ? `${effectiveErrorText.includes(' Please enter 20-1000 characters') ? effectiveErrorText.replace(' Please enter 20-1000 characters', '') : ''}`
+          : `${effectiveErrorText.includes(' Please enter 20-200 characters') ? effectiveErrorText.replace(' Please enter 20-200 characters', '') : ''}`,
+      );
       return true;
     };
 
