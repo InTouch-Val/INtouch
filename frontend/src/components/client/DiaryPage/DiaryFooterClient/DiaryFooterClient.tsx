@@ -5,7 +5,7 @@ import Button from "../../../psy/button/ButtonHeadline";
 import { useFormContext, useWatch } from "react-hook-form";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 
-export default function DiaryFooterClient({ diary }) {
+export default function DiaryFooterClient({ diary, setChangesMade }) {
   const isMobileWidth = useMobileWidth();
 
   const [active, setActive] = React.useState(diary ? diary.visible : false);
@@ -14,7 +14,6 @@ export default function DiaryFooterClient({ diary }) {
   const primaryEmotionValue = getValues("primary_emotion");
   const secondEmotionValues = getValues("clarifying_emotion");
 
-  console.log(primaryEmotionValue);
 
   const [isValid, setValid] = React.useState(false);
   const [isHover, setHover] = React.useState(false);
@@ -35,6 +34,7 @@ export default function DiaryFooterClient({ diary }) {
   React.useEffect(() => {
     setValue("visible", active);
   }, [active]);
+
   return (
     <div className="diary__footer">
       <div
