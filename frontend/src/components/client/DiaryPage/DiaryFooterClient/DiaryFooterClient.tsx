@@ -1,9 +1,9 @@
 //@ts-nocheck
-import React from "react";
-import "./styles.css";
-import Button from "../../../psy/button/ButtonHeadline";
-import { useFormContext, useWatch } from "react-hook-form";
-import useMobileWidth from "../../../../utils/hook/useMobileWidth";
+import React, { useEffect } from 'react';
+import './styles.css';
+import Button from '../../../psy/button/ButtonHeadline';
+import { useFormContext, useWatch } from 'react-hook-form';
+import useMobileWidth from '../../../../utils/hook/useMobileWidth';
 
 export default function DiaryFooterClient({ diary, setChangesMade }) {
   const isMobileWidth = useMobileWidth();
@@ -11,36 +11,40 @@ export default function DiaryFooterClient({ diary, setChangesMade }) {
   const [active, setActive] = React.useState(diary ? diary.visible : false);
   const { control, setValue, getValues, watch } = useFormContext();
 
-  const primaryEmotionValue = getValues("primary_emotion");
-  const secondEmotionValues = getValues("clarifying_emotion");
-
-
   const [isValid, setValid] = React.useState(false);
   const [isHover, setHover] = React.useState(false);
   const form = useWatch({ control });
 
+  const initialFormState = React.useRef(JSON.stringify(getValues()));
+
+  const hasFormChanged = () => {
+    const currentValues = JSON.stringify(getValues());
+    return currentValues !== initialFormState.current;
+  };
+
+  useEffect(() => {
+    const valid =
+      hasFormChanged() &&
+      (form.emotion_type !== '' ||
+        form.event_details !== '' ||
+        form.thoughts_analysis !== '' ||
+        form.physical_sensations !== '');
+    setValid(valid);
+    setChangesMade(valid);
+  }, [form, hasFormChanged]);
+
+  useEffect(() => {
+    const valid = hasFormChanged();
+    setChangesMade(valid);
+  }, [form, hasFormChanged]);
+
   React.useEffect(() => {
-    if (
-      form.emotion_type != "" ||
-      form.event_details != "" ||
-      form.thoughts_analysis != "" ||
-      form.physical_sensations != ""
-    ) {
-      setValid(true);
-    } else {
-      setValid(false);
-    }
-  }, [form]);
-  React.useEffect(() => {
-    setValue("visible", active);
+    setValue('visible', active);
   }, [active]);
 
   return (
     <div className="diary__footer">
-      <div
-        className="diary__footer-shared"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="diary__footer-shared" onClick={(e) => e.stopPropagation()}>
         <div className="diary__footer-shared-text">Share with my therapist</div>
         <input
           type="checkbox"
@@ -55,21 +59,15 @@ export default function DiaryFooterClient({ diary, setChangesMade }) {
         onMouseLeave={(e) => setHover(false)}
         onMouseEnter={(e) => setHover(true)}
       >
-        <Button
-          type="submit"
-          className="diary__footer-button"
-          disabled={!isValid}
-        >
+        <Button type="submit" className="diary__footer-button" disabled={!isValid}>
           Save
         </Button>
 
         {!isValid && (
-          <span
-            className={`diary__message-valid ${!isHover && "diary__message-valid-hidden"}`}
-          >
+          <span className={`diary__message-valid ${!isHover && 'diary__message-valid-hidden'}`}>
             {isMobileWidth
-              ? "Fill in at least one question to save"
-              : "Please fill in at least one question to save your diary entry"}
+              ? 'Fill in at least one question to save'
+              : 'Please fill in at least one question to save your diary entry'}
           </span>
         )}
       </div>
