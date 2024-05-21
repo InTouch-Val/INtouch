@@ -85,7 +85,7 @@
   padding: 0;
   border: none;
   background-color: transparent;
-  background-image: url('../../../images/more-button.svg');
+  background-image: url("../../../images/more-button.svg");
   cursor: pointer;
 }
 
@@ -166,15 +166,15 @@
 }
 
 .card__action-menu-icon_type_edit {
-  background-image: url('../../../images/edit.svg');
+  background-image: url("../../../images/edit.svg");
 }
 
 .card__action-menu-icon_type_clear {
-  background-image: url('../../../images/trash.svg');
+  background-image: url("../../../images/trash.svg");
 }
 
 .card__action-menu-icon_type_duplicate {
-  background-image: url('../../../images/copy.svg');
+  background-image: url("../../../images/copy.svg");
 }
 
 .card__input-label {
@@ -223,7 +223,7 @@
   height: 13px;
   border-radius: 100%;
   background-color: #417d88;
-  content: '';
+  content: "";
   transform: translate(0.1em, 0.08em);
   transition:
     transform 0.5s,

@@ -59,7 +59,7 @@
 }
 
 .diary__block-title {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-weight: 700;
   font-size: 16px;
   color: #0b4a56;
@@ -83,7 +83,7 @@
 }
 
 .diary__block-question {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-size: 16px;
   font-weight: 500;
   line-height: 21px;
@@ -107,7 +107,7 @@
 }
 
 .diary__block-text {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-style: italic;
   font-size: 16px;
   font-weight: 500;
@@ -132,7 +132,7 @@
 }
 
 .diary__block-description {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-size: 16px;
   font-weight: 700;
   line-height: 17px;
@@ -140,7 +140,7 @@
 
 .diary__block-text-sensation {
   color: #656565;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-size: 16px;
   font-style: italic;
   font-weight: 500;
@@ -163,7 +163,7 @@
 }
 
 .diary__emotion-title {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-size: 22px;
   font-weight: 600;
   line-height: 17px;
@@ -208,7 +208,7 @@
   padding: 10px 12px 10px 12px;
   border-radius: 10px;
   border: 1px solid #b2b0ab;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-size: 20px;
   font-weight: 500;
   line-height: 17px;
