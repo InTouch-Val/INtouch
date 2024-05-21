@@ -18,14 +18,13 @@ function LoginPage() {
   const [loginAttempts, setLoginAttempts] = useState(0);
   const [waitTime, setWaitTime] = useState(60);
   const numberOfMaxLoginAttempts = 3;
-  const numberOfMinPassLegth = 8;
 
   const handleCredentialsBlur = (field, value) => {
     let newError = { ...error };
     if (field === 'email' && !isValidEmail(value)) {
       newError.email =
         'Please make sure your email address is in the format        example@example.com';
-    } else if (field === 'password' && value.length < numberOfMinPassLegth) {
+    } else if (field === 'password' && !isValidPassword(value)) {
       newError.password = 'Password must be at least 8 characters long.';
     } else {
       if (field === 'email') {
