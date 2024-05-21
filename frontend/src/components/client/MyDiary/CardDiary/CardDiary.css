@@ -79,7 +79,7 @@
   font-size: 16px;
   line-height: 17px;
   font-weight: 300;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-style: italic;
   width: 249px;
   height: 68px;
@@ -141,7 +141,7 @@
 }
 
 .button__trash {
-  background-image: url('../../../../images/trash.svg');
+  background-image: url("../../../../images/trash.svg");
   background-repeat: no-repeat;
   width: 36px;
   height: 32px;

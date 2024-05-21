@@ -1,8 +1,8 @@
-import React from 'react';
-import { useLoaderData, useParams } from 'react-router-dom';
-import MobileEmotionPage from './MobileEmotionPage';
-import { API } from '../../../../service/axios';
-import { useForm, FormProvider } from 'react-hook-form';
+import React from "react";
+import { useLoaderData, useParams } from "react-router-dom";
+import MobileEmotionPage from "./MobileEmotionPage";
+import { API } from "../../../../service/axios";
+import { useForm, FormProvider } from "react-hook-form";
 
 export const loaderEmotionsById = async ({ params }) => {
   try {
@@ -20,7 +20,7 @@ export default function MobileEmotionsRouteHandler({ type }) {
   const onSubmit = async (data) => {
     try {
       let response;
-      if (type === 'exist') {
+      if (type === "exist") {
         response = await API.patch(`/diary-notes/${id}/`, data);
       }
       return response;
@@ -31,15 +31,15 @@ export default function MobileEmotionsRouteHandler({ type }) {
 
   const methods = useForm({
     defaultValues: {
-      event_details: type === 'create' ? '' : diary.event_details,
-      thoughts_analysis: type === 'create' ? '' : diary.thoughts_analysis,
-      physical_sensations: type === 'create' ? '' : diary.physical_sensations,
-      emotion_type: type === 'create' ? '' : diary.emotion_type,
-      primary_emotion: type === 'create' ? '' : diary.primary_emotion,
-      clarifying_emotion: type === 'create' ? [] : diary.clarifying_emotion,
+      event_details: type === "create" ? "" : diary.event_details,
+      thoughts_analysis: type === "create" ? "" : diary.thoughts_analysis,
+      physical_sensations: type === "create" ? "" : diary.physical_sensations,
+      emotion_type: type === "create" ? "" : diary.emotion_type,
+      primary_emotion: type === "create" ? "" : diary.primary_emotion,
+      clarifying_emotion: type === "create" ? [] : diary.clarifying_emotion,
       visible: false,
     },
-    mode: 'all',
+    mode: "all",
   });
 
   return (

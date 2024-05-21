@@ -383,7 +383,7 @@ tr:last-child {
 }
 
 .activity-filters {
-  content: 'Status';
+  content: "Status";
   border: none;
 }
 
@@ -401,7 +401,7 @@ tr:last-child {
   display: flex;
   align-content: center;
   justify-content: center;
-  background-image: url('../images/icons/trash.svg');
+  background-image: url("../images/icons/trash.svg");
   background-repeat: no-repeat;
   width: 30px;
   height: 30px;
