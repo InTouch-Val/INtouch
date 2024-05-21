@@ -250,7 +250,9 @@ function calculateTotal(sum, tax) {
 
 - Папки именуются в нижнем регистре, слова разделяются дефисами (например, `components`, `utils`).
 - Имена файлов компонентов записываются в PascalCase (например, `MyComponent.tsx`).
-- Файлы стилей называются в соответствии с именем компонента и расширением `.module.css` или `.module.scss` (например, `MyComponent.module.scss`).
+- Файлы стилей называются c расширением `.module.css` или `.module.scss` (например, `srylest.module.scss`).
+- Реэкспорт через `index.ts`: В каждой папке компонента рекомендуется использовать файл index.ts для реэкспорта компонента. 
+- Компонент, его стиль и `index.ts` помещаются в одну папку.
 - Хуки и утилиты именуются в camelCase (например, `useFetchData.ts`, `formatDate.ts`).
 
 Пример структуры директорий:
@@ -258,10 +260,17 @@ function calculateTotal(sum, tax) {
 /components
 /MyComponent
 - MyComponent.tsx
-- MyComponent.module.css
+- styles.module.css
+- index.ts
 /utils
 - formatDate.ts
 - useFetchData.ts
+
+// В файле /components/MyComponent/index.ts
+export { default as MyComponent } from './MyComponent';
+
+// Импорт в другом файле 
+import { MyComponent } from '../components/MyComponent'
 
 
 ### Методология БЭМ
