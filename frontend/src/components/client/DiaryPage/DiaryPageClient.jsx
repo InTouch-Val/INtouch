@@ -116,14 +116,14 @@ export default function DiaryPageContentClient({ diary, type }) {
         {!showEmotionsPage ? (
           <>
             <DiaryHeaderClient diary={diary} onSubmit={onSubmit} />
-            <DiaryEventDetailsClient diary={diary} type={type} />
+            {/* <DiaryEventDetailsClient diary={diary} type={type} /> */}
             <DiaryBlockAnalysisClient diary={diary} type={type} />
             <DiaryBlockEmotionClient
               diary={diary}
               type={type}
               setShowEmotionsPage={setShowEmotionsPage}
             />
-            <DiaryBlockPhysicalSensationClient diary={diary} type={type} />
+            {/* <DiaryBlockPhysicalSensationClient diary={diary} type={type} /> */}
             <DiaryFooterClient diary={diary} />
           </>
         ) : (

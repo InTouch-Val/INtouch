@@ -6,6 +6,7 @@ import { ToolbarProvider } from '../../ToolbarContext';
 import arrow from '../../../images/arrow.svg';
 import copy from '../../../images/block-copy-btn.svg';
 import trash from '../../../images/block-trash-btn.svg';
+import useMobileWidth from '../../../utils/hook/useMobileWidth';
 
 function Block({
   block,
@@ -24,6 +25,8 @@ function Block({
   ...props
 }) {
   const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
+
+  const isMobileWidth = useMobileWidth();
 
   const handleEditorStateChange = useCallback(
     (newEditorState) => {
@@ -76,6 +79,7 @@ function Block({
               errorText={errorText}
               setErrorText={setErrorText}
               setIsError={setIsError}
+              isMobileWidth={isMobileWidth}
             />
           </ToolbarProvider>
         </div>

@@ -33,8 +33,6 @@ export default function DiaryHeaderClient({ diary, onSubmit }) {
     }
   }, [form]);
 
-  console.log(isValid);
-
   return (
     <>
       <div className="diary__header diary__header--complete">

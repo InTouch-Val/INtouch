@@ -13,8 +13,6 @@ export default function DiaryFooterClient({ diary }) {
   const primaryEmotionValue = getValues('primary_emotion');
   const secondEmotionValues = getValues('clarifying_emotion');
 
-  console.log(primaryEmotionValue);
-
   const [isValid, setValid] = React.useState(false);
   const [isHover, setHover] = React.useState(false);
   const form = useWatch({ control });

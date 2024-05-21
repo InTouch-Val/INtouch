@@ -1,11 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
-import { EditorState } from 'draft-js';
-import { EditorToolbar } from '../../../service/editors-toolbar';
 import { useAuth } from '../../../service/authContext';
-import { NavLink } from 'react-router-dom';
 import save from '../../../images/save.svg';
-import image from '../../../images/image2.svg';
-import imageGirl from '../../../images/image_girl.png';
 import arrowLeft from '../../../images/arrow-left.svg';
 import arrowBack from '../../../images/arrowBackWhite.svg';
 import sadEmote from '../../../images/sadEmote.svg';

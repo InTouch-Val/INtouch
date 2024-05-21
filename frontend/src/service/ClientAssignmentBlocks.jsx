@@ -28,8 +28,9 @@ function ClientAssignmentBlocks({
 
   const [editorState, setEditorState] = useState(() => {
     if (block.content) {
-      const content = convertFromRaw(JSON.parse(block.content));
-      return EditorState.createWithContent(content);
+      const content = typeof block.content === 'string' ? JSON.parse(block.content) : block.content;
+      const contentState = convertFromRaw(content);
+      return EditorState.createWithContent(contentState);
     }
     return EditorState.createEmpty();
   });
@@ -44,15 +45,21 @@ function ClientAssignmentBlocks({
     (newEditorState) => {
       const contentState = newEditorState.getCurrentContent();
       const inputText = contentState.getPlainText();
+
       if (inputText.length > MAX_INPUT_LENGTH) {
         const truncatedText = inputText.slice(0, MAX_INPUT_LENGTH);
         const newContentState = ContentState.createFromText(truncatedText);
         const truncatedEditorState = EditorState.createWithContent(newContentState);
+
+        const rawContent = convertToRaw(newContentState);
+        const serializedData = JSON.stringify(rawContent);
         setEditorState(truncatedEditorState);
-        updateBlock(block.id, truncatedText, []);
+        updateBlock(block.id, serializedData, []);
       } else {
+        const rawContent = convertToRaw(contentState);
+        const serializedData = JSON.stringify(rawContent);
         setEditorState(newEditorState);
-        updateBlock(block.id, inputText, []);
+        updateBlock(block.id, serializedData, []);
       }
     },
     [updateBlock, block.id],
@@ -88,7 +95,6 @@ function ClientAssignmentBlocks({
   function handleRangeClick(event) {
     updateBlock(block.id, event.target.value, []);
   }
-
 
   const isMobileWidth = useMobileWidth();
 
@@ -150,6 +156,7 @@ function ClientAssignmentBlocks({
             readOnly={isView}
             block={block}
             setEditorState={interceptSetEditorState}
+            isMobileWidth={isMobileWidth}
           />
         </ToolbarProvider>
       </div>

@@ -1,4 +1,4 @@
-import React, { useRef, forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef, useEffect } from 'react';
 import Editor from '@draft-js-plugins/editor';
 import { Separator } from '@draft-js-plugins/static-toolbar';
 import {
@@ -72,13 +72,26 @@ const EditorToolbar = forwardRef(
       return newContentState;
     };
 
-    // Функция для инициализации редактора с текстом block.description
+    console.log('block', block);
+    // Функция для инициализации редактора с текстом
     const initializeEditorWithText = () => {
+      const parseContent = (content) => {
+        try {
+          const contentObject = JSON.parse(content); // Try parsing as JSON
+          const contentState = convertFromRaw(contentObject);
+          const contentStateWithStyles = applyStylesFromCharacterList(contentState, contentObject);
+          return EditorState.createWithContent(contentStateWithStyles);
+        } catch (error) {
+          console.error('Parsing error, treating as plain text:', error);
+          const contentState = ContentState.createFromText(content);
+          return EditorState.createWithContent(contentState);
+        }
+      };
+
+      let newEditorState;
       if (block.description) {
         try {
           const descriptionObject = JSON.parse(block.description);
-          console.log(descriptionObject);
-
           const rawContentState = {
             blocks: [],
             entityMap: descriptionObject.entityMap,
@@ -103,12 +116,17 @@ const EditorToolbar = forwardRef(
           console.error('Ошибка при преобразовании строки в объект:', error);
         }
       } else if (block.reply) {
-        const contentState = ContentState.createFromText(block.reply);
-        const newEditorState = EditorState.createWithContent(contentState);
+        newEditorState = parseContent(block.reply);
+        setEditorState(newEditorState);
+      } else if (block.thoughts_analysis) {
+        newEditorState = parseContent(block.thoughts_analysis);
         setEditorState(newEditorState);
       } else if (block.question) {
         const contentState = ContentState.createFromText(block.question);
         const newEditorState = EditorState.createWithContent(contentState);
+        setEditorState(newEditorState);
+      } else {
+        newEditorState = EditorState.createEmpty();
         setEditorState(newEditorState);
       }
     };
@@ -121,7 +139,7 @@ const EditorToolbar = forwardRef(
 
     useEffect(() => {
       // Проверяем, если редактор пуст и не содержит текст block.question, добавляем плейсхолдер
-      if (!block.question && !block.description) {
+      if (!block.question && !block.description && !block.reply) {
         setEditorState(
           EditorState.push(
             editorState,
