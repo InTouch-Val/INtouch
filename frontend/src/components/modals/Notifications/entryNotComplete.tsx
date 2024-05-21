@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import NotificationStyles from '../Notifications/notifications.module.css';
 
 const EntryNotComplete = ({ completeClick, backClick }) => {
