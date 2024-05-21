@@ -13,6 +13,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import MobileEmotionPage from "../MyDiary/MobileEmotionPage/MobileEmotionPage";
 import EntryNotComplete from '../../modals/Notifications/entryNotComplete';
 import EntryUnsavedExit from '../../modals/Notifications/entryUnsavedExit';
+import Modal from '../../modals/Modal/Modal';
 
 export default function DiaryPageContentClient({ diary, type }) {
   //Changing card content and menu
@@ -36,6 +37,26 @@ export default function DiaryPageContentClient({ diary, type }) {
     },
     mode: "all",
   });
+
+  const [showExitUnsaveModal, setShowExitUnsaveModal] = useState(false);
+  const [showCompleteModal, setShowCompleteModal] = useState(false);
+  const [showEmotionsPage, setShowEmotionsPage] = useState(false);
+  const [changesMade, setChangesMade] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  React.useEffect(() => {
+    if (showModal) {
+      setShowExitUnsaveModal(true);
+    }
+  }, [showModal]);
+
+  // Ensure modal state is reset appropriately to hide it when needed
+  React.useEffect(() => {
+    if (!showExitUnsaveModal) {
+      setShowModal(false); // Reset showModal when showExitUnsaveModal is set to false
+    }
+  }, [showExitUnsaveModal]);
+
   const onSubmit = async (data) => {
     console.log(data);
 
@@ -51,6 +72,7 @@ export default function DiaryPageContentClient({ diary, type }) {
           setTimeout(() => {
             setIsSaved(false);
             setChangesMade(false);
+            setShowExitUnsaveModal(false);
             navigate("/my-diary");
           }, 1000);
         }
@@ -85,6 +107,7 @@ export default function DiaryPageContentClient({ diary, type }) {
           setTimeout(() => {
             setIsSaved(false);
             setChangesMade(false);
+            setShowExitUnsaveModal(false);
             navigate("/my-diary");
           }, 1000);
         }
@@ -109,13 +132,6 @@ export default function DiaryPageContentClient({ diary, type }) {
     }
   };
 
-  const [showEmotionsPage, setShowEmotionsPage] = useState(false);
-  const [showExitUnsaveModal, setShowExitUnsaveModal] = useState(false);
-  const [showCompleteModal, setShowCompleteModal] = useState(false);
-  const [changesMade, setChangesMade] = useState(false);
-
-  console.log();
-
   return (
     <form className="diaryPage" onSubmit={methods.handleSubmit(onSubmit)}>
       <FormProvider {...methods}>
@@ -133,7 +149,14 @@ export default function DiaryPageContentClient({ diary, type }) {
 
         {!showEmotionsPage ? (
           <>
-            <DiaryHeaderClient diary={diary} onSubmit={onSubmit} />
+            <DiaryHeaderClient
+              diary={diary}
+              onSubmit={onSubmit}
+              setShowExitUnsaveModal={setShowExitUnsaveModal}
+              changesMade={changesMade}
+              isSaved={isSaved}
+              setShowModal={setShowModal}
+            />
             <DiaryEventDetailsClient diary={diary} type={type} />
             <DiaryBlockAnalysisClient diary={diary} type={type} />
             <DiaryBlockEmotionClient
@@ -144,9 +167,17 @@ export default function DiaryPageContentClient({ diary, type }) {
             <DiaryBlockPhysicalSensationClient diary={diary} type={type} />
             <DiaryFooterClient diary={diary} setChangesMade={setChangesMade} />
 
-            {showExitUnsaveModal && changesMade && !isSaved ? (
-              <EntryUnsavedExit saveClick={onSubmit} discardClick={navigate('/my-diary')} />
-            ) : null}
+            {showExitUnsaveModal && (
+              <Modal>
+                <EntryUnsavedExit
+                  saveClick={methods.handleSubmit(onSubmit)}
+                  discardClick={() => {
+                    setShowExitUnsaveModal(false);
+                    navigate('/my-diary');
+                  }}
+                />
+              </Modal>
+            )}
 
             {showCompleteModal ? <EntryNotComplete /> : null}
           </>

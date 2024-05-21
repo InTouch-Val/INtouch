@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Controller, useFormContext, useForm } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import {
   listEmotions,
   listEmotionsChipsMobile,
@@ -19,6 +19,12 @@ export default function MobileEmotionPage({ type, id, setShowEmotionsPage }) {
 
   const clarifyingEmotionValues = getValues("clarifying_emotion");
   const primaryEmotionValue = getValues("primary_emotion");
+
+  const [isValid, setIsValid] = useState(false);
+
+  useEffect(() => {
+    setIsValid(clarifyingEmotionValues.length);
+  }, [clarifyingEmotionValues]);
 
   const [offset, setOffset] = useState(0);
   const [currentPrimaryEmotion, setCurrentPrimaryEmotion] = useState(
@@ -169,8 +175,12 @@ export default function MobileEmotionPage({ type, id, setShowEmotionsPage }) {
         onClick={handleSaveClick}
       >
         <button
+         
           type="submit"
+         
           className={MobileEmotionPageStyles.mobile_emotions__save}
+        
+          disabled={!isValid}
         >
           Save
         </button>

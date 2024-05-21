@@ -1,8 +1,8 @@
 //@ts-nocheck
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./styles.css";
 import arrowBack from "../../../../images/assignment-page/arrowBack.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import save from "../../../../images/assignment-page/save.svg";
 import { useAuth } from "../../../../service/authContext";
 import { useFormContext, useWatch } from "react-hook-form";
@@ -17,8 +17,23 @@ const options = {
   year: "numeric",
 };
 
-export default function DiaryHeaderClient({ diary, onSubmit }) {
+export default function DiaryHeaderClient({
+  diary,
+  onSubmit,
+  setShowModal,
+  changesMade,
+  isSaved,
+  showExitUnsaveModal,
+}) {
   const isMobileWidth = useMobileWidth();
+
+  const navigate = useNavigate();
+
+  const handleGoBack = useCallback(() => {
+    if (changesMade && !isSaved) {
+      setShowModal(true);
+    }
+  }, [changesMade, isSaved, setShowModal, navigate]);
 
   const { currentUser } = useAuth();
   const { handleSubmit, control } = useFormContext();
@@ -52,7 +67,15 @@ export default function DiaryHeaderClient({ diary, onSubmit }) {
         </div>
 
         <div className="buttons__container">
-          <Link to={-1}>
+          <div
+            onClick={() => {
+              if (changesMade && !isSaved) {
+                handleGoBack();
+              } else {
+                navigate(-1);
+              }
+            }}
+          >
             {isMobileWidth ? (
               <FontAwesomeIcon
                 icon={faArrowLeft}
@@ -62,20 +85,19 @@ export default function DiaryHeaderClient({ diary, onSubmit }) {
             ) : (
               <img src={arrowBack} alt="back" className="diary__img-back" />
             )}
-          </Link>
+          </div>
 
-          {isValid ? (
-            isMobileWidth ? null : (
+          {!isMobileWidth &&
+            (isValid ? (
               <img
                 src={save}
                 about="save"
                 className="diary__img-back"
                 onClick={handleSubmit(onSubmit)}
               />
-            )
-          ) : (
-            <img src={save} about="save" className="diary__img-back-unactive" />
-          )}
+            ) : (
+              <img src={save} about="save" className="diary__img-back-unactive" />
+            ))}
         </div>
       </div>
 
