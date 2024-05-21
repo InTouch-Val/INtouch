@@ -26,9 +26,12 @@ export const WithTab = (WrappedComponent) => {
       searchTerm,
       page,
       status,
+      assignments
     } = useAppSelector((state) => state.assignment);
 
     const dispatch = useAppDispatch();
+
+    console.log(assignments)
 
     const {
       data: listAssignment,
@@ -56,9 +59,6 @@ export const WithTab = (WrappedComponent) => {
       }
     );
 
-    React.useEffect(() => {
-      dispatch(changeStatusAction(isSuccess));
-    }, [isSuccess]);
 
     const toggleFavorite = async (assignmentId: number | string) => {
       const isFavorite = currentUser.doctor.assignments.find(

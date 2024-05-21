@@ -1,16 +1,22 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, EntityState } from "@reduxjs/toolkit";
 import assignmentSlice, {
   setAssignments,
   setAssignmentsFavorites,
 } from "./slices/assignments/assignmentSlice";
 import { authSlice } from "./slices/index";
-import { assignmentApi } from "./entities";
+import { assignmentAdapter, assignmentApi, assignmentSelector } from "./entities";
 import { authApi } from "./entities/auth/auth";
 
 const assignmentsMiddleware = (store) => (next) => (action) => {
   if (assignmentApi.endpoints.getAssignments.matchFulfilled(action)) {
-    store.dispatch(setAssignments(action.payload));
+    const { entities, ...originalArgs } = action.payload;
+    const selectedData = assignmentSelector.selectAll(
+      assignmentAdapter.setAll(assignmentAdapter.getInitialState(), entities)
+    );
+    const newArray = selectedData.concat(store.getState().assignment.assignments?.entities);
+    const modifiedActionPayload = { ...action.payload, entities: newArray };
+    store.dispatch(setAssignments(modifiedActionPayload));
   }
   return next(action);
 };

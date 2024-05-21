@@ -47,7 +47,7 @@ const assignmentSlice = createSlice({
   initialState: initialState,
   reducers: {
     setAssignments: (state, action) => {
-      state.assignments = action.payload.results;
+      state.assignments = action.payload;
       state.isSuccess = false;
     },
     changeTabActions: (state, action) => {
@@ -69,7 +69,7 @@ const assignmentSlice = createSlice({
     },
 
     setAssignmentsFavorites: (state, action) => {
-      state.assignmentsFavorites = action.payload.results;
+      state.assignmentsFavorites = action.payload;
       state.isSuccess = false;
     },
     changePageAction: (state, action) => {
