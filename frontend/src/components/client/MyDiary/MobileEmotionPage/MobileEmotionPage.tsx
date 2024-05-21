@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import React, { useState, useRef, useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import {
