@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Modal } from "../../../service/modal";
 import { useAuth } from "../../../service/authContext";
 import { API } from "../../../service/axios";
+import { useDeleteAssignmentByUUIDMutation } from "../../../store/entities";
 
 export default function ModalAssignments() {
   //@ts-ignore
@@ -11,10 +12,12 @@ export default function ModalAssignments() {
   const [selectedClients, setSelectedClients] = useState<any>([]);
   const [selectedAssignmentId, setSelectedAssignmentId] = useState("");
   const [ifError, setIfError] = useState(false);
-  const [errorText, setErrorText] = useState("");
+  const [errorText, setErrorText] = useState<string>("");
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const [deleteAssignmentById, _] = useDeleteAssignmentByUUIDMutation();
 
   const handleModalClose = () => {
     setIsShareModalOpen(false);
@@ -83,9 +86,7 @@ export default function ModalAssignments() {
 
   const deleteAssignment = async (assignmentId) => {
     try {
-      await API.delete(`assignments/${assignmentId}`);
-      //   console.log(assignments);
-      //   setAssignments(assignments.filter((assignment) => assignment.id !== assignmentId));
+      deleteAssignmentById(assignmentId);
       setSelectedAssignmentId("");
       handleModalClose();
     } catch (error) {

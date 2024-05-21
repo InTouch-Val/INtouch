@@ -2,9 +2,10 @@
 
 import React from "react";
 
-export const useObserve = (ref, isTotal = false, callback) => {
+export const useObserve = (ref, isTotal = false, callback, isSuccess) => {
   const observer = React.useRef();
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
+    if(!ref) return;
     const cb = (entries, observer) => {
       if (entries[0].isIntersecting) {
         callback();
@@ -14,7 +15,7 @@ export const useObserve = (ref, isTotal = false, callback) => {
       }
     };
 
-    if (!isTotal) {
+    if (!isTotal && !isSuccess) {
       observer.current = new IntersectionObserver(cb);
       observer.current.observe(ref.current);
     }
@@ -23,5 +24,5 @@ export const useObserve = (ref, isTotal = false, callback) => {
         observer.current.disconnect();
       }
     };
-  }, [isTotal]);
+  }, [ref, isTotal, callback]);
 };
