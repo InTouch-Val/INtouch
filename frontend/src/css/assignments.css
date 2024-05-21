@@ -171,7 +171,7 @@
 }
 
 .form-setting select,
-.form-setting input[type='text'] {
+.form-setting input[type="text"] {
   padding: 5px 10px;
   border: 1px solid #d7e4e7;
   border-radius: 4px;

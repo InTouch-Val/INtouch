@@ -1,10 +1,10 @@
-import globals from 'globals';
-import eslintPluginUnicorn from 'eslint-plugin-unicorn';
-import eslintConfigPrettier from 'eslint-config-prettier';
+import globals from "globals";
+import eslintPluginUnicorn from "eslint-plugin-unicorn";
+import eslintConfigPrettier from "eslint-config-prettier";
 
-import { FlatCompat } from '@eslint/eslintrc';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { FlatCompat } from "@eslint/eslintrc";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,11 +14,11 @@ const compat = new FlatCompat({
 });
 
 export default [
-  ...compat.extends('airbnb', 'plugin:react/jsx-runtime', 'airbnb/hooks'),
-  eslintPluginUnicorn.configs['flat/recommended'],
+  ...compat.extends("airbnb", "plugin:react/jsx-runtime", "airbnb/hooks"),
+  eslintPluginUnicorn.configs["flat/recommended"],
   eslintConfigPrettier,
   {
-    files: ['**/*.js', '**/*.jsx'],
+    files: ["**/*.js", "**/*.jsx"],
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -26,34 +26,34 @@ export default [
       },
       parserOptions: {
         ecmaVersion: 2023,
-        sourceType: 'module',
+        sourceType: "module",
       },
     },
     linterOptions: {
       reportUnusedDisableDirectives: true,
     },
     rules: {
-      'react/prop-types': 0,
-      'import/prefer-default-export': 'off',
-      'spaced-comment': 'off',
-      'unicorn/filename-case': 'off',
-      'react/jsx-boolean-value': 'off',
-      'jsx-a11y/label-has-associated-control': [
+      "react/prop-types": 0,
+      "import/prefer-default-export": "off",
+      "spaced-comment": "off",
+      "unicorn/filename-case": "off",
+      "react/jsx-boolean-value": "off",
+      "jsx-a11y/label-has-associated-control": [
         2,
         {
-          assert: 'either',
+          assert: "either",
         },
       ],
     },
   },
   {
-    files: ['eslint.config.js', 'vite.config.js'],
+    files: ["eslint.config.js", "vite.config.js"],
     rules: {
-      'import/no-extraneous-dependencies': 'off',
-      'no-underscore-dangle': 'off',
+      "import/no-extraneous-dependencies": "off",
+      "no-underscore-dangle": "off",
     },
   },
   {
-    ignores: ['dist'],
+    ignores: ["dist"],
   },
 ];
