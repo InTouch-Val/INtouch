@@ -109,8 +109,8 @@
   /* Отступ снизу для каждого варианта */
 }
 
-.choice-option input[type='radio'],
-.choice-option input[type='checkbox'] {
+.choice-option input[type="radio"],
+.choice-option input[type="checkbox"] {
   height: 22px;
   width: 22px;
   border: 1px solid rgba(215, 228, 231, 1);
@@ -122,7 +122,7 @@
   margin-left: 5px;
 }
 
-.choice-option input[type='text']:disabled {
+.choice-option input[type="text"]:disabled {
   border: 1px solid rgba(215, 228, 231, 1);
   box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.4);
   background-color: #e0e0e0;
@@ -196,7 +196,7 @@
   margin: 0;
 }
 
-input[type='number'] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
 
@@ -241,7 +241,7 @@ input[type='number'] {
   }
 }
 
-.range-option input[type='radio'] {
+.range-option input[type="radio"] {
   margin-right: 5px;
 }
 
@@ -259,7 +259,7 @@ input[type='number'] {
     color: #1f304f;
   }
 
-  .range-option input[type='radio'] {
+  .range-option input[type="radio"] {
     margin: 0;
   }
 }
@@ -269,7 +269,7 @@ input[type='number'] {
 .choice-input,
 .range-display,
 .range-options,
-.range-option input[type='radio'],
+.range-option input[type="radio"],
 .range-label {
   box-sizing: border-box;
   /* Добавляем это свойство к элементам */

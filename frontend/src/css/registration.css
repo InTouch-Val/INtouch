@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: center;
   background-color: rgb(225 244 248 / 35%);
-  background-image: url('https://i122.fastpic.org/big/2023/1025/d2/e4e7924e98bda72edc75d27bf95bcad2.png');
+  background-image: url("https://i122.fastpic.org/big/2023/1025/d2/e4e7924e98bda72edc75d27bf95bcad2.png");
 }
 
 .registration-form img {
@@ -117,8 +117,8 @@
   margin-bottom: 20px;
 }
 
-input[type='checkbox'],
-input[type='checkbox']:focus {
+.registration-client__checkbox-input,
+.registration-client__checkbox-input:focus {
   margin: 0;
   box-shadow: none;
   width: 22px;

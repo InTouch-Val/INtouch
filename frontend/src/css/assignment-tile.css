@@ -110,7 +110,7 @@
 
 .assignment-actions__statistics_grades::before {
   display: inline-block;
-  content: '';
+  content: "";
   width: 25px;
   height: 25px;
   background-image: url(../images/star.svg);
@@ -121,7 +121,7 @@
 
 .assignment-actions__statistics_shares::before {
   display: inline-block;
-  content: '';
+  content: "";
   width: 25px;
   height: 25px;
   background-image: url(../images/repeat.svg);
@@ -179,7 +179,7 @@
 
 .favorite-button_dropdown::before {
   display: inline-block;
-  content: '';
+  content: "";
   width: 19px;
   height: 100%;
   background: url(../images/fav_gray.svg) no-repeat;
@@ -223,7 +223,7 @@
 
 .assignment__dropdown-copy-btn::before {
   display: inline-block;
-  content: '';
+  content: "";
   width: 19px;
   height: 100%;
   background: url(../images/copy.svg) no-repeat;
@@ -232,7 +232,7 @@
 
 .assignment__dropdown-copy-btn:hover::before {
   display: inline-block;
-  content: '';
+  content: "";
   width: 19px;
   height: 100%;
   background: url(../images/copy_white.svg) no-repeat;
@@ -257,7 +257,7 @@
 
 .assignment__dropdown-delete-btn::before {
   display: inline-block;
-  content: '';
+  content: "";
   width: 19px;
   height: 100%;
   background: url(../images/trash.svg) no-repeat;
@@ -266,7 +266,7 @@
 
 .assignment__dropdown-delete-btn:hover::before {
   display: inline-block;
-  content: '';
+  content: "";
   width: 19px;
   height: 100%;
   background: url(../images/trash_white.svg) no-repeat;
@@ -464,7 +464,7 @@
 }
 
 .share-assignment__checkbox::after {
-  content: '✓'; /* Unicode символ галочки */
+  content: "✓"; /* Unicode символ галочки */
   position: absolute;
   top: 50%;
   left: 50%;
