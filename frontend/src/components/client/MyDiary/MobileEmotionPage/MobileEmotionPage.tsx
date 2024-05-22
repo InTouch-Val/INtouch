@@ -177,11 +177,8 @@ export default function MobileEmotionPage({ type, id, setShowEmotionsPage }) {
         onClick={handleSaveClick}
       >
         <button
-         
           type="submit"
-         
           className={MobileEmotionPageStyles.mobile_emotions__save}
-        
           disabled={!isValid}
         >
           Save

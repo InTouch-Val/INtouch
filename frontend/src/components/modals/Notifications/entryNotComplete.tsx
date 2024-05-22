@@ -1,11 +1,13 @@
 //@ts-nocheck
 
-import NotificationStyles from '../Notifications/notifications.module.css';
+import NotificationStyles from "../Notifications/notifications.module.css";
 
 const EntryNotComplete = ({ completeClick, backClick }) => {
   return (
     <div>
-      <p className={NotificationStyles.modal_description}>It seems not all fields are filled</p>
+      <p className={NotificationStyles.modal_description}>
+        It seems not all fields are filled
+      </p>
       <div className={NotificationStyles.modal_buttons_container}>
         <button
           className={`${NotificationStyles.modal_button} ${NotificationStyles.modal_button_highlighted}`}

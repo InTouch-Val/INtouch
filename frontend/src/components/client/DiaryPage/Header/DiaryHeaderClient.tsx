@@ -96,7 +96,11 @@ export default function DiaryHeaderClient({
                 onClick={handleSubmit(onSubmit)}
               />
             ) : (
-              <img src={save} about="save" className="diary__img-back-unactive" />
+              <img
+                src={save}
+                about="save"
+                className="diary__img-back-unactive"
+              />
             ))}
         </div>
       </div>

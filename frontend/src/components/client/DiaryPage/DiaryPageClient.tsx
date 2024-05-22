@@ -11,9 +11,9 @@ import { FormProvider, useForm } from "react-hook-form";
 import { API } from "../../../service/axios";
 import { useNavigate, useParams } from "react-router-dom";
 import MobileEmotionPage from "../MyDiary/MobileEmotionPage/MobileEmotionPage";
-import EntryNotComplete from '../../modals/Notifications/entryNotComplete';
-import EntryUnsavedExit from '../../modals/Notifications/entryUnsavedExit';
-import Modal from '../../modals/Modal/Modal';
+import EntryNotComplete from "../../modals/Notifications/entryNotComplete";
+import EntryUnsavedExit from "../../modals/Notifications/entryUnsavedExit";
+import Modal from "../../modals/Modal/Modal";
 
 export default function DiaryPageContentClient({ diary, type }) {
   //Changing card content and menu
@@ -173,7 +173,7 @@ export default function DiaryPageContentClient({ diary, type }) {
                   saveClick={methods.handleSubmit(onSubmit)}
                   discardClick={() => {
                     setShowExitUnsaveModal(false);
-                    navigate('/my-diary');
+                    navigate("/my-diary");
                   }}
                 />
               </Modal>
