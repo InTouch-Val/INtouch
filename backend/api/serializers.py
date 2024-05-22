@@ -127,7 +127,7 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Accept with company policy")
         if User.objects.filter(email=attrs["email"]).exists():
             raise serializers.ValidationError(
-                "This email address already exists.Please use a unique one."
+                "This email address already exists. Please use a unique one."
             )
         return attrs
 
