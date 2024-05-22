@@ -27,11 +27,11 @@ export default function FilterDropDown() {
         dispatch(changeSortActions(e.target.value));
         break;
       }
-      case "avarage_grade": {
+      case "average_grade": {
         dispatch(changeSortActions(e.target.value));
         break;
       }
-      case "-avarage_grade": {
+      case "-average_grade": {
         dispatch(changeSortActions(e.target.value));
         break;
       }
@@ -53,8 +53,8 @@ export default function FilterDropDown() {
         <option value="metaphor">Essay</option>
         <option value="study">Study</option>
         <option value="quiz">Quiz</option>
-        <option value="methology">Methodology</option>
-        <option value="metaphor">Metaphors</option>
+        <option value="methodology">Methodology</option>
+        <option value="metaphors">Metaphors</option>
       </select>
 
       <select
@@ -71,8 +71,8 @@ export default function FilterDropDown() {
       <select value={sortMethod} onChange={(e) => handleSortMethodChange(e)}>
         <option value="add_date">Date Created ↑</option>
         <option value="-add_date">Date Created ↓</option>
-        <option value="avarage_grade">Popularity ↑</option>
-        <option value="-avarage_grade">Popularity ↓</option>
+        <option value="average_grade">Popularity ↑</option>
+        <option value="-average_grade">Popularity ↓</option>
       </select>
     </div>
   );

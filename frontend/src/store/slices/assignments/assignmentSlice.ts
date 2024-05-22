@@ -19,10 +19,10 @@ interface AssignmentState {
     | "metaphor"
     | "study"
     | "quiz"
-    | "methology"
-    | "metaphor";
+    | "methodology "
+    | "metaphors";
 
-  activeOrder: "add_date" | "-add_date" | "avarage_grade" | "-avarage_grade";
+  activeOrder: "add_date" | "-add_date" | "average_grade" | "-average_grade";
   page: number;
   searchTerm: string | undefined;
   isSuccess: boolean
