@@ -22,4 +22,6 @@ def send_by_mail(html_message, email):
 
 def avg_grade_annotation(query: QuerySet) -> QuerySet:
     """Function for the annotation of an Assignment avarage grade."""
-    return query.annotate(avarage_grade=Avg("assignments_clients__grade", default=0))
+    return query.annotate(
+        avarage_grade=Avg("assignments_clients__grade", default=0)
+    ).order_by("-add_date")

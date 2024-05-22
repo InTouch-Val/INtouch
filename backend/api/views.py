@@ -448,8 +448,8 @@ class AssignmentAddUserMyListView(APIView):
                 examples=[
                     OpenApiExample(
                         "Successful deletion request",
-                        value={"message": "Assignment was deleted from favourites."},
                         status_codes=[int(HTTPStatus.NO_CONTENT)],
+                        value=None,
                         response_only=True,
                     )
                 ],
@@ -468,8 +468,7 @@ class AssignmentDeleteUserMyListView(APIView):
         assignment = Assignment.objects.get(pk=pk)
         user.doctor.assignments.remove(assignment)
         return Response(
-            {"message": "Assignment was deleted from favourites."},
-            HTTPStatus.NO_CONTENT,
+            status=HTTPStatus.NO_CONTENT,
         )
 
 
@@ -830,7 +829,7 @@ class AssignmentClientViewSet(
             return user.client.assignments
         query = AssignmentClient.objects.none()
         for client_user in user.doctor.clients.all():
-            query = query | client_user.client.assignments.all().filter(visible=True)
+            query = query | client_user.client.assignments.all().filter()
         return query
 
     @action(detail=True, methods=["get"])
