@@ -405,7 +405,7 @@ class DoctorUpdateClientView(generics.UpdateAPIView):
 @extend_schema_view(
     get=extend_schema(
         tags=["Assignments"],
-        summary="Add assignment to favourites",
+        summary="Add assignment to favorites",
         request=None,
         responses={
             int(HTTPStatus.CREATED): OpenApiResponse(
@@ -413,7 +413,7 @@ class DoctorUpdateClientView(generics.UpdateAPIView):
                 examples=[
                     OpenApiExample(
                         "Successful addition request",
-                        value={"message": "Assignment was added to favourites."},
+                        value={"message": "Assignment was added to favorites."},
                         status_codes=[int(HTTPStatus.CREATED)],
                         response_only=True,
                     )
@@ -433,14 +433,14 @@ class AssignmentAddUserMyListView(APIView):
         assignment = Assignment.objects.get(pk=pk)
         user.doctor.assignments.add(assignment)
         return Response(
-            {"message": "Assignment was added to favourites."}, HTTPStatus.CREATED
+            {"message": "Assignment was added to favorites."}, HTTPStatus.CREATED
         )
 
 
 @extend_schema_view(
     get=extend_schema(
         tags=["Assignments"],
-        summary="Delete assignment from favourites",
+        summary="Delete assignment from favorites",
         request=None,
         responses={
             int(HTTPStatus.NO_CONTENT): OpenApiResponse(
@@ -604,15 +604,15 @@ class AddAssignmentClientView(APIView):
                 "ordering",
                 description=(
                     "Which field to use when ordering the results. \n"
-                    "- `-avarage_grade / avarage_grade` \n"
+                    "- `-average_grade / average_grade` \n"
                     "- `-share / share` \n"
                     "- `-add_date / add_date` \n \n "
-                    "example: `-add_date,-avarage_grade,-share`"
+                    "example: `-add_date,-average_grade,-share`"
                 ),
             ),
             OpenApiParameter(
-                "favourites",
-                description=("To return favourites of a doctor."),
+                "favorites",
+                description=("To return favorites of a doctor."),
                 enum=[
                     "true",
                 ],
@@ -675,7 +675,7 @@ class AssignmentViewSet(viewsets.ModelViewSet):
         "author",
     ]
     ordering_fields = [
-        "avarage_grade",
+        "average_grade",
         "add_date",
         "share",
     ]
@@ -684,8 +684,8 @@ class AssignmentViewSet(viewsets.ModelViewSet):
     ]
 
     def get_queryset(self):
-        favourites = self.request.query_params.get("favourites") == "true"
-        if favourites:
+        favorites = self.request.query_params.get("favorites") == "true"
+        if favorites:
             return avg_grade_annotation(self.request.user.doctor.assignments)
         return avg_grade_annotation(super().get_queryset())
 
