@@ -405,7 +405,7 @@ class DoctorUpdateClientView(generics.UpdateAPIView):
 @extend_schema_view(
     get=extend_schema(
         tags=["Assignments"],
-        summary="Add assignment to favourites",
+        summary="Add assignment to favorites",
         request=None,
         responses={
             int(HTTPStatus.CREATED): OpenApiResponse(
@@ -413,7 +413,7 @@ class DoctorUpdateClientView(generics.UpdateAPIView):
                 examples=[
                     OpenApiExample(
                         "Successful addition request",
-                        value={"message": "Assignment was added to favourites."},
+                        value={"message": "Assignment was added to favorites."},
                         status_codes=[int(HTTPStatus.CREATED)],
                         response_only=True,
                     )
@@ -433,14 +433,14 @@ class AssignmentAddUserMyListView(APIView):
         assignment = Assignment.objects.get(pk=pk)
         user.doctor.assignments.add(assignment)
         return Response(
-            {"message": "Assignment was added to favourites."}, HTTPStatus.CREATED
+            {"message": "Assignment was added to favorites."}, HTTPStatus.CREATED
         )
 
 
 @extend_schema_view(
     get=extend_schema(
         tags=["Assignments"],
-        summary="Delete assignment from favourites",
+        summary="Delete assignment from favorites",
         request=None,
         responses={
             int(HTTPStatus.NO_CONTENT): OpenApiResponse(
@@ -448,8 +448,8 @@ class AssignmentAddUserMyListView(APIView):
                 examples=[
                     OpenApiExample(
                         "Successful deletion request",
-                        value={"message": "Assignment was deleted from favourites."},
                         status_codes=[int(HTTPStatus.NO_CONTENT)],
+                        value=None,
                         response_only=True,
                     )
                 ],
@@ -468,8 +468,7 @@ class AssignmentDeleteUserMyListView(APIView):
         assignment = Assignment.objects.get(pk=pk)
         user.doctor.assignments.remove(assignment)
         return Response(
-            {"message": "Assignment was deleted from favourites."},
-            HTTPStatus.NO_CONTENT,
+            status=HTTPStatus.NO_CONTENT,
         )
 
 
@@ -595,7 +594,6 @@ class AddAssignmentClientView(APIView):
                 response_only=False,
             ),
         ],
-        responses={},
     ),
     list=extend_schema(
         tags=["Assignments"],
@@ -606,19 +604,19 @@ class AddAssignmentClientView(APIView):
                 "ordering",
                 description=(
                     "Which field to use when ordering the results. \n"
-                    "- `-avarage_grade / avarage_grade` \n"
+                    "- `-average_grade / average_grade` \n"
                     "- `-share / share` \n"
-                    "- `-add_date / add_date` \n"
+                    "- `-add_date / add_date` \n \n "
+                    "example: `-add_date,-average_grade,-share`"
                 ),
+            ),
+            OpenApiParameter(
+                "favorites",
+                description=("To return favorites of a doctor."),
                 enum=[
-                    "-avarage_grade",
-                    "avarage_grade",
-                    "-share",
-                    "share",
-                    "-add_date",
-                    "add_date",
+                    "true",
                 ],
-            )
+            ),
         ],
     ),
     retrieve=extend_schema(
@@ -677,7 +675,7 @@ class AssignmentViewSet(viewsets.ModelViewSet):
         "author",
     ]
     ordering_fields = [
-        "avarage_grade",
+        "average_grade",
         "add_date",
         "share",
     ]
@@ -686,8 +684,8 @@ class AssignmentViewSet(viewsets.ModelViewSet):
     ]
 
     def get_queryset(self):
-        favourites = self.request.query_params.get("favourites") == "true"
-        if favourites:
+        favorites = self.request.query_params.get("favorites") == "true"
+        if favorites:
             return avg_grade_annotation(self.request.user.doctor.assignments)
         return avg_grade_annotation(super().get_queryset())
 
@@ -831,8 +829,8 @@ class AssignmentClientViewSet(
             return user.client.assignments
         query = AssignmentClient.objects.none()
         for client_user in user.doctor.clients.all():
-            query = query | client_user.client.assignments.all()
-        return query.filter(visible=True)
+            query = query | client_user.client.assignments.all().filter()
+        return query
 
     @action(detail=True, methods=["get"])
     def complete(self, request, pk):
@@ -892,21 +890,90 @@ class NoteViewSet(viewsets.ModelViewSet):
 @extend_schema_view(
     list=extend_schema(tags=["Diaries"], summary="Get diary notes"),
     retrieve=extend_schema(tags=["Diaries"], summary="Get diary note by id"),
-    create=extend_schema(tags=["Diaries"], summary="Create diary note"),
-    destroy=extend_schema(tags=["Diaries"], summary="Delete diary note"),
+    create=extend_schema(
+        tags=["Diaries"],
+        summary="Create diary note",
+        description="To create a diary note you have to pass text in one of the arguments below.",
+        request=DiaryNoteSerializer,
+        examples=[
+            OpenApiExample(
+                "Succesful creation request",
+                description=(
+                    "In the primary emotion choices are: \n"
+                    " - TERRIBLE \n - GOOD \n - OKAY \n - BAD \n - GREAT \n \n"
+                    "In the clarifying emotions choices are equal to Frontend. "
+                    "So check them out there, because there is **A LOT** to cover."
+                ),
+                value={
+                    "event_details": "your_text",
+                    "event_details_tags": "some_text_tags",
+                    "thoughts_analysis": "your_text",
+                    "thoughts_analysis_tags": "some_text_tags",
+                    "emotion_type": "your_text",
+                    "emotion_type_tags": "some_text_tags",
+                    "physical_sensations": "your_text",
+                    "physical_sensations_tags": "some_text_tags",
+                    "primary_emotion": "TERRIBLE",
+                    "clarifying_emotion": [
+                        "Loss",
+                        "Anxiety",
+                        "Anger",
+                    ],
+                },
+                request_only=True,
+            ),
+        ],
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(response=DiaryNoteSerializer),
+            int(HTTPStatus.BAD_REQUEST): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "When you pass emotion only",
+                        value={
+                            "message": "You can not create a diary note without text fields!"
+                        },
+                        response_only=True,
+                    ),
+                    OpenApiExample(
+                        "When you pass nothing",
+                        value={"message": "You can not create an empty diary note!"},
+                        response_only=True,
+                    ),
+                ],
+            ),
+        },
+    ),
+    destroy=extend_schema(
+        tags=["Diaries"], summary="Delete diary note", responses=None, request=None
+    ),
     update=extend_schema(
         tags=["Diaries"],
         summary="Update diary note",
-        description="Deletes values of non passed fields",
+        description="Deletes values of non passed fields.",
     ),
     partial_update=extend_schema(tags=["Diaries"], summary="Update diary note"),
-    visible=extend_schema(tags=["Diaries"], summary="Change diary note visibility"),
+    visible=extend_schema(
+        tags=["Diaries"],
+        summary="Change diary note visibility",
+        request=None,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Good request",
+                        value={"message": "Visibility changed to true / false"},
+                    ),
+                ],
+            )
+        },
+    ),
 )
 class DiaryNoteViewSet(viewsets.ModelViewSet):
     """CRUD операции над заметками в дневнике"""
 
-    # TODO: ограничить выдачу по связке доктор-заметки его клиентов
-    queryset = DiaryNote.objects.filter(visible=True)
+    queryset = DiaryNote.objects.all()
     serializer_class = DiaryNoteSerializer
     filterset_fields = [
         "author",
@@ -916,8 +983,11 @@ class DiaryNoteViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         if user.user_type == USER_TYPES[0]:
-            return DiaryNote.objects.filter(author=user)
-        return super().get_queryset()
+            return user.diary_notes
+        query = DiaryNote.objects.none()
+        for client_user in user.doctor.clients.all():
+            query = query | client_user.diary_notes.all().filter(visible=True)
+        return query
 
     @action(detail=True, methods=["POST"])
     def visible(self, request, pk):
@@ -925,7 +995,9 @@ class DiaryNoteViewSet(viewsets.ModelViewSet):
         diary_note = self.get_object()
         diary_note.visible = not diary_note.visible
         diary_note.save()
-        return Response({"message": f"Visibility changed to {diary_note.visible}"})
+        return Response(
+            {"message": f"Visibility changed to {diary_note.visible}"}, HTTPStatus.OK
+        )
 
 
 @require_GET

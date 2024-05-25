@@ -65,7 +65,10 @@ class DoctorSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     client = serializers.SerializerMethodField()
-    doctor = DoctorSerializer(required=False, read_only=True)
+    doctor = DoctorSerializer(
+        required=False,
+        read_only=True,
+    )
     password = serializers.CharField(write_only=True)
     confirm_password = serializers.CharField(write_only=True)
     email = serializers.EmailField(
@@ -632,6 +635,9 @@ class DiaryNoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = DiaryNote
         fields = "__all__"
+        read_only_fields = [
+            "visible",
+        ]
 
     def validate(self, data):
         if not data:
