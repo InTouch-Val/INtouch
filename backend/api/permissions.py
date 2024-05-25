@@ -64,6 +64,7 @@ class AssignmentAuthorOnly(BasePermission):
         ) or (
             request.user.user_type == USER_TYPES[1]
             and request.user.doctor == obj.user.doctors.first()
+            and obj.visible
         )
 
 
