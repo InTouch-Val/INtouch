@@ -502,7 +502,7 @@ class AddAssignmentClientView(APIView):
     def get(self, request, pk, client_pk):
         assignment = get_object_or_404(Assignment, pk=pk)
         client = get_object_or_404(User, pk=client_pk)
-        if not request.user.doctor.clients.filter(id=client_pk).exists():
+        if request.user.doctor != client.doctors.first():
             return Response(
                 {"message": "You cannot add assignment to not-yours client."}
             )
