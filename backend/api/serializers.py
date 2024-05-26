@@ -103,17 +103,14 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {"is_active": {"read_only": True}}
 
     def get_client(self, obj):
-        user = None
         request = self.context.get("request")
-        if request and hasattr(request, "user"):
-            user = request.user
-        if user.user_type == "client":
-            return None
-        else:
+        if request and hasattr(request, "user") and request.user.user_type != USER_TYPES[0]:
             try:
                 return ClientSerializer(obj.client).data
             except User.client.RelatedObjectDoesNotExist:
                 return None
+        else:
+            return None
 
     def validate(self, attrs):
         if len(attrs["first_name"]) < 2 or len(attrs["last_name"]) < 2:
