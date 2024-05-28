@@ -331,16 +331,16 @@ function ClientAssignmentTile({
     }
   }, [assignment]);
 
-  function onCardClick() {
+  function onCardClick(): void {
     navigate(`/clients/${clientId}/assignments/${assignment?.id}`);
     openAssignment(assignment);
   }
 
-  function onRecallClick() {
+  function onRecallClick(): void {
     handleToggleModal();
   }
 
-  const deleteClientsAssignment = async () => {
+  const deleteClientsAssignment = async (): void => {
     try {
       deleteClientAssignment(assignment.id)
       handleToggleModal();
@@ -350,7 +350,7 @@ function ClientAssignmentTile({
     }
   };
 
-  const handleToggleModal = () => setShowModal(!showModal);
+  const handleToggleModal = (): void => setShowModal(!showModal);
 
   return (
     <div
