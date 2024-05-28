@@ -4,7 +4,7 @@ import { useAuth } from "../../../service/authContext";
 import { API } from "../../../service/axios";
 import { useDeleteAssignmentByUUIDMutation } from "../../../store/entities";
 
-export default function ModalAssignments() {
+export default function ModalAssignments(): JSX.Element {
   //@ts-ignore
   const { currentUser } = useAuth();
 
@@ -19,7 +19,7 @@ export default function ModalAssignments() {
 
   const [deleteAssignmentById, _] = useDeleteAssignmentByUUIDMutation();
 
-  const handleModalClose = () => {
+  const handleModalClose = (): void => {
     setIsShareModalOpen(false);
     setIsSuccessModalOpen(false);
     setIsDeleteModalOpen(false);
@@ -29,7 +29,7 @@ export default function ModalAssignments() {
     setErrorText("");
   };
 
-  const handleShareSubmit = async () => {
+  const handleShareSubmit = async (): Promise<void> => {
     try {
       const assignmentId = selectedAssignmentId;
 
@@ -46,14 +46,14 @@ export default function ModalAssignments() {
       const res = await Promise.all(
         selectedClients.map(async (clientId) => {
           const response = await API.get(
-            `assignments/set-client/${assignmentId}/${clientId}/`,
+            `assignments/set-client/${assignmentId}/${clientId}/`
           );
           return response;
-        }),
+        })
       );
 
       const allResponsesSuccessful = res.every(
-        (response) => response.status >= 200 && response.status <= 300,
+        (response) => response.status >= 200 && response.status <= 300
       );
 
       if (allResponsesSuccessful) {
@@ -75,7 +75,7 @@ export default function ModalAssignments() {
     }
   };
 
-  const handleClientSelect = (clientId) => {
+  const handleClientSelect = (clientId: number | string): void => {
     setSelectedClients((prevSelectedClients) => {
       if (prevSelectedClients.includes(clientId)) {
         return prevSelectedClients.filter((id) => id !== clientId);
@@ -84,7 +84,7 @@ export default function ModalAssignments() {
     });
   };
 
-  const deleteAssignment = async (assignmentId) => {
+  const deleteAssignment = async (assignmentId: string): Promise<void> => {
     try {
       deleteAssignmentById(assignmentId);
       setSelectedAssignmentId("");

@@ -16,7 +16,7 @@ export default function FilterDropDown() {
 
   const [sortMethod, setSortMethod] = React.useState(TypeOrder.AddDate);
 
-  const handleSortMethodChange = (e) => {
+  const handleSortMethodChange = (e): void => {
     setSortMethod(e.target.value);
 
     switch (e.target.value) {

@@ -24,7 +24,7 @@ export default function AssignmentsPageRefactor({
   isShareModal = false,
   selectedAssignmentIdForShareModalOnClientPage,
   setSelectedAssignmentIdForShareModalOnClientPage,
-}) {
+}: Props): JSX.Element {
   const [searchTerm, setSearchTerm] = React.useState<string>("");
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -34,12 +34,12 @@ export default function AssignmentsPageRefactor({
 
   const [deleteAssignment, _] = useDeleteAssignmentByUUIDMutation();
 
-  const handleDeleteClick = (assignmentId) => {
+  const handleDeleteClick = (assignmentId: string): void => {
     deleteAssignment(assignmentId);
     setIsDeleteModalOpen(true);
   };
 
-  const handleShareButton = (assignmentId) => {
+  const handleShareButton = (assignmentId: string): void => {
     if (isShareModal) {
       setSelectedAssignmentIdForShareModalOnClientPage(assignmentId);
     } else {
@@ -48,9 +48,14 @@ export default function AssignmentsPageRefactor({
     }
   };
 
-  const handleAddAssignment = () => {
+  const handleAddAssignment = (): void => {
     navigate("/add-assignment");
   };
+
+  function handleChangeSearch(e: React.ChangeEvent<HTMLInputElement>): void {
+    setSearchTerm(e.target.value);
+    dispatch(changeSearchAction(e.target.value));
+  }
 
   const Tab = WithTab(TabsAssignments);
 
@@ -73,10 +78,7 @@ export default function AssignmentsPageRefactor({
               type="text"
               placeholder="Search..."
               value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                dispatch(changeSearchAction(e.target.value));
-              }}
+              onChange={(e) => handleChangeSearch(e)}
             />
           </div>
         )}

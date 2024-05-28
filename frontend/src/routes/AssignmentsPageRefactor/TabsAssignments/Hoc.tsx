@@ -9,7 +9,6 @@ import { useAppDispatch, useAppSelector } from "../../../store/store";
 import { changeAssignmentFavoriteByIdAction } from "../../../store/actions/assignment/assignmentActions";
 import { changePageAction, changeStatusAction } from "../../../store/slices";
 import { useInView } from "react-intersection-observer";
-import { PropsTabAssignments } from "./Tab";
 import {
   AssignmentTab,
   TypeFilter,
@@ -35,8 +34,6 @@ export const WithTab = (WrappedComponent) => {
     } = useAppSelector((state) => state.assignment);
 
     const dispatch = useAppDispatch();
-
-    console.log(assignments);
 
     const {
       data: listAssignment,
@@ -65,7 +62,7 @@ export const WithTab = (WrappedComponent) => {
       }
     );
 
-    const toggleFavorite = async (assignmentId: number | string) => {
+    const toggleFavorite = async (assignmentId: number | string): Promise<void> => {
       const isFavorite = currentUser.doctor.assignments.find(
         (item) => item == assignmentId
       );
