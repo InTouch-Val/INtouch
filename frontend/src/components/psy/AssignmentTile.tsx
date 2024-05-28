@@ -6,7 +6,7 @@ import { Modal } from "../../service/modal";
 import "../../css/assignment-tile.css";
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-import { duplicateAssignmentAction } from "../../store/actions/assignment/assignmentActions";
+import { duplicateAssignmentAction, useDeleteAssignmentClientByUUIDMutation } from "../../store/actions/assignment/assignmentActions";
 import { BlockType } from "../../utils/constants";
 import { AssignmentsType } from "../../store/entities/assignments/types";
 
@@ -19,7 +19,7 @@ const getObjectFromEditorState = (editorState: string) => JSON.stringify(editorS
 
 interface Props {
   assignment: AssignmentsType,
-  onFavoriteToogle: (id: string) => void,
+  onFavoriteToggle: (id: number | string) => void;
   isFavorite: boolean,
   onShareClick: (id: string) => void,
   isAuthor: boolean,
@@ -299,18 +299,27 @@ function AssignmentTile({
   );
 }
 
+interface PropsClient {
+  assignment: AssignmentsType,
+  onDeleteSuccess: (id: string) => void,
+  openAssignment: (card: AssignmentsType) => void,
+  clientId: string
+}
+
 function ClientAssignmentTile({
   assignment,
   onDeleteSuccess,
   openAssignment,
   clientId,
-}) {
+}: PropsClient) {
   const [isHovered, setIsHovered] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [ifError, setIfError] = useState(false);
   const [errorText, setErrorText] = useState("Can`t Recall");
   const [statusOneWord, setStatusOneWord] = useState("to-do");
   const navigate = useNavigate();
+
+  const [deleteClientAssignment, _] = useDeleteAssignmentClientByUUIDMutation()
 
   useEffect(() => {
     if (assignment.status === "to do") {
@@ -333,7 +342,7 @@ function ClientAssignmentTile({
 
   const deleteClientsAssignment = async () => {
     try {
-      await API.delete(`assignments-client/${assignment.id}/`);
+      deleteClientAssignment(assignment.id)
       handleToggleModal();
       onDeleteSuccess(assignment.id);
     } catch (e) {

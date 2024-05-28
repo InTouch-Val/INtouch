@@ -139,6 +139,18 @@ export const assignmentApi = createApi({
       }),
     }),
 
+
+    deleteAssignmentClientByUUID: build.mutation<string, string>({
+      query: (uuid) => ({
+        url: `assignments-client/${uuid}`,
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }),
+      invalidatesTags: () => [{ type: "Assignments", id: "PARTIAL-LIST" }],
+    }),
+
     deleteAssignmentByUUID: build.mutation<string, string>({
       query: (uuid) => ({
         url: `${ASSIGNMENTS_URL}/${uuid}`,
@@ -158,6 +170,7 @@ export const {
   useUpdateAssignmentByUUIDMutation,
   useGetAssignmentByUUIDQuery,
   useGetAssignmentsQuery,
+  useDeleteAssignmentClientByUUIDMutation,
 } = assignmentApi;
 
 export { assignmentAdapter, assignmentSelector };
