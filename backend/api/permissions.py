@@ -60,8 +60,11 @@ class AssignmentAuthorOnly(BasePermission):
 
     def has_object_permission(self, request, view, obj):
         return (
-            request.user.id == obj.user.id
-            or request.user.doctor == obj.user.doctors.first()
+            request.user.user_type == USER_TYPES[0] and request.user.id == obj.user.id
+        ) or (
+            request.user.user_type == USER_TYPES[1]
+            and request.user.doctor == obj.user.doctors.first()
+            and obj.visible
         )
 
 

@@ -65,7 +65,10 @@ class DoctorSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     client = serializers.SerializerMethodField()
-    doctor = DoctorSerializer(required=False, read_only=True)
+    doctor = DoctorSerializer(
+        required=False,
+        read_only=True,
+    )
     password = serializers.CharField(write_only=True)
     confirm_password = serializers.CharField(write_only=True)
     email = serializers.EmailField(
@@ -100,17 +103,14 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {"is_active": {"read_only": True}}
 
     def get_client(self, obj):
-        user = None
         request = self.context.get("request")
-        if request and hasattr(request, "user"):
-            user = request.user
-        if user.user_type == "client":
-            return None
-        else:
+        if request and hasattr(request, "user") and request.user.user_type != USER_TYPES[0]:
             try:
                 return ClientSerializer(obj.client).data
             except User.client.RelatedObjectDoesNotExist:
                 return None
+        else:
+            return None
 
     def validate(self, attrs):
         if len(attrs["first_name"]) < 2 or len(attrs["last_name"]) < 2:
@@ -125,6 +125,10 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Passwords do not match")
         if not attrs["accept_policy"]:
             raise serializers.ValidationError("Accept with company policy")
+        if User.objects.filter(email=attrs["email"]).exists():
+            raise serializers.ValidationError(
+                "This email address already exists. Please use a unique one."
+            )
         return attrs
 
     def create(self, validated_data):
@@ -628,6 +632,9 @@ class DiaryNoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = DiaryNote
         fields = "__all__"
+        read_only_fields = [
+            "visible",
+        ]
 
     def validate(self, data):
         if not data:

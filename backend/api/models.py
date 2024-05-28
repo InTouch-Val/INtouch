@@ -168,9 +168,11 @@ class Massage(models.Model):
 
 
 class DiaryNote(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="diary_notes"
+    )
     add_date = models.DateTimeField(auto_now_add=True)
-    visible = models.BooleanField(default=True)
+    visible = models.BooleanField(default=False)
     event_details = models.TextField(blank=True)
     event_details_tags = models.TextField(blank=True)
     thoughts_analysis = models.TextField(blank=True)

@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { API } from "../axios";
@@ -10,6 +9,7 @@ import eyeSlashIcon from "../../images/icons/eyeSlash.svg";
 import logo from "../../images/LogoBig.svg";
 
 function LoginPage() {
+  //@ts-ignore
   const navigate = useNavigate();
   const { login } = useAuth(); // Использование useAuth
   const [credentials, setCredentials] = useState({ email: "", password: "" });
@@ -19,13 +19,14 @@ function LoginPage() {
   const [loginAttempts, setLoginAttempts] = useState(0);
   const [waitTime, setWaitTime] = useState(60);
   const numberOfMaxLoginAttempts = 3;
+  const numberOfMinPassLegth = 8;
 
   const handleCredentialsBlur = (field, value) => {
     let newError = { ...error };
     if (field === "email" && !isValidEmail(value)) {
       newError.email =
         "Please make sure your email address is in the format        example@example.com";
-    } else if (field === "password" && !isValidPassword(value)) {
+    } else if (field === "password" && value.length < numberOfMinPassLegth) {
       newError.password = "Password must be at least 8 characters long.";
     } else {
       if (field === "email") {
