@@ -1,6 +1,10 @@
 import { ActionReducerMapBuilder, createSlice } from "@reduxjs/toolkit";
 import { AssignmentsType } from "../../entities/assignments/types";
-import { changeAssignmentFavoriteByIdAction } from "../../actions/assignment/assignmentActions";
+import {
+  changeAssignmentFavoriteByIdAction,
+  draftAssignmentAction,
+  duplicateAssignmentAction,
+} from "../../actions/assignment/assignmentActions";
 import {
   AssignmentTab,
   Status,
@@ -18,6 +22,7 @@ export type IStatusState =
 interface AssignmentState {
   assignments: AssignmentsType[] | null;
   assignmentsFavorites: AssignmentsType[] | null;
+  duplicateAssignment: AssignmentsType | null;
   activeTab:
     | AssignmentTab.library
     | AssignmentTab.favorites
@@ -53,6 +58,7 @@ interface AssignmentState {
 
 const initialState: AssignmentState = {
   assignments: null,
+  duplicateAssignment: null,
   assignmentsFavorites: null,
   activeLanguage: TypeLanguage.All,
   activeTab: AssignmentTab.library,
@@ -119,6 +125,25 @@ const assignmentSlice = createSlice({
         state.status = Status.Loading;
       })
       .addCase(changeAssignmentFavoriteByIdAction.rejected, (state, action) => {
+        state.status = Status.Error;
+      })
+      .addCase(duplicateAssignmentAction.fulfilled, (state, action) => {
+        state.duplicateAssignment = action.payload;
+        state.status = Status.Success;
+      })
+      .addCase(duplicateAssignmentAction.pending, (state, action) => {
+        state.status = Status.Loading;
+      })
+      .addCase(duplicateAssignmentAction.rejected, (state, action) => {
+        state.status = Status.Error;
+      })
+      .addCase(draftAssignmentAction.fulfilled, (state, action) => {
+        state.status = Status.Success;
+      })
+      .addCase(draftAssignmentAction.pending, (state, action) => {
+        state.status = Status.Loading;
+      })
+      .addCase(draftAssignmentAction.rejected, (state, action) => {
         state.status = Status.Error;
       });
   },

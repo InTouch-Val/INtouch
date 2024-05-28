@@ -67,3 +67,11 @@ export enum TypeFilter {
   Methodology = 'methodology',
   Metaphors = 'metaphors'
 }
+
+export enum BlockType {
+  Text = 'text',
+  Range = 'range',
+  Question = 'question',
+  Image = 'image',
+  Open = 'open',
+}

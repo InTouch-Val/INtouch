@@ -18,5 +18,33 @@ export const changeAssignmentFavoriteByIdAction = createAsyncThunk(
       console.error("Error toggling favorites:", error);
       return rejectWithValue;
     }
-  },
+  }
+);
+
+export const duplicateAssignmentAction = createAsyncThunk(
+  "assignment/duplicateAssignmentAction",
+  async (assignmentId: string, { rejectWithValue }) => {
+    try {
+      const response = await API.get(`assignments/${assignmentId}/`);
+      const data = response.data;
+      return data;
+    } catch (error) {
+      console.error("Error duplicate:", error);
+      return rejectWithValue;
+    }
+  }
+);
+
+export const draftAssignmentAction = createAsyncThunk(
+  "assignment/draftAssignmentAction",
+  async (responseAssignmentId: string, { rejectWithValue }) => {
+    try {
+      const response = await API.get(`assignments/${responseAssignmentId}/draft/`);
+      const data = response.data;
+      return data;
+    } catch (error) {
+      console.error("Error duplicate:", error);
+      return rejectWithValue;
+    }
+  }
 );

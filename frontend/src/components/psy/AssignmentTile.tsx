@@ -1,19 +1,20 @@
 //@ts-nocheck
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookmark, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { API } from "../../service/axios";
 import { Modal } from "../../service/modal";
 import "../../css/assignment-tile.css";
 import React from "react";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { duplicateAssignmentAction } from "../../store/actions/assignment/assignmentActions";
+import { BlockType } from "../../utils/constants";
 
-const formatDate = (dateString) => {
+const formatDate = (dateString: Date): Date => {
   const options = { year: "numeric", month: "short", day: "numeric" };
   return new Date(dateString).toLocaleDateString("en-US", options);
 };
 
-const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
+const getObjectFromEditorState = (editorState: string) => JSON.stringify(editorState);
 
 function AssignmentTile({
   assignment,
@@ -26,14 +27,17 @@ function AssignmentTile({
   selectedAssignmentIdForShareModalOnClientPage,
 }) {
   const [isSelected, setIsSelected] = useState(
-    assignment.id === selectedAssignmentIdForShareModalOnClientPage,
+    assignment.id === selectedAssignmentIdForShareModalOnClientPage
   );
+
+  const dispatch = useAppDispatch();
+  const { duplicateAssignment } = useAppSelector((store) => store.assignment);
 
   const [assignmentId, setAssignments] = useState<any>([]);
 
   useEffect(() => {
     setIsSelected(
-      assignment.id === selectedAssignmentIdForShareModalOnClientPage,
+      assignment.id === selectedAssignmentIdForShareModalOnClientPage
     );
   }, [selectedAssignmentIdForShareModalOnClientPage]);
 
@@ -69,15 +73,14 @@ function AssignmentTile({
     };
   }, [isDropdownOpen]);
 
-    const duplicateAssignment = async (assignmentId) => {
+  const duplicateAssignmentHandle = async (assignmentId: string): void => {
     try {
-      const response = await API.get(`assignments/${assignmentId}/`);
-      let assignmentData = response.data;
-      console.log(assignmentData);
+      dispatch(duplicateAssignmentAction(assignmentId));
+      let assignmentData = duplicateAssignment;
 
       // Подготавливаем данные для дубликата, используя ту же структуру, что и в handleSubmit
       const blockInfo = assignmentData.blocks.map((block) => {
-        if (block.type === "text") {
+        if (block.type === BlockType.Text) {
           return {
             type: block.type,
             question: block.question,
@@ -85,7 +88,7 @@ function AssignmentTile({
             choice_replies: [],
           };
         }
-        if (block.type === "range") {
+        if (block.type === BlockType.Range) {
           return {
             type: block.type,
             question: block.question,
@@ -95,14 +98,14 @@ function AssignmentTile({
             right_pole: block.rightPole || "Right Pole",
           };
         }
-        if (block.type === "image") {
+        if (block.type === BlockType.Image) {
           return {
             type: block.type,
             question: block.question,
             image: block.image,
           };
         }
-        if (block.type === "open") {
+        if (block.type === BlockType.Open) {
           return {
             type: block.type,
             question: block.question,
@@ -117,7 +120,7 @@ function AssignmentTile({
 
       const duplicateData = {
         blocks: blockInfo,
-        title: assignmentData.title + " COPY",
+        title: `${assignmentData.title} + COPY`,
         text: assignmentData.text,
         assignment_type: assignmentData.assignment_type,
         tags: assignmentData.tags,
@@ -140,7 +143,7 @@ function AssignmentTile({
       const responseAssignmentId = duplicateResponse.data.id;
 
       // Если задание должно быть сохранено как черновик, выполняем GET запрос
-      await API.get(`assignments/${responseAssignmentId}/draft/`);
+      await dispatch(draftAssignmentAction(responseAssignmentId));
       duplicateResponse.data.is_public = false;
 
       // Если все прошло успешно, добавляем дубликат в список заданий
@@ -154,7 +157,6 @@ function AssignmentTile({
       console.error("Error duplicating assignment:", error);
     }
   };
-
 
   return (
     <div
@@ -197,7 +199,7 @@ function AssignmentTile({
                         className="assignment__dropdown-copy-btn"
                         onClick={(event) => {
                           event.stopPropagation();
-                          duplicateAssignment(assignment.id);
+                          duplicateAssignmentHandle(assignment.id);
                         }}
                       >
                         Duplicate
@@ -231,7 +233,7 @@ function AssignmentTile({
             </>
           )}
         </div>
-        <img loading='lazy' alt="Loading..." src={assignment.image_url} />
+        <img loading="lazy" alt="Loading..." src={assignment.image_url} />
       </div>
       <div className="assignment-info">
         <h3>{assignment.title}</h3>
