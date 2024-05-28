@@ -54,7 +54,7 @@ export const assignmentApi = createApi({
         url: `${ASSIGNMENTS_URL}?${limit ? `limit=${limit} ` : ""}&page=${page}${author ? `&author=${author}` : ""}${favorite ? `&favourites=${favorite}` : ""}${language ? `&language=${language}` : ""}${assignmentType ? `&assignment_type=${assignmentType}` : ""}&ordering=${ordering}${search ? `&search=${search}` : ""}`.replace(
           /\s+/g,
           ""
-        ),
+        ), // regex удаляет все пробелы в строке
         method: "GET",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,

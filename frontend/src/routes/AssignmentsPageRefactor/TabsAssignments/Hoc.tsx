@@ -10,6 +10,11 @@ import { changeAssignmentFavoriteByIdAction } from "../../../store/actions/assig
 import { changePageAction, changeStatusAction } from "../../../store/slices";
 import { useInView } from "react-intersection-observer";
 import { PropsTabAssignments } from "./Tab";
+import {
+  AssignmentTab,
+  TypeFilter,
+  TypeLanguage,
+} from "../../../utils/constants";
 
 export const WithTab = (WrappedComponent) => {
   return function WithTabComponent(props) {
@@ -26,12 +31,12 @@ export const WithTab = (WrappedComponent) => {
       searchTerm,
       page,
       status,
-      assignments
+      assignments,
     } = useAppSelector((state) => state.assignment);
 
     const dispatch = useAppDispatch();
 
-    console.log(assignments)
+    console.log(assignments);
 
     const {
       data: listAssignment,
@@ -41,11 +46,12 @@ export const WithTab = (WrappedComponent) => {
       {
         limit: 15,
         page: page,
-        author: activeTab == "my-list" ? currentUser.id : undefined,
-        favorite: activeTab == "favorites" && true,
-        language: activeLanguage !== "all" ? activeLanguage : undefined,
+        author: activeTab == AssignmentTab.myList ? currentUser.id : undefined,
+        favorite: activeTab == AssignmentTab.favorites && true,
+        language:
+          activeLanguage !== TypeLanguage.All ? activeLanguage : undefined,
         assignmentType:
-          activeFilterType !== "all" ? activeFilterType : undefined,
+          activeFilterType !== TypeFilter.All ? activeFilterType : undefined,
         ordering: activeOrder,
         search: searchTerm,
       },
@@ -58,7 +64,6 @@ export const WithTab = (WrappedComponent) => {
         }),
       }
     );
-
 
     const toggleFavorite = async (assignmentId: number | string) => {
       const isFavorite = currentUser.doctor.assignments.find(

@@ -1,40 +1,63 @@
 import { ActionReducerMapBuilder, createSlice } from "@reduxjs/toolkit";
 import { AssignmentsType } from "../../entities/assignments/types";
 import { changeAssignmentFavoriteByIdAction } from "../../actions/assignment/assignmentActions";
-import { Status } from "../../../utils/constants";
+import {
+  AssignmentTab,
+  Status,
+  TypeFilter,
+  TypeLanguage,
+  TypeOrder,
+} from "../../../utils/constants";
 
-export type IStatusState = "init" | "success" | "loading" | "error";
+export type IStatusState =
+  | Status.Init
+  | Status.Success
+  | Status.Loading
+  | Status.Error;
 
 interface AssignmentState {
   assignments: AssignmentsType[] | null;
   assignmentsFavorites: AssignmentsType[] | null;
-  activeTab: "library" | "favorites" | "my-list";
+  activeTab:
+    | AssignmentTab.library
+    | AssignmentTab.favorites
+    | AssignmentTab.myList;
   status: IStatusState;
   message: string | undefined;
-  activeLanguage: "all" | "en" | "es" | "fr" | "de" | "it";
+  activeLanguage:
+    | TypeLanguage.All
+    | TypeLanguage.En
+    | TypeLanguage.Es
+    | TypeLanguage.Fr
+    | TypeLanguage.De
+    | TypeLanguage.It;
   activeFilterType:
-    | "all"
-    | "lesson"
-    | "exercise"
-    | "metaphor"
-    | "study"
-    | "quiz"
-    | "methodology "
-    | "metaphors";
+    | TypeFilter.All
+    | TypeFilter.Lesson
+    | TypeFilter.Exercise
+    | TypeFilter.Metaphor
+    | TypeFilter.Study
+    | TypeFilter.Quiz
+    | TypeFilter.Methodology
+    | TypeFilter.Metaphors;
 
-  activeOrder: "add_date" | "-add_date" | "average_grade" | "-average_grade";
+  activeOrder:
+    | TypeOrder.AddDate
+    | TypeOrder.DecDate
+    | TypeOrder.Popularity
+    | TypeOrder.NoPopularity;
   page: number;
   searchTerm: string | undefined;
-  isSuccess: boolean
+  isSuccess: boolean;
 }
 
 const initialState: AssignmentState = {
   assignments: null,
   assignmentsFavorites: null,
-  activeLanguage: "all",
-  activeTab: "library",
-  activeFilterType: "all",
-  activeOrder: "add_date",
+  activeLanguage: TypeLanguage.All,
+  activeTab: AssignmentTab.library,
+  activeFilterType: TypeFilter.All,
+  activeOrder: TypeOrder.AddDate,
   status: Status.Init,
   message: "default",
   page: 1,
@@ -110,7 +133,7 @@ export const {
   setAssignmentsFavorites,
   changePageAction,
   changeSearchAction,
-  changeStatusAction
+  changeStatusAction,
 } = assignmentSlice.actions;
 
 export default assignmentSlice.reducer;
