@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { useState, useEffect } from "react";
+import { useState, useEffect, SetStateAction } from "react";
 import { useNavigate } from "react-router-dom";
 import { API } from "../../service/axios";
 import { Modal } from "../../service/modal";
@@ -8,6 +8,7 @@ import React from "react";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { duplicateAssignmentAction } from "../../store/actions/assignment/assignmentActions";
 import { BlockType } from "../../utils/constants";
+import { AssignmentsType } from "../../store/entities/assignments/types";
 
 const formatDate = (dateString: Date): Date => {
   const options = { year: "numeric", month: "short", day: "numeric" };
@@ -15,6 +16,17 @@ const formatDate = (dateString: Date): Date => {
 };
 
 const getObjectFromEditorState = (editorState: string) => JSON.stringify(editorState);
+
+interface Props {
+  assignment: AssignmentsType,
+  onFavoriteToogle: (id: string) => void,
+  isFavorite: boolean,
+  onShareClick: (id: string) => void,
+  isAuthor: boolean,
+  onDeleteClick: (id: string) => void,
+  isShareModal: boolean,
+  selectedAssignmentIdForShareModalOnClientPage: string
+}
 
 function AssignmentTile({
   assignment,
@@ -25,7 +37,7 @@ function AssignmentTile({
   onDeleteClick,
   isShareModal,
   selectedAssignmentIdForShareModalOnClientPage,
-}) {
+}: Props) {
   const [isSelected, setIsSelected] = useState(
     assignment.id === selectedAssignmentIdForShareModalOnClientPage
   );
