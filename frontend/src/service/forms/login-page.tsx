@@ -16,12 +16,11 @@ function LoginPage() {
   const [error, setError] = useState({ email: "", password: "", login: "" });
   const [passwordShown, setPasswordShown] = useState(false);
   const [isValidCredentials, setIsValidCredentials] = useState(false);
-  const [loginAttempts, setLoginAttempts] = useState(0);
+  const [tooMuchLoginAttempts, setTooMuchLoginAttempts] = useState(false);
   const [waitTime, setWaitTime] = useState(60);
-  const numberOfMaxLoginAttempts = 3;
   const numberOfMinPassLegth = 8;
 
-  const handleCredentialsBlur = (field, value) => {
+  const handleCredentialsBlur = (field: string, value: string) => {
     let newError = { ...error };
     if (field === "email" && !isValidEmail(value)) {
       newError.email =
@@ -46,23 +45,23 @@ function LoginPage() {
 
   useEffect(() => {
     let timerId;
-    if (loginAttempts >= numberOfMaxLoginAttempts) {
+    if (tooMuchLoginAttempts) {
       timerId = setInterval(() => {
         setWaitTime((prevTime) => prevTime - 1);
-        if (waitTime === 0) {
+        if (waitTime <= 0) {
           clearInterval(timerId);
-          setLoginAttempts(0);
+          setTooMuchLoginAttempts(false);
         }
       }, 1000);
     }
     return () => clearInterval(timerId);
-  }, [loginAttempts, waitTime]);
+  }, [tooMuchLoginAttempts, waitTime]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     // Если количество попыток достигло 3, отключаем кнопку входа
-    if (loginAttempts >= numberOfMaxLoginAttempts) {
+    if (tooMuchLoginAttempts) {
       return;
     }
 
@@ -81,19 +80,26 @@ function LoginPage() {
         login(response.data.access, response.data.refresh);
         navigate("/");
         // Сбрасываем количество попыток и время ожидания при успешном входе
-        setLoginAttempts(0);
+        setTooMuchLoginAttempts(false);
         setWaitTime(60);
       } else {
         setError({ ...error, login: "Something went wrong. Please try again" });
-        setLoginAttempts(loginAttempts + 1);
       }
     } catch (error) {
-      const message =
-        error.response?.data.detail || "An error occurred while logging in.";
+      console.log(error);
+      let message: string;
+      if (error.response.status === 401) {
+        message = "Invalid username or password. Please try again";
+      } else if (error.response.status === 429) {
+        message = "";
+        setTooMuchLoginAttempts(true);
+      } else {
+        message =
+          error.response?.data.detail || "An error occurred while logging in.";
+      }
       // Добавляем ошибку ввода в состояние
       setError({ ...error, login: message });
       console.error("Login error:", error);
-      setLoginAttempts(loginAttempts + 1);
     }
   };
 
@@ -122,7 +128,7 @@ function LoginPage() {
 
           <div className="password-field">
             <input
-              className={`input ${error.email || error.login ? "error" : ""}`}
+              className={`input ${error.password || error.login ? "error" : ""}`}
               type={passwordShown ? "text" : "password"}
               id="password"
               placeholder="Password"
@@ -151,7 +157,7 @@ function LoginPage() {
           {error.email && <div>{error.email}</div>}
           {error.password && <div>{error.password}</div>}
           {error.login && <div>{error.login}</div>}
-          {loginAttempts >= numberOfMaxLoginAttempts && (
+          {tooMuchLoginAttempts && (
             <div>
               Too many login attempts. Please try again in {waitTime} seconds.
             </div>
@@ -163,7 +169,10 @@ function LoginPage() {
             type="submit"
             className="action-button action-button_register-login"
             disabled={
-              !isValidCredentials || loginAttempts >= numberOfMaxLoginAttempts
+              !isValidCredentials ||
+              tooMuchLoginAttempts ||
+              credentials.email.length === 0 ||
+              credentials.password.length === 0
             }
           >
             Login
