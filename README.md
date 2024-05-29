@@ -250,7 +250,7 @@ function calculateTotal(sum, tax) {
 
 - Папки именуются в нижнем регистре, слова разделяются дефисами (например, `components`, `utils`).
 - Имена файлов компонентов записываются в PascalCase (например, `MyComponent.tsx`).
-- Файлы стилей называются c расширением `.module.css` или `.module.scss` (например, `srylest.module.scss`).
+- Файлы стилей называются c расширением `.module.css` или `.module.scss` (например, `styles.module.scss`).
 - Реэкспорт через `index.ts`: В каждой папке компонента рекомендуется использовать файл index.ts для реэкспорта компонента. 
 - Компонент, его стиль и `index.ts` помещаются в одну папку.
 - Хуки и утилиты именуются в camelCase (например, `useFetchData.ts`, `formatDate.ts`).
