@@ -5,9 +5,9 @@ import {
   listEmotionsChips,
 } from '../../../psy/DiaryPageContent/DiaryBlockEmotion/constants';
 import { ToolbarProvider } from '../../../../service/ToolbarContext';
-import { EditorState, convertFromRaw } from 'draft-js';
+import { EditorState, convertFromRaw, convertToRaw, ContentState } from 'draft-js';
 import { EditorToolbar } from '../../../../service/editors-toolbar';
-import { Controller, useFormContext, useWatch } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import DiaryBlockEmotionClientMobile from './DiaryBlockEmotionClientMobile';
 import useMobileWidth from '../../../../utils/hook/useMobileWidth';
 
@@ -15,41 +15,39 @@ export default function DiaryBlockEmotionClient({ diary, type, setShowEmotionsPa
   const isMobileWidth = useMobileWidth();
 
   const editorRef = useRef(null);
-  const { control, setValue, watch, getValues } = useFormContext();
-  const primaryEmotionActive = useWatch({ control, name: 'primary_emotion' });
+  const { control, setValue, getValues } = useFormContext();
   const primaryEmotionValue = getValues('primary_emotion');
-  const secondEmotionActive = watch('clarifying_emotion');
   const secondEmotionValues = getValues('clarifying_emotion');
 
-  const content = {
-    blocks: [
-      {
-        key: 'abcde',
-        text: diary ? diary.emotion_type : ' ',
-        type: 'open',
-        depth: 0,
-        inlineStyleRanges: [],
-        entityRanges: [],
-        data: {},
-      },
-    ],
-    entityMap: {},
-  };
-
-  const contentState = convertFromRaw(content);
-  const [editorState, setEditorState] = useState(() =>
-    type == 'exist' ? EditorState.createWithContent(contentState) : EditorState.createEmpty(),
-  );
   const block = {
     type: 'open',
-    question: 'd',
+    question: getValues('emotion_type'),
     description: 'd',
   };
+
+  const [editorState, setEditorState] = useState(() => {
+    if (diary && diary.emotion_type) {
+      let content;
+      try {
+        content = JSON.parse(diary.emotion_type);
+        if (typeof content === 'object') {
+          const contentState = convertFromRaw(content);
+          return EditorState.createWithContent(contentState);
+        }
+      } catch (error) {
+        console.error('Failed to parse JSON:', error);
+        const contentState = ContentState.createFromText(diary.emotion_type);
+        return EditorState.createWithContent(contentState);
+      }
+    }
+    return EditorState.createEmpty();
+  });
+
   const handleEditorStateChange = (newEditorState) => {
     setEditorState(newEditorState);
     const contentState = newEditorState.getCurrentContent();
-    const text = contentState.getPlainText();
-    setValue('emotion_type', text);
+    const rawContent = convertToRaw(contentState);
+    setValue('emotion_type', JSON.stringify(rawContent));
   };
 
   function handleClickSecondEmotion(item) {

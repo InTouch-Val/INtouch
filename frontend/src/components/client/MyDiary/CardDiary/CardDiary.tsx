@@ -4,6 +4,7 @@ import Button from '../../../psy/button/ButtonHeadline';
 import { useNavigate } from 'react-router-dom';
 import { API } from '../../../../service/axios';
 import { getDate } from '../../../../utils/helperFunction/getDate';
+import { convertFromRaw, ContentState } from 'draft-js';
 
 export default function CardDiaryClient({ card, setFetching, openModal }) {
   const navigate = useNavigate();
@@ -25,6 +26,26 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
     }
   };
 
+  console.log(card)
+
+
+  const parseText = () => {
+    let content;
+    try {
+      content = JSON.parse(card.event_details);
+      if (typeof content === 'object') {
+        const contentState = convertFromRaw(content);
+        const text = contentState.getPlainText();
+        return text.trim() ? text : "Write your answer here...";
+      }
+    } catch (error) {
+      console.error('Failed to parse JSON:', error);
+      return card.event_details.trim() ? card.event_details : "Write your answer here...";
+    }
+    return '';
+  };
+
+
   return (
     <div className="diary__card" onClick={() => goDiary()}>
       <div className="diary__card-header">
@@ -42,7 +63,7 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
           }}
         />
       </div>
-      <div className="diary__card-text">{card.event_details}</div>
+      <div className="diary__card-text">{parseText()}</div>
 
       <div className="diary__card-buttons" onClick={(e) => e.stopPropagation()}>
         {card.primary_emotion != '' && (

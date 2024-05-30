@@ -1,47 +1,60 @@
 import React, { useRef, useState, useEffect } from 'react';
 import '../DiaryPage.css';
-import { EditorState, convertFromRaw } from 'draft-js';
+import { EditorState, convertFromRaw, convertToRaw, ContentState } from 'draft-js';
 import { EditorToolbar } from '../../../../service/editors-toolbar';
 import { ToolbarProvider } from '../../../../service/ToolbarContext';
-import { Controller, useFormContext, useWatch } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import useMobileWidth from '../../../../utils/hook/useMobileWidth';
 
 export default function DiaryBlockPhysicalSensationClient({ diary, type }) {
   const isMobileWidth = useMobileWidth();
 
   const editorRef = useRef(null);
-  const { control, setValue } = useFormContext();
-  const content = {
-    blocks: [
-      {
-        key: 'abcde',
-        text: diary ? diary.physical_sensations : '',
-        type: 'open',
-        depth: 0,
-        inlineStyleRanges: [],
-        entityRanges: [],
-        data: {},
-      },
-    ],
-    entityMap: {},
-  };
+  const { control, setValue, getValues } = useFormContext();
+  // const content = {
+  //   blocks: [
+  //     {
+  //       key: 'abcde',
+  //       text: diary ? diary.physical_sensations : '',
+  //       type: 'open',
+  //       depth: 0,
+  //       inlineStyleRanges: [],
+  //       entityRanges: [],
+  //       data: {},
+  //     },
+  //   ],
+  //   entityMap: {},
+  // };
 
-  const contentState = convertFromRaw(content);
-  const [editorState, setEditorState] = useState(() =>
-    type == 'exist' ? EditorState.createWithContent(contentState) : EditorState.createEmpty(),
-  );
   const block = {
     type: 'open',
-    question: 'd',
+    question: getValues('physical_sensations'),
     description: 'd',
   };
+
+  const [editorState, setEditorState] = useState(() => {
+    if (diary && diary.physical_sensations) {
+      let content;
+      try {
+        content = JSON.parse(diary.physical_sensations);
+        if (typeof content === 'object') {
+          const contentState = convertFromRaw(content);
+          return EditorState.createWithContent(contentState);
+        }
+      } catch (error) {
+        console.error('Failed to parse JSON:', error);
+        const contentState = ContentState.createFromText(diary.physical_sensations);
+        return EditorState.createWithContent(contentState);
+      }
+    }
+    return EditorState.createEmpty();
+  });
 
   const handleEditorStateChange = (newEditorState) => {
     setEditorState(newEditorState);
     const contentState = newEditorState.getCurrentContent();
-    const text = contentState.getPlainText();
-
-    setValue('physical_sensations', text);
+    const rawContent = convertToRaw(contentState);
+    setValue('physical_sensations', JSON.stringify(rawContent));
   };
 
   return (

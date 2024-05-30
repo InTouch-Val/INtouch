@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import '../DiaryPage.css';
-import { EditorState, convertFromRaw } from 'draft-js';
+import { EditorState, convertFromRaw, convertToRaw, ContentState } from 'draft-js';
 import { ToolbarProvider } from '../../../../service/ToolbarContext';
 import { EditorToolbar } from '../../../../service/editors-toolbar';
 import { Controller, useFormContext } from 'react-hook-form';
@@ -8,41 +8,41 @@ import useMobileWidth from '../../../../utils/hook/useMobileWidth';
 
 export default function DiaryBlockAnalysisClient({ diary, type }) {
   const isMobileWidth = useMobileWidth();
+  const { control, setValue, getValues } = useFormContext();
 
   const editorRef = useRef(null);
-  const content = {
-    blocks: [
-      {
-        key: 'abcde',
-        text: diary ? diary.thoughts_analysis : ' ',
-        type: 'open',
-        depth: 0,
-        inlineStyleRanges: [],
-        entityRanges: [],
-        data: {},
-      },
-    ],
-    entityMap: {},
-  };
 
-  const contentState = convertFromRaw(content);
-  const [editorState, setEditorState] = useState(() =>
-    type == 'exist' ? EditorState.createWithContent(contentState) : EditorState.createEmpty(),
-  );
+  const [editorState, setEditorState] = useState(() => {
+    if (diary && diary.thoughts_analysis) {
+      let content;
+      try {
+        content = JSON.parse(diary.thoughts_analysis);
+        if (typeof content === 'object') {
+          const contentState = convertFromRaw(content);
+          return EditorState.createWithContent(contentState);
+        }
+      } catch (error) {
+        console.error('Failed to parse JSON:', error);
+        const contentState = ContentState.createFromText(diary.thoughts_analysis);
+        return EditorState.createWithContent(contentState);
+      }
+    }
+    return EditorState.createEmpty();
+  });
+
   const block = {
     type: 'open',
-    question: 'd',
+    question: getValues('thoughts_analysis'),
     description: 'd',
   };
 
   const handleEditorStateChange = (newEditorState) => {
     setEditorState(newEditorState);
     const contentState = newEditorState.getCurrentContent();
-    const text = contentState.getPlainText();
-    setValue('thoughts_analysis', text);
+    const rawContent = convertToRaw(contentState);
+    setValue('thoughts_analysis', JSON.stringify(rawContent));
   };
 
-  const { control, setValue } = useFormContext();
   return (
     <div className="diary__block-event">
       <div className="diary__block-title">Thoughts Analysis</div>
@@ -57,6 +57,7 @@ export default function DiaryBlockAnalysisClient({ diary, type }) {
           <ToolbarProvider>
             <EditorToolbar
               {...fieldsProps}
+              key="diary_analysis"
               ref={editorRef}
               editorState={editorState}
               setEditorState={handleEditorStateChange}

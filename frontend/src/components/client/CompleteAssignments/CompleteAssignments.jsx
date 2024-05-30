@@ -282,6 +282,8 @@ function CompleteAssignments() {
     //sends complete task without rate
     const blockInfo = blocks.map(transformBlock);
 
+    console.log('blocks', blockInfo);
+
     try {
       console.log(blockInfo);
       const res = await API.patch(`assignments-client/${assignmentData.id}/`, {

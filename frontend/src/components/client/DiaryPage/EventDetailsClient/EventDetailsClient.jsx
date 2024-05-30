@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import '../DiaryPage.css';
 import { ToolbarProvider } from '../../../../service/ToolbarContext';
 import { EditorToolbar } from '../../../../service/editors-toolbar';
-import { EditorState, convertFromRaw } from 'draft-js';
+import { EditorState, convertFromRaw, convertToRaw, ContentState } from 'draft-js';
 import { Controller, useFormContext } from 'react-hook-form';
 import useMobileWidth from '../../../../utils/hook/useMobileWidth';
 
@@ -10,39 +10,39 @@ export default function EventDetailsClient({ diary, type }) {
   const isMobileWidth = useMobileWidth();
 
   const editorRef = useRef(null);
-  const content = {
-    blocks: [
-      {
-        key: 'abcde',
-        text: diary ? diary.event_details : '',
-        type: 'open',
-        depth: 0,
-        inlineStyleRanges: [],
-        entityRanges: [],
-        data: {},
-      },
-    ],
-    entityMap: {},
-  };
-  const contentState = convertFromRaw(content);
-  const [editorState, setEditorState] = useState(() =>
-    type == 'exist' ? EditorState.createWithContent(contentState) : EditorState.createEmpty(),
-  );
+
+  const { control, setValue, getValues } = useFormContext();
+
+  const [editorState, setEditorState] = useState(() => {
+    if (diary && diary.event_details) {
+      let content;
+      try {
+        content = JSON.parse(diary.event_details);
+        if (typeof content === 'object') {
+          const contentState = convertFromRaw(content);
+          return EditorState.createWithContent(contentState);
+        }
+      } catch (error) {
+        console.error('Failed to parse JSON:', error);
+        const contentState = ContentState.createFromText(diary.event_details);
+        return EditorState.createWithContent(contentState);
+      }
+    }
+    return EditorState.createEmpty();
+  });
 
   const block = {
     type: 'open',
-    question: 'd',
+    question: getValues('event_details'),
     description: 'd',
   };
 
   const handleEditorStateChange = (newEditorState) => {
     setEditorState(newEditorState);
     const contentState = newEditorState.getCurrentContent();
-    const text = contentState.getPlainText();
-    setValue('event_details', text);
+    const rawContent = convertToRaw(contentState);
+    setValue('event_details', JSON.stringify(rawContent));
   };
-
-  const { control, setValue } = useFormContext();
 
   return (
     <div className="diary__block-event">
@@ -57,6 +57,7 @@ export default function EventDetailsClient({ diary, type }) {
           <ToolbarProvider>
             <EditorToolbar
               {...fieldsProps}
+              key="diary_event"
               ref={editorRef}
               editorState={editorState}
               setEditorState={handleEditorStateChange}

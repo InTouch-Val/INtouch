@@ -14,7 +14,7 @@ import '@draft-js-plugins/static-toolbar/lib/plugin.css';
 import '../css/editorsBar.css';
 import { useToolbar } from './ToolbarContext'; // Импортируем хук для использования контекста
 import { EditorState, ContentState, convertFromRaw } from 'draft-js';
-import { Modifier, SelectionState } from 'draft-js';
+import { Modifier } from 'draft-js';
 
 const EditorToolbar = forwardRef(
   (
@@ -30,7 +30,7 @@ const EditorToolbar = forwardRef(
     },
     ref,
   ) => {
-    const { toolbarPlugin, setToolbarPlugin } = useToolbar(); // Используем контекст
+    const { toolbarPlugin } = useToolbar(); // Используем контекст
     const { Toolbar } = toolbarPlugin;
     const plugins = [toolbarPlugin];
 
@@ -72,12 +72,11 @@ const EditorToolbar = forwardRef(
       return newContentState;
     };
 
-    console.log('block', block);
     // Функция для инициализации редактора с текстом
     const initializeEditorWithText = () => {
       const parseContent = (content) => {
         try {
-          const contentObject = JSON.parse(content); // Try parsing as JSON
+          const contentObject = JSON.parse(content);
           const contentState = convertFromRaw(contentObject);
           const contentStateWithStyles = applyStylesFromCharacterList(contentState, contentObject);
           return EditorState.createWithContent(contentStateWithStyles);
@@ -101,25 +100,19 @@ const EditorToolbar = forwardRef(
             const block = descriptionObject.blockMap[blockKey];
             rawContentState.blocks.push(block);
           }
-          console.log(rawContentState);
 
           const contentState = convertFromRaw(rawContentState);
           const contentStateWithStyles = applyStylesFromCharacterList(
             contentState,
             rawContentState,
           );
-          console.log(contentStateWithStyles);
           const newEditorState = EditorState.createWithContent(contentStateWithStyles);
-          console.log(newEditorState);
           setEditorState(newEditorState);
         } catch (error) {
           console.error('Ошибка при преобразовании строки в объект:', error);
         }
       } else if (block.reply) {
         newEditorState = parseContent(block.reply);
-        setEditorState(newEditorState);
-      } else if (block.thoughts_analysis) {
-        newEditorState = parseContent(block.thoughts_analysis);
         setEditorState(newEditorState);
       } else if (block.question) {
         const contentState = ContentState.createFromText(block.question);
@@ -134,8 +127,8 @@ const EditorToolbar = forwardRef(
     // Инициализация редактора при монтировании компонента
     useEffect(() => {
       initializeEditorWithText();
-      setTimeout(focusEditor, 10000); // Отложенное выполнение фокусировки
-    }, []); // Пустой массив зависимостей означает, что эффект будет вызван только при монтировании компонента
+      setTimeout(focusEditor, 100); // Отложенное выполнение фокусировки
+    }, [isMobileWidth]); // Пустой массив зависимостей означает, что эффект будет вызван только при монтировании компонента
 
     useEffect(() => {
       // Проверяем, если редактор пуст и не содержит текст block.question, добавляем плейсхолдер
@@ -148,7 +141,7 @@ const EditorToolbar = forwardRef(
           ),
         );
       }
-    }, []);
+    }, [isMobileWidth]);
 
     const onChange = (newEditorState) => {
       setEditorState(newEditorState);
