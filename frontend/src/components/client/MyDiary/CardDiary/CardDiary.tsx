@@ -26,8 +26,6 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
     }
   };
 
-  console.log(card)
-
 
   const parseText = () => {
     let content;
@@ -36,15 +34,14 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
       if (typeof content === 'object') {
         const contentState = convertFromRaw(content);
         const text = contentState.getPlainText();
-        return text.trim() ? text : "Write your answer here...";
+        return text.trim() ? text : 'Write your answer here...';
       }
     } catch (error) {
       console.error('Failed to parse JSON:', error);
-      return card.event_details.trim() ? card.event_details : "Write your answer here...";
+      return card.event_details.trim() ? card.event_details : 'Write your answer here...';
     }
     return '';
   };
-
 
   return (
     <div className="diary__card" onClick={() => goDiary()}>

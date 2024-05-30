@@ -33,8 +33,6 @@ export default function DiaryPageContentClient({ diary, type }) {
     mode: 'all',
   });
   const onSubmit = async (data) => {
-    console.log('data', data);
-
     if (type == 'create') {
       try {
         const response = await API.post(`/diary-notes/`, data);
@@ -101,8 +99,6 @@ export default function DiaryPageContentClient({ diary, type }) {
   };
 
   const [showEmotionsPage, setShowEmotionsPage] = useState(false);
-
-  console.log(diary);
 
   return (
     <form className="diaryPage" onSubmit={methods.handleSubmit(onSubmit)}>

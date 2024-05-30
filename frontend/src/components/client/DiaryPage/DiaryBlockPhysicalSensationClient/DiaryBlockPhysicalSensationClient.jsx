@@ -11,20 +11,6 @@ export default function DiaryBlockPhysicalSensationClient({ diary, type }) {
 
   const editorRef = useRef(null);
   const { control, setValue, getValues } = useFormContext();
-  // const content = {
-  //   blocks: [
-  //     {
-  //       key: 'abcde',
-  //       text: diary ? diary.physical_sensations : '',
-  //       type: 'open',
-  //       depth: 0,
-  //       inlineStyleRanges: [],
-  //       entityRanges: [],
-  //       data: {},
-  //     },
-  //   ],
-  //   entityMap: {},
-  // };
 
   const block = {
     type: 'open',
