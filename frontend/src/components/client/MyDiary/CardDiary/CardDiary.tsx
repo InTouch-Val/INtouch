@@ -26,7 +26,6 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
     }
   };
 
-
   const parseText = () => {
     let content;
     try {
