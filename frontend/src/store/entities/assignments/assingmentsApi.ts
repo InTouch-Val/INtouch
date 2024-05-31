@@ -105,7 +105,7 @@ export const assignmentApi = createApi({
     }),
     createAssignment: build.mutation<
       AssignmentsType,
-      AssignmentCreateRequestType
+      Partial<AssignmentCreateRequestType>
     >({
       query: (newAssignmentData) => ({
         url: "assignments/",

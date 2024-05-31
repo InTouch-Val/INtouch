@@ -1,9 +1,10 @@
 import { ActionReducerMapBuilder, createSlice } from "@reduxjs/toolkit";
-import { AssignmentsType } from "../../entities/assignments/types";
+import { AssignmentsResponseType, AssignmentsType } from "../../entities/assignments/types";
 import {
   changeAssignmentFavoriteByIdAction,
   draftAssignmentAction,
   duplicateAssignmentAction,
+  setClientByIdAction,
 } from "../../actions/assignment/assignmentActions";
 import {
   AssignmentTab,
@@ -54,12 +55,14 @@ interface AssignmentState {
   page: number;
   searchTerm: string | undefined;
   isSuccess: boolean;
+  setClientId: AssignmentsResponseType | null | any;
 }
 
 const initialState: AssignmentState = {
   assignments: null,
   duplicateAssignment: null,
   assignmentsFavorites: null,
+  setClientId: null,
   activeLanguage: TypeLanguage.All,
   activeTab: AssignmentTab.library,
   activeFilterType: TypeFilter.All,
@@ -145,9 +148,20 @@ const assignmentSlice = createSlice({
       })
       .addCase(draftAssignmentAction.rejected, (state, action) => {
         state.status = Status.Error;
+      })
+      .addCase(setClientByIdAction.fulfilled, (state, action) => {
+        state.status = Status.Success;
+        state.setClientId = action.payload;
+      })
+      .addCase(setClientByIdAction.pending, (state, action) => {
+        state.status = Status.Loading;
+      })
+      .addCase(setClientByIdAction.rejected, (state, action) => {
+        state.status = Status.Error;
       });
   },
 });
+
 
 export const {
   setAssignments,

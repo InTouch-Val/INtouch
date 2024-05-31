@@ -5,8 +5,13 @@ import assignmentSlice, {
   setAssignmentsFavorites,
 } from "./slices/assignments/assignmentSlice";
 import { authSlice } from "./slices/index";
-import { assignmentAdapter, assignmentApi, assignmentSelector } from "./entities";
+import {
+  assignmentAdapter,
+  assignmentApi,
+  assignmentSelector,
+} from "./entities";
 import { authApi } from "./entities/auth/auth";
+import { AssignmentTab } from "../utils/constants";
 
 const assignmentsMiddleware = (store) => (next) => (action) => {
   if (assignmentApi.endpoints.getAssignments.matchFulfilled(action)) {
@@ -14,7 +19,9 @@ const assignmentsMiddleware = (store) => (next) => (action) => {
     const selectedData = assignmentSelector.selectAll(
       assignmentAdapter.setAll(assignmentAdapter.getInitialState(), entities)
     );
-    const newArray = selectedData.concat(store.getState().assignment.assignments?.entities);
+    const newArray = selectedData.concat(
+      store.getState().assignment.assignments?.entities
+    );
     const modifiedActionPayload = { ...action.payload, entities: newArray };
     store.dispatch(setAssignments(modifiedActionPayload));
   }
@@ -24,7 +31,7 @@ const assignmentsMiddleware = (store) => (next) => (action) => {
 const assignmentsFavoritesMiddleware = (store) => (next) => (action) => {
   const activeTab = store.getState().assignment.activeTab;
   if (
-    activeTab == "favorites" &&
+    activeTab == AssignmentTab.favorites &&
     assignmentApi.endpoints.getAssignments.matchFulfilled(action)
   ) {
     store.dispatch(setAssignmentsFavorites(action.payload));

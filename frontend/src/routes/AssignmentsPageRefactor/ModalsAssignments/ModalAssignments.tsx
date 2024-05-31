@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Modal } from "../../../service/modal";
 import { useAuth } from "../../../service/authContext";
-import { API } from "../../../service/axios";
 import { useDeleteAssignmentByUUIDMutation } from "../../../store/entities";
+import { useAppDispatch, useAppSelector } from "../../../store/store";
+import { setClientByIdAction } from "../../../store/actions/assignment/assignmentActions";
 
 export default function ModalAssignments(): JSX.Element {
   //@ts-ignore
@@ -18,6 +19,8 @@ export default function ModalAssignments(): JSX.Element {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const [deleteAssignmentById, _] = useDeleteAssignmentByUUIDMutation();
+  const { setClientId } = useAppSelector((state) => state.assignment);
+  const dispatch = useAppDispatch();
 
   const handleModalClose = (): void => {
     setIsShareModalOpen(false);
@@ -43,16 +46,11 @@ export default function ModalAssignments(): JSX.Element {
         return;
       }
 
-      const res = await Promise.all(
-        selectedClients.map(async (clientId) => {
-          const response = await API.get(
-            `assignments/set-client/${assignmentId}/${clientId}/`
-          );
-          return response;
-        })
-      );
+      selectedClients.map(async (clientId) => {
+        await dispatch(setClientByIdAction({ assignmentId, clientId }));
+      });
 
-      const allResponsesSuccessful = res.every(
+      const allResponsesSuccessful = setClientId.every(
         (response) => response.status >= 200 && response.status <= 300
       );
 

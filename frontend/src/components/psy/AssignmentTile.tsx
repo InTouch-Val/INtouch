@@ -6,9 +6,10 @@ import { Modal } from "../../service/modal";
 import "../../css/assignment-tile.css";
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-import { duplicateAssignmentAction, useDeleteAssignmentClientByUUIDMutation } from "../../store/actions/assignment/assignmentActions";
+import { draftAssignmentAction, duplicateAssignmentAction } from "../../store/actions/assignment/assignmentActions";
 import { BlockType } from "../../utils/constants";
 import { AssignmentsType } from "../../store/entities/assignments/types";
+import { useCreateAssignmentMutation, } from "../../store/entities";
 
 const formatDate = (dateString: Date): Date => {
   const options = { year: "numeric", month: "short", day: "numeric" };
@@ -25,7 +26,7 @@ interface Props {
   isAuthor: boolean,
   onDeleteClick: (id: string) => void,
   isShareModal: boolean,
-  selectedAssignmentIdForShareModalOnClientPage: string
+  selectedAssignmentIdForShareModalOnClientPage: string | number;
 }
 
 function AssignmentTile({
@@ -46,6 +47,8 @@ function AssignmentTile({
   const { duplicateAssignment } = useAppSelector((store) => store.assignment);
 
   const [assignmentId, setAssignments] = useState<any>([]);
+
+  const [createAssignment, _] = useCreateAssignmentMutation();
 
   useEffect(() => {
     setIsSelected(
@@ -85,7 +88,8 @@ function AssignmentTile({
     };
   }, [isDropdownOpen]);
 
-  const duplicateAssignmentHandle = async (assignmentId: string): void => {
+
+  const duplicateAssignmentHandle = async (assignmentId: string): Promise<void> => {
     try {
       dispatch(duplicateAssignmentAction(assignmentId));
       let assignmentData = duplicateAssignment;
@@ -143,7 +147,7 @@ function AssignmentTile({
       };
 
       // Отправляем данные задания на сервер для создания дубликата
-      const duplicateResponse = await API.post(`assignments/`, duplicateData);
+      createAssignment(duplicateData)
       if (
         !duplicateResponse ||
         !duplicateResponse.data ||
