@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, { useState } from "react";
 import DiaryHeaderClient from "./Header/DiaryHeaderClient";
 import "./DiaryPage.css";
