@@ -4,7 +4,7 @@ import Button from "../../../psy/button/ButtonHeadline";
 import { useNavigate } from "react-router-dom";
 import { API } from "../../../../service/axios";
 import { getDate } from "../../../../utils/helperFunction/getDate";
-import { convertFromRaw, ContentState } from 'draft-js';
+import { convertFromRaw, ContentState } from "draft-js";
 
 export default function CardDiaryClient({ card, setFetching, openModal }) {
   const navigate = useNavigate();
@@ -30,16 +30,18 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
     let content;
     try {
       content = JSON.parse(card.event_details);
-      if (typeof content === 'object') {
+      if (typeof content === "object") {
         const contentState = convertFromRaw(content);
         const text = contentState.getPlainText();
-        return text.trim() ? text : 'Write your answer here...';
+        return text.trim() ? text : "Write your answer here...";
       }
     } catch (error) {
-      console.error('Failed to parse JSON:', error);
-      return card.event_details.trim() ? card.event_details : 'Write your answer here...';
+      console.error("Failed to parse JSON:", error);
+      return card.event_details.trim()
+        ? card.event_details
+        : "Write your answer here...";
     }
-    return '';
+    return "";
   };
 
   return (

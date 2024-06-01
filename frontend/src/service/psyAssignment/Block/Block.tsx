@@ -1,13 +1,13 @@
 //@ts-nocheck
-import React, { useState, useRef } from 'react';
-import { useCallback } from 'react';
-import { EditorState } from 'draft-js';
-import { EditorToolbar } from '../../editors-toolbar';
-import { ToolbarProvider } from '../../ToolbarContext';
-import arrow from '../../../images/arrow.svg';
-import copy from '../../../images/block-copy-btn.svg';
-import trash from '../../../images/block-trash-btn.svg';
-import useMobileWidth from '../../../utils/hook/useMobileWidth';
+import React, { useState, useRef } from "react";
+import { useCallback } from "react";
+import { EditorState } from "draft-js";
+import { EditorToolbar } from "../../editors-toolbar";
+import { ToolbarProvider } from "../../ToolbarContext";
+import arrow from "../../../images/arrow.svg";
+import copy from "../../../images/block-copy-btn.svg";
+import trash from "../../../images/block-trash-btn.svg";
+import useMobileWidth from "../../../utils/hook/useMobileWidth";
 
 function Block({
   block,
@@ -25,7 +25,9 @@ function Block({
   index = { index },
   ...props
 }) {
-  const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty(),
+  );
 
   const isMobileWidth = useMobileWidth();
 
@@ -36,10 +38,10 @@ function Block({
       const contentState = newEditorState.getCurrentContent();
       const text = contentState.getPlainText();
       updateBlock(block.id, contentState, block.choices, text);
-      if (block.type === 'open') {
+      if (block.type === "open") {
         return (
           <div
-            className={`block assignment__block ${!isValid && showInvalidInputs ? 'uncompleted' : ''}`}
+            className={`block assignment__block ${!isValid && showInvalidInputs ? "uncompleted" : ""}`}
           >
             <h3 className="assignment__block-header">{block.question}</h3>
             <Editor
@@ -47,7 +49,10 @@ function Block({
               onChange={handleEditorChange}
               placeholder="Write your answer here..."
             />
-            <EditorToolbar editorState={editorState} setEditorState={setEditorState} />
+            <EditorToolbar
+              editorState={editorState}
+              setEditorState={setEditorState}
+            />
           </div>
         );
       }
@@ -67,7 +72,7 @@ function Block({
             value={block.question}
             placeholder={placeholder}
             className="block-title-input"
-            style={{ display: 'none' }}
+            style={{ display: "none" }}
             onChange={() => {}}
           />
           <ToolbarProvider>
@@ -86,7 +91,9 @@ function Block({
         </div>
         {props.children}
         <div className="block__below-container">
-          {errorText && <span className="error__text error__text_block">{errorText}</span>}
+          {errorText && (
+            <span className="error__text error__text_block">{errorText}</span>
+          )}
           <div className="buttons">
             <button
               type="button"
@@ -95,7 +102,11 @@ function Block({
               }}
               className="button"
             >
-              <img src={arrow} alt="arrow-icon" style={{ transform: 'rotate(180deg)' }}></img>
+              <img
+                src={arrow}
+                alt="arrow-icon"
+                style={{ transform: "rotate(180deg)" }}
+              ></img>
             </button>
             <button
               type="button"

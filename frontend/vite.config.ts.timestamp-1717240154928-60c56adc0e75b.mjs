@@ -4,14 +4,12 @@ var vite_config_default = {
   plugins: [react()],
   server: {
     open: true,
-    port: 5273
+    port: 5273,
   },
   // Fix for `draft-js` package (https://github.com/facebook/fbjs/issues/290)
   define: {
-    global: "window"
-  }
+    global: "window",
+  },
 };
-export {
-  vite_config_default as default
-};
+export { vite_config_default as default };
 //# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsidml0ZS5jb25maWcudHMiXSwKICAic291cmNlc0NvbnRlbnQiOiBbImNvbnN0IF9fdml0ZV9pbmplY3RlZF9vcmlnaW5hbF9kaXJuYW1lID0gXCIvVXNlcnMvc2FzaGFkdWRraW5hL0RvY3VtZW50cy9HaXRIdWIvSU50b3VjaC9mcm9udGVuZFwiO2NvbnN0IF9fdml0ZV9pbmplY3RlZF9vcmlnaW5hbF9maWxlbmFtZSA9IFwiL1VzZXJzL3Nhc2hhZHVka2luYS9Eb2N1bWVudHMvR2l0SHViL0lOdG91Y2gvZnJvbnRlbmQvdml0ZS5jb25maWcudHNcIjtjb25zdCBfX3ZpdGVfaW5qZWN0ZWRfb3JpZ2luYWxfaW1wb3J0X21ldGFfdXJsID0gXCJmaWxlOi8vL1VzZXJzL3Nhc2hhZHVka2luYS9Eb2N1bWVudHMvR2l0SHViL0lOdG91Y2gvZnJvbnRlbmQvdml0ZS5jb25maWcudHNcIjtpbXBvcnQgcmVhY3QgZnJvbSBcIkB2aXRlanMvcGx1Z2luLXJlYWN0XCI7XG5cbi8vIGh0dHBzOi8vdml0ZWpzLmRldi9jb25maWcvXG5leHBvcnQgZGVmYXVsdCB7XG4gIHBsdWdpbnM6IFtyZWFjdCgpXSxcbiAgc2VydmVyOiB7XG4gICAgb3BlbjogdHJ1ZSxcbiAgICBwb3J0OiA1MjczLFxuICB9LFxuICAvLyBGaXggZm9yIGBkcmFmdC1qc2AgcGFja2FnZSAoaHR0cHM6Ly9naXRodWIuY29tL2ZhY2Vib29rL2ZianMvaXNzdWVzLzI5MClcbiAgZGVmaW5lOiB7XG4gICAgZ2xvYmFsOiBcIndpbmRvd1wiLFxuICB9LFxufTtcbiJdLAogICJtYXBwaW5ncyI6ICI7QUFBaVYsT0FBTyxXQUFXO0FBR25XLElBQU8sc0JBQVE7QUFBQSxFQUNiLFNBQVMsQ0FBQyxNQUFNLENBQUM7QUFBQSxFQUNqQixRQUFRO0FBQUEsSUFDTixNQUFNO0FBQUEsSUFDTixNQUFNO0FBQUEsRUFDUjtBQUFBO0FBQUEsRUFFQSxRQUFRO0FBQUEsSUFDTixRQUFRO0FBQUEsRUFDVjtBQUNGOyIsCiAgIm5hbWVzIjogW10KfQo=

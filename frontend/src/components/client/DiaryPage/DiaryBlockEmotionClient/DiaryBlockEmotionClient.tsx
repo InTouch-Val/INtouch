@@ -1,29 +1,38 @@
 //@ts-nocheck
-import React, { useRef, useState, useEffect } from 'react';
-import '../DiaryPage.css';
+import React, { useRef, useState, useEffect } from "react";
+import "../DiaryPage.css";
 import {
   listEmotions,
   listEmotionsChips,
-} from '../../../psy/DiaryPageContent/DiaryBlockEmotion/constants';
-import { ToolbarProvider } from '../../../../service/ToolbarContext';
-import { EditorState, convertFromRaw, convertToRaw, ContentState } from 'draft-js';
-import { EditorToolbar } from '../../../../service/editors-toolbar';
-import { Controller, useFormContext } from 'react-hook-form';
-import DiaryBlockEmotionClientMobile from './DiaryBlockEmotionClientMobile';
-import useMobileWidth from '../../../../utils/hook/useMobileWidth';
+} from "../../../psy/DiaryPageContent/DiaryBlockEmotion/constants";
+import { ToolbarProvider } from "../../../../service/ToolbarContext";
+import {
+  EditorState,
+  convertFromRaw,
+  convertToRaw,
+  ContentState,
+} from "draft-js";
+import { EditorToolbar } from "../../../../service/editors-toolbar";
+import { Controller, useFormContext } from "react-hook-form";
+import DiaryBlockEmotionClientMobile from "./DiaryBlockEmotionClientMobile";
+import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 
-export default function DiaryBlockEmotionClient({ diary, type, setShowEmotionsPage }) {
+export default function DiaryBlockEmotionClient({
+  diary,
+  type,
+  setShowEmotionsPage,
+}) {
   const isMobileWidth = useMobileWidth();
 
   const editorRef = useRef(null);
   const { control, setValue, getValues } = useFormContext();
-  const primaryEmotionValue = getValues('primary_emotion');
-  const secondEmotionValues = getValues('clarifying_emotion');
+  const primaryEmotionValue = getValues("primary_emotion");
+  const secondEmotionValues = getValues("clarifying_emotion");
 
   const block = {
-    type: 'open',
-    question: getValues('emotion_type'),
-    description: 'd',
+    type: "open",
+    question: getValues("emotion_type"),
+    description: "d",
   };
 
   const [editorState, setEditorState] = useState(() => {
@@ -31,12 +40,12 @@ export default function DiaryBlockEmotionClient({ diary, type, setShowEmotionsPa
       let content;
       try {
         content = JSON.parse(diary.emotion_type);
-        if (typeof content === 'object') {
+        if (typeof content === "object") {
           const contentState = convertFromRaw(content);
           return EditorState.createWithContent(contentState);
         }
       } catch (error) {
-        console.error('Failed to parse JSON:', error);
+        console.error("Failed to parse JSON:", error);
         const contentState = ContentState.createFromText(diary.emotion_type);
         return EditorState.createWithContent(contentState);
       }
@@ -48,15 +57,17 @@ export default function DiaryBlockEmotionClient({ diary, type, setShowEmotionsPa
     setEditorState(newEditorState);
     const contentState = newEditorState.getCurrentContent();
     const rawContent = convertToRaw(contentState);
-    setValue('emotion_type', JSON.stringify(rawContent));
+    setValue("emotion_type", JSON.stringify(rawContent));
   };
 
   function handleClickSecondEmotion(item) {
     if (secondEmotionValues.includes(item.title)) {
-      const newArray = secondEmotionValues.filter((emotion) => emotion !== item.title);
-      setValue('clarifying_emotion', newArray);
+      const newArray = secondEmotionValues.filter(
+        (emotion) => emotion !== item.title,
+      );
+      setValue("clarifying_emotion", newArray);
     } else {
-      setValue('clarifying_emotion', [...secondEmotionValues, item.title]);
+      setValue("clarifying_emotion", [...secondEmotionValues, item.title]);
     }
   }
 
@@ -77,7 +88,7 @@ export default function DiaryBlockEmotionClient({ diary, type, setShowEmotionsPa
                 ref={editorRef}
                 editorState={editorState}
                 setEditorState={handleEditorStateChange}
-                placeholder={'Write your answer here...'}
+                placeholder={"Write your answer here..."}
                 block={block}
                 isMobileWidth={isMobileWidth}
               />
@@ -95,12 +106,20 @@ export default function DiaryBlockEmotionClient({ diary, type, setShowEmotionsPa
                     listEmotions.map((item) => {
                       return (
                         <div
-                          onClick={() => setValue('primary_emotion', item.title)}
+                          onClick={() =>
+                            setValue("primary_emotion", item.title)
+                          }
                           key={item.id}
-                          className={`${item.title === primaryEmotionValue ? 'diary__emotion-container diary__emotion-container-active' : 'diary__emotion-container'}`}
+                          className={`${item.title === primaryEmotionValue ? "diary__emotion-container diary__emotion-container-active" : "diary__emotion-container"}`}
                         >
-                          <img src={item.img} className="diary__emotion" alt={item.title} />
-                          <div className="diary__emotion-title">{item.title}</div>
+                          <img
+                            src={item.img}
+                            className="diary__emotion"
+                            alt={item.title}
+                          />
+                          <div className="diary__emotion-title">
+                            {item.title}
+                          </div>
                         </div>
                       );
                     })
@@ -117,7 +136,7 @@ export default function DiaryBlockEmotionClient({ diary, type, setShowEmotionsPa
                     return (
                       <div
                         key={index}
-                        className={`${secondEmotionValues.find((emotion) => item.title === emotion) ? 'diary__emotion-chip chip_active' : 'diary__emotion-chip'}`}
+                        className={`${secondEmotionValues.find((emotion) => item.title === emotion) ? "diary__emotion-chip chip_active" : "diary__emotion-chip"}`}
                         onClick={() => handleClickSecondEmotion(item)}
                       >
                         {item.title}
@@ -146,7 +165,9 @@ export default function DiaryBlockEmotionClient({ diary, type, setShowEmotionsPa
               .map((filteredItem, index) => (
                 <li key={index}>
                   <div className="diary__emotion-name-container--mobile">
-                    <span className="diary__emotion-name--mobile">{filteredItem.title}</span>
+                    <span className="diary__emotion-name--mobile">
+                      {filteredItem.title}
+                    </span>
                   </div>
                 </li>
               ))}

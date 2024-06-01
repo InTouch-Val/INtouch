@@ -1,11 +1,16 @@
 //@ts-nocheck
-import React, { useState, useRef, useEffect } from 'react';
-import '../DiaryPage.css';
-import { ToolbarProvider } from '../../../../service/ToolbarContext';
-import { EditorToolbar } from '../../../../service/editors-toolbar';
-import { EditorState, convertFromRaw, convertToRaw, ContentState } from 'draft-js';
-import { Controller, useFormContext } from 'react-hook-form';
-import useMobileWidth from '../../../../utils/hook/useMobileWidth';
+import React, { useState, useRef, useEffect } from "react";
+import "../DiaryPage.css";
+import { ToolbarProvider } from "../../../../service/ToolbarContext";
+import { EditorToolbar } from "../../../../service/editors-toolbar";
+import {
+  EditorState,
+  convertFromRaw,
+  convertToRaw,
+  ContentState,
+} from "draft-js";
+import { Controller, useFormContext } from "react-hook-form";
+import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 
 export default function EventDetailsClient({ diary, type }) {
   const isMobileWidth = useMobileWidth();
@@ -19,12 +24,12 @@ export default function EventDetailsClient({ diary, type }) {
       let content;
       try {
         content = JSON.parse(diary.event_details);
-        if (typeof content === 'object') {
+        if (typeof content === "object") {
           const contentState = convertFromRaw(content);
           return EditorState.createWithContent(contentState);
         }
       } catch (error) {
-        console.error('Failed to parse JSON:', error);
+        console.error("Failed to parse JSON:", error);
         const contentState = ContentState.createFromText(diary.event_details);
         return EditorState.createWithContent(contentState);
       }
@@ -33,16 +38,16 @@ export default function EventDetailsClient({ diary, type }) {
   });
 
   const block = {
-    type: 'open',
-    question: getValues('event_details'),
-    description: 'd',
+    type: "open",
+    question: getValues("event_details"),
+    description: "d",
   };
 
   const handleEditorStateChange = (newEditorState) => {
     setEditorState(newEditorState);
     const contentState = newEditorState.getCurrentContent();
     const rawContent = convertToRaw(contentState);
-    setValue('event_details', JSON.stringify(rawContent));
+    setValue("event_details", JSON.stringify(rawContent));
   };
 
   return (
@@ -62,7 +67,7 @@ export default function EventDetailsClient({ diary, type }) {
               ref={editorRef}
               editorState={editorState}
               setEditorState={handleEditorStateChange}
-              placeholder={'Write your answer here...'}
+              placeholder={"Write your answer here..."}
               block={block}
               isMobileWidth={isMobileWidth}
             />

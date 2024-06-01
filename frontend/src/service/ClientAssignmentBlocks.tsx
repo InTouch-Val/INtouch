@@ -1,15 +1,20 @@
 //@ts-nocheck
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashCan, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { EditorToolbar } from './editors-toolbar';
-import { ToolbarProvider } from './ToolbarContext';
-import { EditorState, convertToRaw, convertFromRaw, ContentState } from 'draft-js';
-import '../css/block.css';
-import '../css/assignments.css';
-import decodeStyledText from './decodeStyledText';
-import '../components/client/CompleteAssignments/CompleteAssignments.css';
-import useMobileWidth from '../utils/hook/useMobileWidth';
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { EditorToolbar } from "./editors-toolbar";
+import { ToolbarProvider } from "./ToolbarContext";
+import {
+  EditorState,
+  convertToRaw,
+  convertFromRaw,
+  ContentState,
+} from "draft-js";
+import "../css/block.css";
+import "../css/assignments.css";
+import decodeStyledText from "./decodeStyledText";
+import "../components/client/CompleteAssignments/CompleteAssignments.css";
+import useMobileWidth from "../utils/hook/useMobileWidth";
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
@@ -24,12 +29,15 @@ function ClientAssignmentBlocks({
 }) {
   const [choices, setChoices] = useState(block.choices || []);
   const [choiceRefs, setChoiceRefs] = useState([]);
-  const [selectedValue, setSelectedValue] = useState(block.reply || '');
+  const [selectedValue, setSelectedValue] = useState(block.reply || "");
   const editorRef = useRef(null);
 
   const [editorState, setEditorState] = useState(() => {
     if (block.content) {
-      const content = typeof block.content === 'string' ? JSON.parse(block.content) : block.content;
+      const content =
+        typeof block.content === "string"
+          ? JSON.parse(block.content)
+          : block.content;
       const contentState = convertFromRaw(content);
       return EditorState.createWithContent(contentState);
     }
@@ -50,7 +58,8 @@ function ClientAssignmentBlocks({
       if (inputText.length > MAX_INPUT_LENGTH) {
         const truncatedText = inputText.slice(0, MAX_INPUT_LENGTH);
         const newContentState = ContentState.createFromText(truncatedText);
-        const truncatedEditorState = EditorState.createWithContent(newContentState);
+        const truncatedEditorState =
+          EditorState.createWithContent(newContentState);
 
         const rawContent = convertToRaw(newContentState);
         const serializedData = JSON.stringify(rawContent);
@@ -75,8 +84,8 @@ function ClientAssignmentBlocks({
 
   // Determines if the block is filled in
   const isValid =
-    inputValidationStates[block.type + 'Inputs'] &&
-    inputValidationStates[block.type + 'Inputs'][block.id];
+    inputValidationStates[block.type + "Inputs"] &&
+    inputValidationStates[block.type + "Inputs"][block.id];
 
   useEffect(() => {
     if (choices && choices.length > 0) {
@@ -110,7 +119,7 @@ function ClientAssignmentBlocks({
           reply: event.target.value,
           checked: event.target.checked,
         };
-      } else if (event.target.type === 'radio') {
+      } else if (event.target.type === "radio") {
         return {
           id: choice.id,
           reply: choice.reply,
@@ -119,10 +128,10 @@ function ClientAssignmentBlocks({
       }
       return choice;
     });
-    updateBlock(block.id, '', newChoices);
+    updateBlock(block.id, "", newChoices);
   }
 
-  if (block.type === 'text') {
+  if (block.type === "text") {
     return (
       <div className="block assignment__block">
         {!block.description && !isViewPsy ? (
@@ -142,10 +151,10 @@ function ClientAssignmentBlocks({
       </div>
     );
   }
-  if (block.type === 'open') {
+  if (block.type === "open") {
     return (
       <div
-        className={`block assignment__block ${!isValid && showInvalidInputs ? 'uncompleted' : ''}`}
+        className={`block assignment__block ${!isValid && showInvalidInputs ? "uncompleted" : ""}`}
       >
         <h3 className="assignment__block-header">{block.question}</h3>
         <ToolbarProvider>
@@ -164,7 +173,7 @@ function ClientAssignmentBlocks({
     );
   }
 
-  if (block.type === 'image') {
+  if (block.type === "image") {
     return (
       <div className="block assignment__block">
         {!block.description && !isViewPsy ? (
@@ -185,10 +194,10 @@ function ClientAssignmentBlocks({
       </div>
     );
   }
-  if (block.type === 'range') {
+  if (block.type === "range") {
     return (
       <div
-        className={`block assignment__block ${!isValid && showInvalidInputs ? 'uncompleted' : ''}`}
+        className={`block assignment__block ${!isValid && showInvalidInputs ? "uncompleted" : ""}`}
       >
         {!block.description && !isViewPsy ? (
           <h3 className="assignment__block-header">{block.question}</h3>
@@ -205,7 +214,7 @@ function ClientAssignmentBlocks({
           />
         )}
         <div className="range-display">
-          <span className="range-label">{block.left_pole || 'Left Pole'}</span>
+          <span className="range-label">{block.left_pole || "Left Pole"}</span>
           <div className="range-options">
             {Array.from(
               { length: block.end_range - block.start_range + 1 },
@@ -241,15 +250,17 @@ function ClientAssignmentBlocks({
               </label>
             ))}
           </div>
-          <span className="range-label">{block.right_pole || 'Right Pole'}</span>
+          <span className="range-label">
+            {block.right_pole || "Right Pole"}
+          </span>
         </div>
       </div>
     );
   }
-  if (block.type === 'single') {
+  if (block.type === "single") {
     return (
       <div
-        className={`block assignment__block ${!isValid && showInvalidInputs ? 'uncompleted' : ''}`}
+        className={`block assignment__block ${!isValid && showInvalidInputs ? "uncompleted" : ""}`}
       >
         {!block.description && !isViewPsy ? (
           <h4 className="assignment__block-header">{block.question}</h4>
@@ -290,10 +301,10 @@ function ClientAssignmentBlocks({
       </div>
     );
   }
-  if (block.type === 'multiple') {
+  if (block.type === "multiple") {
     return (
       <div
-        className={`block assignment__block ${!isValid && showInvalidInputs ? 'uncompleted' : ''}`}
+        className={`block assignment__block ${!isValid && showInvalidInputs ? "uncompleted" : ""}`}
       >
         {!block.description && !isViewPsy ? (
           <h4 className="assignment__block-header">{block.question}</h4>

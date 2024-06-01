@@ -1,7 +1,7 @@
 //@ts-nocheck
-import React, { forwardRef, useEffect } from 'react';
-import Editor from '@draft-js-plugins/editor';
-import { Separator } from '@draft-js-plugins/static-toolbar';
+import React, { forwardRef, useEffect } from "react";
+import Editor from "@draft-js-plugins/editor";
+import { Separator } from "@draft-js-plugins/static-toolbar";
 import {
   ItalicButton,
   BoldButton,
@@ -10,12 +10,12 @@ import {
   HeadlineTwoButton,
   UnorderedListButton,
   OrderedListButton,
-} from '@draft-js-plugins/buttons';
-import '@draft-js-plugins/static-toolbar/lib/plugin.css';
-import '../css/editorsBar.css';
-import { useToolbar } from './ToolbarContext'; // Импортируем хук для использования контекста
-import { EditorState, ContentState, convertFromRaw } from 'draft-js';
-import { Modifier } from 'draft-js';
+} from "@draft-js-plugins/buttons";
+import "@draft-js-plugins/static-toolbar/lib/plugin.css";
+import "../css/editorsBar.css";
+import { useToolbar } from "./ToolbarContext"; // Импортируем хук для использования контекста
+import { EditorState, ContentState, convertFromRaw } from "draft-js";
+import { Modifier } from "draft-js";
 
 const EditorToolbar = forwardRef(
   (
@@ -41,7 +41,7 @@ const EditorToolbar = forwardRef(
       }
     };
 
-    const effectiveErrorText = errorText || 'Error occured';
+    const effectiveErrorText = errorText || "Error occured";
 
     const applyStylesFromCharacterList = (contentState, rawContentState) => {
       let newContentState = contentState;
@@ -79,10 +79,13 @@ const EditorToolbar = forwardRef(
         try {
           const contentObject = JSON.parse(content);
           const contentState = convertFromRaw(contentObject);
-          const contentStateWithStyles = applyStylesFromCharacterList(contentState, contentObject);
+          const contentStateWithStyles = applyStylesFromCharacterList(
+            contentState,
+            contentObject,
+          );
           return EditorState.createWithContent(contentStateWithStyles);
         } catch (error) {
-          console.error('Parsing error, treating as plain text:', error);
+          console.error("Parsing error, treating as plain text:", error);
           const contentState = ContentState.createFromText(content);
           return EditorState.createWithContent(contentState);
         }
@@ -107,10 +110,12 @@ const EditorToolbar = forwardRef(
             contentState,
             rawContentState,
           );
-          const newEditorState = EditorState.createWithContent(contentStateWithStyles);
+          const newEditorState = EditorState.createWithContent(
+            contentStateWithStyles,
+          );
           setEditorState(newEditorState);
         } catch (error) {
-          console.error('Ошибка при преобразовании строки в объект:', error);
+          console.error("Ошибка при преобразовании строки в объект:", error);
         }
       } else if (block.reply) {
         newEditorState = parseContent(block.reply);
@@ -138,7 +143,7 @@ const EditorToolbar = forwardRef(
           EditorState.push(
             editorState,
             ContentState.createFromText(placeholder),
-            'insert-characters',
+            "insert-characters",
           ),
         );
       }
@@ -159,31 +164,37 @@ const EditorToolbar = forwardRef(
       if (text === placeholder) {
         // Заменяем плейсхолдер на введенный текст
         const newContentState = ContentState.createFromText(chars);
-        let newEditorState = EditorState.push(editorState, newContentState, 'insert-characters');
+        let newEditorState = EditorState.push(
+          editorState,
+          newContentState,
+          "insert-characters",
+        );
 
         // Устанавливаем фокус на конец содержимого
         newEditorState = EditorState.moveFocusToEnd(newEditorState);
 
         setEditorState(newEditorState);
-        return 'handled';
+        return "handled";
       }
 
-      return 'not-handled';
+      return "not-handled";
     };
 
     const validateTextLength = (text) => {
-      const maxLength = block.type === 'text' ? 1000 : 200;
+      const maxLength = block.type === "text" ? 1000 : 200;
       if (text.length < 20 || text.length > maxLength) {
         setIsError(true);
         setErrorText(
           maxLength === 1000
-            ? `${effectiveErrorText.includes(' Please enter 20-1000 characters') ? effectiveErrorText.replace(' Please enter 20-1000 characters', '') : effectiveErrorText} Please enter 20-1000 characters`
-            : `${effectiveErrorText.includes(' Please enter 20-200 characters') ? effectiveErrorText.replace(' Please enter 20-200 characters', '') : effectiveErrorText} Please enter 20-200 characters`,
+            ? `${effectiveErrorText.includes(" Please enter 20-1000 characters") ? effectiveErrorText.replace(" Please enter 20-1000 characters", "") : effectiveErrorText} Please enter 20-1000 characters`
+            : `${effectiveErrorText.includes(" Please enter 20-200 characters") ? effectiveErrorText.replace(" Please enter 20-200 characters", "") : effectiveErrorText} Please enter 20-200 characters`,
         );
         return false;
       }
       setIsError(false);
-      setErrorText(effectiveErrorText.replace(' Please enter 20-200 characters', ''));
+      setErrorText(
+        effectiveErrorText.replace(" Please enter 20-200 characters", ""),
+      );
       return true;
     };
 
@@ -195,7 +206,7 @@ const EditorToolbar = forwardRef(
 
     return (
       <div
-        className={`editor-container ${(effectiveErrorText.includes(' Please enter 20-1000 characters') || effectiveErrorText.includes(' Please enter 20-200 characters')) && 'error'}`}
+        className={`editor-container ${(effectiveErrorText.includes(" Please enter 20-1000 characters") || effectiveErrorText.includes(" Please enter 20-200 characters")) && "error"}`}
         onClick={focusEditor}
       >
         <Editor
@@ -214,7 +225,7 @@ const EditorToolbar = forwardRef(
                 <BoldButton {...externalProps} />
                 <ItalicButton {...externalProps} />
                 <UnderlineButton {...externalProps} />
-                {block.type === 'text' ? (
+                {block.type === "text" ? (
                   <>
                     <Separator {...externalProps} />
                     <HeadlineOneButton {...externalProps} />
