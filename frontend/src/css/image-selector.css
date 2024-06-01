@@ -18,7 +18,7 @@
   margin-bottom: 10px;
 }
 
-.image-selector input[type='text'] {
+.image-selector input[type="text"] {
   flex-grow: 1;
   padding: 10px;
   border: 1px solid #ddd;

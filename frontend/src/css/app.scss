@@ -1,0 +1,282 @@
+@import "../scss-styles/variables.scss";
+@import "../scss-styles/mixins.scss";
+
+
+body {
+  padding: 0;
+  margin: 0;
+  font-family: Montserrat, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+button {
+  font-family: Montserrat, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.app-container {
+  position: relative;
+  display: flex;
+  flex: 1;
+}
+
+.content {
+  width: 100vw;
+  min-height: 100vh;
+  margin-left: 255px;
+  flex: 1;
+  background-color: rgb(225 244 248 / 17%);
+  background-image: url("https://i122.fastpic.org/big/2023/1025/d2/e4e7924e98bda72edc75d27bf95bcad2.png");
+}
+
+@include mobile-media($mobile-min-width, $mobile-max-width) {
+  .toggle-button {
+    position: fixed;
+    top: 15px;
+    left: 28px;
+    right: auto;
+    display: block;
+    z-index: 101;
+    transition:
+      left 0.26s ease-in-out,
+      right 0.26s ease-in-out;
+
+      &.opened {
+        left: calc(100% - 52px - 28px);
+        right: 52px;
+        transition:
+          left 0.26s ease-in-out,
+          right 0.26s ease-in-out;
+      }
+  }
+}
+
+@media screen and (min-width: 480px) {
+  .toggle-button {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .content {
+    margin-left: 0;
+    background-image: linear-gradient(white 50px, transparent 50px),
+      url("https://i122.fastpic.org/big/2023/1025/d2/e4e7924e98bda72edc75d27bf95bcad2.png");
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .mobile-nav-header {
+    height: 50px;
+    width: 100%;
+    background-color: white;
+    position: fixed;
+    z-index: 100;
+  }
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .user-profile {
+    justify-content: flex-start;
+    padding-left: 40px;
+  }
+}
+
+.user-profile h3 {
+  color: #656565;
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .user-profile h3 {
+    margin: 0;
+    margin-bottom: 18px;
+    color: #0b4a56;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 17px;
+    text-align: left;
+  }
+}
+
+.user-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  margin-right: 10px;
+  object-fit: cover;
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .user-avatar {
+    display: none;
+  }
+}
+
+.side-bar {
+  position: fixed;
+  height: 100vh;
+  z-index: 100;
+  width: 255px;
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .side-bar {
+    left: -500px;
+    transition: left 0.35s ease-in-out;
+    background-color: white;
+    padding: 68px 40px 100px 0;
+    background-image: url("../images/logoMobileSidebar.svg");
+    background-position: bottom 40px left 40px;
+    background-repeat: no-repeat;
+    background-size: 198px auto;
+    height: 100dvh;
+  }
+
+  .side-bar.opened {
+    position: fixed;
+    top: 0;
+    right: 24px;
+    left: 0;
+    width: calc(100vw - 24px);
+    height: 100%;
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: 68px 40px 100px 0;
+    box-shadow: 0 0 4px 0 #417d8833;
+    transition: left 0.25s ease-in-out;
+  }
+}
+
+.menu ul {
+  padding: 0;
+  list-style: none;
+  /* Remove bullet points */
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .menu.lower ul {
+    margin: 0;
+  }
+
+  .menu.upper ul {
+    margin-bottom: 0;
+  }
+}
+
+.menu ul li {
+  width: 210px;
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .menu ul li {
+    width: 100%;
+  }
+}
+
+.menu ul li a {
+  display: block;
+  padding: 8px 12px;
+  margin-left: 45px;
+  color: #656565;
+  /* Text color for menu links */
+  line-height: 28px;
+  text-align: flex-end;
+  /* Add spacing above and below each menu item */
+  text-decoration: none;
+  /* Remove underlines from menu links */
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .menu ul li a {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 28px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    margin-left: 40px;
+  }
+}
+
+.menu ul li a.active {
+  border-radius: 4px;
+  background: #fff;
+  box-shadow:
+    0 0 3px 1px rgb(215 228 231 / 60%),
+    -4px 0 0 #417d88;
+}
+
+#logout {
+  display: block;
+  padding: 8px 12px;
+  border: none;
+  margin-left: 45px;
+  background: transparent;
+  color: #656565;
+  /* Цвет текста */
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 28px;
+  text-align: flex-end;
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  #logout {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 28px;
+    margin-left: 40px;
+  }
+}
+
+input:focus,
+select:focus {
+  box-shadow: 0 0 2px #666;
+  outline: none;
+}
+
+/* _____AFTER REGISTRATION PAGE______ */
+.welcome-container {
+  display: flex;
+  max-width: 100vw;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  background-color: rgb(225 244 248 / 17%);
+  background-image: url("https://i122.fastpic.org/big/2023/1025/d2/e4e7924e98bda72edc75d27bf95bcad2.png");
+  background-position: center;
+  background-size: cover;
+}
+
+.welcome-content {
+  padding: 40px;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgb(0 0 0 / 20%);
+  text-align: center;
+}
+
+.welcome-content h2 {
+  margin-bottom: 20px;
+  color: #417d88;
+  font-size: 2.2em;
+}
+
+.welcome-content p {
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}

@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { maxMobWidth, minMobWidth } from '../constants';
+import { useState, useEffect } from "react";
+import { maxMobWidth, minMobWidth } from "../constants";
 
 function useMobileWidth() {
   const [isMobileWidth, setIsMobileWidth] = useState(false);
@@ -17,8 +17,8 @@ function useMobileWidth() {
     // Sets the initial state based on the current window size
     handleResize();
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return isMobileWidth;

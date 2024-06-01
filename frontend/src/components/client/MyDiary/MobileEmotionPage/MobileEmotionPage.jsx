@@ -1,27 +1,29 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Controller, useFormContext, useForm } from 'react-hook-form';
+import React, { useState, useRef, useEffect } from "react";
+import { Controller, useFormContext, useForm } from "react-hook-form";
 import {
   listEmotions,
   listEmotionsChipsMobile,
-} from '../../../psy/DiaryPageContent/DiaryBlockEmotion/constants';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import MobileEmotionPageStyles from './MobileEmotionPage.module.css';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCreative } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/effect-creative';
-import './swiper.css';
-import { API } from '../../../../service/axios';
+} from "../../../psy/DiaryPageContent/DiaryBlockEmotion/constants";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import MobileEmotionPageStyles from "./MobileEmotionPage.module.css";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { EffectCreative } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/effect-creative";
+import "./swiper.css";
+import { API } from "../../../../service/axios";
 
 export default function MobileEmotionPage({ type, id, setShowEmotionsPage }) {
   const { control, getValues, setValue } = useFormContext();
 
-  const clarifyingEmotionValues = getValues('clarifying_emotion');
-  const primaryEmotionValue = getValues('primary_emotion');
+  const clarifyingEmotionValues = getValues("clarifying_emotion");
+  const primaryEmotionValue = getValues("primary_emotion");
 
   const [offset, setOffset] = useState(0);
-  const [currentPrimaryEmotion, setCurrentPrimaryEmotion] = useState(listEmotions[0].title);
+  const [currentPrimaryEmotion, setCurrentPrimaryEmotion] = useState(
+    listEmotions[0].title,
+  );
   const swiperRef = useRef(null);
   const [prevTranslate, setPrevTranslate] = useState(0);
 
@@ -30,7 +32,7 @@ export default function MobileEmotionPage({ type, id, setShowEmotionsPage }) {
   );
 
   const handleSaveClick = () => {
-    setValue('primary_emotion', currentPrimaryEmotion);
+    setValue("primary_emotion", currentPrimaryEmotion);
     setShowEmotionsPage(false);
   };
 
@@ -38,15 +40,17 @@ export default function MobileEmotionPage({ type, id, setShowEmotionsPage }) {
     const activeIndex = swiper.activeIndex % listEmotions.length;
     const newPrimaryEmotion = listEmotions[activeIndex].title;
     setCurrentPrimaryEmotion(newPrimaryEmotion);
-    setValue('primary_emotion', newPrimaryEmotion);
+    setValue("primary_emotion", newPrimaryEmotion);
   };
 
   const handleClickSecondaryEmotion = (item) => {
     if (clarifyingEmotionValues.includes(item.title)) {
-      const newArray = clarifyingEmotionValues.filter((emotion) => emotion !== item.title);
-      setValue('clarifying_emotion', newArray);
+      const newArray = clarifyingEmotionValues.filter(
+        (emotion) => emotion !== item.title,
+      );
+      setValue("clarifying_emotion", newArray);
     } else {
-      setValue('clarifying_emotion', [...clarifyingEmotionValues, item.title]);
+      setValue("clarifying_emotion", [...clarifyingEmotionValues, item.title]);
     }
   };
 
@@ -55,26 +59,27 @@ export default function MobileEmotionPage({ type, id, setShowEmotionsPage }) {
     const currentTranslate = swiper.getTranslate();
     const deltaTranslate = currentTranslate - prevTranslate;
     const movementFactor = 300;
-    const adjustedOffset = offset + deltaTranslate * (movementFactor / swiper.width);
+    const adjustedOffset =
+      offset + deltaTranslate * (movementFactor / swiper.width);
     setOffset(adjustedOffset);
     setPrevTranslate(currentTranslate);
   };
 
   const swiperSettings = {
-    effect: 'creative',
+    effect: "creative",
     grabCursor: true,
     centeredSlides: true,
     creativeEffect: {
       prev: {
         shadow: false,
-        translate: ['-180%', 0, -600],
-        origin: 'left center',
+        translate: ["-180%", 0, -600],
+        origin: "left center",
       },
       next: {
         shadow: false,
-        translate: ['180%', 0, -600],
+        translate: ["180%", 0, -600],
         opacity: 1,
-        origin: 'right center',
+        origin: "right center",
       },
     },
     modules: [EffectCreative],
@@ -97,23 +102,29 @@ export default function MobileEmotionPage({ type, id, setShowEmotionsPage }) {
       <span onClick={() => setShowEmotionsPage(false)}>
         <FontAwesomeIcon
           icon={faArrowLeft}
-          style={{ color: '#417D88', marginLeft: '28px' }}
+          style={{ color: "#417D88", marginLeft: "28px" }}
           size="xl"
         />
       </span>
-      <h1 className={MobileEmotionPageStyles.mobile_emotion_title}>Emotion Journal</h1>
+      <h1 className={MobileEmotionPageStyles.mobile_emotion_title}>
+        Emotion Journal
+      </h1>
       <p className={MobileEmotionPageStyles.mobile_emotion_description}>
         How are you feeling? <br />
         Choose from our prompt.
       </p>
       <div className="diary__emotions-wrapper">
         <div className={MobileEmotionPageStyles.mobile_emotion_swiper}>
-          <Swiper {...swiperSettings} className={MobileEmotionPageStyles.swiper} ref={swiperRef}>
+          <Swiper
+            {...swiperSettings}
+            className={MobileEmotionPageStyles.swiper}
+            ref={swiperRef}
+          >
             {listEmotions.map((item) => (
               <SwiperSlide key={item.id}>
                 {({ isActive }) => (
                   <div
-                    onClick={() => setValue('primary_emotion', item.title)}
+                    onClick={() => setValue("primary_emotion", item.title)}
                     className={
                       isActive
                         ? MobileEmotionPageStyles.swiper_slide_active
@@ -121,7 +132,9 @@ export default function MobileEmotionPage({ type, id, setShowEmotionsPage }) {
                     }
                   >
                     <img src={item.img} alt={item.title} />
-                    <div className={MobileEmotionPageStyles.swiper_slide_title}>{item.title}</div>
+                    <div className={MobileEmotionPageStyles.swiper_slide_title}>
+                      {item.title}
+                    </div>
                   </div>
                 )}
               </SwiperSlide>
@@ -155,7 +168,10 @@ export default function MobileEmotionPage({ type, id, setShowEmotionsPage }) {
         className={MobileEmotionPageStyles.mobile_emotions__save_wrapper}
         onClick={handleSaveClick}
       >
-        <button type="submit" className={MobileEmotionPageStyles.mobile_emotions__save}>
+        <button
+          type="submit"
+          className={MobileEmotionPageStyles.mobile_emotions__save}
+        >
           Save
         </button>
       </div>

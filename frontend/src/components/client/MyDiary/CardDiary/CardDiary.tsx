@@ -1,9 +1,9 @@
-import React from 'react';
-import './CardDiary.css';
-import Button from '../../../psy/button/ButtonHeadline';
-import { useNavigate } from 'react-router-dom';
-import { API } from '../../../../service/axios';
-import { getDate } from '../../../../utils/helperFunction/getDate';
+import React from "react";
+import "./CardDiary.css";
+import Button from "../../../psy/button/ButtonHeadline";
+import { useNavigate } from "react-router-dom";
+import { API } from "../../../../service/axios";
+import { getDate } from "../../../../utils/helperFunction/getDate";
 import { convertFromRaw, ContentState } from 'draft-js';
 
 export default function CardDiaryClient({ card, setFetching, openModal }) {
@@ -46,7 +46,9 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
     <div className="diary__card" onClick={() => goDiary()}>
       <div className="diary__card-header">
         <div className="diary__card-title-client">
-          <div className="diary__card-title__day">{new Date(card.add_date).getUTCDate()}</div>
+          <div className="diary__card-title__day">
+            {new Date(card.add_date).getUTCDate()}
+          </div>
           <div>
             <span>{getDate(card).dayOfWeek}</span> <br />
             <span>{getDate(card).monthYear}</span>
@@ -62,7 +64,7 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
       <div className="diary__card-text">{parseText()}</div>
 
       <div className="diary__card-buttons" onClick={(e) => e.stopPropagation()}>
-        {card.primary_emotion != '' && (
+        {card.primary_emotion != "" && (
           <Button className="diary__card-button">
             {card.primary_emotion
               .toLowerCase()
