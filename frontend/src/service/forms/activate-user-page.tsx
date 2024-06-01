@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../authContext";
 import { API } from "../axios";
-import "../../css/app.css";
+import "../../css/app.scss";
 
 function ActivateUserPage() {
   let { userId, userToken } = useParams();
