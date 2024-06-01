@@ -1,5 +1,6 @@
+//@ts-nocheck
 import React, { useState, useRef, useEffect } from "react";
-import { Controller, useFormContext, useForm } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import {
   listEmotions,
   listEmotionsChipsMobile,
@@ -12,9 +13,12 @@ import { EffectCreative } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-creative";
 import "./swiper.css";
-import { API } from "../../../../service/axios";
 
-export default function MobileEmotionPage({ type, id, setShowEmotionsPage }) {
+export default function MobileEmotionPage({ type, id, setShowEmotionsPage }: {
+  type: string;
+  id: string;
+  setShowEmotionsPage: () => void;
+}) {
   const { control, getValues, setValue } = useFormContext();
 
   const clarifyingEmotionValues = getValues("clarifying_emotion");

@@ -7,20 +7,22 @@ import {
 } from "../../../psy/DiaryPageContent/DiaryBlockEmotion/constants";
 import { ToolbarProvider } from "../../../../service/ToolbarContext";
 import {
-  EditorState,
-  convertFromRaw,
-  convertToRaw,
-  ContentState,
+  EditorState
 } from "draft-js";
 import { EditorToolbar } from "../../../../service/editors-toolbar";
 import { Controller, useFormContext } from "react-hook-form";
 import DiaryBlockEmotionClientMobile from "./DiaryBlockEmotionClientMobile";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
+import { ClientDiary } from "../../../../store/entities/assignments/types";
+import { useEditorState } from "../../../../utils/hook/useEditorState";
+import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig";
 
 export default function DiaryBlockEmotionClient({
   diary,
-  type,
   setShowEmotionsPage,
+}: {
+  diary: ClientDiary | null;
+  setShowEmotionsPage: () => void;
 }) {
   const isMobileWidth = useMobileWidth();
 
@@ -29,41 +31,13 @@ export default function DiaryBlockEmotionClient({
   const primaryEmotionValue = getValues("primary_emotion");
   const secondEmotionValues = getValues("clarifying_emotion");
 
-  const block = {
-    type: "open",
-    question: getValues("emotion_type"),
-    description: "d",
-  };
-
-  const [editorState, setEditorState] = useState(() => {
-    if (diary && diary.emotion_type) {
-      let content;
-      try {
-        content = JSON.parse(diary.emotion_type);
-        if (typeof content === "object") {
-          const contentState = convertFromRaw(content);
-          return EditorState.createWithContent(contentState);
-        }
-      } catch (error) {
-        console.error("Failed to parse JSON:", error);
-        const contentState = ContentState.createFromText(diary.emotion_type);
-        return EditorState.createWithContent(contentState);
-      }
-    }
-    return EditorState.createEmpty();
-  });
-
-  const handleEditorStateChange = (newEditorState) => {
-    setEditorState(newEditorState);
-    const contentState = newEditorState.getCurrentContent();
-    const rawContent = convertToRaw(contentState);
-    setValue("emotion_type", JSON.stringify(rawContent));
-  };
+  const [editorState, handleEditorStateChange] = useEditorState(diary?.emotion_type || null);
+  const block = getBlockConfig(getValues, "emotion_type");
 
   function handleClickSecondEmotion(item) {
     if (secondEmotionValues.includes(item.title)) {
       const newArray = secondEmotionValues.filter(
-        (emotion) => emotion !== item.title,
+        (emotion) => emotion !== item.title
       );
       setValue("clarifying_emotion", newArray);
     } else {
@@ -87,7 +61,7 @@ export default function DiaryBlockEmotionClient({
                 {...fieldsProps}
                 ref={editorRef}
                 editorState={editorState}
-                setEditorState={handleEditorStateChange}
+                setEditorState={(newEditorState: EditorState) => handleEditorStateChange(newEditorState, setValue, "emotion_type")}
                 placeholder={"Write your answer here..."}
                 block={block}
                 isMobileWidth={isMobileWidth}

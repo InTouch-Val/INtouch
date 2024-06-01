@@ -1,5 +1,5 @@
 //@ts-nocheck
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import DiaryHeaderClient from "./Header/DiaryHeaderClient";
 import "./DiaryPage.css";
 import DiaryEventDetailsClient from "./EventDetailsClient/EventDetailsClient";
@@ -11,8 +11,10 @@ import { FormProvider, useForm } from "react-hook-form";
 import { API } from "../../../service/axios";
 import { useNavigate, useParams } from "react-router-dom";
 import MobileEmotionPage from "../MyDiary/MobileEmotionPage/MobileEmotionPage";
+import { ClientDiary } from "../../../store/entities/assignments/types";
+import { ClientDiaryEntry } from "../../../store/entities/assignments/types";
 
-export default function DiaryPageContentClient({ diary, type }) {
+export default function DiaryPageContentClient({ diary, type }: { diary: ClientDiary | null; type: string })  {
   //Changing card content and menu
 
   const navigate = useNavigate();
@@ -33,7 +35,7 @@ export default function DiaryPageContentClient({ diary, type }) {
     },
     mode: "all",
   });
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: ClientDiaryEntry) => {
     if (type == "create") {
       try {
         const response = await API.post(`/diary-notes/`, data);
@@ -101,6 +103,8 @@ export default function DiaryPageContentClient({ diary, type }) {
 
   const [showEmotionsPage, setShowEmotionsPage] = useState(false);
 
+  console.log(diary)
+
   return (
     <form className="diaryPage" onSubmit={methods.handleSubmit(onSubmit)}>
       <FormProvider {...methods}>
@@ -119,14 +123,13 @@ export default function DiaryPageContentClient({ diary, type }) {
         {!showEmotionsPage ? (
           <>
             <DiaryHeaderClient diary={diary} onSubmit={onSubmit} />
-            <DiaryEventDetailsClient diary={diary} type={type} />
-            <DiaryBlockAnalysisClient diary={diary} type={type} />
+            <DiaryEventDetailsClient diary={diary} />
+            <DiaryBlockAnalysisClient diary={diary} />
             <DiaryBlockEmotionClient
               diary={diary}
-              type={type}
               setShowEmotionsPage={setShowEmotionsPage}
             />
-            <DiaryBlockPhysicalSensationClient diary={diary} type={type} />
+            <DiaryBlockPhysicalSensationClient diary={diary} />
             <DiaryFooterClient diary={diary} />
           </>
         ) : (
@@ -134,7 +137,6 @@ export default function DiaryPageContentClient({ diary, type }) {
             type={type}
             id={params.id}
             setShowEmotionsPage={setShowEmotionsPage}
-            diary={diary}
           />
         )}
       </FormProvider>

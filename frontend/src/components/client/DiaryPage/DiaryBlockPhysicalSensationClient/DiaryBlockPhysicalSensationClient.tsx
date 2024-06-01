@@ -1,55 +1,25 @@
 //@ts-nocheck
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef } from "react";
 import "../DiaryPage.css";
 import {
-  EditorState,
-  convertFromRaw,
-  convertToRaw,
-  ContentState,
+  EditorState
 } from "draft-js";
 import { EditorToolbar } from "../../../../service/editors-toolbar";
 import { ToolbarProvider } from "../../../../service/ToolbarContext";
 import { Controller, useFormContext } from "react-hook-form";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
+import { ClientDiary } from "../../../../store/entities/assignments/types";
+import { useEditorState } from "../../../../utils/hook/useEditorState";
+import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig";
 
-export default function DiaryBlockPhysicalSensationClient({ diary, type }) {
+export default function DiaryBlockPhysicalSensationClient({ diary }: { diary: ClientDiary | null }) {
   const isMobileWidth = useMobileWidth();
 
   const editorRef = useRef(null);
   const { control, setValue, getValues } = useFormContext();
 
-  const block = {
-    type: "open",
-    question: getValues("physical_sensations"),
-    description: "d",
-  };
-
-  const [editorState, setEditorState] = useState(() => {
-    if (diary && diary.physical_sensations) {
-      let content;
-      try {
-        content = JSON.parse(diary.physical_sensations);
-        if (typeof content === "object") {
-          const contentState = convertFromRaw(content);
-          return EditorState.createWithContent(contentState);
-        }
-      } catch (error) {
-        console.error("Failed to parse JSON:", error);
-        const contentState = ContentState.createFromText(
-          diary.physical_sensations,
-        );
-        return EditorState.createWithContent(contentState);
-      }
-    }
-    return EditorState.createEmpty();
-  });
-
-  const handleEditorStateChange = (newEditorState) => {
-    setEditorState(newEditorState);
-    const contentState = newEditorState.getCurrentContent();
-    const rawContent = convertToRaw(contentState);
-    setValue("physical_sensations", JSON.stringify(rawContent));
-  };
+  const [editorState, handleEditorStateChange] = useEditorState(diary?.physical_sensations || null);
+  const block = getBlockConfig(getValues, "physical_sensations");
 
   return (
     <div className="diary__block-event">
@@ -67,7 +37,7 @@ export default function DiaryBlockPhysicalSensationClient({ diary, type }) {
               {...fieldsProps}
               ref={editorRef}
               editorState={editorState}
-              setEditorState={handleEditorStateChange}
+              setEditorState={(newEditorState: EditorState) => handleEditorStateChange(newEditorState, setValue, "physical_sensations")}
               placeholder={"Write your answer here..."}
               block={block}
               isMobileWidth={isMobileWidth}
