@@ -103,6 +103,10 @@ function CompleteAssignments() {
     setInitialData(blocks);
   }, [blocks]);
 
+  useEffect(() => {
+    return setInitialData(false);
+  }, []);
+
   const checkIfChangesMade = () => {
     // Here we compare deep equality of current data and initial data
     return (
