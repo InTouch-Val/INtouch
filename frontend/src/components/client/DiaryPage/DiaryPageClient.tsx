@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React, { useState } from "react";
 import DiaryHeaderClient from "./Header/DiaryHeaderClient";
 import "./DiaryPage.css";
@@ -50,10 +49,9 @@ export default function DiaryPageContentClient({ diary, type }) {
     }
   }, [showModal]);
 
-  // Ensure modal state is reset appropriately to hide it when needed
   React.useEffect(() => {
     if (!showExitUnsaveModal) {
-      setShowModal(false); // Reset showModal when showExitUnsaveModal is set to false
+      setShowModal(false);
     }
   }, [showExitUnsaveModal]);
 

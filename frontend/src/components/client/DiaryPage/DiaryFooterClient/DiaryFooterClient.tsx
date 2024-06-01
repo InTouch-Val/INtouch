@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React, { useEffect } from "react";
 import "./styles.css";
 import Button from "../../../psy/button/ButtonHeadline";
