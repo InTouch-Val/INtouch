@@ -90,6 +90,8 @@ function CompleteAssignments() {
 
   useEffect(() => {
     setAssignmentCredentials(card);
+    setInitialData(false);
+    setIsSaved(false);
   }, []);
 
   useEffect(() => {
@@ -102,10 +104,6 @@ function CompleteAssignments() {
   useEffect(() => {
     setInitialData(blocks);
   }, [blocks]);
-
-  useEffect(() => {
-    return setInitialData(false);
-  }, []);
 
   const checkIfChangesMade = () => {
     // Here we compare deep equality of current data and initial data
@@ -333,7 +331,7 @@ function CompleteAssignments() {
         blocks: blockInfo,
       });
       if (res.status >= 200 && res.status < 300) {
-        console.log('saved');
+        setIsSaved(true);
       } else {
         console.log(`Status: ${res.status}`);
       }
