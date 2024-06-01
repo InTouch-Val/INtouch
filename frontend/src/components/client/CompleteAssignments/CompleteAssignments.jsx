@@ -21,8 +21,6 @@ import decodeStyledText from '../../../service/decodeStyledText';
 import Modal from '../../modals/Modal/Modal';
 import AssignmentNotComplete from '../../modals/modal-content/assignmentNotComplete';
 import AssignmentExit from '../../modals/modal-content/assgnmentExit';
-import AssignmentNotComplete from '../../modals/modal-content/assignmentNotComplete';
-import AssignmentExit from '../../modals/modal-content/assgnmentExit';
 import { minMobWidth, maxMobWidth } from '../../../utils/constants';
 
 function CompleteAssignments() {
@@ -95,6 +93,10 @@ function CompleteAssignments() {
   useEffect(() => {
     setInitialData(blocks);
   }, [blocks]);
+
+  useEffect(() => {
+    return setInitialData(false);
+  }, []);
 
   const checkIfChangesMade = () => {
     // Here we compare deep equality of current data and initial data
