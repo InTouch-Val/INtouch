@@ -32,60 +32,64 @@ function ClientAssignmentBlocks({
   const [selectedValue, setSelectedValue] = useState(block.reply || "");
   const editorRef = useRef(null);
 
-  const [editorState, setEditorState] = useState(() => {
-    if (block.content) {
-      const content =
-        typeof block.content === "string"
-          ? JSON.parse(block.content)
-          : block.content;
-      const contentState = convertFromRaw(content);
-      return EditorState.createWithContent(contentState);
-    }
-    return EditorState.createEmpty();
-  });
+  console.log("osy", isViewPsy)
+  console.log("vie", isView)
+  console.log("vlo", block)
 
-  useEffect(() => {
-    setSelectedValue(editorState.getCurrentContent().getPlainText());
-  }, [editorState]);
+  // const [editorState, setEditorState] = useState(() => {
+  //   if (block.content) {
+  //     const content =
+  //       typeof block.content === "string"
+  //         ? JSON.parse(block.content)
+  //         : block.content;
+  //     const contentState = convertFromRaw(content);
+  //     return EditorState.createWithContent(contentState);
+  //   }
+  //   return EditorState.createEmpty();
+  // });
+
+  // useEffect(() => {
+  //   setSelectedValue(editorState.getCurrentContent().getPlainText());
+  // }, [editorState]);
 
   const MAX_INPUT_LENGTH = 1000;
 
-  const handleEditorChange = useCallback(
-    (newEditorState) => {
-      const contentState = newEditorState.getCurrentContent();
-      const inputText = contentState.getPlainText();
+  // const handleEditorChange = useCallback(
+  //   (newEditorState) => {
+  //     const contentState = newEditorState.getCurrentContent();
+  //     const inputText = contentState.getPlainText();
 
-      if (inputText.length > MAX_INPUT_LENGTH) {
-        const truncatedText = inputText.slice(0, MAX_INPUT_LENGTH);
-        const newContentState = ContentState.createFromText(truncatedText);
-        const truncatedEditorState =
-          EditorState.createWithContent(newContentState);
+  //     if (inputText.length > MAX_INPUT_LENGTH) {
+  //       const truncatedText = inputText.slice(0, MAX_INPUT_LENGTH);
+  //       const newContentState = ContentState.createFromText(truncatedText);
+  //       const truncatedEditorState =
+  //         EditorState.createWithContent(newContentState);
 
-        const rawContent = convertToRaw(newContentState);
-        const serializedData = JSON.stringify(rawContent);
-        setEditorState(truncatedEditorState);
-        updateBlock(block.id, serializedData, []);
-      } else {
-        const rawContent = convertToRaw(contentState);
-        const serializedData = JSON.stringify(rawContent);
-        setEditorState(newEditorState);
-        updateBlock(block.id, serializedData, []);
-      }
-    },
-    [updateBlock, block.id],
-  );
+  //       const rawContent = convertToRaw(newContentState);
+  //       const serializedData = JSON.stringify(rawContent);
+  //       setEditorState(truncatedEditorState);
+  //       updateBlock(block.id, serializedData, []);
+  //     } else {
+  //       const rawContent = convertToRaw(contentState);
+  //       const serializedData = JSON.stringify(rawContent);
+  //       setEditorState(newEditorState);
+  //       updateBlock(block.id, serializedData, []);
+  //     }
+  //   },
+  //   [updateBlock, block.id],
+  // );
 
-  const interceptSetEditorState = useCallback(
-    (newEditorState) => {
-      handleEditorChange(newEditorState);
-    },
-    [handleEditorChange],
-  );
+  // const interceptSetEditorState = useCallback(
+  //   (newEditorState) => {
+  //     handleEditorChange(newEditorState);
+  //   },
+  //   [handleEditorChange],
+  // );
 
   // Determines if the block is filled in
-  const isValid =
-    inputValidationStates[block.type + "Inputs"] &&
-    inputValidationStates[block.type + "Inputs"][block.id];
+  // const isValid =
+  //   inputValidationStates[block.type + "Inputs"] &&
+  //   inputValidationStates[block.type + "Inputs"][block.id];
 
   useEffect(() => {
     if (choices && choices.length > 0) {
@@ -151,27 +155,70 @@ function ClientAssignmentBlocks({
       </div>
     );
   }
+
   if (block.type === "open") {
     return (
-      <div
-        className={`block assignment__block ${!isValid && showInvalidInputs ? "uncompleted" : ""}`}
-      >
-        <h3 className="assignment__block-header">{block.question}</h3>
-        <ToolbarProvider>
+      // <div
+      //   className={`block assignment__block ${!isValid && showInvalidInputs ? "uncompleted" : ""}`}
+      // >
+
+        <div>
+        {!block.description && !isViewPsy ? (
+          <h3 className="assignment__block-header">{block.question}</h3>
+        ) : (
+          <>
+          <div
+            className="block__text"
+            dangerouslySetInnerHTML={{
+              __html: block.description
+                ? !isViewPsy
+                  ? block.description
+                  : decodeStyledText(block.description)
+                : decodeStyledText(getObjectFromEditorState(block.content)),
+            }}
+          />
+        </>
+        )}
+         <ToolbarProvider>
           <EditorToolbar
-            editorState={editorState}
+            // editorState={editorState}
             ref={editorRef}
-            onChange={handleEditorChange}
+            // onChange={handleEditorChange}
             placeholder="Write your answer here..."
             readOnly={isView}
             block={block}
-            setEditorState={interceptSetEditorState}
+            // setEditorState={interceptSetEditorState}
             isMobileWidth={isMobileWidth}
           />
         </ToolbarProvider>
       </div>
     );
   }
+
+  // if (block.type === "open") {
+  //   return (
+  //     <div
+  //       className={`block assignment__block ${!isValid && showInvalidInputs ? "uncompleted" : ""}`}
+  //     >
+
+  //       <h3 className="assignment__block-header">{block.question}</h3>
+  //       <ToolbarProvider>
+  //         <EditorToolbar
+  //           editorState={editorState}
+  //           ref={editorRef}
+  //           onChange={handleEditorChange}
+  //           placeholder="Write your answer here..."
+  //           readOnly={isView}
+  //           block={block}
+  //           setEditorState={interceptSetEditorState}
+  //           isMobileWidth={isMobileWidth}
+  //         />
+  //       </ToolbarProvider>
+        
+  //     </div>
+      
+  //   );
+  // }
 
   if (block.type === "image") {
     return (
@@ -196,9 +243,11 @@ function ClientAssignmentBlocks({
   }
   if (block.type === "range") {
     return (
-      <div
-        className={`block assignment__block ${!isValid && showInvalidInputs ? "uncompleted" : ""}`}
-      >
+      // <div
+      //   className={`block assignment__block ${!isValid && showInvalidInputs ? "uncompleted" : ""}`}
+      // >
+
+      <div>
         {!block.description && !isViewPsy ? (
           <h3 className="assignment__block-header">{block.question}</h3>
         ) : (
@@ -259,9 +308,11 @@ function ClientAssignmentBlocks({
   }
   if (block.type === "single") {
     return (
-      <div
-        className={`block assignment__block ${!isValid && showInvalidInputs ? "uncompleted" : ""}`}
-      >
+      // <div
+      //   className={`block assignment__block ${!isValid && showInvalidInputs ? "uncompleted" : ""}`}
+      // >
+
+      <div>
         {!block.description && !isViewPsy ? (
           <h4 className="assignment__block-header">{block.question}</h4>
         ) : (
@@ -303,9 +354,11 @@ function ClientAssignmentBlocks({
   }
   if (block.type === "multiple") {
     return (
-      <div
-        className={`block assignment__block ${!isValid && showInvalidInputs ? "uncompleted" : ""}`}
-      >
+      // <div
+      //   className={`block assignment__block ${!isValid && showInvalidInputs ? "uncompleted" : ""}`}
+      // >
+
+      <div>
         {!block.description && !isViewPsy ? (
           <h4 className="assignment__block-header">{block.question}</h4>
         ) : (
