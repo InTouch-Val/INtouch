@@ -14,7 +14,11 @@ import "swiper/css";
 import "swiper/css/effect-creative";
 import "./swiper.css";
 
-export default function MobileEmotionPage({ type, id, setShowEmotionsPage }: {
+export default function MobileEmotionPage({
+  type,
+  id,
+  setShowEmotionsPage,
+}: {
   type: string;
   id: string;
   setShowEmotionsPage: () => void;

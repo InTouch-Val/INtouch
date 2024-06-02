@@ -3,24 +3,27 @@ import React, { useState, useRef, useEffect } from "react";
 import "../DiaryPage.css";
 import { ToolbarProvider } from "../../../../service/ToolbarContext";
 import { EditorToolbar } from "../../../../service/editors-toolbar";
-import {
-  EditorState
-} from "draft-js";
+import { EditorState } from "draft-js";
 import { Controller, useFormContext } from "react-hook-form";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 import { ClientDiary } from "../../../../store/entities/assignments/types";
 import { useEditorState } from "../../../../utils/hook/useEditorState";
 import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig";
 
-export default function EventDetailsClient({ diary }: { diary: ClientDiary | null }) {
+export default function EventDetailsClient({
+  diary,
+}: {
+  diary: ClientDiary | null;
+}) {
   const isMobileWidth = useMobileWidth();
 
   const editorRef = useRef<EditorToolbar | null>(null);
 
   const { control, setValue, getValues } = useFormContext();
-  const [editorState, handleEditorStateChange] = useEditorState(diary?.event_details || null);
+  const [editorState, handleEditorStateChange] = useEditorState(
+    diary?.event_details || null,
+  );
   const block = getBlockConfig(getValues, "event_details");
-
 
   return (
     <div className="diary__block-event">
@@ -38,7 +41,13 @@ export default function EventDetailsClient({ diary }: { diary: ClientDiary | nul
               key="diary_event"
               ref={editorRef}
               editorState={editorState}
-              setEditorState={(newEditorState: EditorState) => handleEditorStateChange(newEditorState, setValue, "event_details")}
+              setEditorState={(newEditorState: EditorState) =>
+                handleEditorStateChange(
+                  newEditorState,
+                  setValue,
+                  "event_details",
+                )
+              }
               placeholder={"Write your answer here..."}
               block={block}
               isMobileWidth={isMobileWidth}

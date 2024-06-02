@@ -32,9 +32,9 @@ function ClientAssignmentBlocks({
   const [selectedValue, setSelectedValue] = useState(block.reply || "");
   const editorRef = useRef(null);
 
-  console.log("osy", isViewPsy)
-  console.log("vie", isView)
-  console.log("vlo", block)
+  console.log("osy", isViewPsy);
+  console.log("vie", isView);
+  console.log("vlo", block);
 
   // const [editorState, setEditorState] = useState(() => {
   //   if (block.content) {
@@ -162,24 +162,24 @@ function ClientAssignmentBlocks({
       //   className={`block assignment__block ${!isValid && showInvalidInputs ? "uncompleted" : ""}`}
       // >
 
-        <div>
+      <div>
         {!block.description && !isViewPsy ? (
           <h3 className="assignment__block-header">{block.question}</h3>
         ) : (
           <>
-          <div
-            className="block__text"
-            dangerouslySetInnerHTML={{
-              __html: block.description
-                ? !isViewPsy
-                  ? block.description
-                  : decodeStyledText(block.description)
-                : decodeStyledText(getObjectFromEditorState(block.content)),
-            }}
-          />
-        </>
+            <div
+              className="block__text"
+              dangerouslySetInnerHTML={{
+                __html: block.description
+                  ? !isViewPsy
+                    ? block.description
+                    : decodeStyledText(block.description)
+                  : decodeStyledText(getObjectFromEditorState(block.content)),
+              }}
+            />
+          </>
         )}
-         <ToolbarProvider>
+        <ToolbarProvider>
           <EditorToolbar
             // editorState={editorState}
             ref={editorRef}
@@ -214,9 +214,9 @@ function ClientAssignmentBlocks({
   //           isMobileWidth={isMobileWidth}
   //         />
   //       </ToolbarProvider>
-        
+
   //     </div>
-      
+
   //   );
   // }
 

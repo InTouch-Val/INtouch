@@ -1,9 +1,7 @@
 //@ts-nocheck
 import React, { useRef } from "react";
 import "../DiaryPage.css";
-import {
-  EditorState
-} from "draft-js";
+import { EditorState } from "draft-js";
 import { EditorToolbar } from "../../../../service/editors-toolbar";
 import { ToolbarProvider } from "../../../../service/ToolbarContext";
 import { Controller, useFormContext } from "react-hook-form";
@@ -12,13 +10,19 @@ import { ClientDiary } from "../../../../store/entities/assignments/types";
 import { useEditorState } from "../../../../utils/hook/useEditorState";
 import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig";
 
-export default function DiaryBlockPhysicalSensationClient({ diary }: { diary: ClientDiary | null }) {
+export default function DiaryBlockPhysicalSensationClient({
+  diary,
+}: {
+  diary: ClientDiary | null;
+}) {
   const isMobileWidth = useMobileWidth();
 
   const editorRef = useRef(null);
   const { control, setValue, getValues } = useFormContext();
 
-  const [editorState, handleEditorStateChange] = useEditorState(diary?.physical_sensations || null);
+  const [editorState, handleEditorStateChange] = useEditorState(
+    diary?.physical_sensations || null,
+  );
   const block = getBlockConfig(getValues, "physical_sensations");
 
   return (
@@ -37,7 +41,13 @@ export default function DiaryBlockPhysicalSensationClient({ diary }: { diary: Cl
               {...fieldsProps}
               ref={editorRef}
               editorState={editorState}
-              setEditorState={(newEditorState: EditorState) => handleEditorStateChange(newEditorState, setValue, "physical_sensations")}
+              setEditorState={(newEditorState: EditorState) =>
+                handleEditorStateChange(
+                  newEditorState,
+                  setValue,
+                  "physical_sensations",
+                )
+              }
               placeholder={"Write your answer here..."}
               block={block}
               isMobileWidth={isMobileWidth}

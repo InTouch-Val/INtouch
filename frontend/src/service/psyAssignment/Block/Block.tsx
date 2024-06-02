@@ -7,6 +7,7 @@ import { ToolbarProvider } from "../../ToolbarContext";
 import arrow from "../../../images/arrow.svg";
 import copy from "../../../images/block-copy-btn.svg";
 import trash from "../../../images/block-trash-btn.svg";
+import useMobileWidth from "../../../utils/hook/useMobileWidth";
 
 function Block({
   block,
@@ -28,6 +29,8 @@ function Block({
     EditorState.createEmpty(),
   );
 
+  const isMobileWidth = useMobileWidth();
+
   const handleEditorStateChange = useCallback(
     (newEditorState) => {
       setEditorState(newEditorState);
@@ -35,6 +38,24 @@ function Block({
       const contentState = newEditorState.getCurrentContent();
       const text = contentState.getPlainText();
       updateBlock(block.id, contentState, block.choices, text);
+      if (block.type === "open") {
+        return (
+          <div
+          className="block assignment__block"
+          >
+            <h3 className="assignment__block-header">{block.question}</h3>
+            <EditorToolbar
+              editorState={editorState}
+              // onChange={handleEditorChange}
+              placeholder="Write your answer here..."
+            />
+            <EditorToolbar
+              editorState={editorState}
+              setEditorState={setEditorState}
+            />
+          </div>
+        );
+      }
     },
     [block.id, block.content, block.choices, updateBlock],
   );
@@ -64,6 +85,7 @@ function Block({
               errorText={errorText}
               setErrorText={setErrorText}
               setIsError={setIsError}
+              isMobileWidth={isMobileWidth}
             />
           </ToolbarProvider>
         </div>

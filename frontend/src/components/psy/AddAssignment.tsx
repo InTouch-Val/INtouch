@@ -421,7 +421,7 @@ function AddAssignment() {
     );
   };
 
-  console.log(blocks)
+  console.log(blocks);
 
   return (
     <div className="assignments-page">

@@ -27,7 +27,11 @@ export const useEditorState = (initialContent: string | null) => {
     return EditorState.createEmpty();
   });
 
-  const handleEditorStateChange = (newEditorState: EditorState, setValue: (name: string, value: any) => void, fieldName: string) => {
+  const handleEditorStateChange = (
+    newEditorState: EditorState,
+    setValue: (name: string, value: any) => void,
+    fieldName: string,
+  ) => {
     setEditorState(newEditorState);
     const contentState = newEditorState.getCurrentContent();
     const rawContent = convertToRaw(contentState);

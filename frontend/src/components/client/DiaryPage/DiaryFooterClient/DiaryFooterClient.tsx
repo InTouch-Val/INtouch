@@ -6,7 +6,11 @@ import { useFormContext, useWatch } from "react-hook-form";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 import { ClientDiary } from "../../../../store/entities/assignments/types";
 
-export default function DiaryFooterClient({ diary }: { diary: ClientDiary | null }){
+export default function DiaryFooterClient({
+  diary,
+}: {
+  diary: ClientDiary | null;
+}) {
   const isMobileWidth = useMobileWidth();
 
   const [active, setActive] = React.useState(diary ? diary.visible : false);

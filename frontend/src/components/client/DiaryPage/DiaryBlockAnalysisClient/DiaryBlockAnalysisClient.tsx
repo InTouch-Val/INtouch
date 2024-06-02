@@ -1,26 +1,29 @@
 //@ts-nocheck
-import React, {useRef } from "react";
+import React, { useRef } from "react";
 import "../DiaryPage.css";
 import { ToolbarProvider } from "../../../../service/ToolbarContext";
 import { EditorToolbar } from "../../../../service/editors-toolbar";
 import { Controller, useFormContext } from "react-hook-form";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 import { ClientDiary } from "../../../../store/entities/assignments/types";
-import {getBlockConfig} from "../../../../utils/helperFunction/getBlockConfig";
-import {useEditorState}from "../../../../utils/hook/useEditorState";
-import {
-  EditorState
-} from "draft-js";
+import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig";
+import { useEditorState } from "../../../../utils/hook/useEditorState";
+import { EditorState } from "draft-js";
 
-export default function DiaryBlockAnalysisClient({ diary }: { diary: ClientDiary | null }){
+export default function DiaryBlockAnalysisClient({
+  diary,
+}: {
+  diary: ClientDiary | null;
+}) {
   const isMobileWidth = useMobileWidth();
-  const { control,setValue,  getValues } = useFormContext();
+  const { control, setValue, getValues } = useFormContext();
 
   const editorRef = useRef<EditorToolbar | null>(null);
 
-  const [editorState, handleEditorStateChange] = useEditorState(diary?.thoughts_analysis || null);
+  const [editorState, handleEditorStateChange] = useEditorState(
+    diary?.thoughts_analysis || null,
+  );
   const block = getBlockConfig(getValues, "thoughts_analysis");
-
 
   return (
     <div className="diary__block-event">
@@ -40,7 +43,13 @@ export default function DiaryBlockAnalysisClient({ diary }: { diary: ClientDiary
               key="diary_analysis"
               ref={editorRef}
               editorState={editorState}
-              setEditorState={(newEditorState: EditorState) => handleEditorStateChange(newEditorState, setValue, "thoughts_analysis")}
+              setEditorState={(newEditorState: EditorState) =>
+                handleEditorStateChange(
+                  newEditorState,
+                  setValue,
+                  "thoughts_analysis",
+                )
+              }
               placeholder={"Write your answer here..."}
               block={block}
               isMobileWidth={isMobileWidth}

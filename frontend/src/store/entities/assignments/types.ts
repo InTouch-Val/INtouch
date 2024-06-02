@@ -70,7 +70,7 @@ export type ClientDiary = {
   thoughts_analysis: string; // Raw JSON string
   thoughts_analysis_tags: string;
   visible: boolean;
-}
+};
 
 export type ClientDiaryEntry = {
   answer_emotion: any;
@@ -81,4 +81,4 @@ export type ClientDiaryEntry = {
   primary_emotion: string;
   thoughts_analysis: string;
   visible: boolean;
-}
+};

@@ -6,9 +6,7 @@ import {
   listEmotionsChips,
 } from "../../../psy/DiaryPageContent/DiaryBlockEmotion/constants";
 import { ToolbarProvider } from "../../../../service/ToolbarContext";
-import {
-  EditorState
-} from "draft-js";
+import { EditorState } from "draft-js";
 import { EditorToolbar } from "../../../../service/editors-toolbar";
 import { Controller, useFormContext } from "react-hook-form";
 import DiaryBlockEmotionClientMobile from "./DiaryBlockEmotionClientMobile";
@@ -31,13 +29,15 @@ export default function DiaryBlockEmotionClient({
   const primaryEmotionValue = getValues("primary_emotion");
   const secondEmotionValues = getValues("clarifying_emotion");
 
-  const [editorState, handleEditorStateChange] = useEditorState(diary?.emotion_type || null);
+  const [editorState, handleEditorStateChange] = useEditorState(
+    diary?.emotion_type || null,
+  );
   const block = getBlockConfig(getValues, "emotion_type");
 
   function handleClickSecondEmotion(item) {
     if (secondEmotionValues.includes(item.title)) {
       const newArray = secondEmotionValues.filter(
-        (emotion) => emotion !== item.title
+        (emotion) => emotion !== item.title,
       );
       setValue("clarifying_emotion", newArray);
     } else {
@@ -61,7 +61,13 @@ export default function DiaryBlockEmotionClient({
                 {...fieldsProps}
                 ref={editorRef}
                 editorState={editorState}
-                setEditorState={(newEditorState: EditorState) => handleEditorStateChange(newEditorState, setValue, "emotion_type")}
+                setEditorState={(newEditorState: EditorState) =>
+                  handleEditorStateChange(
+                    newEditorState,
+                    setValue,
+                    "emotion_type",
+                  )
+                }
                 placeholder={"Write your answer here..."}
                 block={block}
                 isMobileWidth={isMobileWidth}

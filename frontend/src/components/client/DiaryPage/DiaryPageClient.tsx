@@ -14,7 +14,13 @@ import MobileEmotionPage from "../MyDiary/MobileEmotionPage/MobileEmotionPage";
 import { ClientDiary } from "../../../store/entities/assignments/types";
 import { ClientDiaryEntry } from "../../../store/entities/assignments/types";
 
-export default function DiaryPageContentClient({ diary, type }: { diary: ClientDiary | null; type: string })  {
+export default function DiaryPageContentClient({
+  diary,
+  type,
+}: {
+  diary: ClientDiary | null;
+  type: string;
+}) {
   //Changing card content and menu
 
   const navigate = useNavigate();
@@ -103,7 +109,7 @@ export default function DiaryPageContentClient({ diary, type }: { diary: ClientD
 
   const [showEmotionsPage, setShowEmotionsPage] = useState(false);
 
-  console.log(diary)
+  console.log(diary);
 
   return (
     <form className="diaryPage" onSubmit={methods.handleSubmit(onSubmit)}>
