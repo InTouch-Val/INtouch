@@ -103,8 +103,7 @@ const EditorToolbar = forwardRef(
           );
           console.log(newEditorState);
           setEditorState(newEditorState);
-        } catch (error) {
-        }
+        } catch (error) {}
       } else if (block.question) {
         const contentState = ContentState.createFromText(block.question);
         const newEditorState = EditorState.createWithContent(contentState);

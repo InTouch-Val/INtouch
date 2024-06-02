@@ -7,7 +7,11 @@ import { ToolbarProvider } from "../../../../service/ToolbarContext";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 
-export default function DiaryBlockPhysicalSensationClient({ diary, type, showInputsincomplete }) {
+export default function DiaryBlockPhysicalSensationClient({
+  diary,
+  type,
+  showInputsincomplete,
+}) {
   const isMobileWidth = useMobileWidth();
 
   const editorRef = useRef(null);
@@ -47,10 +51,16 @@ export default function DiaryBlockPhysicalSensationClient({ diary, type, showInp
     setValue("physical_sensations", text);
   };
 
-  const value = getValues("physical_sensations")
+  const value = getValues("physical_sensations");
 
   return (
-    <div className={!value && showInputsincomplete ? `incomplete diary__block-event` : `diary__block-event`}>
+    <div
+      className={
+        !value && showInputsincomplete
+          ? `incomplete diary__block-event`
+          : `diary__block-event`
+      }
+    >
       <div className="diary__block-title">Physical Sensations</div>
       <div className="diary__block-question">
         Describe any physical sensations or changes you noticed in your body.

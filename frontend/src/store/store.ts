@@ -6,7 +6,7 @@ import assignmentSlice, {
 import { authSlice } from "./slices/index";
 import { assignmentApi } from "./entities";
 import { authApi } from "./entities/auth/auth";
-import {modalsSlice} from "./slices/modals/modalsSlice";
+import { modalsSlice } from "./slices/modals/modalsSlice";
 
 const assignmentsMiddleware = (store) => (next) => (action) => {
   if (assignmentApi.endpoints.getAssignments.matchFulfilled(action)) {

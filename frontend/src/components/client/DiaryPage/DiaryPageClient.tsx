@@ -15,13 +15,18 @@ import EntryUnsavedExit from "../../modals/Notifications/entryUnsavedExit";
 import EntryNotComplete from "../../modals/Notifications/entryNotComplete";
 import Modal from "../../modals/Modal/Modal";
 import { useAppDispatch, useAppSelector } from "../../../store/store";
-import { selectShowModalExitUnsaved, selectShowModalSaveIncomplete } from "../../../store/slices/modals/modalsSlice";
-import { closeModalExitUnsaved, closeModalSaveIncomplete} from "../../../store/slices/modals/modalsSlice";
+import {
+  selectShowModalExitUnsaved,
+  selectShowModalSaveIncomplete,
+} from "../../../store/slices/modals/modalsSlice";
+import {
+  closeModalExitUnsaved,
+  closeModalSaveIncomplete,
+} from "../../../store/slices/modals/modalsSlice";
 import { diaryClientValidation } from "../../../routes/SettingPage/ProfileTab/schemaValid";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 export default function DiaryPageContentClient({ diary, type }) {
-
   const dispatch = useAppDispatch();
   const showModalExitUnsaved = useAppSelector(selectShowModalExitUnsaved);
   const showModalSaveIncomplete = useAppSelector(selectShowModalSaveIncomplete);
@@ -37,11 +42,14 @@ export default function DiaryPageContentClient({ diary, type }) {
     resolver: yupResolver(diaryClientValidation),
     defaultValues: {
       event_details: type === "create" ? "" : diary?.event_details || "",
-      thoughts_analysis: type === "create" ? "" : diary?.thoughts_analysis || "",
-      physical_sensations: type === "create" ? "" : diary?.physical_sensations || "",
+      thoughts_analysis:
+        type === "create" ? "" : diary?.thoughts_analysis || "",
+      physical_sensations:
+        type === "create" ? "" : diary?.physical_sensations || "",
       emotion_type: type === "create" ? "" : diary?.emotion_type || "",
       primary_emotion: type === "create" ? "" : diary?.primary_emotion || "",
-      clarifying_emotion: type === "create" ? [] : diary?.clarifying_emotion || [],
+      clarifying_emotion:
+        type === "create" ? [] : diary?.clarifying_emotion || [],
       visible: false,
     },
     mode: "all",
@@ -50,7 +58,7 @@ export default function DiaryPageContentClient({ diary, type }) {
   const [showEmotionsPage, setShowEmotionsPage] = useState(false);
   const [changesMade, setChangesMade] = useState(false);
   const [showInputsincomplete, setShowInputsincomplete] = useState(false);
-  
+
   const handleCloseExitModal = () => {
     dispatch(closeModalExitUnsaved());
   };
@@ -60,7 +68,6 @@ export default function DiaryPageContentClient({ diary, type }) {
   };
 
   const onSubmit = async (data) => {
-
     if (type == "create") {
       try {
         const response = await API.post(`/diary-notes/`, data);
@@ -160,16 +167,32 @@ export default function DiaryPageContentClient({ diary, type }) {
               changesMade={changesMade}
               isSaved={isSaved}
             />
-            <DiaryEventDetailsClient diary={diary} type={type} showInputsincomplete={showInputsincomplete}/>
-            <DiaryBlockAnalysisClient diary={diary} type={type} showInputsincomplete={showInputsincomplete}/>
+            <DiaryEventDetailsClient
+              diary={diary}
+              type={type}
+              showInputsincomplete={showInputsincomplete}
+            />
+            <DiaryBlockAnalysisClient
+              diary={diary}
+              type={type}
+              showInputsincomplete={showInputsincomplete}
+            />
             <DiaryBlockEmotionClient
               diary={diary}
               type={type}
               setShowEmotionsPage={setShowEmotionsPage}
               showInputsincomplete={showInputsincomplete}
             />
-            <DiaryBlockPhysicalSensationClient diary={diary} type={type} showInputsincomplete={showInputsincomplete}/>
-            <DiaryFooterClient diary={diary} setChangesMade={setChangesMade} setShowInputsincomplete={setShowInputsincomplete}/>
+            <DiaryBlockPhysicalSensationClient
+              diary={diary}
+              type={type}
+              showInputsincomplete={showInputsincomplete}
+            />
+            <DiaryFooterClient
+              diary={diary}
+              setChangesMade={setChangesMade}
+              setShowInputsincomplete={setShowInputsincomplete}
+            />
 
             {showModalExitUnsaved && (
               <Modal>
@@ -186,14 +209,13 @@ export default function DiaryPageContentClient({ diary, type }) {
             {showModalSaveIncomplete && (
               <Modal>
                 <EntryNotComplete
-                completeClick={methods.handleSubmit(onSubmit)}
-                backClick={() => {
-                  handleCloseSaveIncompleteModal();
-                }}
+                  completeClick={methods.handleSubmit(onSubmit)}
+                  backClick={() => {
+                    handleCloseSaveIncompleteModal();
+                  }}
                 />
               </Modal>
             )}
-
           </>
         ) : (
           <MobileEmotionPage

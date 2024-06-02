@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   showModalExitUnsaved: false,
@@ -6,7 +6,7 @@ const initialState = {
 };
 
 export const modalsSlice = createSlice({
-  name: 'modals',
+  name: "modals",
   initialState,
   reducers: {
     openModalExitUnsaved: (state) => {
@@ -17,15 +17,21 @@ export const modalsSlice = createSlice({
     },
 
     openModalSaveIncomplete: (state) => {
-        state.showModalSaveIncomplete = true;
-      },
-      closeModalSaveIncomplete: (state) => {
-        state.showModalSaveIncomplete = false;
-      },
-
+      state.showModalSaveIncomplete = true;
+    },
+    closeModalSaveIncomplete: (state) => {
+      state.showModalSaveIncomplete = false;
+    },
   },
 });
 
-export const { openModalExitUnsaved, closeModalExitUnsaved, openModalSaveIncomplete, closeModalSaveIncomplete } = modalsSlice.actions;
-export const selectShowModalExitUnsaved = (state) => state.modals.showModalExitUnsaved;
-export const selectShowModalSaveIncomplete = (state) => state.modals.showModalSaveIncomplete;
+export const {
+  openModalExitUnsaved,
+  closeModalExitUnsaved,
+  openModalSaveIncomplete,
+  closeModalSaveIncomplete,
+} = modalsSlice.actions;
+export const selectShowModalExitUnsaved = (state) =>
+  state.modals.showModalExitUnsaved;
+export const selectShowModalSaveIncomplete = (state) =>
+  state.modals.showModalSaveIncomplete;

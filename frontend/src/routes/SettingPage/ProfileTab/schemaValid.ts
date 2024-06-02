@@ -22,13 +22,29 @@ export const updateUserForm = yup.object({
   dateOfBirth: yup.string(),
 });
 
-
-export const diaryClientValidation = yup.object().shape({
-  event_details: yup.string(),
-  thoughts_analysis: yup.string(),
-  physical_sensations: yup.string(),
-  emotion_type: yup.string(),
-}).test('at-least-one-field', 'At least one field must be filled in', function (value) {
-  const { event_details, thoughts_analysis, physical_sensations, emotion_type } = value;
-  return !!event_details || !!thoughts_analysis || !!physical_sensations || !!emotion_type;
-});
+export const diaryClientValidation = yup
+  .object()
+  .shape({
+    event_details: yup.string(),
+    thoughts_analysis: yup.string(),
+    physical_sensations: yup.string(),
+    emotion_type: yup.string(),
+  })
+  .test(
+    "at-least-one-field",
+    "At least one field must be filled in",
+    function (value) {
+      const {
+        event_details,
+        thoughts_analysis,
+        physical_sensations,
+        emotion_type,
+      } = value;
+      return (
+        !!event_details ||
+        !!thoughts_analysis ||
+        !!physical_sensations ||
+        !!emotion_type
+      );
+    },
+  );

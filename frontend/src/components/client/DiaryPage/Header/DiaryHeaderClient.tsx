@@ -10,7 +10,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 import { useAppDispatch } from "../../../../store/store";
-import { openModalExitUnsaved, closeModalExitUnsaved } from "../../../../store/slices/modals/modalsSlice";
+import {
+  openModalExitUnsaved,
+  closeModalExitUnsaved,
+} from "../../../../store/slices/modals/modalsSlice";
 
 const options = {
   weekday: "long",
@@ -23,7 +26,7 @@ export default function DiaryHeaderClient({
   diary,
   onSubmit,
   changesMade,
-  isSaved
+  isSaved,
 }) {
   const isMobileWidth = useMobileWidth();
 
@@ -37,7 +40,7 @@ export default function DiaryHeaderClient({
 
   const handleGoBack = useCallback(() => {
     if (changesMade && !isSaved) {
-      handleOpenExitModal()
+      handleOpenExitModal();
     }
   }, [changesMade, isSaved, handleOpenExitModal, navigate]);
 

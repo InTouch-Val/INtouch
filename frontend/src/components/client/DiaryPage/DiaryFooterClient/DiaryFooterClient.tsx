@@ -7,11 +7,20 @@ import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 import { openModalSaveIncomplete } from "../../../../store/slices/modals/modalsSlice";
 import { useAppDispatch } from "../../../../store/store";
 
-export default function DiaryFooterClient({ diary, setChangesMade, setShowInputsincomplete }) {
+export default function DiaryFooterClient({
+  diary,
+  setChangesMade,
+  setShowInputsincomplete,
+}) {
   const isMobileWidth = useMobileWidth();
 
   const [active, setActive] = React.useState(diary ? diary.visible : false);
-  const { setValue, formState: {isValid}, trigger, getValues} = useFormContext();
+  const {
+    setValue,
+    formState: { isValid },
+    trigger,
+    getValues,
+  } = useFormContext();
   const watchAllFields = useWatch();
 
   const initialFormState = React.useRef(JSON.stringify(getValues()));
@@ -21,20 +30,18 @@ export default function DiaryFooterClient({ diary, setChangesMade, setShowInputs
     dispatch(openModalSaveIncomplete());
   };
 
-
-  function hasFormChanged () {
+  function hasFormChanged() {
     const currentValues = JSON.stringify(getValues());
-    setChangesMade(currentValues !== initialFormState.current)
+    setChangesMade(currentValues !== initialFormState.current);
     return currentValues !== initialFormState.current;
-  };
-
+  }
 
   const handleSaveClick = (e: Event) => {
     if (!allFieldsFilled()) {
-      e.stopPropagation()
-      e.preventDefault()
+      e.stopPropagation();
+      e.preventDefault();
       handleSaveIncomplete();
-      setShowInputsincomplete(true)
+      setShowInputsincomplete(true);
     }
   };
 
@@ -54,13 +61,17 @@ export default function DiaryFooterClient({ diary, setChangesMade, setShowInputs
     for (let i = 0; i < keys.length; i++) {
       if (keys[i] === "visible" || keys[i] === "answer_emotion") continue;
       const value = values[keys[i]];
-      if (value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0)) {
+      if (
+        value === undefined ||
+        value === null ||
+        value === "" ||
+        (Array.isArray(value) && value.length === 0)
+      ) {
         return false;
       }
     }
     return true;
   };
-
 
   React.useEffect(() => {
     setValue("visible", active);
@@ -86,26 +97,26 @@ export default function DiaryFooterClient({ diary, setChangesMade, setShowInputs
         onMouseLeave={(e) => setHover(false)}
         onMouseEnter={(e) => setHover(true)}
       >
-
         <div onClick={handleSaveClick}>
-        <Button
-          type="submit"
-          className="diary__footer-button"
-          disabled={!isValid || !hasFormChanged()}
-        >
-          Save
-        </Button>
+          <Button
+            type="submit"
+            className="diary__footer-button"
+            disabled={!isValid || !hasFormChanged()}
+          >
+            Save
+          </Button>
         </div>
 
-        {!isValid || !hasFormChanged() && (
-          <span 
-            className={`diary__message-valid ${!isHover && "diary__message-valid-hidden"}`}
-          >
-            {isMobileWidth
-              ? "Fill in at least one question to save"
-              : "Please fill in at least one question to save your diary entry"}
-          </span>
-        )}
+        {!isValid ||
+          (!hasFormChanged() && (
+            <span
+              className={`diary__message-valid ${!isHover && "diary__message-valid-hidden"}`}
+            >
+              {isMobileWidth
+                ? "Fill in at least one question to save"
+                : "Please fill in at least one question to save your diary entry"}
+            </span>
+          ))}
       </div>
     </div>
   );

@@ -7,7 +7,11 @@ import { EditorToolbar } from "../../../../service/editors-toolbar";
 import { Controller, useFormContext } from "react-hook-form";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 
-export default function DiaryBlockAnalysisClient({ diary, type, showInputsincomplete }) {
+export default function DiaryBlockAnalysisClient({
+  diary,
+  type,
+  showInputsincomplete,
+}) {
   const isMobileWidth = useMobileWidth();
 
   const editorRef = useRef(null);
@@ -47,10 +51,16 @@ export default function DiaryBlockAnalysisClient({ diary, type, showInputsincomp
 
   const { control, setValue, getValues } = useFormContext();
 
-  const value = getValues("thoughts_analysis")
+  const value = getValues("thoughts_analysis");
 
   return (
-    <div className={!value && showInputsincomplete ? `incomplete diary__block-event` : `diary__block-event`}>
+    <div
+      className={
+        !value && showInputsincomplete
+          ? `incomplete diary__block-event`
+          : `diary__block-event`
+      }
+    >
       <div className="diary__block-title">Thoughts Analysis</div>
       <div className="diary__block-question">
         Reflect on your thoughts related to the situation. What were you
