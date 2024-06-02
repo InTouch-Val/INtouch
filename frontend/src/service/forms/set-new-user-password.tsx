@@ -5,14 +5,18 @@ import { API } from "../axios";
 import { isValidPassword } from "./regex";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "../authContext";
 import logo from "../../images/LogoBig.svg";
 
 function SetNewUserPassword({ accessToken }) {
+  const { currentUser } = useAuth();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState({ password: "", server: "" });
   const [passwordShown, setPasswordShown] = useState(false);
   const [isValidCredentials, setIsValidCredentials] = useState(false);
+  const numberOfMinLengthOfPassword = 8;
+  const numberOfMaxLengthOfPassword = 128;
 
   const handleTogglePassword = (e) => {
     e.preventDefault();
@@ -25,7 +29,15 @@ function SetNewUserPassword({ accessToken }) {
     let newError = { ...error };
     if (!isValidPassword(value)) {
       newError.password =
-        "Password must contain letters, numbers, no more than 3 consecutive identical characters and must be at least 8 characters long.";
+        "Password must contain letters, numbers, at least 1 uppercase letter, 1 lowercase letter, and 1 digit, no more than 3 consecutive identical characters and must be at least 8 characters long.";
+    } else if (
+      value.toLowerCase().includes(currentUser.first_name.toLowerCase())
+    ) {
+      newError.password = "The password is too similar to your first name";
+    } else if (
+      value.toLowerCase().includes(currentUser.last_name.toLowerCase())
+    ) {
+      newError.password = "The password is too similar to your last name";
     } else {
       newError.password = "";
     }
@@ -63,7 +75,7 @@ function SetNewUserPassword({ accessToken }) {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
-          },
+          }
         );
 
         if (response.status === 200) {
@@ -104,6 +116,8 @@ function SetNewUserPassword({ accessToken }) {
               onChange={(e) => setPassword(e.target.value)}
               onBlur={(e) => handlePasswordBlur(e.target.value)}
               value={password}
+              minLength={numberOfMinLengthOfPassword}
+              maxLength={numberOfMaxLengthOfPassword}
             />
             <button type="button" onClick={(e) => handleTogglePassword(e)}>
               {passwordShown ? (
@@ -121,6 +135,8 @@ function SetNewUserPassword({ accessToken }) {
               placeholder="Confirm Password"
               onChange={(e) => setConfirmPassword(e.target.value)}
               value={confirmPassword}
+              minLength={numberOfMinLengthOfPassword}
+              maxLength={numberOfMaxLengthOfPassword}
             />
             <button type="button" onClick={(e) => handleTogglePassword(e)}>
               {passwordShown ? (
