@@ -142,8 +142,10 @@ function RegistrationForm() {
     }
 
     if (
-      formData.password === formData.firstName ||
-      formData.password === formData.lastName
+      formData.password
+        .toLowerCase()
+        .includes(formData.firstName.toLowerCase()) ||
+      formData.password.toLowerCase().includes(formData.lastName.toLowerCase())
     ) {
       setValidationError({
         ...validationError,
