@@ -7,7 +7,7 @@ import { EditorState, convertFromRaw } from "draft-js";
 import { Controller, useFormContext } from "react-hook-form";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 
-export default function EventDetailsClient({ diary, type }) {
+export default function EventDetailsClient({ diary, type, showInputsincomplete }) {
   const isMobileWidth = useMobileWidth();
 
   const editorRef = useRef(null);
@@ -45,10 +45,12 @@ export default function EventDetailsClient({ diary, type }) {
     setValue("event_details", text);
   };
 
-  const { control, setValue } = useFormContext();
+  const { control, setValue, getValues } = useFormContext();
+
+  const value = getValues("event_details")
 
   return (
-    <div className="diary__block-event">
+    <div className={!value && showInputsincomplete ? `incomplete diary__block-event` : `diary__block-event`}>
       <div className="diary__block-title">Event Details</div>
       <div className="diary__block-question">
         Describe the event or situation that evoked emotions. What happened?

@@ -1,41 +1,66 @@
+//@ts-nocheck
 import React, { useEffect } from "react";
 import "./styles.css";
 import Button from "../../../psy/button/ButtonHeadline";
 import { useFormContext, useWatch } from "react-hook-form";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
+import { openModalSaveIncomplete } from "../../../../store/slices/modals/modalsSlice";
+import { useAppDispatch } from "../../../../store/store";
 
-export default function DiaryFooterClient({ diary, setChangesMade }) {
+export default function DiaryFooterClient({ diary, setChangesMade, setShowInputsincomplete }) {
   const isMobileWidth = useMobileWidth();
 
   const [active, setActive] = React.useState(diary ? diary.visible : false);
-  const { control, setValue, getValues, watch } = useFormContext();
-
-  const [isValid, setValid] = React.useState(false);
-  const [isHover, setHover] = React.useState(false);
-  const form = useWatch({ control });
+  const { setValue, formState: {isValid}, trigger, getValues} = useFormContext();
+  const watchAllFields = useWatch();
 
   const initialFormState = React.useRef(JSON.stringify(getValues()));
 
-  const hasFormChanged = () => {
+  const dispatch = useAppDispatch();
+  const handleOpenModalSaveIncomplete = () => {
+    dispatch(openModalSaveIncomplete());
+  };
+
+
+  function hasFormChanged () {
     const currentValues = JSON.stringify(getValues());
+    setChangesMade(currentValues !== initialFormState.current)
     return currentValues !== initialFormState.current;
   };
 
-  useEffect(() => {
-    const valid =
-      hasFormChanged() &&
-      (form.emotion_type !== "" ||
-        form.event_details !== "" ||
-        form.thoughts_analysis !== "" ||
-        form.physical_sensations !== "");
-    setValid(valid);
-    setChangesMade(valid);
-  }, [form, hasFormChanged]);
+
+  const handleSaveClick = (e: Event) => {
+    if (!allFieldsFilled()) {
+      e.stopPropagation()
+      e.preventDefault()
+      handleSaveIncomplete();
+      setShowInputsincomplete(true)
+    }
+  };
+
+  function handleSaveIncomplete() {
+    handleOpenModalSaveIncomplete();
+  }
 
   useEffect(() => {
-    const valid = hasFormChanged();
-    setChangesMade(valid);
-  }, [form, hasFormChanged]);
+    trigger();
+  }, [watchAllFields, trigger]);
+
+  const [isHover, setHover] = React.useState(false);
+
+  const allFieldsFilled = () => {
+    const values = watchAllFields;
+    const keys = Object.keys(values);
+    for (let i = 0; i < keys.length; i++) {
+      if (keys[i] === "visible" || keys[i] === "answer_emotion") continue;
+      const value = values[keys[i]];
+      if (value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0)) {
+        return false;
+      }
+    }
+    return true;
+  };
+
 
   React.useEffect(() => {
     setValue("visible", active);
@@ -61,16 +86,19 @@ export default function DiaryFooterClient({ diary, setChangesMade }) {
         onMouseLeave={(e) => setHover(false)}
         onMouseEnter={(e) => setHover(true)}
       >
+
+        <div onClick={handleSaveClick}>
         <Button
           type="submit"
           className="diary__footer-button"
-          disabled={!isValid}
+          disabled={!isValid || !hasFormChanged()}
         >
           Save
         </Button>
+        </div>
 
-        {!isValid && (
-          <span
+        {!isValid || !hasFormChanged() && (
+          <span 
             className={`diary__message-valid ${!isHover && "diary__message-valid-hidden"}`}
           >
             {isMobileWidth

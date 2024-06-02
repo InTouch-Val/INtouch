@@ -9,6 +9,8 @@ import { useFormContext, useWatch } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
+import { useAppDispatch } from "../../../../store/store";
+import { openModalExitUnsaved, closeModalExitUnsaved } from "../../../../store/slices/modals/modalsSlice";
 
 const options = {
   weekday: "long",
@@ -20,20 +22,24 @@ const options = {
 export default function DiaryHeaderClient({
   diary,
   onSubmit,
-  setShowModal,
   changesMade,
-  isSaved,
-  showExitUnsaveModal,
+  isSaved
 }) {
   const isMobileWidth = useMobileWidth();
+
+  const dispatch = useAppDispatch();
+
+  const handleOpenExitModal = () => {
+    dispatch(openModalExitUnsaved());
+  };
 
   const navigate = useNavigate();
 
   const handleGoBack = useCallback(() => {
     if (changesMade && !isSaved) {
-      setShowModal(true);
+      handleOpenExitModal()
     }
-  }, [changesMade, isSaved, setShowModal, navigate]);
+  }, [changesMade, isSaved, handleOpenExitModal, navigate]);
 
   const { currentUser } = useAuth();
   const { handleSubmit, control } = useFormContext();
