@@ -19,21 +19,23 @@ class LatinLettersValidator:
     def validate(self, password, user=None):
         if re.search(r"[а-яёА-ЯЁ]", password):
             raise ValidationError(
-                "This password can include latin letters, "
-                "arabic numerals and special characters."
+                "Your password can only contain Latin letters, "
+                "Arabic numerals, and the following special characters: "
+                "~ ! ? @ # $ % ^ & * _ - + ( ) [ ] { } > < / | ' . , : ;"
             )
 
     def get_help_text(self):
         return (
-            "Your password can include latin letters, "
-            "arabic numerals and special characters."
+            "Your password can only contain Latin letters, "
+            "Arabic numerals, and the following special characters: "
+            "~ ! ? @ # $ % ^ & * _ - + ( ) [ ] { } > < / | ' . , : ;"
         )
 
 
 class NoSpaceValidator:
     def validate(self, password, user=None):
         if re.search(r"(\s+)", password):
-            raise ValidationError("Spaces are not allowed in this password.")
+            raise ValidationError("Spaces are not allowed in your password.")
 
     def get_help_text(self):
-        return "Your password cannot include any spaces."
+        return "Spaces are not allowed in your password."
