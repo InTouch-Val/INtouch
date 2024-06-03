@@ -1,40 +1,82 @@
 //@ts-nocheck
-import React from "react";
+import React, { useEffect } from "react";
 import "./styles.css";
 import Button from "../../../psy/button/ButtonHeadline";
 import { useFormContext, useWatch } from "react-hook-form";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
+import { openModalSaveIncomplete } from "../../../../store/slices/modals/modalsSlice";
+import { useAppDispatch } from "../../../../store/store";
 
-export default function DiaryFooterClient({ diary }) {
+export default function DiaryFooterClient({
+  diary,
+  setChangesMade,
+  setShowInputsincomplete,
+}) {
   const isMobileWidth = useMobileWidth();
 
   const [active, setActive] = React.useState(diary ? diary.visible : false);
-  const { control, setValue, getValues, watch } = useFormContext();
+  const {
+    setValue,
+    formState: { isValid },
+    trigger,
+    getValues,
+  } = useFormContext();
+  const watchAllFields = useWatch();
 
-  const primaryEmotionValue = getValues("primary_emotion");
-  const secondEmotionValues = getValues("clarifying_emotion");
+  const initialFormState = React.useRef(JSON.stringify(getValues()));
 
-  console.log(primaryEmotionValue);
+  const dispatch = useAppDispatch();
+  const handleOpenModalSaveIncomplete = () => {
+    dispatch(openModalSaveIncomplete());
+  };
 
-  const [isValid, setValid] = React.useState(false);
-  const [isHover, setHover] = React.useState(false);
-  const form = useWatch({ control });
+  function hasFormChanged() {
+    const currentValues = JSON.stringify(getValues());
+    setChangesMade(currentValues !== initialFormState.current);
+    return currentValues !== initialFormState.current;
+  }
 
-  React.useEffect(() => {
-    if (
-      form.emotion_type != "" ||
-      form.event_details != "" ||
-      form.thoughts_analysis != "" ||
-      form.physical_sensations != ""
-    ) {
-      setValid(true);
-    } else {
-      setValid(false);
+  const handleSaveClick = (e: Event) => {
+    if (!allFieldsFilled()) {
+      e.stopPropagation();
+      e.preventDefault();
+      handleSaveIncomplete();
+      setShowInputsincomplete(true);
     }
-  }, [form]);
+  };
+
+  function handleSaveIncomplete() {
+    handleOpenModalSaveIncomplete();
+  }
+
+  useEffect(() => {
+    trigger();
+  }, [watchAllFields, trigger]);
+
+  const [isHover, setHover] = React.useState(false);
+
+  const allFieldsFilled = () => {
+    const values = watchAllFields;
+    const keys = Object.keys(values);
+    for (let i = 0; i < keys.length; i++) {
+      if (keys[i] === "visible" || keys[i] === "answer_emotion") continue;
+      const value = values[keys[i]];
+      if (
+        value === undefined ||
+        value === null ||
+        value === "" ||
+        (Array.isArray(value) && value.length === 0)
+      ) {
+        return false;
+      }
+    }
+    return true;
+  };
+
   React.useEffect(() => {
     setValue("visible", active);
   }, [active]);
+
   return (
     <div className="diary__footer">
       <div
@@ -55,23 +97,26 @@ export default function DiaryFooterClient({ diary }) {
         onMouseLeave={(e) => setHover(false)}
         onMouseEnter={(e) => setHover(true)}
       >
-        <Button
-          type="submit"
-          className="diary__footer-button"
-          disabled={!isValid}
-        >
-          Save
-        </Button>
-
-        {!isValid && (
-          <span
-            className={`diary__message-valid ${!isHover && "diary__message-valid-hidden"}`}
+        <div onClick={handleSaveClick}>
+          <Button
+            type="submit"
+            className="diary__footer-button"
+            disabled={!isValid || !hasFormChanged()}
           >
-            {isMobileWidth
-              ? "Fill in at least one question to save"
-              : "Please fill in at least one question to save your diary entry"}
-          </span>
-        )}
+            Save
+          </Button>
+        </div>
+
+        {!isValid ||
+          (!hasFormChanged() && (
+            <span
+              className={`diary__message-valid ${!isHover && "diary__message-valid-hidden"}`}
+            >
+              {isMobileWidth
+                ? "Fill in at least one question to save"
+                : "Please fill in at least one question to save your diary entry"}
+            </span>
+          ))}
       </div>
     </div>
   );
