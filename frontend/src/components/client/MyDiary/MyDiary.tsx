@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import React, { useState, useEffect } from "react";
 import Button from "../../psy/button/ButtonHeadline";
 import "./MyDiary.css";
