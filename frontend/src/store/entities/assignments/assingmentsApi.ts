@@ -53,7 +53,7 @@ export const assignmentApi = createApi({
       }) => ({
         url: `${ASSIGNMENTS_URL}?${limit ? `limit=${limit} ` : ""}&page=${page}${author ? `&author=${author}` : ""}${favorite ? `&favourites=${favorite}` : ""}${language ? `&language=${language}` : ""}${assignmentType ? `&assignment_type=${assignmentType}` : ""}&ordering=${ordering}${search ? `&search=${search}` : ""}`.replace(
           /\s+/g,
-          ""
+          "",
         ), // regex удаляет все пробелы в строке
         method: "GET",
         headers: {
@@ -63,7 +63,7 @@ export const assignmentApi = createApi({
       transformResponse: (response: AssignmentsResponseType) => {
         return assignmentAdapter.addMany(
           assignmentAdapter.getInitialState(),
-          response.results
+          response.results,
         );
       },
       forceRefetch: ({ currentArg, previousArg }) => {
@@ -90,7 +90,7 @@ export const assignmentApi = createApi({
       merge: (currentState, incomingState) => {
         assignmentAdapter.addMany(
           currentState,
-          assignmentSelector.selectAll(incomingState)
+          assignmentSelector.selectAll(incomingState),
         );
       },
       providesTags: (result, error, args) =>
@@ -138,7 +138,6 @@ export const assignmentApi = createApi({
         },
       }),
     }),
-
 
     deleteAssignmentClientByUUID: build.mutation<string, string>({
       query: (uuid) => ({

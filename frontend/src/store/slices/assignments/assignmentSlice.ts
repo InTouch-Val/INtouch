@@ -1,5 +1,8 @@
 import { ActionReducerMapBuilder, createSlice } from "@reduxjs/toolkit";
-import { AssignmentsResponseType, AssignmentsType } from "../../entities/assignments/types";
+import {
+  AssignmentsResponseType,
+  AssignmentsType,
+} from "../../entities/assignments/types";
 import {
   changeAssignmentFavoriteByIdAction,
   draftAssignmentAction,
@@ -122,7 +125,7 @@ const assignmentSlice = createSlice({
         changeAssignmentFavoriteByIdAction.fulfilled,
         (state, action) => {
           state.status = Status.Success;
-        }
+        },
       )
       .addCase(changeAssignmentFavoriteByIdAction.pending, (state, action) => {
         state.status = Status.Loading;
@@ -161,7 +164,6 @@ const assignmentSlice = createSlice({
       });
   },
 });
-
 
 export const {
   setAssignments,

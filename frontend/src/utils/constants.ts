@@ -31,47 +31,45 @@ export enum Status {
   Error = "error",
 }
 
-
 export enum TypeLanguage {
-  All = 'all',
-  En = 'en',
-  Es = 'es',
-  Fr = 'fr',
-  De = 'de',
-  It = 'it'
+  All = "all",
+  En = "en",
+  Es = "es",
+  Fr = "fr",
+  De = "de",
+  It = "it",
 }
 
-export enum AssignmentTab  {
+export enum AssignmentTab {
   library = "library",
   favorites = "favorites",
-  myList = "my-list"
+  myList = "my-list",
 }
 
-
 export enum TypeOrder {
-  All = 'all',
-  AddDate = 'add_date',
-  DecDate = '-add_date',
-  Popularity = 'average_grade',
-  NoPopularity = '-average_grade'
+  All = "all",
+  AddDate = "add_date",
+  DecDate = "-add_date",
+  Popularity = "average_grade",
+  NoPopularity = "-average_grade",
 }
 
 export enum TypeFilter {
-  All = 'all',
-  Lesson = 'lesson',
-  Exercise = 'exercise',
-  Essay = 'essay',
-  Metaphor = 'metaphor',
-  Study = 'study',
-  Quiz = 'quiz',
-  Methodology = 'methodology',
-  Metaphors = 'metaphors'
+  All = "all",
+  Lesson = "lesson",
+  Exercise = "exercise",
+  Essay = "essay",
+  Metaphor = "metaphor",
+  Study = "study",
+  Quiz = "quiz",
+  Methodology = "methodology",
+  Metaphors = "metaphors",
 }
 
 export enum BlockType {
-  Text = 'text',
-  Range = 'range',
-  Question = 'question',
-  Image = 'image',
-  Open = 'open',
+  Text = "text",
+  Range = "range",
+  Question = "question",
+  Image = "image",
+  Open = "open",
 }

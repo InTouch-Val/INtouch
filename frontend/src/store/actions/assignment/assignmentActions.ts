@@ -18,7 +18,7 @@ export const changeAssignmentFavoriteByIdAction = createAsyncThunk(
       console.error("Error toggling favorites:", error);
       return rejectWithValue;
     }
-  }
+  },
 );
 
 export const duplicateAssignmentAction = createAsyncThunk(
@@ -32,7 +32,7 @@ export const duplicateAssignmentAction = createAsyncThunk(
       console.error("Error duplicate:", error);
       return rejectWithValue;
     }
-  }
+  },
 );
 
 export const draftAssignmentAction = createAsyncThunk(
@@ -40,7 +40,7 @@ export const draftAssignmentAction = createAsyncThunk(
   async (responseAssignmentId: string, { rejectWithValue }) => {
     try {
       const response = await API.get(
-        `assignments/${responseAssignmentId}/draft/`
+        `assignments/${responseAssignmentId}/draft/`,
       );
       const data = response.data;
       return data;
@@ -48,18 +48,18 @@ export const draftAssignmentAction = createAsyncThunk(
       console.error("Error duplicate:", error);
       return rejectWithValue;
     }
-  }
+  },
 );
 
 export const setClientByIdAction = createAsyncThunk(
   "assignment/setClientByIdAction",
   async (
     { assignmentId, clientId }: { assignmentId: string; clientId: string },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const response = await API.get(
-        `assignments/set-client/${assignmentId}/${clientId}/`
+        `assignments/set-client/${assignmentId}/${clientId}/`,
       );
       const data = response;
       return data;
@@ -67,5 +67,5 @@ export const setClientByIdAction = createAsyncThunk(
       console.error("Error duplicate:", error);
       return rejectWithValue;
     }
-  }
+  },
 );

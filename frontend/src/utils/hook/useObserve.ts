@@ -5,7 +5,7 @@ import React from "react";
 export const useObserve = (ref, isTotal = false, callback, isSuccess) => {
   const observer = React.useRef();
   React.useLayoutEffect(() => {
-    if(!ref) return;
+    if (!ref) return;
     const cb = (entries, observer) => {
       if (entries[0].isIntersecting) {
         callback();

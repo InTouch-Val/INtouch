@@ -9,10 +9,8 @@ export default function AllTabs(): JSX.Element {
 
   const { activeTab } = useAppSelector((state) => state.assignment);
 
-
   return (
     <div className="tabs">
-
       <button
         className={activeTab === AssignmentTab.library ? "active" : ""}
         onClick={() => dispatch(changeTabActions(AssignmentTab.library))}

@@ -51,7 +51,7 @@ export default function ModalAssignments(): JSX.Element {
       });
 
       const allResponsesSuccessful = setClientId.every(
-        (response) => response.status >= 200 && response.status <= 300
+        (response) => response.status >= 200 && response.status <= 300,
       );
 
       if (allResponsesSuccessful) {

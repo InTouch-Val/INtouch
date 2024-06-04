@@ -11,7 +11,7 @@ export default function FilterDropDown() {
   const dispatch = useAppDispatch();
 
   const { activeLanguage, activeFilterType } = useAppSelector(
-    (state) => state.assignment
+    (state) => state.assignment,
   );
 
   const [sortMethod, setSortMethod] = React.useState(TypeOrder.AddDate);

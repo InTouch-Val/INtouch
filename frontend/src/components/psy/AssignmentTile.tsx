@@ -6,26 +6,30 @@ import { Modal } from "../../service/modal";
 import "../../css/assignment-tile.css";
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-import { draftAssignmentAction, duplicateAssignmentAction } from "../../store/actions/assignment/assignmentActions";
+import {
+  draftAssignmentAction,
+  duplicateAssignmentAction,
+} from "../../store/actions/assignment/assignmentActions";
 import { BlockType } from "../../utils/constants";
 import { AssignmentsType } from "../../store/entities/assignments/types";
-import { useCreateAssignmentMutation, } from "../../store/entities";
+import { useCreateAssignmentMutation } from "../../store/entities";
 
 const formatDate = (dateString: Date): Date => {
   const options = { year: "numeric", month: "short", day: "numeric" };
   return new Date(dateString).toLocaleDateString("en-US", options);
 };
 
-const getObjectFromEditorState = (editorState: string) => JSON.stringify(editorState);
+const getObjectFromEditorState = (editorState: string) =>
+  JSON.stringify(editorState);
 
 interface Props {
-  assignment: AssignmentsType,
+  assignment: AssignmentsType;
   onFavoriteToggle: (id: number | string) => void;
-  isFavorite: boolean,
-  onShareClick: (id: string) => void,
-  isAuthor: boolean,
-  onDeleteClick: (id: string) => void,
-  isShareModal: boolean,
+  isFavorite: boolean;
+  onShareClick: (id: string) => void;
+  isAuthor: boolean;
+  onDeleteClick: (id: string) => void;
+  isShareModal: boolean;
   selectedAssignmentIdForShareModalOnClientPage: string | number;
 }
 
@@ -40,7 +44,7 @@ function AssignmentTile({
   selectedAssignmentIdForShareModalOnClientPage,
 }: Props) {
   const [isSelected, setIsSelected] = useState(
-    assignment.id === selectedAssignmentIdForShareModalOnClientPage
+    assignment.id === selectedAssignmentIdForShareModalOnClientPage,
   );
 
   const dispatch = useAppDispatch();
@@ -52,7 +56,7 @@ function AssignmentTile({
 
   useEffect(() => {
     setIsSelected(
-      assignment.id === selectedAssignmentIdForShareModalOnClientPage
+      assignment.id === selectedAssignmentIdForShareModalOnClientPage,
     );
   }, [selectedAssignmentIdForShareModalOnClientPage]);
 
@@ -88,8 +92,9 @@ function AssignmentTile({
     };
   }, [isDropdownOpen]);
 
-
-  const duplicateAssignmentHandle = async (assignmentId: string): Promise<void> => {
+  const duplicateAssignmentHandle = async (
+    assignmentId: string,
+  ): Promise<void> => {
     try {
       dispatch(duplicateAssignmentAction(assignmentId));
       let assignmentData = duplicateAssignment;
@@ -147,7 +152,7 @@ function AssignmentTile({
       };
 
       // Отправляем данные задания на сервер для создания дубликата
-      createAssignment(duplicateData)
+      createAssignment(duplicateData);
       if (
         !duplicateResponse ||
         !duplicateResponse.data ||
@@ -304,10 +309,10 @@ function AssignmentTile({
 }
 
 interface PropsClient {
-  assignment: AssignmentsType,
-  onDeleteSuccess: (id: string) => void,
-  openAssignment: (card: AssignmentsType) => void,
-  clientId: string
+  assignment: AssignmentsType;
+  onDeleteSuccess: (id: string) => void;
+  openAssignment: (card: AssignmentsType) => void;
+  clientId: string;
 }
 
 function ClientAssignmentTile({
@@ -323,7 +328,7 @@ function ClientAssignmentTile({
   const [statusOneWord, setStatusOneWord] = useState("to-do");
   const navigate = useNavigate();
 
-  const [deleteClientAssignment, _] = useDeleteAssignmentClientByUUIDMutation()
+  const [deleteClientAssignment, _] = useDeleteAssignmentClientByUUIDMutation();
 
   useEffect(() => {
     if (assignment.status === "to do") {
@@ -346,7 +351,7 @@ function ClientAssignmentTile({
 
   const deleteClientsAssignment = async (): void => {
     try {
-      deleteClientAssignment(assignment.id)
+      deleteClientAssignment(assignment.id);
       handleToggleModal();
       onDeleteSuccess(assignment.id);
     } catch (e) {

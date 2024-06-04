@@ -11,7 +11,6 @@ function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true);
   const [card, setCard] = useState(null);
 
-
   const isLoggedIn = currentUser != null;
 
   const logout = () => {

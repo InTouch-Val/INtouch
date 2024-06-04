@@ -18,10 +18,10 @@ const assignmentsMiddleware = (store) => (next) => (action) => {
   if (assignmentApi.endpoints.getAssignments.matchFulfilled(action)) {
     const { entities, ...originalArgs } = action.payload;
     const selectedData = assignmentSelector.selectAll(
-      assignmentAdapter.setAll(assignmentAdapter.getInitialState(), entities)
+      assignmentAdapter.setAll(assignmentAdapter.getInitialState(), entities),
     );
     const newArray = selectedData.concat(
-      store.getState().assignment.assignments?.entities
+      store.getState().assignment.assignments?.entities,
     );
     const modifiedActionPayload = { ...action.payload, entities: newArray };
     store.dispatch(setAssignments(modifiedActionPayload));
