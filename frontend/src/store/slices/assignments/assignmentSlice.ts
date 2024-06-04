@@ -93,19 +93,23 @@ const assignmentSlice = createSlice({
     changeLanguageActions: (state, action) => {
       state.activeLanguage = action.payload;
       state.isSuccess = false;
+      state.page = 1;
     },
     changeFilterTypeActions: (state, action) => {
       state.activeFilterType = action.payload;
       state.isSuccess = false;
+      state.page = 1;
     },
     changeSortActions: (state, action) => {
       state.activeOrder = action.payload;
       state.isSuccess = false;
+      state.page = 1;
     },
 
     setAssignmentsFavorites: (state, action) => {
       state.assignmentsFavorites = action.payload;
       state.isSuccess = false;
+      state.page = 1;
     },
     changePageAction: (state, action) => {
       state.page = action.payload;
@@ -114,6 +118,7 @@ const assignmentSlice = createSlice({
     changeSearchAction: (state, action) => {
       state.searchTerm = action.payload;
       state.isSuccess = false;
+      state.page = 1;
     },
     changeStatusAction: (state, action) => {
       state.isSuccess = action.payload;

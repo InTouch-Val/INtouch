@@ -7,7 +7,7 @@ import {
 import { useAuth } from "../../../service/authContext";
 import { useAppDispatch, useAppSelector } from "../../../store/store";
 import { changeAssignmentFavoriteByIdAction } from "../../../store/actions/assignment/assignmentActions";
-import { changePageAction, changeStatusAction } from "../../../store/slices";
+import { changePageAction } from "../../../store/slices";
 import { useInView } from "react-intersection-observer";
 import {
   AssignmentTab,
@@ -41,7 +41,7 @@ export const WithTab = (WrappedComponent) => {
       isSuccess,
     } = useGetAssignmentsQuery(
       {
-        limit: 15,
+        limit: 13,
         page: page,
         author: activeTab == AssignmentTab.myList ? currentUser.id : undefined,
         favorite: activeTab == AssignmentTab.favorites && true,
@@ -54,25 +54,26 @@ export const WithTab = (WrappedComponent) => {
       },
       {
         selectFromResult: ({ data, ...originalArgs }) => ({
-          data: assignmentSelector.selectAll(
-            data ?? assignmentAdapter.getInitialState(),
+          data:
+          assignmentSelector.selectAll(
+            data ?? assignmentAdapter.getInitialState()
           ),
           ...originalArgs,
         }),
-      },
+      }
     );
 
     const toggleFavorite = async (
-      assignmentId: number | string,
+      assignmentId: number | string
     ): Promise<void> => {
       const isFavorite = currentUser.doctor.assignments.find(
-        (item) => item == assignmentId,
+        (item) => item == assignmentId
       );
       dispatch(
         changeAssignmentFavoriteByIdAction({
           isFavorite: isFavorite,
           assignmentId: assignmentId,
-        }),
+        })
       );
       refetch();
     };
@@ -85,7 +86,7 @@ export const WithTab = (WrappedComponent) => {
 
     return (
       <React.Fragment>
-        <WrappedComponent
+    <WrappedComponent
           {...props}
           filteredAssignments={listAssignment}
           toggleFavorite={toggleFavorite}

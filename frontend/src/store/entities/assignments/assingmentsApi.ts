@@ -1,7 +1,6 @@
 import {
   createApi,
   fetchBaseQuery,
-  SerializeQueryArgs,
 } from "@reduxjs/toolkit/query/react";
 import {
   AssignmentsType,
@@ -9,7 +8,7 @@ import {
   AssignmentsResponseType,
   AssignmentUpdateRequestType,
 } from "./types";
-import { createEntityAdapter, EntityState } from "@reduxjs/toolkit";
+import { createEntityAdapter } from "@reduxjs/toolkit";
 
 type ParamsAssignments = {
   limit?: number;
@@ -37,10 +36,7 @@ export const assignmentApi = createApi({
   tagTypes: ["Assignments", "UNAUTHORIZED", "UNKNOWN_ERROR"],
   keepUnusedDataFor: 180, //3 минуты
   endpoints: (build) => ({
-    getAssignments: build.query<
-      EntityState<AssignmentsType, number>,
-      ParamsAssignments
-    >({
+    getAssignments: build.query<any, ParamsAssignments>({
       query: ({
         limit = 15,
         page = 1,
@@ -53,17 +49,23 @@ export const assignmentApi = createApi({
       }) => ({
         url: `${ASSIGNMENTS_URL}?${limit ? `limit=${limit} ` : ""}&page=${page}${author ? `&author=${author}` : ""}${favorite ? `&favourites=${favorite}` : ""}${language ? `&language=${language}` : ""}${assignmentType ? `&assignment_type=${assignmentType}` : ""}&ordering=${ordering}${search ? `&search=${search}` : ""}`.replace(
           /\s+/g,
-          "",
+          ""
         ), // regex удаляет все пробелы в строке
         method: "GET",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       }),
+      merge: (currentState, incomingState) => {
+        return assignmentAdapter.addMany(
+          currentState,
+          assignmentSelector.selectAll(incomingState)
+        );
+      },
       transformResponse: (response: AssignmentsResponseType) => {
         return assignmentAdapter.addMany(
           assignmentAdapter.getInitialState(),
-          response.results,
+          response.results
         );
       },
       forceRefetch: ({ currentArg, previousArg }) => {
@@ -79,7 +81,6 @@ export const assignmentApi = createApi({
       },
       serializeQueryArgs: ({ queryArgs }) => {
         return JSON.stringify({
-          page: queryArgs.page,
           language: queryArgs.language,
           ordering: queryArgs.ordering,
           search: queryArgs.search,
@@ -87,12 +88,7 @@ export const assignmentApi = createApi({
           favorite: queryArgs.favorite,
         });
       },
-      merge: (currentState, incomingState) => {
-        assignmentAdapter.addMany(
-          currentState,
-          assignmentSelector.selectAll(incomingState),
-        );
-      },
+
       providesTags: (result, error, args) =>
         result
           ? [
@@ -103,6 +99,7 @@ export const assignmentApi = createApi({
             ? ["UNAUTHORIZED"]
             : ["UNKNOWN_ERROR"],
     }),
+
     createAssignment: build.mutation<
       AssignmentsType,
       Partial<AssignmentCreateRequestType>
