@@ -11,6 +11,7 @@ import {
   assignmentSelector,
 } from "./entities";
 import { authApi } from "./entities/auth/auth";
+import { modalsSlice } from "./slices/modals/modalsSlice";
 import { AssignmentTab } from "../utils/constants";
 
 const assignmentsMiddleware = (store) => (next) => (action) => {
@@ -43,6 +44,7 @@ const store = configureStore({
   reducer: {
     assignment: assignmentSlice,
     auth: authSlice.reducer,
+    modals: modalsSlice.reducer,
 
     [authApi.reducerPath]: authApi.reducer,
     [assignmentApi.reducerPath]: assignmentApi.reducer,

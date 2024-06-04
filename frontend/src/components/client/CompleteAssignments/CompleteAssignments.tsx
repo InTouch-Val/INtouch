@@ -20,8 +20,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import decodeStyledText from "../../../service/decodeStyledText";
 import Modal from "../../modals/Modal/Modal";
-import AssignmentNotComplete from "../../modals/Notifications/assignmentNotComplete";
-import AssignmentExit from "../../modals/Notifications/assgnmentExit";
+import EntryNotComplete from "../../modals/Notifications/entryNotComplete";
+import EntryUnsavedExit from "../../modals/Notifications/entryUnsavedExit";
 import useMobileWidth from "../../../utils/hook/useMobileWidth";
 
 function CompleteAssignments() {
@@ -628,7 +628,7 @@ function CompleteAssignments() {
 
       {modalIsOpen ? (
         <Modal>
-          <AssignmentNotComplete
+          <EntryNotComplete
             completeClick={() => setIsRateTask(!isRateTask)}
             backClick={() => setModalOpen(false)}
           />
@@ -637,7 +637,7 @@ function CompleteAssignments() {
 
       {modalExitIsOpen ? (
         <Modal>
-          <AssignmentExit
+          <EntryUnsavedExit
             saveClick={() => {
               setIsSaved(true);
               navigate(-1);
