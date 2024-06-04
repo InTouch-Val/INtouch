@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { API } from "./axios";
 
 const AuthContext = createContext(null);
@@ -10,8 +10,6 @@ function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [card, setCard] = useState(null);
-
-  console.log(card);
 
   const isLoggedIn = currentUser != null;
 

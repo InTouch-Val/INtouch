@@ -2,34 +2,62 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { useGetAssignmentsQuery } from "../../store/entities";
-import { useAuth } from "../../service/authContext";
+import { useDeleteAssignmentByUUIDMutation } from "../../store/entities";
 import { useNavigate } from "react-router-dom";
 import FilterDropDown from "./FilterDropDown/FilterDropDown";
 import ModalAssignments from "./ModalsAssignments/ModalAssignments";
-import TabsHideOrderComponent from "./TabsAssignments/TabsHideOrderComponent";
-import { useAppDispatch, useAppSelector } from "../../store/store";
-import { changeTabActions } from "../../store/slices/assignments/assignmentSlice";
+import { useAppDispatch } from "../../store/store";
 import AllTabs from "./AllTabs/AllTabs";
+import TabsAssignments from "./TabsAssignments/Tab";
+import { changeSearchAction } from "../../store/slices";
+import { WithTab } from "./TabsAssignments/Hoc";
 
-export default function AssignmentsPageRefactor({ isShareModal = false }) {
-  //@ts-ignore
-  const { currentUser } = useAuth();
-  const [limit, setLimit] = React.useState(30);
+interface Props {
+  isShareModal: boolean;
+  selectedAssignmentIdForShareModalOnClientPage: string;
+  setSelectedAssignmentIdForShareModalOnClientPage: React.Dispatch<
+    React.SetStateAction<string>
+  >;
+}
+
+export default function AssignmentsPageRefactor({
+  isShareModal = false,
+  selectedAssignmentIdForShareModalOnClientPage,
+  setSelectedAssignmentIdForShareModalOnClientPage,
+}: Props): JSX.Element {
   const [searchTerm, setSearchTerm] = React.useState<string>("");
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [selectedAssignmentId, setSelectedAssignmentId] = React.useState("");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = React.useState(false);
 
-  const { activeTab, status } = useAppSelector((state) => state.assignment);
+  const [deleteAssignment, _] = useDeleteAssignmentByUUIDMutation();
 
-  const { data: listAssignment } = useGetAssignmentsQuery({
-    limit: limit,
-    author: activeTab == "my-list" ? currentUser.id : undefined,
-    favorite: activeTab == "favorites" && true,
-  });
+  const handleDeleteClick = (assignmentId: string): void => {
+    deleteAssignment(assignmentId);
+    setIsDeleteModalOpen(true);
+  };
 
-  const handleAddAssignment = () => {
+  const handleShareButton = (assignmentId: string): void => {
+    if (isShareModal) {
+      setSelectedAssignmentIdForShareModalOnClientPage(assignmentId);
+    } else {
+      setSelectedAssignmentId(assignmentId);
+      setIsShareModalOpen(true);
+    }
+  };
+
+  const handleAddAssignment = (): void => {
     navigate("/add-assignment");
   };
+
+  function handleChangeSearch(e: React.ChangeEvent<HTMLInputElement>): void {
+    setSearchTerm(e.target.value);
+    dispatch(changeSearchAction(e.target.value));
+  }
+
+  const Tab = WithTab(TabsAssignments);
 
   return (
     <>
@@ -50,14 +78,21 @@ export default function AssignmentsPageRefactor({ isShareModal = false }) {
               type="text"
               placeholder="Search..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => handleChangeSearch(e)}
             />
           </div>
         )}
         {!isShareModal && <FilterDropDown />}
       </div>
 
-      <TabsHideOrderComponent filteredAssignments={listAssignment?.results} />
+      <Tab
+        isShareModal={isShareModal}
+        handleDeleteClick={handleDeleteClick}
+        handleShareButton={handleShareButton}
+        selectedAssignmentIdForShareModalOnClientPage={
+          selectedAssignmentIdForShareModalOnClientPage
+        }
+      />
 
       <ModalAssignments />
     </>

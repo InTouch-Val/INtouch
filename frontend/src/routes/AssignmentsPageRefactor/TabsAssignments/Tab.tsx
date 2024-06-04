@@ -1,21 +1,27 @@
 import React from "react";
 import { AssignmentTile } from "../../../components/psy/AssignmentTile";
 import { useAuth } from "../../../service/authContext";
+import { AssignmentsType } from "../../../store/entities/assignments/types";
 
-import { API } from "../../../service/axios";
+export interface PropsTabAssignments {
+  filteredAssignments: AssignmentsType[];
+  isShareModal: boolean;
+  selectedAssignmentIdForShareModalOnClientPage: string;
+  toggleFavorite: (id: number | string) => void;
+  handleDeleteClick: (id: number | string) => void;
+  handleShareButton: (id: number | string) => void;
+}
 
-export default function TabLibrary({
+export default function TabsAssignments({
   filteredAssignments,
   isShareModal = false,
   selectedAssignmentIdForShareModalOnClientPage = "",
   toggleFavorite,
   handleDeleteClick,
-  duplicateAssignment,
   handleShareButton,
-}) {
+}: PropsTabAssignments) {
   //@ts-ignore
   const { currentUser } = useAuth();
-  const [userFavorites, setUserFavorites] = React.useState<string[]>([]);
 
   return (
     <div className="assignment-grid">
@@ -25,10 +31,11 @@ export default function TabLibrary({
             key={assignment.id}
             assignment={assignment}
             onFavoriteToggle={toggleFavorite}
-            isFavorite={userFavorites?.includes(assignment.id)}
+            isFavorite={currentUser.doctor.assignments.find(
+              (item) => item == assignment.id,
+            )}
             isAuthor={assignment.author === currentUser.id}
             onDeleteClick={handleDeleteClick}
-            onCopyClick={duplicateAssignment}
             onShareClick={handleShareButton}
             isShareModal={isShareModal}
             selectedAssignmentIdForShareModalOnClientPage={
