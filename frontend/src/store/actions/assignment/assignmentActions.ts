@@ -27,6 +27,7 @@ export const duplicateAssignmentAction = createAsyncThunk(
     try {
       const response = await API.get(`assignments/${assignmentId}/`);
       const data = response.data;
+
       return data;
     } catch (error) {
       console.error("Error duplicate:", error);

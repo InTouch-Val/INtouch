@@ -7,7 +7,7 @@ import {
   draftAssignmentAction,
   duplicateAssignmentAction,
 } from "../../../store/actions/assignment/assignmentActions";
-import { BlockType } from "../../../utils/constants";
+import { BlockType, Status } from "../../../utils/constants";
 import { AssignmentsType } from "../../../store/entities/assignments/types";
 import { useCreateAssignmentMutation } from "../../../store/entities";
 import { formatDate } from "../../../utils/helperFunction/formatDate";
@@ -42,7 +42,9 @@ function AssignmentTile({
   );
 
   const dispatch = useAppDispatch();
-  const { duplicateAssignment } = useAppSelector((store) => store.assignment);
+  const { duplicateAssignment, status } = useAppSelector(
+    (store) => store.assignment
+  );
 
   const [assignmentId, setAssignments] = useState<any>([]);
 
@@ -90,83 +92,88 @@ function AssignmentTile({
     assignmentId: string
   ): Promise<void> => {
     try {
-      dispatch(duplicateAssignmentAction(assignmentId));
-      let assignmentData = duplicateAssignment!;
+      const { payload } = await dispatch(
+        duplicateAssignmentAction(assignmentId)
+      );
 
-      // Подготавливаем данные для дубликата, используя ту же структуру, что и в handleSubmit
-      const blockInfo = assignmentData.blocks.map((block) => {
-        if (block.type === BlockType.Text) {
+      let assignmentData = await payload;
+      if (assignmentData) {
+        // Подготавливаем данные для дубликата, используя ту же структуру, что и в handleSubmit
+        const blockInfo = await assignmentData.blocks.map((block) => {
+          if (block.type === BlockType.Text) {
+            return {
+              type: block.type,
+              question: block.question,
+              description: getObjectFromEditorState(block.content),
+              choice_replies: [],
+            };
+          }
+          if (block.type === BlockType.Range) {
+            return {
+              type: block.type,
+              question: block.question,
+              start_range: block.minValue,
+              end_range: block.maxValue,
+              left_pole: block.leftPole || "Left Pole",
+              right_pole: block.rightPole || "Right Pole",
+            };
+          }
+          if (block.type === BlockType.Image) {
+            return {
+              type: block.type,
+              question: block.question,
+              image: block.image,
+            };
+          }
+          if (block.type === BlockType.Open) {
+            return {
+              type: block.type,
+              question: block.question,
+            };
+          }
           return {
             type: block.type,
             question: block.question,
-            description: getObjectFromEditorState(block.content),
-            choice_replies: [],
+            choice_replies: block.choice_replies,
           };
-        }
-        if (block.type === BlockType.Range) {
-          return {
-            type: block.type,
-            question: block.question,
-            start_range: block.minValue,
-            end_range: block.maxValue,
-            left_pole: block.leftPole || "Left Pole",
-            right_pole: block.rightPole || "Right Pole",
-          };
-        }
-        if (block.type === BlockType.Image) {
-          return {
-            type: block.type,
-            question: block.question,
-            image: block.image,
-          };
-        }
-        if (block.type === BlockType.Open) {
-          return {
-            type: block.type,
-            question: block.question,
-          };
-        }
-        return {
-          type: block.type,
-          question: block.question,
-          choice_replies: block.choice_replies,
+        });
+
+        const duplicateData = {
+          blocks: blockInfo,
+          title: `${assignmentData.title} + COPY`,
+          text: assignmentData.text,
+          assignment_type: assignmentData.assignment_type,
+          tags: assignmentData.tags,
+          language: assignmentData.language,
+          image_url:
+            assignmentData.image_url ||
+            "https://images.unsplash.com/photo-1641531316051-30d6824c6460?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1MzE0ODh8MHwxfHNlYXJjaHwxfHxsZW9uaWR8ZW58MHx8fHwxNzAwODE4Nzc5fDA&ixlib=rb-4.0.3&q=85",
         };
-      });
 
-      const duplicateData = {
-        blocks: blockInfo,
-        title: `${assignmentData.title} + COPY`,
-        text: assignmentData.text,
-        assignment_type: assignmentData.assignment_type,
-        tags: assignmentData.tags,
-        language: assignmentData.language,
-        image_url:
-          assignmentData.image_url ||
-          "https://images.unsplash.com/photo-1641531316051-30d6824c6460?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1MzE0ODh8MHwxfHNlYXJjaHwxfHxsZW9uaWR8ZW58MHx8fHwxNzAwODE4Nzc5fDA&ixlib=rb-4.0.3&q=85",
-      };
+        // Отправляем данные задания на сервер для создания дубликата
+        const duplicateResponse = await createAssignment(duplicateData);
 
-      // Отправляем данные задания на сервер для создания дубликата
-      const duplicateResponse = await createAssignment(duplicateData);
-      if (
-        !duplicateResponse ||
-        !duplicateResponse.data ||
-        !duplicateResponse.data.id
-      ) {
-        throw new Error("Failed to create assignment");
-      }
-      // Получаем ID созданного задания
-      const responseAssignmentId = duplicateResponse.data.id;
+        if (
+          !duplicateResponse ||
+          !duplicateResponse.data ||
+          !duplicateResponse.data.id
+        ) {
+          throw new Error("Failed to create assignment");
+        }
+        // Получаем ID созданного задания
+        const responseAssignmentId = await duplicateResponse.data.id;
 
-      // Если задание должно быть сохранено как черновик, выполняем GET запрос
-      await dispatch(draftAssignmentAction(`${responseAssignmentId}`));
-      duplicateResponse.data.is_public = false;
+        // Если задание должно быть сохранено как черновик, выполняем GET запрос
+        await dispatch(draftAssignmentAction(`${responseAssignmentId}`));
+        duplicateResponse.data.is_public = false;
 
-      // Если все прошло успешно, добавляем дубликат в список заданий
-      if (duplicateResponse.data) {
-        setAssignments((prevAssignments) => [
-          ...prevAssignments,
-          duplicateResponse.data,
-        ]);
+        // Если все прошло успешно, добавляем дубликат в список заданий
+        if (duplicateResponse.data) {
+          setAssignments((prevAssignments) => [
+            ...prevAssignments,
+            duplicateResponse.data,
+          ]);
+        }
       }
     } catch (error) {
       console.error("Error duplicating assignment:", error);

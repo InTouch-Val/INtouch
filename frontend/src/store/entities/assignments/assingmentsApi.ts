@@ -1,7 +1,4 @@
-import {
-  createApi,
-  fetchBaseQuery,
-} from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
   AssignmentsType,
   AssignmentCreateRequestType,
@@ -36,7 +33,10 @@ export const assignmentApi = createApi({
   tagTypes: ["Assignments", "UNAUTHORIZED", "UNKNOWN_ERROR"],
   keepUnusedDataFor: 180, //3 минуты
   endpoints: (build) => ({
-    getAssignments: build.query<EntityState<AssignmentsType, number>, ParamsAssignments>({
+    getAssignments: build.query<
+      EntityState<AssignmentsType, number>,
+      ParamsAssignments
+    >({
       query: ({
         limit = 15,
         page = 1,
@@ -109,9 +109,11 @@ export const assignmentApi = createApi({
         url: "assignments/",
         method: "POST",
         data: newAssignmentData,
+
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
+        body: newAssignmentData,
       }),
       invalidatesTags: () => [{ type: "Assignments", id: "PARTIAL-LIST" }],
     }),
