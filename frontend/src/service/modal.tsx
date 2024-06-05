@@ -1,4 +1,15 @@
-//@ts-nocheck
+import React, { ReactNode } from "react";
+
+interface PropsModal {
+  isOpen: boolean,
+  onClose: () => void,
+  onConfirm: () => void,
+  children: ReactNode,
+  confirmText: string,
+  ifError: boolean,
+  errorText: any,
+  showCancel: boolean,
+}
 
 function Modal({
   isOpen,
@@ -8,8 +19,8 @@ function Modal({
   confirmText,
   ifError,
   errorText,
-  showCancel = "true",
-}) {
+  showCancel = true,
+}: PropsModal): JSX.Element | null {
   if (!isOpen) return null;
 
   return (

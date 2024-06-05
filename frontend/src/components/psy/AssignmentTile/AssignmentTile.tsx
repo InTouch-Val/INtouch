@@ -1,23 +1,17 @@
-//@ts-nocheck
-import { useState, useEffect, SetStateAction } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { API } from "../../service/axios";
-import { Modal } from "../../service/modal";
-import "../../css/assignment-tile.css";
+import "../../../css/assignment-tile.css";
 import React from "react";
-import { useAppDispatch, useAppSelector } from "../../store/store";
+import { useAppDispatch, useAppSelector } from "../../../store/store";
 import {
   draftAssignmentAction,
   duplicateAssignmentAction,
-} from "../../store/actions/assignment/assignmentActions";
-import { BlockType } from "../../utils/constants";
-import { AssignmentsType } from "../../store/entities/assignments/types";
-import { useCreateAssignmentMutation } from "../../store/entities";
-
-const formatDate = (dateString: Date): Date => {
-  const options = { year: "numeric", month: "short", day: "numeric" };
-  return new Date(dateString).toLocaleDateString("en-US", options);
-};
+} from "../../../store/actions/assignment/assignmentActions";
+import { BlockType } from "../../../utils/constants";
+import { AssignmentsType } from "../../../store/entities/assignments/types";
+import { useCreateAssignmentMutation } from "../../../store/entities";
+import { formatDate } from "../../../utils/helperFunction/formatDate";
+import DropDownButton from "./DropDownButton/DropDownButton";
 
 const getObjectFromEditorState = (editorState: string) =>
   JSON.stringify(editorState);
@@ -44,7 +38,7 @@ function AssignmentTile({
   selectedAssignmentIdForShareModalOnClientPage,
 }: Props) {
   const [isSelected, setIsSelected] = useState(
-    assignment.id === selectedAssignmentIdForShareModalOnClientPage,
+    assignment.id === selectedAssignmentIdForShareModalOnClientPage
   );
 
   const dispatch = useAppDispatch();
@@ -56,7 +50,7 @@ function AssignmentTile({
 
   useEffect(() => {
     setIsSelected(
-      assignment.id === selectedAssignmentIdForShareModalOnClientPage,
+      assignment.id === selectedAssignmentIdForShareModalOnClientPage
     );
   }, [selectedAssignmentIdForShareModalOnClientPage]);
 
@@ -93,11 +87,11 @@ function AssignmentTile({
   }, [isDropdownOpen]);
 
   const duplicateAssignmentHandle = async (
-    assignmentId: string,
+    assignmentId: string
   ): Promise<void> => {
     try {
       dispatch(duplicateAssignmentAction(assignmentId));
-      let assignmentData = duplicateAssignment;
+      let assignmentData = duplicateAssignment!;
 
       // Подготавливаем данные для дубликата, используя ту же структуру, что и в handleSubmit
       const blockInfo = assignmentData.blocks.map((block) => {
@@ -152,7 +146,7 @@ function AssignmentTile({
       };
 
       // Отправляем данные задания на сервер для создания дубликата
-      createAssignment(duplicateData);
+      const duplicateResponse = await createAssignment(duplicateData);
       if (
         !duplicateResponse ||
         !duplicateResponse.data ||
@@ -164,11 +158,11 @@ function AssignmentTile({
       const responseAssignmentId = duplicateResponse.data.id;
 
       // Если задание должно быть сохранено как черновик, выполняем GET запрос
-      await dispatch(draftAssignmentAction(responseAssignmentId));
+      await dispatch(draftAssignmentAction(`${responseAssignmentId}`));
       duplicateResponse.data.is_public = false;
 
       // Если все прошло успешно, добавляем дубликат в список заданий
-      if (duplicateResponse.status === 201) {
+      if (duplicateResponse.data) {
         setAssignments((prevAssignments) => [
           ...prevAssignments,
           duplicateResponse.data,
@@ -193,51 +187,15 @@ function AssignmentTile({
           {assignment.is_public === false ? null : (
             <>
               {isAuthor ? (
-                <button
-                  className="assignment__dropdown-btn"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    setIsDropdownOpen(!isDropdownOpen);
-                  }}
-                >
-                  {isDropdownOpen ? (
-                    <div className="assignment__dropdown">
-                      <button
-                        className={
-                          isFavorite
-                            ? "favorite-button favorite-button_dropdown_selected favorite-button_dropdown"
-                            : "favorite-button favorite-button_dropdown"
-                        }
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          onFavoriteToggle(assignment.id);
-                        }}
-                      >
-                        Favorite
-                      </button>
-                      <hr className="dropdown-separate-line" />
-                      <button
-                        className="assignment__dropdown-copy-btn"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          duplicateAssignmentHandle(assignment.id);
-                        }}
-                      >
-                        Duplicate
-                      </button>
-                      <hr className="dropdown-separate-line" />
-                      <button
-                        className="assignment__dropdown-delete-btn"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          onDeleteClick(assignment.id);
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  ) : null}
-                </button>
+                <DropDownButton
+                  onDeleteClick={onDeleteClick}
+                  isFavorite={isFavorite}
+                  assignment={assignment}
+                  isDropdownOpen={isDropdownOpen}
+                  setIsDropdownOpen={setIsDropdownOpen}
+                  onFavoriteToggle={onFavoriteToggle}
+                  duplicateAssignmentHandle={duplicateAssignmentHandle}
+                />
               ) : (
                 <button
                   className={
@@ -273,7 +231,7 @@ function AssignmentTile({
                 className="assignment__delete-btn"
                 onClick={(event) => {
                   event.stopPropagation();
-                  onDeleteClick(assignment.id);
+                  onDeleteClick(`${assignment.id}`);
                 }}
               ></button>
             </>
@@ -296,7 +254,7 @@ function AssignmentTile({
                   className="assignment-actions__share-with-client"
                   onClick={(event) => {
                     event.stopPropagation();
-                    onShareClick(assignment.id);
+                    onShareClick(`${assignment.id}`);
                   }}
                 ></button>
               )}
@@ -308,123 +266,4 @@ function AssignmentTile({
   );
 }
 
-interface PropsClient {
-  assignment: AssignmentsType;
-  onDeleteSuccess: (id: string) => void;
-  openAssignment: (card: AssignmentsType) => void;
-  clientId: string;
-}
-
-function ClientAssignmentTile({
-  assignment,
-  onDeleteSuccess,
-  openAssignment,
-  clientId,
-}: PropsClient) {
-  const [isHovered, setIsHovered] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [ifError, setIfError] = useState(false);
-  const [errorText, setErrorText] = useState("Can`t Recall");
-  const [statusOneWord, setStatusOneWord] = useState("to-do");
-  const navigate = useNavigate();
-
-  const [deleteClientAssignment, _] = useDeleteAssignmentClientByUUIDMutation();
-
-  useEffect(() => {
-    if (assignment.status === "to do") {
-      setStatusOneWord("to-do");
-    } else if (assignment.status === "in progress") {
-      setStatusOneWord("in-progress");
-    } else if (assignment.status === "done") {
-      setStatusOneWord("done");
-    }
-  }, [assignment]);
-
-  function onCardClick(): void {
-    navigate(`/clients/${clientId}/assignments/${assignment?.id}`);
-    openAssignment(assignment);
-  }
-
-  function onRecallClick(): void {
-    handleToggleModal();
-  }
-
-  const deleteClientsAssignment = async (): void => {
-    try {
-      deleteClientAssignment(assignment.id);
-      handleToggleModal();
-      onDeleteSuccess(assignment.id);
-    } catch (e) {
-      console.error(e.message);
-    }
-  };
-
-  const handleToggleModal = (): void => setShowModal(!showModal);
-
-  return (
-    <div
-      className="assignment-tile"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <div className="assignment-image-container assignment-image-container_client">
-        <div className="date-and-type">
-          <span>Sent: {formatDate(assignment.add_date)}</span>
-          <span className={`status ${statusOneWord}`}>{assignment.status}</span>
-        </div>
-        <img alt="Loading..." src={assignment.image_url} />
-      </div>
-      <div className="assignment-info">
-        <h3>{assignment.title}</h3>
-        <p>UPD: {assignment.update_date}</p>
-      </div>
-      <div className="assignment-actions">
-        {assignment.status !== "to do" ? (
-          <>
-            <button
-              className="assignment__review-btn"
-              title="view task rate"
-              onClick={(event) => {
-                event.stopPropagation();
-                onCardClick();
-              }}
-              disabled={assignment.review === "" || undefined || null}
-            ></button>
-            <button
-              className="assignment__view-btn"
-              title="view done assignment"
-              onClick={(event) => {
-                event.stopPropagation();
-                onCardClick();
-              }}
-            ></button>
-          </>
-        ) : (
-          <>
-            <button
-              className="assignment-actions__share-with-client assignment-actions__share-with-client_recall"
-              title="recall assignment"
-              onClick={(event) => {
-                event.stopPropagation();
-                onRecallClick();
-              }}
-            ></button>
-          </>
-        )}
-      </div>
-      <Modal
-        isOpen={showModal}
-        onClose={handleToggleModal}
-        onConfirm={deleteClientsAssignment}
-        confirmText="Yes, Recall"
-        showCancel={true}
-        ifError={ifError}
-        errorText={errorText}
-      >
-        <p>Are you sure you want to recall this assignment from client?</p>
-      </Modal>
-    </div>
-  );
-}
-
-export { AssignmentTile, ClientAssignmentTile };
+export { AssignmentTile };

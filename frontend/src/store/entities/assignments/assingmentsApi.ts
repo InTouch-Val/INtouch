@@ -8,7 +8,7 @@ import {
   AssignmentsResponseType,
   AssignmentUpdateRequestType,
 } from "./types";
-import { createEntityAdapter } from "@reduxjs/toolkit";
+import { createEntityAdapter, EntityState } from "@reduxjs/toolkit";
 
 type ParamsAssignments = {
   limit?: number;
@@ -36,7 +36,7 @@ export const assignmentApi = createApi({
   tagTypes: ["Assignments", "UNAUTHORIZED", "UNKNOWN_ERROR"],
   keepUnusedDataFor: 180, //3 минуты
   endpoints: (build) => ({
-    getAssignments: build.query<any, ParamsAssignments>({
+    getAssignments: build.query<EntityState<AssignmentsType, number>, ParamsAssignments>({
       query: ({
         limit = 15,
         page = 1,
@@ -84,6 +84,7 @@ export const assignmentApi = createApi({
           language: queryArgs.language,
           ordering: queryArgs.ordering,
           search: queryArgs.search,
+          author: queryArgs.author,
           assignmentType: queryArgs.assignmentType,
           favorite: queryArgs.favorite,
         });

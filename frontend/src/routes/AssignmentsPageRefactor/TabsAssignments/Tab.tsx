@@ -1,7 +1,7 @@
 import React from "react";
-import { AssignmentTile } from "../../../components/psy/AssignmentTile";
 import { useAuth } from "../../../service/authContext";
 import { AssignmentsType } from "../../../store/entities/assignments/types";
+import { AssignmentTile } from "../../../components/psy/AssignmentTile/AssignmentTile";
 
 export interface PropsTabAssignments {
   filteredAssignments: AssignmentsType[];
