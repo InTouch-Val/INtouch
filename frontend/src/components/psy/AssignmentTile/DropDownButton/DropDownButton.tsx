@@ -1,4 +1,15 @@
-import React from "react";
+import React, { SetStateAction } from "react";
+import { AssignmentsType } from "../../../../store/entities/assignments/types";
+
+interface Props {
+  assignment: AssignmentsType;
+  duplicateAssignmentHandle: (id: number) =>  Promise<void>;
+  onDeleteClick: (id: number) => void;
+  isDropdownOpen: boolean;
+  setIsDropdownOpen: React.Dispatch<SetStateAction<boolean>>;
+  isFavorite: boolean;
+  onFavoriteToggle: (id: number) => void;
+}
 
 export default function DropDownButton({
   assignment,
@@ -8,7 +19,7 @@ export default function DropDownButton({
   setIsDropdownOpen,
   isFavorite,
   onFavoriteToggle,
-}) {
+}: Props): JSX.Element {
   return (
     <>
       <button
@@ -38,7 +49,7 @@ export default function DropDownButton({
               className="assignment__dropdown-copy-btn"
               onClick={(event) => {
                 event.stopPropagation();
-                duplicateAssignmentHandle(`${assignment.id}`);
+                duplicateAssignmentHandle(assignment.id);
               }}
             >
               Duplicate
@@ -48,7 +59,7 @@ export default function DropDownButton({
               className="assignment__dropdown-delete-btn"
               onClick={(event) => {
                 event.stopPropagation();
-                onDeleteClick(`${assignment.id}`);
+                onDeleteClick(assignment.id);
               }}
             >
               Delete

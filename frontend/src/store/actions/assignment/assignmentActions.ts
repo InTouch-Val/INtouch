@@ -23,7 +23,7 @@ export const changeAssignmentFavoriteByIdAction = createAsyncThunk(
 
 export const duplicateAssignmentAction = createAsyncThunk(
   "assignment/duplicateAssignmentAction",
-  async (assignmentId: string, { rejectWithValue }) => {
+  async (assignmentId: number, { rejectWithValue }) => {
     try {
       const response = await API.get(`assignments/${assignmentId}/`);
       const data = response.data;

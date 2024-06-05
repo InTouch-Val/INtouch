@@ -20,9 +20,9 @@ interface Props {
   assignment: AssignmentsType;
   onFavoriteToggle: (id: number | string) => void;
   isFavorite: boolean;
-  onShareClick: (id: string) => void;
+  onShareClick: (id: number) => void;
   isAuthor: boolean;
-  onDeleteClick: (id: string) => void;
+  onDeleteClick: (id: number) => void;
   isShareModal: boolean;
   selectedAssignmentIdForShareModalOnClientPage: string | number;
 }
@@ -89,7 +89,7 @@ function AssignmentTile({
   }, [isDropdownOpen]);
 
   const duplicateAssignmentHandle = async (
-    assignmentId: string
+    assignmentId: number
   ): Promise<void> => {
     try {
       const { payload } = await dispatch(
@@ -238,7 +238,7 @@ function AssignmentTile({
                 className="assignment__delete-btn"
                 onClick={(event) => {
                   event.stopPropagation();
-                  onDeleteClick(`${assignment.id}`);
+                  onDeleteClick(assignment.id);
                 }}
               ></button>
             </>
@@ -261,7 +261,7 @@ function AssignmentTile({
                   className="assignment-actions__share-with-client"
                   onClick={(event) => {
                     event.stopPropagation();
-                    onShareClick(`${assignment.id}`);
+                    onShareClick(assignment.id);
                   }}
                 ></button>
               )}
