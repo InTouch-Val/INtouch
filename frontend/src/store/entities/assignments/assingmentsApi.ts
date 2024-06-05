@@ -115,7 +115,6 @@ export const assignmentApi = createApi({
         },
         body: newAssignmentData,
       }),
-      invalidatesTags: () => [{ type: "Assignments", id: "PARTIAL-LIST" }],
     }),
     getAssignmentByUUID: build.query<AssignmentsType, string>({
       query: (uuid) => ({

@@ -88,6 +88,7 @@ export const WithTab = (WrappedComponent) => {
       <React.Fragment>
     <WrappedComponent
           {...props}
+          refetch={refetch}
           filteredAssignments={listAssignment}
           toggleFavorite={toggleFavorite}
         />

@@ -25,9 +25,11 @@ interface Props {
   onDeleteClick: (id: number) => void;
   isShareModal: boolean;
   selectedAssignmentIdForShareModalOnClientPage: string | number;
+  refetch: any;
 }
 
 function AssignmentTile({
+  refetch,
   assignment,
   onFavoriteToggle,
   isFavorite,
@@ -166,7 +168,8 @@ function AssignmentTile({
         // Если задание должно быть сохранено как черновик, выполняем GET запрос
         await dispatch(draftAssignmentAction(`${responseAssignmentId}`));
         duplicateResponse.data.is_public = false;
-
+        debugger;
+      
         // Если все прошло успешно, добавляем дубликат в список заданий
         if (duplicateResponse.data) {
           setAssignments((prevAssignments) => [
@@ -178,6 +181,7 @@ function AssignmentTile({
     } catch (error) {
       console.error("Error duplicating assignment:", error);
     }
+    await refetch()
   };
 
   return (
