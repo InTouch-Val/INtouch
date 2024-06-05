@@ -12,9 +12,7 @@ import { AssignmentsType } from "../../../store/entities/assignments/types";
 import { useCreateAssignmentMutation } from "../../../store/entities";
 import { formatDate } from "../../../utils/helperFunction/formatDate";
 import DropDownButton from "./DropDownButton/DropDownButton";
-
-const getObjectFromEditorState = (editorState: string) =>
-  JSON.stringify(editorState);
+import { separatedBlock } from "./helperFunction";
 
 interface Props {
   assignment: AssignmentsType;
@@ -97,44 +95,8 @@ function AssignmentTile({
       let assignmentData = await payload;
       if (assignmentData) {
         // Подготавливаем данные для дубликата, используя ту же структуру, что и в handleSubmit
-        const blockInfo = await assignmentData.blocks.map((block) => {
-          if (block.type === BlockType.Text) {
-            return {
-              type: block.type,
-              question: block.question,
-              description: getObjectFromEditorState(block.content),
-              choice_replies: [],
-            };
-          }
-          if (block.type === BlockType.Range) {
-            return {
-              type: block.type,
-              question: block.question,
-              start_range: block.minValue,
-              end_range: block.maxValue,
-              left_pole: block.leftPole || "Left Pole",
-              right_pole: block.rightPole || "Right Pole",
-            };
-          }
-          if (block.type === BlockType.Image) {
-            return {
-              type: block.type,
-              question: block.question,
-              image: block.image,
-            };
-          }
-          if (block.type === BlockType.Open) {
-            return {
-              type: block.type,
-              question: block.question,
-            };
-          }
-          return {
-            type: block.type,
-            question: block.question,
-            choice_replies: block.choice_replies,
-          };
-        });
+
+        const blockInfo = separatedBlock(assignmentData);
 
         const duplicateData = {
           blocks: blockInfo,
