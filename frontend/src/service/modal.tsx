@@ -1,5 +1,9 @@
 import React, { ReactNode } from "react";
 
+interface ErrorText {
+  message: string
+}
+
 interface PropsModal {
   isOpen: boolean,
   onClose: () => void,
@@ -7,9 +11,11 @@ interface PropsModal {
   children: ReactNode,
   confirmText: string,
   ifError: boolean,
-  errorText: any,
+  errorText: ErrorText | string,
   showCancel: boolean,
 }
+
+
 
 function Modal({
   isOpen,
@@ -57,7 +63,7 @@ function Modal({
                 textAlign: "center",
               }}
             >
-              {errorText.message || errorText}
+             {typeof errorText === 'object' ? errorText.message : errorText}
             </p>
           )}
         </div>
