@@ -19,7 +19,7 @@ enum StatusFromServer {
 
 interface PropsClient {
   assignment: AssignmentsType;
-  onDeleteSuccess: (id: string) => void;
+  onDeleteSuccess: (id: number) => void;
   openAssignment: (card: AssignmentsType) => void;
   clientId: string;
 }
@@ -62,9 +62,9 @@ export default function ClientAssignmentTile({
 
   const deleteClientsAssignment = async (): Promise<void> => {
     try {
-      deleteClientAssignment(`${assignment.id}`);
+      deleteClientAssignment(assignment.id);
       handleToggleModal();
-      onDeleteSuccess(`${assignment.id}`);
+      onDeleteSuccess(assignment.id);
     } catch (e) {
       setIfError(true);
       console.error(e.message);
@@ -73,7 +73,9 @@ export default function ClientAssignmentTile({
 
   const handleToggleModal = (): void => setShowModal(!showModal);
 
-  function handleRecallClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
+  function handleRecallClick(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ): void {
     event.stopPropagation();
     onRecallClick();
   }

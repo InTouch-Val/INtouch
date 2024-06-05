@@ -138,7 +138,7 @@ export const assignmentApi = createApi({
       }),
     }),
 
-    deleteAssignmentClientByUUID: build.mutation<string, string>({
+    deleteAssignmentClientByUUID: build.mutation<string, number>({
       query: (uuid) => ({
         url: `assignments-client/${uuid}`,
         method: "DELETE",
