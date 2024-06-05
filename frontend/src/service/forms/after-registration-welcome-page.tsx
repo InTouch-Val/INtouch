@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { useNavigate } from "react-router-dom";
-import "../../css/app.css";
+import "../../css/app.scss";
 
 function AfterRegistrationPage() {
   const navigate = useNavigate();

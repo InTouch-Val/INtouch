@@ -254,7 +254,6 @@ function AssignmentsPage({
     }
     setFilteredAssignments(sortedAssignments);
   };
-
   const handleAddAssignment = () => {
     navigate("/add-assignment");
   };

@@ -1,16 +1,37 @@
 //@ts-nocheck
-import { useState, useEffect } from "react";
+import { useState, useEffect, SetStateAction } from "react";
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookmark, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { API } from "../../service/axios";
 import { Modal } from "../../service/modal";
 import "../../css/assignment-tile.css";
+import React from "react";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import {
+  draftAssignmentAction,
+  duplicateAssignmentAction,
+} from "../../store/actions/assignment/assignmentActions";
+import { BlockType } from "../../utils/constants";
+import { AssignmentsType } from "../../store/entities/assignments/types";
+import { useCreateAssignmentMutation } from "../../store/entities";
 
-const formatDate = (dateString) => {
+const formatDate = (dateString: Date): Date => {
   const options = { year: "numeric", month: "short", day: "numeric" };
   return new Date(dateString).toLocaleDateString("en-US", options);
 };
+
+const getObjectFromEditorState = (editorState: string) =>
+  JSON.stringify(editorState);
+
+interface Props {
+  assignment: AssignmentsType;
+  onFavoriteToggle: (id: number | string) => void;
+  isFavorite: boolean;
+  onShareClick: (id: string) => void;
+  isAuthor: boolean;
+  onDeleteClick: (id: string) => void;
+  isShareModal: boolean;
+  selectedAssignmentIdForShareModalOnClientPage: string | number;
+}
 
 function AssignmentTile({
   assignment,
@@ -18,14 +39,20 @@ function AssignmentTile({
   isFavorite,
   onShareClick,
   isAuthor,
-  onCopyClick,
   onDeleteClick,
   isShareModal,
   selectedAssignmentIdForShareModalOnClientPage,
-}) {
+}: Props) {
   const [isSelected, setIsSelected] = useState(
     assignment.id === selectedAssignmentIdForShareModalOnClientPage,
   );
+
+  const dispatch = useAppDispatch();
+  const { duplicateAssignment } = useAppSelector((store) => store.assignment);
+
+  const [assignmentId, setAssignments] = useState<any>([]);
+
+  const [createAssignment, _] = useCreateAssignmentMutation();
 
   useEffect(() => {
     setIsSelected(
@@ -64,6 +91,93 @@ function AssignmentTile({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isDropdownOpen]);
+
+  const duplicateAssignmentHandle = async (
+    assignmentId: string,
+  ): Promise<void> => {
+    try {
+      dispatch(duplicateAssignmentAction(assignmentId));
+      let assignmentData = duplicateAssignment;
+
+      // Подготавливаем данные для дубликата, используя ту же структуру, что и в handleSubmit
+      const blockInfo = assignmentData.blocks.map((block) => {
+        if (block.type === BlockType.Text) {
+          return {
+            type: block.type,
+            question: block.question,
+            description: getObjectFromEditorState(block.content),
+            choice_replies: [],
+          };
+        }
+        if (block.type === BlockType.Range) {
+          return {
+            type: block.type,
+            question: block.question,
+            start_range: block.minValue,
+            end_range: block.maxValue,
+            left_pole: block.leftPole || "Left Pole",
+            right_pole: block.rightPole || "Right Pole",
+          };
+        }
+        if (block.type === BlockType.Image) {
+          return {
+            type: block.type,
+            question: block.question,
+            image: block.image,
+          };
+        }
+        if (block.type === BlockType.Open) {
+          return {
+            type: block.type,
+            question: block.question,
+          };
+        }
+        return {
+          type: block.type,
+          question: block.question,
+          choice_replies: block.choice_replies,
+        };
+      });
+
+      const duplicateData = {
+        blocks: blockInfo,
+        title: `${assignmentData.title} + COPY`,
+        text: assignmentData.text,
+        assignment_type: assignmentData.assignment_type,
+        tags: assignmentData.tags,
+        language: assignmentData.language,
+        image_url:
+          assignmentData.image_url ||
+          "https://images.unsplash.com/photo-1641531316051-30d6824c6460?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1MzE0ODh8MHwxfHNlYXJjaHwxfHxsZW9uaWR8ZW58MHx8fHwxNzAwODE4Nzc5fDA&ixlib=rb-4.0.3&q=85",
+      };
+
+      // Отправляем данные задания на сервер для создания дубликата
+      createAssignment(duplicateData);
+      if (
+        !duplicateResponse ||
+        !duplicateResponse.data ||
+        !duplicateResponse.data.id
+      ) {
+        throw new Error("Failed to create assignment");
+      }
+      // Получаем ID созданного задания
+      const responseAssignmentId = duplicateResponse.data.id;
+
+      // Если задание должно быть сохранено как черновик, выполняем GET запрос
+      await dispatch(draftAssignmentAction(responseAssignmentId));
+      duplicateResponse.data.is_public = false;
+
+      // Если все прошло успешно, добавляем дубликат в список заданий
+      if (duplicateResponse.status === 201) {
+        setAssignments((prevAssignments) => [
+          ...prevAssignments,
+          duplicateResponse.data,
+        ]);
+      }
+    } catch (error) {
+      console.error("Error duplicating assignment:", error);
+    }
+  };
 
   return (
     <div
@@ -106,7 +220,7 @@ function AssignmentTile({
                         className="assignment__dropdown-copy-btn"
                         onClick={(event) => {
                           event.stopPropagation();
-                          onCopyClick(assignment.id);
+                          duplicateAssignmentHandle(assignment.id);
                         }}
                       >
                         Duplicate
@@ -140,7 +254,7 @@ function AssignmentTile({
             </>
           )}
         </div>
-        <img alt="Loading..." src={assignment.image_url} />
+        <img loading="lazy" alt="Loading..." src={assignment.image_url} />
       </div>
       <div className="assignment-info">
         <h3>{assignment.title}</h3>
@@ -194,18 +308,27 @@ function AssignmentTile({
   );
 }
 
+interface PropsClient {
+  assignment: AssignmentsType;
+  onDeleteSuccess: (id: string) => void;
+  openAssignment: (card: AssignmentsType) => void;
+  clientId: string;
+}
+
 function ClientAssignmentTile({
   assignment,
   onDeleteSuccess,
   openAssignment,
   clientId,
-}) {
+}: PropsClient) {
   const [isHovered, setIsHovered] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [ifError, setIfError] = useState(false);
   const [errorText, setErrorText] = useState("Can`t Recall");
   const [statusOneWord, setStatusOneWord] = useState("to-do");
   const navigate = useNavigate();
+
+  const [deleteClientAssignment, _] = useDeleteAssignmentClientByUUIDMutation();
 
   useEffect(() => {
     if (assignment.status === "to do") {
@@ -217,18 +340,18 @@ function ClientAssignmentTile({
     }
   }, [assignment]);
 
-  function onCardClick() {
+  function onCardClick(): void {
     navigate(`/clients/${clientId}/assignments/${assignment?.id}`);
     openAssignment(assignment);
   }
 
-  function onRecallClick() {
+  function onRecallClick(): void {
     handleToggleModal();
   }
 
-  const deleteClientsAssignment = async () => {
+  const deleteClientsAssignment = async (): void => {
     try {
-      await API.delete(`assignments-client/${assignment.id}/`);
+      deleteClientAssignment(assignment.id);
       handleToggleModal();
       onDeleteSuccess(assignment.id);
     } catch (e) {
@@ -236,7 +359,7 @@ function ClientAssignmentTile({
     }
   };
 
-  const handleToggleModal = () => setShowModal(!showModal);
+  const handleToggleModal = (): void => setShowModal(!showModal);
 
   return (
     <div
