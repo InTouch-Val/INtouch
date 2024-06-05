@@ -1,9 +1,10 @@
+import { AssignmentsType } from "../../../store/entities/assignments/types";
 import { BlockType } from "../../../utils/constants";
 
 const getObjectFromEditorState = (editorState: string) =>
   JSON.stringify(editorState);
 
-export const separatedBlock = (assignmentsData) => {
+export const separatedBlock = (assignmentsData: AssignmentsType) => {
   const blockInfo = assignmentsData.blocks.map((block) => {
     if (block.type === BlockType.Text) {
       return {
