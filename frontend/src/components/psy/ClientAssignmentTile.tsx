@@ -73,6 +73,11 @@ export default function ClientAssignmentTile({
 
   const handleToggleModal = (): void => setShowModal(!showModal);
 
+  function handleRecallClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
+    event.stopPropagation();
+    onRecallClick();
+  }
+
   return (
     <div
       className="assignment-tile"
@@ -110,10 +115,7 @@ export default function ClientAssignmentTile({
             <button
               className="assignment-actions__share-with-client assignment-actions__share-with-client_recall"
               title="recall assignment"
-              onClick={(event) => {
-                event.stopPropagation();
-                onRecallClick();
-              }}
+              onClick={(event) => handleRecallClick(event)}
             ></button>
           </>
         )}
