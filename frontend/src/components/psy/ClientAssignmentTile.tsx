@@ -48,7 +48,10 @@ export default function ClientAssignmentTile({
     }
   }, [assignment]);
 
-  function onCardClick(): void {
+  function onCardClick(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ): void {
+    event.stopPropagation();
     navigate(`/clients/${clientId}/assignments/${assignment?.id}`);
     openAssignment(assignment);
   }
@@ -93,19 +96,13 @@ export default function ClientAssignmentTile({
             <button
               className="assignment__review-btn"
               title="view task rate"
-              onClick={(event) => {
-                event.stopPropagation();
-                onCardClick();
-              }}
+              onClick={(event) => onCardClick(event)}
               disabled={assignment.review === "" || undefined}
             ></button>
             <button
               className="assignment__view-btn"
               title="view done assignment"
-              onClick={(event) => {
-                event.stopPropagation();
-                onCardClick();
-              }}
+              onClick={(event) => onCardClick(event)}
             ></button>
           </>
         ) : (

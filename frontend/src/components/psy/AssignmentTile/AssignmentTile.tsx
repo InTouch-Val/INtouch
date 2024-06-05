@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../css/assignment-tile.css";
 import React from "react";
-import { useAppDispatch, useAppSelector } from "../../../store/store";
+import { useAppDispatch } from "../../../store/store";
 import {
   draftAssignmentAction,
   duplicateAssignmentAction,
 } from "../../../store/actions/assignment/assignmentActions";
-import { BlockType, Status } from "../../../utils/constants";
+import { BlockType } from "../../../utils/constants";
 import { AssignmentsType } from "../../../store/entities/assignments/types";
 import { useCreateAssignmentMutation } from "../../../store/entities";
 import { formatDate } from "../../../utils/helperFunction/formatDate";
@@ -25,7 +25,7 @@ interface Props {
   onDeleteClick: (id: number) => void;
   isShareModal: boolean;
   selectedAssignmentIdForShareModalOnClientPage: string | number;
-  refetch: any;
+  refetch: () => void;
 }
 
 function AssignmentTile({
@@ -44,12 +44,7 @@ function AssignmentTile({
   );
 
   const dispatch = useAppDispatch();
-  const { duplicateAssignment, status } = useAppSelector(
-    (store) => store.assignment
-  );
-
-  const [assignmentId, setAssignments] = useState<any>([]);
-
+  const [assignmentId, setAssignments] = useState<AssignmentsType[] | []>([]);
   const [createAssignment, _] = useCreateAssignmentMutation();
 
   useEffect(() => {
@@ -61,7 +56,7 @@ function AssignmentTile({
   const displayDate = formatDate(assignment.update_date);
   const navigate = useNavigate();
 
-  const handleOnTileClick = (assignmentId) => () => {
+  function handleOnTileClick(assignmentId: number): void {
     if (isShareModal) {
       onShareClick(assignmentId);
     } else {
@@ -69,24 +64,25 @@ function AssignmentTile({
         ? navigate(`/assignment/${assignmentId}`)
         : navigate(`/edit-assignment/${assignmentId}`);
     }
-  };
+  }
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event: MouseEvent): void => {
+      const target = event.target as HTMLElement;
       if (
         isDropdownOpen &&
-        event.target.closest(".assignment__dropdown-btn") === null
+        target.closest(".assignment__dropdown-btn") === null
       ) {
         setIsDropdownOpen(false);
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", (e) => handleClickOutside(e));
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", (e) => handleClickOutside(e));
     };
   }, [isDropdownOpen]);
 
@@ -166,10 +162,10 @@ function AssignmentTile({
         const responseAssignmentId = await duplicateResponse.data.id;
 
         // Если задание должно быть сохранено как черновик, выполняем GET запрос
-        await dispatch(draftAssignmentAction(`${responseAssignmentId}`));
+        await dispatch(draftAssignmentAction(responseAssignmentId));
         duplicateResponse.data.is_public = false;
         debugger;
-      
+
         // Если все прошло успешно, добавляем дубликат в список заданий
         if (duplicateResponse.data) {
           setAssignments((prevAssignments) => [
@@ -181,13 +177,41 @@ function AssignmentTile({
     } catch (error) {
       console.error("Error duplicating assignment:", error);
     }
-    await refetch()
+    await refetch();
   };
+
+  function handleFavoriteClick(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ): void {
+    event.stopPropagation();
+    onFavoriteToggle(assignment.id);
+  }
+
+  function handleDeleteClick(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ): void {
+    event.stopPropagation();
+    onDeleteClick(assignment.id);
+  }
+
+  function handleShareClick(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ): void {
+    event.stopPropagation();
+    onShareClick(assignment.id);
+  }
+
+  function handleGoNavigateEdit(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ): void {
+    event.stopPropagation();
+    navigate(`/edit-assignment/${assignment.id}`);
+  }
 
   return (
     <div
       className={`assignment-tile ${isSelected && "assignment-tile_selected"}`}
-      onClick={handleOnTileClick(assignment.id)}
+      onClick={() => handleOnTileClick(assignment.id)}
     >
       <div className="assignment-image-container">
         <div className="date-and-type">
@@ -214,10 +238,7 @@ function AssignmentTile({
                       ? "favorite-button favorite-button_selected"
                       : "favorite-button"
                   }
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    onFavoriteToggle(assignment.id);
-                  }}
+                  onClick={(event) => handleFavoriteClick(event)}
                 ></button>
               )}
             </>
@@ -233,17 +254,11 @@ function AssignmentTile({
             <>
               <button
                 className="assignment__edit-btn"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  navigate(`/edit-assignment/${assignment.id}`);
-                }}
+                onClick={(event) => handleGoNavigateEdit(event)}
               ></button>
               <button
                 className="assignment__delete-btn"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  onDeleteClick(assignment.id);
-                }}
+                onClick={(event) => handleDeleteClick(event)}
               ></button>
             </>
           ) : (
@@ -263,10 +278,7 @@ function AssignmentTile({
               {isShareModal === false && (
                 <button
                   className="assignment-actions__share-with-client"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    onShareClick(assignment.id);
-                  }}
+                  onClick={(event) => handleShareClick(event)}
                 ></button>
               )}
             </>

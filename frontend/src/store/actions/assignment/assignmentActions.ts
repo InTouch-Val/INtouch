@@ -38,7 +38,7 @@ export const duplicateAssignmentAction = createAsyncThunk(
 
 export const draftAssignmentAction = createAsyncThunk(
   "assignment/draftAssignmentAction",
-  async (responseAssignmentId: string, { rejectWithValue }) => {
+  async (responseAssignmentId: number, { rejectWithValue }) => {
     try {
       const response = await API.get(
         `assignments/${responseAssignmentId}/draft/`,
