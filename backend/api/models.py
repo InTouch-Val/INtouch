@@ -44,6 +44,10 @@ class Client(models.Model):
     about = models.TextField(blank=True)
     notes = models.ManyToManyField("Note", blank=True)
 
+    @property
+    def last_ivited(self):
+        return self.user.date_joined()
+
 
 class Assignment(models.Model):
     title = models.CharField(max_length=100)
