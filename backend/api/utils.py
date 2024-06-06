@@ -1,5 +1,7 @@
+import csv
 import datetime as dt
 
+from django.http import HttpResponse
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
 from django.db.models import Avg, QuerySet, Count, Subquery, OuterRef, When, Case, F
@@ -29,7 +31,8 @@ def avg_grade_annotation(query: QuerySet) -> QuerySet:
     return query.annotate(average_grade=Avg("assignments_clients__grade", default=0))
 
 
-def get_queryset_for_metrics() -> QuerySet:
+def get_therapists_metrics_query() -> QuerySet:
+    """Function to get a query of psychotherapists metrics."""
     last_invited = Client.objects.filter(user__doctors=OuterRef("pk")).order_by(
         "-user__date_joined"
     )
@@ -70,3 +73,37 @@ def get_queryset_for_metrics() -> QuerySet:
         )
     )
     return query
+
+
+def form_metrics_file(response: HttpResponse) -> None:
+    """Form a csv metrics data file."""
+    writer = csv.writer(response)
+    writer.writerow(
+        [
+            "User ID",
+            "Registration Date",
+            "Rolling Retention 7D",
+            "Rolling Retention 30D",
+            "Last Seen",
+            "Clients Invited",
+            "Last Invited Client",
+            "Last Sent Assignment",
+            "Last Created Assignment",
+            "Deleted On",
+        ]
+    )
+    users = get_therapists_metrics_query()
+    for user in users:
+        writer.writerow(
+            [
+                user.id,
+                user.date_joined,
+                user.rolling_retention_7d,
+                user.rolling_retention_30d,
+                user.last_login,
+                user.clients_count,
+                user.last_invited,
+                user.last_sent_assignment,
+                user.last_created_assignment,
+            ]
+        )

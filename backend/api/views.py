@@ -1,4 +1,3 @@
-import csv
 import json
 from http import HTTPStatus
 
@@ -30,7 +29,12 @@ from api.models import *
 from api.permissions import *
 from api.serializers import *
 from api.swagger_serializers import SwaggerMessageHandlerSerializer
-from api.utils import send_by_mail, avg_grade_annotation, get_queryset_for_metrics
+from api.utils import (
+    send_by_mail,
+    avg_grade_annotation,
+    get_therapists_metrics_query,
+    form_metrics_file,
+)
 from api.constants import USER_TYPES, METRICS_FILE_NAME
 from api.tasks import reset_email_update_status
 
@@ -1014,7 +1018,7 @@ def assetlink(request):
 
 def project_metrics(request):
     """Render project metrics for psychotherapists"""
-    users = get_queryset_for_metrics()
+    users = get_therapists_metrics_query()
     context = {"users": users}
     return render(request, "metrics/project_metrics.html", context=context)
 
@@ -1028,34 +1032,5 @@ def project_metrics_download(request):
             )
         },
     )
-    writer = csv.writer(response)
-    writer.writerow(
-        [
-            "User ID",
-            "Registration Date",
-            "Rolling Retention 7D",
-            "Rolling Retention 30D",
-            "Last Seen",
-            "Clients Invited",
-            "Last Invited Client",
-            "Last Sent Assignment",
-            "Last Created Assignment",
-            "Deleted On",
-        ]
-    )
-    users = get_queryset_for_metrics()
-    for user in users:
-        writer.writerow(
-            [
-                user.id,
-                user.date_joined,
-                user.rolling_retention_7d,
-                user.rolling_retention_30d,
-                user.last_login,
-                user.clients_count,
-                user.last_invited,
-                user.last_sent_assignment,
-                user.last_created_assignment,
-            ]
-        )
+    form_metrics_file(response)
     return response

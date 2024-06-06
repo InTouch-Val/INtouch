@@ -76,6 +76,9 @@ class Assignment(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        ordering = ["-add_date"]
+
 
 class AssignmentClient(models.Model):
     title = models.CharField(max_length=100)
