@@ -1,14 +1,11 @@
-import {
-  createApi,
-  fetchBaseQuery,
-} from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
   AssignmentsType,
   AssignmentCreateRequestType,
   AssignmentsResponseType,
   AssignmentUpdateRequestType,
 } from "./types";
-import { createEntityAdapter } from "@reduxjs/toolkit";
+import { createEntityAdapter, EntityState } from "@reduxjs/toolkit";
 
 type ParamsAssignments = {
   limit?: number;
@@ -36,7 +33,10 @@ export const assignmentApi = createApi({
   tagTypes: ["Assignments", "UNAUTHORIZED", "UNKNOWN_ERROR"],
   keepUnusedDataFor: 180, //3 минуты
   endpoints: (build) => ({
-    getAssignments: build.query<any, ParamsAssignments>({
+    getAssignments: build.query<
+      EntityState<AssignmentsType, number>,
+      ParamsAssignments
+    >({
       query: ({
         limit = 15,
         page = 1,
@@ -84,6 +84,7 @@ export const assignmentApi = createApi({
           language: queryArgs.language,
           ordering: queryArgs.ordering,
           search: queryArgs.search,
+          author: queryArgs.author,
           assignmentType: queryArgs.assignmentType,
           favorite: queryArgs.favorite,
         });
@@ -108,11 +109,12 @@ export const assignmentApi = createApi({
         url: "assignments/",
         method: "POST",
         data: newAssignmentData,
+
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
+        body: newAssignmentData,
       }),
-      invalidatesTags: () => [{ type: "Assignments", id: "PARTIAL-LIST" }],
     }),
     getAssignmentByUUID: build.query<AssignmentsType, string>({
       query: (uuid) => ({
@@ -136,7 +138,7 @@ export const assignmentApi = createApi({
       }),
     }),
 
-    deleteAssignmentClientByUUID: build.mutation<string, string>({
+    deleteAssignmentClientByUUID: build.mutation<string, number>({
       query: (uuid) => ({
         url: `assignments-client/${uuid}`,
         method: "DELETE",

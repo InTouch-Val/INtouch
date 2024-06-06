@@ -1,7 +1,7 @@
 import React from "react";
-import { AssignmentTile } from "../../../components/psy/AssignmentTile";
 import { useAuth } from "../../../service/authContext";
 import { AssignmentsType } from "../../../store/entities/assignments/types";
+import { AssignmentTile } from "../../../components/psy/AssignmentTile/AssignmentTile";
 
 export interface PropsTabAssignments {
   filteredAssignments: AssignmentsType[];
@@ -10,9 +10,11 @@ export interface PropsTabAssignments {
   toggleFavorite: (id: number | string) => void;
   handleDeleteClick: (id: number | string) => void;
   handleShareButton: (id: number | string) => void;
+  refetch: any
 }
 
 export default function TabsAssignments({
+  refetch,
   filteredAssignments,
   isShareModal = false,
   selectedAssignmentIdForShareModalOnClientPage = "",
@@ -28,6 +30,7 @@ export default function TabsAssignments({
       {filteredAssignments && filteredAssignments.length > 0 ? (
         filteredAssignments.map((assignment) => (
           <AssignmentTile
+          refetch={refetch}
             key={assignment.id}
             assignment={assignment}
             onFavoriteToggle={toggleFavorite}

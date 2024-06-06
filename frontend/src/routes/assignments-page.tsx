@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { API } from "../service/axios";
-import { AssignmentTile } from "../components/psy/AssignmentTile";
+import { AssignmentTile } from "../components/psy/AssignmentTile/AssignmentTile";
 import "../css/assignments.css";
 import { useAuth } from "../service/authContext";
 import { Modal } from "../service/modal";
