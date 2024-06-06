@@ -1,5 +1,5 @@
 //@ts-nocheck
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import DiaryHeaderClient from "./Header/DiaryHeaderClient";
 import "./DiaryPage.css";
 import DiaryEventDetailsClient from "./EventDetailsClient/EventDetailsClient";
@@ -11,31 +11,63 @@ import { FormProvider, useForm } from "react-hook-form";
 import { API } from "../../../service/axios";
 import { useNavigate, useParams } from "react-router-dom";
 import MobileEmotionPage from "../MyDiary/MobileEmotionPage/MobileEmotionPage";
+import EntryUnsavedExit from "../../modals/Notifications/entryUnsavedExit";
+import EntryNotComplete from "../../modals/Notifications/entryNotComplete";
+import Modal from "../../modals/Modal/Modal";
+import { useAppDispatch, useAppSelector } from "../../../store/store";
+import {
+  selectShowModalExitUnsaved,
+  selectShowModalSaveIncomplete,
+} from "../../../store/slices/modals/modalsSlice";
+import {
+  closeModalExitUnsaved,
+  closeModalSaveIncomplete,
+} from "../../../store/slices/modals/modalsSlice";
+import { diaryClientValidation } from "../../../routes/SettingPage/ProfileTab/schemaValid";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 export default function DiaryPageContentClient({ diary, type }) {
-  //Changing card content and menu
+  const dispatch = useAppDispatch();
+  const showModalExitUnsaved = useAppSelector(selectShowModalExitUnsaved);
+  const showModalSaveIncomplete = useAppSelector(selectShowModalSaveIncomplete);
 
   const navigate = useNavigate();
   const [statusMessageText, setStatusMessageText] = React.useState({
     text: null,
     status: null,
   });
+  const [isSaved, setIsSaved] = useState(false);
   const params = useParams();
   const methods = useForm({
+    resolver: yupResolver(diaryClientValidation),
     defaultValues: {
-      event_details: type == "create" ? "" : diary.event_details,
-      thoughts_analysis: type == "create" ? "" : diary.thoughts_analysis,
-      physical_sensations: type == "create" ? "" : diary.physical_sensations,
-      emotion_type: type == "create" ? "" : diary.emotion_type,
-      primary_emotion: type == "create" ? "" : diary.primary_emotion,
-      clarifying_emotion: type == "create" ? [] : diary.clarifying_emotion,
+      event_details: type === "create" ? "" : diary?.event_details || "",
+      thoughts_analysis:
+        type === "create" ? "" : diary?.thoughts_analysis || "",
+      physical_sensations:
+        type === "create" ? "" : diary?.physical_sensations || "",
+      emotion_type: type === "create" ? "" : diary?.emotion_type || "",
+      primary_emotion: type === "create" ? "" : diary?.primary_emotion || "",
+      clarifying_emotion:
+        type === "create" ? [] : diary?.clarifying_emotion || [],
       visible: false,
     },
     mode: "all",
   });
-  const onSubmit = async (data) => {
-    console.log(data);
 
+  const [showEmotionsPage, setShowEmotionsPage] = useState(false);
+  const [changesMade, setChangesMade] = useState(false);
+  const [showInputsincomplete, setShowInputsincomplete] = useState(false);
+
+  const handleCloseExitModal = () => {
+    dispatch(closeModalExitUnsaved());
+  };
+
+  const handleCloseSaveIncompleteModal = () => {
+    dispatch(closeModalSaveIncomplete());
+  };
+
+  const onSubmit = async (data) => {
     if (type == "create") {
       try {
         const response = await API.post(`/diary-notes/`, data);
@@ -43,8 +75,14 @@ export default function DiaryPageContentClient({ diary, type }) {
           text: "Entry successfully saved",
           status: "success",
         });
+        setIsSaved(true);
         if (!showEmotionsPage) {
           setTimeout(() => {
+            setIsSaved(false);
+            setChangesMade(false);
+            handleCloseExitModal();
+            handleCloseSaveIncompleteModal();
+            setShowInputsincomplete(false);
             navigate("/my-diary");
           }, 1000);
         }
@@ -64,7 +102,6 @@ export default function DiaryPageContentClient({ diary, type }) {
             status: "error",
           });
         }
-
         console.log(error);
       }
     }
@@ -75,8 +112,14 @@ export default function DiaryPageContentClient({ diary, type }) {
           text: "Diary changed successfully",
           status: "success",
         });
+        setIsSaved(true);
         if (!showEmotionsPage) {
           setTimeout(() => {
+            setIsSaved(false);
+            setChangesMade(false);
+            handleCloseExitModal();
+            handleCloseSaveIncompleteModal();
+            setShowInputsincomplete(false);
             navigate("/my-diary");
           }, 1000);
         }
@@ -101,8 +144,6 @@ export default function DiaryPageContentClient({ diary, type }) {
     }
   };
 
-  const [showEmotionsPage, setShowEmotionsPage] = useState(false);
-
   return (
     <form className="diaryPage" onSubmit={methods.handleSubmit(onSubmit)}>
       <FormProvider {...methods}>
@@ -120,16 +161,61 @@ export default function DiaryPageContentClient({ diary, type }) {
 
         {!showEmotionsPage ? (
           <>
-            <DiaryHeaderClient diary={diary} onSubmit={onSubmit} />
-            <DiaryEventDetailsClient diary={diary} type={type} />
-            <DiaryBlockAnalysisClient diary={diary} type={type} />
+            <DiaryHeaderClient
+              diary={diary}
+              onSubmit={onSubmit}
+              changesMade={changesMade}
+              isSaved={isSaved}
+            />
+            <DiaryEventDetailsClient
+              diary={diary}
+              type={type}
+              showInputsincomplete={showInputsincomplete}
+            />
+            <DiaryBlockAnalysisClient
+              diary={diary}
+              type={type}
+              showInputsincomplete={showInputsincomplete}
+            />
             <DiaryBlockEmotionClient
               diary={diary}
               type={type}
               setShowEmotionsPage={setShowEmotionsPage}
+              showInputsincomplete={showInputsincomplete}
             />
-            <DiaryBlockPhysicalSensationClient diary={diary} type={type} />
-            <DiaryFooterClient diary={diary} />
+            <DiaryBlockPhysicalSensationClient
+              diary={diary}
+              type={type}
+              showInputsincomplete={showInputsincomplete}
+            />
+            <DiaryFooterClient
+              diary={diary}
+              setChangesMade={setChangesMade}
+              setShowInputsincomplete={setShowInputsincomplete}
+            />
+
+            {showModalExitUnsaved && (
+              <Modal>
+                <EntryUnsavedExit
+                  saveClick={methods.handleSubmit(onSubmit)}
+                  discardClick={() => {
+                    handleCloseExitModal();
+                    navigate("/my-diary");
+                  }}
+                />
+              </Modal>
+            )}
+
+            {showModalSaveIncomplete && (
+              <Modal>
+                <EntryNotComplete
+                  completeClick={methods.handleSubmit(onSubmit)}
+                  backClick={() => {
+                    handleCloseSaveIncompleteModal();
+                  }}
+                />
+              </Modal>
+            )}
           </>
         ) : (
           <MobileEmotionPage
