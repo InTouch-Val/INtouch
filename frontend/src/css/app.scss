@@ -1,7 +1,6 @@
 @import "../scss-styles/variables.scss";
 @import "../scss-styles/mixins.scss";
 
-
 body {
   padding: 0;
   margin: 0;
@@ -43,13 +42,13 @@ button {
       left 0.26s ease-in-out,
       right 0.26s ease-in-out;
 
-      &.opened {
-        left: calc(100% - 52px - 28px);
-        right: 52px;
-        transition:
-          left 0.26s ease-in-out,
-          right 0.26s ease-in-out;
-      }
+    &.opened {
+      left: calc(100% - 52px - 28px);
+      right: 52px;
+      transition:
+        left 0.26s ease-in-out,
+        right 0.26s ease-in-out;
+    }
   }
 }
 

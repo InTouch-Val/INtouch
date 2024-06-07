@@ -5,7 +5,6 @@ import { faNoteSticky } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAuth } from "../../service/authContext";
 import { API } from "../../service/axios";
-import { ClientAssignmentTile } from "./AssignmentTile";
 import { Notes } from "./Notes";
 import { Modal } from "../../service/modal";
 import { AssignmentsPage } from "../../routes/assignments-page";
@@ -13,6 +12,7 @@ import shareImage from "../../images/shareArrow_white.svg";
 import "../../css/clients.css";
 import DiaryNotes from "./DiaryNotes/DiaryNotes";
 import { useObserve } from "../../utils/hook/useObserve";
+import ClientAssignmentTile from "./ClientAssignmentTile";
 
 function ClientDetailsPage() {
   const { id } = useParams();

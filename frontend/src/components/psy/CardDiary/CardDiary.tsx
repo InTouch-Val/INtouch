@@ -13,13 +13,15 @@ export default function CardDiary({ card }) {
     navigate(`/diary/${card.id}`);
   }
 
+  const date = `${getDate(card).dayOfWeek}\n${getDate(card).monthYear}`;
+
   return (
     <div className="diary__card" onClick={() => goDiary()}>
       <div className="diary__card-title">
         <div className="diary__card-title__day">
           {new Date(card.add_date).getUTCDate()}
         </div>
-        <div className="diary__card-title__date"> {getDate(card)}</div>
+        <div className="diary__card-title__date">{date}</div>
       </div>
       <div className="diary__card-text">{card.event_details}</div>
 
