@@ -1,4 +1,4 @@
-export const isValidEmail = (email) => {
+export const isValidEmail = (email: string): boolean => {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   //До символа "@" может быть любое количество буквенно-цифровых символов, а также точки, подчеркивания, проценты, плюсы и дефисы.
   //После "@" следует доменное имя, состоящее из буквенно-цифровых символов, точек и дефисов.
@@ -6,7 +6,7 @@ export const isValidEmail = (email) => {
   return emailRegex.test(email);
 };
 
-export const isValidPassword = (password) => {
+export const isValidPassword = (password: string): boolean => {
   const passwordRegex =
     /^(?!.*\s)(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?!.*(.)(?=\1\1\1)).{7,128}[a-zA-Z0-9~!?@#$%^&*_\-+(){}\[\]><\/|'.,:;]$/;
   //Содержит хотя бы одну букву.
@@ -20,7 +20,7 @@ export const isValidPassword = (password) => {
   return passwordRegex.test(password);
 };
 
-export const isValidName = (name) => {
+export const isValidName = (name: string): boolean => {
   const nameRegex = /^[a-zA-Z]{2,50}$/;
   return nameRegex.test(name);
 };

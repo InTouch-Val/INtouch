@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { API } from "../axios";
 import "../../css/registration.css";
@@ -34,7 +34,10 @@ function RegistrationForm() {
   const numberOfMinLengthOfName = 2;
   const numberOfMaxLengthOfName = 50;
 
-  const handleCredentialsBlur = (field, value) => {
+  const handleCredentialsBlur = (
+    field: "email" | "password" | "name" | "second",
+    value: string
+  ): void => {
     let newError = { ...validationError };
     if (field === "email" && !isValidEmail(value)) {
       newError.email =
@@ -95,8 +98,19 @@ function RegistrationForm() {
       }
     }
     setValidationError(newError);
-    setIsValidCredentials(!newError.email && !newError.password);
   };
+
+  useEffect(() => {
+    {
+      setIsValidCredentials(
+        !validationError.email &&
+          !validationError.name &&
+          !validationError.password &&
+          !validationError.second &&
+          !validationError.terms
+      );
+    }
+  }, [validationError]);
 
   const handleTogglePassword = (e) => {
     e.preventDefault();
@@ -184,10 +198,16 @@ function RegistrationForm() {
       navigate("/welcome-to-intouch");
     } catch (error) {
       console.error("Registration error:", error);
-      if (error.response?.data?.email[0]) {
+      if (error.response?.data?.email) {
         setValidationError({
           ...validationError,
           email: "This email address already exists. Please use a unique one.",
+        });
+      } else if (error.response?.data?.password) {
+        setValidationError({
+          ...validationError,
+          password:
+            error.response?.data?.password || "'This password is too common",
         });
       } else if (error.response?.status >= 500) {
         setError(
@@ -199,7 +219,7 @@ function RegistrationForm() {
     }
   };
 
-  const isAnyFieldMissingOrInvalid = () => {
+  const isAnyFieldMissingOrInvalid = (): boolean => {
     return (
       !isValidCredentials ||
       !formData.confirmPassword ||
