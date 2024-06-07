@@ -20,7 +20,10 @@ function LoginPage() {
   const [waitTime, setWaitTime] = useState(60);
   const numberOfMinPassLegth = 8;
 
-  const handleCredentialsBlur = (field: string, value: string) => {
+  const handleCredentialsBlur = (
+    field: "email" | "password",
+    value: string
+  ): void => {
     let newError = { ...error };
     if (field === "email" && !isValidEmail(value)) {
       newError.email =
@@ -38,13 +41,13 @@ function LoginPage() {
     setIsValidCredentials(!newError.email && !newError.password);
   };
 
-  const handleTogglePassword = (e) => {
+  const handleTogglePassword = (e): void => {
     e.preventDefault();
     setPasswordShown(!passwordShown);
   };
 
   useEffect(() => {
-    let timerId;
+    let timerId: number;
     if (tooMuchLoginAttempts) {
       timerId = setInterval(() => {
         setWaitTime((prevTime) => prevTime - 1);
