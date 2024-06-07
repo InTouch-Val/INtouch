@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Modal } from "../../../service/modal";
 import { useAuth } from "../../../service/authContext";
-import { API } from "../../../service/axios";
+import { useDeleteAssignmentByUUIDMutation } from "../../../store/entities";
+import { useAppDispatch, useAppSelector } from "../../../store/store";
+import { setClientByIdAction } from "../../../store/actions/assignment/assignmentActions";
 
-export default function ModalAssignments() {
+export default function ModalAssignments(): JSX.Element {
   //@ts-ignore
   const { currentUser } = useAuth();
 
@@ -11,12 +13,16 @@ export default function ModalAssignments() {
   const [selectedClients, setSelectedClients] = useState<any>([]);
   const [selectedAssignmentId, setSelectedAssignmentId] = useState("");
   const [ifError, setIfError] = useState(false);
-  const [errorText, setErrorText] = useState("");
+  const [errorText, setErrorText] = useState<string>("");
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const handleModalClose = () => {
+  const [deleteAssignmentById, _] = useDeleteAssignmentByUUIDMutation();
+  const { setClientId } = useAppSelector((state) => state.assignment);
+  const dispatch = useAppDispatch();
+
+  const handleModalClose = (): void => {
     setIsShareModalOpen(false);
     setIsSuccessModalOpen(false);
     setIsDeleteModalOpen(false);
@@ -26,7 +32,7 @@ export default function ModalAssignments() {
     setErrorText("");
   };
 
-  const handleShareSubmit = async () => {
+  const handleShareSubmit = async (): Promise<void> => {
     try {
       const assignmentId = selectedAssignmentId;
 
@@ -40,16 +46,11 @@ export default function ModalAssignments() {
         return;
       }
 
-      const res = await Promise.all(
-        selectedClients.map(async (clientId) => {
-          const response = await API.get(
-            `assignments/set-client/${assignmentId}/${clientId}/`,
-          );
-          return response;
-        }),
-      );
+      selectedClients.map(async (clientId) => {
+        await dispatch(setClientByIdAction({ assignmentId, clientId }));
+      });
 
-      const allResponsesSuccessful = res.every(
+      const allResponsesSuccessful = setClientId.every(
         (response) => response.status >= 200 && response.status <= 300,
       );
 
@@ -72,7 +73,7 @@ export default function ModalAssignments() {
     }
   };
 
-  const handleClientSelect = (clientId) => {
+  const handleClientSelect = (clientId: number | string): void => {
     setSelectedClients((prevSelectedClients) => {
       if (prevSelectedClients.includes(clientId)) {
         return prevSelectedClients.filter((id) => id !== clientId);
@@ -81,11 +82,9 @@ export default function ModalAssignments() {
     });
   };
 
-  const deleteAssignment = async (assignmentId) => {
+  const deleteAssignment = async (assignmentId: string): Promise<void> => {
     try {
-      await API.delete(`assignments/${assignmentId}`);
-      //   console.log(assignments);
-      //   setAssignments(assignments.filter((assignment) => assignment.id !== assignmentId));
+      deleteAssignmentById(assignmentId);
       setSelectedAssignmentId("");
       handleModalClose();
     } catch (error) {

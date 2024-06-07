@@ -18,6 +18,7 @@ export type AssignmentsType = {
   grade: string | null;
   review: string;
   assignment_root: number;
+  is_public: boolean;
 };
 
 export type AssignmentsResponseType = {
