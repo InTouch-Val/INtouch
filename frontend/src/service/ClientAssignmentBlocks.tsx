@@ -32,9 +32,19 @@ function ClientAssignmentBlocks({
   const [selectedValue, setSelectedValue] = useState(block.reply || "");
   const editorRef = useRef(null);
 
-  console.log("osy", isViewPsy);
-  console.log("vie", isView);
-  console.log("vlo", block);
+  const [editorState, setEditorState] = useState(() => {
+    if (isViewPsy && isView) {
+      EditorState.createEmpty();
+    } else if (block.content) {
+      const content =
+        typeof block.content === "string"
+          ? JSON.parse(block.content)
+          : block.content;
+      const contentState = convertFromRaw(content);
+      return EditorState.createWithContent(contentState);
+    }
+    return EditorState.createEmpty();
+  });
 
   // const [editorState, setEditorState] = useState(() => {
   //   if (block.content) {
@@ -48,11 +58,39 @@ function ClientAssignmentBlocks({
   //   return EditorState.createEmpty();
   // });
 
-  // useEffect(() => {
-  //   setSelectedValue(editorState.getCurrentContent().getPlainText());
-  // }, [editorState]);
+  const handleEditorChange = useCallback(
+    (newEditorState: { getCurrentContent: () => any; }) => {
+      if (isViewPsy && isView) {
+        setEditorState(newEditorState);
+        // Конвертируем editorState в строку и обновляем title
+        const contentState = newEditorState.getCurrentContent();
+        const text = contentState.getPlainText();
+        updateBlock(block.id, contentState, block.choices, text);
+      } else {
+        const contentState = newEditorState.getCurrentContent();
+        const inputText = contentState.getPlainText();
 
-  const MAX_INPUT_LENGTH = 1000;
+        if (inputText.length > MAX_INPUT_LENGTH) {
+          const truncatedText = inputText.slice(0, MAX_INPUT_LENGTH);
+          const newContentState = ContentState.createFromText(truncatedText);
+          const truncatedEditorState =
+            EditorState.createWithContent(newContentState);
+
+          const rawContent = convertToRaw(newContentState);
+          const serializedData = JSON.stringify(rawContent);
+          setEditorState(truncatedEditorState);
+          updateBlock(block.id, serializedData, []);
+        } else {
+          const rawContent = convertToRaw(contentState);
+          const serializedData = JSON.stringify(rawContent);
+          setEditorState(newEditorState);
+          updateBlock(block.id, serializedData, []);
+        }
+      }
+    },
+
+    [updateBlock, block.id, block.content, block.choices]
+  );
 
   // const handleEditorChange = useCallback(
   //   (newEditorState) => {
@@ -79,12 +117,21 @@ function ClientAssignmentBlocks({
   //   [updateBlock, block.id],
   // );
 
-  // const interceptSetEditorState = useCallback(
-  //   (newEditorState) => {
-  //     handleEditorChange(newEditorState);
-  //   },
-  //   [handleEditorChange],
-  // );
+  console.log("osy", isViewPsy);
+  console.log("vie", isView);
+
+  // useEffect(() => {
+  //   setSelectedValue(editorState.getCurrentContent().getPlainText());
+  // }, [editorState]);
+
+  const MAX_INPUT_LENGTH = 1000;
+
+  const interceptSetEditorState = useCallback(
+    (newEditorState) => {
+      handleEditorChange(newEditorState);
+    },
+    [handleEditorChange],
+  );
 
   // Determines if the block is filled in
   // const isValid =
@@ -181,13 +228,14 @@ function ClientAssignmentBlocks({
         )}
         <ToolbarProvider>
           <EditorToolbar
-            // editorState={editorState}
+            editorState={editorState}
             ref={editorRef}
-            // onChange={handleEditorChange}
+            onChange={isViewPsy && isView ? null : handleEditorChange}
             placeholder="Write your answer here..."
             readOnly={isView}
             block={block}
             // setEditorState={interceptSetEditorState}
+            setEditorState={isViewPsy && isView ? handleEditorChange: interceptSetEditorState}
             isMobileWidth={isMobileWidth}
           />
         </ToolbarProvider>
@@ -267,7 +315,7 @@ function ClientAssignmentBlocks({
           <div className="range-options">
             {Array.from(
               { length: block.end_range - block.start_range + 1 },
-              (_, i) => i + block.start_range,
+              (_, i) => i + block.start_range
             ).map((value) => (
               <label key={value} className="range-option">
                 {isMobileWidth ? (

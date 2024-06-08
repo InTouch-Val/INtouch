@@ -41,6 +41,7 @@ const EditorToolbar = forwardRef(
       }
     };
 
+
     const effectiveErrorText = errorText || "Error occured";
 
     const applyStylesFromCharacterList = (contentState, rawContentState) => {
