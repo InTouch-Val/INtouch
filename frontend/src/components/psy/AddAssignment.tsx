@@ -23,30 +23,63 @@ import decodeStyledText from "../../service/decodeStyledText";
 import HeadlinerImg from "./HeadlinerImg/HeadlinerImg";
 import "../../css/assignments.css";
 import HeaderAssignment from "./HeaderAssigmentPage/HeaderAssignment";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import {
+  setTitle,
+  setDescription,
+  setType,
+  setLanguage,
+  setSelectedImage,
+  setSuccessMessage,
+  setSuccessMessageText,
+  setSelectedImageForBlock,
+  setIsChangeView,
+  setIsError,
+} from "../../store/slices/add-assignment/form";
+import {
+  addBlock,
+  removeBlock,
+  updateBlock,
+  setBlocks,
+} from "../../store/slices/add-assignment/blocks";
+import {
+  Block,
+  AssignmentData,
+  UpdateBlockAction,
+} from "../../store/entities/add-assignment/types";
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
 function AddAssignment() {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [type, setType] = useState("lesson");
-  const [language, setLanguage] = useState("en");
-  // const [tags, setTags] = useState('');
+  const dispatch = useAppDispatch();
+  const blocks = useAppSelector((state) => state.blocks.blocks);
 
-  const [blocks, setBlocks] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(false);
-  const [successMessageText, setSuccessMessageText] = useState("");
-  const [selectedImageForBlock, setSelectedImageForBlock] = useState({
-    file: null, // Файл изображения
-    url: null, // URL изображения, полученный с помощью FileReader
-  });
+  const handleAddBlock = (type: string) => {
+    dispatch(addBlock({ type })); // Диспатчим действие для добавления блока
+  };
 
-  const [isChangeView, setChangeView] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const handleRemoveBlock = (blockId: number) => {
+    dispatch(removeBlock({ blockId })); // Диспатчим действие для удаления блока
+  };
+
+  const handleUpdateBlock = (updates: UpdateBlockAction["payload"]) => {
+    dispatch(updateBlock(updates));
+  };
+
+  const {
+    title,
+    description,
+    type,
+    language,
+    selectedImage,
+    successMessage,
+    successMessageText,
+    selectedImageForBlock,
+    isChangeView,
+    isError,
+  } = useAppSelector((state) => state.formAddAssignment);
 
   useEffect(() => {
-    console.log(title, description);
     if (title.length > 2 && description.length > 2) {
       setErrorText("");
 
@@ -62,66 +95,59 @@ function AddAssignment() {
   const { id } = useParams();
   const isEditMode = id != undefined;
 
-  const fetchAssignment = useCallback(async () => {
+  const fetchAssignment = useCallback<AssignmentData>(async () => {
     try {
       const response = await API.get(`assignments/${id}/`);
-      setTitle(response.data.title);
-      setDescription(response.data.text);
-      setType(response.data.assignment_type);
-      setLanguage(response.data.language);
-      setSelectedImage({ urls: { full: response.data.image_url } });
+      dispatch(setTitle(response.data.title));
+      dispatch(setDescription(response.data.text));
+      dispatch(setType(response.data.assignment_type));
+      dispatch(setLanguage(response.data.language));
+      dispatch(setSelectedImage({ urls: { full: response.data.image_url } }));
 
-      const fetchedBlocks = response.data.blocks.map((block) => {
+      const fetchedBlocks = response.data.blocks.map((block: Block) => {
         let contentState;
         try {
           contentState = ContentState.createFromText(block.question);
         } catch (error) {
           console.error("Ошибка при обработке содержимого:", error);
-          // Создаем ContentState с текстом из data.title для всех типов блоков, кроме 'text'
-          if (block.type !== "text") {
-            contentState = ContentState.createFromText(block.question);
-          } else {
-            // Для типа 'text' создаем пустое содержимое, если описание не может быть обработано
-            contentState = ContentState.createFromText(block.question);
-          }
         }
 
-        if (block.type === "text") {
-          return {
-            ...block,
-            content: EditorState.createWithContent(contentState),
-          };
+        switch (block.type) {
+          case "text":
+            return {
+              ...block,
+              content: EditorState.createWithContent(contentState),
+            };
+          case "single":
+          case "multiple":
+            return {
+              ...block,
+              choices: block.choice_replies.map((choice) => choice.reply),
+              content: EditorState.createWithContent(contentState),
+            };
+          case "range":
+            return {
+              ...block,
+              minValue: block.start_range,
+              maxValue: block.end_range,
+              content: EditorState.createWithContent(contentState),
+            };
+          case "image":
+            return {
+              ...block,
+              content: EditorState.createWithContent(contentState),
+              image: block.image,
+            };
+          default:
+            return block;
         }
-        if (block.type === "single" || block.type === "multiple") {
-          return {
-            ...block,
-            choices: block.choice_replies.map((choice) => choice.reply),
-            content: EditorState.createWithContent(contentState),
-          };
-        }
-        if (block.type === "range") {
-          return {
-            ...block,
-            minValue: block.start_range,
-            maxValue: block.end_range,
-            content: EditorState.createWithContent(contentState),
-          };
-        }
-        if (block.type === "image") {
-          return {
-            ...block,
-            content: EditorState.createWithContent(contentState),
-            image: block.image,
-          };
-        }
-        return block;
       });
 
-      setBlocks(fetchedBlocks);
+      dispatch(setBlocks(fetchedBlocks));
     } catch (error) {
       console.error(error.message);
     }
-  }, [id]);
+  }, [id, dispatch]);
 
   useEffect(() => {
     if (isEditMode) {
@@ -313,7 +339,7 @@ function AddAssignment() {
     blockContainers.forEach((blockContainer, index) => {
       const blockErrorKey = `blocks #${index + 1}`;
       const blockErrorExists = Object.keys(errorMessages).some((key) =>
-        key.startsWith(blockErrorKey),
+        key.startsWith(blockErrorKey)
       );
       if (blockErrorExists) {
         blockContainer.classList.add("error");
@@ -323,26 +349,6 @@ function AddAssignment() {
 
   const handleImageSelect = (image) => {
     setSelectedImage(image);
-  };
-
-  const addBlock = (type) => {
-    const newBlock = {
-      id: blocks.length + 1,
-      type,
-      title: "",
-      content: EditorState.createEmpty(),
-      choices: type === "text" || "open" ? [] : [""],
-      minValue: type === "range" ? 1 : null,
-      maxValue: type === "range" ? 10 : null,
-      image: type === "image" ? "" : null,
-    };
-    setBlocks([...blocks, newBlock]);
-  };
-
-  const removeBlock = (blockId) => {
-    const updatedBlocks = blocks.filter((block) => block.id !== blockId);
-    setBlocks(updatedBlocks);
-    setIsError(false);
   };
 
   const copyBlock = (block) => {
@@ -384,43 +390,6 @@ function AddAssignment() {
     }
   };
 
-  const updateBlock = (
-    blockId,
-    newContent,
-    newChoices,
-    newTitle,
-    newMinValue,
-    newMaxValue,
-    newLeftPole,
-    newRightPole,
-    newImage,
-  ) => {
-    setBlocks((prevBlocks) =>
-      prevBlocks.map((block) =>
-        block.id === blockId
-          ? {
-              ...block,
-              content: newContent || block.content,
-              description:
-                getObjectFromEditorState(newContent) || block.description,
-              choices: newChoices || block.choices,
-              title: newTitle || block.title,
-              choice_replies:
-                newChoices?.map((choice) => ({
-                  reply: choice,
-                  checked: false,
-                })) || block.choice_replies,
-              minValue: newMinValue ?? block.minValue,
-              maxValue: newMaxValue ?? block.maxValue,
-              leftPole: newLeftPole ?? block.leftPole,
-              rightPole: newRightPole ?? block.rightPole,
-              image: newImage ?? block.image,
-            }
-          : block,
-      ),
-    );
-  };
-
   return (
     <div className="assignments-page">
       {successMessage && (
@@ -441,7 +410,7 @@ function AddAssignment() {
           className="title-input"
           placeholder="Name of Assignment..."
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => dispatch(setTitle(e.target.value))}
           required
           id="title"
         />
@@ -450,7 +419,7 @@ function AddAssignment() {
           className="title-input"
           placeholder="Description..."
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={(e) => dispatch(setDescription(e.target.value))}
           required
           id="text"
         />
@@ -467,15 +436,18 @@ function AddAssignment() {
           {blocks.map((block, index) => (
             <div key={index}>
               {block.type === "headline" && (
-                <Headline block={block} updateBlock={updateBlock} />
+                <Headline block={block} updateBlock={handleUpdateBlock} />
               )}
               {block.type === "imageQuestion" && (
-                <ImageQuestionBlock block={block} updateBlock={updateBlock} />
+                <ImageQuestionBlock
+                  block={block}
+                  updateBlock={handleUpdateBlock}
+                />
               )}
               {block.type === "headlinerImg" && (
                 <HeadlinerImg
                   block={block}
-                  updateBlock={updateBlock}
+                  updateBlock={handleUpdateBlock}
                   setSelectedImageForBlock={setSelectedImageForBlock}
                 />
               )}
@@ -518,7 +490,7 @@ function AddAssignment() {
                 <ClientAssignmentBlocks
                   key={index}
                   block={block}
-                  updateBlock={updateBlock}
+                  updateBlock={handleUpdateBlock}
                   isView={true}
                   isViewPsy={true}
                 />
@@ -530,8 +502,8 @@ function AddAssignment() {
                 <AssignmentBlock
                   key={block.id}
                   block={block}
-                  updateBlock={updateBlock}
-                  removeBlock={removeBlock}
+                  updateBlock={handleUpdateBlock}
+                  removeBlock={handleRemoveBlock}
                   copyBlock={copyBlock}
                   moveBlockForward={moveBlockForward}
                   moveBlockBackward={moveBlockBackward}
@@ -545,34 +517,37 @@ function AddAssignment() {
         </form>
         <div className="block-buttons-container">
           <div className="block-buttons">
-            <button title="Add Text Block" onClick={() => addBlock("text")}>
+            <button
+              title="Add Text Block"
+              onClick={() => handleAddBlock("text")}
+            >
               <FontAwesomeIcon icon={faComment} />{" "}
             </button>
             <button
               title="Add Open-Question Block"
-              onClick={() => addBlock("open")}
+              onClick={() => handleAddBlock("open")}
             >
               <FontAwesomeIcon icon={faQuestion} />{" "}
             </button>
             <button
               title="Add Multiple Choice Block"
-              onClick={() => addBlock("multiple")}
+              onClick={() => handleAddBlock("multiple")}
             >
               <FontAwesomeIcon icon={faSquareCheck} />{" "}
             </button>
             <button
               title="Add Single Choice Block"
-              onClick={() => addBlock("single")}
+              onClick={() => handleAddBlock("single")}
             >
               <FontAwesomeIcon icon={faCircleDot} />{" "}
             </button>
             <button
               title="Add Linear Scale Question Block"
-              onClick={() => addBlock("range")}
+              onClick={() => handleAddBlock("range")}
             >
               <FontAwesomeIcon icon={faEllipsis} />
             </button>
-            <button title="Add Image" onClick={() => addBlock("image")}>
+            <button title="Add Image" onClick={() => handleAddBlock("image")}>
               <FontAwesomeIcon icon={faImage} />
             </button>
           </div>

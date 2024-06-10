@@ -6,6 +6,8 @@ import assignmentSlice, {
 import { authSlice } from "./slices/index";
 import { assignmentApi } from "./entities";
 import { authApi } from "./entities/auth/auth";
+import blocksReducer from "./slices/add-assignment/blocks";
+import formAddAssignmentReducer from "./slices/add-assignment/form";
 
 const assignmentsMiddleware = (store) => (next) => (action) => {
   if (assignmentApi.endpoints.getAssignments.matchFulfilled(action)) {
@@ -18,7 +20,8 @@ const store = configureStore({
   reducer: {
     assignment: assignmentSlice,
     auth: authSlice.reducer,
-
+    blocks: blocksReducer,
+    formAddAssignment: formAddAssignmentReducer,
     [authApi.reducerPath]: authApi.reducer,
     [assignmentApi.reducerPath]: assignmentApi.reducer,
   },
