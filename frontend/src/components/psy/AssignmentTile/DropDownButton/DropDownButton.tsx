@@ -20,7 +20,7 @@ export default function DropDownButton({
   isFavorite,
   onFavoriteToggle,
 }: Props): JSX.Element {
-  
+
   function handleFavoriteClick(
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void {

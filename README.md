@@ -242,8 +242,8 @@ npm run build
 Примеры:
 const userName = 'Ivan'; // Хорошо: camelCase и понятное имя
 const MAX_USERS = 25;    // Хорошо: константы в UPPER_CASE
-function calculateTotal(sum, tax) { 
-  return sum + tax; 
+function calculateTotal(sum, tax) {
+  return sum + tax;
 } // Хорошо: функция с глаголом в названии, описывающим действие
 
 #### Наименование файлов и папок
@@ -251,7 +251,7 @@ function calculateTotal(sum, tax) {
 - Папки именуются в нижнем регистре, слова разделяются дефисами (например, `components`, `utils`).
 - Имена файлов компонентов записываются в PascalCase (например, `MyComponent.tsx`).
 - Файлы стилей называются c расширением `.module.css` или `.module.scss` (например, `styles.module.scss`).
-- Реэкспорт через `index.ts`: В каждой папке компонента рекомендуется использовать файл index.ts для реэкспорта компонента. 
+- Реэкспорт через `index.ts`: В каждой папке компонента рекомендуется использовать файл index.ts для реэкспорта компонента.
 - Компонент, его стиль и `index.ts` помещаются в одну папку.
 - Хуки и утилиты именуются в camelCase (например, `useFetchData.ts`, `formatDate.ts`).
 
@@ -269,7 +269,7 @@ function calculateTotal(sum, tax) {
 // В файле /components/MyComponent/index.ts
 export { default as MyComponent } from './MyComponent';
 
-// Импорт в другом файле 
+// Импорт в другом файле
 import { MyComponent } from '../components/MyComponent'
 
 

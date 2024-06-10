@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %} INtouch Metrics {% endblock title %}
+{% block content %}
+    <table style="width:100%">
+        <tr>
+            <th> User ID </th>
+            <th> Registration Date </th>
+            <th> Rolling Retention 7D </th>
+            <th> Rolling Retention 30D </th>
+            <th> Last Seen </th>
+            <th> Clients Invited </th>
+            <th> Last Invited Client </th>
+            <th> Last Sent Assignment </th>
+            <th> Last Created Assignment </th>
+            <th> Deleted On </th>
+        </tr>
+        {% block psychoterapists %}{% endblock psychoterapists %}
+    </table>
+    <a href = "{{request.path}}download">
+         <button type = "button"> Download Table </button>
+    </a>
+{% endblock content %}
