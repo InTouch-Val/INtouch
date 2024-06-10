@@ -26,13 +26,13 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
     }
   };
 
-  const parseText = () => {
+  const parseEventDetailsText = () => {
     let content;
     try {
       content = JSON.parse(card.event_details);
       if (typeof content === "object") {
-        const contentState = convertFromRaw(content);
-        const text = contentState.getPlainText();
+        const contentState: ContentState = convertFromRaw(content);
+        const text: string = contentState.getPlainText();
         return text.trim() ? text : "Write your answer here...";
       }
     } catch (error) {
@@ -62,7 +62,7 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
           }}
         />
       </div>
-      <div className="diary__card-text">{parseText()}</div>
+      <div className="diary__card-text">{parseEventDetailsText()}</div>
 
       <div className="diary__card-buttons" onClick={(e) => e.stopPropagation()}>
         {card.primary_emotion != "" && (

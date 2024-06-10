@@ -1,5 +1,5 @@
 export const getBlockConfig = (
-  getValues: (fieldName: string) => any,
+  getValues: (fieldName: string) => string,
   fieldName: string,
 ) => ({
   type: "open",

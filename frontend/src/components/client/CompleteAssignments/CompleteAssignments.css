@@ -224,7 +224,7 @@
 }
 
 .assignment__block {
-  max-width: 935px;
+  max-width: 100%;
   max-height: fit-content;
   margin-right: auto;
   margin-left: auto;

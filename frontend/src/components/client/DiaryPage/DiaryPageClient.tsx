@@ -109,8 +109,6 @@ export default function DiaryPageContentClient({
 
   const [showEmotionsPage, setShowEmotionsPage] = useState(false);
 
-  console.log(diary);
-
   return (
     <form className="diaryPage" onSubmit={methods.handleSubmit(onSubmit)}>
       <FormProvider {...methods}>

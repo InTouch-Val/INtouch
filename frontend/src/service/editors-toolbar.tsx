@@ -41,7 +41,6 @@ const EditorToolbar = forwardRef(
       }
     };
 
-
     const effectiveErrorText = errorText || "Error occured";
 
     const applyStylesFromCharacterList = (contentState, rawContentState) => {
@@ -134,8 +133,8 @@ const EditorToolbar = forwardRef(
     // Инициализация редактора при монтировании компонента
     useEffect(() => {
       initializeEditorWithText();
-      setTimeout(focusEditor, 100); // Отложенное выполнение фокусировки
-    }, [isMobileWidth]); // Пустой массив зависимостей означает, что эффект будет вызван только при монтировании компонента
+      setTimeout(focusEditor, 1000); // Отложенное выполнение фокусировки
+    }, []); // Пустой массив зависимостей означает, что эффект будет вызван только при монтировании компонента
 
     useEffect(() => {
       // Проверяем, если редактор пуст и не содержит текст block.question, добавляем плейсхолдер
