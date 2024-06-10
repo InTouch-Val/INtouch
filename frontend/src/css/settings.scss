@@ -1,0 +1,374 @@
+@import "../scss-styles/mixins.scss";
+@import "../scss-styles/variables.scss";
+
+.settings-page {
+  padding: 35px;
+
+  @include mobile-media($mobile-min-width, $mobile-max-width) {
+    padding: 118px 28px 60px;
+  }
+}
+
+.settings-page header {
+  display: flex;
+  align-items: center;
+}
+
+
+
+header h2 {
+  color: #656565;
+  font-weight: 400;
+
+  @include mobile-media($mobile-min-width, $mobile-max-width) {
+    color: $mobile-titles-color;
+    font-weight: 600;
+    font-size: 24px;
+    margin: 0;
+  }
+}
+
+header img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 20px;
+  object-fit: cover;
+}
+
+.tabs {
+  width: 100%;
+
+  @include mobile-media($mobile-min-width, $mobile-max-width) {
+    margin-bottom: 20px;
+    display: flex;
+
+    & button {
+      flex: 1;
+    }
+  }
+
+}
+
+.settings-profile-tab {
+  display: flex;
+
+  /* justify-content: space-evenly; */
+}
+
+.left-column {
+  display: flex;
+  flex: 0 0 25%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.left-column img {
+  width: 100px;
+  height: 100px;
+  margin: 0;
+  object-fit: cover;
+}
+
+.right-column {
+  flex-grow: 1;
+}
+
+.right-column form {
+  display: flex;
+  flex-direction: column;
+}
+
+.right-column label {
+  color: #417d88;
+  font-size: 22px;
+}
+
+.settings-input {
+  padding: 10px 15px;
+  border: none;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  margin: 10px;
+  background-color: #fff;
+  box-shadow: 0 0 3px 2px #d7e4e773;
+  color: #656565;
+  font-size: 17px;
+
+  @include mobile-media($mobile-min-width, $mobile-max-width) {
+    margin: 0;
+    padding: 6px 12px;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 21px;
+    color: $mobile-titles-color;
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
+
+    &::placeholder {
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 21px;
+      color: transparent;
+    }
+  }
+
+
+}
+
+.save-settings {
+  width: 148px;
+  align-self: flex-end;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 100px;
+  margin-top: 15px;
+  background-color: #417d88;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+
+  @include mobile-media($mobile-min-width, $mobile-max-width) {
+    border-radius: 20px;
+    padding: 14px;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 21px;
+    margin-top: 20px;
+    align-self: center;
+  }
+}
+
+.save-settings:disabled {
+  opacity: 0.5;
+}
+
+/* SECURITY TAB */
+
+/* SECURITY TAB */
+
+/* SECURITY TAB */
+.security-tab {
+  display: flex;
+  align-items: flex-start;
+  padding: 20px;
+  padding: 0;
+
+  @include mobile-media($mobile-min-width, $mobile-max-width) {
+    flex-direction: column;
+    width: 100%;
+  }
+
+}
+
+.security-tab h2 {
+  margin: 10px 0;
+  color: #417d88;
+  font-weight: 600;
+
+  @include mobile-media($mobile-min-width, $mobile-max-width) {
+    margin: 0;
+    color: $mobile-titles-color;
+    margin-bottom: 18px;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 34px;
+    flex-grow: 1;
+  }
+
+}
+
+.security-tab_wrapper {
+  @include mobile-media($mobile-min-width, $mobile-max-width) {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+.change-password-form label {
+  display: block;
+  margin-bottom: 10px;
+  color: #417d88;
+  font-size: 22px;
+
+  @include mobile-media($mobile-min-width, $mobile-max-width) {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 21px;
+    color: $mobile-titles-color;
+    width: 100%;
+  }
+}
+
+.change-password-form form {
+  display: flex;
+  flex-direction: column;
+  margin-right: 90px;
+
+  @include mobile-media($mobile-min-width, $mobile-max-width) {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 70px;
+  }
+
+}
+
+.danger-zone {
+  @include mobile-media($mobile-min-width, $mobile-max-width) {
+    align-self: center;
+    text-align: center;
+
+    & h2 {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 21px;
+
+    }
+  }
+}
+
+.change-password-form input,
+.danger-zone button {
+  padding: 10px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+
+@include mobile-media($mobile-min-width, $mobile-max-width) {
+
+  .change-password-form input {
+    padding: 6px 12px;
+    box-shadow: 0 0 3px 2px #d7e4e773;
+    border: none;
+    margin: 0;
+  }
+
+  .danger-zone button.delete {
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    background-color: transparent;
+    color: $mobile-titles-color;
+    padding: 14px 54px;
+  }
+}
+
+.danger-zone button {
+  border: none;
+  border-radius: 20px;
+  background-color: #ff4d4f;
+  color: white;
+  cursor: pointer;
+
+  @include mobile-media($mobile-min-width, $mobile-max-width) {
+    background-color: $mobile-alert-color;
+    border-radius: 20px;
+    padding: 14px 54px;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 21px;
+  }
+}
+
+.danger-zone button:hover {
+  background-color: #f33;
+}
+
+.change-password-form_wrapper {
+
+  @include mobile-media($mobile-min-width, $mobile-max-width) {
+    position: relative;
+
+    .change-password-form form & {
+      margin-bottom: 32px;
+    }
+  }
+}
+
+.input__container {
+  display: flex;
+  flex-direction: column;
+
+  @include mobile-media($mobile-min-width, $mobile-max-width) {
+
+    gap: 10px;
+    margin-bottom: 30px;
+    width: 100%;
+
+    & label {
+      color: $mobile-titles-color;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 21px;
+
+    }
+  }
+
+
+}
+
+.input__container_icon {
+  display: none;
+
+  @include mobile-media($mobile-min-width, $mobile-max-width) {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 15px;
+    display: block;
+  }
+}
+
+
+
+.profile__errorText {
+  margin: 5px;
+  font-family: "Montserrat";
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 17px;
+  color: #ff0000;
+
+  @include mobile-media($mobile-min-width, $mobile-max-width) {
+    min-height: auto;
+    text-align: center;
+    color: $mobile-error-color;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 19px;
+  }
+
+}
+
+.profile__inputError {
+  border: 1px solid #ff0000;
+}
+
+.profile__errorMessages {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  @include mobile-media($mobile-min-width, $mobile-max-width) {
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+
+}
+
+.profile__fieldError {
+  display: flex;
+  flex-direction: column;
+  height: 250px;
+
+  @include mobile-media($mobile-min-width, $mobile-max-width) {
+    min-height: 40px;
+    text-align: center;
+    color: $mobile-error-color;
+  }
+}
