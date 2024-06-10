@@ -11,8 +11,8 @@ from drf_spectacular.utils import (
 from django.conf import settings
 from django.contrib.auth.hashers import check_password
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404
-from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, render
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_GET
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, viewsets, filters, mixins
@@ -29,8 +29,13 @@ from api.models import *
 from api.permissions import *
 from api.serializers import *
 from api.swagger_serializers import SwaggerMessageHandlerSerializer
-from api.utils import send_by_mail, avg_grade_annotation
-from api.constants import USER_TYPES
+from api.utils import (
+    send_by_mail,
+    avg_grade_annotation,
+    get_therapists_metrics_query,
+    form_metrics_file,
+)
+from api.constants import USER_TYPES, METRICS_FILE_NAME
 from api.tasks import reset_email_update_status
 
 
@@ -679,6 +684,7 @@ class AssignmentViewSet(viewsets.ModelViewSet):
         "add_date",
         "share",
     ]
+    ordering = ["-add_date"]
     search_fields = [
         "title",
     ]
@@ -1007,4 +1013,24 @@ def assetlink(request):
     with open(path, "r") as f:
         data = json.loads(f.read())
     response = JsonResponse(data, safe=False)
+    return response
+
+
+def project_metrics(request):
+    """Render project metrics for psychotherapists"""
+    users = get_therapists_metrics_query()
+    context = {"users": users}
+    return render(request, "metrics/project_metrics.html", context=context)
+
+
+def project_metrics_download(request):
+    response = HttpResponse(
+        content_type="text/csv",
+        headers={
+            "Content-Disposition": 'attachment; filename="{0}"'.format(
+                METRICS_FILE_NAME
+            )
+        },
+    )
+    form_metrics_file(response)
     return response

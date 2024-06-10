@@ -44,6 +44,10 @@ class Client(models.Model):
     about = models.TextField(blank=True)
     notes = models.ManyToManyField("Note", blank=True)
 
+    @property
+    def last_ivited(self):
+        return self.user.date_joined()
+
 
 class Assignment(models.Model):
     title = models.CharField(max_length=100)
@@ -71,6 +75,9 @@ class Assignment(models.Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        ordering = ["-add_date"]
 
 
 class AssignmentClient(models.Model):
