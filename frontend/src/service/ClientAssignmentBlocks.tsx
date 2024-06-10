@@ -69,7 +69,6 @@ function ClientAssignmentBlocks({
     return clone;
   }, [block]);
 
-
   const handleEditorChange = useCallback(
     (newEditorState: { getCurrentContent: () => any }) => {
       if (isViewPsy && isView) {
@@ -101,7 +100,7 @@ function ClientAssignmentBlocks({
       }
     },
 
-    [updateBlock, block.id, block.content, block.choices]
+    [updateBlock, block.id, block.content, block.choices],
   );
 
   const MAX_INPUT_LENGTH = 1000;
@@ -110,7 +109,7 @@ function ClientAssignmentBlocks({
     (newEditorState) => {
       handleEditorChange(newEditorState);
     },
-    [handleEditorChange]
+    [handleEditorChange],
   );
 
   // Determines if the block is filled in
@@ -279,7 +278,7 @@ function ClientAssignmentBlocks({
             <div className="range-options">
               {Array.from(
                 { length: block.end_range - block.start_range + 1 },
-                (_, i) => i + block.start_range
+                (_, i) => i + block.start_range,
               ).map((value) => (
                 <label key={value} className="range-option">
                   {isMobileWidth ? (
