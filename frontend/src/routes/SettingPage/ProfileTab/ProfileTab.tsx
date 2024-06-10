@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 
 export function ProfileTab() {
-  const isMobileWidth = useMobileWidth()
+  const isMobileWidth = useMobileWidth();
   const { currentUser, updateUserData } = useAuth();
   const {
     control,
@@ -120,26 +120,25 @@ export function ProfileTab() {
                 <div className="input__container">
                   <label htmlFor="firstName">First Name</label>
                   <div className="change-password-form_wrapper">
-                  <input
-                    {...fieldsProps}
-                    type="text"
-                    name="firstName"
-                    placeholder="First Name"
-                    className={
-                      !!errors.firstName
-                        ? "settings-input profile__inputError"
-                        : "settings-input"
-                    }
-                  />
-                   <span className="input__container_icon">
-                   <FontAwesomeIcon
-                    
-              icon={faPencil}
-              style={{ color: "#417D88", paddingRight: "5px" }}
-              size="fa-lg"
-            />
-            </span>
-            </div>
+                    <input
+                      {...fieldsProps}
+                      type="text"
+                      name="firstName"
+                      placeholder="First Name"
+                      className={
+                        !!errors.firstName
+                          ? "settings-input profile__inputError"
+                          : "settings-input"
+                      }
+                    />
+                    <span className="input__container_icon">
+                      <FontAwesomeIcon
+                        icon={faPencil}
+                        style={{ color: "#417D88", paddingRight: "5px" }}
+                        size="fa-lg"
+                      />
+                    </span>
+                  </div>
                 </div>
               )}
             />
@@ -150,26 +149,25 @@ export function ProfileTab() {
                 <div className="input__container">
                   <label htmlFor="lastName">Last Name</label>
                   <div className="change-password-form_wrapper">
-                  <input
-                    {...fieldsProps}
-                    type="text"
-                    name="lastName"
-                    placeholder="Last Name"
-                    className={
-                      !!errors.lastName
-                        ? "settings-input profile__inputError"
-                        : "settings-input"
-                    }
-                  />
+                    <input
+                      {...fieldsProps}
+                      type="text"
+                      name="lastName"
+                      placeholder="Last Name"
+                      className={
+                        !!errors.lastName
+                          ? "settings-input profile__inputError"
+                          : "settings-input"
+                      }
+                    />
                     <span className="input__container_icon">
-                   <FontAwesomeIcon
-                    
-              icon={faPencil}
-              style={{ color: "#417D88", paddingRight: "5px" }}
-              size="fa-lg"
-            />
-            </span>
-            </div>
+                      <FontAwesomeIcon
+                        icon={faPencil}
+                        style={{ color: "#417D88", paddingRight: "5px" }}
+                        size="fa-lg"
+                      />
+                    </span>
+                  </div>
                 </div>
               )}
             />
@@ -181,26 +179,25 @@ export function ProfileTab() {
                 <div className="input__container">
                   <label htmlFor="email">Email</label>
                   <div className="change-password-form_wrapper">
-                  <input
-                    {...fieldsProps}
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    className={
-                      !!errors.email
-                        ? "settings-input profile__inputError"
-                        : "settings-input"
-                    }
-                  />
-                  <span className="input__container_icon">
-                   <FontAwesomeIcon
-                    
-              icon={faPencil}
-              style={{ color: "#417D88", paddingRight: "5px" }}
-              size="fa-lg"
-            />
-            </span>
-                </div>
+                    <input
+                      {...fieldsProps}
+                      type="email"
+                      name="email"
+                      placeholder="Email"
+                      className={
+                        !!errors.email
+                          ? "settings-input profile__inputError"
+                          : "settings-input"
+                      }
+                    />
+                    <span className="input__container_icon">
+                      <FontAwesomeIcon
+                        icon={faPencil}
+                        style={{ color: "#417D88", paddingRight: "5px" }}
+                        size="fa-lg"
+                      />
+                    </span>
+                  </div>
                 </div>
               )}
             />

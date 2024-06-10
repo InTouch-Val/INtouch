@@ -9,8 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 
 export const SecurityTab = () => {
-
-  const isMobileWidth = useMobileWidth()
+  const isMobileWidth = useMobileWidth();
 
   const [userPassword, setUserPassword] = useState({
     password: "",
@@ -70,63 +69,60 @@ export const SecurityTab = () => {
           <form onSubmit={handleSubmit}>
             <label>Current Password</label>
             <div className="change-password-form_wrapper">
-            <input
-              type="password"
-              placeholder="***********"
-              name="password"
-              value={userPassword.password}
-              onChange={handleChange}
-              className="settings-input"
-            />
+              <input
+                type="password"
+                placeholder="***********"
+                name="password"
+                value={userPassword.password}
+                onChange={handleChange}
+                className="settings-input"
+              />
 
-<span className="input__container_icon">
-                   <FontAwesomeIcon
-                    
-              icon={faPencil}
-              style={{ color: "#417D88", paddingRight: "5px" }}
-              size="fa-lg"
-            />
-            </span>
+              <span className="input__container_icon">
+                <FontAwesomeIcon
+                  icon={faPencil}
+                  style={{ color: "#417D88", paddingRight: "5px" }}
+                  size="fa-lg"
+                />
+              </span>
             </div>
 
             <label>New Password</label>
             <div className="change-password-form_wrapper">
-            <input
-              type="password"
-              placeholder="***********"
-              name="new_password"
-              value={userPassword.new_password}
-              onChange={handleChange}
-              className="settings-input"
-            />
-            <span className="input__container_icon">
-                   <FontAwesomeIcon
-                    
-              icon={faPencil}
-              style={{ color: "#417D88", paddingRight: "5px" }}
-              size="fa-lg"
-            />
-            </span>
+              <input
+                type="password"
+                placeholder="***********"
+                name="new_password"
+                value={userPassword.new_password}
+                onChange={handleChange}
+                className="settings-input"
+              />
+              <span className="input__container_icon">
+                <FontAwesomeIcon
+                  icon={faPencil}
+                  style={{ color: "#417D88", paddingRight: "5px" }}
+                  size="fa-lg"
+                />
+              </span>
             </div>
 
             <label>Confirm New Password</label>
             <div className="change-password-form_wrapper">
-            <input
-              type="password"
-              placeholder="***********"
-              name="confirm_new_password"
-              value={userPassword.confirm_new_password}
-              onChange={handleChange}
-              className="settings-input"
-            />
-             <span className="input__container_icon">
-                   <FontAwesomeIcon
-                    
-              icon={faPencil}
-              style={{ color: "#417D88", paddingRight: "5px" }}
-              size="fa-lg"
-            />
-            </span>
+              <input
+                type="password"
+                placeholder="***********"
+                name="confirm_new_password"
+                value={userPassword.confirm_new_password}
+                onChange={handleChange}
+                className="settings-input"
+              />
+              <span className="input__container_icon">
+                <FontAwesomeIcon
+                  icon={faPencil}
+                  style={{ color: "#417D88", paddingRight: "5px" }}
+                  size="fa-lg"
+                />
+              </span>
             </div>
 
             <button id="save-settings" type="submit" className="save-settings">
@@ -139,8 +135,7 @@ export const SecurityTab = () => {
       <div className="danger-zone">
         <h2>Danger zone</h2>
         <button onClick={handleModalToggle}>
-
-        {isMobileWidth ? "Delete Profile" : "Delete Profile Forever"}
+          {isMobileWidth ? "Delete Profile" : "Delete Profile Forever"}
         </button>
         {showModal && (
           <div className="modal-overlay" onClick={handleModalToggle}>
@@ -153,7 +148,7 @@ export const SecurityTab = () => {
               </button>
               <div className="delete-modal-div">
                 <p>
-                  Are you sure you want to delete your profile forever?{" "}<br/>
+                  Are you sure you want to delete your profile forever? <br />
                   <strong>This action is irrevertable!</strong>
                 </p>
                 <div>

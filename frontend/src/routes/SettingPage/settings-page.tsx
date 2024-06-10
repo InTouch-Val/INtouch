@@ -21,7 +21,9 @@ function SettingsPage() {
   return (
     <div className="settings-page">
       <header>
-        {isMobileWidth ? null :  <img alt="img" src={currentUser.photo || "default-avatar.png"}></img>}
+        {isMobileWidth ? null : (
+          <img alt="img" src={currentUser.photo || "default-avatar.png"}></img>
+        )}
         <h2>{`${currentUser.first_name} ${currentUser.last_name}`}</h2>
       </header>
       <div className="tabs">
