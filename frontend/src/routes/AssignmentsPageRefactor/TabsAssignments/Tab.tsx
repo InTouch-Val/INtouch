@@ -10,7 +10,7 @@ export interface PropsTabAssignments {
   toggleFavorite: (id: number | string) => void;
   handleDeleteClick: (id: number | string) => void;
   handleShareButton: (id: number | string) => void;
-  refetch: any
+  refetch: any;
 }
 
 export default function TabsAssignments({
@@ -30,7 +30,7 @@ export default function TabsAssignments({
       {filteredAssignments && filteredAssignments.length > 0 ? (
         filteredAssignments.map((assignment) => (
           <AssignmentTile
-          refetch={refetch}
+            refetch={refetch}
             key={assignment.id}
             assignment={assignment}
             onFavoriteToggle={toggleFavorite}

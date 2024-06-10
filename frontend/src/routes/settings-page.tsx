@@ -279,7 +279,7 @@ const SecurityTab = () => {
               </button>
               <div className="delete-modal-div">
                 <p>
-                  Are you sure you want to delete your profile forever?{" "}<br/>
+                  Are you sure you want to delete your profile forever? <br />
                   <strong>This action is irrevertable!</strong>
                 </p>
                 <div>

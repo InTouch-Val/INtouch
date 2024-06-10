@@ -14,8 +14,6 @@
   align-items: center;
 }
 
-
-
 header h2 {
   color: #656565;
   font-weight: 400;
@@ -47,7 +45,6 @@ header img {
       flex: 1;
     }
   }
-
 }
 
 .settings-profile-tab {
@@ -114,8 +111,6 @@ header img {
       color: transparent;
     }
   }
-
-
 }
 
 .save-settings {
@@ -160,7 +155,6 @@ header img {
     flex-direction: column;
     width: 100%;
   }
-
 }
 
 .security-tab h2 {
@@ -177,7 +171,6 @@ header img {
     line-height: 34px;
     flex-grow: 1;
   }
-
 }
 
 .security-tab_wrapper {
@@ -213,7 +206,6 @@ header img {
     margin-right: 0;
     margin-bottom: 70px;
   }
-
 }
 
 .danger-zone {
@@ -225,7 +217,6 @@ header img {
       font-size: 15px;
       font-weight: 700;
       line-height: 21px;
-
     }
   }
 }
@@ -238,7 +229,6 @@ header img {
 }
 
 @include mobile-media($mobile-min-width, $mobile-max-width) {
-
   .change-password-form input {
     padding: 6px 12px;
     box-shadow: 0 0 3px 2px #d7e4e773;
@@ -278,7 +268,6 @@ header img {
 }
 
 .change-password-form_wrapper {
-
   @include mobile-media($mobile-min-width, $mobile-max-width) {
     position: relative;
 
@@ -293,7 +282,6 @@ header img {
   flex-direction: column;
 
   @include mobile-media($mobile-min-width, $mobile-max-width) {
-
     gap: 10px;
     margin-bottom: 30px;
     width: 100%;
@@ -303,11 +291,8 @@ header img {
       font-size: 18px;
       font-weight: 500;
       line-height: 21px;
-
     }
   }
-
-
 }
 
 .input__container_icon {
@@ -321,8 +306,6 @@ header img {
     display: block;
   }
 }
-
-
 
 .profile__errorText {
   margin: 5px;
@@ -340,7 +323,6 @@ header img {
     font-weight: 400;
     line-height: 19px;
   }
-
 }
 
 .profile__inputError {
@@ -358,7 +340,6 @@ header img {
     flex-direction: column;
     align-items: center;
   }
-
 }
 
 .profile__fieldError {
