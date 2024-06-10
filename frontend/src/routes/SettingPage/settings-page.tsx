@@ -1,18 +1,18 @@
 //@ts-nocheck
-import { useState, createRef } from "react";
-import { useNavigate } from "react-router-dom";
-import FormData from "form-data";
+import { useState } from "react";
 import { useAuth } from "../../service/authContext";
-import { API } from "../../service/axios";
-import "../../css/settings.css";
+import "../../css/settings.scss";
 import { ProfileTab } from "./ProfileTab/ProfileTab";
 import { SecurityTab } from "./SecurityTab/SeciurityTab";
+import useMobileWidth from "../../utils/hook/useMobileWidth";
 
 // TODO: PopUp windows for users
 
 function SettingsPage() {
   const [activeTab, setActiveTab] = useState("profile");
   const { currentUser } = useAuth();
+
+  const isMobileWidth = useMobileWidth();
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -21,7 +21,7 @@ function SettingsPage() {
   return (
     <div className="settings-page">
       <header>
-        <img alt="img" src={currentUser.photo || "default-avatar.png"}></img>
+        {isMobileWidth ? null :  <img alt="img" src={currentUser.photo || "default-avatar.png"}></img>}
         <h2>{`${currentUser.first_name} ${currentUser.last_name}`}</h2>
       </header>
       <div className="tabs">

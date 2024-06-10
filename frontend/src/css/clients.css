@@ -237,6 +237,12 @@ tr:last-child {
   font-size: 20px;
 }
 
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .close-modal-button {
+    display: none;
+  }
+}
+
 .close-modal__text {
   text-align: center;
 }
