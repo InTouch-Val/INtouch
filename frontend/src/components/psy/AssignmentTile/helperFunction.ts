@@ -4,7 +4,9 @@ import { BlockType } from "../../../utils/constants";
 const getObjectFromEditorState = (editorState: string) =>
   JSON.stringify(editorState);
 
-export const separatedBlock = (assignmentsData: AssignmentsType): Partial<AssignmentsType> => {
+export const separatedBlock = (
+  assignmentsData: AssignmentsType,
+): Partial<AssignmentsType> => {
   const blockInfo = assignmentsData.blocks.map((block) => {
     if (block.type === BlockType.Text) {
       return {
