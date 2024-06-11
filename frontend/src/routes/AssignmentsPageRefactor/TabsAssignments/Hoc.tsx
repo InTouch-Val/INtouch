@@ -8,6 +8,7 @@ import { useAuth } from "../../../service/authContext";
 import { useAppDispatch, useAppSelector } from "../../../store/store";
 import { changeAssignmentFavoriteByIdAction } from "../../../store/actions/assignment/assignmentActions";
 import { changePageAction } from "../../../store/slices";
+import styles from "./style.module.css";
 import { useInView } from "react-intersection-observer";
 import {
   AssignmentTab,
@@ -41,7 +42,7 @@ export const WithTab = (WrappedComponent) => {
       isSuccess,
     } = useGetAssignmentsQuery(
       {
-        limit: 13,
+        limit: 30,
         page: page,
         author: activeTab == AssignmentTab.myList ? currentUser.id : undefined,
         favorite: activeTab == AssignmentTab.favorites && true,
@@ -54,8 +55,7 @@ export const WithTab = (WrappedComponent) => {
       },
       {
         selectFromResult: ({ data, ...originalArgs }) => ({
-          data:
-          assignmentSelector.selectAll(
+          data: assignmentSelector.selectAll(
             data ?? assignmentAdapter.getInitialState()
           ),
           ...originalArgs,
@@ -86,13 +86,13 @@ export const WithTab = (WrappedComponent) => {
 
     return (
       <React.Fragment>
-    <WrappedComponent
+        <WrappedComponent
           {...props}
           refetch={refetch}
           filteredAssignments={listAssignment}
           toggleFavorite={toggleFavorite}
         />
-        <div ref={ref} className="observer_element" />
+        <div ref={ref} className={styles.observer_element} />
       </React.Fragment>
     );
   };

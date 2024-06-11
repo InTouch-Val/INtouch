@@ -17,44 +17,23 @@ import {
   TypeOrder,
 } from "../../../utils/constants";
 
-export type IStatusState =
-  | Status.Init
-  | Status.Success
-  | Status.Loading
-  | Status.Error;
+export type IStatusState = Status;
+  
 
 interface AssignmentState {
   assignments: AssignmentsType[] | null;
   assignmentsFavorites: AssignmentsType[] | null;
   duplicateAssignment: AssignmentsType | null;
-  activeTab:
-    | AssignmentTab.library
-    | AssignmentTab.favorites
-    | AssignmentTab.myList;
+  activeTab: AssignmentTab;
+
   status: IStatusState;
   message: string | undefined;
-  activeLanguage:
-    | TypeLanguage.All
-    | TypeLanguage.En
-    | TypeLanguage.Es
-    | TypeLanguage.Fr
-    | TypeLanguage.De
-    | TypeLanguage.It;
-  activeFilterType:
-    | TypeFilter.All
-    | TypeFilter.Lesson
-    | TypeFilter.Exercise
-    | TypeFilter.Metaphor
-    | TypeFilter.Study
-    | TypeFilter.Quiz
-    | TypeFilter.Methodology
-    | TypeFilter.Metaphors;
+  activeLanguage: TypeLanguage;
 
-  activeOrder:
-    | TypeOrder.AddDate
-    | TypeOrder.DecDate
-    | TypeOrder.Popularity
-    | TypeOrder.NoPopularity;
+  activeFilterType: TypeFilter;
+
+  activeOrder: TypeOrder;
+
   page: number;
   searchTerm: string | undefined;
   isSuccess: boolean;
@@ -69,7 +48,7 @@ const initialState: AssignmentState = {
   activeLanguage: TypeLanguage.All,
   activeTab: AssignmentTab.library,
   activeFilterType: TypeFilter.All,
-  activeOrder: TypeOrder.AddDate,
+  activeOrder: TypeOrder.DecDate,
   status: Status.Init,
   message: "default",
   page: 1,
@@ -130,7 +109,7 @@ const assignmentSlice = createSlice({
         changeAssignmentFavoriteByIdAction.fulfilled,
         (state, action) => {
           state.status = Status.Success;
-        },
+        }
       )
       .addCase(changeAssignmentFavoriteByIdAction.pending, (state, action) => {
         state.status = Status.Loading;
