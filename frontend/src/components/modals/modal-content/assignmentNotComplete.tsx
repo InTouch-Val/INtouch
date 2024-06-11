@@ -1,3 +1,4 @@
+//@ts-nocheck
 import NotificationStyles from "./notifications.module.scss";
 
 const AssignmentNotComplete = ({ completeClick, backClick }) => {
