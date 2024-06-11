@@ -82,7 +82,7 @@ export const WithTab = (WrappedComponent) => {
       if (isSuccess && inView) {
         dispatch(changePageAction(page + 1));
       }
-    }, [listAssignment, inView]);
+    }, [isSuccess, inView]);
 
     return (
       <React.Fragment>
