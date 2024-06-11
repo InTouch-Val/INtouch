@@ -10,7 +10,7 @@ export interface PropsTabAssignments {
   toggleFavorite: (id: number | string) => void;
   handleDeleteClick: (id: number | string) => void;
   handleShareButton: (id: number | string) => void;
-  refetch: any;
+  refetch: () => void;
 }
 
 export default function TabsAssignments({
