@@ -11,8 +11,7 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 import { useAppDispatch } from "../../../../store/store";
 import {
-  openModalExitUnsaved,
-  closeModalExitUnsaved,
+  openModalExitUnsaved
 } from "../../../../store/slices/modals/modalsSlice";
 
 const options = {
@@ -37,6 +36,8 @@ export default function DiaryHeaderClient({
   };
 
   const navigate = useNavigate();
+
+  console.log(changesMade)
 
   const handleGoBack = useCallback(() => {
     if (changesMade && !isSaved) {
