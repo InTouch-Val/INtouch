@@ -42,7 +42,7 @@ export const WithTab = (WrappedComponent) => {
       isSuccess,
     } = useGetAssignmentsQuery(
       {
-        limit: 30,
+        limit: 12,
         page: page,
         author: activeTab == AssignmentTab.myList ? currentUser.id : undefined,
         favorite: activeTab == AssignmentTab.favorites && true,
@@ -82,7 +82,7 @@ export const WithTab = (WrappedComponent) => {
       if (isSuccess && inView) {
         dispatch(changePageAction(page + 1));
       }
-    }, [inView]);
+    }, [listAssignment, inView]);
 
     return (
       <React.Fragment>

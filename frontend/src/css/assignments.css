@@ -98,7 +98,8 @@
   width: 100%;
   margin-bottom: 20px;
   grid-gap: 20px;
-  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  justify-content: center;
+  grid-template-columns: repeat(4, minmax(270px, 1fr));
 }
 
 @media screen and (min-width: 320px) and (max-width: 480px) {
