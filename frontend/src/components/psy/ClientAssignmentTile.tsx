@@ -49,7 +49,7 @@ export default function ClientAssignmentTile({
   }, [assignment]);
 
   function onCardClick(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ): void {
     event.stopPropagation();
     navigate(`/clients/${clientId}/assignments/${assignment?.id}`);
@@ -74,7 +74,7 @@ export default function ClientAssignmentTile({
   const handleToggleModal = (): void => setShowModal(!showModal);
 
   function handleRecallClick(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ): void {
     event.stopPropagation();
     onRecallClick();

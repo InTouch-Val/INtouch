@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import FormData from "form-data";
 import { useAuth } from "../service/authContext";
 import { API } from "../service/axios";
-import "../css/settings.css";
+import "../css/settings.scss";
 
 // TODO: PopUp windows for users
 
@@ -279,7 +279,7 @@ const SecurityTab = () => {
               </button>
               <div className="delete-modal-div">
                 <p>
-                  Are you sure you want to delete your profile forever?{" "}
+                  Are you sure you want to delete your profile forever? <br />
                   <strong>This action is irrevertable!</strong>
                 </p>
                 <div>
@@ -287,10 +287,10 @@ const SecurityTab = () => {
                     Cancel
                   </button>
                   <button
-                    className="action-button"
+                    className="action-button delete"
                     onClick={handleDeleteProfile}
                   >
-                    Delete Forever
+                    {isMobileWidth ? " Delete" : " Delete Forever"}
                   </button>
                 </div>
               </div>
