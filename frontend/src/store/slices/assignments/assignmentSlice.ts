@@ -18,7 +18,6 @@ import {
 } from "../../../utils/constants";
 
 export type IStatusState = Status;
-  
 
 interface AssignmentState {
   assignments: AssignmentsType[] | null;
@@ -109,7 +108,7 @@ const assignmentSlice = createSlice({
         changeAssignmentFavoriteByIdAction.fulfilled,
         (state, action) => {
           state.status = Status.Success;
-        }
+        },
       )
       .addCase(changeAssignmentFavoriteByIdAction.pending, (state, action) => {
         state.status = Status.Loading;
