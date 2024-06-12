@@ -24,6 +24,8 @@ class User(AbstractUser):
     )
     new_email_changing = models.BooleanField(default=False)
     new_email_temp = models.EmailField(null=True)
+    deleted = models.BooleanField(default=False)
+    date_deleted = models.DateTimeField(null=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"

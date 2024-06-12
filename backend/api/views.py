@@ -1,4 +1,7 @@
+import random
+import string
 import json
+from datetime import datetime, timezone
 from http import HTTPStatus
 
 from drf_spectacular.utils import (
@@ -35,7 +38,12 @@ from api.utils import (
     get_therapists_metrics_query,
     form_metrics_file,
 )
-from api.constants import USER_TYPES, METRICS_FILE_NAME
+from api.constants import (
+    USER_TYPES,
+    METRICS_FILE_NAME,
+    DELETING_FIELDS,
+    RANDOM_USERNAME_DELETING,
+)
 from api.tasks import reset_email_update_status
 
 
@@ -317,7 +325,36 @@ def user_delete_hard(request):
     """Полное удаление пользователя"""
     user = request.user
     if user:
-        user.delete()
+        deleted_username = string.ascii_uppercase + string.digits
+        user.first_name = DELETING_FIELDS[0]
+        user.last_name = DELETING_FIELDS[0]
+        user.email = DELETING_FIELDS[0]
+        user.date_of_birth = DELETING_FIELDS[1]
+        user.photo = DELETING_FIELDS[1]
+        user.deleted = DELETING_FIELDS[2]
+        user.is_active = DELETING_FIELDS[3]
+        user.accept_policy = DELETING_FIELDS[3]
+        user.date_deleted = datetime.now(timezone.utc)
+        user.username = "".join(
+            random.choice(deleted_username) for _ in range(RANDOM_USERNAME_DELETING)
+        )
+        user.password = "".join(
+            random.choice(deleted_username) for _ in range(RANDOM_USERNAME_DELETING)
+        )
+
+        if user.user_type == USER_TYPES[0]:
+            Client.objects.filter(user=user).delete()
+            for assignment in AssignmentClient.objects.filter(user=user):
+                assignment.delete()
+            for diary in DiaryNote.objects.filter(author=user):
+                diary.delete()
+        else:
+            Doctor.objects.filter(user=user).delete()
+            for assignment in Assignment.objects.filter(author=user, is_public=False):
+                assignment.delete()
+
+        user.save()
+
         return Response({"message": "User deleted successfully"})
     else:
         return Response({"error": "User not found"})

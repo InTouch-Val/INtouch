@@ -85,6 +85,14 @@ DIARY_FIELDS_TO_CHECK = [
     "physical_sensations",
 ]
 
+DELETING_FIELDS = {
+    0: "deleted",
+    1: None,
+    2: True,
+    3: False,
+}
+
+RANDOM_USERNAME_DELETING = 10
 TIME_DELETE_NON_ACTIVE_USER = 604800  # 7 days
 DEFAULT_PAGE_SIZE = 10
 METRICS_FILE_NAME = "project_metrics.csv"
