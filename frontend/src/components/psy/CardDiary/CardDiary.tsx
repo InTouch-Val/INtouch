@@ -26,13 +26,18 @@ export default function CardDiary({ card }) {
       <div className="diary__card-text">{card.event_details}</div>
 
       <div className="diary__card-buttons" onClick={(e) => e.stopPropagation()}>
-        {card.clarifying_emotion.slice(0, 2).map((item, index) => {
-          return (
-            <Button key={index} className="diary__card-button">
-              {item}
-            </Button>
-          );
-        })}
+         {card.primary_emotion != "" && (
+          <Button className="diary__card-button">
+            {card.primary_emotion
+              .toLowerCase()
+              .replace(/(^\w)(\w+)/, (a, b, c) => b.toUpperCase() + c)}
+          </Button>
+        )}
+        {card.clarifying_emotion.length > 0 && (
+          <Button className="diary__card-button">
+            <p className="diary__button-text">{card.clarifying_emotion[0]}</p>
+          </Button>
+        )}
       </div>
     </div>
   );
