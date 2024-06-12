@@ -102,6 +102,12 @@
   grid-template-columns: repeat(4, minmax(270px, 1fr));
 }
 
+@media screen and (min-width: 480px) and (max-width: 1200px) {
+  .assignment-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+}
+
 @media screen and (min-width: 320px) and (max-width: 480px) {
   .assignment-grid {
     margin: 0;
