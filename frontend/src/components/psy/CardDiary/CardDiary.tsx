@@ -26,7 +26,7 @@ export default function CardDiary({ card }) {
       <div className="diary__card-text">{card.event_details}</div>
 
       <div className="diary__card-buttons" onClick={(e) => e.stopPropagation()}>
-         {card.primary_emotion != "" && (
+        {card.primary_emotion != "" && (
           <Button className="diary__card-button">
             {card.primary_emotion
               .toLowerCase()
