@@ -1,22 +1,26 @@
 {% extends "base.html" %}
+{% load static %}
+{% block static %} <link rel="stylesheet" href={% static "css/project_metrics.css" %}> {% endblock static %}
 {% block title %} INtouch Metrics {% endblock title %}
 {% block content %}
-    <table style="width:100%">
-        <tr>
-            <th> User ID </th>
-            <th> Registration Date </th>
-            <th> Rolling Retention 7D </th>
-            <th> Rolling Retention 30D </th>
-            <th> Last Seen </th>
-            <th> Clients Invited </th>
-            <th> Last Invited Client </th>
-            <th> Last Sent Assignment </th>
-            <th> Last Created Assignment </th>
-            <th> Deleted On </th>
-        </tr>
-        {% block psychoterapists %}{% endblock psychoterapists %}
+    <table>
+        <tbody>
+            <tr>
+                <th> User ID </th>
+                <th> Registration Date </th>
+                <th> Rolling Retention 7D </th>
+                <th> Rolling Retention 30D </th>
+                <th> Last Seen </th>
+                <th> Clients Invited </th>
+                <th> Last Invited Client </th>
+                <th> Last Sent Assignment </th>
+                <th> Last Created Assignment </th>
+                <th> Deleted On </th>
+            </tr>
+            {% block psychoterapists %}{% endblock psychoterapists %}
+        </tbody>
     </table>
     <a href = "{{request.path}}download">
-         <button type = "button"> Download Table </button>
+         <button type="button" class="download"> Download Table </button>
     </a>
 {% endblock content %}

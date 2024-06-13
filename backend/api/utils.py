@@ -65,7 +65,7 @@ def get_therapists_metrics_query() -> QuerySet:
                 ),
                 default=False,
             ),
-            last_invited=Subquery(last_invited.values("user__date_joined")[:1]),
+            last_invited=Subquery(last_invited.values("user__add_date")[:1]),
             last_sent_assignment=Subquery(last_sent_assignment.values("add_date")[:1]),
             last_created_assignment=Subquery(
                 last_created_assignment.values("add_date")[:1]
