@@ -33,9 +33,9 @@ from api.utils import (
     send_by_mail,
     avg_grade_annotation,
     get_therapists_metrics_query,
-    form_metrics_file,
+    form_therapists_metrics_file,
 )
-from api.constants import USER_TYPES, METRICS_FILE_NAME
+from api.constants import USER_TYPES, THERAPISTS_METRICS_FILE_NAME
 from api.tasks import reset_email_update_status
 
 
@@ -1023,14 +1023,14 @@ def project_metrics(request):
     return render(request, "metrics/project_metrics.html", context=context)
 
 
-def project_metrics_download(request):
+def therapists_metrics_download(request):
     response = HttpResponse(
         content_type="text/csv",
         headers={
             "Content-Disposition": 'attachment; filename="{0}"'.format(
-                METRICS_FILE_NAME
+                THERAPISTS_METRICS_FILE_NAME
             )
         },
     )
-    form_metrics_file(response)
+    form_therapists_metrics_file(response)
     return response

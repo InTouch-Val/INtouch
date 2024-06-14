@@ -74,7 +74,7 @@ urlpatterns = [
         name="update_email_confirm",
     ),
     path("project-metrics/", project_metrics, name="project-metrics"),
-    path("project-metrics/download/", project_metrics_download),
+    path("project-metrics/therapists/download/", therapists_metrics_download),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
         "swagger/",
