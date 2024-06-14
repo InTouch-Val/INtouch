@@ -1,5 +1,4 @@
 import random
-import string
 import json
 from datetime import datetime, timezone
 from http import HTTPStatus
@@ -41,8 +40,9 @@ from api.utils import (
 from api.constants import (
     USER_TYPES,
     METRICS_FILE_NAME,
-    DELETING_FIELDS,
     RANDOM_VALUE_SIZE,
+    FIELD_DELETED,
+    RANDOM_CHARSET_FOR_DELETING
 )
 from api.tasks import reset_email_update_status
 
@@ -326,21 +326,21 @@ def user_delete_hard(request):
 
     user = request.user
     if user:
-        deleted_username = string.ascii_uppercase + string.digits
-        user.first_name = DELETING_FIELDS[3]
-        user.last_name = DELETING_FIELDS[3]
-        user.email = DELETING_FIELDS[3]
-        user.date_of_birth = DELETING_FIELDS[2]
-        user.photo = DELETING_FIELDS[2]
-        user.deleted = DELETING_FIELDS[1]
-        user.is_active = DELETING_FIELDS[0]
-        user.accept_policy = DELETING_FIELDS[0]
+        default_charset = RANDOM_CHARSET_FOR_DELETING
+        user.first_name = FIELD_DELETED
+        user.last_name = FIELD_DELETED
+        user.email = FIELD_DELETED
+        user.date_of_birth = None
+        user.photo = None
+        user.deleted = True
+        user.is_active = False
+        user.accept_policy = False
         user.deleted_on = datetime.now(timezone.utc)
         user.username = "".join(
-            random.choice(deleted_username) for _ in range(RANDOM_VALUE_SIZE)
+            random.choice(default_charset) for _ in range(RANDOM_VALUE_SIZE)
         )
         user.password = "".join(
-            random.choice(deleted_username) for _ in range(RANDOM_VALUE_SIZE)
+            random.choice(default_charset) for _ in range(RANDOM_VALUE_SIZE)
         )
 
         if user.user_type == USER_TYPES[0]:
