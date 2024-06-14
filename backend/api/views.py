@@ -42,7 +42,7 @@ from api.constants import (
     USER_TYPES,
     METRICS_FILE_NAME,
     DELETING_FIELDS,
-    RANDOM_USERNAME_DELETING,
+    RANDOM_VALUE_SIZE,
 )
 from api.tasks import reset_email_update_status
 
@@ -322,24 +322,25 @@ class UpdateUserView(generics.UpdateAPIView):
 )
 @api_view(["GET"])
 def user_delete_hard(request):
-    """Полное удаление пользователя"""
+    """Удаление конфиденциальных данных пользователя с сохранением самой сущности."""
+
     user = request.user
     if user:
         deleted_username = string.ascii_uppercase + string.digits
-        user.first_name = DELETING_FIELDS[0]
-        user.last_name = DELETING_FIELDS[0]
-        user.email = DELETING_FIELDS[0]
-        user.date_of_birth = DELETING_FIELDS[1]
-        user.photo = DELETING_FIELDS[1]
-        user.deleted = DELETING_FIELDS[2]
-        user.is_active = DELETING_FIELDS[3]
-        user.accept_policy = DELETING_FIELDS[3]
-        user.date_deleted = datetime.now(timezone.utc)
+        user.first_name = DELETING_FIELDS[3]
+        user.last_name = DELETING_FIELDS[3]
+        user.email = DELETING_FIELDS[3]
+        user.date_of_birth = DELETING_FIELDS[2]
+        user.photo = DELETING_FIELDS[2]
+        user.deleted = DELETING_FIELDS[1]
+        user.is_active = DELETING_FIELDS[0]
+        user.accept_policy = DELETING_FIELDS[0]
+        user.deleted_on = datetime.now(timezone.utc)
         user.username = "".join(
-            random.choice(deleted_username) for _ in range(RANDOM_USERNAME_DELETING)
+            random.choice(deleted_username) for _ in range(RANDOM_VALUE_SIZE)
         )
         user.password = "".join(
-            random.choice(deleted_username) for _ in range(RANDOM_USERNAME_DELETING)
+            random.choice(deleted_username) for _ in range(RANDOM_VALUE_SIZE)
         )
 
         if user.user_type == USER_TYPES[0]:
@@ -364,6 +365,7 @@ def user_delete_hard(request):
 @api_view(["GET"])
 def user_delete_soft(request):
     """Перевод пользователя в неактивные"""
+
     user = request.user
     if user:
         user.is_active = False

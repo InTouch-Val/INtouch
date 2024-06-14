@@ -86,13 +86,14 @@ DIARY_FIELDS_TO_CHECK = [
 ]
 
 DELETING_FIELDS = {
-    0: "deleted",
-    1: None,
-    2: True,
-    3: False,
+    0: False,
+    1: True,
+    2: None,
+    3: "deleted",
 }
 
-RANDOM_USERNAME_DELETING = 10
+RANDOM_VALUE_SIZE = 10
+# Random default value for username and password on profile's deleting.
 TIME_DELETE_NON_ACTIVE_USER = 604800  # 7 days
 DEFAULT_PAGE_SIZE = 10
 METRICS_FILE_NAME = "project_metrics.csv"
