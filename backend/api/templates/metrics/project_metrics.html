@@ -12,7 +12,7 @@
             <td> {{ user.last_invited|date:"d F Y" }} </td>
             <td> {{ user.last_sent_assignment|date:"d F Y" }} </td>
             <td> {{ user.last_created_assignment|date:"d F Y" }}</td>
-            <td> ??? </td>
+            <td> {{ user.deleted_on|date:"d F Y" }} </td>
         </tr>
     {% endfor %}
 {% endblock psychoterapists %}

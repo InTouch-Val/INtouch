@@ -105,5 +105,6 @@ def form_therapists_metrics_file(response: HttpResponse) -> None:
                 user.last_invited,
                 user.last_sent_assignment,
                 user.last_created_assignment,
+                user.deleted_on,
             ]
         )
