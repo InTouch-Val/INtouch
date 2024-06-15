@@ -1057,7 +1057,7 @@ def assetlink(request):
 
 
 def project_metrics(request):
-    """Render project metrics for psychotherapists"""
+    """Renders project metrics page."""
     therapists_metrics = get_therapists_metrics_query()
     clients_metrics = get_clients_metrics_query()
     context = {
@@ -1068,6 +1068,7 @@ def project_metrics(request):
 
 
 def metrics_download(request, for_whom: str):
+    """Sends the project metrics files, depends on for_whom query parameter."""
     response = HttpResponse(
         content_type="text/csv",
         headers={

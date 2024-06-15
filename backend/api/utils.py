@@ -76,7 +76,7 @@ def get_therapists_metrics_query() -> QuerySet:
 
 
 def get_clients_metrics_query() -> QuerySet:
-    """Function to get a query of psychotherapists metrics."""
+    """Function to get a query of clients metrics."""
     last_done_assignment = AssignmentClient.objects.filter(
         user=OuterRef("pk"), status="done"
     ).order_by("-update_date")
