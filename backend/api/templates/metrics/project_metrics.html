@@ -4,15 +4,15 @@
     {% for user in users %}
         <tr>
             <td> {{ user.id }} </td>
-            <td> {{ user.date_joined }} </td>
+            <td> {{ user.date_joined|date:"d F Y" }} </td>
             <td> {{ user.rolling_retention_7d }} </td>
             <td> {{ user.rolling_retention_30d }}</td>
-            <td> {{ user.last_login }} </td>
+            <td> {{ user.last_login|date:"d F Y" }} </td>
             <td> {{ user.clients_count }} </td>
-            <td> {{ user.last_invited }} </td>
-            <td> {{ user.last_sent_assignment }} </td>
-            <td> {{ user.last_created_assignment }}</td>
-            <td> ??? </td>
+            <td> {{ user.last_invited|date:"d F Y" }} </td>
+            <td> {{ user.last_sent_assignment|date:"d F Y" }} </td>
+            <td> {{ user.last_created_assignment|date:"d F Y" }}</td>
+            <td> {{ user.deleted_on|date:"d F Y" }} </td>
         </tr>
     {% endfor %}
 {% endblock psychoterapists %}

@@ -34,7 +34,7 @@ def avg_grade_annotation(query: QuerySet) -> QuerySet:
 def get_therapists_metrics_query() -> QuerySet:
     """Function to get a query of psychotherapists metrics."""
     last_invited = Client.objects.filter(user__doctors=OuterRef("pk")).order_by(
-        "-user__date_joined"
+        "-user__add_date"
     )
     last_sent_assignment = AssignmentClient.objects.filter(
         author=OuterRef("pk")
@@ -65,7 +65,7 @@ def get_therapists_metrics_query() -> QuerySet:
                 ),
                 default=False,
             ),
-            last_invited=Subquery(last_invited.values("user__date_joined")[:1]),
+            last_invited=Subquery(last_invited.values("user__add_date")[:1]),
             last_sent_assignment=Subquery(last_sent_assignment.values("add_date")[:1]),
             last_created_assignment=Subquery(
                 last_created_assignment.values("add_date")[:1]
@@ -75,7 +75,7 @@ def get_therapists_metrics_query() -> QuerySet:
     return query
 
 
-def form_metrics_file(response: HttpResponse) -> None:
+def form_therapists_metrics_file(response: HttpResponse) -> None:
     """Form a csv metrics data file."""
     writer = csv.writer(response)
     writer.writerow(
@@ -105,5 +105,6 @@ def form_metrics_file(response: HttpResponse) -> None:
                 user.last_invited,
                 user.last_sent_assignment,
                 user.last_created_assignment,
+                user.deleted_on,
             ]
         )
