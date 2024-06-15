@@ -23,4 +23,22 @@
     <a href = "{{request.path}}therapists/download">
          <button type="button" class="download"> Download Table </button>
     </a>
+    <table>
+        <tbody>
+            <tr>
+                <th> User ID </th>
+                <th> Registration Date </th>
+                <th> Rolling Retention 7D </th>
+                <th> Rolling Retention 30D </th>
+                <th> Last Seen </th>
+                <th> Last Done Assignment </th>
+                <th> Last Diary Created </th>
+                <th> Deleted On </th>
+            </tr>
+            {% block clients %}{% endblock clients %}
+        </tbody>
+    </table>
+    <a href = "{{request.path}}clients/download">
+         <button type="button" class="download"> Download Table </button>
+    </a>
 {% endblock content %}

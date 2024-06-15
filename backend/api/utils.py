@@ -7,8 +7,8 @@ from django.utils.html import strip_tags
 from django.db.models import Avg, QuerySet, Count, Subquery, OuterRef, When, Case, F
 from django.db.models.lookups import GreaterThan
 
-from api.models import User, Client, AssignmentClient, Assignment
-from api.constants import USER_TYPES
+from api.models import User, Client, AssignmentClient, Assignment, DiaryNote
+from api.constants import USER_TYPES, METRICS_TABLE_ROWS
 
 current_site = "https://app.intouch.care"
 
@@ -75,36 +75,82 @@ def get_therapists_metrics_query() -> QuerySet:
     return query
 
 
-def form_therapists_metrics_file(response: HttpResponse) -> None:
-    """Form a csv metrics data file."""
-    writer = csv.writer(response)
-    writer.writerow(
-        [
-            "User ID",
-            "Registration Date",
-            "Rolling Retention 7D",
-            "Rolling Retention 30D",
-            "Last Seen",
-            "Clients Invited",
-            "Last Invited Client",
-            "Last Sent Assignment",
-            "Last Created Assignment",
-            "Deleted On",
-        ]
+def get_clients_metrics_query() -> QuerySet:
+    """Function to get a query of psychotherapists metrics."""
+    last_done_assignment = AssignmentClient.objects.filter(
+        user=OuterRef("pk"), status="done"
+    ).order_by("-update_date")
+    last_created_diary = DiaryNote.objects.filter(author=OuterRef("pk")).order_by(
+        "-add_date"
     )
-    users = get_therapists_metrics_query()
-    for user in users:
-        writer.writerow(
-            [
-                user.id,
-                user.date_joined,
-                user.rolling_retention_7d,
-                user.rolling_retention_30d,
-                user.last_login,
-                user.clients_count,
-                user.last_invited,
-                user.last_sent_assignment,
-                user.last_created_assignment,
-                user.deleted_on,
-            ]
+    query = (
+        User.objects.all()
+        .filter(user_type=USER_TYPES[0])
+        .annotate(
+            last_done_assignment=Subquery(
+                last_done_assignment.values("update_date")[:1]
+            ),
+            rolling_retention_7d=Case(
+                When(
+                    GreaterThan(
+                        F("last_done_assignment") - F("date_joined"),
+                        dt.timedelta(days=7),
+                    ),
+                    then=True,
+                ),
+                default=False,
+            ),
+            rolling_retention_30d=Case(
+                When(
+                    GreaterThan(
+                        F("last_done_assignment") - F("date_joined"),
+                        dt.timedelta(days=30),
+                    ),
+                    then=True,
+                ),
+                default=False,
+            ),
+            last_created_diary=Subquery(last_created_diary.values("add_date")[:1]),
         )
+    )
+    return query
+
+
+def form_metrics_file(response: HttpResponse, for_whom: str) -> None:
+    "Function for forming metrics files. Depend on for_whom parameter."
+    if for_whom == "clients":
+        writer = csv.writer(response)
+        writer.writerow(METRICS_TABLE_ROWS[for_whom])
+        users = get_clients_metrics_query()
+        for user in users:
+            writer.writerow(
+                [
+                    user.id,
+                    user.date_joined,
+                    user.rolling_retention_7d,
+                    user.rolling_retention_30d,
+                    user.last_login,
+                    user.last_done_assignment,
+                    user.last_created_diary,
+                    user.deleted_on,
+                ]
+            )
+    elif for_whom == "therapists":
+        writer = csv.writer(response)
+        writer.writerow(METRICS_TABLE_ROWS[for_whom])
+        users = get_therapists_metrics_query()
+        for user in users:
+            writer.writerow(
+                [
+                    user.id,
+                    user.date_joined,
+                    user.rolling_retention_7d,
+                    user.rolling_retention_30d,
+                    user.last_login,
+                    user.clients_count,
+                    user.last_invited,
+                    user.last_sent_assignment,
+                    user.last_created_assignment,
+                    user.deleted_on,
+                ]
+            )

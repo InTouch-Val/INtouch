@@ -1,7 +1,7 @@
 {% extends "metrics/project_metrics_table.html" %}
 
 {% block psychoterapists %}
-    {% for user in users %}
+    {% for user in therapists %}
         <tr>
             <td> {{ user.id }} </td>
             <td> {{ user.date_joined|date:"d F Y" }} </td>
@@ -16,3 +16,18 @@
         </tr>
     {% endfor %}
 {% endblock psychoterapists %}
+
+{% block clients %}
+    {% for user in clients %}
+        <tr>
+            <td> {{ user.id }} </td>
+            <td> {{ user.date_joined|date:"d F Y" }} </td>
+            <td> {{ user.rolling_retention_7d }} </td>
+            <td> {{ user.rolling_retention_30d }}</td>
+            <td> {{ user.last_login|date:"d F Y" }} </td>
+            <td> {{ user.last_done_assignment|date:"d F Y" }} </td>
+            <td> {{ user.last_created_diary|date:"d F Y" }} </td>
+            <td> {{ user.deleted_on|date:"d F Y" }} </td>
+        </tr>
+    {% endfor %}
+{% endblock clients %}
