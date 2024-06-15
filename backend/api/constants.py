@@ -95,4 +95,4 @@ RANDOM_CHARSET_FOR_DELETING = string.ascii_uppercase + string.digits
 FIELD_DELETED = "deleted"
 TIME_DELETE_NON_ACTIVE_USER = 604800  # 7 days
 DEFAULT_PAGE_SIZE = 10
-METRICS_FILE_NAME = "project_metrics.csv"
+THERAPISTS_METRICS_FILE_NAME = "therapists_metrics.csv"
