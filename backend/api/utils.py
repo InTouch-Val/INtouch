@@ -118,9 +118,9 @@ def get_clients_metrics_query() -> QuerySet:
 
 def form_metrics_file(response: HttpResponse, for_whom: str) -> None:
     "Function for forming metrics files. Depend on for_whom parameter."
+    writer = csv.writer(response)
+    writer.writerow(METRICS_TABLE_ROWS[for_whom])
     if for_whom == "clients":
-        writer = csv.writer(response)
-        writer.writerow(METRICS_TABLE_ROWS[for_whom])
         users = get_clients_metrics_query()
         for user in users:
             writer.writerow(
@@ -136,8 +136,6 @@ def form_metrics_file(response: HttpResponse, for_whom: str) -> None:
                 ]
             )
     elif for_whom == "therapists":
-        writer = csv.writer(response)
-        writer.writerow(METRICS_TABLE_ROWS[for_whom])
         users = get_therapists_metrics_query()
         for user in users:
             writer.writerow(
