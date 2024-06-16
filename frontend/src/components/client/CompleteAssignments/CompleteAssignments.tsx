@@ -322,7 +322,6 @@ function CompleteAssignments() {
     }
   }
 
-
   async function handleSaveTask() {
     //saves changes in task
     const blockInfo = blocks.map(transformBlock);
@@ -660,7 +659,7 @@ function CompleteAssignments() {
                 await handleSaveTask();
                 navigate(-1);
               } catch (error) {
-                console.error('Failed to save:', error);
+                console.error("Failed to save:", error);
               }
             }}
             discardClick={() => navigate(-1)}
