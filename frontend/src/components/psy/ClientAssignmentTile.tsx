@@ -98,14 +98,16 @@ export default function ClientAssignmentTile({
         <p>UPD: {assignment.update_date}</p>
       </div>
       <div className="assignment-actions">
-        {assignment.status !== StatusFromServer.ToDo ? (
+        {assignment.visible === true ? (
           <>
-            <button
-              className="assignment__review-btn"
-              title="view task rate"
-              onClick={(event) => onCardClick(event)}
-              disabled={assignment.review === "" || undefined}
-            ></button>
+            {assignment.review !== null && (
+              <button
+                className="assignment__review-btn"
+                title="view task rate"
+                onClick={(event) => onCardClick(event)}
+                disabled={assignment.review === "" || undefined}
+              ></button>
+            )}
             <button
               className="assignment__view-btn"
               title="view done assignment"

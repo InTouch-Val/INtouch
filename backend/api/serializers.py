@@ -107,6 +107,7 @@ class UserSerializer(serializers.ModelSerializer):
         if (
             request
             and hasattr(request, "user")
+            and request.user.is_authenticated
             and request.user.user_type != USER_TYPES[0]
         ):
             try:

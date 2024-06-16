@@ -10,11 +10,11 @@ import { TypeFilter, TypeLanguage, TypeOrder } from "../../../utils/constants";
 export default function FilterDropDown() {
   const dispatch = useAppDispatch();
 
-  const { activeLanguage, activeFilterType } = useAppSelector(
+  const { activeLanguage, activeFilterType, activeOrder } = useAppSelector(
     (state) => state.assignment,
   );
 
-  const [sortMethod, setSortMethod] = React.useState(TypeOrder.AddDate);
+  const [sortMethod, setSortMethod] = React.useState(activeOrder);
 
   const handleSortMethodChange = (e): void => {
     setSortMethod(e.target.value);
