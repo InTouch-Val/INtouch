@@ -115,6 +115,10 @@
 
 .diary__button-text {
   margin: 0;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 @media screen and (min-width: 320px) and (max-width: 480px) {
