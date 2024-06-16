@@ -4,8 +4,18 @@
 .settings-page {
   padding: 35px;
 
-  @include mobile-media($mobile-min-width, $mobile-max-width) {
-    padding: 118px 28px 60px;
+  @include mobile() {
+    padding: 80px 28px 60px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+}
+
+.settings_section {
+  @include mobile() {
+    height: 100%;
   }
 }
 
@@ -18,7 +28,7 @@ header h2 {
   color: #656565;
   font-weight: 400;
 
-  @include mobile-media($mobile-min-width, $mobile-max-width) {
+  @include mobile() {
     color: $mobile-titles-color;
     font-weight: 600;
     font-size: 24px;
@@ -37,7 +47,7 @@ header img {
 .tabs {
   width: 100%;
 
-  @include mobile-media($mobile-min-width, $mobile-max-width) {
+  @include mobile() {
     margin-bottom: 20px;
     display: flex;
 
@@ -49,6 +59,10 @@ header img {
 
 .settings-profile-tab {
   display: flex;
+
+  @include mobile() {
+    height: 100%;
+  }
 }
 
 .left-column {
@@ -68,11 +82,19 @@ header img {
 
 .right-column {
   flex-grow: 1;
+
+  @include mobile() {
+    height: 100%;
+  }
 }
 
 .right-column form {
   display: flex;
   flex-direction: column;
+
+  @include mobile() {
+    height: 100%;
+  }
 }
 
 .right-column label {
@@ -91,7 +113,7 @@ header img {
   color: #656565;
   font-size: 17px;
 
-  @include mobile-media($mobile-min-width, $mobile-max-width) {
+  @include mobile() {
     margin: 0;
     padding: 6px 12px;
     font-size: 15px;
@@ -123,7 +145,7 @@ header img {
   cursor: pointer;
   font-size: 16px;
 
-  @include mobile-media($mobile-min-width, $mobile-max-width) {
+  @include mobile() {
     border-radius: 20px;
     padding: 14px;
     font-size: 22px;
@@ -144,7 +166,7 @@ header img {
   padding: 20px;
   padding: 0;
 
-  @include mobile-media($mobile-min-width, $mobile-max-width) {
+  @include mobile() {
     flex-direction: column;
     width: 100%;
   }
@@ -155,7 +177,7 @@ header img {
   color: #417d88;
   font-weight: 600;
 
-  @include mobile-media($mobile-min-width, $mobile-max-width) {
+  @include mobile() {
     margin: 0;
     color: $mobile-titles-color;
     margin-bottom: 18px;
@@ -167,7 +189,7 @@ header img {
 }
 
 .security-tab_wrapper {
-  @include mobile-media($mobile-min-width, $mobile-max-width) {
+  @include mobile() {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -180,7 +202,7 @@ header img {
   color: #417d88;
   font-size: 22px;
 
-  @include mobile-media($mobile-min-width, $mobile-max-width) {
+  @include mobile() {
     font-size: 18px;
     font-weight: 500;
     line-height: 21px;
@@ -194,7 +216,7 @@ header img {
   flex-direction: column;
   margin-right: 90px;
 
-  @include mobile-media($mobile-min-width, $mobile-max-width) {
+  @include mobile() {
     width: 100%;
     margin-right: 0;
     margin-bottom: 70px;
@@ -202,7 +224,7 @@ header img {
 }
 
 .danger-zone {
-  @include mobile-media($mobile-min-width, $mobile-max-width) {
+  @include mobile() {
     align-self: center;
     text-align: center;
 
@@ -221,7 +243,7 @@ header img {
   margin-bottom: 10px;
 }
 
-@include mobile-media($mobile-min-width, $mobile-max-width) {
+@include mobile() {
   .change-password-form input {
     padding: 6px 12px;
     box-shadow: 0 0 3px 2px #d7e4e773;
@@ -246,7 +268,7 @@ header img {
   color: white;
   cursor: pointer;
 
-  @include mobile-media($mobile-min-width, $mobile-max-width) {
+  @include mobile() {
     background-color: $mobile-alert-color;
     border-radius: 20px;
     padding: 14px 54px;
@@ -261,7 +283,7 @@ header img {
 }
 
 .change-password-form_wrapper {
-  @include mobile-media($mobile-min-width, $mobile-max-width) {
+  @include mobile() {
     position: relative;
 
     .change-password-form form & {
@@ -274,7 +296,7 @@ header img {
   display: flex;
   flex-direction: column;
 
-  @include mobile-media($mobile-min-width, $mobile-max-width) {
+  @include mobile() {
     gap: 10px;
     margin-bottom: 30px;
     width: 100%;
@@ -291,7 +313,7 @@ header img {
 .input__container_icon {
   display: none;
 
-  @include mobile-media($mobile-min-width, $mobile-max-width) {
+  @include mobile() {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -308,7 +330,7 @@ header img {
   line-height: 17px;
   color: #ff0000;
 
-  @include mobile-media($mobile-min-width, $mobile-max-width) {
+  @include mobile() {
     min-height: auto;
     text-align: center;
     color: $mobile-error-color;
@@ -328,10 +350,11 @@ header img {
   justify-content: space-between;
   align-items: flex-start;
 
-  @include mobile-media($mobile-min-width, $mobile-max-width) {
-    justify-content: center;
+  @include mobile() {
+    justify-content: space-between;
     flex-direction: column;
     align-items: center;
+    height: 100%;
   }
 }
 
@@ -340,8 +363,9 @@ header img {
   flex-direction: column;
   height: 250px;
 
-  @include mobile-media($mobile-min-width, $mobile-max-width) {
+  @include mobile() {
     min-height: 40px;
+    height: auto;
     text-align: center;
     color: $mobile-error-color;
   }
