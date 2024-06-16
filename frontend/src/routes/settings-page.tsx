@@ -37,7 +37,6 @@ function SettingsPage() {
         </button>
       </div>
       <div>
-       
         {activeTab === "profile" && <ProfileTab />}
         {activeTab === "security" && <SecurityTab />}
       </div>
