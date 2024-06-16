@@ -5,7 +5,17 @@
   padding: 35px;
 
   @include mobile-media($mobile-min-width, $mobile-max-width) {
-    padding: 118px 28px 60px;
+    padding: 80px 28px 60px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+}
+
+.settings_section {
+  @include mobile-media($mobile-min-width, $mobile-max-width) {
+    height: 100%;
   }
 }
 
@@ -49,6 +59,10 @@ header img {
 
 .settings-profile-tab {
   display: flex;
+
+  @include mobile-media($mobile-min-width, $mobile-max-width) {
+    height: 100%;
+  }
 }
 
 .left-column {
@@ -68,11 +82,19 @@ header img {
 
 .right-column {
   flex-grow: 1;
+
+  @include mobile-media($mobile-min-width, $mobile-max-width) {
+    height: 100%;
+  }
 }
 
 .right-column form {
   display: flex;
   flex-direction: column;
+
+  @include mobile-media($mobile-min-width, $mobile-max-width) {
+    height: 100%;
+  }
 }
 
 .right-column label {
@@ -329,9 +351,10 @@ header img {
   align-items: flex-start;
 
   @include mobile-media($mobile-min-width, $mobile-max-width) {
-    justify-content: center;
+    justify-content: space-between;
     flex-direction: column;
     align-items: center;
+    height: 100%;
   }
 }
 
@@ -342,6 +365,7 @@ header img {
 
   @include mobile-media($mobile-min-width, $mobile-max-width) {
     min-height: 40px;
+    height: auto;
     text-align: center;
     color: $mobile-error-color;
   }
