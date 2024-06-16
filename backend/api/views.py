@@ -1,4 +1,6 @@
+import random
 import json
+from datetime import datetime, timezone
 from http import HTTPStatus
 
 from drf_spectacular.utils import (
@@ -33,9 +35,15 @@ from api.utils import (
     send_by_mail,
     avg_grade_annotation,
     get_therapists_metrics_query,
-    form_metrics_file,
+    form_therapists_metrics_file,
 )
-from api.constants import USER_TYPES, METRICS_FILE_NAME
+from api.constants import (
+    USER_TYPES,
+    THERAPISTS_METRICS_FILE_NAME,
+    RANDOM_VALUE_SIZE,
+    FIELD_DELETED,
+    RANDOM_CHARSET_FOR_DELETING,
+)
 from api.tasks import reset_email_update_status
 
 
@@ -314,10 +322,40 @@ class UpdateUserView(generics.UpdateAPIView):
 )
 @api_view(["GET"])
 def user_delete_hard(request):
-    """Полное удаление пользователя"""
+    """Удаление конфиденциальных данных пользователя с сохранением самой сущности."""
+
     user = request.user
     if user:
-        user.delete()
+        default_charset = RANDOM_CHARSET_FOR_DELETING
+        user.first_name = FIELD_DELETED
+        user.last_name = FIELD_DELETED
+        user.email = FIELD_DELETED
+        user.date_of_birth = None
+        user.photo = None
+        user.deleted = True
+        user.is_active = False
+        user.accept_policy = False
+        user.deleted_on = datetime.now(timezone.utc)
+        user.username = "".join(
+            random.choice(default_charset) for _ in range(RANDOM_VALUE_SIZE)
+        )
+        user.password = "".join(
+            random.choice(default_charset) for _ in range(RANDOM_VALUE_SIZE)
+        )
+
+        if user.user_type == USER_TYPES[0]:
+            Client.objects.filter(user=user).delete()
+            for assignment in AssignmentClient.objects.filter(user=user):
+                assignment.delete()
+            for diary in DiaryNote.objects.filter(author=user):
+                diary.delete()
+        else:
+            Doctor.objects.filter(user=user).delete()
+            for assignment in Assignment.objects.filter(author=user, is_public=False):
+                assignment.delete()
+
+        user.save()
+
         return Response({"message": "User deleted successfully"})
     else:
         return Response({"error": "User not found"})
@@ -327,6 +365,7 @@ def user_delete_hard(request):
 @api_view(["GET"])
 def user_delete_soft(request):
     """Перевод пользователя в неактивные"""
+
     user = request.user
     if user:
         user.is_active = False
@@ -1023,14 +1062,14 @@ def project_metrics(request):
     return render(request, "metrics/project_metrics.html", context=context)
 
 
-def project_metrics_download(request):
+def therapists_metrics_download(request):
     response = HttpResponse(
         content_type="text/csv",
         headers={
             "Content-Disposition": 'attachment; filename="{0}"'.format(
-                METRICS_FILE_NAME
+                THERAPISTS_METRICS_FILE_NAME
             )
         },
     )
-    form_metrics_file(response)
+    form_therapists_metrics_file(response)
     return response

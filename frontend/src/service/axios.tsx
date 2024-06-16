@@ -76,7 +76,7 @@ API.interceptors.request.use(
   },
   (error) => {
     throw error;
-  },
+  }
 );
 
 API.interceptors.response.use(
@@ -93,12 +93,12 @@ API.interceptors.response.use(
         return API(originalRequest);
       } catch (refreshError) {
         console.error("Token refresh failed:", refreshError);
-        throw refreshError;
+        throw error;
       }
     }
 
     throw error;
-  },
+  }
 );
 
 export { API };

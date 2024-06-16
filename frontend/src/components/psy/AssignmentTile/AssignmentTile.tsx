@@ -206,7 +206,7 @@ function AssignmentTile({
             </>
           )}
         </div>
-        <img loading="lazy" alt="Loading..." src={assignment.image_url} />
+        <img alt="Loading..." src={assignment.image_url} />
       </div>
       <div className="assignment-info">
         <h3>{assignment.title}</h3>
