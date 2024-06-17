@@ -128,6 +128,9 @@ function CompleteAssignments() {
   const [allInputsFilled, setAllInputsFilled] = useState(false);
 
   useEffect(() => {
+    if (isClientsAssignmentsPath) {
+      return;
+    }
     let newState = {
       openInputs: {},
       multipleInputs: {},

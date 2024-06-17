@@ -28,8 +28,9 @@ const EditorToolbar = forwardRef(
       errorText,
       setErrorText,
       setIsError,
+      readOnly = false
     },
-    ref,
+    ref
   ) => {
     const { toolbarPlugin } = useToolbar(); // Используем контекст
     const { Toolbar } = toolbarPlugin;
@@ -217,6 +218,7 @@ const EditorToolbar = forwardRef(
           ref={ref}
           handleBeforeInput={handleBeforeInput}
           onBlur={handleBlur}
+          readOnly={readOnly}
         />
         {!isMobileWidth && (
           <Toolbar>

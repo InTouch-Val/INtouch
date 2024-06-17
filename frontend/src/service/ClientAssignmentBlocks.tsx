@@ -40,7 +40,7 @@ function ClientAssignmentBlocks({
 
   const [editorState, setEditorState] = useState(() => {
     try {
-      if (isViewPsy && isView) {
+      if (isViewPsy || isView) {
         return EditorState.createEmpty();
       } else if (block.content) {
         const content =
@@ -57,21 +57,9 @@ function ClientAssignmentBlocks({
     }
   });
 
-  const modifiedBlock = useMemo(() => {
-    const clone = { ...block };
-    const descriptionObj = JSON.parse(clone.description);
-    const blockMapKeys = Object.keys(descriptionObj.blockMap);
-    const firstKey = blockMapKeys[0];
-    if (firstKey) {
-      descriptionObj.blockMap[firstKey].text = "";
-    }
-    clone.description = JSON.stringify(descriptionObj);
-    return clone;
-  }, [block]);
-
   const handleEditorChange = useCallback(
     (newEditorState: { getCurrentContent: () => any }) => {
-      if (isViewPsy && isView) {
+      if (isViewPsy || isView) {
         setEditorState(newEditorState);
         // Конвертируем editorState в строку и обновляем title
         const contentState = newEditorState.getCurrentContent();
@@ -100,17 +88,14 @@ function ClientAssignmentBlocks({
       }
     },
 
-    [updateBlock, block.id, block.content, block.choices],
+    [updateBlock, block.id, block.content, block.choices]
   );
 
   const MAX_INPUT_LENGTH = 1000;
 
-  const interceptSetEditorState = useCallback(
-    (newEditorState) => {
-      handleEditorChange(newEditorState);
-    },
-    [handleEditorChange],
-  );
+  const interceptSetEditorState = () => {
+    console.log("e")
+  };
 
   // Determines if the block is filled in
   const isValid = () => {
@@ -213,12 +198,12 @@ function ClientAssignmentBlocks({
             <EditorToolbar
               editorState={editorState}
               ref={editorRef}
-              onChange={isViewPsy && isView ? null : handleEditorChange}
+              onChange={isViewPsy || isView ? null : handleEditorChange}
               placeholder="Write your answer here..."
-              readOnly={isView}
-              block={isViewPsy && isView ? modifiedBlock : block}
+              readOnly={isView || isViewPsy}
+              block={block}
               setEditorState={
-                isViewPsy && isView
+                !isViewPsy || !isView
                   ? handleEditorChange
                   : interceptSetEditorState
               }
@@ -278,7 +263,7 @@ function ClientAssignmentBlocks({
             <div className="range-options">
               {Array.from(
                 { length: block.end_range - block.start_range + 1 },
-                (_, i) => i + block.start_range,
+                (_, i) => i + block.start_range
               ).map((value) => (
                 <label key={value} className="range-option">
                   {isMobileWidth ? (
