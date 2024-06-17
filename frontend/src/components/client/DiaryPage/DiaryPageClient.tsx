@@ -177,12 +177,10 @@ export default function DiaryPageContentClient({
             />
             <DiaryEventDetailsClient
               diary={diary}
-             
               showInputsincomplete={showInputsincomplete}
             />
             <DiaryBlockAnalysisClient
               diary={diary}
-             
               showInputsincomplete={showInputsincomplete}
             />
             <DiaryBlockEmotionClient
@@ -192,7 +190,6 @@ export default function DiaryPageContentClient({
             />
             <DiaryBlockPhysicalSensationClient
               diary={diary}
-             
               showInputsincomplete={showInputsincomplete}
             />
             <DiaryFooterClient

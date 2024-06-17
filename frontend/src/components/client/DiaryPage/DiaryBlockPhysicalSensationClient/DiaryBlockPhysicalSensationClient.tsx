@@ -18,7 +18,7 @@ export default function DiaryBlockPhysicalSensationClient({
   const isMobileWidth = useMobileWidth();
 
   const editorRef = useRef(null);
-  const { control, setValue, getValues, getValues } = useFormContext();
+  const { control, setValue, getValues } = useFormContext();
 
   const [editorState, handleEditorStateChange] = useEditorState(
     diary?.physical_sensations || null,

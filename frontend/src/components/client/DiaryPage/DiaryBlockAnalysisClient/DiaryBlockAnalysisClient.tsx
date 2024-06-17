@@ -21,33 +21,12 @@ export default function DiaryBlockAnalysisClient({
 
   const { control, setValue, getValues } = useFormContext();
 
-  
-  const [editorState, setEditorState] = useState(() =>
-    type == "exist"
-      ? EditorState.createWithContent(contentState)
-      : EditorState.createEmpty(),
-  );
-
-
-  const block = {
-    type: "open",
-    question: "d",
-    description: "d",
-  };
-
-  const handleEditorStateChange = (newEditorState) => {
-    setEditorState(newEditorState);
-    const contentState = newEditorState.getCurrentContent();
-    const text = contentState.getPlainText();
-    setValue("thoughts_analysis", text);
-  };
-
   const [editorState, handleEditorStateChange] = useEditorState(
     diary?.thoughts_analysis || null,
   );
+
+
   const block = getBlockConfig(getValues, "thoughts_analysis");
-
-
 
   const value = getValues("thoughts_analysis");
   return (

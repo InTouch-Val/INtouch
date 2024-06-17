@@ -28,9 +28,9 @@ const EditorToolbar = forwardRef(
       errorText,
       setErrorText,
       setIsError,
-      readOnly = false
+      readOnly = false,
     },
-    ref
+    ref,
   ) => {
     const { toolbarPlugin } = useToolbar(); // Используем контекст
     const { Toolbar } = toolbarPlugin;

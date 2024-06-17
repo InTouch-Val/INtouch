@@ -15,24 +15,21 @@ export default function DiaryFooterClient({
 }) {
   const isMobileWidth = useMobileWidth();
 
-  const [active, setActive] = React.useState(diary ? diary.visible : false);
-  const { control, setValue, getValues, watch } = useFormContext();
-
-  const primaryEmotionValue = getValues("primary_emotion");
-  const secondEmotionValues = getValues("clarifying_emotion");
-
-  console.log(primaryEmotionValue);
-
-
-  const [isValid, setValid] = React.useState(false);
-
-
   const {
     setValue,
     formState: { isValid },
     trigger,
     getValues,
   } = useFormContext();
+
+  const [active, setActive] = React.useState(diary ? diary.visible : false);
+
+  const primaryEmotionValue = getValues("primary_emotion");
+  const secondEmotionValues = getValues("clarifying_emotion");
+
+  const [isHover, setHover] = React.useState(false);
+
+
   const watchAllFields = useWatch();
 
   const initialFormState = React.useRef(JSON.stringify(getValues()));
@@ -64,7 +61,6 @@ export default function DiaryFooterClient({
   useEffect(() => {
     trigger();
   }, [watchAllFields, trigger]);
-  const [isHover, setHover] = React.useState(false);
 
   const allFieldsFilled = () => {
     const values = watchAllFields;
