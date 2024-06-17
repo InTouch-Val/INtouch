@@ -24,6 +24,8 @@ class User(AbstractUser):
     )
     new_email_changing = models.BooleanField(default=False)
     new_email_temp = models.EmailField(null=True)
+    deleted = models.BooleanField(default=False)
+    deleted_on = models.DateTimeField(null=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -43,6 +45,10 @@ class Client(models.Model):
     diagnosis = models.CharField(max_length=255, blank=True)
     about = models.TextField(blank=True)
     notes = models.ManyToManyField("Note", blank=True)
+
+    @property
+    def last_ivited(self):
+        return self.user.date_joined()
 
 
 class Assignment(models.Model):
@@ -71,6 +77,9 @@ class Assignment(models.Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        ordering = ["-add_date"]
 
 
 class AssignmentClient(models.Model):

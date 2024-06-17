@@ -12,21 +12,29 @@ import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig"
 
 export default function DiaryBlockPhysicalSensationClient({
   diary,
-}: {
-  diary: ClientDiary | null;
+  type,
+  showInputsincomplete,
 }) {
   const isMobileWidth = useMobileWidth();
 
   const editorRef = useRef(null);
-  const { control, setValue, getValues } = useFormContext();
+  const { control, setValue, getValues, getValues } = useFormContext();
 
   const [editorState, handleEditorStateChange] = useEditorState(
     diary?.physical_sensations || null,
   );
   const block = getBlockConfig(getValues, "physical_sensations");
 
+  const value = getValues("physical_sensations");
+
   return (
-    <div className="diary__block-event">
+    <div
+      className={
+        !value && showInputsincomplete
+          ? `incomplete diary__block-event`
+          : `diary__block-event`
+      }
+    >
       <div className="diary__block-title">Physical Sensations</div>
       <div className="diary__block-question">
         Describe any physical sensations or changes you noticed in your body.

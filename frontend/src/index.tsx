@@ -30,6 +30,7 @@ import { loaderEmotionsById } from "./components/client/MyDiary/MobileEmotionPag
 import DiaryPageClient from "./routes/client/my-diary-page";
 import ConfirmEmail from "./service/forms/confirm-email";
 import MobileEmotionPage from "./components/client/MyDiary/MobileEmotionPage/MobileEmotionPage";
+import AssignmentsPageRefactor from "./routes/AssignmentsPageRefactor/AssignmentsPage";
 
 const router = createBrowserRouter([
   {
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
       {
         path: "/assignments",
         element: <AssignmentsPage />,
+      },
+      {
+        path: "/test-assignments",
+        element: <AssignmentsPageRefactor />,
       },
       {
         path: "/assignment/:id",

@@ -1,3 +1,5 @@
+import string
+
 USER_TYPES = {
     0: "client",
     1: "doctor",
@@ -85,5 +87,12 @@ DIARY_FIELDS_TO_CHECK = [
     "physical_sensations",
 ]
 
+# Random default value for username and password on profile's deleting.
+RANDOM_VALUE_SIZE = 10
+# Charset for username and password deleting.
+RANDOM_CHARSET_FOR_DELETING = string.ascii_uppercase + string.digits
+# Default field status after deleting.
+FIELD_DELETED = "deleted"
 TIME_DELETE_NON_ACTIVE_USER = 604800  # 7 days
 DEFAULT_PAGE_SIZE = 10
+THERAPISTS_METRICS_FILE_NAME = "therapists_metrics.csv"

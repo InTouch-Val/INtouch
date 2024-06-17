@@ -1,47 +1,79 @@
 import React from "react";
+import { useAppDispatch, useAppSelector } from "../../../store/store";
+import {
+  changeLanguageActions,
+  changeFilterTypeActions,
+  changeSortActions,
+} from "../../../store/slices";
+import { TypeFilter, TypeLanguage, TypeOrder } from "../../../utils/constants";
 
 export default function FilterDropDown() {
-  const [filterType, setFilterType] = React.useState("all");
+  const dispatch = useAppDispatch();
 
-  const [filterLanguage, setFilterLanguage] = React.useState("all");
-  const [sortMethod, setSortMethod] = React.useState("date_asc");
+  const { activeLanguage, activeFilterType, activeOrder } = useAppSelector(
+    (state) => state.assignment,
+  );
 
-  const handleSortMethodChange = (e) => {
+  const [sortMethod, setSortMethod] = React.useState(activeOrder);
+
+  const handleSortMethodChange = (e): void => {
     setSortMethod(e.target.value);
+
+    switch (e.target.value) {
+      case TypeOrder.AddDate: {
+        dispatch(changeSortActions(e.target.value));
+        break;
+      }
+      case TypeOrder.DecDate: {
+        dispatch(changeSortActions(e.target.value));
+        break;
+      }
+      case TypeOrder.Popularity: {
+        dispatch(changeSortActions(e.target.value));
+        break;
+      }
+      case TypeOrder.NoPopularity: {
+        dispatch(changeSortActions(e.target.value));
+        break;
+      }
+      default: {
+        break;
+      }
+    }
   };
 
   return (
     <div className="filter-dropdowns">
       <select
-        value={filterType}
-        onChange={(e) => setFilterType(e.target.value)}
+        value={activeFilterType}
+        onChange={(e) => dispatch(changeFilterTypeActions(e.target.value))}
       >
-        <option value="all">All Types</option>
-        <option value="lesson">Lesson</option>
-        <option value="exercise">Exercise</option>
-        <option value="metaphor">Essay</option>
-        <option value="study">Study</option>
-        <option value="quiz">Quiz</option>
-        <option value="methology">Methodology</option>
-        <option value="metaphor">Metaphors</option>
+        <option value={TypeFilter.All}>All Types</option>
+        <option value={TypeFilter.Lesson}>Lesson</option>
+        <option value={TypeFilter.Exercise}>Exercise</option>
+        <option value={TypeFilter.Essay}>Essay</option>
+        <option value={TypeFilter.Study}>Study</option>
+        <option value={TypeFilter.Quiz}>Quiz</option>
+        <option value={TypeFilter.Methodology}>Methodology</option>
+        <option value={TypeFilter.Metaphors}>Metaphors</option>
       </select>
 
       <select
-        value={filterLanguage}
-        onChange={(e) => setFilterLanguage(e.target.value)}
+        value={activeLanguage}
+        onChange={(e) => dispatch(changeLanguageActions(e.target.value))}
       >
-        <option value="all">All Languages</option>
-        <option value="en">English</option>
-        <option value="es">Spanish</option>
-        <option value="fr">French</option>
-        <option value="ge">German</option>
-        <option value="it">Italian</option>
+        <option value={TypeLanguage.All}>All Languages</option>
+        <option value={TypeLanguage.En}>English</option>
+        <option value={TypeLanguage.Es}>Spanish</option>
+        <option value={TypeLanguage.Fr}>French</option>
+        <option value={TypeLanguage.De}>German</option>
+        <option value={TypeLanguage.It}>Italian</option>
       </select>
       <select value={sortMethod} onChange={(e) => handleSortMethodChange(e)}>
-        <option value="date_asc">Date Created ↑</option>
-        <option value="date_desc">Date Created ↓</option>
-        <option value="popularity_asc">Popularity ↑</option>
-        <option value="popularity_desc">Popularity ↓</option>
+        <option value={TypeOrder.AddDate}>Date Created ↑</option>
+        <option value={TypeOrder.DecDate}>Date Created ↓</option>
+        <option value={TypeOrder.Popularity}>Popularity ↑</option>
+        <option value={TypeOrder.NoPopularity}>Popularity ↓</option>
       </select>
     </div>
   );

@@ -12,8 +12,8 @@ import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig"
 
 export default function EventDetailsClient({
   diary,
-}: {
-  diary: ClientDiary | null;
+  type,
+  showInputsincomplete,
 }) {
   const isMobileWidth = useMobileWidth();
 
@@ -25,8 +25,16 @@ export default function EventDetailsClient({
   );
   const block = getBlockConfig(getValues, "event_details");
 
+  const value = getValues("event_details");
+
   return (
-    <div className="diary__block-event">
+    <div
+      className={
+        !value && showInputsincomplete
+          ? `incomplete diary__block-event`
+          : `diary__block-event`
+      }
+    >
       <div className="diary__block-title">Event Details</div>
       <div className="diary__block-question">
         Describe the event or situation that evoked emotions. What happened?

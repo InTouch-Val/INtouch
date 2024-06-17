@@ -12,21 +12,52 @@ import { EditorState } from "draft-js";
 
 export default function DiaryBlockAnalysisClient({
   diary,
-}: {
-  diary: ClientDiary | null;
+  type,
+  showInputsincomplete,
 }) {
   const isMobileWidth = useMobileWidth();
-  const { control, setValue, getValues } = useFormContext();
 
   const editorRef = useRef<EditorToolbar | null>(null);
+
+  const { control, setValue, getValues } = useFormContext();
+
+  
+  const [editorState, setEditorState] = useState(() =>
+    type == "exist"
+      ? EditorState.createWithContent(contentState)
+      : EditorState.createEmpty(),
+  );
+
+
+  const block = {
+    type: "open",
+    question: "d",
+    description: "d",
+  };
+
+  const handleEditorStateChange = (newEditorState) => {
+    setEditorState(newEditorState);
+    const contentState = newEditorState.getCurrentContent();
+    const text = contentState.getPlainText();
+    setValue("thoughts_analysis", text);
+  };
 
   const [editorState, handleEditorStateChange] = useEditorState(
     diary?.thoughts_analysis || null,
   );
   const block = getBlockConfig(getValues, "thoughts_analysis");
 
+
+
+  const value = getValues("thoughts_analysis");
   return (
-    <div className="diary__block-event">
+    <div
+      className={
+        !value && showInputsincomplete
+          ? `incomplete diary__block-event`
+          : `diary__block-event`
+      }
+    >
       <div className="diary__block-title">Thoughts Analysis</div>
       <div className="diary__block-question">
         Reflect on your thoughts related to the situation. What were you

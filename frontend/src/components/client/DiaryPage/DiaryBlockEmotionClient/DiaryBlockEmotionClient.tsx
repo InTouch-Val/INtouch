@@ -18,6 +18,7 @@ import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig"
 export default function DiaryBlockEmotionClient({
   diary,
   setShowEmotionsPage,
+  showInputsincomplete,
 }: {
   diary: ClientDiary | null;
   setShowEmotionsPage: () => void;
@@ -45,9 +46,17 @@ export default function DiaryBlockEmotionClient({
     }
   }
 
+  const value = getValues("emotion_type");
+
   return (
     <>
-      <div className="diary__block-event">
+      <div
+        className={
+          !value && showInputsincomplete
+            ? `incomplete diary__block-event`
+            : `diary__block-event`
+        }
+      >
         <div className="diary__block-title">Emotion Type</div>
         <div className="diary__block-question">
           How are you feeling? Describe your emotions or choose from our prompt.
