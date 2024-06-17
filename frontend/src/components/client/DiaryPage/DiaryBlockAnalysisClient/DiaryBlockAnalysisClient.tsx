@@ -8,17 +8,18 @@ import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 import { ClientDiary } from "../../../../store/entities/assignments/types";
 import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig";
 import { useEditorState } from "../../../../utils/hook/useEditorState";
-import { EditorState } from "draft-js";
+
+interface Props {
+  diary: ClientDiary;
+  showInputsincomplete: boolean;
+}
 
 export default function DiaryBlockAnalysisClient({
   diary,
-  type,
   showInputsincomplete,
-}) {
+}: Props) {
   const isMobileWidth = useMobileWidth();
-
   const editorRef = useRef<EditorToolbar | null>(null);
-
   const { control, setValue, getValues } = useFormContext();
 
   const [editorState, handleEditorStateChange] = useEditorState(

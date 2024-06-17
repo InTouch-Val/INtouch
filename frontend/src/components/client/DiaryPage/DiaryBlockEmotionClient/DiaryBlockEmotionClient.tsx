@@ -15,14 +15,18 @@ import { ClientDiary } from "../../../../store/entities/assignments/types";
 import { useEditorState } from "../../../../utils/hook/useEditorState";
 import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig";
 
+
+interface Props {
+  diary: ClientDiary;
+  setShowEmotionsPage: React.Dispatch<React.SetStateAction<boolean>>;
+  showInputsincomplete: boolean;
+}
+
 export default function DiaryBlockEmotionClient({
   diary,
   setShowEmotionsPage,
   showInputsincomplete,
-}: {
-  diary: ClientDiary | null;
-  setShowEmotionsPage: () => void;
-}) {
+}: Props) {
   const isMobileWidth = useMobileWidth();
 
   const editorRef = useRef(null);

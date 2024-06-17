@@ -10,11 +10,15 @@ import { ClientDiary } from "../../../../store/entities/assignments/types";
 import { useEditorState } from "../../../../utils/hook/useEditorState";
 import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig";
 
+interface Props {
+  diary: ClientDiary;
+  showInputsincomplete: boolean;
+}
+
 export default function DiaryBlockPhysicalSensationClient({
   diary,
-  type,
   showInputsincomplete,
-}) {
+}: Props) {
   const isMobileWidth = useMobileWidth();
 
   const editorRef = useRef(null);

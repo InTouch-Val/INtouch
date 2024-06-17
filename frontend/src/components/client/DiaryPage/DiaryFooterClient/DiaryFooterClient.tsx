@@ -8,11 +8,19 @@ import { openModalSaveIncomplete } from "../../../../store/slices/modals/modalsS
 import { useAppDispatch } from "../../../../store/store";
 import { ClientDiary } from "../../../../store/entities/assignments/types";
 
+
+interface Props {
+  diary: ClientDiary;
+  setChangesMade: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowInputsincomplete: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+
 export default function DiaryFooterClient({
   diary,
   setChangesMade,
   setShowInputsincomplete,
-}) {
+}:Props) {
   const isMobileWidth = useMobileWidth();
 
   const {

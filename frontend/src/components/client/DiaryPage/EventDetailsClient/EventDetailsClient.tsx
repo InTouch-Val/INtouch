@@ -3,18 +3,23 @@ import React, { useState, useRef, useEffect } from "react";
 import "../DiaryPage.css";
 import { ToolbarProvider } from "../../../../service/ToolbarContext";
 import { EditorToolbar } from "../../../../service/editors-toolbar";
-import { EditorState } from "draft-js";
 import { Controller, useFormContext } from "react-hook-form";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 import { ClientDiary } from "../../../../store/entities/assignments/types";
 import { useEditorState } from "../../../../utils/hook/useEditorState";
 import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig";
 
+interface Props {
+  diary: ClientDiary;
+  showInputsincomplete: boolean;
+}
+
+
 export default function EventDetailsClient({
   diary,
   type,
   showInputsincomplete,
-}) {
+}: Props) {
   const isMobileWidth = useMobileWidth();
 
   const editorRef = useRef<EditorToolbar | null>(null);
