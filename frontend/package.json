@@ -4,19 +4,18 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-  "dev": "vite",
-  "format": "prettier --write .",
-  "lint": "eslint .",
-  "lint:fix": "eslint . --fix",
-  "lint:style": "stylelint '**/*.css'",
-  "lint:style:fix": "stylelint '**/*.css' --fix",
-  "build": "vite build",
-  "preview": "vite preview",
-  "prepare": "cd .. && husky frontend/.husky",
-  "storybook": "storybook dev -p 6006",
-  "build-storybook": "storybook build"
-},
-  
+    "dev": "vite",
+    "format": "prettier --write .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint:style": "stylelint '**/*.css'",
+    "lint:style:fix": "stylelint '**/*.css' --fix",
+    "build": "vite build",
+    "preview": "vite preview",
+    "prepare": "cd .. && husky frontend/.husky",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
   "dependencies": {
     "@draft-js-plugins/buttons": "^4.3.3",
     "@draft-js-plugins/editor": "^4.1.4",
