@@ -35,6 +35,49 @@ export interface AssignmentData {
   assignment_root: number;
 }
 
+type reqBlockType = "text" | "open" | "range" | "image" | "single" | "multiple";
+
+interface reqBaseBlock {
+  type: reqBlockType;
+  question: string;
+  description: string;
+}
+
+interface reqTextOrOpenBlock extends reqBaseBlock {}
+
+interface reqRangeBlock extends reqBaseBlock {
+  start_range: number;
+  end_range: number;
+  left_pole: string;
+  right_pole: string;
+}
+
+interface reqImageBlock extends reqBaseBlock {
+  image?: {
+    url: string;
+  };
+}
+
+interface reqChoiceRepliesBlock extends reqBaseBlock {
+  choice_replies: any[];
+}
+
+type reqBlock =
+  | reqTextOrOpenBlock
+  | reqRangeBlock
+  | reqImageBlock
+  | reqChoiceRepliesBlock;
+
+export interface AssignmentReqData {
+  title: string;
+  text: string;
+  assignment_type: string;
+  tags: string;
+  language: string;
+  image_url: string;
+  blocks: reqBlock[];
+}
+
 export interface BlocksState {
   blocks: Block[];
 }

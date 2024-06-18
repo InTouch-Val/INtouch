@@ -35,8 +35,14 @@ import {
   Block,
   AssignmentData,
   UpdateBlockAction,
+  AssignmentReqData,
 } from "../../store/entities/add-assignment/types";
-import { fetchAssignmentById } from "../../store/slices/add-assignment/thunks";
+import {
+  fetchAssignmentById,
+  createAssignment,
+  updateAssignment,
+  saveAsDraft,
+} from "../../store/actions/add-assignment/addAssAct";
 import {
   setError,
   clearErrors,
@@ -274,7 +280,7 @@ function AddAssignment() {
       };
     });
 
-    const requestData = {
+    const requestData: AssignmentReqData = {
       blocks: blockInfo,
       title,
       text: description,
@@ -288,62 +294,48 @@ function AddAssignment() {
     };
 
     try {
-      console.log(blockInfo);
-      let response;
       if (!isEditMode) {
-        // Если задание создается впервые, выполняем POST запрос
-        response = await API.post("assignments/", requestData);
-        if (!response || !response.data || !response.data.id) {
-          throw new Error("Failed to create assignment");
-        }
-        // Получаем ID созданного задания
-        const assignmentId = response.data.id;
-
-        if (isDraft || isSaveAsDraft) {
-          // Если задание должно быть сохранено как черновик, выполняем GET запрос
-          await API.get(`assignments/${assignmentId}/draft/`);
-        }
+        // Используем createAssignment для создания нового задания
+        dispatch(createAssignment({ requestData }));
       } else {
-        // Если задание уже существует, выполняем PUT запрос
-        response = await API.patch(`assignments/${id}/`, requestData);
-        if (isDraft || isSaveAsDraft) {
-          // Если задание должно быть перемещено в черновик, выполняем GET запрос
-          await API.get(`assignments/${id}/draft/`);
-        }
+        // Используем updateAssignment для обновления существующего задания
+        dispatch(updateAssignment({ id, requestData }));
       }
 
-      if ([200, 201].includes(response.status)) {
-        if (isDraft) {
-          setSuccessMessageText("Saved succesfully");
-          setSuccessMessage(true);
-        } else if (isSaveAsDraft) {
-          setTimeout(() => {
-            navigate("/assignments");
-          }, 2000);
+      // После отправки действия, вы можете использовать селекторы для получения актуального состояния
+      const assignmentStatus = useSelector(
+        (state) => state.addAssignment.status
+      );
+      const assignmentError = useSelector((state) => state.addAssignment.error);
 
-          setSuccessMessageText("Draft created succesfully");
-          setSuccessMessage(true);
-        } else {
-          setTimeout(() => {
-            navigate("/assignments");
-          }, 2000);
-
-          setSuccessMessageText("Assignment created succesfully");
+      // Проверяем статус асинхронного действия
+      if (assignmentStatus === "fulfilled") {
+        const assignment = useSelector((state) => state.addAssignment.entity);
+        if (assignment && assignment.id) {
+          if (isDraft || isSaveAsDraft) {
+            // Логика сохранения черновика или обновления существующего задания
+            await dispatch(saveAsDraft({ assignmentId })).unwrap();
+          } else {
+            // Переход на страницу с заданиями после успешного создания
+            setTimeout(() => {
+              navigate("/assignments");
+            }, 2000);
+          }
+          setSuccessMessageText("Assignment created successfully");
           setSuccessMessage(true);
         }
+      } else if (assignmentStatus === "rejected" && assignmentError) {
+        const errorTextString = Object.entries(assignmentError)
+          .map(([key, message]) => `${key}: ${message}`)
+          .join(", ");
+        dispatch(
+          setError(`Please correct the following errors: ${errorTextString}`)
+        );
+        console.error("Error creating assignment", assignmentError);
+        displayErrorMessages(assignmentError);
       }
     } catch (error) {
-      const parsedError = parseErrorText(error.request.responseText);
-      console.log(parsedError);
-      // Преобразование объекта ошибок в строку для обновления состояния
-      const errorTextString = Object.entries(parsedError)
-        .map(([key, message]) => `${key}: ${message}`)
-        .join(", ");
-      dispatch(
-        setError(`Please correct the following errors: ${errorTextString}`)
-      );
-      console.error("Error creating assignment", error);
-      displayErrorMessages(parsedError);
+      console.error("Error in handleSubmit:", error);
     }
   };
 
