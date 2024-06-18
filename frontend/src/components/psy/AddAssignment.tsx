@@ -24,18 +24,7 @@ import HeadlinerImg from "./HeadlinerImg/HeadlinerImg";
 import "../../css/assignments.css";
 import HeaderAssignment from "./HeaderAssigmentPage/HeaderAssignment";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-import {
-  setTitle,
-  setDescription,
-  setType,
-  setLanguage,
-  setSelectedImage,
-  setSuccessMessage,
-  setSuccessMessageText,
-  setSelectedImageForBlock,
-  setIsChangeView,
-  setIsError,
-} from "../../store/slices/add-assignment/form";
+import { updateForm } from "../../store/slices/add-assignment/form";
 import {
   addBlock,
   removeBlock,
@@ -47,8 +36,6 @@ import {
   AssignmentData,
   UpdateBlockAction,
 } from "../../store/entities/add-assignment/types";
-
-const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
 function AddAssignment() {
   const dispatch = useAppDispatch();
@@ -77,7 +64,7 @@ function AddAssignment() {
     selectedImageForBlock,
     isChangeView,
     isError,
-  } = useAppSelector((state) => state.formAddAssignment);
+  } = useAppSelector((state) => state.form);
 
   useEffect(() => {
     if (title.length > 2 && description.length > 2) {
@@ -98,11 +85,16 @@ function AddAssignment() {
   const fetchAssignment = useCallback<AssignmentData>(async () => {
     try {
       const response = await API.get(`assignments/${id}/`);
-      dispatch(setTitle(response.data.title));
-      dispatch(setDescription(response.data.text));
-      dispatch(setType(response.data.assignment_type));
-      dispatch(setLanguage(response.data.language));
-      dispatch(setSelectedImage({ urls: { full: response.data.image_url } }));
+
+      dispatch(
+        updateForm({
+          title: response.data.title,
+          description: response.data.text,
+          type: response.data.assignment_type,
+          language: response.data.language,
+          selectedImage: { urls: { full: response.data.image_url } },
+        })
+      );
 
       const fetchedBlocks = response.data.blocks.map((block: Block) => {
         let contentState;
@@ -154,10 +146,6 @@ function AddAssignment() {
       fetchAssignment();
     }
   }, [isEditMode, fetchAssignment]);
-
-  useEffect(() => {
-    console.log(blocks);
-  }, [blocks]);
 
   function parseErrorText(errorText) {
     const errors = JSON.parse(errorText);
@@ -348,7 +336,11 @@ function AddAssignment() {
   }
 
   const handleImageSelect = (image) => {
-    setSelectedImage(image);
+    dispatch(updateForm({ selectedImage: image }));
+  };
+
+  const handleImgSelectForBlock = (image) => {
+    dispatch(updateForm({ selectedImageForBlock: image }));
   };
 
   const copyBlock = (block) => {
@@ -359,7 +351,7 @@ function AddAssignment() {
 
     blocks.splice(index + 1, 0, newBlock);
 
-    setBlocks([...blocks]);
+    dispatch(setBlocks([...blocks]));
   };
 
   const moveBlockForward = (index) => {
@@ -372,7 +364,7 @@ function AddAssignment() {
       // Добавляем блок обратно в массив, но на позицию на одну вперед
       blocks.splice(index + 1, 0, block);
       // Обновляем состояние
-      setBlocks([...blocks]);
+      dispatch(setBlocks([...blocks]));
     }
   };
 
@@ -386,7 +378,7 @@ function AddAssignment() {
       // Добавляем блок обратно в массив, но на позицию на одну назад
       blocks.splice(index - 1, 0, block);
       // Обновляем состояние
-      setBlocks([...blocks]);
+      dispatch(setBlocks([...blocks]));
     }
   };
 
@@ -410,7 +402,7 @@ function AddAssignment() {
           className="title-input"
           placeholder="Name of Assignment..."
           value={title}
-          onChange={(e) => dispatch(setTitle(e.target.value))}
+          onChange={(e) => dispatch(updateForm({ title: e.target.value }))}
           required
           id="title"
         />
@@ -419,7 +411,9 @@ function AddAssignment() {
           className="title-input"
           placeholder="Description..."
           value={description}
-          onChange={(e) => dispatch(setDescription(e.target.value))}
+          onChange={(e) =>
+            dispatch(updateForm({ description: e.target.value }))
+          }
           required
           id="text"
         />
@@ -508,7 +502,7 @@ function AddAssignment() {
                   moveBlockForward={moveBlockForward}
                   moveBlockBackward={moveBlockBackward}
                   index={index}
-                  setSelectedImageForBlock={setSelectedImageForBlock}
+                  setSelectedImageForBlock={handleImgSelectForBlock}
                   setIsError={setIsError}
                 />
               ))}

@@ -1,6 +1,8 @@
-// slices/formSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { FormState } from "../../entities/add-assignment/types";
+import {
+  FormState,
+  UpdateFormPayload,
+} from "../../entities/add-assignment/types";
 
 const initialState: FormState = {
   title: "",
@@ -18,57 +20,45 @@ const initialState: FormState = {
   isError: false,
 };
 
-const formSliceAddAssignment = createSlice({
+const formSlice = createSlice({
   name: "form",
   initialState,
   reducers: {
-    setTitle: (state, action: PayloadAction<string>) => {
-      state.title = action.payload;
-    },
-    setDescription: (state, action: PayloadAction<string>) => {
-      state.description = action.payload;
-    },
-    setType: (state, action: PayloadAction<string>) => {
-      state.type = action.payload;
-    },
-    setLanguage: (state, action: PayloadAction<string>) => {
-      state.language = action.payload;
-    },
-    setSelectedImage: (state, action: PayloadAction<File | null>) => {
-      state.selectedImage = action.payload;
-    },
-    setSuccessMessage: (state, action: PayloadAction<boolean>) => {
-      state.successMessage = action.payload;
-    },
-    setSuccessMessageText: (state, action: PayloadAction<string>) => {
-      state.successMessageText = action.payload;
-    },
-    setSelectedImageForBlock: (
-      state,
-      action: PayloadAction<{ file: File | null; url: string | null }>
-    ) => {
-      state.selectedImageForBlock = action.payload;
-    },
-    setIsChangeView: (state, action: PayloadAction<boolean>) => {
-      state.isChangeView = action.payload;
-    },
-    setIsError: (state, action: PayloadAction<boolean>) => {
-      state.isError = action.payload;
+    updateForm: (state, action: PayloadAction<UpdateFormPayload>) => {
+      if (action.payload.title !== undefined) {
+        state.title = action.payload.title;
+      }
+      if (action.payload.description !== undefined) {
+        state.description = action.payload.description;
+      }
+      if (action.payload.type !== undefined) {
+        state.type = action.payload.type;
+      }
+      if (action.payload.language !== undefined) {
+        state.language = action.payload.language;
+      }
+      if (action.payload.selectedImage !== undefined) {
+        state.selectedImage = action.payload.selectedImage;
+      }
+      if (action.payload.successMessage !== undefined) {
+        state.successMessage = action.payload.successMessage;
+      }
+      if (action.payload.successMessageText !== undefined) {
+        state.successMessageText = action.payload.successMessageText;
+      }
+      if (action.payload.selectedImageForBlock !== undefined) {
+        state.selectedImageForBlock = action.payload.selectedImageForBlock;
+      }
+      if (action.payload.isChangeView !== undefined) {
+        state.isChangeView = action.payload.isChangeView;
+      }
+      if (action.payload.isError !== undefined) {
+        state.isError = action.payload.isError;
+      }
     },
   },
 });
 
-export const {
-  setTitle,
-  setDescription,
-  setType,
-  setLanguage,
-  setSelectedImage,
-  setSuccessMessage,
-  setSuccessMessageText,
-  setSelectedImageForBlock,
-  setIsChangeView,
-  setIsError,
-} = formSliceAddAssignment.actions;
+export const { updateForm } = formSlice.actions;
 
-export default formSliceAddAssignment.reducer;
+export default formSlice.reducer;

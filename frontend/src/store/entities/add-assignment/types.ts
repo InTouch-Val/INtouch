@@ -64,6 +64,19 @@ export type UpdateBlockAction = {
   };
 };
 
+export interface UpdateFormPayload {
+  title?: string;
+  description?: string;
+  type?: string;
+  language?: string;
+  selectedImage?: File | null;
+  successMessage?: boolean;
+  successMessageText?: string;
+  selectedImageForBlock?: { file: File | null; url: string | null };
+  isChangeView?: boolean;
+  isError?: boolean;
+}
+
 export interface FormState {
   title: string;
   description: string;
