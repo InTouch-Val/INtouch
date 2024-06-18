@@ -344,42 +344,37 @@ function AddAssignment() {
     dispatch(updateForm({ selectedImageForBlock: image }));
   };
 
-  const copyBlock = (block) => {
-    const maxId = Math.max(...blocks.map((b) => b.id));
-    const newBlock = { ...block, id: maxId + 1 };
-
-    const index = blocks.findIndex((b) => b.id === block.id);
-
-    blocks.splice(index + 1, 0, newBlock);
-
-    dispatch(setBlocks([...blocks]));
+  const copyBlock = (blockId: number) => {
+    const blockIndex = blocks.findIndex((b) => b.id === blockId);
+    const blockCopy = { ...blocks[blockIndex], id: Date.now() }; // Используем Date.now() для генерации нового ID
+    dispatch(
+      setBlocks([
+        ...blocks.slice(0, blockIndex + 1),
+        blockCopy,
+        ...blocks.slice(blockIndex + 1),
+      ])
+    );
   };
 
-  const moveBlockForward = (index) => {
-    // Проверяем, не является ли текущий блок последним в массиве
-    if (index < blocks.length - 1) {
-      // Сохраняем текущий блок
-      const block = blocks[index];
-      // Удаляем блок из текущей позиции
-      blocks.splice(index, 1);
-      // Добавляем блок обратно в массив, но на позицию на одну вперед
-      blocks.splice(index + 1, 0, block);
-      // Обновляем состояние
-      dispatch(setBlocks([...blocks]));
+  const moveBlockForward = (blockId: number) => {
+    const blockIndex = blocks.findIndex((b) => b.id === blockId);
+    if (blockIndex < blocks.length - 1) {
+      // Проверяем, не является ли текущий блок последним
+      const updatedBlocks = [...blocks]; // Создаем копию массива блоков
+      const movingBlock = updatedBlocks.splice(blockIndex, 1)[0]; // Удаляем блок из текущей позиции
+      updatedBlocks.splice(blockIndex + 1, 0, movingBlock); // Вставляем блок на новую позицию
+      dispatch(setBlocks(updatedBlocks)); // Обновляем состояние
     }
   };
 
-  const moveBlockBackward = (index) => {
-    // Проверяем, не является ли текущий блок первым в массиве
-    if (index > 0) {
-      // Сохраняем текущий блок
-      const block = blocks[index];
-      // Удаляем блок из текущей позиции
-      blocks.splice(index, 1);
-      // Добавляем блок обратно в массив, но на позицию на одну назад
-      blocks.splice(index - 1, 0, block);
-      // Обновляем состояние
-      dispatch(setBlocks([...blocks]));
+  const moveBlockBackward = (blockId: number) => {
+    const blockIndex = blocks.findIndex((b) => b.id === blockId);
+    if (blockIndex > 0) {
+      // Проверяем, не является ли текущий блок первым
+      const updatedBlocks = [...blocks]; // Создаем копию массива блоков
+      const movingBlock = updatedBlocks.splice(blockIndex, 1)[0]; // Удаляем блок из текущей позиции
+      updatedBlocks.splice(blockIndex - 1, 0, movingBlock); // Вставляем блок на новую позицию
+      dispatch(setBlocks(updatedBlocks)); // Обновляем состояние
     }
   };
 
