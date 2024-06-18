@@ -37,22 +37,16 @@ import {
   UpdateBlockAction,
 } from "../../store/entities/add-assignment/types";
 import { fetchAssignmentById } from "../../store/slices/add-assignment/thunks";
+import {
+  setError,
+  clearErrors,
+} from "../../store/slices/add-assignment/errorsSlice";
 
 function AddAssignment() {
   const dispatch = useAppDispatch();
   const blocks = useAppSelector((state) => state.blocks.blocks);
-
-  const handleAddBlock = (type: string) => {
-    dispatch(addBlock({ type })); // Диспатчим действие для добавления блока
-  };
-
-  const handleRemoveBlock = (blockId: number) => {
-    dispatch(removeBlock({ blockId })); // Диспатчим действие для удаления блока
-  };
-
-  const handleUpdateBlock = (updates: UpdateBlockAction["payload"]) => {
-    dispatch(updateBlock(updates));
-  };
+  const MemoizedHeadline = React.memo(Headline); //предотвращения ненужных перерендеров
+  const MemoizedImageQuestionBlock = React.memo(ImageQuestionBlock); //предотвращения ненужных перерендеров
 
   const {
     title,
@@ -65,11 +59,92 @@ function AddAssignment() {
     selectedImageForBlock,
     isChangeView,
     isError,
-  } = useAppSelector((state) => state.form);
+  } = useAppSelector((state) => state.formAddAssignment);
+
+  const [hasScrolled, setHasScrolled] = useState(false);
+  const errorMessages = useAppSelector((state) => state.errors.messages);
+
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const isEditMode = id != undefined;
+
+  const handleAddBlock = useCallback(
+    (type: string) => {
+      dispatch(addBlock({ type }));
+    },
+    [dispatch]
+  );
+
+  const handleRemoveBlock = useCallback(
+    (blockId: number) => {
+      dispatch(removeBlock({ blockId }));
+    },
+    [dispatch]
+  );
+
+  const handleUpdateBlock = useCallback(
+    (updates: UpdateBlockAction["payload"]) => {
+      dispatch(updateBlock(updates));
+    },
+    [dispatch]
+  );
+
+  const handleImageSelect = (image) => {
+    dispatch(updateForm({ selectedImage: image }));
+  };
+
+  const handleImgSelectForBlock = (image) => {
+    dispatch(updateForm({ selectedImageForBlock: image }));
+  };
+
+  const copyBlock = useCallback(
+    (blockId: number) => {
+      const blockIndex = blocks.findIndex((b) => b.id === blockId);
+      if (blockIndex !== -1) {
+        const blockCopy = { ...blocks[blockIndex], id: Date.now() };
+        dispatch(
+          setBlocks((prevBlocks) => [
+            ...prevBlocks.slice(0, blockIndex),
+            blockCopy,
+            ...prevBlocks.slice(blockIndex + 1),
+          ])
+        );
+      }
+    },
+    [blocks, dispatch]
+  );
+
+  const moveBlockForward = useCallback(
+    (blockId: number) => {
+      const blockIndex = blocks.findIndex((b) => b.id === blockId);
+      if (blockIndex < blocks.length - 1) {
+        // Проверяем, не является ли текущий блок последним
+        const updatedBlocks = [...blocks]; // Создаем копию массива блоков
+        const movingBlock = updatedBlocks.splice(blockIndex, 1)[0]; // Удаляем блок из текущей позиции
+        updatedBlocks.splice(blockIndex + 1, 0, movingBlock); // Вставляем блок на новую позицию
+        dispatch(setBlocks(updatedBlocks)); // Обновляем состояние
+      }
+    },
+    [blocks, dispatch]
+  );
+
+  const moveBlockBackward = useCallback(
+    (blockId: number) => {
+      const blockIndex = blocks.findIndex((b) => b.id === blockId);
+      if (blockIndex > 0) {
+        // Проверяем, не является ли текущий блок первым
+        const updatedBlocks = [...blocks]; // Создаем копию массива блоков
+        const movingBlock = updatedBlocks.splice(blockIndex, 1)[0]; // Удаляем блок из текущей позиции
+        updatedBlocks.splice(blockIndex - 1, 0, movingBlock); // Вставляем блок на новую позицию
+        dispatch(setBlocks(updatedBlocks)); // Обновляем состояние
+      }
+    },
+    [blocks, dispatch]
+  );
 
   useEffect(() => {
     if (title.length > 2 && description.length > 2) {
-      setErrorText("");
+      dispatch(clearErrors());
 
       const titleElement = document.getElementById("title");
 
@@ -78,10 +153,6 @@ function AddAssignment() {
       textElement.classList.remove("error");
     }
   }, [title, description]);
-
-  const navigate = useNavigate();
-  const { id } = useParams();
-  const isEditMode = id != undefined;
 
   useEffect(() => {
     if (isEditMode) {
@@ -152,44 +223,15 @@ function AddAssignment() {
     const errors = JSON.parse(errorText);
     const errorMessages = {};
 
-    errors.title.forEach((message) => {
-      errorMessages.title = message;
-    });
-
-    errors.text.forEach((message) => {
-      errorMessages.description = message;
-    });
-
-    errors.blocks?.forEach((block, index) => {
-      if (block.image) {
-        errorMessages[`blocks #${index + 1} image`] = block.image[0];
-      }
-      if (block.description) {
-        errorMessages[`blocks #${index + 1} description`] =
-          block.description[0];
-      }
-      if (block.question) {
-        errorMessages[`blocks #${index + 1} question`] = block.question[0];
-      }
-      if (block.choice_replies) {
-        errorMessages[`blocks #${index + 1} choice_replies`] =
-          block.choice_replies[0];
-      }
-      if (block.end_range) {
-        errorMessages[`blocks #${index + 1} end_range`] = block.end_range[0];
-      }
-      if (block.left_pole) {
-        errorMessages[`blocks #${index + 1} left_pole`] = block.left_pole[0];
-      }
-      if (block.right_pole) {
-        errorMessages[`blocks #${index + 1} right_pole`] = block.right_pole[0];
-      }
-      if (block.start_range) {
-        errorMessages[`blocks #${index + 1} start_range`] =
-          block.start_range[0];
+    Object.keys(errors).forEach((key) => {
+      if (Array.isArray(errors[key])) {
+        errors[key].forEach((message, index) => {
+          errorMessages[`${key} #${index + 1}`] = message;
+        });
+      } else {
+        errorMessages[key] = errors[key];
       }
     });
-    setHasScrolled(true);
 
     return errorMessages;
   }
@@ -297,22 +339,23 @@ function AddAssignment() {
       const errorTextString = Object.entries(parsedError)
         .map(([key, message]) => `${key}: ${message}`)
         .join(", ");
-      setErrorText(`Please correct the following errors: ${errorTextString}`);
+      dispatch(
+        setError(`Please correct the following errors: ${errorTextString}`)
+      );
       console.error("Error creating assignment", error);
       displayErrorMessages(parsedError);
     }
   };
 
-  const [errorText, setErrorText] = useState("");
-  const [hasScrolled, setHasScrolled] = useState(false);
-
   useEffect(() => {
-    const targetElement = document.getElementById("errorText");
-    if (targetElement) {
-      targetElement.scrollIntoView({ behavior: "smooth" });
+    if (Object.keys(errorMessages).length > 0) {
+      const targetElement = document.getElementById("errorText");
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: "smooth" });
+      }
+      setHasScrolled(false);
     }
-    setHasScrolled(false);
-  }, [hasScrolled]);
+  }, [errorMessages, hasScrolled]);
 
   function displayErrorMessages(errorMessages) {
     console.log(errorMessages);
@@ -336,48 +379,6 @@ function AddAssignment() {
     });
   }
 
-  const handleImageSelect = (image) => {
-    dispatch(updateForm({ selectedImage: image }));
-  };
-
-  const handleImgSelectForBlock = (image) => {
-    dispatch(updateForm({ selectedImageForBlock: image }));
-  };
-
-  const copyBlock = (blockId: number) => {
-    const blockIndex = blocks.findIndex((b) => b.id === blockId);
-    const blockCopy = { ...blocks[blockIndex], id: Date.now() }; // Используем Date.now() для генерации нового ID
-    dispatch(
-      setBlocks([
-        ...blocks.slice(0, blockIndex + 1),
-        blockCopy,
-        ...blocks.slice(blockIndex + 1),
-      ])
-    );
-  };
-
-  const moveBlockForward = (blockId: number) => {
-    const blockIndex = blocks.findIndex((b) => b.id === blockId);
-    if (blockIndex < blocks.length - 1) {
-      // Проверяем, не является ли текущий блок последним
-      const updatedBlocks = [...blocks]; // Создаем копию массива блоков
-      const movingBlock = updatedBlocks.splice(blockIndex, 1)[0]; // Удаляем блок из текущей позиции
-      updatedBlocks.splice(blockIndex + 1, 0, movingBlock); // Вставляем блок на новую позицию
-      dispatch(setBlocks(updatedBlocks)); // Обновляем состояние
-    }
-  };
-
-  const moveBlockBackward = (blockId: number) => {
-    const blockIndex = blocks.findIndex((b) => b.id === blockId);
-    if (blockIndex > 0) {
-      // Проверяем, не является ли текущий блок первым
-      const updatedBlocks = [...blocks]; // Создаем копию массива блоков
-      const movingBlock = updatedBlocks.splice(blockIndex, 1)[0]; // Удаляем блок из текущей позиции
-      updatedBlocks.splice(blockIndex - 1, 0, movingBlock); // Вставляем блок на новую позицию
-      dispatch(setBlocks(updatedBlocks)); // Обновляем состояние
-    }
-  };
-
   return (
     <div className="assignments-page">
       {successMessage && (
@@ -386,7 +387,7 @@ function AddAssignment() {
       <HeaderAssignment
         blocks={blocks}
         handleSubmit={(e) => handleSubmit(e, true, false)}
-        errorText={errorText}
+        errorText={errorMessages}
         isError={isError}
         changeView={() => {
           setChangeView((prev) => !prev);
@@ -426,10 +427,13 @@ function AddAssignment() {
           {blocks.map((block, index) => (
             <div key={index}>
               {block.type === "headline" && (
-                <Headline block={block} updateBlock={handleUpdateBlock} />
+                <MemoizedHeadline
+                  block={block}
+                  updateBlock={handleUpdateBlock}
+                />
               )}
               {block.type === "imageQuestion" && (
-                <ImageQuestionBlock
+                <MemoizedImageQuestionBlock
                   block={block}
                   updateBlock={handleUpdateBlock}
                 />
@@ -542,7 +546,7 @@ function AddAssignment() {
             </button>
           </div>
         </div>
-        {(isError || errorText) && (
+        {(isError || errorMessages) && (
           <span className="error__text error__text_header error__text_footer">
             Please check all fields
           </span>
@@ -557,7 +561,7 @@ function AddAssignment() {
           <button
             className="buttons-save-as-draft-and-publish"
             onClick={(e) => handleSubmit(e, false, false)}
-            disabled={errorText || isError}
+            disabled={errorMessages || isError}
           >
             Complete & Publish
           </button>
