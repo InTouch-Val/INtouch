@@ -36,6 +36,7 @@ import {
   AssignmentData,
   UpdateBlockAction,
 } from "../../store/entities/add-assignment/types";
+import { fetchAssignmentById } from "../../store/slices/add-assignment/thunks";
 
 function AddAssignment() {
   const dispatch = useAppDispatch();
@@ -82,70 +83,70 @@ function AddAssignment() {
   const { id } = useParams();
   const isEditMode = id != undefined;
 
-  const fetchAssignment = useCallback<AssignmentData>(async () => {
-    try {
-      const response = await API.get(`assignments/${id}/`);
-
-      dispatch(
-        updateForm({
-          title: response.data.title,
-          description: response.data.text,
-          type: response.data.assignment_type,
-          language: response.data.language,
-          selectedImage: { urls: { full: response.data.image_url } },
-        })
-      );
-
-      const fetchedBlocks = response.data.blocks.map((block: Block) => {
-        let contentState;
-        try {
-          contentState = ContentState.createFromText(block.question);
-        } catch (error) {
-          console.error("Ошибка при обработке содержимого:", error);
-        }
-
-        switch (block.type) {
-          case "text":
-            return {
-              ...block,
-              content: EditorState.createWithContent(contentState),
-            };
-          case "single":
-          case "multiple":
-            return {
-              ...block,
-              choices: block.choice_replies.map((choice) => choice.reply),
-              content: EditorState.createWithContent(contentState),
-            };
-          case "range":
-            return {
-              ...block,
-              minValue: block.start_range,
-              maxValue: block.end_range,
-              content: EditorState.createWithContent(contentState),
-            };
-          case "image":
-            return {
-              ...block,
-              content: EditorState.createWithContent(contentState),
-              image: block.image,
-            };
-          default:
-            return block;
-        }
-      });
-
-      dispatch(setBlocks(fetchedBlocks));
-    } catch (error) {
-      console.error(error.message);
-    }
-  }, [id, dispatch]);
-
   useEffect(() => {
     if (isEditMode) {
-      fetchAssignment();
+      const fetchData = async () => {
+        const resultAction = await dispatch(fetchAssignmentById(id));
+
+        if (resultAction.type.endsWith("/fulfilled")) {
+          const response = resultAction.payload;
+
+          dispatch(
+            updateForm({
+              title: response.title,
+              description: response.text,
+              type: response.assignment_type,
+              language: response.language,
+              selectedImage: { urls: { full: response.image_url } },
+            })
+          );
+
+          const fetchedBlocks = response.blocks.map((block) => {
+            let contentState;
+            try {
+              contentState = ContentState.createFromText(block.question);
+            } catch (error) {
+              console.error("Ошибка при обработке содержимого:", error);
+            }
+
+            switch (block.type) {
+              case "text":
+                return {
+                  ...block,
+                  content: EditorState.createWithContent(contentState),
+                };
+              case "single":
+              case "multiple":
+                return {
+                  ...block,
+                  choices: block.choice_replies.map((choice) => choice.reply),
+                  content: EditorState.createWithContent(contentState),
+                };
+              case "range":
+                return {
+                  ...block,
+                  minValue: block.start_range,
+                  maxValue: block.end_range,
+                  content: EditorState.createWithContent(contentState),
+                };
+              case "image":
+                return {
+                  ...block,
+                  content: EditorState.createWithContent(contentState),
+                  image: block.image,
+                };
+              default:
+                return block;
+            }
+          });
+
+          dispatch(setBlocks(fetchedBlocks));
+        }
+      };
+
+      fetchData();
     }
-  }, [isEditMode, fetchAssignment]);
+  }, [isEditMode, dispatch]);
 
   function parseErrorText(errorText) {
     const errors = JSON.parse(errorText);
