@@ -1,9 +1,9 @@
 //@ts-nocheck
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { API } from "../axios";
 import "../../css/registration.css";
-import { isValidEmail, isValidPassword } from "./regex";
+import { isValidEmail, isValidPassword, isValidName } from "./regex";
 import eyeIcon from "../../images/icons/eye.svg";
 import eyeSlashIcon from "../../images/icons/eyeSlash.svg";
 import logo from "../../images/LogoBig.svg";
@@ -24,6 +24,7 @@ function RegistrationForm() {
     password: "",
     name: "",
     second: "",
+    terms: "",
   });
   const [passwordShown, setPasswordShown] = useState(false);
   const [isValidCredentials, setIsValidCredentials] = useState(false);
@@ -33,7 +34,10 @@ function RegistrationForm() {
   const numberOfMinLengthOfName = 2;
   const numberOfMaxLengthOfName = 50;
 
-  const handleCredentialsBlur = (field, value) => {
+  const handleCredentialsBlur = (
+    field: "email" | "password" | "name" | "second",
+    value: string
+  ): void => {
     let newError = { ...validationError };
     if (field === "email" && !isValidEmail(value)) {
       newError.email =
@@ -42,6 +46,7 @@ function RegistrationForm() {
       const hasUppercase = /[A-Z]/.test(value);
       const hasLowercase = /[a-z]/.test(value);
       const hasDigit = /\d/.test(value);
+      const hasSpace = /^(?!.*\s)$/.test(value);
       if (
         value.length < numberOfMinLengthOfPassword ||
         value.length > numberOfMaxLengthOfPassword
@@ -51,21 +56,35 @@ function RegistrationForm() {
       } else if (!hasUppercase || !hasLowercase || !hasDigit) {
         newError.password =
           "Password must contain at least one uppercase letter, one lowercase letter, and one digit.";
+      } else if (!hasSpace) {
+        newError.password = "Spaces are not allowed in your password";
       } else {
         newError.password =
           "Password can only contain Latin letters, Arabic numerals, and the characters: ~!? @ # $ % ^ & * _ - + ( ) [ ] { } > < / \\ | '., : ;";
       }
     } else if (
       (field === "name" || field === "second") &&
-      (value.length < numberOfMinLengthOfName ||
-        value.length > numberOfMaxLengthOfName)
+      !isValidName(value)
     ) {
-      if (field === "name") {
-        newError.name =
-          "Please write a valid name. Only 2-50 letters are allowed.";
+      if (
+        value.length < numberOfMinLengthOfName ||
+        value.length > numberOfMaxLengthOfName
+      ) {
+        if (field === "name") {
+          newError.name =
+            "Please write a valid name. Only 2-50 letters are allowed.";
+        } else {
+          newError.second =
+            "Please write a valid second name. Only 2-50 letters are allowed.";
+        }
       } else {
-        newError.second =
-          "Please write a valid second name. Only 2-50 letters are allowed.";
+        if (field === "name") {
+          newError.name =
+            "Please use only latin characters, special characters are prohibited";
+        } else {
+          newError.second =
+            "Please use only latin characters, special characters are prohibited";
+        }
       }
     } else {
       if (field === "email") {
@@ -79,8 +98,19 @@ function RegistrationForm() {
       }
     }
     setValidationError(newError);
-    setIsValidCredentials(!newError.email && !newError.password);
   };
+
+  useEffect(() => {
+    {
+      setIsValidCredentials(
+        !validationError.email &&
+          !validationError.name &&
+          !validationError.password &&
+          !validationError.second &&
+          !validationError.terms
+      );
+    }
+  }, [validationError]);
 
   const handleTogglePassword = (e) => {
     e.preventDefault();
@@ -100,6 +130,23 @@ function RegistrationForm() {
 
     setError("");
 
+    if (!isValidName(formData.firstName)) {
+      setValidationError({
+        ...validationError,
+        name: "Please use only latin characters, special characters are prohibited",
+      });
+      return;
+    }
+
+    if (!isValidName(formData.lastName)) {
+      setValidationError({
+        ...validationError,
+        second:
+          "Please use only latin characters, special characters are prohibited",
+      });
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setValidationError({
         ...validationError,
@@ -109,8 +156,10 @@ function RegistrationForm() {
     }
 
     if (
-      formData.password === formData.firstName ||
-      formData.password === formData.lastName
+      formData.password
+        .toLowerCase()
+        .includes(formData.firstName.toLowerCase()) ||
+      formData.password.toLowerCase().includes(formData.lastName.toLowerCase())
     ) {
       setValidationError({
         ...validationError,
@@ -121,7 +170,10 @@ function RegistrationForm() {
 
     // Проверка согласия с политикой
     if (!formData.acceptPolicy) {
-      setError("You must accept the terms and conditions.");
+      setValidationError({
+        ...validationError,
+        terms: "Please accept the terms and conditions to continue",
+      });
       return;
     }
 
@@ -146,16 +198,37 @@ function RegistrationForm() {
       navigate("/welcome-to-intouch");
     } catch (error) {
       console.error("Registration error:", error);
-      if (error.response?.data?.email[0]) {
-        setError("This email address already exists. Please use a unique one.");
+      if (error.response?.data?.email) {
+        setValidationError({
+          ...validationError,
+          email: "This email address already exists. Please use a unique one.",
+        });
+      } else if (error.response?.data?.password) {
+        setValidationError({
+          ...validationError,
+          password:
+            error.response?.data?.password || "'This password is too common",
+        });
       } else if (error.response?.status >= 500) {
         setError(
-          "Some error occurs from the server, we’re fixing it. Sorry for inconvenience ",
+          "Some error occurs from the server, we’re fixing it. Sorry for inconvenience "
         );
       } else {
         setError("Account isn’t activated");
       }
     }
+  };
+
+  const isAnyFieldMissingOrInvalid = (): boolean => {
+    return (
+      !isValidCredentials ||
+      !formData.confirmPassword ||
+      !formData.email ||
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.password ||
+      !formData.acceptPolicy
+    );
   };
 
   return (
@@ -240,12 +313,18 @@ function RegistrationForm() {
           </div>
           <label>
             <input
+              className={`${validationError.terms ? "error" : ""}`}
               type="checkbox"
               name="acceptPolicy"
               checked={formData.acceptPolicy}
               onChange={handleChange}
             />
-            I agree with the terms and conditions
+            <a
+              href=""
+              className={`${validationError.terms ? "error-text" : ""}`}
+            >
+              I agree with the terms and conditions
+            </a>
           </label>
         </div>
         <div className="error__text error__text_login">
@@ -257,7 +336,7 @@ function RegistrationForm() {
         <button
           type="submit"
           className="action-button action-button_register-login"
-          disabled={!isValidCredentials}
+          disabled={isAnyFieldMissingOrInvalid()}
         >
           Register
         </button>
