@@ -75,7 +75,7 @@ function SetNewUserPassword({ accessToken }) {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
-          }
+          },
         );
 
         if (response.status === 200) {
