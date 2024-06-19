@@ -48,7 +48,6 @@ export default function MyDiary() {
   }, [isFetching, limit]);
 
   function handleClickDelete() {
-    debugger;
     setFetching(false);
     try {
       const response = API.delete(`/diary-notes/${idCardDelete}/`);

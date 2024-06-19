@@ -30,7 +30,7 @@ const EditorToolbar = forwardRef(
       setErrorText,
       setIsError,
     },
-    ref
+    ref,
   ) => {
     const { toolbarPlugin, setToolbarPlugin } = useToolbar(); // Используем контекст
     const { Toolbar } = toolbarPlugin;
@@ -66,7 +66,7 @@ const EditorToolbar = forwardRef(
                   focusKey: blockKey,
                   focusOffset: charIndex + 1,
                 }),
-                style
+                style,
               );
             });
           });
@@ -97,11 +97,11 @@ const EditorToolbar = forwardRef(
           const contentState = convertFromRaw(rawContentState);
           const contentStateWithStyles = applyStylesFromCharacterList(
             contentState,
-            rawContentState
+            rawContentState,
           );
           console.log(contentStateWithStyles);
           const newEditorState = EditorState.createWithContent(
-            contentStateWithStyles
+            contentStateWithStyles,
           );
           console.log(newEditorState);
           setEditorState(newEditorState);
@@ -132,8 +132,8 @@ const EditorToolbar = forwardRef(
           EditorState.push(
             editorState,
             ContentState.createFromText(placeholder),
-            "insert-characters"
-          )
+            "insert-characters",
+          ),
         );
       }
     }, []);
@@ -156,7 +156,7 @@ const EditorToolbar = forwardRef(
         let newEditorState = EditorState.push(
           editorState,
           newContentState,
-          "insert-characters"
+          "insert-characters",
         );
 
         // Устанавливаем фокус на конец содержимого
@@ -178,7 +178,7 @@ const EditorToolbar = forwardRef(
         setErrorText(
           maxLength === maxTextLegthBig
             ? `${effectiveErrorText.includes(textErrMaxTextLegthBig) ? effectiveErrorText.replace(textErrMaxTextLegthBig, "") : effectiveErrorText} ${textErrMaxTextLegthBig}`
-            : `${effectiveErrorText.includes(textErrMaxTextLegthSmall) ? effectiveErrorText.replace(textErrMaxTextLegthSmall, "") : effectiveErrorText} ${textErrMaxTextLegthSmall}`
+            : `${effectiveErrorText.includes(textErrMaxTextLegthSmall) ? effectiveErrorText.replace(textErrMaxTextLegthSmall, "") : effectiveErrorText} ${textErrMaxTextLegthSmall}`,
         );
         return false;
       }
@@ -186,7 +186,7 @@ const EditorToolbar = forwardRef(
       setErrorText(
         maxLength === maxTextLegthBig
           ? `${effectiveErrorText.includes(textErrMaxTextLegthBig) ? effectiveErrorText.replace(textErrMaxTextLegthBig, "") : ""}`
-          : `${effectiveErrorText.includes(textErrMaxTextLegthSmall) ? effectiveErrorText.replace(textErrMaxTextLegthSmall, "") : ""}`
+          : `${effectiveErrorText.includes(textErrMaxTextLegthSmall) ? effectiveErrorText.replace(textErrMaxTextLegthSmall, "") : ""}`,
       );
       return true;
     };
@@ -234,7 +234,7 @@ const EditorToolbar = forwardRef(
         )}
       </div>
     );
-  }
+  },
 );
 
 export { EditorToolbar };

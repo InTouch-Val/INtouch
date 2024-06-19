@@ -54,7 +54,7 @@ function ClientAssignmentBlocks({
     setSelectedValue(
       inputText.length > maxTextLegthBig
         ? inputText.slice(0, maxTextLegthBig)
-        : inputText
+        : inputText,
     );
     updateBlock(block.id, event.target.value, []);
   }
@@ -180,7 +180,7 @@ function ClientAssignmentBlocks({
           <div className="range-options">
             {Array.from(
               { length: block.end_range - block.start_range + 1 },
-              (_, i) => i + block.start_range
+              (_, i) => i + block.start_range,
             ).map((value) => (
               <label key={value} className="range-option">
                 {isMobileWidth ? (
