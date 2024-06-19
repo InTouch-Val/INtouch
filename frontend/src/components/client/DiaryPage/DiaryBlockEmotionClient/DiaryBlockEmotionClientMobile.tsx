@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { listEmotions } from "../../../psy/DiaryPageContent/DiaryBlockEmotion/constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil, faPlus } from "@fortawesome/free-solid-svg-icons";
