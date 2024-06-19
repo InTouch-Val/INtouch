@@ -40,7 +40,7 @@ function SettingsPage() {
           Security
         </button>
       </div>
-      <div>
+      <div className="settings_section">
         {activeTab === "profile" && <ProfileTab />}
         {activeTab === "security" && <SecurityTab />}
       </div>

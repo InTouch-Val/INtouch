@@ -136,12 +136,13 @@ function AddAssignment() {
   function parseErrorText(errorText) {
     const errors = JSON.parse(errorText);
     const errorMessages = {};
+    console.log(errors);
 
-    errors.title.forEach((message) => {
+    errors.title?.forEach((message) => {
       errorMessages.title = message;
     });
 
-    errors.text.forEach((message) => {
+    errors.text?.forEach((message) => {
       errorMessages.description = message;
     });
 

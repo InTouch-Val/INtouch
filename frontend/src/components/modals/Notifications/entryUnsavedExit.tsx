@@ -1,6 +1,6 @@
 //@ts-nocheck
 
-import NotificationStyles from "../Notifications/notifications.module.css";
+import NotificationStyles from "../Notifications/notifications.module.scss";
 
 const EntryUnsavedExit = ({ saveClick, discardClick }) => {
   return (
