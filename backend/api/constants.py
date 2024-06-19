@@ -3,6 +3,7 @@ import string
 USER_TYPES = {
     0: "client",
     1: "doctor",
+    2: "Anonymous",
 }
 
 ASSIGNMENT_TYPES = [
