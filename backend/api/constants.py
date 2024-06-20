@@ -96,4 +96,32 @@ RANDOM_CHARSET_FOR_DELETING = string.ascii_uppercase + string.digits
 FIELD_DELETED = "deleted"
 TIME_DELETE_NON_ACTIVE_USER = 604800  # 7 days
 DEFAULT_PAGE_SIZE = 10
-THERAPISTS_METRICS_FILE_NAME = "therapists_metrics.csv"
+
+METRICS_TABLE_ROWS = {
+    "therapists": [
+        "User ID",
+        "Registration Date",
+        "Rolling Retention 7D",
+        "Rolling Retention 30D",
+        "Last Seen",
+        "Clients Invited",
+        "Last Invited Client",
+        "Last Sent Assignment",
+        "Last Created Assignment",
+        "Deleted On",
+    ],
+    "clients": [
+        "User ID",
+        "Registration Date",
+        "Rolling Retention 7D",
+        "Rolling Retention 30D",
+        "Last Seen",
+        "Last Done Assignment",
+        "Last Diary Created",
+        "Deleted On",
+    ],
+}
+METRICS_FILES_NAMES = {
+    "therapists": "therapists_metrics.csv",
+    "clients": "clients_metrics.csv",
+}
