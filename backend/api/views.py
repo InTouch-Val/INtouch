@@ -35,11 +35,12 @@ from api.utils import (
     send_by_mail,
     avg_grade_annotation,
     get_therapists_metrics_query,
-    form_therapists_metrics_file,
+    get_clients_metrics_query,
+    form_metrics_file,
 )
 from api.constants import (
     USER_TYPES,
-    THERAPISTS_METRICS_FILE_NAME,
+    METRICS_FILES_NAMES,
     RANDOM_VALUE_SIZE,
     FIELD_DELETED,
     RANDOM_CHARSET_FOR_DELETING,
@@ -1056,20 +1057,25 @@ def assetlink(request):
 
 
 def project_metrics(request):
-    """Render project metrics for psychotherapists"""
-    users = get_therapists_metrics_query()
-    context = {"users": users}
+    """Renders project metrics page."""
+    therapists_metrics = get_therapists_metrics_query()
+    clients_metrics = get_clients_metrics_query()
+    context = {
+        "therapists": therapists_metrics,
+        "clients": clients_metrics,
+    }
     return render(request, "metrics/project_metrics.html", context=context)
 
 
-def therapists_metrics_download(request):
+def metrics_download(request, for_whom: str):
+    """Sends the project metrics files, depends on for_whom query parameter."""
     response = HttpResponse(
         content_type="text/csv",
         headers={
             "Content-Disposition": 'attachment; filename="{0}"'.format(
-                THERAPISTS_METRICS_FILE_NAME
+                METRICS_FILES_NAMES[for_whom]
             )
         },
     )
-    form_therapists_metrics_file(response)
+    form_metrics_file(response, for_whom)
     return response

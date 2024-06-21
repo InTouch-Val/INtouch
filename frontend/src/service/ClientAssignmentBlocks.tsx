@@ -21,6 +21,7 @@ import "../css/assignments.css";
 import decodeStyledText from "./decodeStyledText";
 import "../components/client/CompleteAssignments/CompleteAssignments.css";
 import useMobileWidth from "../utils/hook/useMobileWidth";
+import { maxTextLegthBig } from "../utils/constants";
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
@@ -123,6 +124,16 @@ function ClientAssignmentBlocks({
   }, [choices]);
 
   function handleRangeClick(event) {
+    updateBlock(block.id, event.target.value, []);
+  }
+
+  function handleOpenChange(event) {
+    const inputText = event.target.value;
+    setSelectedValue(
+      inputText.length > maxTextLegthBig
+        ? inputText.slice(0, maxTextLegthBig)
+        : inputText,
+    );
     updateBlock(block.id, event.target.value, []);
   }
 

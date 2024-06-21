@@ -16,6 +16,7 @@ import "../css/editorsBar.css";
 import { useToolbar } from "./ToolbarContext"; // Импортируем хук для использования контекста
 import { EditorState, ContentState, convertFromRaw } from "draft-js";
 import { Modifier } from "draft-js";
+import { maxTextLegthBig, maxTextLegthSmall } from "../utils/constants";
 
 const EditorToolbar = forwardRef(
   (
@@ -35,6 +36,8 @@ const EditorToolbar = forwardRef(
     const { toolbarPlugin } = useToolbar(); // Используем контекст
     const { Toolbar } = toolbarPlugin;
     const plugins = [toolbarPlugin];
+    const textErrMaxTextLegthBig = ` Please enter 20-${maxTextLegthBig} characters`;
+    const textErrMaxTextLegthSmall = ` Please enter 20-${maxTextLegthSmall} characters`;
 
     const focusEditor = () => {
       if (ref.current) {
@@ -42,7 +45,7 @@ const EditorToolbar = forwardRef(
       }
     };
 
-    const effectiveErrorText = errorText || "Error occured";
+    const effectiveErrorText = errorText || "";
 
     const applyStylesFromCharacterList = (contentState, rawContentState) => {
       let newContentState = contentState;
@@ -115,12 +118,11 @@ const EditorToolbar = forwardRef(
             contentStateWithStyles,
           );
           setEditorState(newEditorState);
+          const text = contentState.getPlainText();
+          validateTextLength(text);
         } catch (error) {
           console.error("Ошибка при преобразовании строки в объект:", error);
         }
-      } else if (block.reply) {
-        newEditorState = parseContent(block.reply);
-        setEditorState(newEditorState);
       } else if (block.question) {
         const contentState = ContentState.createFromText(block.question);
         const newEditorState = EditorState.createWithContent(contentState);
@@ -128,6 +130,8 @@ const EditorToolbar = forwardRef(
       } else {
         newEditorState = EditorState.createEmpty();
         setEditorState(newEditorState);
+        const text = contentState.getPlainText();
+        validateTextLength(text);
       }
     };
 
@@ -182,19 +186,23 @@ const EditorToolbar = forwardRef(
     };
 
     const validateTextLength = (text) => {
-      const maxLength = block.type === "text" ? 1000 : 200;
+      const maxLength =
+        block.type === "text" ? maxTextLegthBig : maxTextLegthSmall;
+      console.log(maxLength);
       if (text.length < 20 || text.length > maxLength) {
         setIsError(true);
         setErrorText(
-          maxLength === 1000
-            ? `${effectiveErrorText.includes(" Please enter 20-1000 characters") ? effectiveErrorText.replace(" Please enter 20-1000 characters", "") : effectiveErrorText} Please enter 20-1000 characters`
-            : `${effectiveErrorText.includes(" Please enter 20-200 characters") ? effectiveErrorText.replace(" Please enter 20-200 characters", "") : effectiveErrorText} Please enter 20-200 characters`,
+          maxLength === maxTextLegthBig
+            ? `${effectiveErrorText.includes(textErrMaxTextLegthBig) ? effectiveErrorText.replace(textErrMaxTextLegthBig, "") : effectiveErrorText} ${textErrMaxTextLegthBig}`
+            : `${effectiveErrorText.includes(textErrMaxTextLegthSmall) ? effectiveErrorText.replace(textErrMaxTextLegthSmall, "") : effectiveErrorText} ${textErrMaxTextLegthSmall}`,
         );
         return false;
       }
       setIsError(false);
       setErrorText(
-        effectiveErrorText.replace(" Please enter 20-200 characters", ""),
+        maxLength === maxTextLegthBig
+          ? `${effectiveErrorText.includes(textErrMaxTextLegthBig) ? effectiveErrorText.replace(textErrMaxTextLegthBig, "") : ""}`
+          : `${effectiveErrorText.includes(textErrMaxTextLegthSmall) ? effectiveErrorText.replace(textErrMaxTextLegthSmall, "") : ""}`,
       );
       return true;
     };
@@ -207,7 +215,7 @@ const EditorToolbar = forwardRef(
 
     return (
       <div
-        className={`editor-container ${(effectiveErrorText.includes(" Please enter 20-1000 characters") || effectiveErrorText.includes(" Please enter 20-200 characters")) && "error"}`}
+        className={`editor-container ${(effectiveErrorText.includes(textErrMaxTextLegthBig) || effectiveErrorText.includes(textErrMaxTextLegthSmall)) && "error"}`}
         onClick={focusEditor}
       >
         <Editor
