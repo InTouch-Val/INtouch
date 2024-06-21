@@ -15,7 +15,6 @@ import { ClientDiary } from "../../../../store/entities/assignments/types";
 import { useEditorState } from "../../../../utils/hook/useEditorState";
 import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig";
 
-
 interface Props {
   diary: ClientDiary;
   setShowEmotionsPage: React.Dispatch<React.SetStateAction<boolean>>;

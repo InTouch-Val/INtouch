@@ -118,11 +118,12 @@ const EditorToolbar = forwardRef(
             contentStateWithStyles,
           );
           setEditorState(newEditorState);
-          const text = contentState.getPlainText();
-          validateTextLength(text);
         } catch (error) {
           console.error("Ошибка при преобразовании строки в объект:", error);
         }
+      } else if (block.reply) {
+        newEditorState = parseContent(block.reply);
+        setEditorState(newEditorState);
       } else if (block.question) {
         const contentState = ContentState.createFromText(block.question);
         const newEditorState = EditorState.createWithContent(contentState);
@@ -130,8 +131,6 @@ const EditorToolbar = forwardRef(
       } else {
         newEditorState = EditorState.createEmpty();
         setEditorState(newEditorState);
-        const text = contentState.getPlainText();
-        validateTextLength(text);
       }
     };
 

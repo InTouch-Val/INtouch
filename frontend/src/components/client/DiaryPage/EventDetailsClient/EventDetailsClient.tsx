@@ -14,7 +14,6 @@ interface Props {
   showInputsincomplete: boolean;
 }
 
-
 export default function EventDetailsClient({
   diary,
   type,

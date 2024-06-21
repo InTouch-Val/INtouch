@@ -3,11 +3,8 @@ import React, {
   useState,
   useEffect,
   useRef,
-  useCallback,
-  useMemo,
+  useCallback
 } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { EditorToolbar } from "./editors-toolbar";
 import { ToolbarProvider } from "./ToolbarContext";
 import {
@@ -89,7 +86,7 @@ function ClientAssignmentBlocks({
       }
     },
 
-    [updateBlock, block.id, block.content, block.choices],
+    [updateBlock, block.id, block.content, block.choices]
   );
 
   const MAX_INPUT_LENGTH = 1000;

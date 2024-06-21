@@ -26,7 +26,6 @@ export default function DiaryBlockAnalysisClient({
     diary?.thoughts_analysis || null,
   );
 
-
   const block = getBlockConfig(getValues, "thoughts_analysis");
 
   const value = getValues("thoughts_analysis");

@@ -8,19 +8,17 @@ import { openModalSaveIncomplete } from "../../../../store/slices/modals/modalsS
 import { useAppDispatch } from "../../../../store/store";
 import { ClientDiary } from "../../../../store/entities/assignments/types";
 
-
 interface Props {
   diary: ClientDiary;
   setChangesMade: React.Dispatch<React.SetStateAction<boolean>>;
   setShowInputsincomplete: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-
 export default function DiaryFooterClient({
   diary,
   setChangesMade,
   setShowInputsincomplete,
-}:Props) {
+}: Props) {
   const isMobileWidth = useMobileWidth();
 
   const {
@@ -36,7 +34,6 @@ export default function DiaryFooterClient({
   const secondEmotionValues = getValues("clarifying_emotion");
 
   const [isHover, setHover] = React.useState(false);
-
 
   const watchAllFields = useWatch();
 
