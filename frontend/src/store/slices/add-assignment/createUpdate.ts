@@ -6,14 +6,19 @@ import {
 } from "../../actions/add-assignment/addAssAct";
 import { Status } from "../../../utils/constants";
 
-export type IStatusState = "init" | "success" | "loading" | "error";
+enum StatusState {
+  Init = "init",
+  Success = "success",
+  Loading = "loading",
+  Error = "error",
+}
 
 interface createUpdateState {
-  status: IStatusState;
+  status: StatusState;
 }
 
 const initialState: createUpdateState = {
-  status: Status.Init,
+  status: StatusState.Init,
 };
 
 const createUpdate = createSlice({
@@ -23,31 +28,31 @@ const createUpdate = createSlice({
   extraReducers: (builder: ActionReducerMapBuilder<createUpdateState>) => {
     builder
       .addCase(createAssignment.fulfilled, (state, action) => {
-        state.status = Status.Success;
+        state.status = StatusState.Success;
       })
       .addCase(updateAssignment.fulfilled, (state, action) => {
-        state.status = Status.Success;
+        state.status = StatusState.Success;
       })
       .addCase(saveAsDraft.fulfilled, (state, action) => {
-        state.status = Status.Success;
+        state.status = StatusState.Success;
       })
       .addCase(createAssignment.pending, (state, action) => {
-        state.status = Status.Loading;
+        state.status = StatusState.Loading;
       })
       .addCase(updateAssignment.pending, (state, action) => {
-        state.status = Status.Loading;
+        state.status = StatusState.Loading;
       })
       .addCase(saveAsDraft.pending, (state, action) => {
-        state.status = Status.Loading;
+        state.status = StatusState.Loading;
       })
       .addCase(createAssignment.rejected, (state, action) => {
-        state.status = Status.Error;
+        state.status = StatusState.Error;
       })
       .addCase(updateAssignment.rejected, (state, action) => {
-        state.status = Status.Error;
+        state.status = StatusState.Error;
       })
       .addCase(saveAsDraft.rejected, (state, action) => {
-        state.status = Status.Error;
+        state.status = StatusState.Error;
       });
   },
 });

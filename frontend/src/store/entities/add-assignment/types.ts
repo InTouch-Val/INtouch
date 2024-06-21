@@ -35,10 +35,17 @@ export interface AssignmentData {
   assignment_root: number;
 }
 
-type reqBlockType = "text" | "open" | "range" | "image" | "single" | "multiple";
+enum ReqBlockType {
+  Text = "text",
+  Open = "open",
+  Range = "range",
+  Image = "image",
+  Single = "single",
+  Multiple = "multiple",
+}
 
 interface reqBaseBlock {
-  type: reqBlockType;
+  type: ReqBlockType;
   question: string;
   description: string;
 }
