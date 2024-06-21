@@ -93,7 +93,7 @@ API.interceptors.response.use(
         return API(originalRequest);
       } catch (refreshError) {
         console.error("Token refresh failed:", refreshError);
-        throw refreshError;
+        throw error;
       }
     }
 

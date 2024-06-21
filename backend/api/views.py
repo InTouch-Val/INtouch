@@ -1,4 +1,6 @@
+import random
 import json
+from datetime import datetime, timezone
 from http import HTTPStatus
 
 from drf_spectacular.utils import (
@@ -11,8 +13,8 @@ from drf_spectacular.utils import (
 from django.conf import settings
 from django.contrib.auth.hashers import check_password
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404
-from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, render
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_GET
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, viewsets, filters, mixins
@@ -29,8 +31,20 @@ from api.models import *
 from api.permissions import *
 from api.serializers import *
 from api.swagger_serializers import SwaggerMessageHandlerSerializer
-from api.utils import send_by_mail, avg_grade_annotation
-from api.constants import USER_TYPES
+from api.utils import (
+    send_by_mail,
+    avg_grade_annotation,
+    get_therapists_metrics_query,
+    get_clients_metrics_query,
+    form_metrics_file,
+)
+from api.constants import (
+    USER_TYPES,
+    METRICS_FILES_NAMES,
+    RANDOM_VALUE_SIZE,
+    FIELD_DELETED,
+    RANDOM_CHARSET_FOR_DELETING,
+)
 from api.tasks import reset_email_update_status
 
 
@@ -309,10 +323,40 @@ class UpdateUserView(generics.UpdateAPIView):
 )
 @api_view(["GET"])
 def user_delete_hard(request):
-    """Полное удаление пользователя"""
+    """Удаление конфиденциальных данных пользователя с сохранением самой сущности."""
+
     user = request.user
     if user:
-        user.delete()
+        default_charset = RANDOM_CHARSET_FOR_DELETING
+        user.first_name = FIELD_DELETED
+        user.last_name = FIELD_DELETED
+        user.email = FIELD_DELETED
+        user.date_of_birth = None
+        user.photo = None
+        user.deleted = True
+        user.is_active = False
+        user.accept_policy = False
+        user.deleted_on = datetime.now(timezone.utc)
+        user.username = "".join(
+            random.choice(default_charset) for _ in range(RANDOM_VALUE_SIZE)
+        )
+        user.password = "".join(
+            random.choice(default_charset) for _ in range(RANDOM_VALUE_SIZE)
+        )
+
+        if user.user_type == USER_TYPES[0]:
+            Client.objects.filter(user=user).delete()
+            for assignment in AssignmentClient.objects.filter(user=user):
+                assignment.delete()
+            for diary in DiaryNote.objects.filter(author=user):
+                diary.delete()
+        else:
+            Doctor.objects.filter(user=user).delete()
+            for assignment in Assignment.objects.filter(author=user, is_public=False):
+                assignment.delete()
+
+        user.save()
+
         return Response({"message": "User deleted successfully"})
     else:
         return Response({"error": "User not found"})
@@ -322,6 +366,7 @@ def user_delete_hard(request):
 @api_view(["GET"])
 def user_delete_soft(request):
     """Перевод пользователя в неактивные"""
+
     user = request.user
     if user:
         user.is_active = False
@@ -679,6 +724,7 @@ class AssignmentViewSet(viewsets.ModelViewSet):
         "add_date",
         "share",
     ]
+    ordering = ["-add_date"]
     search_fields = [
         "title",
     ]
@@ -1007,4 +1053,29 @@ def assetlink(request):
     with open(path, "r") as f:
         data = json.loads(f.read())
     response = JsonResponse(data, safe=False)
+    return response
+
+
+def project_metrics(request):
+    """Renders project metrics page."""
+    therapists_metrics = get_therapists_metrics_query()
+    clients_metrics = get_clients_metrics_query()
+    context = {
+        "therapists": therapists_metrics,
+        "clients": clients_metrics,
+    }
+    return render(request, "metrics/project_metrics.html", context=context)
+
+
+def metrics_download(request, for_whom: str):
+    """Sends the project metrics files, depends on for_whom query parameter."""
+    response = HttpResponse(
+        content_type="text/csv",
+        headers={
+            "Content-Disposition": 'attachment; filename="{0}"'.format(
+                METRICS_FILES_NAMES[for_whom]
+            )
+        },
+    )
+    form_metrics_file(response, for_whom)
     return response

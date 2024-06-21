@@ -61,7 +61,7 @@
 }
 
 .control-panel {
-  width: 98%;
+  width: 100%;
   display: flex;
   /* Используем flexbox для расположения элементов */
   align-items: center;

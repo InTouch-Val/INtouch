@@ -68,6 +68,13 @@
     font-weight: 500;
     line-height: 21px;
     text-align: center;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .mobile_emotions__save:disabled {
+    opacity: 0.3;
+    transition: opacity 0.3s ease-in-out;
   }
 
   .mobile_emotions__save_wrapper {

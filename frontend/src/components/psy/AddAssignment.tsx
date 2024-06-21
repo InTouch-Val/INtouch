@@ -228,6 +228,7 @@ function AddAssignment() {
   function parseErrorText(errorText) {
     const errors = JSON.parse(errorText);
     const errorMessages = {};
+    console.log(errors);
 
     Object.keys(errors).forEach((key) => {
       if (Array.isArray(errors[key])) {
