@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
+  Block,
   BlocksState,
   AddBlockAction,
   RemoveBlockAction,
@@ -32,48 +33,51 @@ const blocksSlice = createSlice({
         (block) => block.id !== action.payload.blockId
       );
     },
-    updateBlock: (
-      state,
-      action: PayloadAction<UpdateBlockAction["payload"]>
-    ) => {
-      const blockIndex = state.blocks.findIndex(
-        (block) => block.id === action.payload.blockId
-      );
-      if (blockIndex >= 0) {
-        const updatedBlock = { ...state.blocks[blockIndex] };
+    updateBlock: {
+      reducer: (state, action: PayloadAction<Block>) => {
+        const blockIndex = state.blocks.findIndex(
+          (block) => block.id === action.payload.id
+        );
+        if (blockIndex >= 0) {
+          state.blocks[blockIndex] = action.payload;
+        }
+      },
+      prepare: (payload: UpdateBlockAction["payload"]) => {
+        const blockIndex = initialState.blocks.findIndex(
+          (block) => block.id === payload.blockId
+        );
+        let updatedBlock = { ...initialState.blocks[blockIndex] };
 
-        if (action.payload.newContent !== undefined) {
-          updatedBlock.content = action.payload.newContent;
+        if (payload.newContent !== undefined) {
+          updatedBlock.content = payload.newContent;
           updatedBlock.description = getObjectFromEditorState(
-            action.payload.newContent
+            payload.newContent
           );
         }
 
-        if (action.payload.newChoices !== undefined) {
-          updatedBlock.choices = action.payload.newChoices;
-          updatedBlock.choice_replies = action.payload.newChoices?.map(
-            (choice) => ({
-              reply: choice,
-              checked: false,
-            })
-          );
+        if (payload.newChoices !== undefined) {
+          updatedBlock.choices = payload.newChoices;
+          updatedBlock.choice_replies = payload.newChoices.map((choice) => ({
+            reply: choice,
+            checked: false,
+          }));
         }
 
-        if (action.payload.newTitle !== undefined)
-          updatedBlock.title = action.payload.newTitle;
-        if (action.payload.newMinValue !== undefined)
-          updatedBlock.minValue = action.payload.newMinValue;
-        if (action.payload.newMaxValue !== undefined)
-          updatedBlock.maxValue = action.payload.newMaxValue;
-        if (action.payload.newLeftPole !== undefined)
-          updatedBlock.leftPole = action.payload.newLeftPole;
-        if (action.payload.newRightPole !== undefined)
-          updatedBlock.rightPole = action.payload.newRightPole;
-        if (action.payload.newImage !== undefined)
-          updatedBlock.image = action.payload.newImage;
+        if (payload.newTitle !== undefined)
+          updatedBlock.title = payload.newTitle;
+        if (payload.newMinValue !== undefined)
+          updatedBlock.minValue = payload.newMinValue;
+        if (payload.newMaxValue !== undefined)
+          updatedBlock.maxValue = payload.newMaxValue;
+        if (payload.newLeftPole !== undefined)
+          updatedBlock.leftPole = payload.newLeftPole;
+        if (payload.newRightPole !== undefined)
+          updatedBlock.rightPole = payload.newRightPole;
+        if (payload.newImage !== undefined)
+          updatedBlock.image = payload.newImage;
 
-        state.blocks[blockIndex] = updatedBlock;
-      }
+        return { payload: updatedBlock };
+      },
     },
   },
 });
