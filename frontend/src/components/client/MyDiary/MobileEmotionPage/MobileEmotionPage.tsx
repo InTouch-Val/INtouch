@@ -1,5 +1,4 @@
 //@ts-nocheck
-
 import React, { useState, useRef, useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import {
@@ -14,19 +13,20 @@ import { EffectCreative } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-creative";
 import "./swiper.css";
-import { API } from "../../../../service/axios";
 
-export default function MobileEmotionPage({ type, id, setShowEmotionsPage }) {
+export default function MobileEmotionPage({
+  type,
+  id,
+  setShowEmotionsPage,
+}: {
+  type: string;
+  id: string;
+  setShowEmotionsPage: () => void;
+}) {
   const { control, getValues, setValue } = useFormContext();
 
   const clarifyingEmotionValues = getValues("clarifying_emotion");
   const primaryEmotionValue = getValues("primary_emotion");
-
-  const [isValid, setIsValid] = useState(false);
-
-  useEffect(() => {
-    setIsValid(clarifyingEmotionValues.length);
-  }, [clarifyingEmotionValues]);
 
   const [offset, setOffset] = useState(0);
   const [currentPrimaryEmotion, setCurrentPrimaryEmotion] = useState(
@@ -179,7 +179,6 @@ export default function MobileEmotionPage({ type, id, setShowEmotionsPage }) {
         <button
           type="submit"
           className={MobileEmotionPageStyles.mobile_emotions__save}
-          disabled={!isValid}
         >
           Save
         </button>

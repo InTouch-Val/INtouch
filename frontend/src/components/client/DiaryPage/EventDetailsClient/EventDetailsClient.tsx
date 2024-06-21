@@ -1,55 +1,33 @@
 //@ts-nocheck
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "../DiaryPage.css";
 import { ToolbarProvider } from "../../../../service/ToolbarContext";
 import { EditorToolbar } from "../../../../service/editors-toolbar";
-import { EditorState, convertFromRaw } from "draft-js";
 import { Controller, useFormContext } from "react-hook-form";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
+import { ClientDiary } from "../../../../store/entities/assignments/types";
+import { useEditorState } from "../../../../utils/hook/useEditorState";
+import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig";
+
+interface Props {
+  diary: ClientDiary;
+  showInputsincomplete: boolean;
+}
 
 export default function EventDetailsClient({
   diary,
   type,
   showInputsincomplete,
-}) {
+}: Props) {
   const isMobileWidth = useMobileWidth();
 
-  const editorRef = useRef(null);
-  const content = {
-    blocks: [
-      {
-        key: "abcde",
-        text: diary ? diary.event_details : "",
-        type: "open",
-        depth: 0,
-        inlineStyleRanges: [],
-        entityRanges: [],
-        data: {},
-      },
-    ],
-    entityMap: {},
-  };
-  const contentState = convertFromRaw(content);
-  const [editorState, setEditorState] = useState(() =>
-    type == "exist"
-      ? EditorState.createWithContent(contentState)
-      : EditorState.createEmpty(),
-  );
-
-  const block = {
-    type: "open",
-    question: "d",
-    description: "d",
-  };
-
-  const handleEditorStateChange = (newEditorState) => {
-    setEditorState(newEditorState);
-    const contentState = newEditorState.getCurrentContent();
-    const text = contentState.getPlainText();
-    setValue("event_details", text);
-  };
+  const editorRef = useRef<EditorToolbar | null>(null);
 
   const { control, setValue, getValues } = useFormContext();
+  const [editorState, handleEditorStateChange] = useEditorState(
+    diary?.event_details || null,
+  );
+  const block = getBlockConfig(getValues, "event_details");
 
   const value = getValues("event_details");
 
@@ -72,9 +50,16 @@ export default function EventDetailsClient({
           <ToolbarProvider>
             <EditorToolbar
               {...fieldsProps}
+              key="diary_event"
               ref={editorRef}
               editorState={editorState}
-              setEditorState={handleEditorStateChange}
+              setEditorState={(newEditorState: EditorState) =>
+                handleEditorStateChange(
+                  newEditorState,
+                  setValue,
+                  "event_details",
+                )
+              }
               placeholder={"Write your answer here..."}
               block={block}
               isMobileWidth={isMobileWidth}
