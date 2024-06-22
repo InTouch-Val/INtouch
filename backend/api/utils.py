@@ -31,7 +31,9 @@ def avg_grade_annotation(query: QuerySet) -> QuerySet:
     return query.annotate(average_grade=Avg("assignments_clients__grade", default=0))
 
 
-def get_therapists_metrics_query() -> QuerySet:
+def get_therapists_metrics_query(
+    date_from: dt.datetime, date_to: dt.datetime
+) -> QuerySet:
     """Function to get a query of psychotherapists metrics."""
     last_invited = Client.objects.filter(user__doctors=OuterRef("pk")).order_by(
         "-user__add_date"
@@ -44,7 +46,9 @@ def get_therapists_metrics_query() -> QuerySet:
     )
     query = (
         User.objects.all()
-        .filter(user_type=USER_TYPES[1])
+        .filter(
+            user_type=USER_TYPES[1], date_joined__gt=date_from, date_joined__lt=date_to
+        )
         .annotate(
             clients_count=Count("doctor__clients"),
             rolling_retention_7d=Case(
@@ -75,7 +79,7 @@ def get_therapists_metrics_query() -> QuerySet:
     return query
 
 
-def get_clients_metrics_query() -> QuerySet:
+def get_clients_metrics_query(date_from: dt.datetime, date_to: dt.datetime) -> QuerySet:
     """Function to get a query of clients metrics."""
     last_done_assignment = AssignmentClient.objects.filter(
         user=OuterRef("pk"), status="done"
@@ -85,7 +89,9 @@ def get_clients_metrics_query() -> QuerySet:
     )
     query = (
         User.objects.all()
-        .filter(user_type=USER_TYPES[0])
+        .filter(
+            user_type=USER_TYPES[0], date_joined__gt=date_from, date_joined__lt=date_to
+        )
         .annotate(
             last_done_assignment=Subquery(
                 last_done_assignment.values("update_date")[:1]
@@ -116,12 +122,17 @@ def get_clients_metrics_query() -> QuerySet:
     return query
 
 
-def form_metrics_file(response: HttpResponse, for_whom: str) -> None:
+def form_metrics_file(
+    response: HttpResponse,
+    for_whom: str,
+    date_from: dt.datetime,
+    date_to: dt.datetime,
+) -> None:
     "Function for forming metrics files. Depend on for_whom parameter."
     writer = csv.writer(response)
     writer.writerow(METRICS_TABLE_ROWS[for_whom])
     if for_whom == "clients":
-        users = get_clients_metrics_query()
+        users = get_clients_metrics_query(date_from, date_to)
         for user in users:
             writer.writerow(
                 [
@@ -136,7 +147,7 @@ def form_metrics_file(response: HttpResponse, for_whom: str) -> None:
                 ]
             )
     elif for_whom == "therapists":
-        users = get_therapists_metrics_query()
+        users = get_therapists_metrics_query(date_from, date_to)
         for user in users:
             writer.writerow(
                 [

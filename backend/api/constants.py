@@ -124,3 +124,4 @@ METRICS_FILES_NAMES = {
     "therapists": "therapists_metrics.csv",
     "clients": "clients_metrics.csv",
 }
+METRICS_DATE_FORMAT = "%d %B %Y"

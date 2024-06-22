@@ -17,6 +17,7 @@ router.register(
 )
 router.register("notes", NoteViewSet, basename="notes")
 router.register("diary-notes", DiaryNoteViewSet, basename="diary_notes")
+router.register("project-metrics", ProjectMetricsViewSet, basename="project_metrics")
 
 urlpatterns = [
     path("", include(router.urls)),
@@ -73,7 +74,6 @@ urlpatterns = [
         UpdateEmailConfirmView.as_view(),
         name="update_email_confirm",
     ),
-    path("project-metrics/", project_metrics, name="project_metrics"),
     re_path(
         r"project-metrics/(?P<for_whom>clients|therapists)/download/",
         metrics_download,
