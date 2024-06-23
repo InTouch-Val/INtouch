@@ -473,7 +473,7 @@ class AssignmentAddUserMyListView(APIView):
     permission_classes = (IsDoctorOnly,)
     serializer_class = None
 
-    def get(self, request, pk):
+    def post(self, request, pk):
         user = request.user
         assignment = Assignment.objects.get(pk=pk)
         user.doctor.assignments.add(assignment)
@@ -508,7 +508,7 @@ class AssignmentDeleteUserMyListView(APIView):
     permission_classes = (IsDoctorOnly,)
     serializer_class = None
 
-    def get(self, request, pk):
+    def delete(self, request, pk):
         user = request.user
         assignment = Assignment.objects.get(pk=pk)
         user.doctor.assignments.remove(assignment)
@@ -518,7 +518,7 @@ class AssignmentDeleteUserMyListView(APIView):
 
 
 @extend_schema_view(
-    get=extend_schema(
+    post=extend_schema(
         tags=["Assignments"],
         summary="Set assignment to a client",
         request=None,
@@ -544,7 +544,7 @@ class AddAssignmentClientView(APIView):
 
     serializer_class = None
 
-    def get(self, request, pk, client_pk):
+    def post(self, request, pk, client_pk):
         assignment = get_object_or_404(Assignment, pk=pk)
         client = get_object_or_404(User, pk=client_pk)
         if request.user.doctor != client.doctors.first():
@@ -751,7 +751,7 @@ class AssignmentViewSet(viewsets.ModelViewSet):
             )
         return super().update(request, *args, **kwargs)
 
-    @action(detail=True, methods=["get"])
+    @action(detail=True, methods=["PATCH"])
     def draft(self, request, pk):
         """Сокрытие задачи из общего пула, добавление  драфт"""
         assignments = self.get_object()
