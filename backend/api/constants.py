@@ -119,9 +119,17 @@ METRICS_TABLE_ROWS = {
         "Last Diary Created",
         "Deleted On",
     ],
+    "growth": [
+        "Amount of registered therapists",
+        "Amount of registered clients",
+        "Amount of assignments",
+        "Amount of deleted therapists",
+        "Amount of deleted clients",
+    ],
 }
 METRICS_FILES_NAMES = {
     "therapists": "therapists_metrics.csv",
     "clients": "clients_metrics.csv",
+    "growth": "growth_metrics.csv",
 }
 METRICS_DATE_FORMAT = "%d %B %Y"

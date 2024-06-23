@@ -678,3 +678,11 @@ class TherapistsMetricsSerializer(BaseMetricsSerializer):
 class ClientsMetricsSerializer(BaseMetricsSerializer):
     last_done_assignment = serializers.DateTimeField(format=METRICS_DATE_FORMAT)
     last_created_diary = serializers.DateTimeField(format=METRICS_DATE_FORMAT)
+
+
+class GrowthMetricsSerializer(serializers.Serializer):
+    amount_of_therapists = serializers.IntegerField()
+    amount_of_clients = serializers.IntegerField()
+    amount_of_assignments = serializers.IntegerField()
+    amount_of_deleted_therapists = serializers.IntegerField()
+    amount_of_deleted_clients = serializers.IntegerField()

@@ -75,7 +75,7 @@ urlpatterns = [
         name="update_email_confirm",
     ),
     re_path(
-        r"project-metrics/(?P<for_whom>clients|therapists)/download/",
+        r"project-metrics/(?P<for_whom>clients|therapists|growth)/download/",
         metrics_download,
         name="metrics_download",
     ),
