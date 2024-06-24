@@ -1,0 +1,37 @@
+import { Meta, ColorPalette, ColorItem } from '@storybook/blocks';
+import { colors } from './colors';
+
+<Meta title="Colors" />
+
+  <ColorPalette>
+    <ColorItem
+      title="Primary Colors"
+      subtitle="Jelly Bean, Dim Gray, Ori"
+      colors={colors.primary}
+    />
+
+    <ColorItem
+      title="Additional Colors"
+      subtitle="Light Yellow, Beige, Light Gray, Black, Dark Blue, White, Gray, Medium Gray, Dark Gray"
+      colors={colors.additional}
+    />
+
+    <ColorItem
+      title="Emoji Colors"
+      subtitle="100, 200, 300, 400, 500, 600, 700, 800, 900"
+      colors={colors.emojiColors}
+    />
+
+    <ColorItem
+      title="Toast Notification Colors"
+      subtitle="Green, Red, Dark Green, Bright Red"
+      colors={colors.toastNotification}
+    />
+
+    <ColorItem
+      title="Scrollbar Colors"
+      subtitle="Gray, Blue"
+      colors={colors.scrollbar}
+    />
+  </ColorPalette>
+
