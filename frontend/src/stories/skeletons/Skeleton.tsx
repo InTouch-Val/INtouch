@@ -38,10 +38,10 @@ const Skeleton = ({ type, user, variant }: Props) => {
         </div>
       )}
       {type === "diary" && user === "psy" && (
-        <div className="skeleton" style={{gap: 20}}>
-          <div className="skeleton__body" style={{height: 70}}></div>
-          <div className="skeleton__footer"  style={{height: 70}}></div>
-          <div className="skeleton__footer_low"  style={{height: 35}}></div>
+        <div className="skeleton" style={{ gap: 20 }}>
+          <div className="skeleton__body" style={{ height: 70 }}></div>
+          <div className="skeleton__footer" style={{ height: 70 }}></div>
+          <div className="skeleton__footer_low" style={{ height: 35 }}></div>
         </div>
       )}
     </>
