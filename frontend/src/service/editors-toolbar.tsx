@@ -79,60 +79,72 @@ const EditorToolbar = forwardRef(
 
     // Функция для инициализации редактора с текстом
     const initializeEditorWithText = () => {
-      const parseContent = (content) => {
+      const isJSON = (str) => {
         try {
-          const contentObject = JSON.parse(content);
-          const contentState = convertFromRaw(contentObject);
-          const contentStateWithStyles = applyStylesFromCharacterList(
-            contentState,
-            contentObject,
-          );
-          return EditorState.createWithContent(contentStateWithStyles);
+          JSON.parse(str);
+          return true;
         } catch (error) {
-          console.error("Parsing error, treating as plain text:", error);
+          return false;
+        }
+      };
+    
+      const parseContent = (content) => {
+        if (isJSON(content)) {
+          try {
+            const contentObject = JSON.parse(content);
+            const contentState = convertFromRaw(contentObject);
+            const contentStateWithStyles = applyStylesFromCharacterList(
+              contentState,
+              contentObject,
+            );
+            return EditorState.createWithContent(contentStateWithStyles);
+          } catch (error) {
+            console.error("Error parsing JSON content:", error);
+            const contentState = ContentState.createFromText(content);
+            return EditorState.createWithContent(contentState);
+          }
+        } else {
           const contentState = ContentState.createFromText(content);
           return EditorState.createWithContent(contentState);
         }
       };
-
+    
       let newEditorState;
-      if (block.description) {
+      if (block.description && isJSON(block.description)) {
         try {
           const descriptionObject = JSON.parse(block.description);
           const rawContentState = {
             blocks: [],
             entityMap: descriptionObject.entityMap,
           };
-
+    
           for (const blockKey in descriptionObject.blockMap) {
             const block = descriptionObject.blockMap[blockKey];
             rawContentState.blocks.push(block);
           }
-
+    
           const contentState = convertFromRaw(rawContentState);
           const contentStateWithStyles = applyStylesFromCharacterList(
             contentState,
             rawContentState,
           );
-          const newEditorState = EditorState.createWithContent(
-            contentStateWithStyles,
-          );
+          newEditorState = EditorState.createWithContent(contentStateWithStyles);
           setEditorState(newEditorState);
         } catch (error) {
-          console.error("Ошибка при преобразовании строки в объект:", error);
+          console.error("Error converting string to object:", error);
         }
       } else if (block.reply) {
         newEditorState = parseContent(block.reply);
         setEditorState(newEditorState);
       } else if (block.question) {
-        const contentState = ContentState.createFromText(block.question);
-        const newEditorState = EditorState.createWithContent(contentState);
+        newEditorState = parseContent(block.question);
         setEditorState(newEditorState);
       } else {
         newEditorState = EditorState.createEmpty();
         setEditorState(newEditorState);
       }
     };
+    
 
     // Инициализация редактора при монтировании компонента
     useEffect(() => {
