@@ -1,12 +1,7 @@
 //@ts-nocheck
 import { useState, useCallback, useEffect } from "react";
-import { EditorState } from "draft-js";
-import { EditorToolbar } from "../../../service/editors-toolbar";
 import { useAuth } from "../../../service/authContext";
-import { NavLink } from "react-router-dom";
 import save from "../../../images/save.svg";
-import image from "../../../images/image2.svg";
-import imageGirl from "../../../images/image_girl.png";
 import arrowLeft from "../../../images/arrow-left.svg";
 import arrowBack from "../../../images/arrowBackWhite.svg";
 import sadEmote from "../../../images/sadEmote.svg";
@@ -20,8 +15,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import decodeStyledText from "../../../service/decodeStyledText";
 import Modal from "../../modals/Modal/Modal";
-import AssignmentNotComplete from "../../modals/Notifications/assignmentNotComplete";
-import AssignmentExit from "../../modals/Notifications/assgnmentExit";
+import EntryNotComplete from "../../modals/Notifications/entryNotComplete";
+import EntryUnsavedExit from "../../modals/Notifications/entryUnsavedExit";
 import useMobileWidth from "../../../utils/hook/useMobileWidth";
 import Button from "../../storybook/Button/Button";
 
@@ -48,15 +43,6 @@ function CompleteAssignments() {
   });
 
   const [isRateTask, setIsRateTask] = useState(false);
-  const [editorStateFirst, setEditorStateFirst] = useState(() =>
-    EditorState.createEmpty(),
-  );
-  const [editorStateSecond, setEditorStateSecond] = useState(() =>
-    EditorState.createEmpty(),
-  );
-  const [editorStateThird, setEditorStateThird] = useState(() =>
-    EditorState.createEmpty(),
-  );
   const { setCurrentCard, card } = useAuth();
   const [values, setValues] = useState({});
   const [blocks, setBlocks] = useState([]);
@@ -91,6 +77,8 @@ function CompleteAssignments() {
 
   useEffect(() => {
     setAssignmentCredentials(card);
+    setInitialData(false);
+    setIsSaved(false);
   }, []);
 
   useEffect(() => {
@@ -143,6 +131,9 @@ function CompleteAssignments() {
   const [allInputsFilled, setAllInputsFilled] = useState(false);
 
   useEffect(() => {
+    if (isClientsAssignmentsPath) {
+      return;
+    }
     let newState = {
       openInputs: {},
       multipleInputs: {},
@@ -218,7 +209,7 @@ function CompleteAssignments() {
       if (block.id === blockId) {
         return {
           ...block,
-          reply: newReply || block.reply,
+          reply: newReply ?? block.reply,
           choice_replies: newChoices || block.choice_replies,
         };
       }
@@ -313,6 +304,23 @@ function CompleteAssignments() {
         } else {
           console.log(`Status: ${resComplete.status}`);
         }
+      } else {
+        console.log(`Status: ${res.status}`);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
+  async function handleSaveTask() {
+    //saves changes in task
+    const blockInfo = blocks.map(transformBlock);
+    try {
+      const res = await API.patch(`assignments-client/${assignmentData.id}/`, {
+        blocks: blockInfo,
+      });
+      if (res.status >= 200 && res.status < 300) {
+        setIsSaved(true);
       } else {
         console.log(`Status: ${res.status}`);
       }
@@ -486,10 +494,7 @@ function CompleteAssignments() {
           </button>
 
           {!isClientsAssignmentsPath && (
-            <button
-              className="button__type_save"
-              onClick={() => setIsSaved(true)}
-            >
+            <button className="button__type_save" onClick={handleSaveTask}>
               {isMobileWidth ? (
                 <FontAwesomeIcon
                   icon={faFloppyDisk}
@@ -629,7 +634,7 @@ function CompleteAssignments() {
 
       {modalIsOpen ? (
         <Modal>
-          <AssignmentNotComplete
+          <EntryNotComplete
             completeClick={() => setIsRateTask(!isRateTask)}
             backClick={() => setModalOpen(false)}
           />
@@ -638,10 +643,14 @@ function CompleteAssignments() {
 
       {modalExitIsOpen ? (
         <Modal>
-          <AssignmentExit
-            saveClick={() => {
-              setIsSaved(true);
-              navigate(-1);
+          <EntryUnsavedExit
+            saveClick={async () => {
+              try {
+                await handleSaveTask();
+                navigate(-1);
+              } catch (error) {
+                console.error("Failed to save:", error);
+              }
             }}
             discardClick={() => navigate(-1)}
           />

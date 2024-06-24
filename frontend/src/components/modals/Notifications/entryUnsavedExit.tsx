@@ -1,7 +1,8 @@
 //@ts-nocheck
-import NotificationStyles from "../Notifications/notifications.module.css";
 
-const AssignmentExit = ({ saveClick, discardClick }) => {
+import NotificationStyles from "../Notifications/notifications.module.scss";
+
+const EntryUnsavedExit = ({ saveClick, discardClick }) => {
   return (
     <div>
       <p className={NotificationStyles.modal_description}>
@@ -26,4 +27,4 @@ const AssignmentExit = ({ saveClick, discardClick }) => {
   );
 };
 
-export default AssignmentExit;
+export default EntryUnsavedExit;

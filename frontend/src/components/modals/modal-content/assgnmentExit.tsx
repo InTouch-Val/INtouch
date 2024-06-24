@@ -1,29 +1,29 @@
 //@ts-nocheck
-import NotificationStyles from "../Notifications/notifications.module.css";
+import NotificationStyles from "./notifications.module.scss";
 
-const AssignmentNotComplete = ({ completeClick, backClick }) => {
+const AssignmentExit = ({ saveClick, discardClick }) => {
   return (
     <div>
       <p className={NotificationStyles.modal_description}>
-        It seems not all fields are filled
+        Closing task without completion may lead to data loss
       </p>
       <div className={NotificationStyles.modal_buttons_container}>
         <button
           className={`${NotificationStyles.modal_button} ${NotificationStyles.modal_button_highlighted}`}
-          onClick={backClick}
+          onClick={saveClick}
         >
-          Back
+          Save in progress
         </button>
 
         <button
           className={`${NotificationStyles.modal_button} ${NotificationStyles.modal_button_neitral}`}
-          onClick={completeClick}
+          onClick={discardClick}
         >
-          Complete as is
+          Discard & Close
         </button>
       </div>
     </div>
   );
 };
 
-export default AssignmentNotComplete;
+export default AssignmentExit;

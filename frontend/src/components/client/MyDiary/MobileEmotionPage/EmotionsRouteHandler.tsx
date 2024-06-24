@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React from "react";
 import { useLoaderData, useParams } from "react-router-dom";
 import MobileEmotionPage from "./MobileEmotionPage";

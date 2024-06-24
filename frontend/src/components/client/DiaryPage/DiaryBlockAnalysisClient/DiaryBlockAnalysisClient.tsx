@@ -1,53 +1,42 @@
 //@ts-nocheck
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import "../DiaryPage.css";
-import { EditorState, convertFromRaw } from "draft-js";
 import { ToolbarProvider } from "../../../../service/ToolbarContext";
 import { EditorToolbar } from "../../../../service/editors-toolbar";
 import { Controller, useFormContext } from "react-hook-form";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
+import { ClientDiary } from "../../../../store/entities/assignments/types";
+import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig";
+import { useEditorState } from "../../../../utils/hook/useEditorState";
 
-export default function DiaryBlockAnalysisClient({ diary, type }) {
+interface Props {
+  diary: ClientDiary;
+  showInputsincomplete: boolean;
+}
+
+export default function DiaryBlockAnalysisClient({
+  diary,
+  showInputsincomplete,
+}: Props) {
   const isMobileWidth = useMobileWidth();
+  const editorRef = useRef<EditorToolbar | null>(null);
+  const { control, setValue, getValues } = useFormContext();
 
-  const editorRef = useRef(null);
-  const content = {
-    blocks: [
-      {
-        key: "abcde",
-        text: diary ? diary.thoughts_analysis : " ",
-        type: "open",
-        depth: 0,
-        inlineStyleRanges: [],
-        entityRanges: [],
-        data: {},
-      },
-    ],
-    entityMap: {},
-  };
-
-  const contentState = convertFromRaw(content);
-  const [editorState, setEditorState] = useState(() =>
-    type == "exist"
-      ? EditorState.createWithContent(contentState)
-      : EditorState.createEmpty(),
+  const [editorState, handleEditorStateChange] = useEditorState(
+    diary?.thoughts_analysis || null,
   );
-  const block = {
-    type: "open",
-    question: "d",
-    description: "d",
-  };
 
-  const handleEditorStateChange = (newEditorState) => {
-    setEditorState(newEditorState);
-    const contentState = newEditorState.getCurrentContent();
-    const text = contentState.getPlainText();
-    setValue("thoughts_analysis", text);
-  };
+  const block = getBlockConfig(getValues, "thoughts_analysis");
 
-  const { control, setValue } = useFormContext();
+  const value = getValues("thoughts_analysis");
   return (
-    <div className="diary__block-event">
+    <div
+      className={
+        !value && showInputsincomplete
+          ? `incomplete diary__block-event`
+          : `diary__block-event`
+      }
+    >
       <div className="diary__block-title">Thoughts Analysis</div>
       <div className="diary__block-question">
         Reflect on your thoughts related to the situation. What were you
@@ -61,9 +50,16 @@ export default function DiaryBlockAnalysisClient({ diary, type }) {
           <ToolbarProvider>
             <EditorToolbar
               {...fieldsProps}
+              key="diary_analysis"
               ref={editorRef}
               editorState={editorState}
-              setEditorState={handleEditorStateChange}
+              setEditorState={(newEditorState: EditorState) =>
+                handleEditorStateChange(
+                  newEditorState,
+                  setValue,
+                  "thoughts_analysis",
+                )
+              }
               placeholder={"Write your answer here..."}
               block={block}
               isMobileWidth={isMobileWidth}

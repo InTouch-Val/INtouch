@@ -13,7 +13,7 @@ import {
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../service/authContext";
-import "../css/app.css";
+import "../css/app.scss";
 
 function App() {
   const { currentUser, logout, isLoading } = useAuth();

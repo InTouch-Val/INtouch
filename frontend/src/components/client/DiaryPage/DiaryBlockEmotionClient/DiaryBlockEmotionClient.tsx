@@ -1,64 +1,42 @@
 //@ts-nocheck
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import "../DiaryPage.css";
 import {
   listEmotions,
   listEmotionsChips,
 } from "../../../psy/DiaryPageContent/DiaryBlockEmotion/constants";
 import { ToolbarProvider } from "../../../../service/ToolbarContext";
-import { EditorState, convertFromRaw } from "draft-js";
+import { EditorState } from "draft-js";
 import { EditorToolbar } from "../../../../service/editors-toolbar";
-import { Controller, useFormContext, useWatch } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import DiaryBlockEmotionClientMobile from "./DiaryBlockEmotionClientMobile";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
+import { ClientDiary } from "../../../../store/entities/assignments/types";
+import { useEditorState } from "../../../../utils/hook/useEditorState";
+import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig";
+
+interface Props {
+  diary: ClientDiary;
+  setShowEmotionsPage: React.Dispatch<React.SetStateAction<boolean>>;
+  showInputsincomplete: boolean;
+}
 
 export default function DiaryBlockEmotionClient({
   diary,
-  type,
   setShowEmotionsPage,
-}) {
+  showInputsincomplete,
+}: Props) {
   const isMobileWidth = useMobileWidth();
 
   const editorRef = useRef(null);
-  const { control, setValue, watch, getValues } = useFormContext();
-  const primaryEmotionActive = useWatch({ control, name: "primary_emotion" });
+  const { control, setValue, getValues } = useFormContext();
   const primaryEmotionValue = getValues("primary_emotion");
-  const secondEmotionActive = watch("clarifying_emotion");
   const secondEmotionValues = getValues("clarifying_emotion");
 
-  const content = {
-    blocks: [
-      {
-        key: "abcde",
-        text: diary ? diary.emotion_type : " ",
-        type: "open",
-        depth: 0,
-        inlineStyleRanges: [],
-        entityRanges: [],
-        data: {},
-      },
-    ],
-    entityMap: {},
-  };
-
-  const contentState = convertFromRaw(content);
-  const [editorState, setEditorState] = useState(() =>
-    type == "exist"
-      ? EditorState.createWithContent(contentState)
-      : EditorState.createEmpty(),
+  const [editorState, handleEditorStateChange] = useEditorState(
+    diary?.emotion_type || null,
   );
-  const block = {
-    type: "open",
-    question: "d",
-    description: "d",
-  };
-
-  const handleEditorStateChange = (newEditorState) => {
-    setEditorState(newEditorState);
-    const contentState = newEditorState.getCurrentContent();
-    const text = contentState.getPlainText();
-    setValue("emotion_type", text);
-  };
+  const block = getBlockConfig(getValues, "emotion_type");
 
   function handleClickSecondEmotion(item) {
     if (secondEmotionValues.includes(item.title)) {
@@ -71,9 +49,17 @@ export default function DiaryBlockEmotionClient({
     }
   }
 
+  const value = getValues("emotion_type");
+
   return (
     <>
-      <div className="diary__block-event">
+      <div
+        className={
+          !value && showInputsincomplete
+            ? `incomplete diary__block-event`
+            : `diary__block-event`
+        }
+      >
         <div className="diary__block-title">Emotion Type</div>
         <div className="diary__block-question">
           How are you feeling? Describe your emotions or choose from our prompt.
@@ -87,7 +73,13 @@ export default function DiaryBlockEmotionClient({
                 {...fieldsProps}
                 ref={editorRef}
                 editorState={editorState}
-                setEditorState={handleEditorStateChange}
+                setEditorState={(newEditorState: EditorState) =>
+                  handleEditorStateChange(
+                    newEditorState,
+                    setValue,
+                    "emotion_type",
+                  )
+                }
                 placeholder={"Write your answer here..."}
                 block={block}
                 isMobileWidth={isMobileWidth}
