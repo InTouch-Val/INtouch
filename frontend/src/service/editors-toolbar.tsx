@@ -209,7 +209,10 @@ const EditorToolbar = forwardRef(
     const handleBlur = () => {
       const contentState = editorState.getCurrentContent();
       const text = contentState.getPlainText();
+
+      if (setErrorText && setErrorText) {
       validateTextLength(text);
+      }
     };
 
     return (
