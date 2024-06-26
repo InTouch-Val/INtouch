@@ -354,6 +354,11 @@ def user_delete_hard(request):
             Doctor.objects.filter(user=user).delete()
             for assignment in Assignment.objects.filter(author=user, is_public=False):
                 assignment.delete()
+            for client in user.doctors.all():
+                client.diagnosis = None
+                client.about = None
+                client.user.date_of_birth = None
+                client.save()
 
         user.save()
 
