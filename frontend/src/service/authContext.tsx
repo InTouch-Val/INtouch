@@ -73,8 +73,6 @@ function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-   
-
     initAuth();
   }, []);
 
@@ -89,7 +87,7 @@ function AuthProvider({ children }) {
         updateUserData,
         card,
         setCurrentCard,
-        initAuth
+        initAuth,
       }}
     >
       {!isLoading && children}

@@ -49,7 +49,7 @@ export const assignmentApi = createApi({
       }) => ({
         url: `${ASSIGNMENTS_URL}?${limit ? `limit=${limit} ` : ""}&page=${page}${author ? `&author=${author}` : ""}${favorite ? `&favorites=${favorite}` : ""}${language ? `&language=${language}` : ""}${assignmentType ? `&assignment_type=${assignmentType}` : ""}&ordering=${ordering}${search ? `&search=${search}` : ""}`.replace(
           /\s+/g,
-          ""
+          "",
         ), // regex удаляет все пробелы в строке
         method: "GET",
         headers: {
@@ -59,13 +59,13 @@ export const assignmentApi = createApi({
       merge: (currentState, incomingState) => {
         return assignmentAdapter.addMany(
           currentState,
-          assignmentSelector.selectAll(incomingState)
+          assignmentSelector.selectAll(incomingState),
         );
       },
       transformResponse: (response: AssignmentsResponseType) => {
         return assignmentAdapter.addMany(
           assignmentAdapter.getInitialState(),
-          response.results
+          response.results,
         );
       },
       forceRefetch: ({ currentArg, previousArg }) => {
