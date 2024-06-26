@@ -126,7 +126,7 @@ function AssignmentTile({
         // Если задание должно быть сохранено как черновик, выполняем GET запрос
         await dispatch(draftAssignmentAction(responseAssignmentId));
         duplicateResponse.data.is_public = false;
-        debugger;
+  
 
         // Если все прошло успешно, добавляем дубликат в список заданий
         if (duplicateResponse.data) {
@@ -159,6 +159,7 @@ function AssignmentTile({
   function handleShareClick(
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ): void {
+
     event.stopPropagation();
     onShareClick(assignment.id);
   }

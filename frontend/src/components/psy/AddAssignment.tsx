@@ -255,6 +255,7 @@ function AddAssignment() {
           await API.get(`assignments/${id}/draft/`);
         }
       }
+  
 
       if ([200, 201].includes(response.status)) {
         if (isDraft) {
