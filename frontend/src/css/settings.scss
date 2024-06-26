@@ -370,3 +370,11 @@ header img {
     color: $mobile-error-color;
   }
 }
+
+.delete-modal__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 600px;
+  width: 100%;
+}

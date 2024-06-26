@@ -4,11 +4,19 @@ import { NavLink } from "react-router-dom";
 import "./ClientAssignmentCard.css";
 import { API } from "../../../service/axios";
 import useMobileWidth from "../../../utils/hook/useMobileWidth";
+import {
+  useCreateAssignmentMutation,
+  useUpdateAssignmentByUUIDMutation,
+} from "../../../store/entities/assignments/assingmentsApi";
+import { StatusFromServer } from "../../psy/ClientAssignmentTile";
 
 function ClientAssignmentCard({ assignmentData, openAssignment }) {
   const [isShowContextMenu, setIsShowContextMenu] = useState(false);
   const menuReference = useRef(null);
   const buttonReference = useRef(null);
+
+  const [createAssignment, _] = useCreateAssignmentMutation();
+  const [updateClientAssignment] = useUpdateAssignmentByUUIDMutation();
 
   function defineStatusClass() {
     switch (assignmentData?.status) {
@@ -30,7 +38,7 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
   async function handleShareWithTherapist() {
     try {
       const res = await API.post(
-        `assignments-client/${assignmentData?.id}/visible/`,
+        `assignments-client/${assignmentData?.id}/visible/`
       );
       if (res.status >= 200 && res.status < 300) {
         console.log(res.data);
@@ -81,6 +89,39 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
 
   //Changing card content and menu
   const isMobileWidth = useMobileWidth();
+
+  function handleClickDuplicate() {
+    const duplicateAssignmentData = {
+      ...assignmentData,
+      status: StatusFromServer.ToDo,
+    };
+
+    try {
+      const response = createAssignment(duplicateAssignmentData);
+      return response;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  function handleClickClear() {
+    const clearAssignmentData = {
+      ...assignmentData,
+      status: StatusFromServer.ToDo,
+      blocks: [],
+      title: "",
+      text: "",
+    };
+
+    const uuid = clearAssignmentData.id;
+
+    try {
+      const response = updateClientAssignment({ uuid, clearAssignmentData });
+      return response;
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   return (
     <article className="card">
@@ -140,11 +181,12 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
                   />
                 </NavLink>
               </li>
-              <li className="card__action-menu-item disabled">
+              <li className="card__action-menu-item">
                 <button
                   type="button"
+                  onClick={handleClickClear}
                   className="card__action-menu-text"
-                  disabled={true}
+                  // disabled={true}
                 >
                   Clear
                   <div
@@ -153,11 +195,11 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
                   />
                 </button>
               </li>
-              <li className="card__action-menu-item disabled">
+              <li className="card__action-menu-item">
                 <button
                   type="button"
+                  onClick={handleClickDuplicate}
                   className="card__action-menu-text"
-                  disabled={true}
                 >
                   Duplicate
                   <div
@@ -177,7 +219,7 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
             <button
               type="button"
               className="card__action-menu-text"
-              disabled={true}
+              onClick={handleClickDuplicate}
             >
               <div
                 className="card__action-menu-icon card__action-menu-icon_type_duplicate"
@@ -187,7 +229,8 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
             <button
               type="button"
               className="card__action-menu-text"
-              disabled={true}
+              // disabled={true}
+              onClick={handleClickClear}
             >
               <div
                 className="card__action-menu-icon card__action-menu-icon_type_clear"

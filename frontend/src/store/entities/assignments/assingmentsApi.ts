@@ -129,12 +129,14 @@ export const assignmentApi = createApi({
       AssignmentsType,
       AssignmentUpdateRequestType
     >({
-      query: ({ uuid }) => ({
-        url: `${ASSIGNMENTS_URL}/${uuid}`,
+      query: ({ uuid, body }) => ({
+        url: `${ASSIGNMENTS_URL}/${uuid}/`,
         method: "PUT",
+        data: body,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
+        body: body,
       }),
     }),
 

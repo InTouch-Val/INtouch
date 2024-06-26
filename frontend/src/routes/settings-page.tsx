@@ -54,7 +54,7 @@ function ProfileTab() {
   });
   const [selectedFile, setSelectedFile] = useState([]);
   const [previewImage, setPreviewImage] = useState(
-    currentUser.photo || "default-avatar.png",
+    currentUser.photo || "default-avatar.png"
   );
   const fileInputRef = createRef();
 
@@ -94,7 +94,7 @@ function ProfileTab() {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        },
+        }
       ).then(() => updateUserData());
 
       console.log(response);
@@ -282,6 +282,7 @@ const SecurityTab = () => {
                   Are you sure you want to delete your profile forever? <br />
                   <strong>This action is irrevertable!</strong>
                 </p>
+              
                 <div>
                   <button className="action-button" onClick={handleModalToggle}>
                     Cancel
