@@ -440,7 +440,7 @@ class BlockSerializer(BlockSerializerForClient):
 
 class AssignmentSerializer(serializers.ModelSerializer):
     blocks = BlockSerializer(many=True, required=False)
-    author_name = serializers.StringRelatedField(source="author", read_only=True)
+    author_name = serializers.SerializerMethodField()
     status = serializers.CharField(required=False)
     tags = serializers.CharField(required=False)
     image_url = serializers.CharField(required=False)
@@ -474,6 +474,11 @@ class AssignmentSerializer(serializers.ModelSerializer):
             "share",
             "author",
         ]
+
+    def get_author_name(self, obj):
+        if obj.author.deleted:
+            return USER_TYPES[2]
+        return obj.author
 
     def create(self, validated_data):
         blocks_data = validated_data.pop("blocks", [])
