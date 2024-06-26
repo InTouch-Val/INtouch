@@ -55,7 +55,7 @@ urlpatterns = [
         name="assignment_delete-list",
     ),
     path(
-        "assignments/set-client/<int:pk>/<int:client_pk>/",
+        "assignments/set-client/<int:pk>/",
         AddAssignmentClientView.as_view(),
         name="add_assignment_client",
     ),

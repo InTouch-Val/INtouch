@@ -448,7 +448,7 @@ class DoctorUpdateClientView(generics.UpdateAPIView):
 
 
 @extend_schema_view(
-    get=extend_schema(
+    post=extend_schema(
         tags=["Assignments"],
         summary="Add assignment to favorites",
         request=None,
@@ -483,7 +483,7 @@ class AssignmentAddUserMyListView(APIView):
 
 
 @extend_schema_view(
-    get=extend_schema(
+    delete=extend_schema(
         tags=["Assignments"],
         summary="Delete assignment from favorites",
         request=None,
@@ -537,60 +537,72 @@ class AssignmentDeleteUserMyListView(APIView):
                 ],
             ),
         },
+        parameters=[
+            OpenApiParameter(
+                "clients",
+                description=("Ids of clients to send assignment to. \n"),
+                required=True,
+            ),
+        ],
     )
 )
 class AddAssignmentClientView(APIView):
-    """Назначение задачи клиенту"""
+    """Назначение задачи клиентам."""
 
     serializer_class = None
 
-    def post(self, request, pk, client_pk):
-        assignment = get_object_or_404(Assignment, pk=pk)
-        client = get_object_or_404(User, pk=client_pk)
-        if request.user.doctor != client.doctors.first():
+    def post(self, request, pk):
+        try:
+            clients = request.user.doctor.clients.filter(
+                pk__in=request.query_params.get("clients").split(",")
+            )
+        except AttributeError:
             return Response(
-                {"message": "You cannot add assignment to not-yours client."}
+                {"message": "You have to pass 'clients' query parameter."},
+                HTTPStatus.BAD_REQUEST,
             )
-        assignments_copy = AssignmentClient.objects.create(
-            title=assignment.title,
-            text=assignment.text,
-            author=assignment.author,
-            assignment_type=assignment.assignment_type,
-            tags=assignment.tags,
-            language=assignment.language,
-            share=assignment.share,
-            likes=assignment.likes,
-            image_url=assignment.image_url,
-            user=client,
-            assignment_root=assignment,
-        )
-        blocks = assignment.blocks.all()
-        for block in blocks:
-            block_copy = Block.objects.create(
-                question=block.question,
-                type=block.type,
-                image=block.image,
-                description=block.description,
-                reply=block.reply,
-                start_range=block.start_range,
-                end_range=block.end_range,
-                left_pole=block.left_pole,
-                right_pole=block.right_pole,
+        assignment = get_object_or_404(Assignment, pk=pk)
+        for user in clients:
+            assignments_copy = AssignmentClient.objects.create(
+                title=assignment.title,
+                text=assignment.text,
+                author=assignment.author,
+                assignment_type=assignment.assignment_type,
+                tags=assignment.tags,
+                language=assignment.language,
+                share=assignment.share,
+                likes=assignment.likes,
+                image_url=assignment.image_url,
+                user=user,
+                assignment_root=assignment,
             )
-            choice_replies = block.choice_replies.all()
-            for choice_reply in choice_replies:
-                choice_reply_copy = BlockChoice.objects.create(
-                    block=block_copy,
-                    reply=choice_reply.reply,
-                    checked=choice_reply.checked,
+            blocks = assignment.blocks.all()
+            for block in blocks:
+                block_copy = Block.objects.create(
+                    question=block.question,
+                    type=block.type,
+                    image=block.image,
+                    description=block.description,
+                    reply=block.reply,
+                    start_range=block.start_range,
+                    end_range=block.end_range,
+                    left_pole=block.left_pole,
+                    right_pole=block.right_pole,
                 )
-                block_copy.choice_replies.add(choice_reply_copy)
-            assignments_copy.blocks.add(block_copy)
-        client.client.assignments.add(assignments_copy)
-        assignment.share += 1
+                choice_replies = block.choice_replies.all()
+                for choice_reply in choice_replies:
+                    choice_reply_copy = BlockChoice.objects.create(
+                        block=block_copy,
+                        reply=choice_reply.reply,
+                        checked=choice_reply.checked,
+                    )
+                    block_copy.choice_replies.add(choice_reply_copy)
+                assignments_copy.blocks.add(block_copy)
+            user.client.assignments.add(assignments_copy)
+            assignment.share += 1
         assignment.save()
         return Response(
-            {"message": "Assignment was set to the client successfully."},
+            {"message": "Assignment was set to the clients successfully."},
             HTTPStatus.CREATED,
         )
 
@@ -707,7 +719,7 @@ class AssignmentViewSet(viewsets.ModelViewSet):
     """CRUD операции над задачами доктора"""
 
     permission_classes = (AssignmentDoctorOnly,)
-    queryset = Assignment.objects.all()
+    queryset = Assignment.objects.filter(is_public=True)
     serializer_class = AssignmentSerializer
     filter_backends = [
         DjangoFilterBackend,
@@ -733,7 +745,12 @@ class AssignmentViewSet(viewsets.ModelViewSet):
         favorites = self.request.query_params.get("favorites") == "true"
         if favorites:
             return avg_grade_annotation(self.request.user.doctor.assignments)
-        return avg_grade_annotation(super().get_queryset())
+        return avg_grade_annotation(
+            (
+                super().get_queryset()
+                | Assignment.objects.filter(author=self.request.user, is_public=False)
+            )
+        )
 
     def destroy(self, request, *args, **kwargs):
         assignment = self.get_object()
