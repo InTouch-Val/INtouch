@@ -1,12 +1,7 @@
 //@ts-nocheck
 import { useState, useCallback, useEffect } from "react";
-import { EditorState } from "draft-js";
-import { EditorToolbar } from "../../../service/editors-toolbar";
 import { useAuth } from "../../../service/authContext";
-import { NavLink } from "react-router-dom";
 import save from "../../../images/save.svg";
-import image from "../../../images/image2.svg";
-import imageGirl from "../../../images/image_girl.png";
 import arrowLeft from "../../../images/arrow-left.svg";
 import arrowBack from "../../../images/arrowBackWhite.svg";
 import sadEmote from "../../../images/sadEmote.svg";
@@ -47,15 +42,6 @@ function CompleteAssignments() {
   });
 
   const [isRateTask, setIsRateTask] = useState(false);
-  const [editorStateFirst, setEditorStateFirst] = useState(() =>
-    EditorState.createEmpty(),
-  );
-  const [editorStateSecond, setEditorStateSecond] = useState(() =>
-    EditorState.createEmpty(),
-  );
-  const [editorStateThird, setEditorStateThird] = useState(() =>
-    EditorState.createEmpty(),
-  );
   const { setCurrentCard, card } = useAuth();
   const [values, setValues] = useState({});
   const [blocks, setBlocks] = useState([]);
@@ -144,6 +130,9 @@ function CompleteAssignments() {
   const [allInputsFilled, setAllInputsFilled] = useState(false);
 
   useEffect(() => {
+    if (isClientsAssignmentsPath) {
+      return;
+    }
     let newState = {
       openInputs: {},
       multipleInputs: {},
