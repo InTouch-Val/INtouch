@@ -43,7 +43,6 @@ export default function AssignmentsPageRefactor({
     if (isShareModal) {
       setSelectedAssignmentIdForShareModalOnClientPage(assignmentId);
     } else {
-
       setSelectedAssignmentId(assignmentId);
       setIsShareModalOpen(true);
     }

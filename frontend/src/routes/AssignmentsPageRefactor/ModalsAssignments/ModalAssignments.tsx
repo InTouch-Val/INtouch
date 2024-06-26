@@ -52,13 +52,13 @@ export default function ModalAssignments({
 
       const res = await selectedClients.map(async (clientId) => {
         const data = await dispatch(
-          setClientByIdAction({ assignmentId, clientId })
+          setClientByIdAction({ assignmentId, clientId }),
         );
         return await data.payload;
       });
-   
+
       const allResponsesSuccessful = await res.every(
-        (response) => response.status >= 200 && response.status <= 300
+        (response) => response.status >= 200 && response.status <= 300,
       );
       if (allResponsesSuccessful) {
         setIfError(false);
