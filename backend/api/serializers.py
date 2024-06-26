@@ -476,9 +476,12 @@ class AssignmentSerializer(serializers.ModelSerializer):
         ]
 
     def get_author_name(self, obj):
-        if obj.author.deleted:
+        try:
+            if obj.author.deleted:
+                return USER_TYPES[2]
+            return obj.author
+        except AttributeError:
             return USER_TYPES[2]
-        return obj.author
 
     def create(self, validated_data):
         blocks_data = validated_data.pop("blocks", [])
