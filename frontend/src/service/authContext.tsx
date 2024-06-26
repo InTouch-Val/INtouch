@@ -55,23 +55,25 @@ function AuthProvider({ children }) {
     setCard(card);
   }
 
-  useEffect(() => {
-    const initAuth = async () => {
-      const accessToken = localStorage.getItem("accessToken");
-      if (!accessToken) {
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        const response = await API.get("get-user/");
-        setCurrentUser(response.data[0]);
-      } catch (error) {
-        console.error("Error during initial auth check:", error);
-        logout();
-      }
+  const initAuth = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
       setIsLoading(false);
-    };
+      return;
+    }
+
+    try {
+      const response = await API.get("get-user/");
+      setCurrentUser(response.data[0]);
+    } catch (error) {
+      console.error("Error during initial auth check:", error);
+      logout();
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+   
 
     initAuth();
   }, []);
@@ -87,6 +89,7 @@ function AuthProvider({ children }) {
         updateUserData,
         card,
         setCurrentCard,
+        initAuth
       }}
     >
       {!isLoading && children}

@@ -19,7 +19,7 @@ import {
 export const WithTab = (WrappedComponent) => {
   return function WithTabComponent(props) {
     //@ts-ignore
-    const { currentUser } = useAuth();
+    const { currentUser, initAuth } = useAuth();
     const { ref, inView } = useInView({
       threshold: 0.5,
     });
@@ -40,6 +40,7 @@ export const WithTab = (WrappedComponent) => {
       data: listAssignment,
       refetch,
       isSuccess,
+      isLoading,
     } = useGetAssignmentsQuery(
       {
         limit: 12,
@@ -56,25 +57,26 @@ export const WithTab = (WrappedComponent) => {
       {
         selectFromResult: ({ data, ...originalArgs }) => ({
           data: assignmentSelector.selectAll(
-            data ?? assignmentAdapter.getInitialState(),
+            data ?? assignmentAdapter.getInitialState()
           ),
           ...originalArgs,
         }),
-      },
+      }
     );
 
     const toggleFavorite = async (
-      assignmentId: number | string,
+      assignmentId: number | string
     ): Promise<void> => {
       const isFavorite = currentUser.doctor.assignments.find(
-        (item) => item == assignmentId,
+        (item) => item == assignmentId
       );
       dispatch(
         changeAssignmentFavoriteByIdAction({
           isFavorite: isFavorite,
           assignmentId: assignmentId,
-        }),
+        })
       );
+      initAuth();
       refetch();
     };
 

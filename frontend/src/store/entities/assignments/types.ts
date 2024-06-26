@@ -52,6 +52,6 @@ export type AssignmentCreateRequestType = {
 };
 
 export type AssignmentUpdateRequestType = {
-  uuid: string;
+  uuid: string | number;
   body: AssignmentCreateRequestType;
 };
