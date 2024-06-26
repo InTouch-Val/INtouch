@@ -220,11 +220,11 @@
 }
 
 .uncompleted {
-  outline: 1px solid #c86b7c; /* Example style */
+  outline: 1px solid #c86b7c;
 }
 
 .assignment__block {
-  max-width: 935px;
+  max-width: 100%;
   max-height: fit-content;
   margin-right: auto;
   margin-left: auto;

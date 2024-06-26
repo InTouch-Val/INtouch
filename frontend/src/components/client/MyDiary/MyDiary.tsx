@@ -1,6 +1,5 @@
 //@ts-nocheck
-
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../../psy/button/ButtonHeadline";
 import "./MyDiary.css";
 import addEntry from "../../../images/add_entry.svg";
@@ -47,16 +46,17 @@ export default function MyDiary() {
       .finally(() => setFetching(true));
   }, [isFetching, limit]);
 
-  function handleClickDelete() {
+  const handleClickDelete = async (event) => {
+    event.stopPropagation();
     setFetching(false);
     try {
-      const response = API.delete(`/diary-notes/${idCardDelete}/`);
+      const response = await API.delete(`/diary-notes/${idCardDelete}/`);
       closeModal();
       return response.data;
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   function openModal(e, card) {
     e.stopPropagation();
@@ -113,12 +113,12 @@ export default function MyDiary() {
             <div className="diary__buttons-modal">
               <Button
                 className="diary__button"
-                onClick={() => handleClickDelete()}
+                onClick={(e) => handleClickDelete(e)}
               >
                 Yes, Delete
               </Button>
               <Button
-                className="action-button diary__button"
+                className="action-button diary_button"
                 onClick={() => setShowModal(false)}
               >
                 Cancel
