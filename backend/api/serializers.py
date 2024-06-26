@@ -479,7 +479,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
         try:
             if obj.author.deleted:
                 return USER_TYPES[2]
-            return obj.author
+            return str(obj.author)
         except AttributeError:
             return USER_TYPES[2]
 
