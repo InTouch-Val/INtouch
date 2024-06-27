@@ -1,6 +1,6 @@
 import random
 import json
-from datetime import datetime, timezone
+from datetime import datetime
 from http import HTTPStatus
 
 from drf_spectacular.utils import (
@@ -11,9 +11,10 @@ from drf_spectacular.utils import (
     OpenApiResponse,
 )
 from django.conf import settings
+from django.utils import timezone
 from django.contrib.auth.hashers import check_password
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_GET
 from django_filters.rest_framework import DjangoFilterBackend
@@ -36,7 +37,9 @@ from api.utils import (
     avg_grade_annotation,
     get_therapists_metrics_query,
     get_clients_metrics_query,
+    get_growth_metrics_query,
     form_metrics_file,
+    form_dates_for_metrics,
 )
 from api.constants import (
     USER_TYPES,
@@ -336,7 +339,7 @@ def user_delete_hard(request):
         user.deleted = True
         user.is_active = False
         user.accept_policy = False
-        user.deleted_on = datetime.now(timezone.utc)
+        user.deleted_on = timezone.now()
         user.username = "".join(
             random.choice(default_charset) for _ in range(RANDOM_VALUE_SIZE)
         )
@@ -1078,15 +1081,141 @@ def assetlink(request):
     return response
 
 
-def project_metrics(request):
-    """Renders project metrics page."""
-    therapists_metrics = get_therapists_metrics_query()
-    clients_metrics = get_clients_metrics_query()
-    context = {
-        "therapists": therapists_metrics,
-        "clients": clients_metrics,
-    }
-    return render(request, "metrics/project_metrics.html", context=context)
+@extend_schema_view(
+    therapists=extend_schema(
+        tags=["Metrics"],
+        summary="Therapists metrics",
+        request=None,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=TherapistsMetricsSerializer,
+            )
+        },
+        parameters=[
+            OpenApiParameter(
+                "date_from",
+                description=(
+                    "Filter accounts from date \n" "Date format: 01-01-2000 \n"
+                ),
+                required=True,
+            ),
+            OpenApiParameter(
+                "date_to",
+                description=("Filter accounts to date \n" "Date format: 01-01-2000 \n"),
+                required=True,
+            ),
+        ],
+    ),
+    clients=extend_schema(
+        tags=["Metrics"],
+        summary="Clients metrics",
+        request=None,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=ClientsMetricsSerializer,
+            )
+        },
+        parameters=[
+            OpenApiParameter(
+                "date_from",
+                description=(
+                    "Filter accounts from date. \n" "Date format: 01-01-2000 \n"
+                ),
+                required=True,
+            ),
+            OpenApiParameter(
+                "date_to",
+                description=("Filter accounts to date \n" "Date format: 01-01-2000 \n"),
+                required=True,
+            ),
+        ],
+    ),
+    growth=extend_schema(
+        tags=["Metrics"],
+        summary="Growth metrics",
+        request=None,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=ClientsMetricsSerializer,
+            )
+        },
+        parameters=[
+            OpenApiParameter(
+                "date_from",
+                description=(
+                    "Filter accounts from date. \n" "Date format: 01-01-2000 \n"
+                ),
+                required=True,
+            ),
+            OpenApiParameter(
+                "date_to",
+                description=("Filter accounts to date \n" "Date format: 01-01-2000 \n"),
+                required=True,
+            ),
+        ],
+    ),
+)
+class ProjectMetricsViewSet(
+    viewsets.GenericViewSet,
+):
+    serializer_class = None
+
+    def get_queryset(self, for_whom, date_from, date_to):
+        queries = {
+            "therapists": get_therapists_metrics_query,
+            "clients": get_clients_metrics_query,
+            "growth": get_growth_metrics_query,
+        }
+        return queries[for_whom](date_from, date_to)
+
+    def get_serializer(self, *args, **kwargs):
+        serializer_class = self.get_serializer_class()
+        kwargs.setdefault("context", self.get_serializer_context())
+        return serializer_class(*args, **kwargs)
+
+    def form_serialized_metrics_data(self, request):
+        for_whom = request.path.split("/")[4]
+        date_from = request.query_params.get("date_from")
+        date_to = request.query_params.get("date_to")
+        formatted_dates = form_dates_for_metrics(date_from, date_to)
+        if isinstance(formatted_dates, Response):
+            return formatted_dates
+        query = self.get_queryset(for_whom, formatted_dates[0], formatted_dates[1])
+        try:
+            return Response(
+                data=self.get_serializer(query, many=True).data, status=HTTPStatus.OK
+            )
+        except AttributeError:
+            serialized_data = self.get_serializer(data=query)
+            serialized_data.is_valid(raise_exception=True)
+            return Response(data=serialized_data.data, status=HTTPStatus.OK)
+
+    @action(
+        methods=["GET"],
+        detail=False,
+        url_name="project_metrics_therapists",
+        serializer_class=TherapistsMetricsSerializer,
+    )
+    def therapists(self, request):
+        return self.form_serialized_metrics_data(request)
+
+    @action(
+        methods=["GET"],
+        detail=False,
+        url_name="project_metrics_clients",
+        serializer_class=ClientsMetricsSerializer,
+    )
+    def clients(self, request):
+        return self.form_serialized_metrics_data(request)
+
+    @action(
+        methods=["GET"],
+        detail=False,
+        url_name="project_metrics_clients",
+        serializer_class=GrowthMetricsSerializer,
+    )
+    def growth(self, request):
+        return self.form_serialized_metrics_data(request)
 
 
 def metrics_download(request, for_whom: str):
@@ -1099,5 +1228,24 @@ def metrics_download(request, for_whom: str):
             )
         },
     )
-    form_metrics_file(response, for_whom)
+    date_from = request.GET.get("date_from")
+    date_to = request.GET.get("date_to")
+    if not date_from or not date_to:
+        return JsonResponse(
+            data={"error": "You have to pass both date_from and date_to parameters."},
+            status=HTTPStatus.BAD_REQUEST,
+        )
+    try:
+        formatted_date_from = timezone.make_aware(
+            datetime.strptime(date_from, "%d-%m-%Y"),
+        )
+        formatted_date_to = timezone.make_aware(
+            datetime.strptime(date_to, "%d-%m-%Y"),
+        )
+    except ValueError:
+        return JsonResponse(
+            data={"error": "Incorrect date format. Correct format 01-01-1999."},
+            status=HTTPStatus.BAD_REQUEST,
+        )
+    form_metrics_file(response, for_whom, formatted_date_from, formatted_date_to)
     return response
