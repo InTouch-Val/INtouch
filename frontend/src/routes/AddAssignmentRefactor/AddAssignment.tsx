@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { EditorState, ContentState } from "draft-js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -23,32 +23,134 @@ import decodeStyledText from "../../service/decodeStyledText";
 import HeadlinerImg from "./HeadlinerImg/HeadlinerImg";
 import "../../css/assignments.css";
 import HeaderAssignment from "./HeaderAssigmentPage/HeaderAssignment";
-
-const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { updateForm } from "../../store/slices/add-assignment/form";
+import {
+  addBlock,
+  removeBlock,
+  updateBlock,
+  setBlocks,
+} from "../../store/slices/add-assignment/blocks";
+import {
+  Block,
+  AssignmentData,
+  UpdateBlockAction,
+  AssignmentReqData,
+} from "../../store/entities/add-assignment/types";
+import {
+  fetchAssignmentById,
+  createAssignment,
+  updateAssignment,
+  saveAsDraft,
+} from "../../store/actions/add-assignment/addAssAct";
+import {
+  setError,
+  clearErrors,
+} from "../../store/slices/add-assignment/errorsSlice";
 
 function AddAssignment() {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [type, setType] = useState("lesson");
-  const [language, setLanguage] = useState("en");
-  // const [tags, setTags] = useState('');
+  const dispatch = useAppDispatch();
+  const blocks = useAppSelector((state) => state.blocks.blocks);
+  const MemoizedHeadline = useMemo(Headline); //предотвращения ненужных перерендеров
+  const MemoizedImageQuestionBlock = useMemo(ImageQuestionBlock); //предотвращения ненужных перерендеров
 
-  const [blocks, setBlocks] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(false);
-  const [successMessageText, setSuccessMessageText] = useState("");
-  const [selectedImageForBlock, setSelectedImageForBlock] = useState({
-    file: null, // Файл изображения
-    url: null, // URL изображения, полученный с помощью FileReader
-  });
+  const {
+    title,
+    description,
+    type,
+    language,
+    selectedImage,
+    successMessage,
+    successMessageText,
+    selectedImageForBlock,
+    isChangeView,
+    isError,
+  } = useAppSelector((state) => state.formAddAssignment);
 
-  const [isChangeView, setChangeView] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
+  const errorMessages = useAppSelector((state) => state.errors.messages);
+
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const isEditMode = id != undefined;
+
+  const handleAddBlock = useCallback(
+    (type: string) => {
+      dispatch(addBlock({ type }));
+    },
+    [dispatch]
+  );
+
+  const handleRemoveBlock = useCallback(
+    (blockId: number) => {
+      dispatch(removeBlock({ blockId }));
+    },
+    [dispatch]
+  );
+
+  const handleUpdateBlock = useCallback(
+    (updates: UpdateBlockAction["payload"]) => {
+      dispatch(updateBlock(updates));
+    },
+    [dispatch]
+  );
+
+  const handleImageSelect = (image) => {
+    dispatch(updateForm({ selectedImage: image }));
+  };
+
+  const handleImgSelectForBlock = (image) => {
+    dispatch(updateForm({ selectedImageForBlock: image }));
+  };
+
+  const copyBlock = useCallback(
+    (blockId: number) => {
+      const blockIndex = blocks.findIndex((b) => b.id === blockId);
+      if (blockIndex !== -1) {
+        const blockCopy = { ...blocks[blockIndex], id: Date.now() };
+        dispatch(
+          setBlocks((prevBlocks) => [
+            ...prevBlocks.slice(0, blockIndex),
+            blockCopy,
+            ...prevBlocks.slice(blockIndex + 1),
+          ])
+        );
+      }
+    },
+    [blocks, dispatch]
+  );
+
+  const moveBlockForward = useCallback(
+    (blockId: number) => {
+      const blockIndex = blocks.findIndex((b) => b.id === blockId);
+      if (blockIndex < blocks.length - 1) {
+        // Проверяем, не является ли текущий блок последним
+        const updatedBlocks = [...blocks]; // Создаем копию массива блоков
+        const movingBlock = updatedBlocks.splice(blockIndex, 1)[0]; // Удаляем блок из текущей позиции
+        updatedBlocks.splice(blockIndex + 1, 0, movingBlock); // Вставляем блок на новую позицию
+        dispatch(setBlocks(updatedBlocks)); // Обновляем состояние
+      }
+    },
+    [blocks, dispatch]
+  );
+
+  const moveBlockBackward = useCallback(
+    (blockId: number) => {
+      const blockIndex = blocks.findIndex((b) => b.id === blockId);
+      if (blockIndex > 0) {
+        // Проверяем, не является ли текущий блок первым
+        const updatedBlocks = [...blocks]; // Создаем копию массива блоков
+        const movingBlock = updatedBlocks.splice(blockIndex, 1)[0]; // Удаляем блок из текущей позиции
+        updatedBlocks.splice(blockIndex - 1, 0, movingBlock); // Вставляем блок на новую позицию
+        dispatch(setBlocks(updatedBlocks)); // Обновляем состояние
+      }
+    },
+    [blocks, dispatch]
+  );
 
   useEffect(() => {
-    console.log(title, description);
     if (title.length > 2 && description.length > 2) {
-      setErrorText("");
+      dispatch(clearErrors());
 
       const titleElement = document.getElementById("title");
 
@@ -58,124 +160,85 @@ function AddAssignment() {
     }
   }, [title, description]);
 
-  const navigate = useNavigate();
-  const { id } = useParams();
-  const isEditMode = id != undefined;
-
-  const fetchAssignment = useCallback(async () => {
-    try {
-      const response = await API.get(`assignments/${id}/`);
-      setTitle(response.data.title);
-      setDescription(response.data.text);
-      setType(response.data.assignment_type);
-      setLanguage(response.data.language);
-      setSelectedImage({ urls: { full: response.data.image_url } });
-
-      const fetchedBlocks = response.data.blocks.map((block) => {
-        let contentState;
-        try {
-          contentState = ContentState.createFromText(block.question);
-        } catch (error) {
-          console.error("Ошибка при обработке содержимого:", error);
-          // Создаем ContentState с текстом из data.title для всех типов блоков, кроме 'text'
-          if (block.type !== "text") {
-            contentState = ContentState.createFromText(block.question);
-          } else {
-            // Для типа 'text' создаем пустое содержимое, если описание не может быть обработано
-            contentState = ContentState.createFromText(block.question);
-          }
-        }
-
-        if (block.type === "text") {
-          return {
-            ...block,
-            content: EditorState.createWithContent(contentState),
-          };
-        }
-        if (block.type === "single" || block.type === "multiple") {
-          return {
-            ...block,
-            choices: block.choice_replies.map((choice) => choice.reply),
-            content: EditorState.createWithContent(contentState),
-          };
-        }
-        if (block.type === "range") {
-          return {
-            ...block,
-            minValue: block.start_range,
-            maxValue: block.end_range,
-            content: EditorState.createWithContent(contentState),
-          };
-        }
-        if (block.type === "image") {
-          return {
-            ...block,
-            content: EditorState.createWithContent(contentState),
-            image: block.image,
-          };
-        }
-        return block;
-      });
-
-      setBlocks(fetchedBlocks);
-    } catch (error) {
-      console.error(error.message);
-    }
-  }, [id]);
-
   useEffect(() => {
     if (isEditMode) {
-      fetchAssignment();
-    }
-  }, [isEditMode, fetchAssignment]);
+      const fetchData = async () => {
+        const resultAction = await dispatch(fetchAssignmentById(id));
 
-  useEffect(() => {
-    console.log(blocks);
-  }, [blocks]);
+        if (resultAction.type.endsWith("/fulfilled")) {
+          const response = resultAction.payload;
+
+          dispatch(
+            updateForm({
+              title: response.title,
+              description: response.text,
+              type: response.assignment_type,
+              language: response.language,
+              selectedImage: { urls: { full: response.image_url } },
+            })
+          );
+
+          const fetchedBlocks = response.blocks.map((block) => {
+            let contentState;
+            try {
+              contentState = ContentState.createFromText(block.question);
+            } catch (error) {
+              console.error("Ошибка при обработке содержимого:", error);
+            }
+
+            switch (block.type) {
+              case "text":
+                return {
+                  ...block,
+                  content: EditorState.createWithContent(contentState),
+                };
+              case "single":
+              case "multiple":
+                return {
+                  ...block,
+                  choices: block.choice_replies.map((choice) => choice.reply),
+                  content: EditorState.createWithContent(contentState),
+                };
+              case "range":
+                return {
+                  ...block,
+                  minValue: block.start_range,
+                  maxValue: block.end_range,
+                  content: EditorState.createWithContent(contentState),
+                };
+              case "image":
+                return {
+                  ...block,
+                  content: EditorState.createWithContent(contentState),
+                  image: block.image,
+                };
+              default:
+                return block;
+            }
+          });
+
+          dispatch(setBlocks(fetchedBlocks));
+        }
+      };
+
+      fetchData();
+    }
+  }, [isEditMode, dispatch]);
 
   function parseErrorText(errorText) {
     const errors = JSON.parse(errorText);
     const errorMessages = {};
     console.log(errors);
 
-    errors.title?.forEach((message) => {
-      errorMessages.title = message;
-    });
-
-    errors.text?.forEach((message) => {
-      errorMessages.description = message;
-    });
-
-    errors.blocks?.forEach((block, index) => {
-      if (block.image) {
-        errorMessages[`blocks #${index + 1} image`] = block.image[0];
-      }
-      if (block.description) {
-        errorMessages[`blocks #${index + 1} description`] =
-          block.description[0];
-      }
-      if (block.question) {
-        errorMessages[`blocks #${index + 1} question`] = block.question[0];
-      }
-      if (block.choice_replies) {
-        errorMessages[`blocks #${index + 1} choice_replies`] =
-          block.choice_replies[0];
-      }
-      if (block.end_range) {
-        errorMessages[`blocks #${index + 1} end_range`] = block.end_range[0];
-      }
-      if (block.left_pole) {
-        errorMessages[`blocks #${index + 1} left_pole`] = block.left_pole[0];
-      }
-      if (block.right_pole) {
-        errorMessages[`blocks #${index + 1} right_pole`] = block.right_pole[0];
-      }
-      if (block.start_range) {
-        errorMessages[`blocks #${index + 1} start_range`] =
-          block.start_range[0];
+    Object.keys(errors).forEach((key) => {
+      if (Array.isArray(errors[key])) {
+        errors[key].forEach((message, index) => {
+          errorMessages[`${key} #${index + 1}`] = message;
+        });
+      } else {
+        errorMessages[key] = errors[key];
       }
     });
-    setHasScrolled(true);
 
     return errorMessages;
   }
@@ -218,7 +281,7 @@ function AddAssignment() {
       };
     });
 
-    const requestData = {
+    const requestData: AssignmentReqData = {
       blocks: blockInfo,
       title,
       text: description,
@@ -232,73 +295,60 @@ function AddAssignment() {
     };
 
     try {
-      console.log(blockInfo);
-      let response;
       if (!isEditMode) {
-        // Если задание создается впервые, выполняем POST запрос
-        response = await API.post("assignments/", requestData);
-        if (!response || !response.data || !response.data.id) {
-          throw new Error("Failed to create assignment");
-        }
-        // Получаем ID созданного задания
-        const assignmentId = response.data.id;
-
-        if (isDraft || isSaveAsDraft) {
-          // Если задание должно быть сохранено как черновик, выполняем GET запрос
-          await API.get(`assignments/${assignmentId}/draft/`);
-        }
+        // Используем createAssignment для создания нового задания
+        dispatch(createAssignment({ requestData }));
       } else {
-        // Если задание уже существует, выполняем PUT запрос
-        response = await API.patch(`assignments/${id}/`, requestData);
-        if (isDraft || isSaveAsDraft) {
-          // Если задание должно быть перемещено в черновик, выполняем GET запрос
-          await API.get(`assignments/${id}/draft/`);
-        }
+        // Используем updateAssignment для обновления существующего задания
+        dispatch(updateAssignment({ id, requestData }));
       }
 
-      if ([200, 201].includes(response.status)) {
-        if (isDraft) {
-          setSuccessMessageText("Saved succesfully");
-          setSuccessMessage(true);
-        } else if (isSaveAsDraft) {
-          setTimeout(() => {
-            navigate("/assignments");
-          }, 2000);
+      // После отправки действия, вы можете использовать селекторы для получения актуального состояния
+      const assignmentStatus = useSelector(
+        (state) => state.addAssignment.status
+      );
+      const assignmentError = useSelector((state) => state.addAssignment.error);
 
-          setSuccessMessageText("Draft created succesfully");
-          setSuccessMessage(true);
-        } else {
-          setTimeout(() => {
-            navigate("/assignments");
-          }, 2000);
-
-          setSuccessMessageText("Assignment created succesfully");
+      // Проверяем статус асинхронного действия
+      if (assignmentStatus === "fulfilled") {
+        const assignment = useSelector((state) => state.addAssignment.entity);
+        if (assignment && assignment.id) {
+          if (isDraft || isSaveAsDraft) {
+            // Логика сохранения черновика или обновления существующего задания
+            await dispatch(saveAsDraft({ assignmentId })).unwrap();
+          } else {
+            // Переход на страницу с заданиями после успешного создания
+            setTimeout(() => {
+              navigate("/assignments");
+            }, 2000);
+          }
+          setSuccessMessageText("Assignment created successfully");
           setSuccessMessage(true);
         }
+      } else if (assignmentStatus === "rejected" && assignmentError) {
+        const errorTextString = Object.entries(assignmentError)
+          .map(([key, message]) => `${key}: ${message}`)
+          .join(", ");
+        dispatch(
+          setError(`Please correct the following errors: ${errorTextString}`)
+        );
+        console.error("Error creating assignment", assignmentError);
+        displayErrorMessages(assignmentError);
       }
     } catch (error) {
-      const parsedError = parseErrorText(error.request.responseText);
-      console.log(parsedError);
-      // Преобразование объекта ошибок в строку для обновления состояния
-      const errorTextString = Object.entries(parsedError)
-        .map(([key, message]) => `${key}: ${message}`)
-        .join(", ");
-      setErrorText(`Please correct the following errors: ${errorTextString}`);
-      console.error("Error creating assignment", error);
-      displayErrorMessages(parsedError);
+      console.error("Error in handleSubmit:", error);
     }
   };
 
-  const [errorText, setErrorText] = useState("");
-  const [hasScrolled, setHasScrolled] = useState(false);
-
   useEffect(() => {
-    const targetElement = document.getElementById("errorText");
-    if (targetElement) {
-      targetElement.scrollIntoView({ behavior: "smooth" });
+    if (Object.keys(errorMessages).length > 0) {
+      const targetElement = document.getElementById("errorText");
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: "smooth" });
+      }
+      setHasScrolled(false);
     }
-    setHasScrolled(false);
-  }, [hasScrolled]);
+  }, [errorMessages, hasScrolled]);
 
   function displayErrorMessages(errorMessages) {
     console.log(errorMessages);
@@ -322,108 +372,6 @@ function AddAssignment() {
     });
   }
 
-  const handleImageSelect = (image) => {
-    setSelectedImage(image);
-  };
-
-  const addBlock = (type) => {
-    const newBlock = {
-      id: blocks.length + 1,
-      type,
-      title: "",
-      content: EditorState.createEmpty(),
-      choices: type === "text" || "open" ? [] : [""],
-      minValue: type === "range" ? 1 : null,
-      maxValue: type === "range" ? 10 : null,
-      image: type === "image" ? "" : null,
-    };
-    setBlocks([...blocks, newBlock]);
-  };
-
-  const removeBlock = (blockId) => {
-    const updatedBlocks = blocks.filter((block) => block.id !== blockId);
-    setBlocks(updatedBlocks);
-    setIsError(false);
-  };
-
-  const copyBlock = (block) => {
-    const maxId = Math.max(...blocks.map((b) => b.id));
-    const newBlock = { ...block, id: maxId + 1 };
-
-    const index = blocks.findIndex((b) => b.id === block.id);
-
-    blocks.splice(index + 1, 0, newBlock);
-
-    setBlocks([...blocks]);
-  };
-
-  const moveBlockForward = (index) => {
-    // Проверяем, не является ли текущий блок последним в массиве
-    if (index < blocks.length - 1) {
-      // Сохраняем текущий блок
-      const block = blocks[index];
-      // Удаляем блок из текущей позиции
-      blocks.splice(index, 1);
-      // Добавляем блок обратно в массив, но на позицию на одну вперед
-      blocks.splice(index + 1, 0, block);
-      // Обновляем состояние
-      setBlocks([...blocks]);
-    }
-  };
-
-  const moveBlockBackward = (index) => {
-    // Проверяем, не является ли текущий блок первым в массиве
-    if (index > 0) {
-      // Сохраняем текущий блок
-      const block = blocks[index];
-      // Удаляем блок из текущей позиции
-      blocks.splice(index, 1);
-      // Добавляем блок обратно в массив, но на позицию на одну назад
-      blocks.splice(index - 1, 0, block);
-      // Обновляем состояние
-      setBlocks([...blocks]);
-    }
-  };
-
-  const updateBlock = (
-    blockId,
-    newContent,
-    newChoices,
-    newTitle,
-    newMinValue,
-    newMaxValue,
-    newLeftPole,
-    newRightPole,
-    newImage
-  ) => {
-    setBlocks((prevBlocks) =>
-      prevBlocks.map((block) =>
-        block.id === blockId
-          ? {
-              ...block,
-              content: newContent || block.content,
-              description:
-                getObjectFromEditorState(newContent) || block.description,
-              choices: newChoices || block.choices,
-              title: newTitle || block.title,
-              choice_replies:
-                newChoices?.map((choice) => ({
-                  reply: choice,
-                  checked: false,
-                })) || block.choice_replies,
-              minValue: newMinValue ?? block.minValue,
-              maxValue: newMaxValue ?? block.maxValue,
-              leftPole: newLeftPole ?? block.leftPole,
-              rightPole: newRightPole ?? block.rightPole,
-              image: newImage ?? block.image,
-            }
-          : block
-      )
-    );
-  };
-
-  console.log(blocks);
-
   return (
     <div className="assignments-page">
       {successMessage && (
@@ -432,7 +380,7 @@ function AddAssignment() {
       <HeaderAssignment
         blocks={blocks}
         handleSubmit={(e) => handleSubmit(e, true, false)}
-        errorText={errorText}
+        errorText={errorMessages}
         isError={isError}
         changeView={() => {
           setChangeView((prev) => !prev);
@@ -444,7 +392,7 @@ function AddAssignment() {
           className="title-input"
           placeholder="Name of Assignment..."
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => dispatch(updateForm({ title: e.target.value }))}
           required
           id="title"
         />
@@ -453,7 +401,9 @@ function AddAssignment() {
           className="title-input"
           placeholder="Description..."
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={(e) =>
+            dispatch(updateForm({ description: e.target.value }))
+          }
           required
           id="text"
         />
@@ -470,15 +420,21 @@ function AddAssignment() {
           {blocks.map((block, index) => (
             <div key={index}>
               {block.type === "headline" && (
-                <Headline block={block} updateBlock={updateBlock} />
+                <MemoizedHeadline
+                  block={block}
+                  updateBlock={handleUpdateBlock}
+                />
               )}
               {block.type === "imageQuestion" && (
-                <ImageQuestionBlock block={block} updateBlock={updateBlock} />
+                <MemoizedImageQuestionBlock
+                  block={block}
+                  updateBlock={handleUpdateBlock}
+                />
               )}
               {block.type === "headlinerImg" && (
                 <HeadlinerImg
                   block={block}
-                  updateBlock={updateBlock}
+                  updateBlock={handleUpdateBlock}
                   setSelectedImageForBlock={setSelectedImageForBlock}
                 />
               )}
@@ -521,7 +477,7 @@ function AddAssignment() {
                 <ClientAssignmentBlocks
                   key={index}
                   block={block}
-                  updateBlock={updateBlock}
+                  updateBlock={handleUpdateBlock}
                   isView={true}
                   isViewPsy={true}
                 />
@@ -533,13 +489,13 @@ function AddAssignment() {
                 <AssignmentBlock
                   key={block.id}
                   block={block}
-                  updateBlock={updateBlock}
-                  removeBlock={removeBlock}
+                  updateBlock={handleUpdateBlock}
+                  removeBlock={handleRemoveBlock}
                   copyBlock={copyBlock}
                   moveBlockForward={moveBlockForward}
                   moveBlockBackward={moveBlockBackward}
                   index={index}
-                  setSelectedImageForBlock={setSelectedImageForBlock}
+                  setSelectedImageForBlock={handleImgSelectForBlock}
                   setIsError={setIsError}
                 />
               ))}
@@ -548,39 +504,42 @@ function AddAssignment() {
         </form>
         <div className="block-buttons-container">
           <div className="block-buttons">
-            <button title="Add Text Block" onClick={() => addBlock("text")}>
+            <button
+              title="Add Text Block"
+              onClick={() => handleAddBlock("text")}
+            >
               <FontAwesomeIcon icon={faComment} />{" "}
             </button>
             <button
               title="Add Open-Question Block"
-              onClick={() => addBlock("open")}
+              onClick={() => handleAddBlock("open")}
             >
               <FontAwesomeIcon icon={faQuestion} />{" "}
             </button>
             <button
               title="Add Multiple Choice Block"
-              onClick={() => addBlock("multiple")}
+              onClick={() => handleAddBlock("multiple")}
             >
               <FontAwesomeIcon icon={faSquareCheck} />{" "}
             </button>
             <button
               title="Add Single Choice Block"
-              onClick={() => addBlock("single")}
+              onClick={() => handleAddBlock("single")}
             >
               <FontAwesomeIcon icon={faCircleDot} />{" "}
             </button>
             <button
               title="Add Linear Scale Question Block"
-              onClick={() => addBlock("range")}
+              onClick={() => handleAddBlock("range")}
             >
               <FontAwesomeIcon icon={faEllipsis} />
             </button>
-            <button title="Add Image" onClick={() => addBlock("image")}>
+            <button title="Add Image" onClick={() => handleAddBlock("image")}>
               <FontAwesomeIcon icon={faImage} />
             </button>
           </div>
         </div>
-        {(isError || errorText) && (
+        {(isError || errorMessages) && (
           <span className="error__text error__text_header error__text_footer">
             Please check all fields
           </span>
@@ -595,7 +554,7 @@ function AddAssignment() {
           <button
             className="buttons-save-as-draft-and-publish"
             onClick={(e) => handleSubmit(e, false, false)}
-            disabled={errorText || isError}
+            disabled={errorMessages || isError}
           >
             Complete & Publish
           </button>
