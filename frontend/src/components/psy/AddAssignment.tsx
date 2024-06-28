@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { EditorState, ContentState, convertFromRaw } from "draft-js";
+import { EditorState, ContentState } from "draft-js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faComment,
