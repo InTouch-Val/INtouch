@@ -1,5 +1,5 @@
 //@ts-nocheck
-import React, { useRef, forwardRef, useEffect, useState } from "react";
+import React, { forwardRef, useEffect } from "react";
 import Editor from "@draft-js-plugins/editor";
 import { Separator } from "@draft-js-plugins/static-toolbar";
 import {
@@ -14,9 +14,9 @@ import {
 import "@draft-js-plugins/static-toolbar/lib/plugin.css";
 import "../css/editorsBar.css";
 import { useToolbar } from "./ToolbarContext"; // Импортируем хук для использования контекста
-
 import { EditorState, ContentState, convertFromRaw } from "draft-js";
-import { Modifier, SelectionState } from "draft-js";
+import { Modifier } from "draft-js";
+import { maxTextLegthBig, maxTextLegthSmall } from "../utils/constants";
 
 const EditorToolbar = forwardRef(
   (
@@ -29,12 +29,15 @@ const EditorToolbar = forwardRef(
       errorText,
       setErrorText,
       setIsError,
+      readOnly = false,
     },
     ref,
   ) => {
-    const { toolbarPlugin, setToolbarPlugin } = useToolbar(); // Используем контекст
+    const { toolbarPlugin } = useToolbar(); // Используем контекст
     const { Toolbar } = toolbarPlugin;
     const plugins = [toolbarPlugin];
+    const textErrMaxTextLegthBig = ` Please enter 20-${maxTextLegthBig} characters`;
+    const textErrMaxTextLegthSmall = ` Please enter 20-${maxTextLegthSmall} characters`;
 
     const focusEditor = () => {
       if (ref.current) {
@@ -42,7 +45,7 @@ const EditorToolbar = forwardRef(
       }
     };
 
-    const effectiveErrorText = errorText || "Error occured";
+    const effectiveErrorText = errorText || "";
 
     const applyStylesFromCharacterList = (contentState, rawContentState) => {
       let newContentState = contentState;
@@ -74,13 +77,28 @@ const EditorToolbar = forwardRef(
       return newContentState;
     };
 
-    // Функция для инициализации редактора с текстом block.description
+    // Функция для инициализации редактора с текстом
     const initializeEditorWithText = () => {
+      const parseContent = (content) => {
+        try {
+          const contentObject = JSON.parse(content);
+          const contentState = convertFromRaw(contentObject);
+          const contentStateWithStyles = applyStylesFromCharacterList(
+            contentState,
+            contentObject,
+          );
+          return EditorState.createWithContent(contentStateWithStyles);
+        } catch (error) {
+          console.error("Parsing error, treating as plain text:", error);
+          const contentState = ContentState.createFromText(content);
+          return EditorState.createWithContent(contentState);
+        }
+      };
+
+      let newEditorState;
       if (block.description) {
         try {
           const descriptionObject = JSON.parse(block.description);
-          console.log(descriptionObject);
-
           const rawContentState = {
             blocks: [],
             entityMap: descriptionObject.entityMap,
@@ -90,23 +108,28 @@ const EditorToolbar = forwardRef(
             const block = descriptionObject.blockMap[blockKey];
             rawContentState.blocks.push(block);
           }
-          console.log(rawContentState);
 
           const contentState = convertFromRaw(rawContentState);
           const contentStateWithStyles = applyStylesFromCharacterList(
             contentState,
             rawContentState,
           );
-          console.log(contentStateWithStyles);
           const newEditorState = EditorState.createWithContent(
             contentStateWithStyles,
           );
-          console.log(newEditorState);
           setEditorState(newEditorState);
-        } catch (error) {}
+        } catch (error) {
+          console.error("Ошибка при преобразовании строки в объект:", error);
+        }
+      } else if (block.reply) {
+        newEditorState = parseContent(block.reply);
+        setEditorState(newEditorState);
       } else if (block.question) {
         const contentState = ContentState.createFromText(block.question);
         const newEditorState = EditorState.createWithContent(contentState);
+        setEditorState(newEditorState);
+      } else {
+        newEditorState = EditorState.createEmpty();
         setEditorState(newEditorState);
       }
     };
@@ -114,12 +137,12 @@ const EditorToolbar = forwardRef(
     // Инициализация редактора при монтировании компонента
     useEffect(() => {
       initializeEditorWithText();
-      setTimeout(focusEditor, 10000); // Отложенное выполнение фокусировки
+      setTimeout(focusEditor, 1000); // Отложенное выполнение фокусировки
     }, []); // Пустой массив зависимостей означает, что эффект будет вызван только при монтировании компонента
 
     useEffect(() => {
       // Проверяем, если редактор пуст и не содержит текст block.question, добавляем плейсхолдер
-      if (!block.question && !block.description) {
+      if (!block.question && !block.description && !block.reply) {
         setEditorState(
           EditorState.push(
             editorState,
@@ -128,7 +151,7 @@ const EditorToolbar = forwardRef(
           ),
         );
       }
-    }, []);
+    }, [isMobileWidth]);
 
     const onChange = (newEditorState) => {
       setEditorState(newEditorState);
@@ -162,19 +185,23 @@ const EditorToolbar = forwardRef(
     };
 
     const validateTextLength = (text) => {
-      const maxLength = block.type === "text" ? 1000 : 200;
+      const maxLength =
+        block.type === "text" ? maxTextLegthBig : maxTextLegthSmall;
+      console.log(maxLength);
       if (text.length < 20 || text.length > maxLength) {
         setIsError(true);
         setErrorText(
-          maxLength === 1000
-            ? `${effectiveErrorText.includes(" Please enter 20-1000 characters") ? effectiveErrorText.replace(" Please enter 20-1000 characters", "") : effectiveErrorText} Please enter 20-1000 characters`
-            : `${effectiveErrorText.includes(" Please enter 20-200 characters") ? effectiveErrorText.replace(" Please enter 20-200 characters", "") : effectiveErrorText} Please enter 20-200 characters`,
+          maxLength === maxTextLegthBig
+            ? `${effectiveErrorText.includes(textErrMaxTextLegthBig) ? effectiveErrorText.replace(textErrMaxTextLegthBig, "") : effectiveErrorText} ${textErrMaxTextLegthBig}`
+            : `${effectiveErrorText.includes(textErrMaxTextLegthSmall) ? effectiveErrorText.replace(textErrMaxTextLegthSmall, "") : effectiveErrorText} ${textErrMaxTextLegthSmall}`,
         );
         return false;
       }
       setIsError(false);
       setErrorText(
-        effectiveErrorText.replace(" Please enter 20-200 characters", ""),
+        maxLength === maxTextLegthBig
+          ? `${effectiveErrorText.includes(textErrMaxTextLegthBig) ? effectiveErrorText.replace(textErrMaxTextLegthBig, "") : ""}`
+          : `${effectiveErrorText.includes(textErrMaxTextLegthSmall) ? effectiveErrorText.replace(textErrMaxTextLegthSmall, "") : ""}`,
       );
       return true;
     };
@@ -187,7 +214,7 @@ const EditorToolbar = forwardRef(
 
     return (
       <div
-        className={`editor-container ${(effectiveErrorText.includes(" Please enter 20-1000 characters") || effectiveErrorText.includes(" Please enter 20-200 characters")) && "error"}`}
+        className={`editor-container ${(effectiveErrorText.includes(textErrMaxTextLegthBig) || effectiveErrorText.includes(textErrMaxTextLegthSmall)) && "error"}`}
         onClick={focusEditor}
       >
         <Editor
@@ -198,6 +225,7 @@ const EditorToolbar = forwardRef(
           ref={ref}
           handleBeforeInput={handleBeforeInput}
           onBlur={handleBlur}
+          readOnly={readOnly}
         />
         {!isMobileWidth && (
           <Toolbar>

@@ -25,8 +25,16 @@ import {
 } from "../../../store/slices/modals/modalsSlice";
 import { diaryClientValidation } from "../../../routes/SettingPage/ProfileTab/schemaValid";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { ClientDiary } from "../../../store/entities/assignments/types";
+import { ClientDiaryEntry } from "../../../store/entities/assignments/types";
 
-export default function DiaryPageContentClient({ diary, type }) {
+export default function DiaryPageContentClient({
+  diary,
+  type,
+}: {
+  diary: ClientDiary | null;
+  type: string;
+}) {
   const dispatch = useAppDispatch();
   const showModalExitUnsaved = useAppSelector(selectShowModalExitUnsaved);
   const showModalSaveIncomplete = useAppSelector(selectShowModalSaveIncomplete);
@@ -67,7 +75,7 @@ export default function DiaryPageContentClient({ diary, type }) {
     dispatch(closeModalSaveIncomplete());
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: ClientDiaryEntry) => {
     if (type == "create") {
       try {
         const response = await API.post(`/diary-notes/`, data);
@@ -169,23 +177,19 @@ export default function DiaryPageContentClient({ diary, type }) {
             />
             <DiaryEventDetailsClient
               diary={diary}
-              type={type}
               showInputsincomplete={showInputsincomplete}
             />
             <DiaryBlockAnalysisClient
               diary={diary}
-              type={type}
               showInputsincomplete={showInputsincomplete}
             />
             <DiaryBlockEmotionClient
               diary={diary}
-              type={type}
               setShowEmotionsPage={setShowEmotionsPage}
               showInputsincomplete={showInputsincomplete}
             />
             <DiaryBlockPhysicalSensationClient
               diary={diary}
-              type={type}
               showInputsincomplete={showInputsincomplete}
             />
             <DiaryFooterClient
@@ -222,7 +226,6 @@ export default function DiaryPageContentClient({ diary, type }) {
             type={type}
             id={params.id}
             setShowEmotionsPage={setShowEmotionsPage}
-            diary={diary}
           />
         )}
       </FormProvider>

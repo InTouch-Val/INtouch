@@ -6,21 +6,35 @@ import { useFormContext, useWatch } from "react-hook-form";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 import { openModalSaveIncomplete } from "../../../../store/slices/modals/modalsSlice";
 import { useAppDispatch } from "../../../../store/store";
+import { ClientDiary } from "../../../../store/entities/assignments/types";
+
+interface Props {
+  diary: ClientDiary;
+  setChangesMade: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowInputsincomplete: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 export default function DiaryFooterClient({
   diary,
   setChangesMade,
   setShowInputsincomplete,
-}) {
+}: Props) {
   const isMobileWidth = useMobileWidth();
 
-  const [active, setActive] = React.useState(diary ? diary.visible : false);
   const {
     setValue,
     formState: { isValid },
     trigger,
     getValues,
   } = useFormContext();
+
+  const [active, setActive] = React.useState(diary ? diary.visible : false);
+
+  const primaryEmotionValue = getValues("primary_emotion");
+  const secondEmotionValues = getValues("clarifying_emotion");
+
+  const [isHover, setHover] = React.useState(false);
+
   const watchAllFields = useWatch();
 
   const initialFormState = React.useRef(JSON.stringify(getValues()));
@@ -52,8 +66,6 @@ export default function DiaryFooterClient({
   useEffect(() => {
     trigger();
   }, [watchAllFields, trigger]);
-
-  const [isHover, setHover] = React.useState(false);
 
   const allFieldsFilled = () => {
     const values = watchAllFields;

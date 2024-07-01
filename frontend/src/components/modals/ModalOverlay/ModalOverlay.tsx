@@ -1,5 +1,5 @@
 //@ts-nocheck
-import ModalOverlayStyles from "../ModalOverlay/ModalOverlay.module.css";
+import ModalOverlayStyles from "../ModalOverlay/ModalOverlay.module.scss";
 
 const ModalOverlay = () => {
   return (

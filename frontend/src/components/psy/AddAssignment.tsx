@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { EditorState, ContentState, convertFromRaw } from "draft-js";
+import { EditorState, ContentState } from "draft-js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faComment,
@@ -136,12 +136,13 @@ function AddAssignment() {
   function parseErrorText(errorText) {
     const errors = JSON.parse(errorText);
     const errorMessages = {};
+    console.log(errors);
 
-    errors.title.forEach((message) => {
+    errors.title?.forEach((message) => {
       errorMessages.title = message;
     });
 
-    errors.text.forEach((message) => {
+    errors.text?.forEach((message) => {
       errorMessages.description = message;
     });
 
@@ -420,6 +421,8 @@ function AddAssignment() {
       ),
     );
   };
+
+  console.log(blocks);
 
   return (
     <div className="assignments-page">

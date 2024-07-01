@@ -358,6 +358,10 @@
   border: 2px red solid !important;
 }
 
+.error-text {
+  color: red;
+}
+
 .errorCheckboxRadio {
   outline: 1px red solid;
 }

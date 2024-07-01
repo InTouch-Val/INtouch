@@ -3,6 +3,7 @@ import string
 USER_TYPES = {
     0: "client",
     1: "doctor",
+    2: "Anonymous",
 }
 
 ASSIGNMENT_TYPES = [
@@ -95,4 +96,41 @@ RANDOM_CHARSET_FOR_DELETING = string.ascii_uppercase + string.digits
 FIELD_DELETED = "deleted"
 TIME_DELETE_NON_ACTIVE_USER = 604800  # 7 days
 DEFAULT_PAGE_SIZE = 10
-THERAPISTS_METRICS_FILE_NAME = "therapists_metrics.csv"
+
+METRICS_TABLE_ROWS = {
+    "therapists": [
+        "User ID",
+        "Registration Date",
+        "Rolling Retention 7D",
+        "Rolling Retention 30D",
+        "Last Seen",
+        "Clients Invited",
+        "Last Invited Client",
+        "Last Sent Assignment",
+        "Last Created Assignment",
+        "Deleted On",
+    ],
+    "clients": [
+        "User ID",
+        "Registration Date",
+        "Rolling Retention 7D",
+        "Rolling Retention 30D",
+        "Last Seen",
+        "Last Done Assignment",
+        "Last Diary Created",
+        "Deleted On",
+    ],
+    "growth": [
+        "Amount of registered therapists",
+        "Amount of registered clients",
+        "Amount of assignments",
+        "Amount of deleted therapists",
+        "Amount of deleted clients",
+    ],
+}
+METRICS_FILES_NAMES = {
+    "therapists": "therapists_metrics.csv",
+    "clients": "clients_metrics.csv",
+    "growth": "growth_metrics.csv",
+}
+METRICS_DATE_FORMAT = "%d %B %Y"
