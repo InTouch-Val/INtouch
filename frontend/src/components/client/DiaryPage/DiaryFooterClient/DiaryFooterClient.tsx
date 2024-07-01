@@ -6,7 +6,7 @@ import { useFormContext, useWatch } from "react-hook-form";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 import { openModalSaveIncomplete } from "../../../../store/slices/modals/modalsSlice";
 import { useAppDispatch } from "../../../../store/store";
-import { ClientDiary } from "../../../../store/entities/assignments/types";
+import { ClientDiary } from "../../../../utils/global-types";
 
 interface Props {
   diary: ClientDiary;
