@@ -1,10 +1,5 @@
 //@ts-nocheck
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useCallback
-} from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { EditorToolbar } from "./editors-toolbar";
 import { ToolbarProvider } from "./ToolbarContext";
 import {
@@ -86,7 +81,7 @@ function ClientAssignmentBlocks({
       }
     },
 
-    [updateBlock, block.id, block.content, block.choices]
+    [updateBlock, block.id, block.content, block.choices],
   );
 
   const MAX_INPUT_LENGTH = 1000;
