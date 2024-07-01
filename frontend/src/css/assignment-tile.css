@@ -22,7 +22,7 @@
   cursor: pointer;
 }
 
-.assignment-image-container_client {
+.assignment-tile .assignment-image-container_client {
   cursor: default;
 }
 
