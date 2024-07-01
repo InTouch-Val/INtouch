@@ -17,6 +17,7 @@ import { useToolbar } from "./ToolbarContext"; // Импортируем хук 
 import { EditorState, ContentState, convertFromRaw } from "draft-js";
 import { Modifier } from "draft-js";
 import { maxTextLegthBig, maxTextLegthSmall } from "../utils/constants";
+import { Block, CharacterInfo } from "../utils/global-types";
 
 const EditorToolbar = forwardRef(
   (
@@ -47,18 +48,18 @@ const EditorToolbar = forwardRef(
 
     const effectiveErrorText = errorText || "";
 
-    const applyStylesFromCharacterList = (contentState, rawContentState) => {
+    const applyStylesFromCharacterList = (contentState: ContentState, rawContentState: ExtendedRawDraftContentState) => {
       let newContentState = contentState;
 
-      rawContentState.blocks.forEach((block, blockIndex) => {
+      rawContentState.blocks.forEach((block: Block) => {
         if (block.characterList) {
-          block.characterList.forEach((charInfo, charIndex) => {
+          block.characterList.forEach((charInfo: CharacterInfo, charIndex: number) => {
             const blockKey = block.key;
             const charStyles = charInfo.style; // Получаем массив стилей для символа
             const char = block.text[charIndex];
 
             // Применяем каждый стиль к символу
-            charStyles.forEach((style) => {
+            charStyles.forEach((style: string) => {
               newContentState = Modifier.applyInlineStyle(
                 newContentState,
                 newContentState.getSelectionAfter().merge({
@@ -79,7 +80,7 @@ const EditorToolbar = forwardRef(
 
     // Функция для инициализации редактора с текстом
     const initializeEditorWithText = () => {
-      const isJSON = (str) => {
+      const isJSON = (str: string) => {
         try {
           JSON.parse(str);
           return true;
@@ -88,7 +89,7 @@ const EditorToolbar = forwardRef(
         }
       };
     
-      const parseContent = (content) => {
+      const parseContent = (content: string) => {
         if (isJSON(content)) {
           try {
             const contentObject = JSON.parse(content);
@@ -109,7 +110,7 @@ const EditorToolbar = forwardRef(
         }
       };
     
-      let newEditorState;
+      let newEditorState: EditorState;
       if (block.description && isJSON(block.description)) {
         try {
           const descriptionObject = JSON.parse(block.description);
@@ -165,11 +166,11 @@ const EditorToolbar = forwardRef(
       }
     }, [isMobileWidth]);
 
-    const onChange = (newEditorState) => {
+    const onChange = (newEditorState: EditorState) => {
       setEditorState(newEditorState);
     };
 
-    const handleBeforeInput = (chars, editorState) => {
+    const handleBeforeInput = (chars: string, editorState: EditorState) => {
       const contentState = editorState.getCurrentContent();
       const selectionState = editorState.getSelection();
       const EditorBlockKey = selectionState.getStartKey();
@@ -196,10 +197,9 @@ const EditorToolbar = forwardRef(
       return "not-handled";
     };
 
-    const validateTextLength = (text) => {
+    const validateTextLength = (text: string) => {
       const maxLength =
         block.type === "text" ? maxTextLegthBig : maxTextLegthSmall;
-      console.log(maxLength);
       if (text.length < 20 || text.length > maxLength) {
         setIsError(true);
         setErrorText(
