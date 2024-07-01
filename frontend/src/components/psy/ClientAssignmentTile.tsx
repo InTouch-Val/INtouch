@@ -5,13 +5,13 @@ import { useDeleteAssignmentClientByUUIDMutation } from "../../store/entities";
 import { useNavigate } from "react-router-dom";
 import { AssignmentsType } from "../../store/entities/assignments/types";
 
-enum Status {
+export enum Status {
   ToDo = "to-do",
   Done = "done",
   inProgress = "in-progress",
 }
 
-enum StatusFromServer {
+export enum StatusFromServer {
   ToDo = "to do",
   Done = "done",
   inProgress = "in progress",
