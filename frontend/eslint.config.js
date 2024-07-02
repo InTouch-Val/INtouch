@@ -54,10 +54,6 @@ export default [
     },
   },
   {
-    files: ["*.mdx"],
-    extends: "plugin:mdx/recommended",
-  },
-  {
     ignores: ["dist"],
   },
 ];

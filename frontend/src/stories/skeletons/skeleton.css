@@ -17,6 +17,12 @@
   gap: 10px;
   min-height: 100%;
   padding: 10px;
+  width: 290px;
+  height: 318px;
+  border-radius: 10px; /* Скругленные углы */
+  background-color: #fff; /* Белый фон */
+  box-shadow: 0 4px 8px rgb(0 0 0 / 10%); /* Тень */
+  box-sizing: border-box;
 }
 
 .skeleton__header,

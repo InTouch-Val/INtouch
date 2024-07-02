@@ -8,7 +8,9 @@ import { AssignmentTile } from "../components/psy/AssignmentTile/AssignmentTile"
 import "../css/assignments.css";
 import { useAuth } from "../service/authContext";
 import { Modal } from "../service/modal";
+import { useGetAssignmentsQuery } from "../store/entities";
 import { useObserve } from "../utils/hook/useObserve";
+import { useAppSelector } from "../store/store";
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
@@ -42,6 +44,54 @@ function AssignmentsPage({
   const handleTakeUpdate = useCallback(() => {
     setLimit((prevLimit) => prevLimit + 10);
   }, []);
+
+  // const {
+  //   activeTab,
+  //   activeLanguage,
+  //   activeFilterType,
+  //   activeOrder,
+  //   searchTerm,
+  //   page,
+  //   status,
+  //   assignments,
+  // } = useAppSelector((state) => state.assignment);
+
+
+  // const {
+  //   data: listAssignment,
+  //   refetch,
+  //   isSuccess,
+  //   isFetching,
+  // } = useGetAssignmentsQuery(
+  //   {
+  //     limit: 12,
+  //     page: page,
+  //     author: activeTab === AssignmentTab.myList ? currentUser.id : undefined,
+  //     favorite: activeTab === AssignmentTab.favorites && true,
+  //     language:
+  //       activeLanguage !== TypeLanguage.All ? activeLanguage : undefined,
+  //     assignmentType:
+  //       activeFilterType !== TypeFilter.All ? activeFilterType : undefined,
+  //     ordering: activeOrder,
+  //     search: searchTerm,
+  //   },
+  //   {
+  //     selectFromResult: ({ data, ...originalArgs }) => ({
+  //       data: assignmentSelector.selectAll(
+  //         data ?? assignmentAdapter.getInitialState()
+  //       ),
+  //       ...originalArgs,
+  //     }),
+  //     refetchOnMountOrArgChange: true, // Ensure refetch on arguments change
+  //   }
+  // );
+
+  // console.log("isFetching", isFetching)
+  // console.log("currentData", currentData)
+
+  // if (isFetching && !currentData) return <h1>!!!!!loading!!</h1>
+
+  console.log("filteredAssignments", filteredAssignments)
 
   useObserve(observeElement, isTotal, handleTakeUpdate);
 
@@ -188,7 +238,6 @@ function AssignmentsPage({
         );
         setAssignments(filteredAssignments);
         setFilteredAssignments(filteredAssignments);
-        console.log(filteredAssignments);
       } catch (error) {
         console.error("Error fetching assignments", error);
         navigate("/");

@@ -1,5 +1,4 @@
 import React from "react";
-import "./Skeleton.stories";
 import "./skeleton.css";
 
 type Props = {
