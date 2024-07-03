@@ -1,12 +1,7 @@
 //@ts-nocheck
 import { useState, useCallback, useEffect } from "react";
-import { EditorState } from "draft-js";
-import { EditorToolbar } from "../../../service/editors-toolbar";
 import { useAuth } from "../../../service/authContext";
-import { NavLink } from "react-router-dom";
 import save from "../../../images/save.svg";
-import image from "../../../images/image2.svg";
-import imageGirl from "../../../images/image_girl.png";
 import arrowLeft from "../../../images/arrow-left.svg";
 import arrowBack from "../../../images/arrowBackWhite.svg";
 import sadEmote from "../../../images/sadEmote.svg";
@@ -47,15 +42,6 @@ function CompleteAssignments() {
   });
 
   const [isRateTask, setIsRateTask] = useState(false);
-  const [editorStateFirst, setEditorStateFirst] = useState(() =>
-    EditorState.createEmpty(),
-  );
-  const [editorStateSecond, setEditorStateSecond] = useState(() =>
-    EditorState.createEmpty(),
-  );
-  const [editorStateThird, setEditorStateThird] = useState(() =>
-    EditorState.createEmpty(),
-  );
   const { setCurrentCard, card } = useAuth();
   const [values, setValues] = useState({});
   const [blocks, setBlocks] = useState([]);
@@ -90,6 +76,8 @@ function CompleteAssignments() {
 
   useEffect(() => {
     setAssignmentCredentials(card);
+    setInitialData(false);
+    setIsSaved(false);
   }, []);
 
   useEffect(() => {
@@ -114,21 +102,25 @@ function CompleteAssignments() {
   const [isSaved, setIsSaved] = useState(false);
 
   const goBack = () => {
-    if (checkIfChangesMade()) {
-      if (isSaved) {
-        // Changes were made and saved
-        navigate(-1);
-        setShowInvalidInputs(false);
-        setInitialData(null);
-        setModalExitOpen(false);
+    if (!isClientsAssignmentsPath) {
+      if (checkIfChangesMade()) {
+        if (isSaved) {
+          // Changes were made and saved
+          navigate(-1);
+          setShowInvalidInputs(false);
+          setInitialData(null);
+          setModalExitOpen(false);
+        } else {
+          // Changes were made and NOT saved
+          setModalExitOpen(true);
+        }
       } else {
-        // Changes were made and NOT saved
-        setModalExitOpen(true);
+        navigate(-1); // NO changes made, safe to navigate back
+        setInitialData(null);
+        setShowInvalidInputs(false);
       }
     } else {
-      navigate(-1); // NO changes made, safe to navigate back
-      setInitialData(null);
-      setShowInvalidInputs(false);
+      navigate(-1); //if user is psy just navigate back
     }
   };
 
@@ -142,6 +134,9 @@ function CompleteAssignments() {
   const [allInputsFilled, setAllInputsFilled] = useState(false);
 
   useEffect(() => {
+    if (isClientsAssignmentsPath) {
+      return;
+    }
     let newState = {
       openInputs: {},
       multipleInputs: {},
@@ -217,7 +212,7 @@ function CompleteAssignments() {
       if (block.id === blockId) {
         return {
           ...block,
-          reply: newReply || block.reply,
+          reply: newReply ?? block.reply,
           choice_replies: newChoices || block.choice_replies,
         };
       }
@@ -312,6 +307,23 @@ function CompleteAssignments() {
         } else {
           console.log(`Status: ${resComplete.status}`);
         }
+      } else {
+        console.log(`Status: ${res.status}`);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
+  async function handleSaveTask() {
+    //saves changes in task
+    const blockInfo = blocks.map(transformBlock);
+    try {
+      const res = await API.patch(`assignments-client/${assignmentData.id}/`, {
+        blocks: blockInfo,
+      });
+      if (res.status >= 200 && res.status < 300) {
+        setIsSaved(true);
       } else {
         console.log(`Status: ${res.status}`);
       }
@@ -485,10 +497,7 @@ function CompleteAssignments() {
           </button>
 
           {!isClientsAssignmentsPath && (
-            <button
-              className="button__type_save"
-              onClick={() => setIsSaved(true)}
-            >
+            <button className="button__type_save" onClick={handleSaveTask}>
               {isMobileWidth ? (
                 <FontAwesomeIcon
                   icon={faFloppyDisk}
@@ -638,9 +647,13 @@ function CompleteAssignments() {
       {modalExitIsOpen ? (
         <Modal>
           <EntryUnsavedExit
-            saveClick={() => {
-              setIsSaved(true);
-              navigate(-1);
+            saveClick={async () => {
+              try {
+                await handleSaveTask();
+                navigate(-1);
+              } catch (error) {
+                console.error("Failed to save:", error);
+              }
             }}
             discardClick={() => navigate(-1)}
           />

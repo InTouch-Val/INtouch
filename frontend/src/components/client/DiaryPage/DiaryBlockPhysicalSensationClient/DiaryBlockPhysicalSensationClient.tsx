@@ -1,55 +1,33 @@
 //@ts-nocheck
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import "../DiaryPage.css";
-import { EditorState, convertFromRaw } from "draft-js";
+import { EditorState } from "draft-js";
 import { EditorToolbar } from "../../../../service/editors-toolbar";
 import { ToolbarProvider } from "../../../../service/ToolbarContext";
-import { Controller, useFormContext, useWatch } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
+import { ClientDiary } from "../../../../store/entities/assignments/types";
+import { useEditorState } from "../../../../utils/hook/useEditorState";
+import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig";
+
+interface Props {
+  diary: ClientDiary;
+  showInputsincomplete: boolean;
+}
 
 export default function DiaryBlockPhysicalSensationClient({
   diary,
-  type,
   showInputsincomplete,
-}) {
+}: Props) {
   const isMobileWidth = useMobileWidth();
 
   const editorRef = useRef(null);
   const { control, setValue, getValues } = useFormContext();
-  const content = {
-    blocks: [
-      {
-        key: "abcde",
-        text: diary ? diary.physical_sensations : "",
-        type: "open",
-        depth: 0,
-        inlineStyleRanges: [],
-        entityRanges: [],
-        data: {},
-      },
-    ],
-    entityMap: {},
-  };
 
-  const contentState = convertFromRaw(content);
-  const [editorState, setEditorState] = useState(() =>
-    type == "exist"
-      ? EditorState.createWithContent(contentState)
-      : EditorState.createEmpty(),
+  const [editorState, handleEditorStateChange] = useEditorState(
+    diary?.physical_sensations || null,
   );
-  const block = {
-    type: "open",
-    question: "d",
-    description: "d",
-  };
-
-  const handleEditorStateChange = (newEditorState) => {
-    setEditorState(newEditorState);
-    const contentState = newEditorState.getCurrentContent();
-    const text = contentState.getPlainText();
-
-    setValue("physical_sensations", text);
-  };
+  const block = getBlockConfig(getValues, "physical_sensations");
 
   const value = getValues("physical_sensations");
 
@@ -75,7 +53,13 @@ export default function DiaryBlockPhysicalSensationClient({
               {...fieldsProps}
               ref={editorRef}
               editorState={editorState}
-              setEditorState={handleEditorStateChange}
+              setEditorState={(newEditorState: EditorState) =>
+                handleEditorStateChange(
+                  newEditorState,
+                  setValue,
+                  "physical_sensations",
+                )
+              }
               placeholder={"Write your answer here..."}
               block={block}
               isMobileWidth={isMobileWidth}

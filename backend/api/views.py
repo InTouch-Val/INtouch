@@ -1,6 +1,6 @@
 import random
 import json
-from datetime import datetime, timezone
+from datetime import datetime
 from http import HTTPStatus
 
 from drf_spectacular.utils import (
@@ -11,9 +11,10 @@ from drf_spectacular.utils import (
     OpenApiResponse,
 )
 from django.conf import settings
+from django.utils import timezone
 from django.contrib.auth.hashers import check_password
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_GET
 from django_filters.rest_framework import DjangoFilterBackend
@@ -35,11 +36,14 @@ from api.utils import (
     send_by_mail,
     avg_grade_annotation,
     get_therapists_metrics_query,
-    form_therapists_metrics_file,
+    get_clients_metrics_query,
+    get_growth_metrics_query,
+    form_metrics_file,
+    form_dates_for_metrics,
 )
 from api.constants import (
     USER_TYPES,
-    THERAPISTS_METRICS_FILE_NAME,
+    METRICS_FILES_NAMES,
     RANDOM_VALUE_SIZE,
     FIELD_DELETED,
     RANDOM_CHARSET_FOR_DELETING,
@@ -335,7 +339,7 @@ def user_delete_hard(request):
         user.deleted = True
         user.is_active = False
         user.accept_policy = False
-        user.deleted_on = datetime.now(timezone.utc)
+        user.deleted_on = timezone.now()
         user.username = "".join(
             random.choice(default_charset) for _ in range(RANDOM_VALUE_SIZE)
         )
@@ -353,6 +357,11 @@ def user_delete_hard(request):
             Doctor.objects.filter(user=user).delete()
             for assignment in Assignment.objects.filter(author=user, is_public=False):
                 assignment.delete()
+            for client in user.doctors.all():
+                client.diagnosis = None
+                client.about = None
+                client.user.date_of_birth = None
+                client.save()
 
         user.save()
 
@@ -447,7 +456,7 @@ class DoctorUpdateClientView(generics.UpdateAPIView):
 
 
 @extend_schema_view(
-    get=extend_schema(
+    post=extend_schema(
         tags=["Assignments"],
         summary="Add assignment to favorites",
         request=None,
@@ -472,7 +481,7 @@ class AssignmentAddUserMyListView(APIView):
     permission_classes = (IsDoctorOnly,)
     serializer_class = None
 
-    def get(self, request, pk):
+    def post(self, request, pk):
         user = request.user
         assignment = Assignment.objects.get(pk=pk)
         user.doctor.assignments.add(assignment)
@@ -482,7 +491,7 @@ class AssignmentAddUserMyListView(APIView):
 
 
 @extend_schema_view(
-    get=extend_schema(
+    delete=extend_schema(
         tags=["Assignments"],
         summary="Delete assignment from favorites",
         request=None,
@@ -507,7 +516,7 @@ class AssignmentDeleteUserMyListView(APIView):
     permission_classes = (IsDoctorOnly,)
     serializer_class = None
 
-    def get(self, request, pk):
+    def delete(self, request, pk):
         user = request.user
         assignment = Assignment.objects.get(pk=pk)
         user.doctor.assignments.remove(assignment)
@@ -517,7 +526,7 @@ class AssignmentDeleteUserMyListView(APIView):
 
 
 @extend_schema_view(
-    get=extend_schema(
+    post=extend_schema(
         tags=["Assignments"],
         summary="Set assignment to a client",
         request=None,
@@ -536,60 +545,72 @@ class AssignmentDeleteUserMyListView(APIView):
                 ],
             ),
         },
+        parameters=[
+            OpenApiParameter(
+                "clients",
+                description=("Ids of clients to send assignment to. \n"),
+                required=True,
+            ),
+        ],
     )
 )
 class AddAssignmentClientView(APIView):
-    """Назначение задачи клиенту"""
+    """Назначение задачи клиентам."""
 
     serializer_class = None
 
-    def get(self, request, pk, client_pk):
-        assignment = get_object_or_404(Assignment, pk=pk)
-        client = get_object_or_404(User, pk=client_pk)
-        if request.user.doctor != client.doctors.first():
+    def post(self, request, pk):
+        try:
+            clients = request.user.doctor.clients.filter(
+                pk__in=request.query_params.get("clients").split(",")
+            )
+        except AttributeError:
             return Response(
-                {"message": "You cannot add assignment to not-yours client."}
+                {"message": "You have to pass 'clients' query parameter."},
+                HTTPStatus.BAD_REQUEST,
             )
-        assignments_copy = AssignmentClient.objects.create(
-            title=assignment.title,
-            text=assignment.text,
-            author=assignment.author,
-            assignment_type=assignment.assignment_type,
-            tags=assignment.tags,
-            language=assignment.language,
-            share=assignment.share,
-            likes=assignment.likes,
-            image_url=assignment.image_url,
-            user=client,
-            assignment_root=assignment,
-        )
-        blocks = assignment.blocks.all()
-        for block in blocks:
-            block_copy = Block.objects.create(
-                question=block.question,
-                type=block.type,
-                image=block.image,
-                description=block.description,
-                reply=block.reply,
-                start_range=block.start_range,
-                end_range=block.end_range,
-                left_pole=block.left_pole,
-                right_pole=block.right_pole,
+        assignment = get_object_or_404(Assignment, pk=pk)
+        for user in clients:
+            assignments_copy = AssignmentClient.objects.create(
+                title=assignment.title,
+                text=assignment.text,
+                author=assignment.author,
+                assignment_type=assignment.assignment_type,
+                tags=assignment.tags,
+                language=assignment.language,
+                share=assignment.share,
+                likes=assignment.likes,
+                image_url=assignment.image_url,
+                user=user,
+                assignment_root=assignment,
             )
-            choice_replies = block.choice_replies.all()
-            for choice_reply in choice_replies:
-                choice_reply_copy = BlockChoice.objects.create(
-                    block=block_copy,
-                    reply=choice_reply.reply,
-                    checked=choice_reply.checked,
+            blocks = assignment.blocks.all()
+            for block in blocks:
+                block_copy = Block.objects.create(
+                    question=block.question,
+                    type=block.type,
+                    image=block.image,
+                    description=block.description,
+                    reply=block.reply,
+                    start_range=block.start_range,
+                    end_range=block.end_range,
+                    left_pole=block.left_pole,
+                    right_pole=block.right_pole,
                 )
-                block_copy.choice_replies.add(choice_reply_copy)
-            assignments_copy.blocks.add(block_copy)
-        client.client.assignments.add(assignments_copy)
-        assignment.share += 1
+                choice_replies = block.choice_replies.all()
+                for choice_reply in choice_replies:
+                    choice_reply_copy = BlockChoice.objects.create(
+                        block=block_copy,
+                        reply=choice_reply.reply,
+                        checked=choice_reply.checked,
+                    )
+                    block_copy.choice_replies.add(choice_reply_copy)
+                assignments_copy.blocks.add(block_copy)
+            user.client.assignments.add(assignments_copy)
+            assignment.share += 1
         assignment.save()
         return Response(
-            {"message": "Assignment was set to the client successfully."},
+            {"message": "Assignment was set to the clients successfully."},
             HTTPStatus.CREATED,
         )
 
@@ -706,7 +727,7 @@ class AssignmentViewSet(viewsets.ModelViewSet):
     """CRUD операции над задачами доктора"""
 
     permission_classes = (AssignmentDoctorOnly,)
-    queryset = Assignment.objects.all()
+    queryset = Assignment.objects.filter(is_public=True)
     serializer_class = AssignmentSerializer
     filter_backends = [
         DjangoFilterBackend,
@@ -732,7 +753,12 @@ class AssignmentViewSet(viewsets.ModelViewSet):
         favorites = self.request.query_params.get("favorites") == "true"
         if favorites:
             return avg_grade_annotation(self.request.user.doctor.assignments)
-        return avg_grade_annotation(super().get_queryset())
+        return avg_grade_annotation(
+            (
+                super().get_queryset()
+                | Assignment.objects.filter(author=self.request.user, is_public=False)
+            )
+        )
 
     def destroy(self, request, *args, **kwargs):
         assignment = self.get_object()
@@ -750,7 +776,7 @@ class AssignmentViewSet(viewsets.ModelViewSet):
             )
         return super().update(request, *args, **kwargs)
 
-    @action(detail=True, methods=["get"])
+    @action(detail=True, methods=["PATCH"])
     def draft(self, request, pk):
         """Сокрытие задачи из общего пула, добавление  драфт"""
         assignments = self.get_object()
@@ -1055,21 +1081,171 @@ def assetlink(request):
     return response
 
 
-def project_metrics(request):
-    """Render project metrics for psychotherapists"""
-    users = get_therapists_metrics_query()
-    context = {"users": users}
-    return render(request, "metrics/project_metrics.html", context=context)
+@extend_schema_view(
+    therapists=extend_schema(
+        tags=["Metrics"],
+        summary="Therapists metrics",
+        request=None,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=TherapistsMetricsSerializer,
+            )
+        },
+        parameters=[
+            OpenApiParameter(
+                "date_from",
+                description=(
+                    "Filter accounts from date \n" "Date format: 01-01-2000 \n"
+                ),
+                required=True,
+            ),
+            OpenApiParameter(
+                "date_to",
+                description=("Filter accounts to date \n" "Date format: 01-01-2000 \n"),
+                required=True,
+            ),
+        ],
+    ),
+    clients=extend_schema(
+        tags=["Metrics"],
+        summary="Clients metrics",
+        request=None,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=ClientsMetricsSerializer,
+            )
+        },
+        parameters=[
+            OpenApiParameter(
+                "date_from",
+                description=(
+                    "Filter accounts from date. \n" "Date format: 01-01-2000 \n"
+                ),
+                required=True,
+            ),
+            OpenApiParameter(
+                "date_to",
+                description=("Filter accounts to date \n" "Date format: 01-01-2000 \n"),
+                required=True,
+            ),
+        ],
+    ),
+    growth=extend_schema(
+        tags=["Metrics"],
+        summary="Growth metrics",
+        request=None,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=ClientsMetricsSerializer,
+            )
+        },
+        parameters=[
+            OpenApiParameter(
+                "date_from",
+                description=(
+                    "Filter accounts from date. \n" "Date format: 01-01-2000 \n"
+                ),
+                required=True,
+            ),
+            OpenApiParameter(
+                "date_to",
+                description=("Filter accounts to date \n" "Date format: 01-01-2000 \n"),
+                required=True,
+            ),
+        ],
+    ),
+)
+class ProjectMetricsViewSet(
+    viewsets.GenericViewSet,
+):
+    serializer_class = None
+
+    def get_queryset(self, for_whom, date_from, date_to):
+        queries = {
+            "therapists": get_therapists_metrics_query,
+            "clients": get_clients_metrics_query,
+            "growth": get_growth_metrics_query,
+        }
+        return queries[for_whom](date_from, date_to)
+
+    def get_serializer(self, *args, **kwargs):
+        serializer_class = self.get_serializer_class()
+        kwargs.setdefault("context", self.get_serializer_context())
+        return serializer_class(*args, **kwargs)
+
+    def form_serialized_metrics_data(self, request):
+        for_whom = request.path.split("/")[4]
+        date_from = request.query_params.get("date_from")
+        date_to = request.query_params.get("date_to")
+        formatted_dates = form_dates_for_metrics(date_from, date_to)
+        if isinstance(formatted_dates, Response):
+            return formatted_dates
+        query = self.get_queryset(for_whom, formatted_dates[0], formatted_dates[1])
+        try:
+            return Response(
+                data=self.get_serializer(query, many=True).data, status=HTTPStatus.OK
+            )
+        except AttributeError:
+            serialized_data = self.get_serializer(data=query)
+            serialized_data.is_valid(raise_exception=True)
+            return Response(data=serialized_data.data, status=HTTPStatus.OK)
+
+    @action(
+        methods=["GET"],
+        detail=False,
+        url_name="project_metrics_therapists",
+        serializer_class=TherapistsMetricsSerializer,
+    )
+    def therapists(self, request):
+        return self.form_serialized_metrics_data(request)
+
+    @action(
+        methods=["GET"],
+        detail=False,
+        url_name="project_metrics_clients",
+        serializer_class=ClientsMetricsSerializer,
+    )
+    def clients(self, request):
+        return self.form_serialized_metrics_data(request)
+
+    @action(
+        methods=["GET"],
+        detail=False,
+        url_name="project_metrics_clients",
+        serializer_class=GrowthMetricsSerializer,
+    )
+    def growth(self, request):
+        return self.form_serialized_metrics_data(request)
 
 
-def therapists_metrics_download(request):
+def metrics_download(request, for_whom: str):
+    """Sends the project metrics files, depends on for_whom query parameter."""
     response = HttpResponse(
         content_type="text/csv",
         headers={
             "Content-Disposition": 'attachment; filename="{0}"'.format(
-                THERAPISTS_METRICS_FILE_NAME
+                METRICS_FILES_NAMES[for_whom]
             )
         },
     )
-    form_therapists_metrics_file(response)
+    date_from = request.GET.get("date_from")
+    date_to = request.GET.get("date_to")
+    if not date_from or not date_to:
+        return JsonResponse(
+            data={"error": "You have to pass both date_from and date_to parameters."},
+            status=HTTPStatus.BAD_REQUEST,
+        )
+    try:
+        formatted_date_from = timezone.make_aware(
+            datetime.strptime(date_from, "%d-%m-%Y"),
+        )
+        formatted_date_to = timezone.make_aware(
+            datetime.strptime(date_to, "%d-%m-%Y"),
+        )
+    except ValueError:
+        return JsonResponse(
+            data={"error": "Incorrect date format. Correct format 01-01-1999."},
+            status=HTTPStatus.BAD_REQUEST,
+        )
+    form_metrics_file(response, for_whom, formatted_date_from, formatted_date_to)
     return response
