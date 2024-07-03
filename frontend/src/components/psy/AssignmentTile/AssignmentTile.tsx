@@ -41,7 +41,7 @@ function AssignmentTile({
   selectedAssignmentIdForShareModalOnClientPage,
 }: Props) {
   const [isSelected, setIsSelected] = useState(
-    assignment.id === selectedAssignmentIdForShareModalOnClientPage,
+    assignment.id === selectedAssignmentIdForShareModalOnClientPage
   );
 
   const dispatch = useAppDispatch();
@@ -51,7 +51,7 @@ function AssignmentTile({
 
   useEffect(() => {
     setIsSelected(
-      assignment.id === selectedAssignmentIdForShareModalOnClientPage,
+      assignment.id === selectedAssignmentIdForShareModalOnClientPage
     );
   }, [selectedAssignmentIdForShareModalOnClientPage]);
 
@@ -89,16 +89,9 @@ function AssignmentTile({
   }, [isDropdownOpen]);
 
   const duplicateAssignmentHandle = async (
-    assignmentId: number,
+    assignmentId: number
   ): Promise<void> => {
-    console.log("assignment", assignment);
-    console.log("assignmentId", assignmentId);
     try {
-      // const { payload } = await dispatch(
-      //   duplicateAssignmentAction(assignmentId),
-      // );
-
-      // let assignmentData = await payload;
       const assignmentData = assignment;
       if (assignmentData) {
         // Подготавливаем данные для дубликата, используя ту же структуру, что и в handleSubmit
@@ -132,17 +125,6 @@ function AssignmentTile({
 
         // Если задание должно быть сохранено как черновик, выполняем GET запрос
 
-        // const updateDraftAssignment = {
-        //   ...duplicateResponse.data,
-        //   status: "draft",
-        //   is_public: false,
-        // };
-
-        // const responseUpdate = await updateAssignment({
-        //   uuid: responseAssignmentId,
-        //   body: updateDraftAssignment,
-        // });
-
         await dispatch(draftAssignmentAction(responseAssignmentId));
 
         duplicateResponse.data.is_public = false;
@@ -162,28 +144,28 @@ function AssignmentTile({
   };
 
   function handleFavoriteClick(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void {
     event.stopPropagation();
     onFavoriteToggle(assignment.id);
   }
 
   function handleDeleteClick(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void {
     event.stopPropagation();
     onDeleteClick(assignment.id);
   }
 
   function handleShareClick(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void {
     event.stopPropagation();
     onShareClick(assignment.id);
   }
 
   function handleGoNavigateEdit(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void {
     event.stopPropagation();
     navigate(`/edit-assignment/${assignment.id}`);
