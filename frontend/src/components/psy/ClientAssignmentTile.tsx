@@ -72,7 +72,7 @@ export default function ClientAssignmentTile({
   const handleToggleModal = (): void => setShowModal(!showModal);
 
   function handleRecallClick(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ): void {
     event.stopPropagation();
     onRecallClick();

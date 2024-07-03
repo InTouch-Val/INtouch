@@ -24,7 +24,7 @@ export const fetchAssignmentById = createAsyncThunk<void, FetchByIdParams>(
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
-  }
+  },
 );
 
 export const createAssignment = createAsyncThunk<void, CreateAssignmentParams>(
@@ -32,7 +32,7 @@ export const createAssignment = createAsyncThunk<void, CreateAssignmentParams>(
   async ({ requestData }, thunkAPI) => {
     const response = await API.post("/assignments/", requestData);
     return response.data;
-  }
+  },
 );
 
 export const updateAssignment = createAsyncThunk<void, UpdateAssignmentParams>(
@@ -40,7 +40,7 @@ export const updateAssignment = createAsyncThunk<void, UpdateAssignmentParams>(
   async ({ id, requestData }, thunkAPI) => {
     const response = await API.patch(`/assignments/${id}/`, requestData);
     return response.data;
-  }
+  },
 );
 
 export const saveAsDraft = createAsyncThunk<void, FetchByIdParams>(
@@ -48,5 +48,5 @@ export const saveAsDraft = createAsyncThunk<void, FetchByIdParams>(
   async ({ id }, thunkAPI) => {
     const response = await API.post(`assignments/${id}/draft/`);
     return response.data;
-  }
+  },
 );

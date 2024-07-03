@@ -78,21 +78,21 @@ function AddAssignment() {
     (type: string) => {
       dispatch(addBlock({ type }));
     },
-    [dispatch]
+    [dispatch],
   );
 
   const handleRemoveBlock = useCallback(
     (blockId: number) => {
       dispatch(removeBlock({ blockId }));
     },
-    [dispatch]
+    [dispatch],
   );
 
   const handleUpdateBlock = useCallback(
     (updates: UpdateBlockAction["payload"]) => {
       dispatch(updateBlock(updates));
     },
-    [dispatch]
+    [dispatch],
   );
 
   const handleImageSelect = (image) => {
@@ -113,11 +113,11 @@ function AddAssignment() {
             ...prevBlocks.slice(0, blockIndex),
             blockCopy,
             ...prevBlocks.slice(blockIndex + 1),
-          ])
+          ]),
         );
       }
     },
-    [blocks, dispatch]
+    [blocks, dispatch],
   );
 
   const moveBlockForward = useCallback(
@@ -131,7 +131,7 @@ function AddAssignment() {
         dispatch(setBlocks(updatedBlocks)); // Обновляем состояние
       }
     },
-    [blocks, dispatch]
+    [blocks, dispatch],
   );
 
   const moveBlockBackward = useCallback(
@@ -145,7 +145,7 @@ function AddAssignment() {
         dispatch(setBlocks(updatedBlocks)); // Обновляем состояние
       }
     },
-    [blocks, dispatch]
+    [blocks, dispatch],
   );
 
   useEffect(() => {
@@ -175,7 +175,7 @@ function AddAssignment() {
               type: response.assignment_type,
               language: response.language,
               selectedImage: { urls: { full: response.image_url } },
-            })
+            }),
           );
 
           const fetchedBlocks = response.blocks.map((block) => {
@@ -305,7 +305,7 @@ function AddAssignment() {
 
       // После отправки действия, вы можете использовать селекторы для получения актуального состояния
       const assignmentStatus = useSelector(
-        (state) => state.addAssignment.status
+        (state) => state.addAssignment.status,
       );
       const assignmentError = useSelector((state) => state.addAssignment.error);
 
@@ -330,7 +330,7 @@ function AddAssignment() {
           .map(([key, message]) => `${key}: ${message}`)
           .join(", ");
         dispatch(
-          setError(`Please correct the following errors: ${errorTextString}`)
+          setError(`Please correct the following errors: ${errorTextString}`),
         );
         console.error("Error creating assignment", assignmentError);
         displayErrorMessages(assignmentError);
@@ -364,7 +364,7 @@ function AddAssignment() {
     blockContainers.forEach((blockContainer, index) => {
       const blockErrorKey = `blocks #${index + 1}`;
       const blockErrorExists = Object.keys(errorMessages).some((key) =>
-        key.startsWith(blockErrorKey)
+        key.startsWith(blockErrorKey),
       );
       if (blockErrorExists) {
         blockContainer.classList.add("error");
