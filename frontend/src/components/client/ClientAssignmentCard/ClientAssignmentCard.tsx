@@ -1,22 +1,22 @@
 //@ts-nocheck
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import "./ClientAssignmentCard.css";
 import { API } from "../../../service/axios";
 import useMobileWidth from "../../../utils/hook/useMobileWidth";
-import {
-  useCreateAssignmentMutation,
-  useUpdateAssignmentByUUIDMutation,
-} from "../../../store/entities/assignments/assingmentsApi";
+import { useCreateAssignmentMutation } from "../../../store/entities/assignments/assingmentsApi";
 import { StatusFromServer } from "../../psy/ClientAssignmentTile";
+import { clientAssignmentClear } from "../../../store/actions/assignment/assignmentActions";
+import { useAppDispatch } from "../../../store/store";
 
 function ClientAssignmentCard({ assignmentData, openAssignment }) {
   const [isShowContextMenu, setIsShowContextMenu] = useState(false);
   const menuReference = useRef(null);
   const buttonReference = useRef(null);
 
+  const dispatch = useAppDispatch();
+
   const [createAssignment, _] = useCreateAssignmentMutation();
-  const [updateClientAssignment] = useUpdateAssignmentByUUIDMutation();
 
   function defineStatusClass() {
     switch (assignmentData?.status) {
@@ -38,7 +38,7 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
   async function handleShareWithTherapist() {
     try {
       const res = await API.post(
-        `assignments-client/${assignmentData?.id}/visible/`,
+        `assignments-client/${assignmentData?.id}/visible/`
       );
       if (res.status >= 200 && res.status < 300) {
         console.log(res.data);
@@ -113,10 +113,10 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
       text: "",
     };
 
-    const uuid = clearAssignmentData.id;
+    const assignmentId: string = clearAssignmentData.id;
 
     try {
-      const response = updateClientAssignment({ uuid, clearAssignmentData });
+      const response = dispatch(clientAssignmentClear({ assignmentId }));
       return response;
     } catch (e) {
       console.log(e);
@@ -186,7 +186,7 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
                   type="button"
                   onClick={handleClickClear}
                   className="card__action-menu-text"
-                  // disabled={true}
+                 
                 >
                   Clear
                   <div

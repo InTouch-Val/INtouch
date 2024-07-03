@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Modal } from "../../../service/modal";
 import { useAuth } from "../../../service/authContext";
 import { useDeleteAssignmentByUUIDMutation } from "../../../store/entities";
-import { useAppDispatch, useAppSelector } from "../../../store/store";
+import { useAppDispatch } from "../../../store/store";
 import { setClientByIdAction } from "../../../store/actions/assignment/assignmentActions";
 
 export default function ModalAssignments({
@@ -23,7 +23,6 @@ export default function ModalAssignments({
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   const [deleteAssignmentById, _] = useDeleteAssignmentByUUIDMutation();
-  const { setClientId, status } = useAppSelector((state) => state.assignment);
   const dispatch = useAppDispatch();
 
   const handleModalClose = (): void => {
@@ -50,16 +49,13 @@ export default function ModalAssignments({
         return;
       }
 
-      const res = await selectedClients.map(async (clientId) => {
-        const data = await dispatch(
-          setClientByIdAction({ assignmentId, clientId }),
-        );
-        return await data.payload;
-      });
-
-      const allResponsesSuccessful = await res.every(
-        (response) => response.status >= 200 && response.status <= 300,
+      const { payload }: any = await dispatch(
+        setClientByIdAction({ assignmentId, selectedClients })
       );
+
+      const allResponsesSuccessful =
+        payload.status >= 200 && payload.status <= 300;
+
       if (allResponsesSuccessful) {
         setIfError(false);
         setErrorText("");
@@ -88,7 +84,9 @@ export default function ModalAssignments({
     });
   };
 
-  const deleteAssignment = async (assignmentId: string): Promise<void> => {
+  const deleteAssignment = async (): Promise<void> => {
+    const assignmentId = selectedAssignmentId;
+
     try {
       deleteAssignmentById(assignmentId);
       setSelectedAssignmentId("");
@@ -153,7 +151,7 @@ export default function ModalAssignments({
         showCancel={false}
         isOpen={isDeleteModalOpen}
         onClose={handleModalClose}
-        onConfirm={() => deleteAssignment(selectedAssignmentId)}
+        onConfirm={deleteAssignment}
         confirmText="Yes, delete"
         ifError={ifError}
         errorText={errorText}
