@@ -27,16 +27,16 @@ const blocksSlice = createSlice({
     },
     removeBlock: (
       state,
-      action: PayloadAction<RemoveBlockAction["payload"]>
+      action: PayloadAction<RemoveBlockAction["payload"]>,
     ) => {
       state.blocks = state.blocks.filter(
-        (block) => block.id !== action.payload.blockId
+        (block) => block.id !== action.payload.blockId,
       );
     },
     updateBlock: {
       reducer: (state, action: PayloadAction<Block>) => {
         const blockIndex = state.blocks.findIndex(
-          (block) => block.id === action.payload.id
+          (block) => block.id === action.payload.id,
         );
         if (blockIndex >= 0) {
           state.blocks[blockIndex] = action.payload;
@@ -44,14 +44,14 @@ const blocksSlice = createSlice({
       },
       prepare: (payload: UpdateBlockAction["payload"]) => {
         const blockIndex = initialState.blocks.findIndex(
-          (block) => block.id === payload.blockId
+          (block) => block.id === payload.blockId,
         );
         let updatedBlock = { ...initialState.blocks[blockIndex] };
 
         if (payload.newContent !== undefined) {
           updatedBlock.content = payload.newContent;
           updatedBlock.description = getObjectFromEditorState(
-            payload.newContent
+            payload.newContent,
           );
         }
 
