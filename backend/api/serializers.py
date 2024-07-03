@@ -15,6 +15,7 @@ from api.constants import (
     TIME_DELETE_NON_ACTIVE_USER,
     USER_TYPES,
     DIARY_FIELDS_TO_CHECK,
+    METRICS_DATE_FORMAT,
 )
 
 
@@ -440,7 +441,7 @@ class BlockSerializer(BlockSerializerForClient):
 
 class AssignmentSerializer(serializers.ModelSerializer):
     blocks = BlockSerializer(many=True, required=False)
-    author_name = serializers.StringRelatedField(source="author", read_only=True)
+    author_name = serializers.SerializerMethodField()
     status = serializers.CharField(required=False)
     tags = serializers.CharField(required=False)
     image_url = serializers.CharField(required=False)
@@ -474,6 +475,14 @@ class AssignmentSerializer(serializers.ModelSerializer):
             "share",
             "author",
         ]
+
+    def get_author_name(self, obj):
+        try:
+            if obj.author.deleted:
+                return USER_TYPES[2]
+            return str(obj.author)
+        except AttributeError:
+            return USER_TYPES[2]
 
     def create(self, validated_data):
         blocks_data = validated_data.pop("blocks", [])
@@ -656,3 +665,32 @@ class DiaryNoteSerializer(serializers.ModelSerializer):
         author = self.context["request"].user
         diary_note = DiaryNote.objects.create(author=author, **validated_data)
         return diary_note
+
+
+class BaseMetricsSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    date_joined = serializers.DateTimeField(format=METRICS_DATE_FORMAT)
+    rolling_retention_7d = serializers.BooleanField()
+    rolling_retention_30d = serializers.BooleanField()
+    last_login = serializers.DateTimeField(format=METRICS_DATE_FORMAT)
+    deleted_on = serializers.DateTimeField(format=METRICS_DATE_FORMAT)
+
+
+class TherapistsMetricsSerializer(BaseMetricsSerializer):
+    clients_count = serializers.IntegerField()
+    last_invited = serializers.DateTimeField(format=METRICS_DATE_FORMAT)
+    last_sent_assignment = serializers.DateTimeField(format=METRICS_DATE_FORMAT)
+    last_created_assignment = serializers.DateTimeField(format=METRICS_DATE_FORMAT)
+
+
+class ClientsMetricsSerializer(BaseMetricsSerializer):
+    last_done_assignment = serializers.DateTimeField(format=METRICS_DATE_FORMAT)
+    last_created_diary = serializers.DateTimeField(format=METRICS_DATE_FORMAT)
+
+
+class GrowthMetricsSerializer(serializers.Serializer):
+    amount_of_therapists = serializers.IntegerField()
+    amount_of_clients = serializers.IntegerField()
+    amount_of_assignments = serializers.IntegerField()
+    amount_of_deleted_therapists = serializers.IntegerField()
+    amount_of_deleted_clients = serializers.IntegerField()

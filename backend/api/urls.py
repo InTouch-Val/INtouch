@@ -17,6 +17,7 @@ router.register(
 )
 router.register("notes", NoteViewSet, basename="notes")
 router.register("diary-notes", DiaryNoteViewSet, basename="diary_notes")
+router.register("project-metrics", ProjectMetricsViewSet, basename="project_metrics")
 
 urlpatterns = [
     path("", include(router.urls)),
@@ -55,7 +56,7 @@ urlpatterns = [
         name="assignment_delete-list",
     ),
     path(
-        "assignments/set-client/<int:pk>/<int:client_pk>/",
+        "assignments/set-client/<int:pk>/",
         AddAssignmentClientView.as_view(),
         name="add_assignment_client",
     ),
@@ -73,9 +74,8 @@ urlpatterns = [
         UpdateEmailConfirmView.as_view(),
         name="update_email_confirm",
     ),
-    path("project-metrics/", project_metrics, name="project_metrics"),
     re_path(
-        r"project-metrics/(?P<for_whom>clients|therapists)/download/",
+        r"project-metrics/(?P<for_whom>clients|therapists|growth)/download/",
         metrics_download,
         name="metrics_download",
     ),

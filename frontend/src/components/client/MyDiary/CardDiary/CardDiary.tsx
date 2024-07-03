@@ -15,9 +15,9 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
   const [active, setActive] = React.useState(card.visible);
 
   const handleClickVisible = async () => {
-    setActive((prev) => !prev);
+    await setActive((prev) => !prev);
 
-    const newCard = { ...card, visible: !card.visible };
+    const newCard = { ...card, visible: active };
     try {
       const response = await API.patch(`/diary-notes/${card.id}/`, newCard);
       return response.data;
