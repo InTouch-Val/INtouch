@@ -56,7 +56,6 @@ function AssignmentsPage({
   //   assignments,
   // } = useAppSelector((state) => state.assignment);
 
-
   // const {
   //   data: listAssignment,
   //   refetch,
@@ -91,7 +90,7 @@ function AssignmentsPage({
 
   // if (isFetching && !currentData) return <h1>!!!!!loading!!</h1>
 
-  console.log("filteredAssignments", filteredAssignments)
+  console.log("filteredAssignments", filteredAssignments);
 
   useObserve(observeElement, isTotal, handleTakeUpdate);
 

@@ -2,9 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import {
-  useDeleteAssignmentByUUIDMutation
-} from "../../store/entities";
+import { useDeleteAssignmentByUUIDMutation } from "../../store/entities";
 import { useNavigate } from "react-router-dom";
 import FilterDropDown from "./FilterDropDown/FilterDropDown";
 import ModalAssignments from "./ModalsAssignments/ModalAssignments";
@@ -40,8 +38,6 @@ export default function AssignmentsPageRefactor({
     deleteAssignment(assignmentId);
     setIsDeleteModalOpen(true);
   };
-
-
 
   const handleShareButton = (assignmentId: string): void => {
     if (isShareModal) {

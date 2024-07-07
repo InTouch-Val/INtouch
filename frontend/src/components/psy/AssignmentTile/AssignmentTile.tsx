@@ -7,9 +7,17 @@ import {
   draftAssignmentAction,
   duplicateAssignmentAction,
 } from "../../../store/actions/assignment/assignmentActions";
-import { AssignmentTab, BlockType, TypeFilter, TypeLanguage } from "../../../utils/constants";
+import {
+  AssignmentTab,
+  BlockType,
+  TypeFilter,
+  TypeLanguage,
+} from "../../../utils/constants";
 import { AssignmentsType } from "../../../store/entities/assignments/types";
-import { useCreateAssignmentMutation, useGetAssignmentsQuery } from "../../../store/entities";
+import {
+  useCreateAssignmentMutation,
+  useGetAssignmentsQuery,
+} from "../../../store/entities";
 import { formatDate } from "../../../utils/helperFunction/formatDate";
 import DropDownButton from "./DropDownButton/DropDownButton";
 import { separatedBlock } from "./helperFunction";
@@ -41,8 +49,6 @@ function AssignmentTile({
   const [isSelected, setIsSelected] = useState(
     assignment.id === selectedAssignmentIdForShareModalOnClientPage,
   );
-
-
 
   const dispatch = useAppDispatch();
   const [assignmentId, setAssignments] = useState<AssignmentsType[] | []>([]);
