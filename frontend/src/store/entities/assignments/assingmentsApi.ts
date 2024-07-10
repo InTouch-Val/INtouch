@@ -115,7 +115,24 @@ export const assignmentApi = createApi({
         },
         body: newAssignmentData,
       }),
+      invalidatesTags: () => [{ type: "Assignments", id: "PARTIAL-LIST" }],
     }),
+    createClientAssignment: build.mutation<
+    AssignmentsType,
+    Partial<AssignmentCreateRequestType>
+  >({
+    query: (newAssignmentData) => ({
+      url: "assignments-client/",
+      method: "POST",
+      data: newAssignmentData,
+
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+      body: newAssignmentData,
+    }),
+    invalidatesTags: () => [{ type: "Assignments", id: "PARTIAL-LIST" }],
+  }),
     getAssignmentByUUID: build.query<AssignmentsType, string>({
       query: (uuid) => ({
         url: `${ASSIGNMENTS_URL}/${uuid}`,
@@ -129,14 +146,33 @@ export const assignmentApi = createApi({
       AssignmentsType,
       AssignmentUpdateRequestType
     >({
-      query: ({ uuid }) => ({
-        url: `${ASSIGNMENTS_URL}/${uuid}`,
+      query: ({ uuid, body }) => ({
+        url: `${ASSIGNMENTS_URL}/${uuid}/`,
         method: "PUT",
+        data: body,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
+        body: body,
       }),
+      invalidatesTags: () => [{ type: "Assignments", id: "PARTIAL-LIST" }],
     }),
+    updateClientAssignmentByUUID: build.mutation<
+    AssignmentsType,
+    AssignmentUpdateRequestType
+  >({
+    query: ({ uuid, body }) => ({
+      url: `${ASSIGNMENTS_URL}-client/${uuid}/`,
+      method: "PUT",
+      data: body,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+      body: body,
+    }),
+    invalidatesTags: () => [{ type: "Assignments", id: "PARTIAL-LIST" }],
+  }),
+
 
     deleteAssignmentClientByUUID: build.mutation<string, number>({
       query: (uuid) => ({
@@ -166,6 +202,7 @@ export const {
   useCreateAssignmentMutation,
   useDeleteAssignmentByUUIDMutation,
   useUpdateAssignmentByUUIDMutation,
+  useUpdateClientAssignmentByUUIDMutation,
   useGetAssignmentByUUIDQuery,
   useGetAssignmentsQuery,
   useDeleteAssignmentClientByUUIDMutation,
