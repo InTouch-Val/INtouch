@@ -40,7 +40,7 @@ export const draftAssignmentAction = createAsyncThunk(
   "assignment/draftAssignmentAction",
   async (responseAssignmentId: number, { rejectWithValue }) => {
     try {
-      const response = await API.get(
+      const response = await API.patch(
         `assignments/${responseAssignmentId}/draft/`,
       );
       const data = response.data;
@@ -55,12 +55,12 @@ export const draftAssignmentAction = createAsyncThunk(
 export const setClientByIdAction = createAsyncThunk(
   "assignment/setClientByIdAction",
   async (
-    { assignmentId, clientId }: { assignmentId: string; clientId: string },
+    { assignmentId, selectedClients }: { assignmentId: string; selectedClients: string[] },
     { rejectWithValue },
   ) => {
     try {
-      const response = await API.get(
-        `assignments/set-client/${assignmentId}/${clientId}/`,
+      const response = await API.post(
+        `assignments/set-client/${assignmentId}/?clients=${selectedClients}`,
       );
       const data = response;
       return data;
@@ -70,3 +70,23 @@ export const setClientByIdAction = createAsyncThunk(
     }
   },
 );
+
+export const clientAssignmentClear = createAsyncThunk(
+  "assignment/clientAssignmentClear",
+  async (
+    { assignmentId }: { assignmentId: string },
+    { rejectWithValue },
+  ) => {
+    try {
+      const response = await API.get(
+        `assignments-client/${assignmentId}/clear/`,
+      );
+      const data = response;
+      return data;
+    } catch (error) {
+      console.error("Error duplicate:", error);
+      return rejectWithValue;
+    }
+  },
+);
+

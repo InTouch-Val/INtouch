@@ -5,13 +5,13 @@ import { useDeleteAssignmentClientByUUIDMutation } from "../../store/entities";
 import { useNavigate } from "react-router-dom";
 import { AssignmentsType } from "../../store/entities/assignments/types";
 
-enum Status {
+export enum Status {
   ToDo = "to-do",
   Done = "done",
   inProgress = "in-progress",
 }
 
-enum StatusFromServer {
+export enum StatusFromServer {
   ToDo = "to do",
   Done = "done",
   inProgress = "in progress",
@@ -72,7 +72,7 @@ export default function ClientAssignmentTile({
   const handleToggleModal = (): void => setShowModal(!showModal);
 
   function handleRecallClick(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ): void {
     event.stopPropagation();
     onRecallClick();

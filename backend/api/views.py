@@ -682,6 +682,10 @@ class AddAssignmentClientView(APIView):
                     "true",
                 ],
             ),
+            OpenApiParameter(
+                "author",
+                description=("To return assignments of a certain doctor."),
+            ),
         ],
     ),
     retrieve=extend_schema(
@@ -737,7 +741,6 @@ class AssignmentViewSet(viewsets.ModelViewSet):
     filterset_fields = [
         "assignment_type",
         "language",
-        "author",
     ]
     ordering_fields = [
         "average_grade",
@@ -750,15 +753,15 @@ class AssignmentViewSet(viewsets.ModelViewSet):
     ]
 
     def get_queryset(self):
-        favorites = self.request.query_params.get("favorites") == "true"
-        if favorites:
-            return avg_grade_annotation(self.request.user.doctor.assignments)
-        return avg_grade_annotation(
-            (
-                super().get_queryset()
-                | Assignment.objects.filter(author=self.request.user, is_public=False)
+        if self.request.query_params.get("author"):
+            return avg_grade_annotation(
+                Assignment.objects.filter(
+                    author=self.request.query_params.get("author")
+                )
             )
-        )
+        if self.request.query_params.get("favorites") == "true":
+            return avg_grade_annotation(self.request.user.doctor.assignments)
+        return avg_grade_annotation(super().get_queryset())
 
     def destroy(self, request, *args, **kwargs):
         assignment = self.get_object()
@@ -903,7 +906,7 @@ class AssignmentClientViewSet(
             query = query | client_user.client.assignments.all().filter()
         return query
 
-    @action(detail=True, methods=["get"])
+    @action(detail=True, methods=["PATCH"])
     def complete(self, request, pk):
         """Смена статуса задачи на 'done'"""
         assignment = self.get_object()
@@ -911,7 +914,7 @@ class AssignmentClientViewSet(
         assignment.save()
         return Response({"message": "Status is 'done'."}, HTTPStatus.OK)
 
-    @action(detail=True, methods=["get"])
+    @action(detail=True, methods=["PATCH"])
     def clear(self, request, pk):
         """Очистка ответов в задании клиента"""
         assignment = self.get_object()
@@ -922,13 +925,12 @@ class AssignmentClientViewSet(
                 HTTPStatus.BAD_REQUEST,
             )
 
-        for block in assignment.blocks:
+        for block in assignment.blocks.all():
             if block.type == "text":
                 block.reply = ""
             if block.type == "single" or block.type == "multiple":
-                for ans in block.choice_replies:
-                    ans.checked = False
-                block.choice_replies.save()
+                for answer in block.choice_replies.all():
+                    answer.checked = False
             if block.type == "range":
                 pass
             if block.type == "image":
@@ -939,7 +941,7 @@ class AssignmentClientViewSet(
         assignment.save()
         return Response({"message": "Assignments cleared successfully."}, HTTPStatus.OK)
 
-    @action(detail=True, methods=["POST"])
+    @action(detail=True, methods=["PATCH"])
     def visible(self, request, pk):
         """Смена значения видимости задания для доктора"""
         assignment = self.get_object()
@@ -1060,7 +1062,7 @@ class DiaryNoteViewSet(viewsets.ModelViewSet):
             query = query | client_user.diary_notes.all().filter(visible=True)
         return query
 
-    @action(detail=True, methods=["POST"])
+    @action(detail=True, methods=["PATCH"])
     def visible(self, request, pk):
         """Смена значения видимости записи в дневнике для доктора"""
         diary_note = self.get_object()
@@ -1158,6 +1160,9 @@ def assetlink(request):
 class ProjectMetricsViewSet(
     viewsets.GenericViewSet,
 ):
+    permission_classes = [
+        AllowAny,
+    ]
     serializer_class = None
 
     def get_queryset(self, for_whom, date_from, date_to):
@@ -1173,7 +1178,7 @@ class ProjectMetricsViewSet(
         kwargs.setdefault("context", self.get_serializer_context())
         return serializer_class(*args, **kwargs)
 
-    def form_serialized_metrics_data(self, request):
+    def form_serialized_metrics_data(self, request) -> Response:
         for_whom = request.path.split("/")[4]
         date_from = request.query_params.get("date_from")
         date_to = request.query_params.get("date_to")

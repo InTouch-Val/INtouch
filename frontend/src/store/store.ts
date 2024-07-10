@@ -7,6 +7,10 @@ import assignmentSlice, {
 import { authSlice } from "./slices/index";
 import { assignmentApi } from "./entities";
 import { authApi } from "./entities/auth/auth";
+import blocksReducer from "./slices/add-assignment/blocks";
+import formAddAssignmentReducer from "./slices/add-assignment/form";
+import errorsReducer from "./slices/add-assignment/errorsSlice";
+import createUpdate from "./slices/add-assignment/createUpdate";
 import { modalsSlice } from "./slices/modals/modalsSlice";
 import { AssignmentTab } from "../utils/constants";
 
@@ -32,8 +36,11 @@ const store = configureStore({
   reducer: {
     assignment: assignmentSlice,
     auth: authSlice.reducer,
+    blocks: blocksReducer,
+    formAddAssignment: formAddAssignmentReducer,
+    errors: errorsReducer,
+    addAssignment: createUpdate,
     modals: modalsSlice.reducer,
-
     [authApi.reducerPath]: authApi.reducer,
     [assignmentApi.reducerPath]: assignmentApi.reducer,
   },
