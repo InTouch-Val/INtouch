@@ -11,6 +11,15 @@
   "relation": ["delegate_permission/common.handle_all_urls"],
   "target": {
     "namespace": "android_app",
+    "package_name": "care.intouch.app.qa",
+    "sha256_cert_fingerprints":
+    ["D0:15:F2:B2:D4:5E:15:BE:5D:1E:FF:3D:4E:1A:58:CE:84:AA:21:BE:80:9E:FE:54:25:AD:AF:E5:73:56:CA:B2"]
+  }
+},
+{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
     "package_name": "care.intouch.app",
     "sha256_cert_fingerprints":
     ["D0:15:F2:B2:D4:5E:15:BE:5D:1E:FF:3D:4E:1A:58:CE:84:AA:21:BE:80:9E:FE:54:25:AD:AF:E5:73:56:CA:B2"]

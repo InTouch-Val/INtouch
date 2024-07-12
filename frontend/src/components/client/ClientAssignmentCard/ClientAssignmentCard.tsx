@@ -186,7 +186,7 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
                   type="button"
                   onClick={handleClickClear}
                   className="card__action-menu-text"
-                 
+
                 >
                   Clear
                   <div
