@@ -1076,7 +1076,7 @@ class DiaryNoteViewSet(viewsets.ModelViewSet):
 @require_GET
 def assetlink(request):
     """Вью-функция для деплоя файла конфигурации мобильного предложения."""
-    path = f"{settings.STATIC_ROOT}/assetlinks.json"
+    path = f"{settings.BASE_DIR}/api/static/assetlinks.json"
     with open(path, "r") as f:
         data = json.loads(f.read())
     response = JsonResponse(data, safe=False)
