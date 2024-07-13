@@ -48,30 +48,35 @@ const EditorToolbar = forwardRef(
 
     const effectiveErrorText = errorText || "";
 
-    const applyStylesFromCharacterList = (contentState: ContentState, rawContentState: ExtendedRawDraftContentState) => {
+    const applyStylesFromCharacterList = (
+      contentState: ContentState,
+      rawContentState: ExtendedRawDraftContentState,
+    ) => {
       let newContentState = contentState;
 
       rawContentState.blocks.forEach((block: Block) => {
         if (block.characterList) {
-          block.characterList.forEach((charInfo: CharacterInfo, charIndex: number) => {
-            const blockKey = block.key;
-            const charStyles = charInfo.style; // Получаем массив стилей для символа
-            const char = block.text[charIndex];
+          block.characterList.forEach(
+            (charInfo: CharacterInfo, charIndex: number) => {
+              const blockKey = block.key;
+              const charStyles = charInfo.style; // Получаем массив стилей для символа
+              const char = block.text[charIndex];
 
-            // Применяем каждый стиль к символу
-            charStyles.forEach((style: string) => {
-              newContentState = Modifier.applyInlineStyle(
-                newContentState,
-                newContentState.getSelectionAfter().merge({
-                  anchorKey: blockKey,
-                  anchorOffset: charIndex,
-                  focusKey: blockKey,
-                  focusOffset: charIndex + 1,
-                }),
-                style,
-              );
-            });
-          });
+              // Применяем каждый стиль к символу
+              charStyles.forEach((style: string) => {
+                newContentState = Modifier.applyInlineStyle(
+                  newContentState,
+                  newContentState.getSelectionAfter().merge({
+                    anchorKey: blockKey,
+                    anchorOffset: charIndex,
+                    focusKey: blockKey,
+                    focusOffset: charIndex + 1,
+                  }),
+                  style,
+                );
+              });
+            },
+          );
         }
       });
 
@@ -88,7 +93,7 @@ const EditorToolbar = forwardRef(
           return false;
         }
       };
-    
+
       const parseContent = (content: string) => {
         if (isJSON(content)) {
           try {
@@ -109,7 +114,7 @@ const EditorToolbar = forwardRef(
           return EditorState.createWithContent(contentState);
         }
       };
-    
+
       let newEditorState: EditorState;
       if (block.description && isJSON(block.description)) {
         try {
@@ -118,18 +123,20 @@ const EditorToolbar = forwardRef(
             blocks: [],
             entityMap: descriptionObject.entityMap,
           };
-    
+
           for (const blockKey in descriptionObject.blockMap) {
             const block = descriptionObject.blockMap[blockKey];
             rawContentState.blocks.push(block);
           }
-    
+
           const contentState = convertFromRaw(rawContentState);
           const contentStateWithStyles = applyStylesFromCharacterList(
             contentState,
             rawContentState,
           );
-          newEditorState = EditorState.createWithContent(contentStateWithStyles);
+          newEditorState = EditorState.createWithContent(
+            contentStateWithStyles,
+          );
           setEditorState(newEditorState);
         } catch (error) {
           console.error("Error converting string to object:", error);
@@ -145,7 +152,6 @@ const EditorToolbar = forwardRef(
         setEditorState(newEditorState);
       }
     };
-    
 
     // Инициализация редактора при монтировании компонента
     useEffect(() => {
@@ -223,7 +229,7 @@ const EditorToolbar = forwardRef(
       const text = contentState.getPlainText();
 
       if (setErrorText && setErrorText) {
-      validateTextLength(text);
+        validateTextLength(text);
       }
     };
 

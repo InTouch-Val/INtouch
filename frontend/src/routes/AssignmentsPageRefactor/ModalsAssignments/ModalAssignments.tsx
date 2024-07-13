@@ -50,7 +50,7 @@ export default function ModalAssignments({
       }
 
       const { payload }: any = await dispatch(
-        setClientByIdAction({ assignmentId, selectedClients })
+        setClientByIdAction({ assignmentId, selectedClients }),
       );
 
       const allResponsesSuccessful =

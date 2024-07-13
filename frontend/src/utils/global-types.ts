@@ -1,4 +1,8 @@
-import { RawDraftContentBlock, RawDraftContentState, ContentState } from "draft-js";
+import {
+  RawDraftContentBlock,
+  RawDraftContentState,
+  ContentState,
+} from "draft-js";
 
 export type ClientDiary = {
   add_date: string;
@@ -34,7 +38,6 @@ interface DiaryTextBlockEntry {
   question: string;
   type: "open";
 }
-
 
 export interface CharacterInfo {
   style: string[];
@@ -85,5 +88,7 @@ interface AssignmentConstructor {
   type: "range";
 }
 
-export type Block = AssignmentClientBlock | DiaryTextBlockEntry | AssignmentConstructor;
-
+export type Block =
+  | AssignmentClientBlock
+  | DiaryTextBlockEntry
+  | AssignmentConstructor;
