@@ -2,24 +2,27 @@ import React, { useState } from "react";
 import { Modal } from "../../../service/modal";
 import { useAuth } from "../../../service/authContext";
 import { useDeleteAssignmentByUUIDMutation } from "../../../store/entities";
-import { useAppDispatch, useAppSelector } from "../../../store/store";
+import { useAppDispatch } from "../../../store/store";
 import { setClientByIdAction } from "../../../store/actions/assignment/assignmentActions";
 
-export default function ModalAssignments(): JSX.Element {
+export default function ModalAssignments({
+  setIsShareModalOpen,
+  isShareModalOpen,
+  setIsDeleteModalOpen,
+  isDeleteModalOpen,
+  setSelectedAssignmentId,
+  selectedAssignmentId,
+}): JSX.Element {
   //@ts-ignore
   const { currentUser } = useAuth();
 
   const [clients, setClients] = useState<any>(currentUser?.doctor?.clients);
   const [selectedClients, setSelectedClients] = useState<any>([]);
-  const [selectedAssignmentId, setSelectedAssignmentId] = useState("");
   const [ifError, setIfError] = useState(false);
   const [errorText, setErrorText] = useState<string>("");
-  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const [deleteAssignmentById, _] = useDeleteAssignmentByUUIDMutation();
-  const { setClientId } = useAppSelector((state) => state.assignment);
   const dispatch = useAppDispatch();
 
   const handleModalClose = (): void => {
@@ -46,13 +49,12 @@ export default function ModalAssignments(): JSX.Element {
         return;
       }
 
-      selectedClients.map(async (clientId) => {
-        await dispatch(setClientByIdAction({ assignmentId, clientId }));
-      });
-
-      const allResponsesSuccessful = setClientId.every(
-        (response) => response.status >= 200 && response.status <= 300,
+      const { payload }: any = await dispatch(
+        setClientByIdAction({ assignmentId, selectedClients })
       );
+
+      const allResponsesSuccessful =
+        payload.status >= 200 && payload.status <= 300;
 
       if (allResponsesSuccessful) {
         setIfError(false);
@@ -82,7 +84,9 @@ export default function ModalAssignments(): JSX.Element {
     });
   };
 
-  const deleteAssignment = async (assignmentId: string): Promise<void> => {
+  const deleteAssignment = async (): Promise<void> => {
+    const assignmentId = selectedAssignmentId;
+
     try {
       deleteAssignmentById(assignmentId);
       setSelectedAssignmentId("");
@@ -97,7 +101,7 @@ export default function ModalAssignments(): JSX.Element {
   return (
     <>
       <Modal
-        // showCancel={false}
+        showCancel={false}
         isOpen={isShareModalOpen}
         onClose={handleModalClose}
         onConfirm={handleShareSubmit}
@@ -133,7 +137,7 @@ export default function ModalAssignments(): JSX.Element {
         </div>
       </Modal>
       <Modal
-        // showCancel={false}
+        showCancel={false}
         isOpen={isSuccessModalOpen}
         onClose={handleModalClose}
         onConfirm={handleModalClose}
@@ -144,9 +148,10 @@ export default function ModalAssignments(): JSX.Element {
         <h2>Assignment has been successfully sent!</h2>
       </Modal>
       <Modal
+        showCancel={false}
         isOpen={isDeleteModalOpen}
         onClose={handleModalClose}
-        onConfirm={() => deleteAssignment(selectedAssignmentId)}
+        onConfirm={deleteAssignment}
         confirmText="Yes, delete"
         ifError={ifError}
         errorText={errorText}

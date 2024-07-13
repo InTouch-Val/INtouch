@@ -282,6 +282,7 @@ const SecurityTab = () => {
                   Are you sure you want to delete your profile forever? <br />
                   <strong>This action is irrevertable!</strong>
                 </p>
+
                 <div>
                   <button className="action-button" onClick={handleModalToggle}>
                     Cancel
