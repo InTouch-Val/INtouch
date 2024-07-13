@@ -55,7 +55,10 @@ export const draftAssignmentAction = createAsyncThunk(
 export const setClientByIdAction = createAsyncThunk(
   "assignment/setClientByIdAction",
   async (
-    { assignmentId, selectedClients }: { assignmentId: string; selectedClients: string[] },
+    {
+      assignmentId,
+      selectedClients,
+    }: { assignmentId: string; selectedClients: string[] },
     { rejectWithValue },
   ) => {
     try {
@@ -73,10 +76,7 @@ export const setClientByIdAction = createAsyncThunk(
 
 export const clientAssignmentClear = createAsyncThunk(
   "assignment/clientAssignmentClear",
-  async (
-    { assignmentId }: { assignmentId: string },
-    { rejectWithValue },
-  ) => {
+  async ({ assignmentId }: { assignmentId: string }, { rejectWithValue }) => {
     try {
       const response = await API.get(
         `assignments-client/${assignmentId}/clear/`,

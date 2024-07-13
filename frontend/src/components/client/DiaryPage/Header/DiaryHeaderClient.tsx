@@ -11,6 +11,7 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 import { useAppDispatch } from "../../../../store/store";
 import { openModalExitUnsaved } from "../../../../store/slices/modals/modalsSlice";
+import { ClientDiary } from "../../../../utils/global-types";
 
 const options = {
   weekday: "long",
