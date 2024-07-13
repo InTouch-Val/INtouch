@@ -10,6 +10,7 @@ import logo from "../../images/LogoBig.svg";
 
 function RegistrationForm() {
   const [successMessage, setSuccessMessage] = useState(false);
+  const [passwordTooLong, setPasswordTooLong] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -26,8 +27,14 @@ function RegistrationForm() {
     second: "",
     terms: "",
   });
+
+  console.log(validationError)
+
   const [passwordShown, setPasswordShown] = useState(false);
   const [isValidCredentials, setIsValidCredentials] = useState(false);
+  const [showTermsError, setShowTermsError] = useState(false);
+
+
   const navigate = useNavigate();
   const numberOfMinLengthOfPassword = 8;
   const numberOfMaxLengthOfPassword = 128;
@@ -46,7 +53,7 @@ function RegistrationForm() {
       const hasUppercase = /[A-Z]/.test(value);
       const hasLowercase = /[a-z]/.test(value);
       const hasDigit = /\d/.test(value);
-      const hasSpace = /^(?!.*\s)$/.test(value);
+
       if (
         value.length < numberOfMinLengthOfPassword ||
         value.length > numberOfMaxLengthOfPassword
@@ -56,9 +63,11 @@ function RegistrationForm() {
       } else if (!hasUppercase || !hasLowercase || !hasDigit) {
         newError.password =
           "Password must contain at least one uppercase letter, one lowercase letter, and one digit.";
-      } else if (!hasSpace) {
+      } 
+      else if (/\s/.test(value)) {
         newError.password = "Spaces are not allowed in your password";
-      } else {
+      } 
+      else {
         newError.password =
           "Password can only contain Latin letters, Arabic numerals, and the characters: ~!? @ # $ % ^ & * _ - + ( ) [ ] { } > < / \\ | '., : ;";
       }
@@ -77,13 +86,14 @@ function RegistrationForm() {
           newError.second =
             "Please write a valid second name. Only 2-50 letters are allowed.";
         }
-      } else {
+      } 
+      else {
         if (field === "name") {
           newError.name =
-            "Please use only latin characters, special characters are prohibited";
+            "Please write a valid name. Only 2-50 letters are allowed.";
         } else {
           newError.second =
-            "Please use only latin characters, special characters are prohibited";
+            "Please write a valid name. Only 2-50 letters are allowed.";
         }
       }
     } else {
@@ -119,17 +129,45 @@ function RegistrationForm() {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+  
+    if (name === "acceptPolicy") {
+      setShowTermsError(!checked);
+  
+      if (checked) {
+        setValidationError({
+          ...validationError,
+          terms: "",
+        });
+      }
+    }
+  
     setFormData({
       ...formData,
       [name]: type === "checkbox" ? checked : value,
     });
+
+    if (name === "password" && value.length > numberOfMaxLengthOfPassword) {
+      setPasswordTooLong(true);
+    } else {
+      setPasswordTooLong(false);
+    }
+  }
+
+  const handlePaste = (e) => {
+    const pastedText = e.clipboardData.getData('Text');
+    // Check password length on paste
+    if (pastedText.length > numberOfMaxLengthOfPassword) {
+      setPasswordTooLong(true);
+    } else {
+      setPasswordTooLong(false);
+    }
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     setError("");
-
     if (!isValidName(formData.firstName)) {
       setValidationError({
         ...validationError,
@@ -155,6 +193,15 @@ function RegistrationForm() {
       return;
     }
 
+    if (!formData.acceptPolicy) {
+      setShowTermsError(true);
+      setValidationError({
+        ...validationError,
+        terms: "Please accept the terms and conditions to continue",
+      });
+      return;
+    }
+
     if (
       formData.password
         .toLowerCase()
@@ -164,15 +211,6 @@ function RegistrationForm() {
       setValidationError({
         ...validationError,
         password: "The password is too similar to your name",
-      });
-      return;
-    }
-
-    // Проверка согласия с политикой
-    if (!formData.acceptPolicy) {
-      setValidationError({
-        ...validationError,
-        terms: "Please accept the terms and conditions to continue",
       });
       return;
     }
@@ -219,16 +257,30 @@ function RegistrationForm() {
     }
   };
 
+  // const isAnyFieldMissingOrInvalid = (): boolean => {
+  //   return (
+  //     !isValidCredentials ||
+  //     !formData.confirmPassword ||
+  //     !formData.email ||
+  //     !formData.firstName ||
+  //     !formData.lastName ||
+  //     !formData.password ||
+  //     !formData.acceptPolicy
+  //   );
+  // };
+
   const isAnyFieldMissingOrInvalid = (): boolean => {
-    return (
+    const anyFieldMissingOrInvalid =
       !isValidCredentials ||
       !formData.confirmPassword ||
       !formData.email ||
       !formData.firstName ||
       !formData.lastName ||
-      !formData.password ||
-      !formData.acceptPolicy
-    );
+      !formData.password;
+  
+    const acceptPolicyNotAccepted = !formData.acceptPolicy && showTermsError;
+  
+    return anyFieldMissingOrInvalid || acceptPolicyNotAccepted;
   };
 
   return (
@@ -243,7 +295,7 @@ function RegistrationForm() {
             className={`input ${validationError.name ? "error" : ""}`}
             value={formData.firstName}
             onChange={handleChange}
-            onBlur={(e) => handleCredentialsBlur("name", e.target.value)}
+            onBlur={(e) => handleCredentialsBlur("firstName", e.target.value)}
             required
             min={numberOfMinLengthOfName}
             max={numberOfMaxLengthOfName}
@@ -255,7 +307,7 @@ function RegistrationForm() {
             className={`input ${validationError.second ? "error" : ""}`}
             value={formData.lastName}
             onChange={handleChange}
-            onBlur={(e) => handleCredentialsBlur("second", e.target.value)}
+            onBlur={(e) => handleCredentialsBlur("lastName", e.target.value)}
             required
             min={numberOfMinLengthOfName}
             max={numberOfMaxLengthOfName}
@@ -279,6 +331,7 @@ function RegistrationForm() {
               value={formData.password}
               onChange={handleChange}
               onBlur={(e) => handleCredentialsBlur("password", e.target.value)}
+              onPaste={handlePaste}
               required
               minLength={numberOfMinLengthOfPassword}
               maxLength={numberOfMaxLengthOfPassword}
@@ -291,6 +344,7 @@ function RegistrationForm() {
               )}
             </button>
           </div>
+
           <div className="password-field">
             <input
               className={`input ${validationError.password ? "error" : ""}`}
@@ -313,7 +367,7 @@ function RegistrationForm() {
           </div>
           <label>
             <input
-              className={`${validationError.terms ? "error" : ""}`}
+              className={`${showTermsError ? "error" : ""}`}
               type="checkbox"
               name="acceptPolicy"
               checked={formData.acceptPolicy}
@@ -321,7 +375,7 @@ function RegistrationForm() {
             />
             <a
               href=""
-              className={`${validationError.terms ? "error-text" : ""}`}
+              className={`${showTermsError ? "error-text" : "terms"}`}
             >
               I agree with the terms and conditions
             </a>

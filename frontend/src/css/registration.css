@@ -12,6 +12,14 @@
   object-fit: cover;
 }
 
+.terms {
+  color: #656565;
+}
+
+.error-text {
+  color: #f00;
+}
+
 .registration-logo {
   margin-bottom: 22px;
 }
@@ -48,21 +56,28 @@
   box-shadow: 0 0 3px 1px #d7e4e773;
 }
 
+input[type="checkbox"] {
+  margin: 0;
+}
+
 .input-fields.login input,
 .password-field input {
-  max-width: calc(100% - 20px); /* Adjust width to account for padding */
+  max-width: calc(100% - 20px);
+  /* Adjust width to account for padding */
 }
 
 /* Align button inside password field */
 .password-field {
-  position: relative; /* Position the field relatively */
+  position: relative;
+  /* Position the field relatively */
   display: flex;
   align-items: center;
 }
 
 .password-field input {
   flex-grow: 1;
-  padding-right: 40px; /* Padding to prevent text overlapping with the button */
+  padding-right: 40px;
+  /* Padding to prevent text overlapping with the button */
 }
 
 .password-field button {
@@ -84,7 +99,8 @@
 
 .registration-form label {
   display: flex;
-  align-items: center; /* Выровняйте checkbox и текст по вертикали */
+  align-items: center;
+  /* Выровняйте checkbox и текст по вертикали */
   font-size: 16px;
   font-weight: 400;
   line-height: 19.99px;
@@ -125,14 +141,16 @@
   height: 22px;
 }
 
-@media (width <= 600px) {
+@media (width <=600px) {
   .registration-form {
-    width: 80%; /* Adjust for smaller screens */
+    width: 80%;
+    /* Adjust for smaller screens */
   }
 
   .input-fields.login input,
   .password-field input {
-    width: 100%; /* Full width on small screens */
+    width: 100%;
+    /* Full width on small screens */
   }
 }
 
@@ -209,6 +227,7 @@
   position: relative;
   align-items: center;
 }
+
 .registration__button-eye {
   position: absolute;
   right: 15px;
@@ -219,6 +238,7 @@
   background-color: #fff;
   cursor: pointer;
 }
+
 .registration__button {
   width: 230px;
   height: 57px;
@@ -234,6 +254,7 @@
   font-size: 18px;
   font-weight: 700px;
 }
+
 .forgot-button {
   border: none;
   background: none;
@@ -245,9 +266,11 @@
   text-align: left;
   color: rgba(101, 101, 101, 1);
 }
+
 .input {
   padding: 15px 20px;
 }
+
 .link {
   font-family: Montserrat;
   font-size: 20px;
@@ -256,9 +279,11 @@
   text-align: center;
   color: rgba(65, 125, 136, 1);
 }
+
 .link a {
   color: rgba(65, 125, 136, 1);
 }
+
 .reset-password__heading {
   font-family: Montserrat;
   font-size: 24px;
@@ -269,9 +294,11 @@
   margin: 0;
   margin-bottom: 8px;
 }
+
 .reset-password__heading_reset {
   margin-bottom: 14px;
 }
+
 .reset-password__paragraph {
   font-family: Montserrat;
   font-size: 16px;
@@ -282,6 +309,7 @@
   margin: 0;
   margin-bottom: 14px;
 }
+
 .reset-password__succes {
   width: 452px;
   height: 30px;

@@ -1,5 +1,5 @@
 export const isValidEmail = (email: string): boolean => {
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[^\W\d_]+\.[a-zA-Z]{2,}$/;
   //До символа "@" может быть любое количество буквенно-цифровых символов, а также точки, подчеркивания, проценты, плюсы и дефисы.
   //После "@" следует доменное имя, состоящее из буквенно-цифровых символов, точек и дефисов.
   //Затем идет точка и домен верхнего уровня, состоящий минимум из двух букв.
@@ -7,8 +7,7 @@ export const isValidEmail = (email: string): boolean => {
 };
 
 export const isValidPassword = (password: string): boolean => {
-  const passwordRegex =
-    /^(?!.*\s)(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?!.*(.)(?=\1\1\1)).{7,128}[a-zA-Z0-9~!?@#$%^&*_\-+(){}\[\]><\/|'.,:;]$/;
+  const passwordRegex = /^(?!.*\s)(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?!.*(.)(?=\1\1\1))[a-zA-Z\d~!?@#$%^&*_+\-(){}\[\]><\/|'.,:;]{7,128}$/;
   //Содержит хотя бы одну букву.
   //Содержит хотя бы одну цифру.
   //(?=.*[A-Z]) - требует хотя бы одну заглавную букву.
@@ -21,6 +20,11 @@ export const isValidPassword = (password: string): boolean => {
 };
 
 export const isValidName = (name: string): boolean => {
-  const nameRegex = /^[a-zA-Z]{2,50}$/;
+  const nameRegex = /^(?:[A-Za-z]+\.)?(?:[A-Za-z]+(?:[.\- ]?[A-Za-z]+)*(?: [A-Za-z]\.)?(?: [A-Za-z]+)*)?\.?$/;
+  // Names can start with letters.
+  // Hyphens, periods, and spaces are allowed.
+  // Initials followed by a period (like "M.") are allowed after a space.
+  // Multiple parts of the name (like "Mary L. Jones") are allowed after spaces.
+  //Allows dot at the end
   return nameRegex.test(name);
 };
