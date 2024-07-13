@@ -28,12 +28,11 @@ function RegistrationForm() {
     terms: "",
   });
 
-  console.log(validationError)
+  console.log(validationError);
 
   const [passwordShown, setPasswordShown] = useState(false);
   const [isValidCredentials, setIsValidCredentials] = useState(false);
   const [showTermsError, setShowTermsError] = useState(false);
-
 
   const navigate = useNavigate();
   const numberOfMinLengthOfPassword = 8;
@@ -63,11 +62,9 @@ function RegistrationForm() {
       } else if (!hasUppercase || !hasLowercase || !hasDigit) {
         newError.password =
           "Password must contain at least one uppercase letter, one lowercase letter, and one digit.";
-      } 
-      else if (/\s/.test(value)) {
+      } else if (/\s/.test(value)) {
         newError.password = "Spaces are not allowed in your password";
-      } 
-      else {
+      } else {
         newError.password =
           "Password can only contain Latin letters, Arabic numerals, and the characters: ~!? @ # $ % ^ & * _ - + ( ) [ ] { } > < / \\ | '., : ;";
       }
@@ -86,8 +83,7 @@ function RegistrationForm() {
           newError.second =
             "Please write a valid second name. Only 2-50 letters are allowed.";
         }
-      } 
-      else {
+      } else {
         if (field === "name") {
           newError.name =
             "Please write a valid name. Only 2-50 letters are allowed.";
@@ -129,10 +125,10 @@ function RegistrationForm() {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-  
+
     if (name === "acceptPolicy") {
       setShowTermsError(!checked);
-  
+
       if (checked) {
         setValidationError({
           ...validationError,
@@ -140,7 +136,7 @@ function RegistrationForm() {
         });
       }
     }
-  
+
     setFormData({
       ...formData,
       [name]: type === "checkbox" ? checked : value,
@@ -151,10 +147,10 @@ function RegistrationForm() {
     } else {
       setPasswordTooLong(false);
     }
-  }
+  };
 
   const handlePaste = (e) => {
-    const pastedText = e.clipboardData.getData('Text');
+    const pastedText = e.clipboardData.getData("Text");
     // Check password length on paste
     if (pastedText.length > numberOfMaxLengthOfPassword) {
       setPasswordTooLong(true);
@@ -162,7 +158,6 @@ function RegistrationForm() {
       setPasswordTooLong(false);
     }
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -277,9 +272,9 @@ function RegistrationForm() {
       !formData.firstName ||
       !formData.lastName ||
       !formData.password;
-  
+
     const acceptPolicyNotAccepted = !formData.acceptPolicy && showTermsError;
-  
+
     return anyFieldMissingOrInvalid || acceptPolicyNotAccepted;
   };
 
@@ -373,10 +368,7 @@ function RegistrationForm() {
               checked={formData.acceptPolicy}
               onChange={handleChange}
             />
-            <a
-              href=""
-              className={`${showTermsError ? "error-text" : "terms"}`}
-            >
+            <a href="" className={`${showTermsError ? "error-text" : "terms"}`}>
               I agree with the terms and conditions
             </a>
           </label>

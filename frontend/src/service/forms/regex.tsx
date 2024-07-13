@@ -7,7 +7,8 @@ export const isValidEmail = (email: string): boolean => {
 };
 
 export const isValidPassword = (password: string): boolean => {
-  const passwordRegex = /^(?!.*\s)(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?!.*(.)(?=\1\1\1))[a-zA-Z\d~!?@#$%^&*_+\-(){}\[\]><\/|'.,:;]{7,128}$/;
+  const passwordRegex =
+    /^(?!.*\s)(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?!.*(.)(?=\1\1\1))[a-zA-Z\d~!?@#$%^&*_+\-(){}\[\]><\/|'.,:;]{7,128}$/;
   //Содержит хотя бы одну букву.
   //Содержит хотя бы одну цифру.
   //(?=.*[A-Z]) - требует хотя бы одну заглавную букву.
@@ -20,7 +21,8 @@ export const isValidPassword = (password: string): boolean => {
 };
 
 export const isValidName = (name: string): boolean => {
-  const nameRegex = /^(?:[A-Za-z]+\.)?(?:[A-Za-z]+(?:[.\- ]?[A-Za-z]+)*(?: [A-Za-z]\.)?(?: [A-Za-z]+)*)?\.?$/;
+  const nameRegex =
+    /^(?:[A-Za-z]+\.)?(?:[A-Za-z]+(?:[.\- ]?[A-Za-z]+)*(?: [A-Za-z]\.)?(?: [A-Za-z]+)*)?\.?$/;
   // Names can start with letters.
   // Hyphens, periods, and spaces are allowed.
   // Initials followed by a period (like "M.") are allowed after a space.
