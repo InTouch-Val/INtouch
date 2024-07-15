@@ -25,8 +25,8 @@ import {
 } from "../../../store/slices/modals/modalsSlice";
 import { diaryClientValidation } from "../../../routes/SettingPage/ProfileTab/schemaValid";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { ClientDiary } from "../../../store/entities/assignments/types";
-import { ClientDiaryEntry } from "../../../store/entities/assignments/types";
+import { ClientDiary } from "../../../utils/global-types";
+import { ClientDiaryEntry } from "../../../utils/global-types";
 
 export default function DiaryPageContentClient({
   diary,

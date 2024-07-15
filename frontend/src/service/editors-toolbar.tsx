@@ -17,6 +17,7 @@ import { useToolbar } from "./ToolbarContext"; // Импортируем хук 
 import { EditorState, ContentState, convertFromRaw } from "draft-js";
 import { Modifier } from "draft-js";
 import { maxTextLegthBig, maxTextLegthSmall } from "../utils/constants";
+import { Block, CharacterInfo } from "../utils/global-types";
 
 const EditorToolbar = forwardRef(
   (
@@ -47,30 +48,35 @@ const EditorToolbar = forwardRef(
 
     const effectiveErrorText = errorText || "";
 
-    const applyStylesFromCharacterList = (contentState, rawContentState) => {
+    const applyStylesFromCharacterList = (
+      contentState: ContentState,
+      rawContentState: ExtendedRawDraftContentState,
+    ) => {
       let newContentState = contentState;
 
-      rawContentState.blocks.forEach((block, blockIndex) => {
+      rawContentState.blocks.forEach((block: Block) => {
         if (block.characterList) {
-          block.characterList.forEach((charInfo, charIndex) => {
-            const blockKey = block.key;
-            const charStyles = charInfo.style; // Получаем массив стилей для символа
-            const char = block.text[charIndex];
+          block.characterList.forEach(
+            (charInfo: CharacterInfo, charIndex: number) => {
+              const blockKey = block.key;
+              const charStyles = charInfo.style; // Получаем массив стилей для символа
+              const char = block.text[charIndex];
 
-            // Применяем каждый стиль к символу
-            charStyles.forEach((style) => {
-              newContentState = Modifier.applyInlineStyle(
-                newContentState,
-                newContentState.getSelectionAfter().merge({
-                  anchorKey: blockKey,
-                  anchorOffset: charIndex,
-                  focusKey: blockKey,
-                  focusOffset: charIndex + 1,
-                }),
-                style,
-              );
-            });
-          });
+              // Применяем каждый стиль к символу
+              charStyles.forEach((style: string) => {
+                newContentState = Modifier.applyInlineStyle(
+                  newContentState,
+                  newContentState.getSelectionAfter().merge({
+                    anchorKey: blockKey,
+                    anchorOffset: charIndex,
+                    focusKey: blockKey,
+                    focusOffset: charIndex + 1,
+                  }),
+                  style,
+                );
+              });
+            },
+          );
         }
       });
 
@@ -79,24 +85,38 @@ const EditorToolbar = forwardRef(
 
     // Функция для инициализации редактора с текстом
     const initializeEditorWithText = () => {
-      const parseContent = (content) => {
+      const isJSON = (str: string) => {
         try {
-          const contentObject = JSON.parse(content);
-          const contentState = convertFromRaw(contentObject);
-          const contentStateWithStyles = applyStylesFromCharacterList(
-            contentState,
-            contentObject,
-          );
-          return EditorState.createWithContent(contentStateWithStyles);
+          JSON.parse(str);
+          return true;
         } catch (error) {
-          console.error("Parsing error, treating as plain text:", error);
+          return false;
+        }
+      };
+
+      const parseContent = (content: string) => {
+        if (isJSON(content)) {
+          try {
+            const contentObject = JSON.parse(content);
+            const contentState = convertFromRaw(contentObject);
+            const contentStateWithStyles = applyStylesFromCharacterList(
+              contentState,
+              contentObject,
+            );
+            return EditorState.createWithContent(contentStateWithStyles);
+          } catch (error) {
+            console.error("Error parsing JSON content:", error);
+            const contentState = ContentState.createFromText(content);
+            return EditorState.createWithContent(contentState);
+          }
+        } else {
           const contentState = ContentState.createFromText(content);
           return EditorState.createWithContent(contentState);
         }
       };
 
-      let newEditorState;
-      if (block.description) {
+      let newEditorState: EditorState;
+      if (block.description && isJSON(block.description)) {
         try {
           const descriptionObject = JSON.parse(block.description);
           const rawContentState = {
@@ -114,19 +134,18 @@ const EditorToolbar = forwardRef(
             contentState,
             rawContentState,
           );
-          const newEditorState = EditorState.createWithContent(
+          newEditorState = EditorState.createWithContent(
             contentStateWithStyles,
           );
           setEditorState(newEditorState);
         } catch (error) {
-          console.error("Ошибка при преобразовании строки в объект:", error);
+          console.error("Error converting string to object:", error);
         }
       } else if (block.reply) {
         newEditorState = parseContent(block.reply);
         setEditorState(newEditorState);
       } else if (block.question) {
-        const contentState = ContentState.createFromText(block.question);
-        const newEditorState = EditorState.createWithContent(contentState);
+        newEditorState = parseContent(block.question);
         setEditorState(newEditorState);
       } else {
         newEditorState = EditorState.createEmpty();
@@ -153,11 +172,11 @@ const EditorToolbar = forwardRef(
       }
     }, [isMobileWidth]);
 
-    const onChange = (newEditorState) => {
+    const onChange = (newEditorState: EditorState) => {
       setEditorState(newEditorState);
     };
 
-    const handleBeforeInput = (chars, editorState) => {
+    const handleBeforeInput = (chars: string, editorState: EditorState) => {
       const contentState = editorState.getCurrentContent();
       const selectionState = editorState.getSelection();
       const EditorBlockKey = selectionState.getStartKey();
@@ -184,10 +203,9 @@ const EditorToolbar = forwardRef(
       return "not-handled";
     };
 
-    const validateTextLength = (text) => {
+    const validateTextLength = (text: string) => {
       const maxLength =
         block.type === "text" ? maxTextLegthBig : maxTextLegthSmall;
-      console.log(maxLength);
       if (text.length < 20 || text.length > maxLength) {
         setIsError(true);
         setErrorText(
@@ -209,7 +227,10 @@ const EditorToolbar = forwardRef(
     const handleBlur = () => {
       const contentState = editorState.getCurrentContent();
       const text = contentState.getPlainText();
-      validateTextLength(text);
+
+      if (setErrorText && setErrorText) {
+        validateTextLength(text);
+      }
     };
 
     return (

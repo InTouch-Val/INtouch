@@ -13,7 +13,7 @@ ASSIGNMENT_TYPES = [
     ("study", "Study"),
     ("quiz", "Quiz"),
     ("methodology", "Methodology"),
-    ("metaphors", "Metaphors"),
+    ("metaphor", "Metaphor"),
 ]
 
 LANGUAGES = [

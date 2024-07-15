@@ -9,7 +9,10 @@ import {
 } from "../../../store/actions/assignment/assignmentActions";
 import { BlockType } from "../../../utils/constants";
 import { AssignmentsType } from "../../../store/entities/assignments/types";
-import { useCreateAssignmentMutation } from "../../../store/entities";
+import {
+  useCreateAssignmentMutation,
+  useUpdateAssignmentByUUIDMutation,
+} from "../../../store/entities";
 import { formatDate } from "../../../utils/helperFunction/formatDate";
 import DropDownButton from "./DropDownButton/DropDownButton";
 import { separatedBlock } from "./helperFunction";
@@ -44,6 +47,7 @@ function AssignmentTile({
   const dispatch = useAppDispatch();
   const [assignmentId, setAssignments] = useState<AssignmentsType[] | []>([]);
   const [createAssignment, _] = useCreateAssignmentMutation();
+  const [updateAssignment] = useUpdateAssignmentByUUIDMutation();
 
   useEffect(() => {
     setIsSelected(
@@ -88,11 +92,7 @@ function AssignmentTile({
     assignmentId: number,
   ): Promise<void> => {
     try {
-      const { payload } = await dispatch(
-        duplicateAssignmentAction(assignmentId),
-      );
-
-      let assignmentData = await payload;
+      const assignmentData = assignment;
       if (assignmentData) {
         // Подготавливаем данные для дубликата, используя ту же структуру, что и в handleSubmit
 
@@ -124,7 +124,9 @@ function AssignmentTile({
         const responseAssignmentId = await duplicateResponse.data.id;
 
         // Если задание должно быть сохранено как черновик, выполняем GET запрос
+
         await dispatch(draftAssignmentAction(responseAssignmentId));
+
         duplicateResponse.data.is_public = false;
 
         // Если все прошло успешно, добавляем дубликат в список заданий
