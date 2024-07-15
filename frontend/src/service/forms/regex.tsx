@@ -21,12 +21,11 @@ export const isValidPassword = (password: string): boolean => {
 };
 
 export const isValidName = (name: string): boolean => {
-  const nameRegex =
-    /^(?:[A-Za-z]+\.)?(?:[A-Za-z]+(?:[.\- ]?[A-Za-z]+)*(?: [A-Za-z]\.)?(?: [A-Za-z]+)*)?\.?$/;
+  const nameRegex = /^[A-Za-z]+(?:[.\- ]+[A-Za-z]+)*\.?$/;
   // Names can start with letters.
   // Hyphens, periods, and spaces are allowed.
   // Initials followed by a period (like "M.") are allowed after a space.
   // Multiple parts of the name (like "Mary L. Jones") are allowed after spaces.
   //Allows dot at the end
-  return nameRegex.test(name);
+  return nameRegex.test(name.trim());
 };

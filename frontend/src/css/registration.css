@@ -76,7 +76,7 @@ input[type="checkbox"] {
 
 .password-field input {
   flex-grow: 1;
-  padding-right: 40px;
+  padding-right: 60px;
   /* Padding to prevent text overlapping with the button */
 }
 

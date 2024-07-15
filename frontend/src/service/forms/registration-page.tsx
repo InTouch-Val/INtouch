@@ -28,8 +28,6 @@ function RegistrationForm() {
     terms: "",
   });
 
-  console.log(validationError);
-
   const [passwordShown, setPasswordShown] = useState(false);
   const [isValidCredentials, setIsValidCredentials] = useState(false);
   const [showTermsError, setShowTermsError] = useState(false);
@@ -42,54 +40,65 @@ function RegistrationForm() {
 
   const handleCredentialsBlur = (
     field: "email" | "password" | "name" | "second",
-    value: string,
+    value: string
   ): void => {
     let newError = { ...validationError };
-    if (field === "email" && !isValidEmail(value)) {
+
+    const trimmedValue = value.trim();
+
+    if (field === "email" && !isValidEmail(trimmedValue)) {
       newError.email =
-        "Please make sure your email address is in the format        example@example.com";
-    } else if (field === "password" && !isValidPassword(value)) {
-      const hasUppercase = /[A-Z]/.test(value);
-      const hasLowercase = /[a-z]/.test(value);
-      const hasDigit = /\d/.test(value);
+        "Please make sure your email address is in the format example@example.com";
+    } else if (field === "password" && isValidPassword(trimmedValue)) {
+      if (passwordTooLong) {
+        newError.password = `Password must be at least ${numberOfMinLengthOfPassword} characters long and cannot exceed ${numberOfMaxLengthOfPassword} characters.`;
+      } else if (
+        trimmedValue.toLowerCase().includes(formData.firstName.toLowerCase()) ||
+        trimmedValue.toLowerCase().includes(formData.lastName.toLowerCase())
+      ) {
+        newError.password = "The password is too similar to your name";
+      } else {
+        if (isValidPassword(trimmedValue)) {
+          newError.password = "";
+        }
+      }
+    } else if (field === "password" && !isValidPassword(trimmedValue)) {
+      const hasUppercase = /[A-Z]/.test(trimmedValue);
+      const hasLowercase = /[a-z]/.test(trimmedValue);
+      const hasDigit = /\d/.test(trimmedValue);
 
       if (
-        value.length < numberOfMinLengthOfPassword ||
-        value.length > numberOfMaxLengthOfPassword
+        trimmedValue.length < numberOfMinLengthOfPassword ||
+        trimmedValue.length > numberOfMaxLengthOfPassword
       ) {
-        newError.password =
-          "Password must be at least 8 characters long and cannot exceed 128 characters.";
+        newError.password = `Password must be at least ${numberOfMinLengthOfPassword} characters long and cannot exceed ${numberOfMaxLengthOfPassword} characters.`;
       } else if (!hasUppercase || !hasLowercase || !hasDigit) {
         newError.password =
           "Password must contain at least one uppercase letter, one lowercase letter, and one digit.";
-      } else if (/\s/.test(value)) {
+      } else if (/\s/.test(trimmedValue)) {
         newError.password = "Spaces are not allowed in your password";
       } else {
         newError.password =
           "Password can only contain Latin letters, Arabic numerals, and the characters: ~!? @ # $ % ^ & * _ - + ( ) [ ] { } > < / \\ | '., : ;";
       }
     } else if (
-      (field === "name" || field === "second") &&
-      !isValidName(value)
+      (field === "firstName" || field === "lastName") &&
+      !isValidName(trimmedValue)
     ) {
       if (
-        value.length < numberOfMinLengthOfName ||
-        value.length > numberOfMaxLengthOfName
+        trimmedValue.length < numberOfMinLengthOfName ||
+        trimmedValue.length > numberOfMaxLengthOfName
       ) {
-        if (field === "name") {
-          newError.name =
-            "Please write a valid name. Only 2-50 letters are allowed.";
+        if (field === "firstName") {
+          newError.name = `Please write a valid name. Only ${numberOfMinLengthOfName}-${numberOfMaxLengthOfName} letters are allowed.`;
         } else {
-          newError.second =
-            "Please write a valid second name. Only 2-50 letters are allowed.";
+          newError.second = `Please write a valid second name. Only ${numberOfMinLengthOfName}-${numberOfMaxLengthOfName} letters are allowed.`;
         }
       } else {
-        if (field === "name") {
-          newError.name =
-            "Please write a valid name. Only 2-50 letters are allowed.";
+        if (field === "firstName") {
+          newError.name = `Please write a valid name. Only ${numberOfMinLengthOfName}-${numberOfMaxLengthOfName} letters are allowed.`;
         } else {
-          newError.second =
-            "Please write a valid name. Only 2-50 letters are allowed.";
+          newError.second = `Please write a valid name. Only ${numberOfMinLengthOfName}-${numberOfMaxLengthOfName} letters are allowed.`;
         }
       }
     } else {
@@ -97,13 +106,18 @@ function RegistrationForm() {
         newError.email = "";
       } else if (field === "password") {
         newError.password = "";
-      } else if (field === "name") {
+      } else if (field === "firstName") {
         newError.name = "";
-      } else if (field === "second") {
+      } else if (field === "lastName") {
         newError.second = "";
       }
     }
     setValidationError(newError);
+
+    setFormData({
+      ...formData,
+      [field]: trimmedValue,
+    });
   };
 
   useEffect(() => {
@@ -113,7 +127,7 @@ function RegistrationForm() {
           !validationError.name &&
           !validationError.password &&
           !validationError.second &&
-          !validationError.terms,
+          !validationError.terms
       );
     }
   }, [validationError]);
@@ -142,21 +156,46 @@ function RegistrationForm() {
       [name]: type === "checkbox" ? checked : value,
     });
 
-    if (name === "password" && value.length > numberOfMaxLengthOfPassword) {
-      setPasswordTooLong(true);
-    } else {
-      setPasswordTooLong(false);
+    if (name === "password") {
+      if (value.length > numberOfMaxLengthOfPassword) {
+        setValidationError({
+          ...validationError,
+          password: `Password must be at least ${numberOfMinLengthOfPassword} characters long and cannot exceed ${numberOfMaxLengthOfPassword} characters.`,
+        });
+      } else {
+        setValidationError({
+          ...validationError,
+          password: "",
+        });
+      }
     }
   };
 
   const handlePaste = (e) => {
     const pastedText = e.clipboardData.getData("Text");
-    // Check password length on paste
+
+    let trimmedText = pastedText.substring(0, numberOfMaxLengthOfPassword);
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      password: trimmedText,
+    }));
+
     if (pastedText.length > numberOfMaxLengthOfPassword) {
       setPasswordTooLong(true);
+      setValidationError((prevValidationError) => ({
+        ...prevValidationError,
+        password: `Password must be at least 8 characters long and cannot exceed ${numberOfMaxLengthOfPassword} characters.`,
+      }));
     } else {
       setPasswordTooLong(false);
+      setValidationError((prevValidationError) => ({
+        ...prevValidationError,
+        password: "",
+      }));
     }
+
+    e.preventDefault();
   };
 
   const handleSubmit = async (e) => {
@@ -197,19 +236,6 @@ function RegistrationForm() {
       return;
     }
 
-    if (
-      formData.password
-        .toLowerCase()
-        .includes(formData.firstName.toLowerCase()) ||
-      formData.password.toLowerCase().includes(formData.lastName.toLowerCase())
-    ) {
-      setValidationError({
-        ...validationError,
-        password: "The password is too similar to your name",
-      });
-      return;
-    }
-
     // Преобразование полей для отправки на сервер
     const requestData = {
       first_name: formData.firstName,
@@ -228,7 +254,7 @@ function RegistrationForm() {
         withCredentials: true,
       });
       setSuccessMessage("Account is activated");
-      navigate("/welcome-to-intouch");
+      navigate("/email-confirmation", { state: { emailData: formData.email } });
     } catch (error) {
       console.error("Registration error:", error);
       if (error.response?.data?.email) {
@@ -244,25 +270,13 @@ function RegistrationForm() {
         });
       } else if (error.response?.status >= 500) {
         setError(
-          "Some error occurs from the server, we’re fixing it. Sorry for inconvenience ",
+          "Some error occurs from the server, we’re fixing it. Sorry for inconvenience "
         );
       } else {
         setError("Account isn’t activated");
       }
     }
   };
-
-  // const isAnyFieldMissingOrInvalid = (): boolean => {
-  //   return (
-  //     !isValidCredentials ||
-  //     !formData.confirmPassword ||
-  //     !formData.email ||
-  //     !formData.firstName ||
-  //     !formData.lastName ||
-  //     !formData.password ||
-  //     !formData.acceptPolicy
-  //   );
-  // };
 
   const isAnyFieldMissingOrInvalid = (): boolean => {
     const anyFieldMissingOrInvalid =

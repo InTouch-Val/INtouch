@@ -12,7 +12,7 @@ function AfterRegistrationPage() {
     <div className="welcome-container">
       <div className="welcome-content">
         <div>
-          <h2>Welcome to InTouch</h2>
+          <h2>Welcome to INtouch</h2>
         </div>
         <div>
           <p>Welcome to InTouch! We are thrilled to have you here!</p>
