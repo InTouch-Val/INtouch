@@ -40,7 +40,7 @@ function RegistrationForm() {
 
   const handleCredentialsBlur = (
     field: "email" | "password" | "name" | "second",
-    value: string
+    value: string,
   ): void => {
     let newError = { ...validationError };
 
@@ -127,7 +127,7 @@ function RegistrationForm() {
           !validationError.name &&
           !validationError.password &&
           !validationError.second &&
-          !validationError.terms
+          !validationError.terms,
       );
     }
   }, [validationError]);
@@ -270,7 +270,7 @@ function RegistrationForm() {
         });
       } else if (error.response?.status >= 500) {
         setError(
-          "Some error occurs from the server, we’re fixing it. Sorry for inconvenience "
+          "Some error occurs from the server, we’re fixing it. Sorry for inconvenience ",
         );
       } else {
         setError("Account isn’t activated");
