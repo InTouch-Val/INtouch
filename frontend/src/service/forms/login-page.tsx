@@ -7,6 +7,8 @@ import { isValidEmail, isValidPassword } from "./regex";
 import eyeIcon from "../../images/icons/eye.svg";
 import eyeSlashIcon from "../../images/icons/eyeSlash.svg";
 import logo from "../../images/LogoBig.svg";
+import React from "react";
+import Button from "../../stories/buttons/Button";
 
 function LoginPage() {
   //@ts-ignore
@@ -22,7 +24,7 @@ function LoginPage() {
 
   const handleCredentialsBlur = (
     field: "email" | "password",
-    value: string,
+    value: string
   ): void => {
     let newError = { ...error };
     if (field === "email" && !isValidEmail(value)) {
@@ -168,18 +170,18 @@ function LoginPage() {
         </div>
 
         <div className="form-buttons">
-          <button
-            type="submit"
-            className="action-button action-button_register-login"
+          <Button
+            buttonSize="large"
+            fontSize="medium"
+            label="Login"
             disabled={
               !isValidCredentials ||
               tooMuchLoginAttempts ||
               credentials.email.length === 0 ||
               credentials.password.length === 0
             }
-          >
-            Login
-          </button>
+            type="submit"
+          />
         </div>
         <p className="link">
           Don't have an account? Register one{" "}

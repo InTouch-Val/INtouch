@@ -23,6 +23,7 @@ import decodeStyledText from "../../service/decodeStyledText";
 import HeadlinerImg from "./HeadlinerImg/HeadlinerImg";
 import "../../css/assignments.css";
 import HeaderAssignment from "./HeaderAssigmentPage/HeaderAssignment";
+import Button from "../../stories/buttons/Button";
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
@@ -314,7 +315,7 @@ function AddAssignment() {
     blockContainers.forEach((blockContainer, index) => {
       const blockErrorKey = `blocks #${index + 1}`;
       const blockErrorExists = Object.keys(errorMessages).some((key) =>
-        key.startsWith(blockErrorKey),
+        key.startsWith(blockErrorKey)
       );
       if (blockErrorExists) {
         blockContainer.classList.add("error");
@@ -394,7 +395,7 @@ function AddAssignment() {
     newMaxValue,
     newLeftPole,
     newRightPole,
-    newImage,
+    newImage
   ) => {
     setBlocks((prevBlocks) =>
       prevBlocks.map((block) =>
@@ -417,8 +418,8 @@ function AddAssignment() {
               rightPole: newRightPole ?? block.rightPole,
               image: newImage ?? block.image,
             }
-          : block,
-      ),
+          : block
+      )
     );
   };
 
@@ -586,19 +587,22 @@ function AddAssignment() {
           </span>
         )}
         <div className="buttons-save-as-draft-and-publish-container">
-          <button
-            className="buttons-save-as-draft-and-publish"
+          <Button
+            buttonSize="large"
+            fontSize="medium"
+            label="Save as Draft"
+            type="button"
             onClick={(e) => handleSubmit(e, false, true)}
-          >
-            Save as Draft
-          </button>
-          <button
-            className="buttons-save-as-draft-and-publish"
+          />
+
+          <Button
+            buttonSize="large"
+            fontSize="small"
+            label="Complete & Publish"
+            type="button"
             onClick={(e) => handleSubmit(e, false, false)}
             disabled={errorText || isError}
-          >
-            Complete & Publish
-          </button>
+          />
         </div>
       </div>
     </div>

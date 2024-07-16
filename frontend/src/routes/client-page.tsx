@@ -1,13 +1,13 @@
 //@ts-nocheck
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import AddClient from "../images/psy-icons/add-client-icon.svg"
 import { useAuth } from "../service/authContext";
 import { API } from "../service/axios";
 import "../css/clients.css";
 import Select from "../components/psy/Select/Select";
 import { menuActive, menuDate } from "../utils/constants";
+import Button from "../stories/buttons/Button";
 
 function ClientPage() {
   const [showModal, setShowModal] = useState(false);
@@ -130,9 +130,14 @@ function ClientPage() {
     <div className="clients-page" onClick={handleClickOverlay}>
       <header className="first-row">
         <h1>Clients</h1>
-        <button className="client-button" onClick={handleAddClient}>
-          <FontAwesomeIcon icon={faUserPlus} /> Add Client
-        </button>
+        <Button
+            buttonSize="small"
+            fontSize="medium"
+            label="Add Client"
+            type="button"
+            onClick={handleAddClient}
+            icon={AddClient}
+          />
       </header>
       <div className="search-filters">
         <form className="search">

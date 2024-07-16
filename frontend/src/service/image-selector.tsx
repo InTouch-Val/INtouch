@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "../css/image-selector.css";
+import Button from "../stories/buttons/Button";
 
 function ImageSelector({ onImageSelect, selectedImage }) {
   const [images, setImages] = useState(selectedImage ? [selectedImage] : []);
@@ -59,7 +60,13 @@ function ImageSelector({ onImageSelect, selectedImage }) {
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Search for images"
         />
-        <button type="submit">Search</button>
+
+<Button
+            buttonSize="large"
+            fontSize="medium"
+            label="Search"
+            type="submit"
+          />
       </form>
       <div className="image-results">
         {images.length > 0 ? (

@@ -9,6 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import useMobileWidth from "../../../utils/hook/useMobileWidth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
+import Button from "../../../stories/buttons/Button";
 
 export function ProfileTab() {
   const isMobileWidth = useMobileWidth();
@@ -30,7 +31,7 @@ export function ProfileTab() {
   const [statusMessageText, setStatusMessageText] = React.useState("");
   const [selectedFile, setSelectedFile] = React.useState([]);
   const [previewImage, setPreviewImage] = React.useState(
-    currentUser.photo || "default-avatar.png",
+    currentUser.photo || "default-avatar.png"
   );
   const fileInputRef = React.createRef();
 
@@ -49,7 +50,7 @@ export function ProfileTab() {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        },
+        }
       ).then(() => updateUserData());
       setStatusMessageText("Changes saved successfully");
 
@@ -68,7 +69,7 @@ export function ProfileTab() {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        },
+        }
       ).then(() => updateUserData());
 
       console.log(response);
@@ -105,10 +106,13 @@ export function ProfileTab() {
               style={{ display: "none" }}
               onChange={handleFileSelect}
             />
-
-            <button className="action-button" onClick={handleChooseFileClick}>
-              Change Photo
-            </button>
+            <Button
+              buttonSize="large"
+              fontSize="medium"
+              label="Change Photo"
+              type="button"
+              onClick={handleChooseFileClick}
+            />
           </div>
         )}
         <div className="right-column">
@@ -252,13 +256,13 @@ export function ProfileTab() {
                 )}
               </div>
               <div>
-                <button
-                  className={`save-settings`}
+                <Button
+                  buttonSize="large"
+                  fontSize="medium"
+                  label={isMobileWidth ? "Save" : "Save Changes"}
                   type="submit"
                   disabled={!(isValid && isDirty)}
-                >
-                  {isMobileWidth ? "Save" : "Save Changes"}
-                </button>
+                />
               </div>
             </div>
           </form>

@@ -545,6 +545,7 @@ function AddAssignment() {
           </span>
         )}
         <div className="buttons-save-as-draft-and-publish-container">
+          
           <button
             className="buttons-save-as-draft-and-publish"
             onClick={(e) => handleSubmit(e, false, true)}

@@ -7,6 +7,7 @@ import { isValidEmail, isValidPassword, isValidName } from "./regex";
 import eyeIcon from "../../images/icons/eye.svg";
 import eyeSlashIcon from "../../images/icons/eyeSlash.svg";
 import logo from "../../images/LogoBig.svg";
+import Button from "../../stories/buttons/Button";
 
 function RegistrationForm() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -36,7 +37,7 @@ function RegistrationForm() {
 
   const handleCredentialsBlur = (
     field: "email" | "password" | "name" | "second",
-    value: string,
+    value: string
   ): void => {
     let newError = { ...validationError };
     if (field === "email" && !isValidEmail(value)) {
@@ -107,7 +108,7 @@ function RegistrationForm() {
           !validationError.name &&
           !validationError.password &&
           !validationError.second &&
-          !validationError.terms,
+          !validationError.terms
       );
     }
   }, [validationError]);
@@ -211,7 +212,7 @@ function RegistrationForm() {
         });
       } else if (error.response?.status >= 500) {
         setError(
-          "Some error occurs from the server, we’re fixing it. Sorry for inconvenience ",
+          "Some error occurs from the server, we’re fixing it. Sorry for inconvenience "
         );
       } else {
         setError("Account isn’t activated");
@@ -333,13 +334,14 @@ function RegistrationForm() {
           {validationError.name && <div>{validationError.name}</div>}
           {validationError.second && <div>{validationError.second}</div>}
         </div>
-        <button
-          type="submit"
-          className="action-button action-button_register-login"
+
+        <Button
+          buttonSize="large"
+          fontSize="medium"
+          label="Register"
           disabled={isAnyFieldMissingOrInvalid()}
-        >
-          Register
-        </button>
+          type="submit"
+        />
         <p>
           Already have an account? <Link to={"/login"}>Log in</Link>
         </p>

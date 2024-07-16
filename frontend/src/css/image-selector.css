@@ -26,15 +26,6 @@
   margin-right: 10px;
 }
 
-.image-selector button {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 10px;
-  background-color: #417d88;
-  color: white;
-  cursor: pointer;
-}
-
 .image-results {
   display: flex;
   flex-wrap: nowrap;

@@ -11,6 +11,8 @@ import { Modal } from "../service/modal";
 import { useGetAssignmentsQuery } from "../store/entities";
 import { useObserve } from "../utils/hook/useObserve";
 import { useAppSelector } from "../store/store";
+import addAssignment from "../images/psy-icons/add-assignment-icon.svg"
+import Button from "../stories/buttons/Button";
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
@@ -385,9 +387,14 @@ function AssignmentsPage({
       {!isShareModal && (
         <header>
           <h1>Assignments</h1>
-          <button className="action-button" onClick={handleAddAssignment}>
-            <FontAwesomeIcon icon={faPlus} /> Add Assignment
-          </button>
+          <Button
+            buttonSize="small"
+            fontSize="medium"
+            label="Add Assignment"
+            type="button"
+            onClick={handleAddAssignment}
+            icon={addAssignment}
+          />
         </header>
       )}
       <div className="tabs">

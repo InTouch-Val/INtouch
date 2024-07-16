@@ -5,7 +5,7 @@ type Props = {
   /** which type of data is loading */
   type: "assignment" | "diary" | "other";
   user: "psy" | "client";
-  variant?: "ps-my-tasks" | "ps-all-tasks" | "ps-share-task";
+  variant?: "ps-my-tasks" | "ps-all-tasks" | "ps-share-task" | "ps-client-tasks";
 };
 
 /**The skeleton is displayed while the component is loading */
