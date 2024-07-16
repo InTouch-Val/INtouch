@@ -23,8 +23,7 @@ function AfterRegistrationPage() {
           </p>
         </div>
         <div>
-
-        <Button
+          <Button
             buttonSize="large"
             fontSize="medium"
             label="Go to Login Page"

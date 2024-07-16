@@ -61,12 +61,12 @@ function ImageSelector({ onImageSelect, selectedImage }) {
           placeholder="Search for images"
         />
 
-<Button
-            buttonSize="large"
-            fontSize="medium"
-            label="Search"
-            type="submit"
-          />
+        <Button
+          buttonSize="large"
+          fontSize="medium"
+          label="Search"
+          type="submit"
+        />
       </form>
       <div className="image-results">
         {images.length > 0 ? (

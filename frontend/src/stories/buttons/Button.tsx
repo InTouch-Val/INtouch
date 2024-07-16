@@ -18,7 +18,7 @@ const Button = ({
   label,
   icon = "",
   onClick = () => {},
-  type
+  type,
 }) => {
   return (
     <button
@@ -26,7 +26,7 @@ const Button = ({
       className={`buttonComponent ${disabled ? "disabled" : ""} ${buttonSize == "large" ? "large" : "small"}  ${fontSize == "small" ? "smallFont" : ""}`}
       onClick={onClick}
     >
-      {icon && <img src={icon} alt="icon" className="buttonComponent__icon"/>}
+      {icon && <img src={icon} alt="icon" className="buttonComponent__icon" />}
 
       {label}
     </button>

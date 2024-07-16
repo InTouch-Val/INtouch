@@ -19,29 +19,27 @@ export const BasicButtonMedium: Story = {
     fontSize: "medium",
     buttonSize: "large",
     label: "Button",
-    disabled: false
+    disabled: false,
   },
 };
 
 /** Basic button with small font*/
 export const BasicButtonSmall: Story = {
-    args: {
-      fontSize: "small",
-      buttonSize: "large",
-      label: "Button",
-      disabled: false
-    },
-  };
+  args: {
+    fontSize: "small",
+    buttonSize: "large",
+    label: "Button",
+    disabled: false,
+  },
+};
 
 /** Secondary button */
 export const SecondaryButton: Story = {
-    args: {
-      fontSize: "medium",
-      buttonSize: "small",
-      label: "Button",
-      disabled: false,
-      icon: exampleIcon
-    },
-  };
-
-
+  args: {
+    fontSize: "medium",
+    buttonSize: "small",
+    label: "Button",
+    disabled: false,
+    icon: exampleIcon,
+  },
+};

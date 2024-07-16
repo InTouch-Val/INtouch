@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AddClient from "../images/psy-icons/add-client-icon.svg"
+import AddClient from "../images/psy-icons/add-client-icon.svg";
 import { useAuth } from "../service/authContext";
 import { API } from "../service/axios";
 import "../css/clients.css";
@@ -131,13 +131,13 @@ function ClientPage() {
       <header className="first-row">
         <h1>Clients</h1>
         <Button
-            buttonSize="small"
-            fontSize="medium"
-            label="Add Client"
-            type="button"
-            onClick={handleAddClient}
-            icon={AddClient}
-          />
+          buttonSize="small"
+          fontSize="medium"
+          label="Add Client"
+          type="button"
+          onClick={handleAddClient}
+          icon={AddClient}
+        />
       </header>
       <div className="search-filters">
         <form className="search">

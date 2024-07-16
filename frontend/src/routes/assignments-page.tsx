@@ -11,7 +11,7 @@ import { Modal } from "../service/modal";
 import { useGetAssignmentsQuery } from "../store/entities";
 import { useObserve } from "../utils/hook/useObserve";
 import { useAppSelector } from "../store/store";
-import addAssignment from "../images/psy-icons/add-assignment-icon.svg"
+import addAssignment from "../images/psy-icons/add-assignment-icon.svg";
 import Button from "../stories/buttons/Button";
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);

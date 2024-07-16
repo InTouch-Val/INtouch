@@ -11,7 +11,7 @@ import AllTabs from "./AllTabs/AllTabs";
 import TabsAssignments from "./TabsAssignments/Tab";
 import { changeSearchAction } from "../../store/slices";
 import { WithTab } from "./TabsAssignments/Hoc";
-import addAssignment from "../../images/psy-icons/add-assignment-icon.svg"
+import addAssignment from "../../images/psy-icons/add-assignment-icon.svg";
 import Button from "../../stories/buttons/Button";
 
 interface Props {
@@ -69,13 +69,13 @@ export default function AssignmentsPageRefactor({
           <header>
             <h1>Assignments</h1>
             <Button
-            buttonSize="small"
-            fontSize="medium"
-            label="Add Assignment"
-            type="button"
-            onClick={handleAddAssignment}
-            icon={addAssignment}
-          />
+              buttonSize="small"
+              fontSize="medium"
+              label="Add Assignment"
+              type="button"
+              onClick={handleAddAssignment}
+              icon={addAssignment}
+            />
           </header>
         )}
         <AllTabs />

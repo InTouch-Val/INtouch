@@ -24,7 +24,7 @@ function LoginPage() {
 
   const handleCredentialsBlur = (
     field: "email" | "password",
-    value: string
+    value: string,
   ): void => {
     let newError = { ...error };
     if (field === "email" && !isValidEmail(value)) {

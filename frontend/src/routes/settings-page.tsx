@@ -119,12 +119,12 @@ function ProfileTab() {
           onChange={handleFileSelect}
         />
         <Button
-            buttonSize="large"
-            fontSize="medium"
-            label="Change Photo"
-            type="button"
-            onClick={handleChooseFileClick}
-          />
+          buttonSize="large"
+          fontSize="medium"
+          label="Change Photo"
+          type="button"
+          onClick={handleChooseFileClick}
+        />
       </div>
       <div className="right-column">
         <form onSubmit={handleSubmit}>
