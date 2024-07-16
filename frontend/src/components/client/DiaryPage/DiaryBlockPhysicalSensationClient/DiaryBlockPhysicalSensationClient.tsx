@@ -6,7 +6,7 @@ import { EditorToolbar } from "../../../../service/editors-toolbar";
 import { ToolbarProvider } from "../../../../service/ToolbarContext";
 import { Controller, useFormContext } from "react-hook-form";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
-import { ClientDiary } from "../../../../store/entities/assignments/types";
+import { ClientDiary } from "../../../../utils/global-types";
 import { useEditorState } from "../../../../utils/hook/useEditorState";
 import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig";
 

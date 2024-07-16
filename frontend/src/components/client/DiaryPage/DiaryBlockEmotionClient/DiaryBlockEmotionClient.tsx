@@ -11,7 +11,7 @@ import { EditorToolbar } from "../../../../service/editors-toolbar";
 import { Controller, useFormContext } from "react-hook-form";
 import DiaryBlockEmotionClientMobile from "./DiaryBlockEmotionClientMobile";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
-import { ClientDiary } from "../../../../store/entities/assignments/types";
+import { ClientDiary } from "../../../../utils/global-types";
 import { useEditorState } from "../../../../utils/hook/useEditorState";
 import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig";
 

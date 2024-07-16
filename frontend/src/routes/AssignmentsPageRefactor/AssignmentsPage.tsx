@@ -36,6 +36,7 @@ export default function AssignmentsPageRefactor({
 
   const handleDeleteClick = (assignmentId: string): void => {
     deleteAssignment(assignmentId);
+    setSelectedAssignmentId(assignmentId);
     setIsDeleteModalOpen(true);
   };
 
@@ -94,7 +95,14 @@ export default function AssignmentsPageRefactor({
         }
       />
 
-      <ModalAssignments />
+      <ModalAssignments
+        setIsShareModalOpen={setIsShareModalOpen}
+        isShareModalOpen={isShareModalOpen}
+        setIsDeleteModalOpen={setIsDeleteModalOpen}
+        isDeleteModalOpen={isDeleteModalOpen}
+        setSelectedAssignmentId={setSelectedAssignmentId}
+        selectedAssignmentId={selectedAssignmentId}
+      />
     </>
   );
 }

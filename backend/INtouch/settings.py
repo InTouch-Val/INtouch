@@ -170,7 +170,7 @@ PASSWORD_HASHERS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "Europe/Berlin"
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -300,7 +300,7 @@ LOGGING = {
     "disable_existing_loggers": False,
     "handlers": {
         "file": {
-            "level": "DEBUG",
+            "level": "ERROR",
             "class": "logging.FileHandler",
             "filename": f"{BASE_DIR}/debug.log",
         },
@@ -308,7 +308,7 @@ LOGGING = {
     "loggers": {
         "django": {
             "handlers": ["file"],
-            "level": "DEBUG",
+            "level": "ERROR",
             "propagate": True,
         },
     },
