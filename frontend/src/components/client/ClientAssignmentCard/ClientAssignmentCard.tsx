@@ -37,7 +37,6 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
 
   async function handleShareWithTherapist() {
     try {
-   
       const res = await API.post(
         `assignments-client/${assignmentData?.id}/visible/`,
       );
