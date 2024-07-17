@@ -36,6 +36,14 @@ export default function FilterDropDown() {
         dispatch(changeSortActions(e.target.value));
         break;
       }
+      case TypeOrder.AverageGrade: {
+        dispatch(changeSortActions(e.target.value));
+        break;
+      }
+      case TypeOrder.NoAverageGrade: {
+        dispatch(changeSortActions(e.target.value));
+        break;
+      }
       default: {
         break;
       }
@@ -55,7 +63,7 @@ export default function FilterDropDown() {
         <option value={TypeFilter.Study}>Study</option>
         <option value={TypeFilter.Quiz}>Quiz</option>
         <option value={TypeFilter.Methodology}>Methodology</option>
-        <option value={TypeFilter.Metaphors}>Metaphors</option>
+        <option value={TypeFilter.Metaphor}>Metaphors</option>
       </select>
 
       <select
@@ -72,8 +80,10 @@ export default function FilterDropDown() {
       <select value={sortMethod} onChange={(e) => handleSortMethodChange(e)}>
         <option value={TypeOrder.AddDate}>Date Created ↑</option>
         <option value={TypeOrder.DecDate}>Date Created ↓</option>
-        <option value={TypeOrder.Popularity}>Popularity ↑</option>
-        <option value={TypeOrder.NoPopularity}>Popularity ↓</option>
+        <option value={TypeOrder.Popularity}>Most Assigned ↑</option>
+        <option value={TypeOrder.NoPopularity}>Most Assigned ↓</option>
+        <option value={TypeOrder.AverageGrade}>Top Client Rated ↑</option>
+        <option value={TypeOrder.NoAverageGrade}>Top Client Rated ↓</option>
       </select>
     </div>
   );

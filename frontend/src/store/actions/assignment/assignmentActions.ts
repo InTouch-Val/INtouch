@@ -13,7 +13,7 @@ export const changeAssignmentFavoriteByIdAction = createAsyncThunk(
 
     try {
       const endpoint = isFavorite ? "delete-list" : "add-list";
-      return await API.get(`assignments/${endpoint}/${assignmentId}`);
+      return await API.post(`assignments/${endpoint}/${assignmentId}`);
     } catch (error) {
       console.error("Error toggling favorites:", error);
       return rejectWithValue;

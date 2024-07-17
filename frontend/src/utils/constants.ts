@@ -55,6 +55,8 @@ export enum TypeOrder {
   DecDate = "-add_date",
   Popularity = "share",
   NoPopularity = "-share",
+  AverageGrade = "average grade",
+  NoAverageGrade = "-average_grade",
 }
 
 export enum TypeFilter {
@@ -66,7 +68,6 @@ export enum TypeFilter {
   Study = "study",
   Quiz = "quiz",
   Methodology = "methodology",
-  Metaphors = "metaphors",
 }
 
 export enum BlockType {
