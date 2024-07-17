@@ -285,7 +285,7 @@ class UpdateEmailView(APIView):
 @extend_schema_view(
     get=extend_schema(
         tags=["Email", "Users"],
-        summary="Confierm email changing",
+        summary="Confirm email changing",
     )
 )
 class UpdateEmailConfirmView(generics.GenericAPIView):
@@ -384,7 +384,22 @@ def user_delete_soft(request):
 
 @extend_schema_view(
     delete=extend_schema(
-        tags=["Clients"], summary="Delete user from doctor's interface"
+        tags=["Clients"],
+        summary="Delete user from doctor's interface",
+        request=None,
+        responses={
+            int(HTTPStatus.NO_CONTENT): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Successful deletion request",
+                        status_codes=[int(HTTPStatus.NO_CONTENT)],
+                        value=None,
+                        response_only=True,
+                    )
+                ],
+            ),
+        },
     )
 )
 class ClientDeleteView(APIView):
@@ -405,8 +420,10 @@ class ClientDeleteView(APIView):
 @extend_schema_view(
     post=extend_schema(
         tags=["Clients"],
-        summary="Add someone as a Client",
-    )
+        summary="Client registration from doctor's interface",
+        request=AddClientSerializer,
+        responses={int(HTTPStatus.CREATED): AddClientSerializer},
+    ),
 )
 class AddClientView(APIView):
     """Добавление нового клиента из интерфейса доктора"""
@@ -427,11 +444,15 @@ class AddClientView(APIView):
 @extend_schema_view(
     patch=extend_schema(
         tags=["Clients"],
-        summary="Redact client's profile / final part of the registration",
+        summary="Redact client's profile/final part of registration.",
+        request=UpdateClientSerializer,
+        responses={int(HTTPStatus.OK): UpdateClientSerializer},
     ),
     put=extend_schema(
         tags=["Clients"],
-        summary="Redact client's profile / final part of the registration",
+        summary="Redact client's profile/final part of registration.",
+        request=UpdateClientSerializer,
+        responses={int(HTTPStatus.OK): UpdateClientSerializer},
     ),
 )
 class UpdateClientView(generics.UpdateAPIView):
