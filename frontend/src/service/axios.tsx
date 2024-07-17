@@ -91,7 +91,6 @@ API.interceptors.response.use(
     const originalRequest = error.config;
     const refreshToken = localStorage.getItem("refreshToken");
     if (error.response.status === 401) {
-      debugger;
       try {
         const token = await refreshTokens();
         originalRequest.headers["Authorization"] = "Bearer " + token;
