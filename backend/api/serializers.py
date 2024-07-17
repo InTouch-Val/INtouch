@@ -426,7 +426,10 @@ class CustomBase64ImageField(Base64ImageField):
     def to_representation(self, file):
         request = self.context.get("request", None)
         url = super().to_representation(file)
-        if request and request.is_secure():
+        # Has to be hardcoded for now, can be changed to code below after gunicorn arrives
+        # if request and request.is_secure():
+        #     return request.build_absolute_uri(url).replace("http://", "https://")
+        if request:
             return request.build_absolute_uri(url).replace("http://", "https://")
         return url
 
