@@ -10,6 +10,7 @@ import { faPencil } from "@fortawesome/free-solid-svg-icons";
 
 export const SecurityTab = () => {
   const isMobileWidth = useMobileWidth();
+  const { currentUser } = useAuth();
 
   const [userPassword, setUserPassword] = useState({
     password: "",
@@ -147,10 +148,17 @@ export const SecurityTab = () => {
                 &times;
               </button>
               <div className="delete-modal-div">
-                <p>
+                <p className="delete-modal__text">
                   Are you sure you want to delete your profile forever? <br />
                   <strong>This action is irrevertable!</strong>
                 </p>
+                {currentUser.user_type == "doctor" && (
+                  <div className="delete-modal__text">
+                    Deleting your profile will leave your published assignments
+                    public. To remove them, please delete assignments in the “My
+                    Tasks” section.
+                  </div>
+                )}
                 <div>
                   <button className="action-button" onClick={handleModalToggle}>
                     Cancel

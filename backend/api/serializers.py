@@ -420,9 +420,23 @@ class BlockSerializerForClient(serializers.ModelSerializer):
         ]
 
 
+class CustomBase64ImageField(Base64ImageField):
+    """Custom Base64 to return https URLs in blocks."""
+
+    def to_representation(self, file):
+        request = self.context.get("request", None)
+        url = super().to_representation(file)
+        # Can be changed to code below after gunicorn is implemented
+        # if file and request.is_secure():
+        #     return request.build_absolute_uri(url).replace("http://", "https://")
+        if file:
+            return request.build_absolute_uri(url).replace("http://", "https://")
+        return url
+
+
 class BlockSerializer(BlockSerializerForClient):
     choice_replies = BlockChoiceSerializer(many=True, required=False)
-    image = Base64ImageField(default=None)
+    image = CustomBase64ImageField(default=None)
 
     class Meta:
         model = Block
@@ -446,7 +460,8 @@ class AssignmentSerializer(serializers.ModelSerializer):
     tags = serializers.CharField(required=False)
     image_url = serializers.CharField(required=False)
     is_public = serializers.BooleanField(read_only=True)
-    avarage_grade = serializers.FloatField(read_only=True)
+    is_favorite = serializers.SerializerMethodField()
+    average_grade = serializers.FloatField(read_only=True)
 
     class Meta:
         model = Assignment
@@ -466,7 +481,8 @@ class AssignmentSerializer(serializers.ModelSerializer):
             "author",
             "author_name",
             "is_public",
-            "avarage_grade",
+            "is_favorite",
+            "average_grade",
         ]
         read_only_fields = [
             "id",
@@ -474,15 +490,22 @@ class AssignmentSerializer(serializers.ModelSerializer):
             "add_date",
             "share",
             "author",
+            "is_favorite",
+            "average_grade",
         ]
 
-    def get_author_name(self, obj):
+    def get_author_name(self, obj) -> str:
         try:
             if obj.author.deleted:
                 return USER_TYPES[2]
             return str(obj.author)
         except AttributeError:
             return USER_TYPES[2]
+
+    def get_is_favorite(self, obj) -> bool:
+        return (
+            self.context["request"].user.doctor.assignments.filter(pk=obj.id).exists()
+        )
 
     def create(self, validated_data):
         blocks_data = validated_data.pop("blocks", [])
@@ -501,7 +524,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
         return assignment
 
     def update(self, instance, validated_data):
-        instance.is_public = True
+        instance.is_public = validated_data.get("is_public", instance.is_public)
         instance.title = validated_data.get("title", instance.title)
         instance.text = validated_data.get("text", instance.text)
         instance.assignment_type = validated_data.get(
@@ -646,9 +669,6 @@ class DiaryNoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = DiaryNote
         fields = "__all__"
-        read_only_fields = [
-            "visible",
-        ]
 
     def validate(self, data):
         if not data:

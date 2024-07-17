@@ -53,8 +53,8 @@ export enum TypeOrder {
   All = "all",
   AddDate = "add_date",
   DecDate = "-add_date",
-  Popularity = "average_grade",
-  NoPopularity = "-average_grade",
+  Popularity = "share",
+  NoPopularity = "-share",
 }
 
 export enum TypeFilter {
