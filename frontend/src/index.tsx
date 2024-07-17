@@ -17,7 +17,7 @@ import { ClientPage } from "./routes/client-page";
 import { AssignmentsPage } from "./routes/assignments-page";
 import { CommunityPage } from "./routes/community-page";
 import { SettingsPage } from "./routes/SettingPage/settings-page";
-import { App } from "./components/App";
+import { App, loaderCheckToken } from "./components/App";
 import { AddAssignment, ViewAssignment } from "./components/psy/AddAssignment";
 import { AddClient } from "./components/psy/AddClient";
 import { AddNote } from "./components/psy/AddNote";
@@ -37,6 +37,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
     errorElement: <ErrorPage />,
+    loader: loaderCheckToken,
     children: [
       {
         path: "/clients",
