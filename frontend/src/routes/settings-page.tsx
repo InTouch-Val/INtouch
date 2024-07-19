@@ -81,12 +81,13 @@ function ProfileTab() {
     formData.append("first_name", userData.firstName);
     formData.append("last_name", userData.lastName);
     formData.append("email", userData.email);
-    formData.append("date_of_birth", userData.dateOfBirth);
+    // formData.append("date_of_birth", userData.dateOfBirth);
     if (selectedFile) {
       formData.append("photo", selectedFile);
     }
 
     try {
+      console.log(formData);
       const response = await API.put(
         `user/update/${currentUser.id}/`,
         formData,
@@ -153,7 +154,7 @@ function ProfileTab() {
             className="settings-input"
           />
 
-          <label htmlFor="dateOfBirt">Date Of Birth</label>
+          {/* <label htmlFor="dateOfBirt">Date Of Birth</label>
           <input
             type="date"
             name="dateOfBirth"
@@ -161,7 +162,7 @@ function ProfileTab() {
             onChange={handleChange}
             placeholder="Date of Birth"
             className="settings-input"
-          />
+          /> */}
           <button id="save-settings" type="submit">
             Save Changes
           </button>

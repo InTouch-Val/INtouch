@@ -115,9 +115,9 @@ function ClientDetailsPage() {
 
   const saveClientChanges = async () => {
     const requestBody = {
-      date_of_birth: editableClient.date_of_birth
-        ? editableClient.date_of_birth
-        : null,
+      // date_of_birth: editableClient.date_of_birth
+      //   ? editableClient.date_of_birth
+      //   : null,
       client: {
         diagnosis: editableClient.diagnosis,
         about: editableClient.about,
@@ -276,7 +276,7 @@ function ClientDetailsPage() {
         {/*Profile Tab View */}
         {activeTab === "profile" && (
           <div className="profile-tab">
-            <h3>Date Of Birth</h3>
+            {/* <h3>Date Of Birth</h3>
             {isEditing ? (
               <input
                 type="date"
@@ -287,7 +287,7 @@ function ClientDetailsPage() {
               />
             ) : (
               <p>{client.date_of_birth || "No info yet"}</p>
-            )}
+            )} */}
 
             <h3>Last Update</h3>
             <p>
