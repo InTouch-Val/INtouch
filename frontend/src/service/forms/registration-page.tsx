@@ -30,7 +30,7 @@ function RegistrationForm() {
 
   const [passwordShown, setPasswordShown] = useState(false);
   const [isValidCredentials, setIsValidCredentials] = useState(false);
-  const [showTermsError, setShowTermsError] = useState(false);
+  const [isShowTermsError, setIsShowTermsError] = useState(false);
 
   const navigate = useNavigate();
   const numberOfMinLengthOfPassword = 8;
@@ -141,7 +141,7 @@ function RegistrationForm() {
     const { name, value, type, checked } = e.target;
 
     if (name === "acceptPolicy") {
-      setShowTermsError(!checked);
+      setIsShowTermsError(!checked);
 
       if (checked) {
         setValidationError({
@@ -228,7 +228,7 @@ function RegistrationForm() {
     }
 
     if (!formData.acceptPolicy) {
-      setShowTermsError(true);
+      setIsShowTermsError(true);
       setValidationError({
         ...validationError,
         terms: "Please accept the terms and conditions to continue",
@@ -287,7 +287,7 @@ function RegistrationForm() {
       !formData.lastName ||
       !formData.password;
 
-    const acceptPolicyNotAccepted = !formData.acceptPolicy && showTermsError;
+    const acceptPolicyNotAccepted = !formData.acceptPolicy && isShowTermsError;
 
     return anyFieldMissingOrInvalid || acceptPolicyNotAccepted;
   };
@@ -376,13 +376,13 @@ function RegistrationForm() {
           </div>
           <label>
             <input
-              className={`${showTermsError ? "error" : ""}`}
+              className={`${isShowTermsError ? "error" : ""}`}
               type="checkbox"
               name="acceptPolicy"
               checked={formData.acceptPolicy}
               onChange={handleChange}
             />
-            <a href="" className={`${showTermsError ? "error-text" : "terms"}`}>
+            <a href="" className={`${isShowTermsError ? "error-text" : "terms"}`}>
               I agree with the terms and conditions
             </a>
           </label>
