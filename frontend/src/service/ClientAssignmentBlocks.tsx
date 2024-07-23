@@ -7,7 +7,7 @@ import {
   convertToRaw,
   convertFromRaw,
   ContentState,
-  newEditorState
+  newEditorState,
 } from "draft-js";
 import "../css/block.css";
 import "../css/assignments.css";
@@ -75,7 +75,8 @@ function ClientAssignmentBlocks({
   //         const serializedData = JSON.stringify(rawContent);
   //         setEditorState(truncatedEditorState);
   //         updateBlock(block.id, serializedData, []);
-  //       } else {
+  //       }
+  //       else {
   //         const rawContent = convertToRaw(contentState);
   //         const serializedData = JSON.stringify(rawContent);
   //         setEditorState(newEditorState);
@@ -84,64 +85,71 @@ function ClientAssignmentBlocks({
   //     }
   //   },
 
-  //   [updateBlock, block.id, block.content, block.choices]
+  //   [updateBlock, block.id, block.content, block.choices],
   // );
-
-
-  const createValidContentState = (text) => {
-    try {
-      return ContentState.createFromText(text);
-    } catch (error) {
-      console.error("Invalid ContentState creation:", error);
-      // Fallback to an empty ContentState if invalid
-      return ContentState.createFromText('');
-    }
-  };
-  
 
   const handleEditorChange = useCallback(
     (newEditorState) => {
-      if (isViewPsy || isView) {
+      const contentState = newEditorState.getCurrentContent();
+      const rawContent = convertToRaw(contentState);
+      const serializedData = JSON.stringify(rawContent);
+
+      const plainText = contentState.getPlainText();
+      if (plainText.length <= MAX_INPUT_LENGTH) {
         setEditorState(newEditorState);
-        const contentState = newEditorState.getCurrentContent();
-        const text = contentState.getPlainText();
-        updateBlock(block.id, contentState, block.choices, text);
+        updateBlock(block.id, serializedData, []);
       } else {
-        try {
-          const contentState = newEditorState.getCurrentContent();
-          const inputText = contentState.getPlainText();
-          const selection = newEditorState.getSelection();
-          const cursorPosition = selection.getFocusOffset();
-  
-          if (inputText.length > MAX_INPUT_LENGTH) {
-            const truncatedText = inputText.slice(0, MAX_INPUT_LENGTH);
-            const newContentState = createValidContentState(truncatedText);
-  
-            const newSelection = selection.merge({
-              focusOffset: Math.min(cursorPosition, MAX_INPUT_LENGTH),
-            });
-  
-            const truncatedEditorState = EditorState.createWithContent(newContentState);
-            setEditorState(EditorState.forceSelection(truncatedEditorState, newSelection));
-  
-            const rawContent = convertToRaw(newContentState);
-            const serializedData = JSON.stringify(rawContent);
-            updateBlock(block.id, serializedData, []);
-          } else {
-            setEditorState(newEditorState);
-            const rawContent = convertToRaw(contentState);
-            const serializedData = JSON.stringify(rawContent);
-            updateBlock(block.id, serializedData, []);
-          }
-        } catch (error) {
-          console.error("Error handling editor state:", error);
-        }
+        const truncatedText = plainText.slice(0, MAX_INPUT_LENGTH);
+        const newContentState = ContentState.createFromText(truncatedText);
+        const truncatedEditorState =
+          EditorState.createWithContent(newContentState);
+        setEditorState(truncatedEditorState);
+        const truncatedRawContent = convertToRaw(newContentState);
+        const truncatedSerializedData = JSON.stringify(truncatedRawContent);
+        updateBlock(block.id, truncatedSerializedData, []);
       }
     },
-    [updateBlock, block.id, isViewPsy, isView]
+    [updateBlock, block.id]
   );
-  
 
+  const handleBeforeInput = useCallback(
+    (chars, editorState) => {
+      const currentContent = editorState.getCurrentContent();
+      const currentText = currentContent.getPlainText();
+
+      if (currentText.length >= MAX_INPUT_LENGTH) {
+        return "handled";
+      }
+      return "not-handled";
+    },
+    [MAX_INPUT_LENGTH]
+  );
+
+  const handlePastedText = useCallback(
+    (pastedText, html, newEditorState) => {
+      const currentContent = newEditorState.getCurrentContent();
+      const currentText = currentContent.getPlainText();
+
+      if (currentText.length + pastedText.length > MAX_INPUT_LENGTH) {
+        const allowedText = pastedText.slice(
+          0,
+          MAX_INPUT_LENGTH - currentText.length
+        );
+        const newContentState = ContentState.createFromText(
+          currentText + allowedText
+        );
+        const newEditorState = EditorState.push(
+          editorState,
+          newContentState,
+          "insert-characters"
+        );
+        setEditorState(newEditorState);
+        return "handled";
+      }
+      return "not-handled";
+    },
+    [editorState, MAX_INPUT_LENGTH]
+  );
 
   const interceptSetEditorState = () => {
     console.log("e");
@@ -267,6 +275,8 @@ function ClientAssignmentBlocks({
                   : interceptSetEditorState
               }
               isMobileWidth={isMobileWidth}
+              handleBeforeInput={handleBeforeInput}
+              handlePastedText={handlePastedText}
             />
           </ToolbarProvider>
         </div>
