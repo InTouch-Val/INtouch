@@ -34,11 +34,6 @@ export function ProfileTab() {
   const fileInputRef = React.createRef();
 
   const onSubmit = async (data) => {
-    console.log( {
-      first_name: data.firstName,
-      last_name: data.lastName,
-      photo: selectedFile,
-    });
     try {
       const response = await API.put(
         `user/update/${currentUser.id}/`,
