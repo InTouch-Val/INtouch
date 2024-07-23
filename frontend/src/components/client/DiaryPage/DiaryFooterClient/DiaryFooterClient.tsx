@@ -6,6 +6,8 @@ import { useFormContext, useWatch } from "react-hook-form";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 import { openModalSaveIncomplete } from "../../../../store/slices/modals/modalsSlice";
 import { useAppDispatch } from "../../../../store/store";
+
+import { API } from "../../../../service/axios";
 import { ClientDiary } from "../../../../utils/global-types";
 
 interface Props {
@@ -42,6 +44,16 @@ export default function DiaryFooterClient({
   const dispatch = useAppDispatch();
   const handleOpenModalSaveIncomplete = () => {
     dispatch(openModalSaveIncomplete());
+  };
+
+  const handleClickVisible = async () => {
+    await setActive((prev) => !prev);
+    try {
+      const response = await API.post(`/diary-notes/${diary.id}/visible/`);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   function hasFormChanged() {
@@ -100,7 +112,7 @@ export default function DiaryFooterClient({
           type="checkbox"
           className="footer__input-checkbox"
           defaultChecked={active}
-          onClick={() => setActive((prev) => !prev)}
+          onClick={handleClickVisible}
         />
       </div>
 
