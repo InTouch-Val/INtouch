@@ -420,9 +420,23 @@ class BlockSerializerForClient(serializers.ModelSerializer):
         ]
 
 
+class CustomBase64ImageField(Base64ImageField):
+    """Custom Base64 to return https URLs in blocks."""
+
+    def to_representation(self, file):
+        request = self.context.get("request", None)
+        url = super().to_representation(file)
+        # Can be changed to code below after gunicorn is implemented
+        # if file and request.is_secure():
+        #     return request.build_absolute_uri(url).replace("http://", "https://")
+        if file:
+            return request.build_absolute_uri(url).replace("http://", "https://")
+        return url
+
+
 class BlockSerializer(BlockSerializerForClient):
     choice_replies = BlockChoiceSerializer(many=True, required=False)
-    image = Base64ImageField(default=None)
+    image = CustomBase64ImageField(default=None)
 
     class Meta:
         model = Block
