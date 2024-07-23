@@ -247,7 +247,7 @@ function CompleteAssignments() {
 
   async function handleShareWithTherapist() {
     try {
-      const res = await API.put(
+      const res = await API.post(
         `assignments-client/${assignmentData.id}/visible/`,
       );
       if (res.status >= 200 && res.status < 300) {
