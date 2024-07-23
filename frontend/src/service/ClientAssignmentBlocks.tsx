@@ -7,6 +7,7 @@ import {
   convertToRaw,
   convertFromRaw,
   ContentState,
+  newEditorState
 } from "draft-js";
 import "../css/block.css";
 import "../css/assignments.css";
@@ -50,47 +51,102 @@ function ClientAssignmentBlocks({
     }
   });
 
+  const MAX_INPUT_LENGTH = 1000;
+
+  // const handleEditorChange = useCallback(
+  //   (newEditorState: { getCurrentContent: () => any }) => {
+  //     if (isViewPsy || isView) {
+  //       setEditorState(newEditorState);
+  //       // Конвертируем editorState в строку и обновляем title
+  //       const contentState = newEditorState.getCurrentContent();
+  //       const text = contentState.getPlainText();
+  //       updateBlock(block.id, contentState, block.choices, text);
+  //     } else {
+  //       const contentState = newEditorState.getCurrentContent();
+  //       const inputText = contentState.getPlainText();
+
+  //       if (inputText.length > MAX_INPUT_LENGTH) {
+  //         const truncatedText = inputText.slice(0, MAX_INPUT_LENGTH);
+  //         const newContentState = ContentState.createFromText(truncatedText);
+  //         const truncatedEditorState =
+  //           EditorState.createWithContent(newContentState);
+
+  //         const rawContent = convertToRaw(newContentState);
+  //         const serializedData = JSON.stringify(rawContent);
+  //         setEditorState(truncatedEditorState);
+  //         updateBlock(block.id, serializedData, []);
+  //       } else {
+  //         const rawContent = convertToRaw(contentState);
+  //         const serializedData = JSON.stringify(rawContent);
+  //         setEditorState(newEditorState);
+  //         updateBlock(block.id, serializedData, []);
+  //       }
+  //     }
+  //   },
+
+  //   [updateBlock, block.id, block.content, block.choices]
+  // );
+
+
+  const createValidContentState = (text) => {
+    try {
+      return ContentState.createFromText(text);
+    } catch (error) {
+      console.error("Invalid ContentState creation:", error);
+      // Fallback to an empty ContentState if invalid
+      return ContentState.createFromText('');
+    }
+  };
+  
+
   const handleEditorChange = useCallback(
-    (newEditorState: { getCurrentContent: () => any }) => {
+    (newEditorState) => {
       if (isViewPsy || isView) {
         setEditorState(newEditorState);
-        // Конвертируем editorState в строку и обновляем title
         const contentState = newEditorState.getCurrentContent();
         const text = contentState.getPlainText();
         updateBlock(block.id, contentState, block.choices, text);
       } else {
-        const contentState = newEditorState.getCurrentContent();
-        const inputText = contentState.getPlainText();
-
-        if (inputText.length > MAX_INPUT_LENGTH) {
-          const truncatedText = inputText.slice(0, MAX_INPUT_LENGTH);
-          const newContentState = ContentState.createFromText(truncatedText);
-          const truncatedEditorState =
-            EditorState.createWithContent(newContentState);
-
-          const rawContent = convertToRaw(newContentState);
-          const serializedData = JSON.stringify(rawContent);
-          setEditorState(truncatedEditorState);
-          updateBlock(block.id, serializedData, []);
-        } else {
-          const rawContent = convertToRaw(contentState);
-          const serializedData = JSON.stringify(rawContent);
-          setEditorState(newEditorState);
-          updateBlock(block.id, serializedData, []);
+        try {
+          const contentState = newEditorState.getCurrentContent();
+          const inputText = contentState.getPlainText();
+          const selection = newEditorState.getSelection();
+          const cursorPosition = selection.getFocusOffset();
+  
+          if (inputText.length > MAX_INPUT_LENGTH) {
+            const truncatedText = inputText.slice(0, MAX_INPUT_LENGTH);
+            const newContentState = createValidContentState(truncatedText);
+  
+            const newSelection = selection.merge({
+              focusOffset: Math.min(cursorPosition, MAX_INPUT_LENGTH),
+            });
+  
+            const truncatedEditorState = EditorState.createWithContent(newContentState);
+            setEditorState(EditorState.forceSelection(truncatedEditorState, newSelection));
+  
+            const rawContent = convertToRaw(newContentState);
+            const serializedData = JSON.stringify(rawContent);
+            updateBlock(block.id, serializedData, []);
+          } else {
+            setEditorState(newEditorState);
+            const rawContent = convertToRaw(contentState);
+            const serializedData = JSON.stringify(rawContent);
+            updateBlock(block.id, serializedData, []);
+          }
+        } catch (error) {
+          console.error("Error handling editor state:", error);
         }
       }
     },
-
-    [updateBlock, block.id, block.content, block.choices],
+    [updateBlock, block.id, isViewPsy, isView]
   );
+  
 
-  const MAX_INPUT_LENGTH = 1000;
 
   const interceptSetEditorState = () => {
     console.log("e");
   };
 
-  // Determines if the block is filled in
   const isValid = () => {
     if (!isViewPsy && !isView) {
       return (
@@ -124,7 +180,7 @@ function ClientAssignmentBlocks({
     setSelectedValue(
       inputText.length > maxTextLegthBig
         ? inputText.slice(0, maxTextLegthBig)
-        : inputText,
+        : inputText
     );
     updateBlock(block.id, event.target.value, []);
   }
@@ -242,7 +298,7 @@ function ClientAssignmentBlocks({
   if (block.type === "range") {
     return (
       <div
-        className={`block assignment__block ${!isValid && showInvalidInputs ? "uncompleted" : ""}`}
+        className={`block assignment__block ${!isValid() && showInvalidInputs ? "uncompleted" : ""}`}
       >
         <div>
           {!block.description && !isViewPsy ? (
@@ -266,7 +322,7 @@ function ClientAssignmentBlocks({
             <div className="range-options">
               {Array.from(
                 { length: block.end_range - block.start_range + 1 },
-                (_, i) => i + block.start_range,
+                (_, i) => i + block.start_range
               ).map((value) => (
                 <label key={value} className="range-option">
                   {isMobileWidth ? (
@@ -309,7 +365,7 @@ function ClientAssignmentBlocks({
   if (block.type === "single") {
     return (
       <div
-        className={`block assignment__block ${!isValid && showInvalidInputs ? "uncompleted" : ""}`}
+        className={`block assignment__block ${!isValid() && showInvalidInputs ? "uncompleted" : ""}`}
       >
         <div>
           {!block.description && !isViewPsy ? (
@@ -355,7 +411,7 @@ function ClientAssignmentBlocks({
   if (block.type === "multiple") {
     return (
       <div
-        className={`block assignment__block ${!isValid && showInvalidInputs ? "uncompleted" : ""}`}
+        className={`block assignment__block ${!isValid() && showInvalidInputs ? "uncompleted" : ""}`}
       >
         <div>
           {!block.description && !isViewPsy ? (
