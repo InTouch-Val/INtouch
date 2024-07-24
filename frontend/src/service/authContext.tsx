@@ -11,6 +11,7 @@ function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true);
   const [card, setCard] = useState(null);
 
+
   const isLoggedIn = currentUser != null;
 
   const logout = () => {
@@ -37,6 +38,27 @@ function AuthProvider({ children }) {
     }
     setIsLoading(false); // Установка после завершения всех операций
   };
+
+  // useEffect(() => {
+  //   const refreshToken = localStorage.getItem("refreshToken");
+  //   const accessToken = localStorage.getItem("accessToken");
+
+  //   try {
+  //     const request = API.post("/token/refresh/", { refresh: refreshToken });
+  //     if (request.status == 200) {
+  //       localStorage.setItem("accessToken", request.data.access);
+  //       localStorage.setItem("refreshToken", request.data.refresh);
+  //     }
+
+  //     if (request.status >= 401) {
+  //      window.location.href = "/login";
+  //     }
+
+  //     return request;
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // }, []);
 
   const updateUserData = async () => {
     try {
