@@ -334,7 +334,6 @@ def user_delete_hard(request):
         user.first_name = FIELD_DELETED
         user.last_name = FIELD_DELETED
         user.email = FIELD_DELETED
-        user.date_of_birth = None
         user.photo = None
         user.deleted = True
         user.is_active = False
@@ -360,7 +359,6 @@ def user_delete_hard(request):
             for client in user.doctors.all():
                 client.diagnosis = None
                 client.about = None
-                client.user.date_of_birth = None
                 client.save()
 
         user.save()
