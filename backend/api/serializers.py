@@ -46,7 +46,6 @@ class ClientInDoctorSerializers(serializers.ModelSerializer):
             "date_joined",
             "is_active",
             "photo",
-            "date_of_birth",
             "last_update",
             "client",
         ]
@@ -90,7 +89,6 @@ class UserSerializer(serializers.ModelSerializer):
             "password",
             "confirm_password",
             "accept_policy",
-            "date_of_birth",
             "date_joined",
             "last_update",
             "client",
@@ -245,7 +243,7 @@ class UpdateUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "email", "date_of_birth", "photo"]
+        fields = ["first_name", "last_name", "email", "photo"]
 
     # TODO: настроить валидацию при необязательном введении одного из полей
     # def validate(self, attrs):
@@ -260,7 +258,6 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         user.last_name = validated_data.get("last_name", user.last_name)
         user.email = validated_data.get("email", user.email)
         user.username = user.email
-        user.date_of_birth = validated_data.get("date_of_birth", user.date_of_birth)
         user.photo = validated_data.get("photo", user.photo)
         user.save()
         return user
@@ -357,12 +354,10 @@ class DoctorUpdateClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            "date_of_birth",
             "client",
         ]
 
     def update(self, user, validated_data):
-        user.date_of_birth = validated_data["date_of_birth"]
         user.client.diagnosis = validated_data["client"]["diagnosis"]
         user.client.about = validated_data["client"]["about"]
         user.client.save()
