@@ -31,6 +31,7 @@ import DiaryPageClient from "./routes/client/my-diary-page";
 import ConfirmEmail from "./service/forms/confirm-email";
 import MobileEmotionPage from "./components/client/MyDiary/MobileEmotionPage/MobileEmotionPage";
 import AssignmentsPageRefactor from "./routes/AssignmentsPageRefactor/AssignmentsPage";
+import { AfterRegistrationConfirmEmail } from "./service/forms/after-registration-email-confirmation";
 
 const router = createBrowserRouter([
   {
@@ -164,6 +165,11 @@ const router = createBrowserRouter([
   {
     path: "/welcome-to-intouch",
     element: <AfterRegistrationPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/email-confirmation",
+    element: <AfterRegistrationConfirmEmail />,
     errorElement: <ErrorPage />,
   },
 ]);
