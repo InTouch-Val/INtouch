@@ -14,6 +14,7 @@ import { PasswordResetMock } from "./service/forms/password-reset-mock";
 import { ClientRegistrationPage } from "./service/forms/client-registration-page";
 import { AfterRegistrationPage } from "./service/forms/after-registration-welcome-page";
 import { ClientPage } from "./routes/client-page";
+import { AssignmentsPage } from "./routes/assignments-page";
 import { CommunityPage } from "./routes/community-page";
 import { SettingsPage } from "./routes/SettingPage/settings-page";
 import { App, loaderCheckToken } from "./components/App";
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
       },
       {
         path: "/assignments",
+        element: <AssignmentsPage />,
+      },
+      {
+        path: "/test-assignments",
         element: <AssignmentsPageRefactor />,
       },
       {
