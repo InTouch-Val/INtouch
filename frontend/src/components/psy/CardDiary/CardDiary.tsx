@@ -5,6 +5,7 @@ import "./CardDiary.css";
 import Button from "../button/ButtonHeadline";
 import { useNavigate } from "react-router-dom";
 import { getDate } from "../../../utils/helperFunction/getDate";
+import { parseEventDetailsText } from "../../../utils/helperFunction/parseEventDetailsText";
 
 export default function CardDiary({ card }) {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ export default function CardDiary({ card }) {
         </div>
         <div className="diary__card-title__date">{date}</div>
       </div>
-      <div className="diary__card-text">{card.event_details}</div>
+      <div className="diary__card-text">{parseEventDetailsText(card.event_details)}</div>
 
       <div className="diary__card-buttons" onClick={(e) => e.stopPropagation()}>
         {card.primary_emotion != "" && (
