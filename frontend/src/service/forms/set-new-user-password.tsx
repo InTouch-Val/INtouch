@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API } from "../axios";
 import { isValidPassword } from "./regex";
@@ -23,80 +23,27 @@ function SetNewUserPassword({ accessToken }) {
     setPasswordShown(!passwordShown);
   };
 
-
-  console.log(error)
-
   const navigate = useNavigate();
 
-  // const handlePasswordBlur = (value) => {
-  //   let newError = { ...error };
-  //   if (!isValidPassword(value)) {
-  //     newError.password =
-  //       "Password must contain letters, numbers, at least 1 uppercase letter, 1 lowercase letter, and 1 digit, no more than 3 consecutive identical characters and must be at least 8 characters long.";
-  //   } else if (
-  //     value.toLowerCase().includes(currentUser.first_name.toLowerCase())
-  //   ) {
-  //     newError.password = "The password is too similar to your first name";
-  //   } else if (
-  //     value.toLowerCase().includes(currentUser.last_name.toLowerCase())
-  //   ) {
-  //     newError.password = "The password is too similar to your last name";
-  //   } else {
-  //     newError.password = "";
-  //   }
-  //   setError(newError);
-  //   setIsValidCredentials(!newError.password);
-  // };
-
-
-  const handlePasswordBlur = (value) => {
-    let newError = { ...error };
-    if (!isValidPassword(value)) {
+  const validatePassword = () => {
+    let newError = { password: "", server: "" };
+    if (!isValidPassword(password)) {
       newError.password =
         "Password must contain letters, numbers, at least 1 uppercase letter, 1 lowercase letter, and 1 digit, no more than 3 consecutive identical characters and must be at least 8 characters long.";
     } else if (
-      value.toLowerCase().includes(currentUser.first_name.toLowerCase())
+      currentUser && password.toLowerCase().includes(currentUser.first_name.toLowerCase())
     ) {
       newError.password = "The password is too similar to your first name";
     } else if (
-      value.toLowerCase().includes(currentUser.last_name.toLowerCase())
+      currentUser && password.toLowerCase().includes(currentUser.last_name.toLowerCase())
     ) {
       newError.password = "The password is too similar to your last name";
-    } else {
-      newError.password = "";
+    } else if (password !== confirmPassword && password !== "" && confirmPassword !== "") {
+      newError.password = "Password and confirmation password do not match. Please try again.";
     }
     setError(newError);
     setIsValidCredentials(!newError.password && password === confirmPassword);
   };
-
-  // const validatePassword = () => {
-  //   setError({ password: "", server: "" });
-  //   if (password !== confirmPassword) {
-  //     setError({
-  //       ...error,
-  //       password:
-  //         "Password and confirmation password do not match.                     Please try again.",
-  //     });
-  //     return false;
-  //   }
-  //   setError({ password: "", server: "" });
-  //   return true;
-  // };
-  const validatePassword = () => {
-    let newError = { password: "", server: "" };
-    if (password !== confirmPassword) {
-      newError.password =
-        "Password and confirmation password do not match. Please try again.";
-      setError(newError);
-      return false;
-    }
-    setError(newError);
-    return true;
-  };
-
-  useEffect(() => {
-    handlePasswordBlur(password);
-  }, [password, confirmPassword]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -153,7 +100,7 @@ function SetNewUserPassword({ accessToken }) {
               id="password"
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
-              onBlur={(e) => handlePasswordBlur(e.target.value)}
+              onBlur={validatePassword}
               value={password}
               minLength={numberOfMinLengthOfPassword}
               maxLength={numberOfMaxLengthOfPassword}
@@ -174,6 +121,7 @@ function SetNewUserPassword({ accessToken }) {
               placeholder="Confirm Password"
               onChange={(e) => setConfirmPassword(e.target.value)}
               value={confirmPassword}
+              onBlur={validatePassword}
               minLength={numberOfMinLengthOfPassword}
               maxLength={numberOfMaxLengthOfPassword}
             />
