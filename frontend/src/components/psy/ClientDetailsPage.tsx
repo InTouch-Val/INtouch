@@ -273,7 +273,6 @@ function ClientDetailsPage() {
         {/*Profile Tab View */}
         {activeTab === "profile" && (
           <div className="profile-tab">
-
             <h3>Last Update</h3>
             <p>
               {new Date(client.last_update).toLocaleDateString() ||
