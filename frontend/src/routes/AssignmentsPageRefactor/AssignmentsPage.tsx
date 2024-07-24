@@ -13,9 +13,9 @@ import { changeSearchAction } from "../../store/slices";
 import { WithTab } from "./TabsAssignments/Hoc";
 
 interface Props {
-  isShareModal?: boolean;
-  selectedAssignmentIdForShareModalOnClientPage?: string;
-  setSelectedAssignmentIdForShareModalOnClientPage?: React.Dispatch<
+  isShareModal: boolean;
+  selectedAssignmentIdForShareModalOnClientPage: string;
+  setSelectedAssignmentIdForShareModalOnClientPage: React.Dispatch<
     React.SetStateAction<string>
   >;
 }
@@ -42,8 +42,7 @@ export default function AssignmentsPageRefactor({
 
   const handleShareButton = (assignmentId: string): void => {
     if (isShareModal) {
-      setSelectedAssignmentIdForShareModalOnClientPage &&
-        setSelectedAssignmentIdForShareModalOnClientPage(assignmentId);
+      setSelectedAssignmentIdForShareModalOnClientPage(assignmentId);
     } else {
       setSelectedAssignmentId(assignmentId);
       setIsShareModalOpen(true);

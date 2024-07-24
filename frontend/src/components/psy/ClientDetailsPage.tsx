@@ -7,12 +7,12 @@ import { useAuth } from "../../service/authContext";
 import { API } from "../../service/axios";
 import { Notes } from "./Notes";
 import { Modal } from "../../service/modal";
+import { AssignmentsPage } from "../../routes/assignments-page";
 import shareImage from "../../images/shareArrow_white.svg";
 import "../../css/clients.css";
 import DiaryNotes from "./DiaryNotes/DiaryNotes";
 import { useObserve } from "../../utils/hook/useObserve";
 import ClientAssignmentTile from "./ClientAssignmentTile";
-import AssignmentsPageRefactor from "../../routes/AssignmentsPageRefactor/AssignmentsPage";
 
 function ClientDetailsPage() {
   const { id } = useParams();
@@ -351,7 +351,7 @@ function ClientDetailsPage() {
               Choose assignment you want to share
             </h3>
             <div className="share-assignment__content-container">
-              <AssignmentsPageRefactor
+              <AssignmentsPage
                 isShareModal={true}
                 setSelectedAssignmentIdForShareModalOnClientPage={
                   setSelectedAssignment
@@ -359,7 +359,7 @@ function ClientDetailsPage() {
                 selectedAssignmentIdForShareModalOnClientPage={
                   selectedAssignment
                 }
-              ></AssignmentsPageRefactor>
+              ></AssignmentsPage>
             </div>
           </div>
         </Modal>
