@@ -122,6 +122,35 @@ class UserDetailsView(generics.ListAPIView):
     get=extend_schema(
         tags=["Email", "Users"],
         summary="Confirm email reset",
+        request=None,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Successful email confirmation request",
+                        value={
+                            "message": "Account activated",
+                            "access_token": "string",
+                            "refresh_token": "string",
+                        },
+                        status_codes=[int(HTTPStatus.OK)],
+                        response_only=True,
+                    )
+                ],
+            ),
+            int(HTTPStatus.BAD_REQUEST): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Bad request for email confirmation",
+                        value={"message": "Account not activated"},
+                        status_codes=[int(HTTPStatus.BAD_REQUEST)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+        },
     )
 )
 class UserConfirmEmailView(APIView):
@@ -158,6 +187,30 @@ class UserConfirmEmailView(APIView):
         tags=["Password", "Users"],
         summary="Request password reset",
         request=PasswordResetSerializer,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Succsessful password reset request.",
+                        value={"message": "Password reset email sent."},
+                        status_codes=[int(HTTPStatus.OK)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+            int(HTTPStatus.BAD_REQUEST): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Succsessful password reset request.",
+                        value={"User with this email does not exist."},
+                        status_codes=[int(HTTPStatus.BAD_REQUEST)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+        },
     )
 )
 class PasswordResetRequestView(APIView):
@@ -176,6 +229,35 @@ class PasswordResetRequestView(APIView):
     get=extend_schema(
         tags=["Password", "Users"],
         summary="Confirm password reset",
+        request=None,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Successful password reset confirmation request",
+                        value={
+                            "message": "Password reset successful",
+                            "access_token": "string",
+                            "refresh_token": "string",
+                        },
+                        status_codes=[int(HTTPStatus.OK)],
+                        response_only=True,
+                    )
+                ],
+            ),
+            int(HTTPStatus.BAD_REQUEST): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Bad request for password reset confirmation",
+                        value={"error": "Password did not reset"},
+                        status_codes=[int(HTTPStatus.BAD_REQUEST)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+        },
     )
 )
 class PasswordResetConfirmView(generics.GenericAPIView):
@@ -204,6 +286,30 @@ class PasswordResetConfirmView(generics.GenericAPIView):
         tags=["Password", "Users"],
         summary="Set the new password",
         request=ChangePasswordSerializer,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Successful password reset",
+                        value={"message": "Password reset successfully"},
+                        status_codes=[int(HTTPStatus.OK)],
+                        response_only=True,
+                    )
+                ],
+            ),
+            int(HTTPStatus.BAD_REQUEST): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Bad request for password reset",
+                        value={"error": "Password not reset"},
+                        status_codes=[int(HTTPStatus.BAD_REQUEST)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+        },
     )
 )
 class PasswordResetCompleteView(APIView):
@@ -229,6 +335,30 @@ class PasswordResetCompleteView(APIView):
         tags=["Password", "Users"],
         summary="Change password",
         request=UpdatePasswordSerializer,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Succsessful password changing.",
+                        value={"message": "Password changed successfully"},
+                        status_codes=[int(HTTPStatus.OK)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+            int(HTTPStatus.BAD_REQUEST): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Bad request for password changing.",
+                        value={"error": "Password not changed"},
+                        status_codes=[int(HTTPStatus.BAD_REQUEST)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+        },
     )
 )
 class UpdatePasswordView(APIView):
@@ -256,6 +386,36 @@ class UpdatePasswordView(APIView):
         tags=["Email", "Users"],
         summary="Change the email",
         request=UpdateEmailSerializer(),
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Succsessful email changing.",
+                        value={"Email update confirmation sent."},
+                        status_codes=[int(HTTPStatus.OK)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+            int(HTTPStatus.BAD_REQUEST): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Bad request for email changing (existing email).",
+                        value={"message": "User with this email is already exists"},
+                        status_codes=[int(HTTPStatus.BAD_REQUEST)],
+                        response_only=True,
+                    ),
+                    OpenApiExample(
+                        "Bad request for email changing (same email).",
+                        value={"message": "This email is already set on your account"},
+                        status_codes=[int(HTTPStatus.BAD_REQUEST)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+        },
     )
 )
 class UpdateEmailView(APIView):
@@ -285,7 +445,32 @@ class UpdateEmailView(APIView):
 @extend_schema_view(
     get=extend_schema(
         tags=["Email", "Users"],
-        summary="Confierm email changing",
+        summary="Confirm email reset",
+        request=None,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Successful email confirmation request",
+                        value={"message": "Email updated successfully"},
+                        status_codes=[int(HTTPStatus.OK)],
+                        response_only=True,
+                    )
+                ],
+            ),
+            int(HTTPStatus.BAD_REQUEST): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Bad request for email confirmation",
+                        value={"error": "Email not updated: unvalid token"},
+                        status_codes=[int(HTTPStatus.BAD_REQUEST)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+        },
     )
 )
 class UpdateEmailConfirmView(generics.GenericAPIView):
@@ -323,6 +508,31 @@ class UpdateUserView(generics.UpdateAPIView):
 @extend_schema(
     tags=["Users"],
     summary="Delete user",
+    request=None,
+    responses={
+        int(HTTPStatus.OK): OpenApiResponse(
+            response=SwaggerMessageHandlerSerializer,
+            examples=[
+                OpenApiExample(
+                    "Successful user deleting",
+                    value={"message": "User deleted successfully"},
+                    status_codes=[int(HTTPStatus.OK)],
+                    response_only=True,
+                )
+            ],
+        ),
+        int(HTTPStatus.NOT_FOUND): OpenApiResponse(
+            response=SwaggerMessageHandlerSerializer,
+            examples=[
+                OpenApiExample(
+                    "User doesn't exist",
+                    value={"error": "User not found"},
+                    status_codes=[int(HTTPStatus.NOT_FOUND)],
+                    response_only=True,
+                ),
+            ],
+        ),
+    },
 )
 @api_view(["GET"])
 def user_delete_hard(request):
@@ -334,7 +544,6 @@ def user_delete_hard(request):
         user.first_name = FIELD_DELETED
         user.last_name = FIELD_DELETED
         user.email = FIELD_DELETED
-        user.date_of_birth = None
         user.photo = None
         user.deleted = True
         user.is_active = False
@@ -360,7 +569,6 @@ def user_delete_hard(request):
             for client in user.doctors.all():
                 client.diagnosis = None
                 client.about = None
-                client.user.date_of_birth = None
                 client.save()
 
         user.save()
@@ -370,7 +578,35 @@ def user_delete_hard(request):
         return Response({"error": "User not found"})
 
 
-@extend_schema(tags=["Users"], summary="Deactivate user")
+@extend_schema(
+    tags=["Users"],
+    summary="Deactivate user",
+    request=None,
+    responses={
+        int(HTTPStatus.OK): OpenApiResponse(
+            response=SwaggerMessageHandlerSerializer,
+            examples=[
+                OpenApiExample(
+                    "Successful user deactivation",
+                    value={"message": "User deactivated successfully"},
+                    status_codes=[int(HTTPStatus.OK)],
+                    response_only=True,
+                )
+            ],
+        ),
+        int(HTTPStatus.NOT_FOUND): OpenApiResponse(
+            response=SwaggerMessageHandlerSerializer,
+            examples=[
+                OpenApiExample(
+                    "User doesn't exist",
+                    value={"error": "User not found"},
+                    status_codes=[int(HTTPStatus.NOT_FOUND)],
+                    response_only=True,
+                ),
+            ],
+        ),
+    },
+)
 @api_view(["GET"])
 def user_delete_soft(request):
     """Перевод пользователя в неактивные"""
@@ -386,7 +622,22 @@ def user_delete_soft(request):
 
 @extend_schema_view(
     delete=extend_schema(
-        tags=["Clients"], summary="Delete user from doctor's interface"
+        tags=["Clients"],
+        summary="Delete user from doctor's interface",
+        request=None,
+        responses={
+            int(HTTPStatus.NO_CONTENT): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Successful deletion request",
+                        status_codes=[int(HTTPStatus.NO_CONTENT)],
+                        value=None,
+                        response_only=True,
+                    )
+                ],
+            ),
+        },
     )
 )
 class ClientDeleteView(APIView):
@@ -407,8 +658,26 @@ class ClientDeleteView(APIView):
 @extend_schema_view(
     post=extend_schema(
         tags=["Clients"],
-        summary="Add someone as a Client",
-    )
+        summary="Client registration from doctor's interface",
+        request=AddClientSerializer,
+        responses={
+            int(HTTPStatus.CREATED): AddClientSerializer,
+            int(HTTPStatus.BAD_REQUEST): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Bad request for registration",
+                        value={
+                            "message": "This email address already exists."
+                            "Please use a unique one."
+                        },
+                        status_codes=[int(HTTPStatus.BAD_REQUEST)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+        },
+    ),
 )
 class AddClientView(APIView):
     """Добавление нового клиента из интерфейса доктора"""
@@ -429,11 +698,41 @@ class AddClientView(APIView):
 @extend_schema_view(
     patch=extend_schema(
         tags=["Clients"],
-        summary="Redact client's profile / final part of the registration",
+        summary="Redact client's profile/final part of registration.",
+        request=UpdateClientSerializer,
+        responses={
+            int(HTTPStatus.OK): UpdateClientSerializer,
+            int(HTTPStatus.BAD_REQUEST): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Bad request for registration",
+                        value={"message": "Accept with company policy."},
+                        status_codes=[int(HTTPStatus.BAD_REQUEST)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+        },
     ),
     put=extend_schema(
         tags=["Clients"],
-        summary="Redact client's profile / final part of the registration",
+        summary="Redact client's profile/final part of registration.",
+        request=UpdateClientSerializer,
+        responses={
+            int(HTTPStatus.OK): UpdateClientSerializer,
+            int(HTTPStatus.BAD_REQUEST): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Bad request for registration",
+                        value={"message": "Accept with company policy."},
+                        status_codes=[int(HTTPStatus.BAD_REQUEST)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+        },
     ),
 )
 class UpdateClientView(generics.UpdateAPIView):
