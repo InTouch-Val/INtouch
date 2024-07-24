@@ -10,6 +10,5 @@ DJANGO_SUPERUSER_USERNAME="admin" \
 
 python manage.py collectstatic --noinput
 
+gunicorn -b 0.0.0.0:9090 INtouch.wsgi --daemon
 python manage.py runserver --noreload 0.0.0.0:8000
-
-python manage.py rundramatiq
