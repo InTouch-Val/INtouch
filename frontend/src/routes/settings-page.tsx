@@ -50,7 +50,6 @@ function ProfileTab() {
     firstName: currentUser.first_name || "",
     lastName: currentUser.last_name || "",
     email: currentUser.email || "",
-    dateOfBirth: currentUser.date_of_birth || "",
   });
   const [selectedFile, setSelectedFile] = useState([]);
   const [previewImage, setPreviewImage] = useState(
@@ -81,7 +80,6 @@ function ProfileTab() {
     formData.append("first_name", userData.firstName);
     formData.append("last_name", userData.lastName);
     formData.append("email", userData.email);
-    formData.append("date_of_birth", userData.dateOfBirth);
     if (selectedFile) {
       formData.append("photo", selectedFile);
     }
@@ -150,16 +148,6 @@ function ProfileTab() {
             value={userData.email}
             onChange={handleChange}
             placeholder="Email"
-            className="settings-input"
-          />
-
-          <label htmlFor="dateOfBirt">Date Of Birth</label>
-          <input
-            type="date"
-            name="dateOfBirth"
-            value={userData.dateOfBirth}
-            onChange={handleChange}
-            placeholder="Date of Birth"
             className="settings-input"
           />
           <button id="save-settings" type="submit">
