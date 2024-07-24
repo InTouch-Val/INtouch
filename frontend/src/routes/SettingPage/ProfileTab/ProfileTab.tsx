@@ -22,7 +22,6 @@ export function ProfileTab() {
       firstName: currentUser.first_name || "",
       lastName: currentUser.last_name || "",
       email: currentUser.email || "",
-      dateOfBirth: currentUser.date_of_birth || "",
     },
     resolver: yupResolver(updateUserForm),
     mode: "all",
@@ -35,7 +34,6 @@ export function ProfileTab() {
   const fileInputRef = React.createRef();
 
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       const response = await API.put(
         `user/update/${currentUser.id}/`,
@@ -43,7 +41,6 @@ export function ProfileTab() {
           first_name: data.firstName,
           last_name: data.lastName,
           photo: selectedFile,
-          date_of_birth: data.dateOfBirth,
         },
         {
           headers: {
@@ -201,24 +198,6 @@ export function ProfileTab() {
                 </div>
               )}
             />
-            {currentUser.user_type == "doctor" && (
-              <Controller
-                name="dateOfBirth"
-                control={control}
-                render={({ field: { ...fieldsProps } }) => (
-                  <div className="input__container">
-                    <label htmlFor="dateOfBirt">Date Of Birth</label>
-                    <input
-                      {...fieldsProps}
-                      type="date"
-                      name="dateOfBirth"
-                      placeholder="Date of Birth"
-                      className="settings-input"
-                    />
-                  </div>
-                )}
-              />
-            )}
 
             <div className="profile__errorMessages">
               <div className="profile__fieldError">
@@ -235,11 +214,6 @@ export function ProfileTab() {
                 {!!errors.email && (
                   <span className="profile__errorText">
                     {errors.email?.message}
-                  </span>
-                )}
-                {!!errors.dateOfBirth && (
-                  <span className="profile__errorText">
-                    {errors.dateOfBirth?.message}
                   </span>
                 )}
                 {currentUser.new_email_changing && (
