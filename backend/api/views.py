@@ -1,6 +1,6 @@
 import random
 import json
-from datetime import datetime, timezone
+from datetime import datetime
 from http import HTTPStatus
 
 from drf_spectacular.utils import (
@@ -11,9 +11,10 @@ from drf_spectacular.utils import (
     OpenApiResponse,
 )
 from django.conf import settings
+from django.utils import timezone
 from django.contrib.auth.hashers import check_password
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_GET
 from django_filters.rest_framework import DjangoFilterBackend
@@ -36,7 +37,9 @@ from api.utils import (
     avg_grade_annotation,
     get_therapists_metrics_query,
     get_clients_metrics_query,
+    get_growth_metrics_query,
     form_metrics_file,
+    form_dates_for_metrics,
 )
 from api.constants import (
     USER_TYPES,
@@ -119,6 +122,35 @@ class UserDetailsView(generics.ListAPIView):
     get=extend_schema(
         tags=["Email", "Users"],
         summary="Confirm email reset",
+        request=None,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Successful email confirmation request",
+                        value={
+                            "message": "Account activated",
+                            "access_token": "string",
+                            "refresh_token": "string",
+                        },
+                        status_codes=[int(HTTPStatus.OK)],
+                        response_only=True,
+                    )
+                ],
+            ),
+            int(HTTPStatus.BAD_REQUEST): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Bad request for email confirmation",
+                        value={"message": "Account not activated"},
+                        status_codes=[int(HTTPStatus.BAD_REQUEST)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+        },
     )
 )
 class UserConfirmEmailView(APIView):
@@ -155,6 +187,30 @@ class UserConfirmEmailView(APIView):
         tags=["Password", "Users"],
         summary="Request password reset",
         request=PasswordResetSerializer,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Succsessful password reset request.",
+                        value={"message": "Password reset email sent."},
+                        status_codes=[int(HTTPStatus.OK)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+            int(HTTPStatus.BAD_REQUEST): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Succsessful password reset request.",
+                        value={"User with this email does not exist."},
+                        status_codes=[int(HTTPStatus.BAD_REQUEST)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+        },
     )
 )
 class PasswordResetRequestView(APIView):
@@ -173,6 +229,35 @@ class PasswordResetRequestView(APIView):
     get=extend_schema(
         tags=["Password", "Users"],
         summary="Confirm password reset",
+        request=None,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Successful password reset confirmation request",
+                        value={
+                            "message": "Password reset successful",
+                            "access_token": "string",
+                            "refresh_token": "string",
+                        },
+                        status_codes=[int(HTTPStatus.OK)],
+                        response_only=True,
+                    )
+                ],
+            ),
+            int(HTTPStatus.BAD_REQUEST): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Bad request for password reset confirmation",
+                        value={"error": "Password did not reset"},
+                        status_codes=[int(HTTPStatus.BAD_REQUEST)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+        },
     )
 )
 class PasswordResetConfirmView(generics.GenericAPIView):
@@ -201,6 +286,30 @@ class PasswordResetConfirmView(generics.GenericAPIView):
         tags=["Password", "Users"],
         summary="Set the new password",
         request=ChangePasswordSerializer,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Successful password reset",
+                        value={"message": "Password reset successfully"},
+                        status_codes=[int(HTTPStatus.OK)],
+                        response_only=True,
+                    )
+                ],
+            ),
+            int(HTTPStatus.BAD_REQUEST): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Bad request for password reset",
+                        value={"error": "Password not reset"},
+                        status_codes=[int(HTTPStatus.BAD_REQUEST)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+        },
     )
 )
 class PasswordResetCompleteView(APIView):
@@ -226,6 +335,30 @@ class PasswordResetCompleteView(APIView):
         tags=["Password", "Users"],
         summary="Change password",
         request=UpdatePasswordSerializer,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Succsessful password changing.",
+                        value={"message": "Password changed successfully"},
+                        status_codes=[int(HTTPStatus.OK)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+            int(HTTPStatus.BAD_REQUEST): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Bad request for password changing.",
+                        value={"error": "Password not changed"},
+                        status_codes=[int(HTTPStatus.BAD_REQUEST)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+        },
     )
 )
 class UpdatePasswordView(APIView):
@@ -253,6 +386,36 @@ class UpdatePasswordView(APIView):
         tags=["Email", "Users"],
         summary="Change the email",
         request=UpdateEmailSerializer(),
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Succsessful email changing.",
+                        value={"Email update confirmation sent."},
+                        status_codes=[int(HTTPStatus.OK)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+            int(HTTPStatus.BAD_REQUEST): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Bad request for email changing (existing email).",
+                        value={"message": "User with this email is already exists"},
+                        status_codes=[int(HTTPStatus.BAD_REQUEST)],
+                        response_only=True,
+                    ),
+                    OpenApiExample(
+                        "Bad request for email changing (same email).",
+                        value={"message": "This email is already set on your account"},
+                        status_codes=[int(HTTPStatus.BAD_REQUEST)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+        },
     )
 )
 class UpdateEmailView(APIView):
@@ -282,7 +445,32 @@ class UpdateEmailView(APIView):
 @extend_schema_view(
     get=extend_schema(
         tags=["Email", "Users"],
-        summary="Confierm email changing",
+        summary="Confirm email reset",
+        request=None,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Successful email confirmation request",
+                        value={"message": "Email updated successfully"},
+                        status_codes=[int(HTTPStatus.OK)],
+                        response_only=True,
+                    )
+                ],
+            ),
+            int(HTTPStatus.BAD_REQUEST): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Bad request for email confirmation",
+                        value={"error": "Email not updated: unvalid token"},
+                        status_codes=[int(HTTPStatus.BAD_REQUEST)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+        },
     )
 )
 class UpdateEmailConfirmView(generics.GenericAPIView):
@@ -320,6 +508,31 @@ class UpdateUserView(generics.UpdateAPIView):
 @extend_schema(
     tags=["Users"],
     summary="Delete user",
+    request=None,
+    responses={
+        int(HTTPStatus.OK): OpenApiResponse(
+            response=SwaggerMessageHandlerSerializer,
+            examples=[
+                OpenApiExample(
+                    "Successful user deleting",
+                    value={"message": "User deleted successfully"},
+                    status_codes=[int(HTTPStatus.OK)],
+                    response_only=True,
+                )
+            ],
+        ),
+        int(HTTPStatus.NOT_FOUND): OpenApiResponse(
+            response=SwaggerMessageHandlerSerializer,
+            examples=[
+                OpenApiExample(
+                    "User doesn't exist",
+                    value={"error": "User not found"},
+                    status_codes=[int(HTTPStatus.NOT_FOUND)],
+                    response_only=True,
+                ),
+            ],
+        ),
+    },
 )
 @api_view(["GET"])
 def user_delete_hard(request):
@@ -331,12 +544,11 @@ def user_delete_hard(request):
         user.first_name = FIELD_DELETED
         user.last_name = FIELD_DELETED
         user.email = FIELD_DELETED
-        user.date_of_birth = None
         user.photo = None
         user.deleted = True
         user.is_active = False
         user.accept_policy = False
-        user.deleted_on = datetime.now(timezone.utc)
+        user.deleted_on = timezone.now()
         user.username = "".join(
             random.choice(default_charset) for _ in range(RANDOM_VALUE_SIZE)
         )
@@ -354,6 +566,10 @@ def user_delete_hard(request):
             Doctor.objects.filter(user=user).delete()
             for assignment in Assignment.objects.filter(author=user, is_public=False):
                 assignment.delete()
+            for client in user.doctors.all():
+                client.diagnosis = None
+                client.about = None
+                client.save()
 
         user.save()
 
@@ -362,7 +578,35 @@ def user_delete_hard(request):
         return Response({"error": "User not found"})
 
 
-@extend_schema(tags=["Users"], summary="Deactivate user")
+@extend_schema(
+    tags=["Users"],
+    summary="Deactivate user",
+    request=None,
+    responses={
+        int(HTTPStatus.OK): OpenApiResponse(
+            response=SwaggerMessageHandlerSerializer,
+            examples=[
+                OpenApiExample(
+                    "Successful user deactivation",
+                    value={"message": "User deactivated successfully"},
+                    status_codes=[int(HTTPStatus.OK)],
+                    response_only=True,
+                )
+            ],
+        ),
+        int(HTTPStatus.NOT_FOUND): OpenApiResponse(
+            response=SwaggerMessageHandlerSerializer,
+            examples=[
+                OpenApiExample(
+                    "User doesn't exist",
+                    value={"error": "User not found"},
+                    status_codes=[int(HTTPStatus.NOT_FOUND)],
+                    response_only=True,
+                ),
+            ],
+        ),
+    },
+)
 @api_view(["GET"])
 def user_delete_soft(request):
     """Перевод пользователя в неактивные"""
@@ -378,7 +622,22 @@ def user_delete_soft(request):
 
 @extend_schema_view(
     delete=extend_schema(
-        tags=["Clients"], summary="Delete user from doctor's interface"
+        tags=["Clients"],
+        summary="Delete user from doctor's interface",
+        request=None,
+        responses={
+            int(HTTPStatus.NO_CONTENT): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Successful deletion request",
+                        status_codes=[int(HTTPStatus.NO_CONTENT)],
+                        value=None,
+                        response_only=True,
+                    )
+                ],
+            ),
+        },
     )
 )
 class ClientDeleteView(APIView):
@@ -399,8 +658,26 @@ class ClientDeleteView(APIView):
 @extend_schema_view(
     post=extend_schema(
         tags=["Clients"],
-        summary="Add someone as a Client",
-    )
+        summary="Client registration from doctor's interface",
+        request=AddClientSerializer,
+        responses={
+            int(HTTPStatus.CREATED): AddClientSerializer,
+            int(HTTPStatus.BAD_REQUEST): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Bad request for registration",
+                        value={
+                            "message": "This email address already exists."
+                            "Please use a unique one."
+                        },
+                        status_codes=[int(HTTPStatus.BAD_REQUEST)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+        },
+    ),
 )
 class AddClientView(APIView):
     """Добавление нового клиента из интерфейса доктора"""
@@ -421,11 +698,41 @@ class AddClientView(APIView):
 @extend_schema_view(
     patch=extend_schema(
         tags=["Clients"],
-        summary="Redact client's profile / final part of the registration",
+        summary="Redact client's profile/final part of registration.",
+        request=UpdateClientSerializer,
+        responses={
+            int(HTTPStatus.OK): UpdateClientSerializer,
+            int(HTTPStatus.BAD_REQUEST): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Bad request for registration",
+                        value={"message": "Accept with company policy."},
+                        status_codes=[int(HTTPStatus.BAD_REQUEST)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+        },
     ),
     put=extend_schema(
         tags=["Clients"],
-        summary="Redact client's profile / final part of the registration",
+        summary="Redact client's profile/final part of registration.",
+        request=UpdateClientSerializer,
+        responses={
+            int(HTTPStatus.OK): UpdateClientSerializer,
+            int(HTTPStatus.BAD_REQUEST): OpenApiResponse(
+                response=SwaggerMessageHandlerSerializer,
+                examples=[
+                    OpenApiExample(
+                        "Bad request for registration",
+                        value={"message": "Accept with company policy."},
+                        status_codes=[int(HTTPStatus.BAD_REQUEST)],
+                        response_only=True,
+                    ),
+                ],
+            ),
+        },
     ),
 )
 class UpdateClientView(generics.UpdateAPIView):
@@ -448,7 +755,7 @@ class DoctorUpdateClientView(generics.UpdateAPIView):
 
 
 @extend_schema_view(
-    get=extend_schema(
+    post=extend_schema(
         tags=["Assignments"],
         summary="Add assignment to favorites",
         request=None,
@@ -473,7 +780,7 @@ class AssignmentAddUserMyListView(APIView):
     permission_classes = (IsDoctorOnly,)
     serializer_class = None
 
-    def get(self, request, pk):
+    def post(self, request, pk):
         user = request.user
         assignment = Assignment.objects.get(pk=pk)
         user.doctor.assignments.add(assignment)
@@ -483,7 +790,7 @@ class AssignmentAddUserMyListView(APIView):
 
 
 @extend_schema_view(
-    get=extend_schema(
+    delete=extend_schema(
         tags=["Assignments"],
         summary="Delete assignment from favorites",
         request=None,
@@ -508,7 +815,7 @@ class AssignmentDeleteUserMyListView(APIView):
     permission_classes = (IsDoctorOnly,)
     serializer_class = None
 
-    def get(self, request, pk):
+    def delete(self, request, pk):
         user = request.user
         assignment = Assignment.objects.get(pk=pk)
         user.doctor.assignments.remove(assignment)
@@ -518,7 +825,7 @@ class AssignmentDeleteUserMyListView(APIView):
 
 
 @extend_schema_view(
-    get=extend_schema(
+    post=extend_schema(
         tags=["Assignments"],
         summary="Set assignment to a client",
         request=None,
@@ -537,60 +844,72 @@ class AssignmentDeleteUserMyListView(APIView):
                 ],
             ),
         },
+        parameters=[
+            OpenApiParameter(
+                "clients",
+                description=("Ids of clients to send assignment to. \n"),
+                required=True,
+            ),
+        ],
     )
 )
 class AddAssignmentClientView(APIView):
-    """Назначение задачи клиенту"""
+    """Назначение задачи клиентам."""
 
     serializer_class = None
 
-    def get(self, request, pk, client_pk):
-        assignment = get_object_or_404(Assignment, pk=pk)
-        client = get_object_or_404(User, pk=client_pk)
-        if request.user.doctor != client.doctors.first():
+    def post(self, request, pk):
+        try:
+            clients = request.user.doctor.clients.filter(
+                pk__in=request.query_params.get("clients").split(",")
+            )
+        except AttributeError:
             return Response(
-                {"message": "You cannot add assignment to not-yours client."}
+                {"message": "You have to pass 'clients' query parameter."},
+                HTTPStatus.BAD_REQUEST,
             )
-        assignments_copy = AssignmentClient.objects.create(
-            title=assignment.title,
-            text=assignment.text,
-            author=assignment.author,
-            assignment_type=assignment.assignment_type,
-            tags=assignment.tags,
-            language=assignment.language,
-            share=assignment.share,
-            likes=assignment.likes,
-            image_url=assignment.image_url,
-            user=client,
-            assignment_root=assignment,
-        )
-        blocks = assignment.blocks.all()
-        for block in blocks:
-            block_copy = Block.objects.create(
-                question=block.question,
-                type=block.type,
-                image=block.image,
-                description=block.description,
-                reply=block.reply,
-                start_range=block.start_range,
-                end_range=block.end_range,
-                left_pole=block.left_pole,
-                right_pole=block.right_pole,
+        assignment = get_object_or_404(Assignment, pk=pk)
+        for user in clients:
+            assignments_copy = AssignmentClient.objects.create(
+                title=assignment.title,
+                text=assignment.text,
+                author=assignment.author,
+                assignment_type=assignment.assignment_type,
+                tags=assignment.tags,
+                language=assignment.language,
+                share=assignment.share,
+                likes=assignment.likes,
+                image_url=assignment.image_url,
+                user=user,
+                assignment_root=assignment,
             )
-            choice_replies = block.choice_replies.all()
-            for choice_reply in choice_replies:
-                choice_reply_copy = BlockChoice.objects.create(
-                    block=block_copy,
-                    reply=choice_reply.reply,
-                    checked=choice_reply.checked,
+            blocks = assignment.blocks.all()
+            for block in blocks:
+                block_copy = Block.objects.create(
+                    question=block.question,
+                    type=block.type,
+                    image=block.image,
+                    description=block.description,
+                    reply=block.reply,
+                    start_range=block.start_range,
+                    end_range=block.end_range,
+                    left_pole=block.left_pole,
+                    right_pole=block.right_pole,
                 )
-                block_copy.choice_replies.add(choice_reply_copy)
-            assignments_copy.blocks.add(block_copy)
-        client.client.assignments.add(assignments_copy)
-        assignment.share += 1
+                choice_replies = block.choice_replies.all()
+                for choice_reply in choice_replies:
+                    choice_reply_copy = BlockChoice.objects.create(
+                        block=block_copy,
+                        reply=choice_reply.reply,
+                        checked=choice_reply.checked,
+                    )
+                    block_copy.choice_replies.add(choice_reply_copy)
+                assignments_copy.blocks.add(block_copy)
+            user.client.assignments.add(assignments_copy)
+            assignment.share += 1
         assignment.save()
         return Response(
-            {"message": "Assignment was set to the client successfully."},
+            {"message": "Assignment was set to the clients successfully."},
             HTTPStatus.CREATED,
         )
 
@@ -662,6 +981,10 @@ class AddAssignmentClientView(APIView):
                     "true",
                 ],
             ),
+            OpenApiParameter(
+                "author",
+                description=("To return assignments of a certain doctor."),
+            ),
         ],
     ),
     retrieve=extend_schema(
@@ -707,7 +1030,7 @@ class AssignmentViewSet(viewsets.ModelViewSet):
     """CRUD операции над задачами доктора"""
 
     permission_classes = (AssignmentDoctorOnly,)
-    queryset = Assignment.objects.all()
+    queryset = Assignment.objects.filter(is_public=True)
     serializer_class = AssignmentSerializer
     filter_backends = [
         DjangoFilterBackend,
@@ -717,7 +1040,6 @@ class AssignmentViewSet(viewsets.ModelViewSet):
     filterset_fields = [
         "assignment_type",
         "language",
-        "author",
     ]
     ordering_fields = [
         "average_grade",
@@ -730,8 +1052,13 @@ class AssignmentViewSet(viewsets.ModelViewSet):
     ]
 
     def get_queryset(self):
-        favorites = self.request.query_params.get("favorites") == "true"
-        if favorites:
+        if self.request.query_params.get("author"):
+            return avg_grade_annotation(
+                Assignment.objects.filter(
+                    author=self.request.query_params.get("author")
+                )
+            )
+        if self.request.query_params.get("favorites") == "true":
             return avg_grade_annotation(self.request.user.doctor.assignments)
         return avg_grade_annotation(super().get_queryset())
 
@@ -751,7 +1078,7 @@ class AssignmentViewSet(viewsets.ModelViewSet):
             )
         return super().update(request, *args, **kwargs)
 
-    @action(detail=True, methods=["get"])
+    @action(detail=True, methods=["PATCH"])
     def draft(self, request, pk):
         """Сокрытие задачи из общего пула, добавление  драфт"""
         assignments = self.get_object()
@@ -878,7 +1205,7 @@ class AssignmentClientViewSet(
             query = query | client_user.client.assignments.all().filter()
         return query
 
-    @action(detail=True, methods=["get"])
+    @action(detail=True, methods=["PATCH"])
     def complete(self, request, pk):
         """Смена статуса задачи на 'done'"""
         assignment = self.get_object()
@@ -886,7 +1213,7 @@ class AssignmentClientViewSet(
         assignment.save()
         return Response({"message": "Status is 'done'."}, HTTPStatus.OK)
 
-    @action(detail=True, methods=["get"])
+    @action(detail=True, methods=["PATCH"])
     def clear(self, request, pk):
         """Очистка ответов в задании клиента"""
         assignment = self.get_object()
@@ -897,13 +1224,12 @@ class AssignmentClientViewSet(
                 HTTPStatus.BAD_REQUEST,
             )
 
-        for block in assignment.blocks:
+        for block in assignment.blocks.all():
             if block.type == "text":
                 block.reply = ""
             if block.type == "single" or block.type == "multiple":
-                for ans in block.choice_replies:
-                    ans.checked = False
-                block.choice_replies.save()
+                for answer in block.choice_replies.all():
+                    answer.checked = False
             if block.type == "range":
                 pass
             if block.type == "image":
@@ -914,7 +1240,7 @@ class AssignmentClientViewSet(
         assignment.save()
         return Response({"message": "Assignments cleared successfully."}, HTTPStatus.OK)
 
-    @action(detail=True, methods=["POST"])
+    @action(detail=True, methods=["PATCH"])
     def visible(self, request, pk):
         """Смена значения видимости задания для доктора"""
         assignment = self.get_object()
@@ -1035,7 +1361,7 @@ class DiaryNoteViewSet(viewsets.ModelViewSet):
             query = query | client_user.diary_notes.all().filter(visible=True)
         return query
 
-    @action(detail=True, methods=["POST"])
+    @action(detail=True, methods=["PATCH"])
     def visible(self, request, pk):
         """Смена значения видимости записи в дневнике для доктора"""
         diary_note = self.get_object()
@@ -1049,22 +1375,151 @@ class DiaryNoteViewSet(viewsets.ModelViewSet):
 @require_GET
 def assetlink(request):
     """Вью-функция для деплоя файла конфигурации мобильного предложения."""
-    path = f"{settings.STATIC_ROOT}/assetlinks.json"
+    path = f"{settings.BASE_DIR}/api/static/assetlinks.json"
     with open(path, "r") as f:
         data = json.loads(f.read())
     response = JsonResponse(data, safe=False)
     return response
 
 
-def project_metrics(request):
-    """Renders project metrics page."""
-    therapists_metrics = get_therapists_metrics_query()
-    clients_metrics = get_clients_metrics_query()
-    context = {
-        "therapists": therapists_metrics,
-        "clients": clients_metrics,
-    }
-    return render(request, "metrics/project_metrics.html", context=context)
+@extend_schema_view(
+    therapists=extend_schema(
+        tags=["Metrics"],
+        summary="Therapists metrics",
+        request=None,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=TherapistsMetricsSerializer,
+            )
+        },
+        parameters=[
+            OpenApiParameter(
+                "date_from",
+                description=(
+                    "Filter accounts from date \n" "Date format: 01-01-2000 \n"
+                ),
+                required=True,
+            ),
+            OpenApiParameter(
+                "date_to",
+                description=("Filter accounts to date \n" "Date format: 01-01-2000 \n"),
+                required=True,
+            ),
+        ],
+    ),
+    clients=extend_schema(
+        tags=["Metrics"],
+        summary="Clients metrics",
+        request=None,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=ClientsMetricsSerializer,
+            )
+        },
+        parameters=[
+            OpenApiParameter(
+                "date_from",
+                description=(
+                    "Filter accounts from date. \n" "Date format: 01-01-2000 \n"
+                ),
+                required=True,
+            ),
+            OpenApiParameter(
+                "date_to",
+                description=("Filter accounts to date \n" "Date format: 01-01-2000 \n"),
+                required=True,
+            ),
+        ],
+    ),
+    growth=extend_schema(
+        tags=["Metrics"],
+        summary="Growth metrics",
+        request=None,
+        responses={
+            int(HTTPStatus.OK): OpenApiResponse(
+                response=ClientsMetricsSerializer,
+            )
+        },
+        parameters=[
+            OpenApiParameter(
+                "date_from",
+                description=(
+                    "Filter accounts from date. \n" "Date format: 01-01-2000 \n"
+                ),
+                required=True,
+            ),
+            OpenApiParameter(
+                "date_to",
+                description=("Filter accounts to date \n" "Date format: 01-01-2000 \n"),
+                required=True,
+            ),
+        ],
+    ),
+)
+class ProjectMetricsViewSet(
+    viewsets.GenericViewSet,
+):
+    permission_classes = [
+        AllowAny,
+    ]
+    serializer_class = None
+
+    def get_queryset(self, for_whom, date_from, date_to):
+        queries = {
+            "therapists": get_therapists_metrics_query,
+            "clients": get_clients_metrics_query,
+            "growth": get_growth_metrics_query,
+        }
+        return queries[for_whom](date_from, date_to)
+
+    def get_serializer(self, *args, **kwargs):
+        serializer_class = self.get_serializer_class()
+        kwargs.setdefault("context", self.get_serializer_context())
+        return serializer_class(*args, **kwargs)
+
+    def form_serialized_metrics_data(self, request) -> Response:
+        for_whom = request.path.split("/")[4]
+        date_from = request.query_params.get("date_from")
+        date_to = request.query_params.get("date_to")
+        formatted_dates = form_dates_for_metrics(date_from, date_to)
+        if isinstance(formatted_dates, Response):
+            return formatted_dates
+        query = self.get_queryset(for_whom, formatted_dates[0], formatted_dates[1])
+        try:
+            return Response(
+                data=self.get_serializer(query, many=True).data, status=HTTPStatus.OK
+            )
+        except AttributeError:
+            serialized_data = self.get_serializer(data=query)
+            serialized_data.is_valid(raise_exception=True)
+            return Response(data=serialized_data.data, status=HTTPStatus.OK)
+
+    @action(
+        methods=["GET"],
+        detail=False,
+        url_name="project_metrics_therapists",
+        serializer_class=TherapistsMetricsSerializer,
+    )
+    def therapists(self, request):
+        return self.form_serialized_metrics_data(request)
+
+    @action(
+        methods=["GET"],
+        detail=False,
+        url_name="project_metrics_clients",
+        serializer_class=ClientsMetricsSerializer,
+    )
+    def clients(self, request):
+        return self.form_serialized_metrics_data(request)
+
+    @action(
+        methods=["GET"],
+        detail=False,
+        url_name="project_metrics_clients",
+        serializer_class=GrowthMetricsSerializer,
+    )
+    def growth(self, request):
+        return self.form_serialized_metrics_data(request)
 
 
 def metrics_download(request, for_whom: str):
@@ -1077,5 +1532,24 @@ def metrics_download(request, for_whom: str):
             )
         },
     )
-    form_metrics_file(response, for_whom)
+    date_from = request.GET.get("date_from")
+    date_to = request.GET.get("date_to")
+    if not date_from or not date_to:
+        return JsonResponse(
+            data={"error": "You have to pass both date_from and date_to parameters."},
+            status=HTTPStatus.BAD_REQUEST,
+        )
+    try:
+        formatted_date_from = timezone.make_aware(
+            datetime.strptime(date_from, "%d-%m-%Y"),
+        )
+        formatted_date_to = timezone.make_aware(
+            datetime.strptime(date_to, "%d-%m-%Y"),
+        )
+    except ValueError:
+        return JsonResponse(
+            data={"error": "Incorrect date format. Correct format 01-01-1999."},
+            status=HTTPStatus.BAD_REQUEST,
+        )
+    form_metrics_file(response, for_whom, formatted_date_from, formatted_date_to)
     return response

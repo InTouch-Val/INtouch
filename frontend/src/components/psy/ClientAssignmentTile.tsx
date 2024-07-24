@@ -5,13 +5,13 @@ import { useDeleteAssignmentClientByUUIDMutation } from "../../store/entities";
 import { useNavigate } from "react-router-dom";
 import { AssignmentsType } from "../../store/entities/assignments/types";
 
-enum Status {
+export enum Status {
   ToDo = "to-do",
   Done = "done",
   inProgress = "in-progress",
 }
 
-enum StatusFromServer {
+export enum StatusFromServer {
   ToDo = "to do",
   Done = "done",
   inProgress = "in progress",
@@ -48,9 +48,7 @@ export default function ClientAssignmentTile({
     }
   }, [assignment]);
 
-  function onCardClick(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ): void {
+  function onCardClick(event: React.MouseEvent<Element, MouseEvent>): void {
     event.stopPropagation();
     navigate(`/clients/${clientId}/assignments/${assignment?.id}`);
     openAssignment(assignment);
@@ -86,7 +84,10 @@ export default function ClientAssignmentTile({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="assignment-image-container assignment-image-container_client">
+      <div
+        className={`assignment-image-container ${assignment.visible ? "" : "assignment-image-container_client"}`}
+        onClick={assignment.visible ? (event) => onCardClick(event) : undefined}
+      >
         <div className="date-and-type">
           <span>Sent: {formatDate(assignment.add_date)}</span>
           <span className={`status ${statusOneWord}`}>{assignment.status}</span>

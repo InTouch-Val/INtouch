@@ -102,21 +102,25 @@ function CompleteAssignments() {
   const [isSaved, setIsSaved] = useState(false);
 
   const goBack = () => {
-    if (checkIfChangesMade()) {
-      if (isSaved) {
-        // Changes were made and saved
-        navigate(-1);
-        setShowInvalidInputs(false);
-        setInitialData(null);
-        setModalExitOpen(false);
+    if (!isClientsAssignmentsPath) {
+      if (checkIfChangesMade()) {
+        if (isSaved) {
+          // Changes were made and saved
+          navigate(-1);
+          setShowInvalidInputs(false);
+          setInitialData(null);
+          setModalExitOpen(false);
+        } else {
+          // Changes were made and NOT saved
+          setModalExitOpen(true);
+        }
       } else {
-        // Changes were made and NOT saved
-        setModalExitOpen(true);
+        navigate(-1); // NO changes made, safe to navigate back
+        setInitialData(null);
+        setShowInvalidInputs(false);
       }
     } else {
-      navigate(-1); // NO changes made, safe to navigate back
-      setInitialData(null);
-      setShowInvalidInputs(false);
+      navigate(-1); //if user is psy just navigate back
     }
   };
 
@@ -243,7 +247,7 @@ function CompleteAssignments() {
 
   async function handleShareWithTherapist() {
     try {
-      const res = await API.put(
+      const res = await API.post(
         `assignments-client/${assignmentData.id}/visible/`,
       );
       if (res.status >= 200 && res.status < 300) {

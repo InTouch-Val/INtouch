@@ -19,7 +19,7 @@ import {
 export const WithTab = (WrappedComponent) => {
   return function WithTabComponent(props) {
     //@ts-ignore
-    const { currentUser } = useAuth();
+    const { currentUser, initAuth } = useAuth();
     const { ref, inView } = useInView({
       threshold: 0.5,
     });
@@ -40,6 +40,7 @@ export const WithTab = (WrappedComponent) => {
       data: listAssignment,
       refetch,
       isSuccess,
+      isLoading,
     } = useGetAssignmentsQuery(
       {
         limit: 12,
@@ -75,6 +76,7 @@ export const WithTab = (WrappedComponent) => {
           assignmentId: assignmentId,
         }),
       );
+      initAuth();
       refetch();
     };
 
