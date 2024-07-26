@@ -178,7 +178,10 @@ const EditorToolbar = forwardRef(
       setEditorState(newEditorState);
     };
 
-    const defaultHandleBeforeInput = (chars: string, editorState: EditorState) => {
+    const defaultHandleBeforeInput = (
+      chars: string,
+      editorState: EditorState,
+    ) => {
       const contentState = editorState.getCurrentContent();
       const selectionState = editorState.getSelection();
       const EditorBlockKey = selectionState.getStartKey();

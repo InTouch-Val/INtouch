@@ -109,7 +109,7 @@ function ClientAssignmentBlocks({
         updateBlock(block.id, truncatedSerializedData, []);
       }
     },
-    [updateBlock, block.id]
+    [updateBlock, block.id],
   );
 
   const handleBeforeInput = useCallback(
@@ -122,7 +122,7 @@ function ClientAssignmentBlocks({
       }
       return "not-handled";
     },
-    [MAX_INPUT_LENGTH]
+    [MAX_INPUT_LENGTH],
   );
 
   const handlePastedText = useCallback(
@@ -133,22 +133,22 @@ function ClientAssignmentBlocks({
       if (currentText.length + pastedText.length > MAX_INPUT_LENGTH) {
         const allowedText = pastedText.slice(
           0,
-          MAX_INPUT_LENGTH - currentText.length
+          MAX_INPUT_LENGTH - currentText.length,
         );
         const newContentState = ContentState.createFromText(
-          currentText + allowedText
+          currentText + allowedText,
         );
         const newEditorState = EditorState.push(
           editorState,
           newContentState,
-          "insert-characters"
+          "insert-characters",
         );
         setEditorState(newEditorState);
         return "handled";
       }
       return "not-handled";
     },
-    [editorState, MAX_INPUT_LENGTH]
+    [editorState, MAX_INPUT_LENGTH],
   );
 
   const interceptSetEditorState = () => {
@@ -188,7 +188,7 @@ function ClientAssignmentBlocks({
     setSelectedValue(
       inputText.length > maxTextLegthBig
         ? inputText.slice(0, maxTextLegthBig)
-        : inputText
+        : inputText,
     );
     updateBlock(block.id, event.target.value, []);
   }
@@ -332,7 +332,7 @@ function ClientAssignmentBlocks({
             <div className="range-options">
               {Array.from(
                 { length: block.end_range - block.start_range + 1 },
-                (_, i) => i + block.start_range
+                (_, i) => i + block.start_range,
               ).map((value) => (
                 <label key={value} className="range-option">
                   {isMobileWidth ? (
