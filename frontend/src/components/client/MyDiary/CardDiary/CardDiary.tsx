@@ -43,7 +43,9 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
           }}
         />
       </div>
-      <div className="diary__card-text">{parseEventDetailsText(card.event_details)}</div>
+      <div className="diary__card-text">
+        {parseEventDetailsText(card.event_details)}
+      </div>
 
       <div className="diary__card-buttons" onClick={(e) => e.stopPropagation()}>
         {card.primary_emotion != "" && (

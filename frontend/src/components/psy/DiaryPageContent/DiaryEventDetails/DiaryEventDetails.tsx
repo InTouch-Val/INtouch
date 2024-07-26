@@ -10,7 +10,10 @@ export default function DiaryEventDetails({ diary }) {
       <div className="diary__block-question">
         Describe the event or situation that evoked emotions. What happened?
       </div>
-      <div className="diary__block-text"> {parseEventDetailsText(diary.event_details)}</div>
+      <div className="diary__block-text">
+        {" "}
+        {parseEventDetailsText(diary.event_details)}
+      </div>
     </div>
   );
 }

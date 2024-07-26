@@ -20,7 +20,6 @@ export default function DiaryNotes({ clientId }) {
     setLimit((prev) => prev + 20);
   }, []);
 
-
   useObserve(observeElement, isTotal, handleTakeUpdate);
 
   React.useEffect(() => {

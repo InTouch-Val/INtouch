@@ -382,7 +382,10 @@ function RegistrationForm() {
               checked={formData.acceptPolicy}
               onChange={handleChange}
             />
-            <a href="" className={`${isShowTermsError ? "error-text" : "terms"}`}>
+            <a
+              href=""
+              className={`${isShowTermsError ? "error-text" : "terms"}`}
+            >
               I agree with the terms and conditions
             </a>
           </label>
