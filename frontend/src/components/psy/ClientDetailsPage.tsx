@@ -19,7 +19,7 @@ function ClientDetailsPage() {
   const navigate = useNavigate();
   const { currentUser, updateUserData } = useAuth();
   const client = currentUser?.doctor.clients.find(
-    (client) => client.id === Number(id),
+    (client) => client.id === Number(id)
   );
   const { setCurrentCard, card } = useAuth();
   const [activeTab, setActiveTab] = useState("profile");
@@ -64,10 +64,10 @@ function ClientDetailsPage() {
       if (activeTab === "assignments") {
         try {
           const response = await API.get(
-            `assignments-client/?limit=${limit}&offset=0`,
+            `assignments-client/?limit=${limit}&offset=0`
           );
           const data = response.data.results.filter(
-            (assignment) => assignment.user === Number(id),
+            (assignment) => assignment.user === Number(id)
           );
           setClientAssignments(data);
           console.log(response);
@@ -137,8 +137,8 @@ function ClientDetailsPage() {
   const handleDeleteAssignment = (deletedAssignmentId) => {
     setClientAssignments((currentAssignments) =>
       currentAssignments.filter(
-        (assignment) => assignment.id !== deletedAssignmentId,
-      ),
+        (assignment) => assignment.id !== deletedAssignmentId
+      )
     );
   };
 
@@ -170,7 +170,7 @@ function ClientDetailsPage() {
       }
 
       const res = await API.get(
-        `assignments/set-client/${assignmentId}/${id}/`,
+        `assignments/set-client/${assignmentId}/${id}/`
       );
 
       if (res.status >= 200 && res.status <= 300) {
@@ -225,7 +225,7 @@ function ClientDetailsPage() {
             {activeTab === "assignments" && (
               <button
                 className="action-button action-button_header"
-                onClick={handleShareBtn}
+                onClick={client.client.is_active && handleShareBtn()}
               >
                 <img
                   className="action-button__icon"
