@@ -40,11 +40,6 @@ function Modal({
         >
           {children}
           <div className="modal-actions">
-            {showCancel && (
-              <button className="action-button" onClick={onClose}>
-                Cancel
-              </button>
-            )}
             <button
               className="action-button"
               onClick={onConfirm}
@@ -52,6 +47,11 @@ function Modal({
             >
               {confirmText}
             </button>
+            {showCancel && (
+              <button className="action-button" onClick={onClose}>
+                Cancel
+              </button>
+            )}
           </div>
           {ifError && (
             <p
