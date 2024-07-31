@@ -309,7 +309,7 @@ function CompleteAssignments() {
       });
       if (res.status >= 200 && res.status < 300) {
         console.log(res.data);
-        const resComplete = await API.get(
+        const resComplete = await API.patch(
           `assignments-client/${assignmentData.id}/complete/`,
         );
         if (resComplete.status >= 200 && resComplete.status < 300) {
@@ -353,7 +353,7 @@ function CompleteAssignments() {
       });
       if (res.status >= 200 && res.status < 300) {
         console.log(res.data);
-        const resComplete = await API.get(
+        const resComplete = await API.patch(
           `assignments-client/${assignmentData.id}/complete/`,
         );
         if (resComplete.status >= 200 && resComplete.status < 300) {
