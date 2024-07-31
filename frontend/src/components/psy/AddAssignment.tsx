@@ -2,15 +2,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { EditorState, ContentState } from "draft-js";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faComment,
-  faSquareCheck,
-  faCircleDot,
-  faEllipsis,
-  faImage,
-  faQuestion,
-} from "@fortawesome/free-solid-svg-icons";
 import { API } from "../../service/axios";
 import { AssignmentBlock } from "../../service/psyAssignment/AssignmentBlock";
 import { ImageSelector } from "../../service/image-selector";
@@ -23,14 +14,20 @@ import decodeStyledText from "../../service/decodeStyledText";
 import HeadlinerImg from "./HeadlinerImg/HeadlinerImg";
 import "../../css/assignments.css";
 import HeaderAssignment from "./HeaderAssigmentPage/HeaderAssignment";
+import imageIcon from "../../images/assignment-page/image.svg";
+import textParagraphIcon from "../../images/assignment-page/paragraph.svg";
+import linearScaleIcon from "../../images/assignment-page/linear-scale.svg";
+import multipleIcon from "../../images/assignment-page/multiple-choice.svg";
+import questionIcon from "../../images/assignment-page/question.svg";
+import singleIcon from "../../images/assignment-page/single-choice.svg";
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
 function AddAssignment() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [type, setType] = useState("lesson");
-  const [language, setLanguage] = useState("en");
+  const [type, setType] = useState("");
+  const [language, setLanguage] = useState("");
   // const [tags, setTags] = useState('');
 
   const [blocks, setBlocks] = useState([]);
@@ -314,7 +311,7 @@ function AddAssignment() {
     blockContainers.forEach((blockContainer, index) => {
       const blockErrorKey = `blocks #${index + 1}`;
       const blockErrorExists = Object.keys(errorMessages).some((key) =>
-        key.startsWith(blockErrorKey),
+        key.startsWith(blockErrorKey)
       );
       if (blockErrorExists) {
         blockContainer.classList.add("error");
@@ -394,7 +391,7 @@ function AddAssignment() {
     newMaxValue,
     newLeftPole,
     newRightPole,
-    newImage,
+    newImage
   ) => {
     setBlocks((prevBlocks) =>
       prevBlocks.map((block) =>
@@ -417,8 +414,8 @@ function AddAssignment() {
               rightPole: newRightPole ?? block.rightPole,
               image: newImage ?? block.image,
             }
-          : block,
-      ),
+          : block
+      )
     );
   };
 
@@ -439,10 +436,11 @@ function AddAssignment() {
         }}
       />
       <div className="form-title">
+        <label>Enter Assignment Details</label>
         <input
           type="text"
           className="title-input"
-          placeholder="Name of Assignment..."
+          placeholder="Write the name of assignment here..."
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
@@ -451,7 +449,7 @@ function AddAssignment() {
         <input
           type="text"
           className="title-input"
-          placeholder="Description..."
+          placeholder="White the description here..."
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
@@ -487,7 +485,14 @@ function AddAssignment() {
           <div className="form-settings">
             <div className="form-setting">
               <label>Type</label>
-              <select value={type} onChange={(e) => setType(e.target.value)}>
+              <select
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+                required
+              >
+                <option hidden disabled value={""} selected>
+                  Type
+                </option>
                 <option value="lesson">Lesson</option>
                 <option value="exercise">Exercise</option>
                 <option value="essay">Essay</option>
@@ -502,7 +507,11 @@ function AddAssignment() {
               <select
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
+                required
               >
+                <option hidden disabled value={""} selected>
+                  Language
+                </option>
                 <option value="en">English</option>
                 <option value="es">Spanish</option>
                 <option value="fr">French</option>
@@ -548,35 +557,35 @@ function AddAssignment() {
         </form>
         <div className="block-buttons-container">
           <div className="block-buttons">
-            <button title="Add Text Block" onClick={() => addBlock("text")}>
-              <FontAwesomeIcon icon={faComment} />{" "}
-            </button>
             <button
               title="Add Open-Question Block"
               onClick={() => addBlock("open")}
             >
-              <FontAwesomeIcon icon={faQuestion} />{" "}
+              <img src={questionIcon} alt="OpenQuestionIcon" />
             </button>
-            <button
-              title="Add Multiple Choice Block"
-              onClick={() => addBlock("multiple")}
-            >
-              <FontAwesomeIcon icon={faSquareCheck} />{" "}
+            <button title="Add Text Block" onClick={() => addBlock("text")}>
+              <img src={textParagraphIcon} alt="textParagraphIcon" />
             </button>
             <button
               title="Add Single Choice Block"
               onClick={() => addBlock("single")}
             >
-              <FontAwesomeIcon icon={faCircleDot} />{" "}
+              <img src={singleIcon} alt="singleChoiceIcon" />
+            </button>
+            <button
+              title="Add Multiple Choice Block"
+              onClick={() => addBlock("multiple")}
+            >
+              <img src={multipleIcon} alt="multipleChoiceIcon" />
             </button>
             <button
               title="Add Linear Scale Question Block"
               onClick={() => addBlock("range")}
             >
-              <FontAwesomeIcon icon={faEllipsis} />
+              <img src={linearScaleIcon} alt="linearScaleIcon" />
             </button>
             <button title="Add Image" onClick={() => addBlock("image")}>
-              <FontAwesomeIcon icon={faImage} />
+              <img src={imageIcon} alt="imageIcon" />
             </button>
           </div>
         </div>
