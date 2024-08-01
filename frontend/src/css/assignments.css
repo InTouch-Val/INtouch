@@ -1,5 +1,5 @@
 .assignments-page {
-  padding: 35px;
+  padding: 50px 65px 20px 25px;
   color: #656565;
 }
 
@@ -13,7 +13,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 25px;
 }
 
 @media screen and (min-width: 320px) and (max-width: 480px) {
@@ -24,6 +23,7 @@
 
 .assignments-page h1 {
   font-size: 36px;
+  font-weight: 500;
 }
 
 @media screen and (min-width: 320px) and (max-width: 480px) {
@@ -73,7 +73,7 @@
   align-self: center;
   justify-content: center;
   /* Центрируем блок кнопок */
-  padding: 10px 20px;
+  padding: 15px;
   /* Вертикальный и горизонтальный отступ */
   border-radius: 6px;
   /* Скругление углов */
@@ -125,39 +125,56 @@
 
 .form-title {
   width: 100%;
+  box-sizing: border-box;
+  padding: 16px 18px;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
+  color: #656565;
+  font-size: 20px;
+  background-color: white;
+  margin-bottom: 20px;
+}
+
+.form-title label {
+  display: block;
+  color: #656565;
+  margin-bottom: 15px;
 }
 
 .title-input {
+  font-family: inherit;
   width: 100%;
   box-sizing: border-box;
   padding: 5px 10px;
   border: none;
-  border-radius: 6px 6px 0 0;
-  box-shadow: 0 0 3px 1px rgb(215 228 231 / 60%);
+  border-radius: 6px 6px;
+  box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
+  font-size: 20px;
   color: #417d88;
-  font-size: 24px;
+  background-color: white;
+  font-weight: 700;
+  margin-bottom: 25px;
 }
 
 .title-input:last-child {
-  border-radius: 0 0 6px 6px;
   border-top: none;
-  margin-bottom: 10px;
-  font-size: 16px;
+  margin-bottom: 15px;
+  font-weight: 500;
 }
 
-.title-input:first-child::placeholder {
-  color: #417d88;
-  font-size: 24px;
+.title-input::placeholder {
+  font-weight: 500;
+  color: #e5e5e5;
 }
 
 .title-input:focus {
-  box-shadow: 0 0 3px 1px rgb(215 228 231 / 60%);
+  box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
   outline: none;
 }
 
 .form-settings {
   display: flex;
-  margin: 10px 0;
   gap: 10px;
   /* Расстояние между элементами */
 }
@@ -166,6 +183,12 @@
   display: flex;
   flex: 0.25 0.5;
   flex-direction: column;
+}
+
+@media screen and (min-width: 320px) and (max-width: 600px) {
+  .form-setting {
+    flex: 0.5;
+  }
 }
 
 .tags-setting {
@@ -181,8 +204,16 @@
 .form-setting input[type="text"] {
   padding: 5px 10px;
   border: 1px solid #d7e4e7;
-  border-radius: 4px;
-  box-shadow: 0 0 3px 1px rgb(215 228 231 / 60%);
+  border-radius: 6px;
+  box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
+}
+
+.form-setting select:invalid {
+  color: #e5e5e5;
+}
+
+.form-setting select:invalid option {
+  color: #656565;
 }
 
 .form-setting > :last-child {
@@ -191,12 +222,11 @@
 
 .block-buttons {
   display: flex;
-  gap: 10px;
+  gap: 5px;
   /* Расстояние между кнопками */
 }
 
 .block-buttons button {
-  padding: 10px 15px;
   /* Паддинги для кнопок */
   border: none;
   border-radius: 4px;
@@ -204,6 +234,7 @@
   cursor: pointer;
   transition: background-color 0.3s;
   /* Плавность перехода цвета */
+  background-color: white;
 }
 
 .success-message {
@@ -285,21 +316,21 @@
 
 .buttons-save-as-draft-and-publish-container {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
   margin: auto;
-  margin-top: 100px;
+  margin-top: 55px;
   width: 100%;
 }
 
 .buttons-save-as-draft-and-publish {
   border: none;
-  width: 226px;
-  height: 59px;
+  width: 164px;
+  height: 40px;
   flex-grow: 0;
   border-radius: 100px;
-  box-shadow: 0 0 3px 1px rgba(215, 228, 231, 0.45);
+  box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
   background-color: #417d88;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: bold;
   font-stretch: normal;
   font-style: normal;
@@ -310,8 +341,12 @@
   cursor: pointer;
 }
 
+.buttons-save-as-draft-and-publish:last-child {
+  font-size: 14px;
+}
+
 .buttons-save-as-draft-and-publish:disabled {
-  background-color: #a7acad;
+  background-color: rgba(65, 125, 136, 0.3);
   cursor: default;
 }
 
