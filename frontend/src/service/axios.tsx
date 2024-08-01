@@ -76,7 +76,7 @@ API.interceptors.request.use(
   },
   (error) => {
     throw error;
-  },
+  }
 );
 
 API.interceptors.response.use(
@@ -84,8 +84,12 @@ API.interceptors.response.use(
     return response;
   },
   async (error) => {
+    if (error.response.data.code === "token_not_valid") {
+      return (window.location.href = "/login");
+    }
     console.error("Response error:", error);
     const originalRequest = error.config;
+    const refreshToken = localStorage.getItem("refreshToken");
     if (error.response.status === 401) {
       try {
         const token = await refreshTokens();
@@ -98,7 +102,7 @@ API.interceptors.response.use(
     }
 
     throw error;
-  },
+  }
 );
 
 export { API };
