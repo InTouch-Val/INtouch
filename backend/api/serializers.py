@@ -506,7 +506,6 @@ class AssignmentSerializer(serializers.ModelSerializer):
         blocks_data = validated_data.pop("blocks", [])
         user = self.context["request"].user
         assignment = Assignment.objects.create(author=user, **validated_data)
-        user.doctor.assignments.add(assignment)
         for block_data in blocks_data:
             choice_replies_data = block_data.pop("choice_replies", [])
             block = BlockSerializer.create(BlockSerializer(), block_data)
