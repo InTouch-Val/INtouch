@@ -8,7 +8,6 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-bottom: 30px;
 }
 
 .header__buttons {
@@ -100,11 +99,21 @@
 .error__text_header {
   text-align: right;
   background: rgba(255, 0, 0, 0.1);
-  padding: 0px 5px;
+  margin-left: auto;
+  visibility: hidden;
+  margin-bottom: 8px;
+  border-radius: 3px;
+  padding: 1px 12px;
 }
 
 .error__text_footer {
   text-align: left;
+  visibility: hidden;
+  margin-bottom: 25px;
+}
+
+.error__text_span {
+  visibility: visible;
 }
 
 .error__text_block {

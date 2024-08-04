@@ -9,9 +9,9 @@ import { useNavigate } from "react-router-dom";
 export default function HeaderAssignment({
   blocks,
   handleSubmit,
-  errorText,
+  isFirstEntry,
   changeView,
-  isError,
+  isDisabled,
 }) {
   const navigate = useNavigate();
 
@@ -53,8 +53,11 @@ export default function HeaderAssignment({
             />
           </div>
         </div>
-        <span id="errorText" className="error__text error__text_header">
-          {errorText || (isError && "Please check all fields")}
+        <span
+          id="errorText"
+          className={`error__text error__text_header ${isDisabled && !isFirstEntry ? "error__text_span" : ""}`}
+        >
+          Please check all fields
         </span>
       </header>
     </>

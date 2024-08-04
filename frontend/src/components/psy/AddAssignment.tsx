@@ -28,6 +28,7 @@ function AddAssignment() {
   const [description, setDescription] = useState("");
   const [type, setType] = useState("");
   const [language, setLanguage] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   // const [tags, setTags] = useState('');
 
   const [blocks, setBlocks] = useState([]);
@@ -41,19 +42,41 @@ function AddAssignment() {
 
   const [isChangeView, setChangeView] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [isFirstEntry, setFirstEntry] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(true);
+
+  // useEffect(() => {
+  //   if (title.length > 2 && description.length > 2) {
+  //     setErrorText("");
+
+  //     const titleElement = document.getElementById("title");
+
+  //     const textElement = document.getElementById("text");
+  //     titleElement.classList.remove("error");
+  //     textElement.classList.remove("error");
+  //   }
+  // }, [title, description]);
 
   useEffect(() => {
-    console.log(title, description);
-    if (title.length > 2 && description.length > 2) {
-      setErrorText("");
-
-      const titleElement = document.getElementById("title");
-
-      const textElement = document.getElementById("text");
-      titleElement.classList.remove("error");
-      textElement.classList.remove("error");
+    if (
+      title.length !== 0 ||
+      description.length !== 0 ||
+      searchTerm.length !== 0 ||
+      type.length !== 0 ||
+      language.length !== 0
+    ) {
+      setFirstEntry(false);
     }
-  }, [title, description]);
+    setIsDisabled(
+      !(
+        title.length !== 0 &&
+        description.length !== 0 &&
+        searchTerm.length !== 0 &&
+        type.length !== 0 &&
+        language.length !== 0
+      )
+    );
+  }, [title, description, searchTerm, type, language]);
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -179,7 +202,6 @@ function AddAssignment() {
 
   const handleSubmit = async (e, isDraft = false, isSaveAsDraft = false) => {
     e.preventDefault();
-
     const blockInfo = blocks.map((block) => {
       if (block.type === "text" || block.type === "open") {
         return {
@@ -280,13 +302,12 @@ function AddAssignment() {
       const errorTextString = Object.entries(parsedError)
         .map(([key, message]) => `${key}: ${message}`)
         .join(", ");
-      setErrorText(`Please correct the following errors: ${errorTextString}`);
       console.error("Error creating assignment", error);
+      setIsError(true);
       displayErrorMessages(parsedError);
     }
   };
 
-  const [errorText, setErrorText] = useState("");
   const [hasScrolled, setHasScrolled] = useState(false);
 
   useEffect(() => {
@@ -429,8 +450,8 @@ function AddAssignment() {
       <HeaderAssignment
         blocks={blocks}
         handleSubmit={(e) => handleSubmit(e, true, false)}
-        errorText={errorText}
-        isError={isError}
+        isDisabled={isDisabled}
+        isFirstEntry={isFirstEntry}
         changeView={() => {
           setChangeView((prev) => !prev);
         }}
@@ -439,27 +460,44 @@ function AddAssignment() {
         <label>Enter Assignment Details</label>
         <input
           type="text"
-          className="title-input"
+          className={`title-input ${
+            title.length === 0 && !isFirstEntry ? "error" : ""
+          }`}
           placeholder="Write the name of assignment here..."
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
           id="title"
         />
+        <span
+          className={`title-span ${title.length === 0 && !isFirstEntry && "error__text_span"}`}
+        >
+          Please enter a valid name (1-50 characters)
+        </span>
         <input
           type="text"
-          className="title-input"
+          className={`title-input ${
+            description.length === 0 && !isFirstEntry ? "error" : ""
+          }`}
           placeholder="White the description here..."
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
           id="text"
         />
+        <span
+          className={`title-span ${description.length === 0 && !isFirstEntry ? "error__text_span" : ""}`}
+        >
+          Please enter a valid name (1-300 characters)
+        </span>
       </div>
       <div className="add-assignment-body">
         <ImageSelector
           onImageSelect={handleImageSelect}
           selectedImage={selectedImage}
+          isFirstEntry={isFirstEntry}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
         />
         <form
           onSubmit={(e) => handleSubmit(e, false, false)}
@@ -489,8 +527,9 @@ function AddAssignment() {
                 value={type}
                 onChange={(e) => setType(e.target.value)}
                 required
+                className={!type && !isFirstEntry ? "error" : ""}
               >
-                <option hidden disabled value={""} selected>
+                <option hidden disabled value={""}>
                   Type
                 </option>
                 <option value="lesson">Lesson</option>
@@ -508,8 +547,9 @@ function AddAssignment() {
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
                 required
+                className={!language && !isFirstEntry ? "error" : ""}
               >
-                <option hidden disabled value={""} selected>
+                <option hidden disabled value={""}>
                   Language
                 </option>
                 <option value="en">English</option>
@@ -589,22 +629,23 @@ function AddAssignment() {
             </button>
           </div>
         </div>
-        {(isError || errorText) && (
-          <span className="error__text error__text_header error__text_footer">
-            Please check all fields
-          </span>
-        )}
+        <span
+          className={`error__text error__text_footer ${isDisabled && !isFirstEntry ? "error__text_span" : ""}`}
+        >
+          Please check all fields
+        </span>
         <div className="buttons-save-as-draft-and-publish-container">
           <button
             className="buttons-save-as-draft-and-publish"
             onClick={(e) => handleSubmit(e, false, true)}
+            disabled={isDisabled || blocks.length === 0}
           >
             Save as Draft
           </button>
           <button
             className="buttons-save-as-draft-and-publish"
             onClick={(e) => handleSubmit(e, false, false)}
-            disabled={errorText || isError}
+            disabled={isDisabled || blocks.length === 0}
           >
             Complete & Publish
           </button>
