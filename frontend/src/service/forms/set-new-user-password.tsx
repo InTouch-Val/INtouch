@@ -31,15 +31,22 @@ function SetNewUserPassword({ accessToken }) {
       newError.password =
         "Password must contain letters, numbers, at least 1 uppercase letter, 1 lowercase letter, and 1 digit, no more than 3 consecutive identical characters and must be at least 8 characters long.";
     } else if (
-      currentUser && password.toLowerCase().includes(currentUser.first_name.toLowerCase())
+      currentUser &&
+      password.toLowerCase().includes(currentUser.first_name.toLowerCase())
     ) {
       newError.password = "The password is too similar to your first name";
     } else if (
-      currentUser && password.toLowerCase().includes(currentUser.last_name.toLowerCase())
+      currentUser &&
+      password.toLowerCase().includes(currentUser.last_name.toLowerCase())
     ) {
       newError.password = "The password is too similar to your last name";
-    } else if (password !== confirmPassword && password !== "" && confirmPassword !== "") {
-      newError.password = "Password and confirmation password do not match. Please try again.";
+    } else if (
+      password !== confirmPassword &&
+      password !== "" &&
+      confirmPassword !== ""
+    ) {
+      newError.password =
+        "Password and confirmation password do not match. Please try again.";
     }
     setError(newError);
     setIsValidCredentials(!newError.password && password === confirmPassword);
