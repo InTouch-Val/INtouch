@@ -11,6 +11,7 @@ function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true);
   const [card, setCard] = useState(null);
 
+
   const isLoggedIn = currentUser != null;
 
   const logout = () => {
@@ -37,6 +38,7 @@ function AuthProvider({ children }) {
     }
     setIsLoading(false); // Установка после завершения всех операций
   };
+
 
   const updateUserData = async () => {
     try {

@@ -57,7 +57,7 @@ function ImageSelector({ onImageSelect, selectedImage }) {
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search for images"
+          placeholder={`Enter the relevant keyword here and click "Search"`}
         />
         <button type="submit">Search</button>
       </form>
