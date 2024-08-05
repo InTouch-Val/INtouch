@@ -27,6 +27,7 @@ interface Props {
   isShareModal: boolean;
   selectedAssignmentIdForShareModalOnClientPage: string | number;
   refetch: () => void;
+  className?: string;
 }
 
 function AssignmentTile({
@@ -39,6 +40,7 @@ function AssignmentTile({
   onDeleteClick,
   isShareModal,
   selectedAssignmentIdForShareModalOnClientPage,
+  className = "",
 }: Props) {
   const [isSelected, setIsSelected] = useState(
     assignment.id === selectedAssignmentIdForShareModalOnClientPage,
@@ -173,7 +175,7 @@ function AssignmentTile({
 
   return (
     <div
-      className={`assignment-tile ${isSelected && "assignment-tile_selected"}`}
+      className={`assignment-tile ${isSelected && "assignment-tile_selected"} ${className}`}
       onClick={() => handleOnTileClick(assignment.id)}
     >
       <div className="assignment-image-container">

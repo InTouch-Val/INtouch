@@ -11,6 +11,7 @@ import AllTabs from "./AllTabs/AllTabs";
 import TabsAssignments from "./TabsAssignments/Tab";
 import { changeSearchAction } from "../../store/slices";
 import { WithTab } from "./TabsAssignments/Hoc";
+import useAssignmentsOnboardingTour from "../../utils/hook/onboardingHooks.ts/assignmentsOnboardingTour";
 
 interface Props {
   isShareModal?: boolean;
@@ -33,6 +34,8 @@ export default function AssignmentsPageRefactor({
   const [isShareModalOpen, setIsShareModalOpen] = React.useState(false);
 
   const [deleteAssignment, _] = useDeleteAssignmentByUUIDMutation();
+
+  useAssignmentsOnboardingTour();
 
   const handleDeleteClick = (assignmentId: string): void => {
     deleteAssignment(assignmentId);
@@ -67,7 +70,7 @@ export default function AssignmentsPageRefactor({
         {!isShareModal && (
           <header>
             <h1>Assignments</h1>
-            <button className="action-button" onClick={handleAddAssignment}>
+            <button className="action-button" onClick={handleAddAssignment} id="onboarding_add_assignment">
               <FontAwesomeIcon icon={faPlus as IconProp} /> Add Assignment
             </button>
           </header>

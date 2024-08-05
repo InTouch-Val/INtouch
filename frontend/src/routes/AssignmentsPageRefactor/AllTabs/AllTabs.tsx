@@ -14,18 +14,21 @@ export default function AllTabs(): JSX.Element {
       <button
         className={activeTab === AssignmentTab.library ? "active" : ""}
         onClick={() => dispatch(changeTabActions(AssignmentTab.library))}
+        id="onboarding_library"
       >
         Library
       </button>
       <button
         className={activeTab === AssignmentTab.favorites ? "active" : ""}
         onClick={() => dispatch(changeTabActions(AssignmentTab.favorites))}
+        id="onboarding_favorites"
       >
         Favorites
       </button>
       <button
         className={activeTab === AssignmentTab.myList ? "active" : ""}
         onClick={() => dispatch(changeTabActions(AssignmentTab.myList))}
+        id="onboarding_my_tasks"
       >
         My Tasks
       </button>

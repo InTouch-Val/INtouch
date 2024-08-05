@@ -210,6 +210,11 @@ button {
   box-shadow:
     0 0 3px 1px rgb(215 228 231 / 60%),
     -4px 0 0 #417d88;
+
+    // &.highlighted {
+    //   z-index: 10001;
+    //   position: relative;
+    // }
 }
 
 #logout {

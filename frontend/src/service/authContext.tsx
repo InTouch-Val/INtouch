@@ -2,12 +2,37 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { API } from "./axios";
 
-const AuthContext = createContext(null);
+export interface User {
+  user_type: string;
+  first_name: string;
+  last_name: string;
+  photo: string;
+}
 
-const useAuth = () => useContext(AuthContext);
+interface AuthContextType {
+  currentUser: User | null;
+  isLoading: boolean;
+  isLoggedIn: boolean;
+  login: (accessToken: string, refreshToken: string) => Promise<void>;
+  logout: () => void;
+  updateUserData: () => Promise<void>;
+  card: any;
+  setCurrentCard: (card: any) => void;
+  initAuth: () => Promise<void>;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+const useAuth = (): AuthContextType => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("Error occured");
+  }
+  return context;
+};
 
 function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [card, setCard] = useState(null);
 

@@ -26,9 +26,9 @@ export default function TabsAssignments({
   const { currentUser } = useAuth();
 
   return (
-    <div className="assignment-grid">
+    <div className="assignment-grid onboarding-psy-step">
       {filteredAssignments && filteredAssignments.length > 0 ? (
-        filteredAssignments.map((assignment) => (
+        filteredAssignments.map((assignment, index) => (
           <AssignmentTile
             refetch={refetch}
             key={assignment.id}
@@ -44,6 +44,7 @@ export default function TabsAssignments({
             selectedAssignmentIdForShareModalOnClientPage={
               selectedAssignmentIdForShareModalOnClientPage
             }
+            className={index === 0 ? "first-assignment" : ""} 
           />
         ))
       ) : (

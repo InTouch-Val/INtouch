@@ -1,5 +1,6 @@
 //@ts-nocheck
 import React, { useCallback, useEffect, useState } from "react";
+import 'shepherd.js/dist/css/shepherd.css'; //for onboarding
 import { Outlet, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -98,6 +99,7 @@ function App() {
                   <NavLink
                     to="/assignments"
                     className={({ isActive }) => (isActive ? "active" : "")}
+                    id="onboarding_assignments_menu"
                   >
                     <FontAwesomeIcon icon={faList} /> Assignments
                   </NavLink>
