@@ -34,7 +34,7 @@ export default function MetricsPage() {
     const formattedDate = formatDate(date);
     console.log("Отформатированная дата:", formattedDate);
     setStartDate(date);
-    setMetrics('')
+    setMetrics("");
 
     setFormattedDate((prev) => ({
       ...prev,
@@ -46,7 +46,7 @@ export default function MetricsPage() {
     const formattedDate = formatDate(date);
     console.log("Отформатированная дата:", formattedDate);
     setEndDate(date);
-    setMetrics('')
+    setMetrics("");
 
     setFormattedDate((prev) => ({
       ...prev,
@@ -64,12 +64,12 @@ export default function MetricsPage() {
 
   function handleSelectMetric(typeMetrics: Metrics) {
     setSelectMetric(typeMetrics);
-    setMetrics('')
+    setMetrics("");
   }
 
   async function getMetrics() {
     const response = await API.get(
-      `project-metrics/${selectMetric}/?date_from=${formattedDate.dateFrom}&date_to=${formattedDate.dateTo}`
+      `project-metrics/${selectMetric}/?date_from=${formattedDate.dateFrom}&date_to=${formattedDate.dateTo}`,
     );
 
     setMetrics(response.data);
@@ -131,11 +131,15 @@ export default function MetricsPage() {
       </div>
 
       <div className="metrics__table">
-        {metrics && selectMetric != Metrics.growth && <MetricsTable metrics={metrics} variant={Metrics.client}/>}
+        {metrics && selectMetric != Metrics.growth && (
+          <MetricsTable metrics={metrics} variant={Metrics.client} />
+        )}
       </div>
 
       <div className="metrics__table">
-        {metrics && selectMetric == Metrics.growth && <MetricsTable metrics={metrics} variant={Metrics.growth}/>}
+        {metrics && selectMetric == Metrics.growth && (
+          <MetricsTable metrics={metrics} variant={Metrics.growth} />
+        )}
       </div>
     </div>
   );

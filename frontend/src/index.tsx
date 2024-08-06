@@ -34,13 +34,11 @@ import { AfterRegistrationConfirmEmail } from "./service/forms/after-registratio
 import MetricsPage from "./routes/MetricsPage/metrics-page";
 
 const router = createBrowserRouter([
+  {
+    path: "/metrics",
+    element: <MetricsPage />,
+  },
 
-  
-    {
-      path: "/metrics",
-      element: <MetricsPage />
-    },
-  
   {
     path: "/",
     element: <App />,
