@@ -1,3 +1,5 @@
+@import url("../../vendor/fonts/fonts.css");
+
 button.buttonComponent {
   background-color: #417d88;
   color: #fff;
