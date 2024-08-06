@@ -7,6 +7,7 @@ import {
   convertToRaw,
   convertFromRaw,
   ContentState,
+  newEditorState,
 } from "draft-js";
 import "../css/block.css";
 import "../css/assignments.css";
@@ -50,47 +51,110 @@ function ClientAssignmentBlocks({
     }
   });
 
+  const MAX_INPUT_LENGTH = 1000;
+
+  // const handleEditorChange = useCallback(
+  //   (newEditorState: { getCurrentContent: () => any }) => {
+  //     if (isViewPsy || isView) {
+  //       setEditorState(newEditorState);
+  //       // Конвертируем editorState в строку и обновляем title
+  //       const contentState = newEditorState.getCurrentContent();
+  //       const text = contentState.getPlainText();
+  //       updateBlock(block.id, contentState, block.choices, text);
+  //     } else {
+  //       const contentState = newEditorState.getCurrentContent();
+  //       const inputText = contentState.getPlainText();
+
+  //       if (inputText.length > MAX_INPUT_LENGTH) {
+  //         const truncatedText = inputText.slice(0, MAX_INPUT_LENGTH);
+  //         const newContentState = ContentState.createFromText(truncatedText);
+  //         const truncatedEditorState =
+  //           EditorState.createWithContent(newContentState);
+
+  //         const rawContent = convertToRaw(newContentState);
+  //         const serializedData = JSON.stringify(rawContent);
+  //         setEditorState(truncatedEditorState);
+  //         updateBlock(block.id, serializedData, []);
+  //       }
+  //       else {
+  //         const rawContent = convertToRaw(contentState);
+  //         const serializedData = JSON.stringify(rawContent);
+  //         setEditorState(newEditorState);
+  //         updateBlock(block.id, serializedData, []);
+  //       }
+  //     }
+  //   },
+
+  //   [updateBlock, block.id, block.content, block.choices],
+  // );
+
   const handleEditorChange = useCallback(
-    (newEditorState: { getCurrentContent: () => any }) => {
-      if (isViewPsy || isView) {
+    (newEditorState) => {
+      const contentState = newEditorState.getCurrentContent();
+      const rawContent = convertToRaw(contentState);
+      const serializedData = JSON.stringify(rawContent);
+
+      const plainText = contentState.getPlainText();
+      if (plainText.length <= MAX_INPUT_LENGTH) {
         setEditorState(newEditorState);
-        // Конвертируем editorState в строку и обновляем title
-        const contentState = newEditorState.getCurrentContent();
-        const text = contentState.getPlainText();
-        updateBlock(block.id, contentState, block.choices, text);
+        updateBlock(block.id, serializedData, []);
       } else {
-        const contentState = newEditorState.getCurrentContent();
-        const inputText = contentState.getPlainText();
-
-        if (inputText.length > MAX_INPUT_LENGTH) {
-          const truncatedText = inputText.slice(0, MAX_INPUT_LENGTH);
-          const newContentState = ContentState.createFromText(truncatedText);
-          const truncatedEditorState =
-            EditorState.createWithContent(newContentState);
-
-          const rawContent = convertToRaw(newContentState);
-          const serializedData = JSON.stringify(rawContent);
-          setEditorState(truncatedEditorState);
-          updateBlock(block.id, serializedData, []);
-        } else {
-          const rawContent = convertToRaw(contentState);
-          const serializedData = JSON.stringify(rawContent);
-          setEditorState(newEditorState);
-          updateBlock(block.id, serializedData, []);
-        }
+        const truncatedText = plainText.slice(0, MAX_INPUT_LENGTH);
+        const newContentState = ContentState.createFromText(truncatedText);
+        const truncatedEditorState =
+          EditorState.createWithContent(newContentState);
+        setEditorState(truncatedEditorState);
+        const truncatedRawContent = convertToRaw(newContentState);
+        const truncatedSerializedData = JSON.stringify(truncatedRawContent);
+        updateBlock(block.id, truncatedSerializedData, []);
       }
     },
-
-    [updateBlock, block.id, block.content, block.choices],
+    [updateBlock, block.id],
   );
 
-  const MAX_INPUT_LENGTH = 1000;
+  const handleBeforeInput = useCallback(
+    (chars, editorState) => {
+      const currentContent = editorState.getCurrentContent();
+      const currentText = currentContent.getPlainText();
+
+      if (currentText.length >= MAX_INPUT_LENGTH) {
+        return "handled";
+      }
+      return "not-handled";
+    },
+    [MAX_INPUT_LENGTH],
+  );
+
+  const handlePastedText = useCallback(
+    (pastedText, html, newEditorState) => {
+      const currentContent = newEditorState.getCurrentContent();
+      const currentText = currentContent.getPlainText();
+
+      if (currentText.length + pastedText.length > MAX_INPUT_LENGTH) {
+        const allowedText = pastedText.slice(
+          0,
+          MAX_INPUT_LENGTH - currentText.length,
+        );
+        const newContentState = ContentState.createFromText(
+          currentText + allowedText,
+        );
+        const newEditorState = EditorState.push(
+          editorState,
+          newContentState,
+          "insert-characters",
+        );
+        setEditorState(newEditorState);
+        return "handled";
+      }
+      return "not-handled";
+    },
+    [editorState, MAX_INPUT_LENGTH],
+  );
 
   const interceptSetEditorState = () => {
     console.log("e");
   };
 
-  // Determines if the block is filled in
   const isValid = () => {
     if (!isViewPsy && !isView) {
       return (
@@ -211,6 +275,8 @@ function ClientAssignmentBlocks({
                   : interceptSetEditorState
               }
               isMobileWidth={isMobileWidth}
+              handleBeforeInput={handleBeforeInput}
+              handlePastedText={handlePastedText}
             />
           </ToolbarProvider>
         </div>
@@ -242,7 +308,7 @@ function ClientAssignmentBlocks({
   if (block.type === "range") {
     return (
       <div
-        className={`block assignment__block ${!isValid && showInvalidInputs ? "uncompleted" : ""}`}
+        className={`block assignment__block ${!isValid() && showInvalidInputs ? "uncompleted" : ""}`}
       >
         <div>
           {!block.description && !isViewPsy ? (
@@ -309,7 +375,7 @@ function ClientAssignmentBlocks({
   if (block.type === "single") {
     return (
       <div
-        className={`block assignment__block ${!isValid && showInvalidInputs ? "uncompleted" : ""}`}
+        className={`block assignment__block ${!isValid() && showInvalidInputs ? "uncompleted" : ""}`}
       >
         <div>
           {!block.description && !isViewPsy ? (
@@ -355,7 +421,7 @@ function ClientAssignmentBlocks({
   if (block.type === "multiple") {
     return (
       <div
-        className={`block assignment__block ${!isValid && showInvalidInputs ? "uncompleted" : ""}`}
+        className={`block assignment__block ${!isValid() && showInvalidInputs ? "uncompleted" : ""}`}
       >
         <div>
           {!block.description && !isViewPsy ? (

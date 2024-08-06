@@ -7,7 +7,6 @@ import { useAuth } from "../../service/authContext";
 import { API } from "../../service/axios";
 import { Notes } from "./Notes";
 import { Modal } from "../../service/modal";
-import { AssignmentsPage } from "../../routes/assignments-page";
 import shareImage from "../../images/shareArrow_white.svg";
 import "../../css/clients.css";
 import DiaryNotes from "./DiaryNotes/DiaryNotes";
@@ -15,6 +14,7 @@ import { useObserve } from "../../utils/hook/useObserve";
 import ClientAssignmentTile from "./ClientAssignmentTile";
 import Button from "../../stories/buttons/Button";
 import shareIcon from "../../images/psy-icons/share-assignment-icon.svg";
+import AssignmentsPageRefactor from "../../routes/AssignmentsPageRefactor/AssignmentsPage";
 
 function ClientDetailsPage() {
   const { id } = useParams();
@@ -117,9 +117,6 @@ function ClientDetailsPage() {
 
   const saveClientChanges = async () => {
     const requestBody = {
-      date_of_birth: editableClient.date_of_birth
-        ? editableClient.date_of_birth
-        : null,
       client: {
         diagnosis: editableClient.diagnosis,
         about: editableClient.about,
@@ -277,19 +274,6 @@ function ClientDetailsPage() {
         {/*Profile Tab View */}
         {activeTab === "profile" && (
           <div className="profile-tab">
-            <h3>Date Of Birth</h3>
-            {isEditing ? (
-              <input
-                type="date"
-                name="date_of_birth"
-                value={editableClient.date_of_birth || ""}
-                onChange={handleInputChange}
-                className="settings-input"
-              />
-            ) : (
-              <p>{client.date_of_birth || "No info yet"}</p>
-            )}
-
             <h3>Last Update</h3>
             <p>
               {new Date(client.last_update).toLocaleDateString() ||
@@ -367,7 +351,7 @@ function ClientDetailsPage() {
               Choose assignment you want to share
             </h3>
             <div className="share-assignment__content-container">
-              <AssignmentsPage
+              <AssignmentsPageRefactor
                 isShareModal={true}
                 setSelectedAssignmentIdForShareModalOnClientPage={
                   setSelectedAssignment
@@ -375,7 +359,7 @@ function ClientDetailsPage() {
                 selectedAssignmentIdForShareModalOnClientPage={
                   selectedAssignment
                 }
-              ></AssignmentsPage>
+              ></AssignmentsPageRefactor>
             </div>
           </div>
         </Modal>

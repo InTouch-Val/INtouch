@@ -12,7 +12,6 @@ from api.constants import (
 
 
 class User(AbstractUser):
-    date_of_birth = models.DateField(null=True)
     last_update = models.DateTimeField(auto_now=True)
     add_date = models.DateTimeField(auto_now_add=True)
     user_type = models.CharField(max_length=100)

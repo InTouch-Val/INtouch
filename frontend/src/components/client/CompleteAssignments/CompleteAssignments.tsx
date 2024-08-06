@@ -19,6 +19,7 @@ import EntryNotComplete from "../../modals/Notifications/entryNotComplete";
 import EntryUnsavedExit from "../../modals/Notifications/entryUnsavedExit";
 import useMobileWidth from "../../../utils/hook/useMobileWidth";
 import Button from "../../storybook/Button/Button";
+import { ContentState, convertFromRaw, getPlainText } from "draft-js";
 
 function CompleteAssignments() {
   const location = useLocation();
@@ -147,15 +148,24 @@ function CompleteAssignments() {
 
     let allFilled = true;
 
+    const getPlainTextFromReply = (reply) => {
+      try {
+        const contentState = convertFromRaw(JSON.parse(reply));
+        return contentState.getPlainText();
+      } catch (error) {
+        console.error("Error parsing block.reply:", error);
+        return "";
+      }
+    };
+
     // Checks 'open' type blocks
     const openReplies = blocks.filter((block) => block.type === "open");
-    if (
-      openReplies.some((block) => !block.reply || block.reply.trim() === "")
-    ) {
-      allFilled = false;
-    }
-    openReplies?.forEach((block) => {
-      newState.openInputs[block.id] = block.reply && block.reply.trim() !== "";
+    openReplies.forEach((block) => {
+      const plainText = getPlainTextFromReply(block.reply);
+      newState.openInputs[block.id] = plainText.trim() !== "";
+      if (plainText.trim() === "") {
+        allFilled = false;
+      }
     });
 
     // Checks 'multiple' type blocks

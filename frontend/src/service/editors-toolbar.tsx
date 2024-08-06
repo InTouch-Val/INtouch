@@ -31,6 +31,8 @@ const EditorToolbar = forwardRef(
       setErrorText,
       setIsError,
       readOnly = false,
+      handleBeforeInput,
+      handlePastedText,
     },
     ref,
   ) => {
@@ -176,7 +178,10 @@ const EditorToolbar = forwardRef(
       setEditorState(newEditorState);
     };
 
-    const handleBeforeInput = (chars: string, editorState: EditorState) => {
+    const defaultHandleBeforeInput = (
+      chars: string,
+      editorState: EditorState,
+    ) => {
       const contentState = editorState.getCurrentContent();
       const selectionState = editorState.getSelection();
       const EditorBlockKey = selectionState.getStartKey();
@@ -244,9 +249,10 @@ const EditorToolbar = forwardRef(
           plugins={plugins}
           placeholder={placeholder}
           ref={ref}
-          handleBeforeInput={handleBeforeInput}
           onBlur={handleBlur}
           readOnly={readOnly}
+          handleBeforeInput={handleBeforeInput || defaultHandleBeforeInput}
+          handlePastedText={handlePastedText}
         />
         {!isMobileWidth && (
           <Toolbar>

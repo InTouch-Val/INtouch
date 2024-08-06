@@ -14,10 +14,9 @@ import { PasswordResetMock } from "./service/forms/password-reset-mock";
 import { ClientRegistrationPage } from "./service/forms/client-registration-page";
 import { AfterRegistrationPage } from "./service/forms/after-registration-welcome-page";
 import { ClientPage } from "./routes/client-page";
-import { AssignmentsPage } from "./routes/assignments-page";
 import { CommunityPage } from "./routes/community-page";
 import { SettingsPage } from "./routes/SettingPage/settings-page";
-import { App } from "./components/App";
+import { App, loaderCheckToken } from "./components/App";
 import { AddAssignment, ViewAssignment } from "./components/psy/AddAssignment";
 import { AddClient } from "./components/psy/AddClient";
 import { AddNote } from "./components/psy/AddNote";
@@ -31,12 +30,14 @@ import DiaryPageClient from "./routes/client/my-diary-page";
 import ConfirmEmail from "./service/forms/confirm-email";
 import MobileEmotionPage from "./components/client/MyDiary/MobileEmotionPage/MobileEmotionPage";
 import AssignmentsPageRefactor from "./routes/AssignmentsPageRefactor/AssignmentsPage";
+import { AfterRegistrationConfirmEmail } from "./service/forms/after-registration-email-confirmation";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     errorElement: <ErrorPage />,
+    loader: loaderCheckToken,
     children: [
       {
         path: "/clients",
@@ -57,10 +58,6 @@ const router = createBrowserRouter([
       },
       {
         path: "/assignments",
-        element: <AssignmentsPage />,
-      },
-      {
-        path: "/test-assignments",
         element: <AssignmentsPageRefactor />,
       },
       {
@@ -163,6 +160,11 @@ const router = createBrowserRouter([
   {
     path: "/welcome-to-intouch",
     element: <AfterRegistrationPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/email-confirmation",
+    element: <AfterRegistrationConfirmEmail />,
     errorElement: <ErrorPage />,
   },
 ]);

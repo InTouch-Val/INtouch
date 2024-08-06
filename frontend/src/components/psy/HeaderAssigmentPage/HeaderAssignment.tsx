@@ -42,7 +42,11 @@ export default function HeaderAssignment({
               onClick={handleSubmit}
             />
             <img
-              className="header__icon-eye"
+              className={
+                blocks.length > 0
+                  ? "header__icon-eye"
+                  : "header__icon-eye-disabled"
+              }
               alt="changeView"
               src={eye}
               onClick={changeView}

@@ -15,9 +15,9 @@ import addAssignment from "../../images/psy-icons/add-assignment-icon.svg";
 import Button from "../../stories/buttons/Button";
 
 interface Props {
-  isShareModal: boolean;
-  selectedAssignmentIdForShareModalOnClientPage: string;
-  setSelectedAssignmentIdForShareModalOnClientPage: React.Dispatch<
+  isShareModal?: boolean;
+  selectedAssignmentIdForShareModalOnClientPage?: string;
+  setSelectedAssignmentIdForShareModalOnClientPage?: React.Dispatch<
     React.SetStateAction<string>
   >;
 }
@@ -44,7 +44,8 @@ export default function AssignmentsPageRefactor({
 
   const handleShareButton = (assignmentId: string): void => {
     if (isShareModal) {
-      setSelectedAssignmentIdForShareModalOnClientPage(assignmentId);
+      setSelectedAssignmentIdForShareModalOnClientPage &&
+        setSelectedAssignmentIdForShareModalOnClientPage(assignmentId);
     } else {
       setSelectedAssignmentId(assignmentId);
       setIsShareModalOpen(true);
