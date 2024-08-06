@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import Button from "../stories/buttons/Button";
 
 interface ErrorText {
   message: string;
@@ -40,13 +41,15 @@ function Modal({
         >
           {children}
           <div className="modal-actions">
-            <button
-              className="action-button"
+            <Button
+              buttonSize="large"
+              fontSize="medium"
+              label={confirmText}
+              type="button"
               onClick={onConfirm}
               disabled={ifError}
-            >
-              {confirmText}
-            </button>
+            />
+
             {showCancel && (
               <button className="action-button" onClick={onClose}>
                 Cancel

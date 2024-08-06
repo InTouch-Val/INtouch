@@ -7,6 +7,7 @@ import "../../../css/settings.scss";
 import useMobileWidth from "../../../utils/hook/useMobileWidth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
+import Button from "../../../stories/buttons/Button";
 
 export const SecurityTab = () => {
   const isMobileWidth = useMobileWidth();
@@ -126,9 +127,12 @@ export const SecurityTab = () => {
               </span>
             </div>
 
-            <button id="save-settings" type="submit" className="save-settings">
-              {isMobileWidth ? "Save" : "Save Changes"}
-            </button>
+            <Button
+              buttonSize="large"
+              fontSize="medium"
+              label={isMobileWidth ? "Save" : "Save Changes"}
+              type="submit"
+            />
           </form>
           {message && <div className="success-message">{message}</div>}
         </div>
