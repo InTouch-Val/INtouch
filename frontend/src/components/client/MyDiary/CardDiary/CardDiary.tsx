@@ -17,7 +17,7 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
   const handleClickVisible = async () => {
     await setActive((prev) => !prev);
     try {
-      const response = await API.post(`/diary-notes/${card.id}/visible/`);
+      const response = await API.patch(`/diary-notes/${card.id}/visible/`);
       return response.data;
     } catch (error) {
       console.log(error);

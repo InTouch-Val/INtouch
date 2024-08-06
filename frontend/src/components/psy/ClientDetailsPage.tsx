@@ -12,6 +12,8 @@ import "../../css/clients.css";
 import DiaryNotes from "./DiaryNotes/DiaryNotes";
 import { useObserve } from "../../utils/hook/useObserve";
 import ClientAssignmentTile from "./ClientAssignmentTile";
+import Button from "../../stories/buttons/Button";
+import shareIcon from "../../images/psy-icons/share-assignment-icon.svg";
 import AssignmentsPageRefactor from "../../routes/AssignmentsPageRefactor/AssignmentsPage";
 
 function ClientDetailsPage() {
@@ -19,7 +21,7 @@ function ClientDetailsPage() {
   const navigate = useNavigate();
   const { currentUser, updateUserData } = useAuth();
   const client = currentUser?.doctor.clients.find(
-    (client) => client.id === Number(id),
+    (client) => client.id === Number(id)
   );
   const { setCurrentCard, card } = useAuth();
   const [activeTab, setActiveTab] = useState("profile");
@@ -64,10 +66,10 @@ function ClientDetailsPage() {
       if (activeTab === "assignments") {
         try {
           const response = await API.get(
-            `assignments-client/?limit=${limit}&offset=0`,
+            `assignments-client/?limit=${limit}&offset=0`
           );
           const data = response.data.results.filter(
-            (assignment) => assignment.user === Number(id),
+            (assignment) => assignment.user === Number(id)
           );
           setClientAssignments(data);
           console.log(response);
@@ -137,8 +139,8 @@ function ClientDetailsPage() {
   const handleDeleteAssignment = (deletedAssignmentId) => {
     setClientAssignments((currentAssignments) =>
       currentAssignments.filter(
-        (assignment) => assignment.id !== deletedAssignmentId,
-      ),
+        (assignment) => assignment.id !== deletedAssignmentId
+      )
     );
   };
 
@@ -170,7 +172,7 @@ function ClientDetailsPage() {
       }
 
       const res = await API.get(
-        `assignments/set-client/${assignmentId}/${id}/`,
+        `assignments/set-client/${assignmentId}/${id}/`
       );
 
       if (res.status >= 200 && res.status <= 300) {
@@ -207,33 +209,32 @@ function ClientDetailsPage() {
           </div>
           <div>
             {activeTab === "profile" && (
-              <button
+              <Button
+                buttonSize="large"
+                fontSize="medium"
+                label={isEditing ? "Save Changes" : "Edit Client"}
+                type="button"
                 onClick={handleEditToggle}
-                className="action-button action-button_header"
-              >
-                {isEditing ? "Save Changes" : "Edit Client"}
-              </button>
+              />
             )}
             {activeTab === "profile" && isEditing && (
-              <button
-                className="action-button action-button_header"
+              <Button
+                buttonSize="large"
+                fontSize="medium"
+                label="Cancel"
+                type="button"
                 onClick={handleCancelEdit}
-              >
-                Cancel
-              </button>
+              />
             )}
             {activeTab === "assignments" && (
-              <button
-                className="action-button action-button_header"
-                onClick={handleShareBtn}
-              >
-                <img
-                  className="action-button__icon"
-                  src={shareImage}
-                  alt="share icon"
-                />{" "}
-                Share assignment
-              </button>
+              <Button
+              buttonSize="small"
+              fontSize="small"
+              label="Share assignment"
+              type="button"
+              onClick={client.client.is_active && handleShareBtn()}
+              icon={shareIcon}
+            />
             )}
           </div>
           {activeTab === "notes" && (
