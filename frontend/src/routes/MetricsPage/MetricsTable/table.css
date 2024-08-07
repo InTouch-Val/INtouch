@@ -1,0 +1,57 @@
+.table {
+  padding-top: 20px;
+  width: 100%;
+  border: 1px solid grey;
+  box-shadow: 0px 0px 2px 0px #00000014;
+  border-radius: 10px;
+}
+
+.table__row-columnName {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  padding-bottom: 20px;
+  justify-content: space-between;
+}
+
+.table__row-columnNameGrowth {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  padding-bottom: 20px;
+  justify-content: space-between;
+}
+
+.table__row {
+  display: flex;
+  flex-direction: row;
+  flex-direction: row;
+  gap: 6px;
+  padding-bottom: 20px;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.table__cell {
+  font-size: 12px;
+  max-width: 190px;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  border-radius: 12px;
+  padding: 0 5px;
+}
+
+.table__cellGrowth {
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  border-radius: 12px;
+  padding: 0 8px;
+}
