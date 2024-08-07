@@ -12,6 +12,8 @@ import "../../css/clients.css";
 import DiaryNotes from "./DiaryNotes/DiaryNotes";
 import { useObserve } from "../../utils/hook/useObserve";
 import ClientAssignmentTile from "./ClientAssignmentTile";
+import Button from "../../stories/buttons/Button";
+import shareIcon from "../../images/psy-icons/share-assignment-icon.svg";
 import AssignmentsPageRefactor from "../../routes/AssignmentsPageRefactor/AssignmentsPage";
 
 function ClientDetailsPage() {
@@ -207,33 +209,32 @@ function ClientDetailsPage() {
           </div>
           <div>
             {activeTab === "profile" && (
-              <button
+              <Button
+                buttonSize="large"
+                fontSize="medium"
+                label={isEditing ? "Save Changes" : "Edit Client"}
+                type="button"
                 onClick={handleEditToggle}
-                className="action-button action-button_header"
-              >
-                {isEditing ? "Save Changes" : "Edit Client"}
-              </button>
+              />
             )}
             {activeTab === "profile" && isEditing && (
-              <button
-                className="action-button action-button_header"
+              <Button
+                buttonSize="large"
+                fontSize="medium"
+                label="Cancel"
+                type="button"
                 onClick={handleCancelEdit}
-              >
-                Cancel
-              </button>
+              />
             )}
             {activeTab === "assignments" && (
-              <button
-                className="action-button action-button_header"
-                onClick={handleShareBtn}
-              >
-                <img
-                  className="action-button__icon"
-                  src={shareImage}
-                  alt="share icon"
-                />{" "}
-                Share assignment
-              </button>
+              <Button
+                buttonSize="small"
+                fontSize="small"
+                label="Share assignment"
+                type="button"
+                onClick={client.client.is_active && handleShareBtn()}
+                icon={shareIcon}
+              />
             )}
           </div>
           {activeTab === "notes" && (
@@ -273,7 +274,6 @@ function ClientDetailsPage() {
         {/*Profile Tab View */}
         {activeTab === "profile" && (
           <div className="profile-tab">
-
             <h3>Last Update</h3>
             <p>
               {new Date(client.last_update).toLocaleDateString() ||

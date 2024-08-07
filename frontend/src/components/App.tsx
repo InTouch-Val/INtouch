@@ -14,11 +14,34 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../service/authContext";
 import "../css/app.scss";
+import { API } from "../service/axios";
+
+export const loaderCheckToken = async () => {
+  const refreshToken = localStorage.getItem("refreshToken");
+  const accessToken = localStorage.getItem("accessToken");
+
+  if (
+    !accessToken &&
+    location.pathname !== "/login" &&
+    location.pathname !== "/registration"
+  ) {
+    window.location.href = "/login";
+  }
+
+  try {
+    const request = API.post("/token/refresh/", { refresh: refreshToken });
+    return request;
+  } catch (e) {
+    console.error(e);
+  }
+};
 
 function App() {
   const { currentUser, logout, isLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const refreshToken = localStorage.getItem("refreshToken");
+  const accessToken = localStorage.getItem("accessToken");
 
   const [sideBarOpened, setSideBarOpened] = useState(false);
   const handleSideBar = () => {

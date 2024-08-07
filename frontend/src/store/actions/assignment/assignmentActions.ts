@@ -12,13 +12,15 @@ export const changeAssignmentFavoriteByIdAction = createAsyncThunk(
     const { isFavorite, assignmentId } = params;
 
     try {
-      const endpoint = isFavorite ? "delete-list" : "add-list";
-      return await API.get(`assignments/${endpoint}/${assignmentId}`);
+
+      return isFavorite
+        ? await API.delete(`assignments/delete-list/${assignmentId}/`)
+        : await API.post(`assignments/add-list/${assignmentId}/`);
     } catch (error) {
       console.error("Error toggling favorites:", error);
       return rejectWithValue;
     }
-  },
+  }
 );
 
 export const duplicateAssignmentAction = createAsyncThunk(
@@ -33,7 +35,7 @@ export const duplicateAssignmentAction = createAsyncThunk(
       console.error("Error duplicate:", error);
       return rejectWithValue;
     }
-  },
+  }
 );
 
 export const draftAssignmentAction = createAsyncThunk(
@@ -41,7 +43,7 @@ export const draftAssignmentAction = createAsyncThunk(
   async (responseAssignmentId: number, { rejectWithValue }) => {
     try {
       const response = await API.patch(
-        `assignments/${responseAssignmentId}/draft/`,
+        `assignments/${responseAssignmentId}/draft/`
       );
       const data = response.data;
       return data;
@@ -49,7 +51,7 @@ export const draftAssignmentAction = createAsyncThunk(
       console.error("Error duplicate:", error);
       return rejectWithValue;
     }
-  },
+  }
 );
 
 export const setClientByIdAction = createAsyncThunk(
@@ -59,11 +61,11 @@ export const setClientByIdAction = createAsyncThunk(
       assignmentId,
       selectedClients,
     }: { assignmentId: string; selectedClients: string[] },
-    { rejectWithValue },
+    { rejectWithValue }
   ) => {
     try {
       const response = await API.post(
-        `assignments/set-client/${assignmentId}/?clients=${selectedClients}`,
+        `assignments/set-client/${assignmentId}/?clients=${selectedClients}`
       );
       const data = response;
       return data;
@@ -71,7 +73,7 @@ export const setClientByIdAction = createAsyncThunk(
       console.error("Error duplicate:", error);
       return rejectWithValue;
     }
-  },
+  }
 );
 
 export const clientAssignmentClear = createAsyncThunk(
@@ -79,7 +81,7 @@ export const clientAssignmentClear = createAsyncThunk(
   async ({ assignmentId }: { assignmentId: string }, { rejectWithValue }) => {
     try {
       const response = await API.get(
-        `assignments-client/${assignmentId}/clear/`,
+        `assignments-client/${assignmentId}/clear/`
       );
       const data = response;
       return data;
@@ -87,5 +89,5 @@ export const clientAssignmentClear = createAsyncThunk(
       console.error("Error duplicate:", error);
       return rejectWithValue;
     }
-  },
+  }
 );

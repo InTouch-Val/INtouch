@@ -51,8 +51,8 @@ class Client(models.Model):
 
 
 class Assignment(models.Model):
-    title = models.CharField(max_length=100)
-    text = models.TextField()
+    title = models.CharField(max_length=50)
+    text = models.TextField(max_length=300)
     update_date = models.DateField(auto_now=True)
     add_date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(
@@ -82,8 +82,8 @@ class Assignment(models.Model):
 
 
 class AssignmentClient(models.Model):
-    title = models.CharField(max_length=100)
-    text = models.TextField()
+    title = models.CharField(max_length=50)
+    text = models.TextField(max_length=300)
     update_date = models.DateField(auto_now=True)
     author = models.ForeignKey(
         User,
@@ -119,7 +119,7 @@ class AssignmentClient(models.Model):
 
 
 class Block(models.Model):
-    question = models.CharField(max_length=250)
+    question = models.CharField(max_length=3000)
     reply = models.TextField(blank=True)
     description = models.TextField(blank=True)
     type = models.CharField(max_length=10, choices=BLOCK_TYPES)

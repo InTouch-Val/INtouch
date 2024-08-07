@@ -30,7 +30,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
-      - "9090:9090"
     volumes:
       - "/opt/media:/app/media/"
       - "/opt/intouch_static:/app/static/"

@@ -7,6 +7,7 @@ import { isValidEmail, isValidPassword, isValidName } from "./regex";
 import eyeIcon from "../../images/icons/eye.svg";
 import eyeSlashIcon from "../../images/icons/eyeSlash.svg";
 import logo from "../../images/LogoBig.svg";
+import Button from "../../stories/buttons/Button";
 
 function RegistrationForm() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -382,7 +383,10 @@ function RegistrationForm() {
               checked={formData.acceptPolicy}
               onChange={handleChange}
             />
-            <a href="" className={`${isShowTermsError ? "error-text" : "terms"}`}>
+            <a
+              href=""
+              className={`${isShowTermsError ? "error-text" : "terms"}`}
+            >
               I agree with the terms and conditions
             </a>
           </label>
@@ -393,13 +397,14 @@ function RegistrationForm() {
           {validationError.name && <div>{validationError.name}</div>}
           {validationError.second && <div>{validationError.second}</div>}
         </div>
-        <button
-          type="submit"
-          className="action-button action-button_register-login"
+
+        <Button
+          buttonSize="large"
+          fontSize="medium"
+          label="Register"
           disabled={isAnyFieldMissingOrInvalid()}
-        >
-          Register
-        </button>
+          type="submit"
+        />
         <p>
           Already have an account? <Link to={"/login"}>Log in</Link>
         </p>
