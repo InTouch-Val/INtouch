@@ -312,7 +312,7 @@ function AddAssignment() {
     blockContainers.forEach((blockContainer, index) => {
       const blockErrorKey = `blocks #${index + 1}`;
       const blockErrorExists = Object.keys(errorMessages).some((key) =>
-        key.startsWith(blockErrorKey),
+        key.startsWith(blockErrorKey)
       );
       if (blockErrorExists) {
         blockContainer.classList.add("error");
@@ -392,7 +392,7 @@ function AddAssignment() {
     newMaxValue,
     newLeftPole,
     newRightPole,
-    newImage,
+    newImage
   ) => {
     setBlocks((prevBlocks) =>
       prevBlocks.map((block) =>
@@ -415,8 +415,8 @@ function AddAssignment() {
               rightPole: newRightPole ?? block.rightPole,
               image: newImage ?? block.image,
             }
-          : block,
-      ),
+          : block
+      )
     );
   };
 
@@ -694,12 +694,14 @@ function ViewAssignment() {
             <button className="action-button" onClick={handleToggleModal}>
               Delete Assignment
             </button>
-            <button
-              className="action-button"
-              onClick={() => navigate(`/edit-assignment/${id}`)}
-            >
-              Edit Assignment
-            </button>
+            {!assignmentData.is_public && (
+              <button
+                className="action-button"
+                onClick={() => navigate(`/edit-assignment/${id}`)}
+              >
+                Edit Assignment
+              </button>
+            )}
           </div>
         )}
       </header>
