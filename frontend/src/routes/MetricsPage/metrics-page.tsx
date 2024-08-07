@@ -67,10 +67,31 @@ export default function MetricsPage() {
 
   async function getMetrics() {
     const response = await API.get(
-      `project-metrics/${selectMetric}/?date_from=${formattedDate.dateFrom}&date_to=${formattedDate.dateTo}`,
+      `project-metrics/${selectMetric}/?date_from=${formattedDate.dateFrom}&date_to=${formattedDate.dateTo}`
     );
 
     setMetrics(response.data);
+  }
+
+  async function getMetricsExcel() {
+    try {
+      const response = await API.get(
+        `project-metrics/${selectMetric}/download?date_from=${formattedDate.dateFrom}&date_to=${formattedDate.dateTo}`,
+        { responseType: "blob" }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "metrics.csv");
+
+      document.body.appendChild(link);
+      link.click();
+
+      link.parentNode?.removeChild(link);
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   return (
@@ -115,17 +136,30 @@ export default function MetricsPage() {
           </Button>
         </div>
 
-        <Button
-          onClick={() => getMetrics()}
-          className="metrics__button"
-          disabled={
-            selectMetric == Metrics.default ||
-            !formattedDate.dateFrom ||
-            !formattedDate.dateTo
-          }
-        >
-          Сгенерировать
-        </Button>
+        <div className="metrics__wrapperButtons">
+          <Button
+            onClick={() => getMetrics()}
+            className="metrics__button"
+            disabled={
+              selectMetric == Metrics.default ||
+              !formattedDate.dateFrom ||
+              !formattedDate.dateTo
+            }
+          >
+            Сгенерировать
+          </Button>
+          <Button
+            onClick={() => getMetricsExcel()}
+            className="metrics__button"
+            disabled={
+              selectMetric == Metrics.default ||
+              !formattedDate.dateFrom ||
+              !formattedDate.dateTo
+            }
+          >
+            Скачать
+          </Button>
+        </div>
       </div>
 
       <div className="metrics__table">
