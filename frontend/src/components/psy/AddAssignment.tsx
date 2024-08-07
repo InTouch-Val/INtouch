@@ -46,18 +46,6 @@ function AddAssignment() {
   const [isFirstEntry, setFirstEntry] = useState(true);
   const [isDisabled, setIsDisabled] = useState(true);
 
-  // useEffect(() => {
-  //   if (title.length > 2 && description.length > 2) {
-  //     setErrorText("");
-
-  //     const titleElement = document.getElementById("title");
-
-  //     const textElement = document.getElementById("text");
-  //     titleElement.classList.remove("error");
-  //     textElement.classList.remove("error");
-  //   }
-  // }, [title, description]);
-
   useEffect(() => {
     if (
       title.length !== 0 ||
@@ -71,7 +59,9 @@ function AddAssignment() {
     setIsDisabled(
       !(
         title.length !== 0 &&
+        title.length < 50 &&
         description.length !== 0 &&
+        description.length < 300 &&
         searchTerm.length !== 0 &&
         type.length !== 0 &&
         language.length !== 0
@@ -461,7 +451,9 @@ function AddAssignment() {
         <input
           type="text"
           className={`title-input ${
-            title.length === 0 && !isFirstEntry ? "error" : ""
+            (title.length === 0 || title.length > 50) && !isFirstEntry
+              ? "error"
+              : ""
           }`}
           placeholder="Write the name of assignment here..."
           value={title}
@@ -470,14 +462,17 @@ function AddAssignment() {
           id="title"
         />
         <span
-          className={`title-span ${title.length === 0 && !isFirstEntry && "error__text_span"}`}
+          className={`title-span ${(title.length === 0 || title.length > 50) && !isFirstEntry && "error__text_span"}`}
         >
           Please enter a valid name (1-50 characters)
         </span>
         <input
           type="text"
           className={`title-input ${
-            description.length === 0 && !isFirstEntry ? "error" : ""
+            (description.length === 0 || description.length > 300) &&
+            !isFirstEntry
+              ? "error"
+              : ""
           }`}
           placeholder="White the description here..."
           value={description}
@@ -486,7 +481,7 @@ function AddAssignment() {
           id="text"
         />
         <span
-          className={`title-span ${description.length === 0 && !isFirstEntry ? "error__text_span" : ""}`}
+          className={`title-span ${(description.length === 0 || description.length > 300) && !isFirstEntry ? "error__text_span" : ""}`}
         >
           Please enter a valid name (1-300 characters)
         </span>

@@ -12,7 +12,6 @@ function ImageSelector({
   isFirstEntry,
 }) {
   const [images, setImages] = useState(selectedImage ? [selectedImage] : []);
-  // const [searchTerm, setSearchTerm] = useState("");
   const [isSearchDone, setIsSearchDone] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
   const [selectedImageId, setSelectedImageId] = useState(null); // Состояние для хранения ID выбранного изображения
