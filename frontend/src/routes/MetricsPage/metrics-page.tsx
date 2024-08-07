@@ -32,7 +32,6 @@ export default function MetricsPage() {
 
   const handleChangeDateBegin = (date) => {
     const formattedDate = formatDate(date);
-    console.log("Отформатированная дата:", formattedDate);
     setStartDate(date);
     setMetrics("");
 
@@ -44,7 +43,6 @@ export default function MetricsPage() {
 
   const handleChangeDateEnd = (date) => {
     const formattedDate = formatDate(date);
-    console.log("Отформатированная дата:", formattedDate);
     setEndDate(date);
     setMetrics("");
 

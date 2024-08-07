@@ -82,10 +82,6 @@ const router = createBrowserRouter([
         path: "/settings",
         element: <SettingsPage />,
       },
-      // {
-      //   path: "/metrics",
-      //   element: <MetricsPage />
-      // },
       {
         path: "/add-assignment",
         element: <AddAssignment />,
