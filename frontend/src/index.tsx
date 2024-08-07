@@ -16,7 +16,7 @@ import { AfterRegistrationPage } from "./service/forms/after-registration-welcom
 import { ClientPage } from "./routes/client-page";
 import { CommunityPage } from "./routes/community-page";
 import { SettingsPage } from "./routes/SettingPage/settings-page";
-import { App } from "./components/App";
+import { App, loaderCheckToken } from "./components/App";
 import { AddAssignment, ViewAssignment } from "./components/psy/AddAssignment";
 import { AddClient } from "./components/psy/AddClient";
 import { AddNote } from "./components/psy/AddNote";
@@ -31,12 +31,19 @@ import ConfirmEmail from "./service/forms/confirm-email";
 import MobileEmotionPage from "./components/client/MyDiary/MobileEmotionPage/MobileEmotionPage";
 import AssignmentsPageRefactor from "./routes/AssignmentsPageRefactor/AssignmentsPage";
 import { AfterRegistrationConfirmEmail } from "./service/forms/after-registration-email-confirmation";
+import MetricsPage from "./routes/MetricsPage/metrics-page";
 
 const router = createBrowserRouter([
+  {
+    path: "/metrics",
+    element: <MetricsPage />,
+  },
+
   {
     path: "/",
     element: <App />,
     errorElement: <ErrorPage />,
+    loader: loaderCheckToken,
     children: [
       {
         path: "/clients",

@@ -11,6 +11,8 @@ import AllTabs from "./AllTabs/AllTabs";
 import TabsAssignments from "./TabsAssignments/Tab";
 import { changeSearchAction } from "../../store/slices";
 import { WithTab } from "./TabsAssignments/Hoc";
+import addAssignment from "../../images/psy-icons/add-assignment-icon.svg";
+import Button from "../../stories/buttons/Button";
 
 interface Props {
   isShareModal?: boolean;
@@ -67,9 +69,14 @@ export default function AssignmentsPageRefactor({
         {!isShareModal && (
           <header>
             <h1>Assignments</h1>
-            <button className="action-button" onClick={handleAddAssignment}>
-              <FontAwesomeIcon icon={faPlus as IconProp} /> Add Assignment
-            </button>
+            <Button
+              buttonSize="small"
+              fontSize="medium"
+              label="Add Assignment"
+              type="button"
+              onClick={handleAddAssignment}
+              icon={addAssignment}
+            />
           </header>
         )}
         <AllTabs />

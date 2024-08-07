@@ -49,7 +49,7 @@ export default function DiaryFooterClient({
   const handleClickVisible = async () => {
     await setActive((prev) => !prev);
     try {
-      const response = await API.post(`/diary-notes/${diary.id}/visible/`);
+      const response = await API.patch(`/diary-notes/${diary.id}/visible/`);
       return response.data;
     } catch (error) {
       console.log(error);
