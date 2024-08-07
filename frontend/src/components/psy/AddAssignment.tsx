@@ -14,6 +14,7 @@ import decodeStyledText from "../../service/decodeStyledText";
 import HeadlinerImg from "./HeadlinerImg/HeadlinerImg";
 import "../../css/assignments.css";
 import HeaderAssignment from "./HeaderAssigmentPage/HeaderAssignment";
+import Button from "../../stories/buttons/Button";
 import imageIcon from "../../images/assignment-page/image.svg";
 import textParagraphIcon from "../../images/assignment-page/paragraph.svg";
 import linearScaleIcon from "../../images/assignment-page/linear-scale.svg";
@@ -595,19 +596,22 @@ function AddAssignment() {
           </span>
         )}
         <div className="buttons-save-as-draft-and-publish-container">
-          <button
-            className="buttons-save-as-draft-and-publish"
+          <Button
+            buttonSize="large"
+            fontSize="medium"
+            label="Save as Draft"
+            type="button"
             onClick={(e) => handleSubmit(e, false, true)}
-          >
-            Save as Draft
-          </button>
-          <button
-            className="buttons-save-as-draft-and-publish"
+          />
+
+          <Button
+            buttonSize="large"
+            fontSize="small"
+            label="Complete & Publish"
+            type="button"
             onClick={(e) => handleSubmit(e, false, false)}
             disabled={errorText || isError}
-          >
-            Complete & Publish
-          </button>
+          />
         </div>
       </div>
     </div>

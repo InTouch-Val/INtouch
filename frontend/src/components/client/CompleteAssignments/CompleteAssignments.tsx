@@ -18,6 +18,7 @@ import Modal from "../../modals/Modal/Modal";
 import EntryNotComplete from "../../modals/Notifications/entryNotComplete";
 import EntryUnsavedExit from "../../modals/Notifications/entryUnsavedExit";
 import useMobileWidth from "../../../utils/hook/useMobileWidth";
+import Button from "../../storybook/Button/Button";
 import { ContentState, convertFromRaw, getPlainText } from "draft-js";
 
 function CompleteAssignments() {
@@ -309,7 +310,7 @@ function CompleteAssignments() {
       });
       if (res.status >= 200 && res.status < 300) {
         console.log(res.data);
-        const resComplete = await API.get(
+        const resComplete = await API.patch(
           `assignments-client/${assignmentData.id}/complete/`,
         );
         if (resComplete.status >= 200 && resComplete.status < 300) {
@@ -353,7 +354,7 @@ function CompleteAssignments() {
       });
       if (res.status >= 200 && res.status < 300) {
         console.log(res.data);
-        const resComplete = await API.get(
+        const resComplete = await API.patch(
           `assignments-client/${assignmentData.id}/complete/`,
         );
         if (resComplete.status >= 200 && resComplete.status < 300) {
