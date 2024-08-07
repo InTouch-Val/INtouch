@@ -4,9 +4,15 @@ import axios from "axios";
 import "../css/image-selector.css";
 import Button from "../stories/buttons/Button";
 
-function ImageSelector({ onImageSelect, selectedImage }) {
+function ImageSelector({
+  onImageSelect,
+  selectedImage,
+  searchTerm,
+  setSearchTerm,
+  isFirstEntry,
+}) {
   const [images, setImages] = useState(selectedImage ? [selectedImage] : []);
-  const [searchTerm, setSearchTerm] = useState("");
+  // const [searchTerm, setSearchTerm] = useState("");
   const [isSearchDone, setIsSearchDone] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
   const [selectedImageId, setSelectedImageId] = useState(null); // Состояние для хранения ID выбранного изображения
@@ -23,14 +29,14 @@ function ImageSelector({ onImageSelect, selectedImage }) {
   const searchImages = (query) => {
     if (!accessKey) {
       console.error(
-        "Unsplash Access Key is missing. Please add it to .env file.",
+        "Unsplash Access Key is missing. Please add it to .env file."
       );
       return;
     }
 
     axios
       .get(
-        `https://api.unsplash.com/search/photos?query=${query}&client_id=${accessKey}`,
+        `https://api.unsplash.com/search/photos?query=${query}&client_id=${accessKey}`
       )
       .then((response) => {
         setImages(response.data.results);
@@ -59,6 +65,7 @@ function ImageSelector({ onImageSelect, selectedImage }) {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder={`Enter the relevant keyword here and click "Search"`}
+          className={`title-input ${searchTerm.length == 0 && !isFirstEntry ? "error" : ""}`}
         />
 
         <Button
