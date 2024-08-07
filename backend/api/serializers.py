@@ -449,7 +449,7 @@ class BlockSerializer(BlockSerializerForClient):
 
 
 class AssignmentSerializer(serializers.ModelSerializer):
-    blocks = BlockSerializer(many=True, required=False)
+    blocks = BlockSerializer(many=True, required=True)
     author_name = serializers.SerializerMethodField()
     status = serializers.CharField(required=False)
     tags = serializers.CharField(required=False)
