@@ -148,7 +148,7 @@ export default function ModalAssignments({
         <h2>Assignment has been successfully sent!</h2>
       </Modal>
       <Modal
-        showCancel={false}
+        showCancel={true}
         isOpen={isDeleteModalOpen}
         onClose={handleModalClose}
         onConfirm={deleteAssignment}

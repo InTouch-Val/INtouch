@@ -2,12 +2,17 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../css/assignment-tile.css";
 import React from "react";
-import { useAppDispatch } from "../../../store/store";
+import { useAppDispatch, useAppSelector } from "../../../store/store";
 import {
   draftAssignmentAction,
   duplicateAssignmentAction,
 } from "../../../store/actions/assignment/assignmentActions";
-import { BlockType } from "../../../utils/constants";
+import {
+  AssignmentTab,
+  BlockType,
+  TypeFilter,
+  TypeLanguage,
+} from "../../../utils/constants";
 import { AssignmentsType } from "../../../store/entities/assignments/types";
 import {
   useCreateAssignmentMutation,
@@ -16,6 +21,7 @@ import {
 import { formatDate } from "../../../utils/helperFunction/formatDate";
 import DropDownButton from "./DropDownButton/DropDownButton";
 import { separatedBlock } from "./helperFunction";
+import { useAuth } from "../../../service/authContext";
 
 interface Props {
   assignment: AssignmentsType;

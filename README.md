@@ -295,3 +295,23 @@ import { MyComponent } from '../components/MyComponent'
 #### Практическое использование:
 
 - Используйте БЭМ для организации стилей.
+
+
+### Использование Storybook
+
+#### Установка и запуск
+Установите зависимости:
+
+```
+cd frontend
+npm install
+```
+
+#### Запустите Storybook:
+```
+npm run storybook
+```
+Storybook откроется по адресу http://localhost:6006.
+
+#### Примеры
+См. storybook/example-files с документацией и примерами использования, предоставленными storybook при установке.

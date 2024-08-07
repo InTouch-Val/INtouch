@@ -5,6 +5,7 @@ import FormData from "form-data";
 import { useAuth } from "../service/authContext";
 import { API } from "../service/axios";
 import "../css/settings.scss";
+import Button from "../stories/buttons/Button";
 
 // TODO: PopUp windows for users
 
@@ -115,9 +116,13 @@ function ProfileTab() {
           style={{ display: "none" }}
           onChange={handleFileSelect}
         />
-        <button className="action-button" onClick={handleChooseFileClick}>
-          Change Photo
-        </button>
+        <Button
+          buttonSize="large"
+          fontSize="medium"
+          label="Change Photo"
+          type="button"
+          onClick={handleChooseFileClick}
+        />
       </div>
       <div className="right-column">
         <form onSubmit={handleSubmit}>

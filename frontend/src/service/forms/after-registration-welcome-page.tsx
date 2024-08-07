@@ -1,6 +1,7 @@
 //@ts-nocheck
 import { useNavigate } from "react-router-dom";
 import "../../css/app.scss";
+import Button from "../../stories/buttons/Button";
 
 function AfterRegistrationPage() {
   const navigate = useNavigate();
@@ -22,9 +23,13 @@ function AfterRegistrationPage() {
           </p>
         </div>
         <div>
-          <button className="action-button" onClick={handleGoButton}>
-            Go to Login Page
-          </button>
+          <Button
+            buttonSize="large"
+            fontSize="medium"
+            label="Go to Login Page"
+            type="button"
+            onClick={handleGoButton}
+          />
         </div>
       </div>
     </div>
