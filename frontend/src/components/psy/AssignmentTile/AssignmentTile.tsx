@@ -47,17 +47,19 @@ function AssignmentTile({
   selectedAssignmentIdForShareModalOnClientPage,
 }: Props) {
   const [isSelected, setIsSelected] = useState(
-    assignment.id === selectedAssignmentIdForShareModalOnClientPage,
+    assignment.id === selectedAssignmentIdForShareModalOnClientPage
   );
+
+    //@ts-ignore
+    const { initAuth } = useAuth();
 
   const dispatch = useAppDispatch();
   const [assignmentId, setAssignments] = useState<AssignmentsType[] | []>([]);
   const [createAssignment, _] = useCreateAssignmentMutation();
-  const [updateAssignment] = useUpdateAssignmentByUUIDMutation();
 
   useEffect(() => {
     setIsSelected(
-      assignment.id === selectedAssignmentIdForShareModalOnClientPage,
+      assignment.id === selectedAssignmentIdForShareModalOnClientPage
     );
   }, [selectedAssignmentIdForShareModalOnClientPage]);
 
@@ -95,7 +97,7 @@ function AssignmentTile({
   }, [isDropdownOpen]);
 
   const duplicateAssignmentHandle = async (
-    assignmentId: number,
+    assignmentId: number
   ): Promise<void> => {
     try {
       const assignmentData = assignment;
@@ -150,28 +152,29 @@ function AssignmentTile({
   };
 
   function handleFavoriteClick(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void {
     event.stopPropagation();
     onFavoriteToggle(assignment.id);
+    initAuth();
   }
 
   function handleDeleteClick(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void {
     event.stopPropagation();
     onDeleteClick(assignment.id);
   }
 
   function handleShareClick(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void {
     event.stopPropagation();
     onShareClick(assignment.id);
   }
 
   function handleGoNavigateEdit(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void {
     event.stopPropagation();
     navigate(`/edit-assignment/${assignment.id}`);
