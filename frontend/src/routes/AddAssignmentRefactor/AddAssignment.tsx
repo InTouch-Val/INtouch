@@ -640,12 +640,14 @@ function ViewAssignment() {
             <button className="action-button" onClick={handleToggleModal}>
               Delete Assignment
             </button>
-            <button
-              className="action-button"
-              onClick={() => navigate(`/edit-assignment/${id}`)}
-            >
-              Edit Assignment
-            </button>
+            {!assignmentData.is_public && (
+              <button
+                className="action-button"
+                onClick={() => navigate(`/edit-assignment/${id}`)}
+              >
+                Edit Assignment
+              </button>
+            )}
           </div>
         )}
       </header>

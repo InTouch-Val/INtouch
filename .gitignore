@@ -45,4 +45,4 @@ media/
 sent_emails/
 
 # Logging data
-debug.log
+.data/
