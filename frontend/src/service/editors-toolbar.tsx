@@ -16,7 +16,7 @@ import "../css/editorsBar.css";
 import { useToolbar } from "./ToolbarContext"; // Импортируем хук для использования контекста
 import { EditorState, ContentState, convertFromRaw } from "draft-js";
 import { Modifier } from "draft-js";
-import { maxTextLegthBig, maxTextLegthSmall } from "../utils/constants";
+import { maxTextLegthBig } from "../utils/constants";
 import { Block, CharacterInfo } from "../utils/global-types";
 
 const EditorToolbar = forwardRef(
@@ -40,7 +40,6 @@ const EditorToolbar = forwardRef(
     const { Toolbar } = toolbarPlugin;
     const plugins = [toolbarPlugin];
     const textErrMaxTextLegthBig = ` Please enter 1-${maxTextLegthBig} characters`;
-    const textErrMaxTextLegthSmall = ` Please enter 1-${maxTextLegthSmall} characters`;
 
     const focusEditor = () => {
       if (ref.current) {
@@ -209,22 +208,17 @@ const EditorToolbar = forwardRef(
     };
 
     const validateTextLength = (text: string) => {
-      const maxLength =
-        block.type === "text" ? maxTextLegthBig : maxTextLegthSmall;
+      const maxLength = maxTextLegthBig;
       if (text.length < 1 || text.length > maxLength) {
         setIsError(true);
         setErrorText(
-          maxLength === maxTextLegthBig
-            ? `${effectiveErrorText.includes(textErrMaxTextLegthBig) ? effectiveErrorText.replace(textErrMaxTextLegthBig, "") : effectiveErrorText} ${textErrMaxTextLegthBig}`
-            : `${effectiveErrorText.includes(textErrMaxTextLegthSmall) ? effectiveErrorText.replace(textErrMaxTextLegthSmall, "") : effectiveErrorText} ${textErrMaxTextLegthSmall}`
+          `${effectiveErrorText.includes(textErrMaxTextLegthBig) ? effectiveErrorText.replace(textErrMaxTextLegthBig, "") : effectiveErrorText} ${textErrMaxTextLegthBig}`
         );
         return false;
       }
       setIsError(false);
       setErrorText(
-        maxLength === maxTextLegthBig
-          ? `${effectiveErrorText.includes(textErrMaxTextLegthBig) ? effectiveErrorText.replace(textErrMaxTextLegthBig, "") : ""}`
-          : `${effectiveErrorText.includes(textErrMaxTextLegthSmall) ? effectiveErrorText.replace(textErrMaxTextLegthSmall, "") : ""}`
+        `${effectiveErrorText.includes(textErrMaxTextLegthBig) ? effectiveErrorText.replace(textErrMaxTextLegthBig, "") : ""}`
       );
       return true;
     };
@@ -240,7 +234,7 @@ const EditorToolbar = forwardRef(
 
     return (
       <div
-        className={`editor-container ${(effectiveErrorText.includes(textErrMaxTextLegthBig) || effectiveErrorText.includes(textErrMaxTextLegthSmall)) && "error"}`}
+        className={`editor-container ${effectiveErrorText.includes(textErrMaxTextLegthBig) && "error"}`}
         onClick={focusEditor}
       >
         <Editor

@@ -25,7 +25,6 @@ export const minMobWidth = 320;
 export const maxMobWidth = 480;
 
 export const maxTextLegthBig = 3000;
-export const maxTextLegthSmall = 3000;
 
 export enum Status {
   Success = "success",
