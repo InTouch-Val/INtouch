@@ -11,4 +11,8 @@ export default {
   define: {
     global: "window",
   },
+  esbuild: {
+    target: 'esnext',
+    platform: 'linux',
+  }
 };
