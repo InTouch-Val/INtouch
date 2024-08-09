@@ -10,9 +10,5 @@ export default {
   // Fix for `draft-js` package (https://github.com/facebook/fbjs/issues/290)
   define: {
     global: "window",
-  },
-  esbuild: {
-    target: 'esnext',
-    platform: 'linux',
   }
 };
