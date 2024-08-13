@@ -9,6 +9,7 @@ const useAssignmentsOnboardingTour = () => {
   const { currentUser } = useAuth();
 
   useEffect(() => {
+
     const tourFlag = localStorage.getItem("onboardingTourShown");
 
     if (!tourFlag) {
@@ -42,29 +43,27 @@ const useAssignmentsOnboardingTour = () => {
   }, [currentUser]);
 };
 
-localStorage.removeItem("onboardingTourShown"); // comment this line if testing is needed
+// uncomment for local testing
+// localStorage.removeItem("onboardingTourShown"); 
+
+//hook for testing in browser. Usage: run "window.launchOnboardingTour();" in console to launch onboarding tour
+// @ts-ignore
+window.launchOnboardingTour = () => {
+  localStorage.removeItem("onboardingTourShown");
+
+  const tour = new Shepherd.Tour({
+    useModalOverlay: true,
+    defaultStepOptions: {
+      classes: "shadow-md bg-purple-dark shepherd-theme-custom",
+      scrollTo: false,
+    },
+  });
+
+  // @ts-ignore
+  const steps = getAssignmentsSteps(window.currentUser);
+  steps.forEach((step) => tour.addStep(step));
+
+  tour.start();
+};
 
 export default useAssignmentsOnboardingTour;
-
-// // Highlight the Assignments tab when the tour starts
-// tour.on('start', () => {
-//   const element = document.getElementById('onboarding_assignments_menu');
-//   if (element) {
-//     element.classList.add('highlighted');
-//   }
-// });
-
-// // Remove the highlight from the Assignments tab when the tour ends or is cancelled
-// tour.on('complete', () => {
-//   const element = document.getElementById('onboarding_assignments_menu');
-//   if (element) {
-//     element.classList.remove('highlighted');
-//   }
-// });
-
-// tour.on('cancel', () => {
-//   const element = document.getElementById('onboarding_assignments_menu');
-//   if (element) {
-//     element.classList.remove('highlighted');
-//   }
-// });

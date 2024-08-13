@@ -1,12 +1,13 @@
 import Shepherd, { StepOptions, PopperPlacement } from "shepherd.js";
 import { User } from "../authContext";
+import welcomeIcon from "./assets/welcome-icon.svg";
 
 const getAssignmentsSteps = (currentUser: User | null): StepOptions[] => [
   {
     id: "welcome",
     text: `
-    <div> <img style="width: 100px; height: 100px; margin-bottom: 20px;"/></div>
-      <div style="margin-bottom: 30px;">Hi ${currentUser ? currentUser.first_name : "there"}!</div>
+    <div> <img src="${welcomeIcon}" style="width: 100px; height: 100px; margin-bottom: 20px;"/></div>
+      <div style="margin-bottom: 30px;">Hi${currentUser ? `, ${currentUser.first_name}` : " there"}!</div>
       <div>Welcome to INtouch!</div>
     `,
     classes: "welcome",

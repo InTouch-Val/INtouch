@@ -1,7 +1,4 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { useDeleteAssignmentByUUIDMutation } from "../../store/entities";
 import { useNavigate } from "react-router-dom";
 import FilterDropDown from "./FilterDropDown/FilterDropDown";
@@ -72,6 +69,7 @@ export default function AssignmentsPageRefactor({
         {!isShareModal && (
           <header>
             <h1>Assignments</h1>
+            <div id="onboarding_add_assignment">
             <Button
               buttonSize="small"
               fontSize="medium"
@@ -80,6 +78,7 @@ export default function AssignmentsPageRefactor({
               onClick={handleAddAssignment}
               icon={addAssignment}
             />
+            </div>
           </header>
         )}
         <AllTabs />
