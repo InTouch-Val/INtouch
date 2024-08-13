@@ -12,7 +12,8 @@ services:
       - "5432:5432"
     volumes:
       - "/opt/intouch_data:/var/lib/postgresql/data"
-    env_file: ".env"
+    env_file:
+     - .env
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ivan -d django_app"]
       interval: 1s
@@ -25,7 +26,7 @@ services:
       - "6379:6379"
 
   app:
-    image: ivansitnikov1/repo:latest
+    image: ${BACKEND_IMAGE}
     ports:
       - "8000:8000"
     volumes:

@@ -1,11 +1,10 @@
 name: Deploy to Server
-# test
 
 on:
   push:
     branches:
-      - master
-
+      - develop
+      - develop_server_deploy
 
 jobs:
   build:
@@ -15,20 +14,33 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Determine Docker Tag
+        id: vars
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then
+            echo "TAG=test"
+          elif [[ "${{ github.ref }}" == refs/heads/release-* ]]; then
+            echo "TAG=release"
+          else
+            echo "TAG=latest"
+          fi
+          echo "::set-output name=tag::${TAG}"
+
       - name: Build Docker image
         working-directory: ./backend
-        run: docker build -t ivansitnikov1/repo .
+        run: docker build -t ivansitnikov1/repo:${{ steps.vars.outputs.tag }} .
 
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Push Docker image
-        run: docker push ivansitnikov1/repo:latest
+        run: docker push ivansitnikov1/repo:${{ steps.vars.outputs.tag }}
 
       - name: Logout from Docker Hub
         run: docker logout
 
-  deploy-backend:
+  deploy-test:
+    if: github.ref == 'refs/heads/develop_server_deploy'
     needs: build
     runs-on: ubuntu-latest
 
@@ -36,26 +48,57 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Copy to server
+      - name: Copy to test server
         uses: burnett01/rsync-deployments@6.0.0
         with:
           switches: -avzr --delete
           remote_path: /opt/app/
           path: ./backend/docker-compose.yml
-          remote_host: ${{ secrets.REMOTE_HOST }}
-          remote_user: ${{ secrets.REMOTE_USER }}
-          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          remote_host: ${{ secrets.TEST_REMOTE_HOST }}
+          remote_user: ${{ secrets.TEST_REMOTE_USER }}
+          remote_key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
 
-      - name: Connect to server
+      - name: Connect to test server
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          host: ${{ secrets.TEST_REMOTE_HOST }}
+          username: ${{ secrets.TEST_REMOTE_USER }}
+          key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
           script: |
             cd /opt/app
             docker compose down
-            docker image rm ivansitnikov1/repo
+            docker image rm ivansitnikov1/repo:test
+            docker compose up -d --build
+
+  deploy-prod:
+    if: startsWith(github.ref, 'refs/heads/release-')
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Copy to prod server
+        uses: burnett01/rsync-deployments@6.0.0
+        with:
+          switches: -avzr --delete
+          remote_path: /opt/app/
+          path: ./backend/docker-compose.yml
+          remote_host: ${{ secrets.PROD_REMOTE_HOST }}
+          remote_user: ${{ secrets.PROD_REMOTE_USER }}
+          remote_key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+
+      - name: Connect to prod server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.PROD_REMOTE_HOST }}
+          username: ${{ secrets.PROD_REMOTE_USER }}
+          key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+          script: |
+            cd /opt/app
+            docker compose down
+            docker image rm ivansitnikov1/repo:release
             docker compose up -d --build
 
   deploy-frontend:
