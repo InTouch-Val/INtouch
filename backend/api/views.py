@@ -930,6 +930,7 @@ class AddAssignmentClientView(APIView):
                 value={
                     "title": "Test Assignment",
                     "text": "Some test text",
+                    "is_public": False,
                     "assignment_type": "quiz",
                     "tags": "SomeTagLOL",
                     "language": "en",
