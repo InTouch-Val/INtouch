@@ -125,9 +125,9 @@ jobs:
           switches: -avzr --delete
           remote_path: /opt/app/frontend/build/
           path: ./frontend/dist/
-          remote_host: ${{ secrets.REMOTE_HOST }}
-          remote_user: ${{ secrets.REMOTE_USER }}
-          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          remote_host: ${{ secrets.PROD_REMOTE_HOST }}
+          remote_user: ${{ secrets.PROD_REMOTE_USER }}
+          remote_key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
 
   deploy-prod-storybook:
     if: startsWith(github.ref, 'refs/heads/release-')
@@ -151,9 +151,9 @@ jobs:
           switches: -avzr --delete
           remote_path: /opt/app/storybook/
           path: ./frontend/storybook-static/
-          remote_host: ${{ secrets.REMOTE_HOST }}
-          remote_user: ${{ secrets.REMOTE_USER }}
-          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          remote_host: ${{ secrets.PROD_REMOTE_HOST }}
+          remote_user: ${{ secrets.PROD_REMOTE_USER }}
+          remote_key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
 
   deploy-test-frontend:
     if: github.ref == 'refs/heads/feature/develop_server_deploy'
@@ -179,9 +179,9 @@ jobs:
           switches: -avzr --delete
           remote_path: /opt/app/frontend/build/
           path: ./frontend/dist/
-          remote_host: ${{ secrets.REMOTE_HOST }}
-          remote_user: ${{ secrets.REMOTE_USER }}
-          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          remote_host: ${{ secrets.TEST_REMOTE_HOST }}
+          remote_user: ${{ secrets.TEST_REMOTE_USER }}
+          remote_key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
 
   deploy-test-storybook:
     if: github.ref == 'refs/heads/feature/develop_server_deploy'
@@ -205,6 +205,6 @@ jobs:
           switches: -avzr --delete
           remote_path: /opt/app/storybook/
           path: ./frontend/storybook-static/
-          remote_host: ${{ secrets.REMOTE_HOST }}
-          remote_user: ${{ secrets.REMOTE_USER }}
-          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          remote_host: ${{ secrets.TEST_REMOTE_HOST }}
+          remote_user: ${{ secrets.TEST_REMOTE_USER }}
+          remote_key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
