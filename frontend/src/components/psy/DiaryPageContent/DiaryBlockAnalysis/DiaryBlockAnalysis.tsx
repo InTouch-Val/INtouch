@@ -2,6 +2,7 @@
 
 import React from "react";
 import "../DiaryPageContent.css";
+import { parseEventDetailsText } from "../../../../utils/helperFunction/parseEventDetailsText";
 
 export default function DiaryBlockAnalysis({ diary }) {
   return (
@@ -11,7 +12,9 @@ export default function DiaryBlockAnalysis({ diary }) {
         Reflect on your thoughts related to the situation. What were you
         thinking?
       </div>
-      <div className="diary__block-description">{diary.thoughts_analysis}</div>
+      <div className="diary__block-description">
+        {parseEventDetailsText(diary.thoughts_analysis)}
+      </div>
     </div>
   );
 }

@@ -2,15 +2,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { EditorState, ContentState } from "draft-js";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faComment,
-  faSquareCheck,
-  faCircleDot,
-  faEllipsis,
-  faImage,
-  faQuestion,
-} from "@fortawesome/free-solid-svg-icons";
 import { API } from "../../service/axios";
 import { AssignmentBlock } from "../../service/psyAssignment/AssignmentBlock";
 import { ImageSelector } from "../../service/image-selector";
@@ -23,14 +14,22 @@ import decodeStyledText from "../../service/decodeStyledText";
 import HeadlinerImg from "./HeadlinerImg/HeadlinerImg";
 import "../../css/assignments.css";
 import HeaderAssignment from "./HeaderAssigmentPage/HeaderAssignment";
+import Button from "../../stories/buttons/Button";
+import imageIcon from "../../images/assignment-page/image.svg";
+import textParagraphIcon from "../../images/assignment-page/paragraph.svg";
+import linearScaleIcon from "../../images/assignment-page/linear-scale.svg";
+import multipleIcon from "../../images/assignment-page/multiple-choice.svg";
+import questionIcon from "../../images/assignment-page/question.svg";
+import singleIcon from "../../images/assignment-page/single-choice.svg";
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
 function AddAssignment() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [type, setType] = useState("lesson");
-  const [language, setLanguage] = useState("en");
+  const [type, setType] = useState("");
+  const [language, setLanguage] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   // const [tags, setTags] = useState('');
 
   const [blocks, setBlocks] = useState([]);
@@ -44,23 +43,35 @@ function AddAssignment() {
 
   const [isChangeView, setChangeView] = useState(false);
   const [isError, setIsError] = useState(false);
-
-  useEffect(() => {
-    console.log(title, description);
-    if (title.length > 2 && description.length > 2) {
-      setErrorText("");
-
-      const titleElement = document.getElementById("title");
-
-      const textElement = document.getElementById("text");
-      titleElement.classList.remove("error");
-      textElement.classList.remove("error");
-    }
-  }, [title, description]);
+  const [isFirstEntry, setFirstEntry] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(true);
 
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditMode = id != undefined;
+
+  useEffect(() => {
+    if (
+      title.length !== 0 ||
+      description.length !== 0 ||
+      searchTerm.length !== 0 ||
+      type.length !== 0 ||
+      language.length !== 0
+    ) {
+      setFirstEntry(false);
+    }
+    setIsDisabled(
+      !(
+        title.length !== 0 &&
+        title.length < 50 &&
+        description.length !== 0 &&
+        description.length < 300 &&
+        searchTerm.length !== 0 &&
+        type.length !== 0 &&
+        language.length !== 0
+      )
+    );
+  }, [title, description, searchTerm, type, language]);
 
   const fetchAssignment = useCallback(async () => {
     try {
@@ -283,13 +294,12 @@ function AddAssignment() {
       const errorTextString = Object.entries(parsedError)
         .map(([key, message]) => `${key}: ${message}`)
         .join(", ");
-      setErrorText(`Please correct the following errors: ${errorTextString}`);
       console.error("Error creating assignment", error);
+      setIsError(true);
       displayErrorMessages(parsedError);
     }
   };
 
-  const [errorText, setErrorText] = useState("");
   const [hasScrolled, setHasScrolled] = useState(false);
 
   useEffect(() => {
@@ -314,7 +324,7 @@ function AddAssignment() {
     blockContainers.forEach((blockContainer, index) => {
       const blockErrorKey = `blocks #${index + 1}`;
       const blockErrorExists = Object.keys(errorMessages).some((key) =>
-        key.startsWith(blockErrorKey),
+        key.startsWith(blockErrorKey)
       );
       if (blockErrorExists) {
         blockContainer.classList.add("error");
@@ -394,7 +404,7 @@ function AddAssignment() {
     newMaxValue,
     newLeftPole,
     newRightPole,
-    newImage,
+    newImage
   ) => {
     setBlocks((prevBlocks) =>
       prevBlocks.map((block) =>
@@ -417,8 +427,8 @@ function AddAssignment() {
               rightPole: newRightPole ?? block.rightPole,
               image: newImage ?? block.image,
             }
-          : block,
-      ),
+          : block
+      )
     );
   };
 
@@ -432,36 +442,59 @@ function AddAssignment() {
       <HeaderAssignment
         blocks={blocks}
         handleSubmit={(e) => handleSubmit(e, true, false)}
-        errorText={errorText}
-        isError={isError}
+        isDisabled={isDisabled}
+        isFirstEntry={isFirstEntry}
         changeView={() => {
           setChangeView((prev) => !prev);
         }}
       />
       <div className="form-title">
+        <label>Enter Assignment Details</label>
         <input
           type="text"
-          className="title-input"
-          placeholder="Name of Assignment..."
+          className={`title-input ${
+            (title.length === 0 || title.length > 50) && !isFirstEntry
+              ? "error"
+              : ""
+          }`}
+          placeholder="Write the name of assignment here..."
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
           id="title"
         />
+        <span
+          className={`title-span ${(title.length === 0 || title.length > 50) && !isFirstEntry && "error__text_span"}`}
+        >
+          Please enter a valid name (1-50 characters)
+        </span>
         <input
           type="text"
-          className="title-input"
-          placeholder="Description..."
+          className={`title-input ${
+            (description.length === 0 || description.length > 300) &&
+            !isFirstEntry
+              ? "error"
+              : ""
+          }`}
+          placeholder="White the description here..."
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
           id="text"
         />
+        <span
+          className={`title-span ${(description.length === 0 || description.length > 300) && !isFirstEntry ? "error__text_span" : ""}`}
+        >
+          Please enter a valid name (1-300 characters)
+        </span>
       </div>
       <div className="add-assignment-body">
         <ImageSelector
           onImageSelect={handleImageSelect}
           selectedImage={selectedImage}
+          isFirstEntry={isFirstEntry}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
         />
         <form
           onSubmit={(e) => handleSubmit(e, false, false)}
@@ -487,7 +520,16 @@ function AddAssignment() {
           <div className="form-settings">
             <div className="form-setting">
               <label>Type</label>
-              <select value={type} onChange={(e) => setType(e.target.value)}>
+              <select
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+                required
+                className={!type && !isFirstEntry ? "error" : ""}
+                defaultValue={""}
+              >
+                <option hidden disabled value={""}>
+                  Type
+                </option>
                 <option value="lesson">Lesson</option>
                 <option value="exercise">Exercise</option>
                 <option value="essay">Essay</option>
@@ -502,11 +544,17 @@ function AddAssignment() {
               <select
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
+                required
+                className={!language && !isFirstEntry ? "error" : ""}
+                defaultValue={""}
               >
+                <option hidden disabled value={""}>
+                  Language
+                </option>
                 <option value="en">English</option>
                 <option value="es">Spanish</option>
                 <option value="fr">French</option>
-                <option value="ge">German</option>
+                <option value="de">German</option>
                 <option value="it">Italian</option>
               </select>
             </div>
@@ -548,57 +596,61 @@ function AddAssignment() {
         </form>
         <div className="block-buttons-container">
           <div className="block-buttons">
-            <button title="Add Text Block" onClick={() => addBlock("text")}>
-              <FontAwesomeIcon icon={faComment} />{" "}
-            </button>
             <button
               title="Add Open-Question Block"
               onClick={() => addBlock("open")}
             >
-              <FontAwesomeIcon icon={faQuestion} />{" "}
+              <img src={questionIcon} alt="OpenQuestionIcon" />
             </button>
-            <button
-              title="Add Multiple Choice Block"
-              onClick={() => addBlock("multiple")}
-            >
-              <FontAwesomeIcon icon={faSquareCheck} />{" "}
+            <button title="Add Text Block" onClick={() => addBlock("text")}>
+              <img src={textParagraphIcon} alt="textParagraphIcon" />
             </button>
             <button
               title="Add Single Choice Block"
               onClick={() => addBlock("single")}
             >
-              <FontAwesomeIcon icon={faCircleDot} />{" "}
+              <img src={singleIcon} alt="singleChoiceIcon" />
+            </button>
+            <button
+              title="Add Multiple Choice Block"
+              onClick={() => addBlock("multiple")}
+            >
+              <img src={multipleIcon} alt="multipleChoiceIcon" />
             </button>
             <button
               title="Add Linear Scale Question Block"
               onClick={() => addBlock("range")}
             >
-              <FontAwesomeIcon icon={faEllipsis} />
+              <img src={linearScaleIcon} alt="linearScaleIcon" />
             </button>
             <button title="Add Image" onClick={() => addBlock("image")}>
-              <FontAwesomeIcon icon={faImage} />
+              <img src={imageIcon} alt="imageIcon" />
             </button>
           </div>
         </div>
-        {(isError || errorText) && (
-          <span className="error__text error__text_header error__text_footer">
-            Please check all fields
-          </span>
-        )}
+        <span
+          className={`error__text error__text_footer ${isDisabled && !isFirstEntry ? "error__text_span" : ""}`}
+        >
+          Please check all fields
+        </span>
         <div className="buttons-save-as-draft-and-publish-container">
-          <button
-            className="buttons-save-as-draft-and-publish"
+          <Button
+            buttonSize="large"
+            fontSize="medium"
+            label="Save as Draft"
+            type="button"
             onClick={(e) => handleSubmit(e, false, true)}
-          >
-            Save as Draft
-          </button>
-          <button
-            className="buttons-save-as-draft-and-publish"
+            disabled={isError || isDisabled || blocks.length === 0}
+          />
+
+          <Button
+            buttonSize="large"
+            fontSize="small"
+            label="Complete & Publish"
+            type="button"
             onClick={(e) => handleSubmit(e, false, false)}
-            disabled={errorText || isError}
-          >
-            Complete & Publish
-          </button>
+            disabled={isError || isDisabled || blocks.length === 0}
+          />
         </div>
       </div>
     </div>
@@ -681,12 +733,14 @@ function ViewAssignment() {
             <button className="action-button" onClick={handleToggleModal}>
               Delete Assignment
             </button>
-            <button
-              className="action-button"
-              onClick={() => navigate(`/edit-assignment/${id}`)}
-            >
-              Edit Assignment
-            </button>
+            {!assignmentData.is_public && (
+              <button
+                className="action-button"
+                onClick={() => navigate(`/edit-assignment/${id}`)}
+              >
+                Edit Assignment
+              </button>
+            )}
           </div>
         )}
       </header>

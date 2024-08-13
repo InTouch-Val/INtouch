@@ -41,6 +41,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
+    "INtouch.middleware.request_id.RequestIDMiddleware",
+    "INtouch.middleware.requests_log.RequestLogMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -265,21 +267,37 @@ DRAMATIQ_BROKER = {
 
 DRAMATIQ_TASKS_DATABASE = "default"
 
+logs_path = BASE_DIR / ".data/logs/"
+logs_path.mkdir(parents=True, exist_ok=True)
+logs_filename = logs_path / "backend.log"
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    "formatters": {
+        "django.server": {
+            "()": "django.utils.log.ServerFormatter",
+            "format": "[{server_time}] [{levelname}] {message}",
+            "style": "{",
+        },
+        "verbose": {
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        },
+    },
     "handlers": {
         "file": {
-            "level": "DEBUG",
-            "class": "logging.FileHandler",
-            "filename": f"{BASE_DIR}/debug.log",
+            "level": os.getenv("DJANGO_LOGGING_LEVEL", "DEBUG"),
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "filename": logs_filename,
+            "formatter": "verbose",
+            "when": os.getenv("DJANGO_LOGS_WHEN", "h"),
+            "interval": int(os.getenv("DJANGO_LOGS_INTERVAL", 1)),
+            "backupCount": int(os.getenv("DJANGO_LOGS_BACKUP_COUNT", 3)),
+            "encoding": os.getenv("DJANGO_LOGS_ENCODING", "utf-8"),
         },
     },
     "loggers": {
         "django": {
             "handlers": ["file"],
-            "level": "DEBUG",
-            "propagate": True,
         },
     },
 }

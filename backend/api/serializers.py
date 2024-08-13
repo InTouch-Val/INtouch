@@ -449,7 +449,7 @@ class BlockSerializer(BlockSerializerForClient):
 
 
 class AssignmentSerializer(serializers.ModelSerializer):
-    blocks = BlockSerializer(many=True, required=False)
+    blocks = BlockSerializer(many=True, required=True)
     author_name = serializers.SerializerMethodField()
     status = serializers.CharField(required=False)
     tags = serializers.CharField(required=False)
@@ -506,7 +506,6 @@ class AssignmentSerializer(serializers.ModelSerializer):
         blocks_data = validated_data.pop("blocks", [])
         user = self.context["request"].user
         assignment = Assignment.objects.create(author=user, **validated_data)
-        user.doctor.assignments.add(assignment)
         for block_data in blocks_data:
             choice_replies_data = block_data.pop("choice_replies", [])
             block = BlockSerializer.create(BlockSerializer(), block_data)

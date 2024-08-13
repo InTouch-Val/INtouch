@@ -2,6 +2,7 @@
 
 import React from "react";
 import "../DiaryPageContent.css";
+import { parseEventDetailsText } from "../../../../utils/helperFunction/parseEventDetailsText";
 
 export default function DiaryBlockPhysicalSensation({ diary }) {
   return (
@@ -12,7 +13,7 @@ export default function DiaryBlockPhysicalSensation({ diary }) {
         For example, tension, butterflies, etc.
       </div>
       <div className="diary__block-text-sensation">
-        {diary.physical_sensations}
+        {parseEventDetailsText(diary.physical_sensations)}
       </div>
     </div>
   );

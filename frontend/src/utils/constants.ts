@@ -24,8 +24,7 @@ export const menuDate = [
 export const minMobWidth = 320;
 export const maxMobWidth = 480;
 
-export const maxTextLegthBig = 1000;
-export const maxTextLegthSmall = 200;
+export const maxTextLegthBig = 3000;
 
 export enum Status {
   Success = "success",
@@ -55,6 +54,8 @@ export enum TypeOrder {
   DecDate = "-add_date",
   Popularity = "share",
   NoPopularity = "-share",
+  AverageGrade = "average grade",
+  NoAverageGrade = "-average_grade",
 }
 
 export enum TypeFilter {
@@ -66,7 +67,6 @@ export enum TypeFilter {
   Study = "study",
   Quiz = "quiz",
   Methodology = "methodology",
-  Metaphors = "metaphors",
 }
 
 export enum BlockType {

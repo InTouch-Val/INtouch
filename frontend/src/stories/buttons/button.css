@@ -1,0 +1,42 @@
+@import url("../../vendor/fonts/fonts.css");
+
+button.buttonComponent {
+  background-color: #417d88;
+  color: #fff;
+  border: none;
+  border-radius: 100px;
+  min-width: 165px;
+  padding: 12px;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 17px;
+  text-align: center;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.disabled {
+  opacity: 0.3;
+}
+
+button.smallFont {
+  font-size: 14px;
+}
+
+button.small {
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  justify-content: center;
+}
+
+.buttonComponent__icon {
+  max-height: 17px;
+  display: block;
+  width: auto;
+  margin: 0;
+  border-radius: 0;
+}
