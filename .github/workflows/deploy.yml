@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - develop
-      - develop_server_deploy
+      - feature/develop_server_deploy
 
 jobs:
   build:
@@ -40,7 +40,7 @@ jobs:
         run: docker logout
 
   deploy-test:
-    if: github.ref == 'refs/heads/develop_server_deploy'
+    if: github.ref == 'refs/heads/feature/develop_server_deploy'
     needs: build
     runs-on: ubuntu-latest
 
