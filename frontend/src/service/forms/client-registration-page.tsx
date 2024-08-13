@@ -170,7 +170,14 @@ function ClientRegistrationPage() {
               onChange={(e) => setAcceptTerms(e.target.checked)}
             />
             <label className="registration-client__checkbox">
-              I agree to the <a href="https://intouch.care/terms-conditions"  target="_blank">Terms and Conditions</a> and <a href="https://intouch.care/privacypolicy"  target="_blank">Privacy Policy</a>
+              I agree to the{" "}
+              <a href="https://intouch.care/terms-conditions" target="_blank">
+                Terms and Conditions
+              </a>{" "}
+              and{" "}
+              <a href="https://intouch.care/privacypolicy" target="_blank">
+                Privacy Policy
+              </a>
             </label>
           </div>
           {error && <div className="error-message">{error}</div>}

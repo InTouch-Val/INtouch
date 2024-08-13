@@ -383,11 +383,15 @@ function RegistrationForm() {
               checked={formData.acceptPolicy}
               onChange={handleChange}
             />
-            <p
-              className={`${isShowTermsError ? "error-text" : "terms"}`}
-            >
-              I agree to the <a href="https://intouch.care/terms-conditions"  target="_blank">Terms and Conditions</a> and <a href="https://intouch.care/privacypolicy"  target="_blank">Privacy Policy</a>
-              
+            <p className={`${isShowTermsError ? "error-text" : "terms"}`}>
+              I agree to the{" "}
+              <a href="https://intouch.care/terms-conditions" target="_blank">
+                Terms and Conditions
+              </a>{" "}
+              and{" "}
+              <a href="https://intouch.care/privacypolicy" target="_blank">
+                Privacy Policy
+              </a>
             </p>
           </label>
         </div>
