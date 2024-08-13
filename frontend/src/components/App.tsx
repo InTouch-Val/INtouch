@@ -1,12 +1,7 @@
 //@ts-nocheck
 import React, { useCallback, useEffect, useState } from "react";
-import 'shepherd.js/dist/css/shepherd.css'; //for onboarding
-import {
-  Outlet,
-  NavLink,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
+import "shepherd.js/dist/css/shepherd.css"; //for onboarding
+import { Outlet, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowRightFromBracket,

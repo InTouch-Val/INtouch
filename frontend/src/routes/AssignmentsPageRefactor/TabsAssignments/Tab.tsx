@@ -69,8 +69,8 @@ export default function TabsAssignments({
                 selectedAssignmentIdForShareModalOnClientPage={
                   selectedAssignmentIdForShareModalOnClientPage
                 }
-                className={index === 0 ? "first-assignment" : ""} 
-          />
+                className={index === 0 ? "first-assignment" : ""}
+              />
             )}
           </React.Fragment>
         ))

@@ -69,7 +69,7 @@ function AddAssignment() {
         searchTerm.length !== 0 &&
         type.length !== 0 &&
         language.length !== 0
-      )
+      ),
     );
   }, [title, description, searchTerm, type, language]);
 
@@ -324,7 +324,7 @@ function AddAssignment() {
     blockContainers.forEach((blockContainer, index) => {
       const blockErrorKey = `blocks #${index + 1}`;
       const blockErrorExists = Object.keys(errorMessages).some((key) =>
-        key.startsWith(blockErrorKey)
+        key.startsWith(blockErrorKey),
       );
       if (blockErrorExists) {
         blockContainer.classList.add("error");
@@ -404,7 +404,7 @@ function AddAssignment() {
     newMaxValue,
     newLeftPole,
     newRightPole,
-    newImage
+    newImage,
   ) => {
     setBlocks((prevBlocks) =>
       prevBlocks.map((block) =>
@@ -427,8 +427,8 @@ function AddAssignment() {
               rightPole: newRightPole ?? block.rightPole,
               image: newImage ?? block.image,
             }
-          : block
-      )
+          : block,
+      ),
     );
   };
 
