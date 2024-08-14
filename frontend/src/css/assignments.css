@@ -124,6 +124,19 @@
   flex-direction: column;
 }
 
+.view__img {
+  display: block;
+  width: 375px;
+  height: 206px;
+  margin: 20px auto 45px;
+}
+
+.view__description {
+  color: rgba(65, 125, 136, 1);
+  font-size: 20px;
+  white-space: pre-line;
+}
+
 .form-title {
   width: 100%;
   box-sizing: border-box;
@@ -141,6 +154,12 @@
   display: block;
   color: #656565;
   margin-bottom: 15px;
+}
+
+.form-title textarea {
+  font-weight: 500;
+  resize: none;
+  scrollbar-width: none;
 }
 
 .title-span {
@@ -161,11 +180,6 @@
   font-size: 20px;
   color: #417d88;
   background-color: white;
-  font-weight: 500;
-}
-
-.title-input:first-of-type {
-  border-top: none;
   font-weight: 700;
 }
 
