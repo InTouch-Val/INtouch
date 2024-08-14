@@ -1,5 +1,5 @@
 //@ts-nocheck
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import "../DiaryPage.css";
 import {
   listEmotions,
@@ -14,6 +14,8 @@ import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 import { ClientDiary } from "../../../../utils/global-types";
 import { useEditorState } from "../../../../utils/hook/useEditorState";
 import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig";
+import { DIARY_MAX_LENGTH } from "../../../../utils/constants";
+import { handleBeforeInput as handleBeforeInputUtil, handlePastedText as handlePastedTextUtil } from "../../../../utils/helperFunction/editorUtils";
 
 interface Props {
   diary: ClientDiary;
@@ -51,6 +53,23 @@ export default function DiaryBlockEmotionClient({
 
   const value = getValues("emotion_type");
 
+  const handleBeforeInput = useCallback(
+    (chars, editorState) => handleBeforeInputUtil(chars, editorState, DIARY_MAX_LENGTH),
+    []
+  );
+
+  const handlePastedText = useCallback(
+    (pastedText, html, editorState) => handlePastedTextUtil(
+      pastedText,
+      html,
+      editorState,
+      DIARY_MAX_LENGTH,
+      (newEditorState) => handleEditorStateChange(newEditorState, setValue, "emotion_type")
+    ),
+    [DIARY_MAX_LENGTH, handleEditorStateChange, setValue]
+  );
+
+
   return (
     <>
       <div
@@ -83,6 +102,8 @@ export default function DiaryBlockEmotionClient({
                 placeholder={"Write your answer here..."}
                 block={block}
                 isMobileWidth={isMobileWidth}
+                handleBeforeInput={handleBeforeInput}
+                handlePastedText={handlePastedText}
               />
             </ToolbarProvider>
           )}

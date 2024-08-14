@@ -1,5 +1,5 @@
 //@ts-nocheck
-import React, { useRef } from "react";
+import React, { useRef, useCallback } from "react";
 import "../DiaryPage.css";
 import { EditorState } from "draft-js";
 import { EditorToolbar } from "../../../../service/editors-toolbar";
@@ -9,6 +9,8 @@ import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 import { ClientDiary } from "../../../../utils/global-types";
 import { useEditorState } from "../../../../utils/hook/useEditorState";
 import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig";
+import { DIARY_MAX_LENGTH } from "../../../../utils/constants";
+import { handleBeforeInput as handleBeforeInputUtil, handlePastedText as handlePastedTextUtil } from "../../../../utils/helperFunction/editorUtils";
 
 interface Props {
   diary: ClientDiary;
@@ -30,6 +32,22 @@ export default function DiaryBlockPhysicalSensationClient({
   const block = getBlockConfig(getValues, "physical_sensations");
 
   const value = getValues("physical_sensations");
+
+  const handleBeforeInput = useCallback(
+    (chars, editorState) => handleBeforeInputUtil(chars, editorState, DIARY_MAX_LENGTH),
+    []
+  );
+
+  const handlePastedText = useCallback(
+    (pastedText, html, editorState) => handlePastedTextUtil(
+      pastedText,
+      html,
+      editorState,
+      DIARY_MAX_LENGTH,
+      (newEditorState) => handleEditorStateChange(newEditorState, setValue, "physical_sensations")
+    ),
+    [DIARY_MAX_LENGTH, handleEditorStateChange, setValue]
+  );
 
   return (
     <div
@@ -63,6 +81,8 @@ export default function DiaryBlockPhysicalSensationClient({
               placeholder={"Write your answer here..."}
               block={block}
               isMobileWidth={isMobileWidth}
+              handleBeforeInput={handleBeforeInput}
+              handlePastedText={handlePastedText}
             />
           </ToolbarProvider>
         )}
