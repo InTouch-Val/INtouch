@@ -26,10 +26,10 @@ function ClientRegistrationPage() {
   const { accessToken } = location.state || {};
 
   useEffect(() => {
-    if (!accessToken) {
-      navigate("/login");
-      return;
-    }
+    // if (!accessToken) {
+    //   navigate("/login");
+    //   return;
+    // }
 
     API.get(`/get-user`, {
       headers: { Authorization: `Bearer ${accessToken}` },
