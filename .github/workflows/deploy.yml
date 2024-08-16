@@ -93,9 +93,9 @@ jobs:
       - name: Connect to prod server
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.PROD_REMOTE_HOST }}
-          username: ${{ secrets.PROD_REMOTE_USER }}
-          key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /opt/app
             docker compose down
