@@ -1,8 +1,4 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { useDeleteAssignmentByUUIDMutation } from "../../store/entities";
 import { useNavigate } from "react-router-dom";
 import FilterDropDown from "./FilterDropDown/FilterDropDown";
 import ModalAssignments from "./ModalsAssignments/ModalAssignments";
@@ -34,10 +30,7 @@ export default function AssignmentsPageRefactor({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = React.useState(false);
 
-  const [deleteAssignment, _] = useDeleteAssignmentByUUIDMutation();
-
   const handleDeleteClick = (assignmentId: string): void => {
-    deleteAssignment(assignmentId);
     setSelectedAssignmentId(assignmentId);
     setIsDeleteModalOpen(true);
   };

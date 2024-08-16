@@ -16,7 +16,7 @@ import "../css/editorsBar.css";
 import { useToolbar } from "./ToolbarContext"; // Импортируем хук для использования контекста
 import { EditorState, ContentState, convertFromRaw } from "draft-js";
 import { Modifier } from "draft-js";
-import { maxTextLegthBig, maxTextLegthSmall } from "../utils/constants";
+import { maxTextLegthBig } from "../utils/constants";
 import { Block, CharacterInfo } from "../utils/global-types";
 
 const EditorToolbar = forwardRef(
@@ -34,13 +34,12 @@ const EditorToolbar = forwardRef(
       handleBeforeInput,
       handlePastedText,
     },
-    ref,
+    ref
   ) => {
     const { toolbarPlugin } = useToolbar(); // Используем контекст
     const { Toolbar } = toolbarPlugin;
     const plugins = [toolbarPlugin];
-    const textErrMaxTextLegthBig = ` Please enter 20-${maxTextLegthBig} characters`;
-    const textErrMaxTextLegthSmall = ` Please enter 20-${maxTextLegthSmall} characters`;
+    const textErrMaxTextLegthBig = ` Please enter 1-${maxTextLegthBig} characters`;
 
     const focusEditor = () => {
       if (ref.current) {
@@ -52,7 +51,7 @@ const EditorToolbar = forwardRef(
 
     const applyStylesFromCharacterList = (
       contentState: ContentState,
-      rawContentState: ExtendedRawDraftContentState,
+      rawContentState: ExtendedRawDraftContentState
     ) => {
       let newContentState = contentState;
 
@@ -74,10 +73,10 @@ const EditorToolbar = forwardRef(
                     focusKey: blockKey,
                     focusOffset: charIndex + 1,
                   }),
-                  style,
+                  style
                 );
               });
-            },
+            }
           );
         }
       });
@@ -103,7 +102,7 @@ const EditorToolbar = forwardRef(
             const contentState = convertFromRaw(contentObject);
             const contentStateWithStyles = applyStylesFromCharacterList(
               contentState,
-              contentObject,
+              contentObject
             );
             return EditorState.createWithContent(contentStateWithStyles);
           } catch (error) {
@@ -134,10 +133,10 @@ const EditorToolbar = forwardRef(
           const contentState = convertFromRaw(rawContentState);
           const contentStateWithStyles = applyStylesFromCharacterList(
             contentState,
-            rawContentState,
+            rawContentState
           );
           newEditorState = EditorState.createWithContent(
-            contentStateWithStyles,
+            contentStateWithStyles
           );
           setEditorState(newEditorState);
         } catch (error) {
@@ -168,8 +167,8 @@ const EditorToolbar = forwardRef(
           EditorState.push(
             editorState,
             ContentState.createFromText(placeholder),
-            "insert-characters",
-          ),
+            "insert-characters"
+          )
         );
       }
     }, [isMobileWidth]);
@@ -180,7 +179,7 @@ const EditorToolbar = forwardRef(
 
     const defaultHandleBeforeInput = (
       chars: string,
-      editorState: EditorState,
+      editorState: EditorState
     ) => {
       const contentState = editorState.getCurrentContent();
       const selectionState = editorState.getSelection();
@@ -195,7 +194,7 @@ const EditorToolbar = forwardRef(
         let newEditorState = EditorState.push(
           editorState,
           newContentState,
-          "insert-characters",
+          "insert-characters"
         );
 
         // Устанавливаем фокус на конец содержимого
@@ -209,22 +208,17 @@ const EditorToolbar = forwardRef(
     };
 
     const validateTextLength = (text: string) => {
-      const maxLength =
-        block.type === "text" ? maxTextLegthBig : maxTextLegthSmall;
-      if (text.length < 20 || text.length > maxLength) {
+      const maxLength = maxTextLegthBig;
+      if (text.length < 1 || text.length > maxLength) {
         setIsError(true);
         setErrorText(
-          maxLength === maxTextLegthBig
-            ? `${effectiveErrorText.includes(textErrMaxTextLegthBig) ? effectiveErrorText.replace(textErrMaxTextLegthBig, "") : effectiveErrorText} ${textErrMaxTextLegthBig}`
-            : `${effectiveErrorText.includes(textErrMaxTextLegthSmall) ? effectiveErrorText.replace(textErrMaxTextLegthSmall, "") : effectiveErrorText} ${textErrMaxTextLegthSmall}`,
+          `${effectiveErrorText.includes(textErrMaxTextLegthBig) ? effectiveErrorText.replace(textErrMaxTextLegthBig, "") : effectiveErrorText} ${textErrMaxTextLegthBig}`
         );
         return false;
       }
       setIsError(false);
       setErrorText(
-        maxLength === maxTextLegthBig
-          ? `${effectiveErrorText.includes(textErrMaxTextLegthBig) ? effectiveErrorText.replace(textErrMaxTextLegthBig, "") : ""}`
-          : `${effectiveErrorText.includes(textErrMaxTextLegthSmall) ? effectiveErrorText.replace(textErrMaxTextLegthSmall, "") : ""}`,
+        `${effectiveErrorText.includes(textErrMaxTextLegthBig) ? effectiveErrorText.replace(textErrMaxTextLegthBig, "") : ""}`
       );
       return true;
     };
@@ -240,7 +234,7 @@ const EditorToolbar = forwardRef(
 
     return (
       <div
-        className={`editor-container ${(effectiveErrorText.includes(textErrMaxTextLegthBig) || effectiveErrorText.includes(textErrMaxTextLegthSmall)) && "error"}`}
+        className={`editor-container ${effectiveErrorText.includes(textErrMaxTextLegthBig) && "error"}`}
         onClick={focusEditor}
       >
         <Editor
@@ -277,7 +271,7 @@ const EditorToolbar = forwardRef(
         )}
       </div>
     );
-  },
+  }
 );
 
 export { EditorToolbar };
