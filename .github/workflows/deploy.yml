@@ -17,24 +17,23 @@ jobs:
       - name: Determine Docker Tag
         id: vars
         run: |
-          if [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then
-            echo "TAG=test"
+          if [[ "${{ github.ref }}" == "refs/heads/feature/develop_server_deploy" ]]; then
+            echo "TAG=test" >> "$GITHUB_ENV"
           elif [[ "${{ github.ref }}" == refs/heads/release-* ]]; then
-            echo "TAG=release"
+            echo "TAG=release" >> "$GITHUB_ENV"
           else
-            echo "TAG=latest"
+            echo "TAG=latest" >> "$GITHUB_ENV"
           fi
-          echo "::set-output name=tag::${TAG}"
 
       - name: Build Docker image
         working-directory: ./backend
-        run: docker build -t ivansitnikov1/repo:${{ steps.vars.outputs.tag }} .
+        run: docker build -t ivansitnikov1/repo:${{ env.TAG }} .
 
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Push Docker image
-        run: docker push ivansitnikov1/repo:${{ steps.vars.outputs.tag }}
+        run: docker push ivansitnikov1/repo:${{ env.TAG }}
 
       - name: Logout from Docker Hub
         run: docker logout
@@ -43,6 +42,7 @@ jobs:
     if: github.ref == 'refs/heads/feature/develop_server_deploy'
     needs: build
     runs-on: ubuntu-latest
+    environment: stage
 
     steps:
       - name: Checkout code
@@ -54,9 +54,9 @@ jobs:
           switches: -avzr --delete
           remote_path: /opt/app/
           path: ./backend/docker-compose.yml
-          remote_host: ${{ secrets.TEST_REMOTE_HOST }}
-          remote_user: ${{ secrets.TEST_REMOTE_USER }}
-          remote_key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
+          remote_host: ${{ secrets.REMOTE_HOST }}
+          remote_user: ${{ secrets.REMOTE_USER }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Connect to test server
         uses: appleboy/ssh-action@v1.0.3
@@ -74,6 +74,7 @@ jobs:
     if: startsWith(github.ref, 'refs/heads/release-')
     needs: build
     runs-on: ubuntu-latest
+    environment: prod
 
     steps:
       - name: Checkout code
@@ -85,9 +86,9 @@ jobs:
           switches: -avzr --delete
           remote_path: /opt/app/
           path: ./backend/docker-compose.yml
-          remote_host: ${{ secrets.PROD_REMOTE_HOST }}
-          remote_user: ${{ secrets.PROD_REMOTE_USER }}
-          remote_key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+          remote_host: ${{ secrets.REMOTE_HOST }}
+          remote_user: ${{ secrets.REMOTE_USER }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Connect to prod server
         uses: appleboy/ssh-action@v1.0.3
@@ -101,63 +102,10 @@ jobs:
             docker image rm ivansitnikov1/repo:release
             docker compose up -d --build
 
-  deploy-prod-frontend:
-    if: startsWith(github.ref, 'refs/heads/release-')
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install dependencies
-        working-directory: ./frontend
-        run: npm ci
-
-      - name: Build
-        working-directory: ./frontend
-        run: npm run build
-        env:
-          VITE_APP_UNSPLASH_ACCESS_KEY: ${{ secrets.VITE_APP_UNSPLASH_ACCESS_KEY }}
-
-      - name: Deploy to server
-        uses: burnett01/rsync-deployments@6.0.0
-        with:
-          switches: -avzr --delete
-          remote_path: /opt/app/frontend/build/
-          path: ./frontend/dist/
-          remote_host: ${{ secrets.PROD_REMOTE_HOST }}
-          remote_user: ${{ secrets.PROD_REMOTE_USER }}
-          remote_key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
-
-  deploy-prod-storybook:
-    if: startsWith(github.ref, 'refs/heads/release-')
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install dependencies
-        working-directory: ./frontend
-        run: npm ci
-
-      - name: Build Storybook
-        working-directory: ./frontend
-        run: npm run build-storybook
-
-      - name: Deploy Storybook to server
-        uses: burnett01/rsync-deployments@6.0.0
-        with:
-          switches: -avzr --delete
-          remote_path: /opt/app/storybook/
-          path: ./frontend/storybook-static/
-          remote_host: ${{ secrets.PROD_REMOTE_HOST }}
-          remote_user: ${{ secrets.PROD_REMOTE_USER }}
-          remote_key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
-
   deploy-test-frontend:
     if: github.ref == 'refs/heads/feature/develop_server_deploy'
     runs-on: ubuntu-latest
+    environment: stage
 
     steps:
       - name: Checkout code
@@ -179,13 +127,14 @@ jobs:
           switches: -avzr --delete
           remote_path: /opt/app/frontend/build/
           path: ./frontend/dist/
-          remote_host: ${{ secrets.TEST_REMOTE_HOST }}
-          remote_user: ${{ secrets.TEST_REMOTE_USER }}
-          remote_key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
+          remote_host: ${{ secrets.REMOTE_HOST }}
+          remote_user: ${{ secrets.REMOTE_USER }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
 
   deploy-test-storybook:
     if: github.ref == 'refs/heads/feature/develop_server_deploy'
     runs-on: ubuntu-latest
+    environment: stage
 
     steps:
       - name: Checkout code
@@ -205,6 +154,62 @@ jobs:
           switches: -avzr --delete
           remote_path: /opt/app/storybook/
           path: ./frontend/storybook-static/
-          remote_host: ${{ secrets.TEST_REMOTE_HOST }}
-          remote_user: ${{ secrets.TEST_REMOTE_USER }}
-          remote_key: ${{ secrets.TEST_SSH_PRIVATE_KEY }}
+          remote_host: ${{ secrets.REMOTE_HOST }}
+          remote_user: ${{ secrets.REMOTE_USER }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+  deploy-prod-frontend:
+    if: startsWith(github.ref, 'refs/heads/release-')
+    runs-on: ubuntu-latest
+    environment: prod
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Build
+        working-directory: ./frontend
+        run: npm run build
+        env:
+          VITE_APP_UNSPLASH_ACCESS_KEY: ${{ secrets.VITE_APP_UNSPLASH_ACCESS_KEY }}
+
+      - name: Deploy to server
+        uses: burnett01/rsync-deployments@6.0.0
+        with:
+          switches: -avzr --delete
+          remote_path: /opt/app/frontend/build/
+          path: ./frontend/dist/
+          remote_host: ${{ secrets.REMOTE_HOST }}
+          remote_user: ${{ secrets.REMOTE_USER }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+  deploy-prod-storybook:
+    if: startsWith(github.ref, 'refs/heads/release-')
+    runs-on: ubuntu-latest
+    environment: prod
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Build Storybook
+        working-directory: ./frontend
+        run: npm run build-storybook
+
+      - name: Deploy Storybook to server
+        uses: burnett01/rsync-deployments@6.0.0
+        with:
+          switches: -avzr --delete
+          remote_path: /opt/app/storybook/
+          path: ./frontend/storybook-static/
+          remote_host: ${{ secrets.REMOTE_HOST }}
+          remote_user: ${{ secrets.REMOTE_USER }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
