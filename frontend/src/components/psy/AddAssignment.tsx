@@ -40,7 +40,6 @@ function AddAssignment() {
     file: null, // Файл изображения
     url: null, // URL изображения, полученный с помощью FileReader
   });
-
   const [isChangeView, setChangeView] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isFirstEntry, setFirstEntry] = useState(true);
@@ -605,6 +604,7 @@ function AddAssignment() {
                   updateBlock={updateBlock}
                   isView={true}
                   isViewPsy={true}
+                  isChangeView={isChangeView}
                 />
               ))}
             </>

@@ -25,6 +25,7 @@ function ClientAssignmentBlocks({
   inputValidationStates,
   showInvalidInputs,
   isViewPsy,
+  isChangeView,
 }) {
   const [choices, setChoices] = useState(block.choices || []);
   const [choiceRefs, setChoiceRefs] = useState([]);
@@ -108,7 +109,7 @@ function ClientAssignmentBlocks({
         updateBlock(block.id, truncatedSerializedData, []);
       }
     },
-    [updateBlock, block.id]
+    [updateBlock, block.id],
   );
 
   const handleBeforeInput = useCallback(
@@ -121,7 +122,7 @@ function ClientAssignmentBlocks({
       }
       return "not-handled";
     },
-    [MAX_INPUT_LENGTH]
+    [MAX_INPUT_LENGTH],
   );
 
   const handlePastedText = useCallback(
@@ -132,22 +133,22 @@ function ClientAssignmentBlocks({
       if (currentText.length + pastedText.length > MAX_INPUT_LENGTH) {
         const allowedText = pastedText.slice(
           0,
-          MAX_INPUT_LENGTH - currentText.length
+          MAX_INPUT_LENGTH - currentText.length,
         );
         const newContentState = ContentState.createFromText(
-          currentText + allowedText
+          currentText + allowedText,
         );
         const newEditorState = EditorState.push(
           editorState,
           newContentState,
-          "insert-characters"
+          "insert-characters",
         );
         setEditorState(newEditorState);
         return "handled";
       }
       return "not-handled";
     },
-    [editorState, MAX_INPUT_LENGTH]
+    [editorState, MAX_INPUT_LENGTH],
   );
 
   const interceptSetEditorState = () => {
@@ -272,8 +273,27 @@ function ClientAssignmentBlocks({
       </div>
     );
   }
-
-  if (block.type === "image") {
+  if (isChangeView && block.type === "image") {
+    return (
+      <div className="block assignment__block">
+        {!block.description && !isViewPsy ? (
+          <h3 className="assignment__block-header">{block.question}</h3>
+        ) : (
+          <div
+            className="block__text"
+            dangerouslySetInnerHTML={{
+              __html: block.description
+                ? !isViewPsy
+                  ? block.description
+                  : decodeStyledText(block.description)
+                : decodeStyledText(getObjectFromEditorState(block.content)),
+            }}
+          />
+        )}
+        <img className="block-image" src={block.img} alt={block.question} />
+      </div>
+    );
+  } else if (block.type === "image") {
     return (
       <div className="block assignment__block">
         {!block.description && !isViewPsy ? (
@@ -294,7 +314,71 @@ function ClientAssignmentBlocks({
       </div>
     );
   }
-  if (block.type === "range") {
+  if (isChangeView && block.type === "range") {
+    return (
+      <div
+        className={`block assignment__block ${!isValid() && showInvalidInputs ? "uncompleted" : ""}`}
+      >
+        <div>
+          {!block.description && !isViewPsy ? (
+            <h3 className="assignment__block-header">{block.question}</h3>
+          ) : (
+            <div
+              className="block__text"
+              dangerouslySetInnerHTML={{
+                __html: block.description
+                  ? !isViewPsy
+                    ? block.description
+                    : decodeStyledText(block.description)
+                  : decodeStyledText(getObjectFromEditorState(block.content)),
+              }}
+            />
+          )}
+          <div className="range-display">
+            <span className="range-label">{block.leftPole || "Left Pole"}</span>
+            <div className="range-options range-options-view">
+              {Array.from(
+                { length: block.maxValue - block.minValue + 1 },
+                (_, i) => i + block.minValue,
+              ).map((value) => (
+                <label key={value} className="range-option-view">
+                  {isMobileWidth ? (
+                    <>
+                      <span className="range-option-label">{value}</span>
+                      <input
+                        type="radio"
+                        name={`range-${block.id}`}
+                        value={value}
+                        onChange={handleRangeClick}
+                        defaultChecked={value.toString() === block.reply}
+                        disabled={isView}
+                        className="block-radio__input"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <input
+                        type="radio"
+                        name={`range-${block.id}`}
+                        value={value}
+                        onChange={handleRangeClick}
+                        defaultChecked={value.toString() === block.reply}
+                        disabled={isView}
+                      />
+                      <span className="range-option-label">{value}</span>
+                    </>
+                  )}
+                </label>
+              ))}
+            </div>
+            <span className="range-label">
+              {block.rightPole || "Right Pole"}
+            </span>
+          </div>
+        </div>
+      </div>
+    );
+  } else if (block.type === "range") {
     return (
       <div
         className={`block assignment__block ${!isValid() && showInvalidInputs ? "uncompleted" : ""}`}
@@ -321,7 +405,7 @@ function ClientAssignmentBlocks({
             <div className="range-options">
               {Array.from(
                 { length: block.end_range - block.start_range + 1 },
-                (_, i) => i + block.start_range
+                (_, i) => i + block.start_range,
               ).map((value) => (
                 <label key={value} className="range-option">
                   {isMobileWidth ? (
