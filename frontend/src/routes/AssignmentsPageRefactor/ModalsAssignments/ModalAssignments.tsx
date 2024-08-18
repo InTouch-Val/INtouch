@@ -50,7 +50,7 @@ export default function ModalAssignments({
       }
 
       const { payload }: any = await dispatch(
-        setClientByIdAction({ assignmentId, selectedClients }),
+        setClientByIdAction({ assignmentId, selectedClients })
       );
 
       const allResponsesSuccessful =
@@ -118,21 +118,25 @@ export default function ModalAssignments({
           </button>
           <h3 className="share-assignment__title">Share assignment with...</h3>
           <div className="share-assignment__list-wrapper">
-            {clients.map((client: any) => (
-              <div key={client.id} className="share-assignment__item">
-                <input
-                  type="checkbox"
-                  id={`client-${client.id}`}
-                  className={`share-assignment__checkbox ${selectedClients.includes(client.id) ? "share-assignment__checkbox--checked" : ""}`}
-                  checked={selectedClients.includes(client.id)}
-                  onChange={() => handleClientSelect(client.id)}
-                />
-                <label
-                  htmlFor={`client-${client.id}`}
-                  className="share-assignment__checkbox-label"
-                >{`${client.first_name} ${client.last_name}`}</label>
-              </div>
-            ))}
+            {clients.map((client: any) => {
+              return (
+                client.is_active && (
+                  <div key={client.id} className="share-assignment__item">
+                    <input
+                      type="checkbox"
+                      id={`client-${client.id}`}
+                      className={`share-assignment__checkbox ${selectedClients.includes(client.id) ? "share-assignment__checkbox--checked" : ""}`}
+                      checked={selectedClients.includes(client.id)}
+                      onChange={() => handleClientSelect(client.id)}
+                    />
+                    <label
+                      htmlFor={`client-${client.id}`}
+                      className="share-assignment__checkbox-label"
+                    >{`${client.first_name} ${client.last_name}`}</label>
+                  </div>
+                )
+              );
+            })}
           </div>
         </div>
       </Modal>

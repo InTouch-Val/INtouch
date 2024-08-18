@@ -235,6 +235,7 @@ function AddAssignment() {
       text: description,
       assignment_type: type,
       tags: "ffasd",
+      is_public: false,
       language,
       image_url:
         selectedImage?.urls.small ||
@@ -256,14 +257,14 @@ function AddAssignment() {
 
         if (isDraft || isSaveAsDraft) {
           // Если задание должно быть сохранено как черновик, выполняем GET запрос
-          await API.get(`assignments/${assignmentId}/draft/`);
+          await API.patch(`assignments/${assignmentId}/draft/`);
         }
       } else {
         // Если задание уже существует, выполняем PUT запрос
         response = await API.patch(`assignments/${id}/`, requestData);
         if (isDraft || isSaveAsDraft) {
           // Если задание должно быть перемещено в черновик, выполняем GET запрос
-          await API.get(`assignments/${id}/draft/`);
+          await API.patch(`assignments/${id}/draft/`);
         }
       }
 
