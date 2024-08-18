@@ -9,7 +9,7 @@ const useAssignmentsOnboardingTour = () => {
   const { currentUser } = useAuth();
 
   useEffect(() => {
-
+    window.currentUser = currentUser;
     const tourFlag = localStorage.getItem("onboardingTourShown");
 
     if (!tourFlag) {
@@ -47,7 +47,6 @@ const useAssignmentsOnboardingTour = () => {
 // localStorage.removeItem("onboardingTourShown"); 
 
 //hook for testing in browser. Usage: run "window.launchOnboardingTour();" in console to launch onboarding tour
-// @ts-ignore
 window.launchOnboardingTour = () => {
   localStorage.removeItem("onboardingTourShown");
 
@@ -59,7 +58,6 @@ window.launchOnboardingTour = () => {
     },
   });
 
-  // @ts-ignore
   const steps = getAssignmentsSteps(window.currentUser);
   steps.forEach((step) => tour.addStep(step));
 

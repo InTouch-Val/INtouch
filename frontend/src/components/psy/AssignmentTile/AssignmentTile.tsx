@@ -52,7 +52,6 @@ function AssignmentTile({
     assignment.id === selectedAssignmentIdForShareModalOnClientPage,
   );
 
-  //@ts-ignore
   const { initAuth } = useAuth();
 
   const dispatch = useAppDispatch();

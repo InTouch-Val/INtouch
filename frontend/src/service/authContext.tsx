@@ -1,6 +1,6 @@
-//@ts-nocheck
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { API } from "./axios";
+import {ClientAssignmentCard} from "../utils/global-types";
 
 export interface User {
   user_type: string;
@@ -17,8 +17,8 @@ interface AuthContextType {
   login: (accessToken: string, refreshToken: string) => Promise<void>;
   logout: () => void;
   updateUserData: () => Promise<void>;
-  card: any;
-  setCurrentCard: (card: any) => void;
+  card: ClientAssignmentCard | null;
+  setCurrentCard: (card: ClientAssignmentCard) => void;
   initAuth: () => Promise<void>;
 }
 
@@ -35,7 +35,7 @@ const useAuth = (): AuthContextType => {
 function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [card, setCard] = useState(null);
+  const [card, setCard] = useState<ClientAssignmentCard | null>(null);
 
   const isLoggedIn = currentUser != null;
 
@@ -98,7 +98,7 @@ function AuthProvider({ children }) {
     }
   };
 
-  function setCurrentCard(card) {
+  function setCurrentCard(card: ClientAssignmentCard) {
     setCard(card);
   }
 

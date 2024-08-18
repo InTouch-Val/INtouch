@@ -98,7 +98,7 @@
     &::before {
       width: 40px;
       height: 30px;
-      z-index: -100;
+      z-index: -10;
     }
   }
 }
@@ -144,4 +144,14 @@
 
 .shepherd-theme-custom.shepherd-element.assignment-rating {
   @extend .share-assignment-onboarding;
+}
+
+.welcome-icon {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 20px;
+}
+
+.welcome-message {
+  margin-bottom: 30px;
 }

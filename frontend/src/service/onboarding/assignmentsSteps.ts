@@ -1,15 +1,18 @@
 import Shepherd, { StepOptions, PopperPlacement } from "shepherd.js";
 import { User } from "../authContext";
 import welcomeIcon from "./assets/welcome-icon.svg";
+import "./custom-shepherd-styles.scss";
+import onboardingTexts from './onboardingTexts.json';
+
 
 const getAssignmentsSteps = (currentUser: User | null): StepOptions[] => [
   {
     id: "welcome",
     text: `
-    <div> <img src="${welcomeIcon}" style="width: 100px; height: 100px; margin-bottom: 20px;"/></div>
-      <div style="margin-bottom: 30px;">Hi${currentUser ? `, ${currentUser.first_name}` : " there"}!</div>
-      <div>Welcome to INtouch!</div>
-    `,
+    <div><img src="${welcomeIcon}" alt="${onboardingTexts.welcome.imageAlt}" class="welcome-icon"/></div>
+    <div class="welcome-message">${onboardingTexts.welcome.greeting}${currentUser ? `, ${currentUser.first_name}` : onboardingTexts.welcome.greetingFallback}!</div>
+    <div>${onboardingTexts.welcome.welcomeMessage}</div>
+  `,
     classes: "welcome",
     buttons: [
       {
@@ -20,7 +23,7 @@ const getAssignmentsSteps = (currentUser: User | null): StepOptions[] => [
   },
   {
     id: "library",
-    text: "Library contains all published assignments made by you or your colleagues",
+    text: onboardingTexts.library.description,
     attachTo: {
       element: ".tabs #onboarding_library",
       on: "bottom" as PopperPlacement,
@@ -36,7 +39,7 @@ const getAssignmentsSteps = (currentUser: User | null): StepOptions[] => [
   },
   {
     id: "favorites",
-    text: "You will find the assignments you bookmarked here in Favorites",
+    text: onboardingTexts.favorites.description,
     attachTo: {
       element: ".tabs #onboarding_favorites",
       on: "bottom" as PopperPlacement,
@@ -52,7 +55,7 @@ const getAssignmentsSteps = (currentUser: User | null): StepOptions[] => [
   },
   {
     id: "my-tasks",
-    text: "You will find your drafts and your published assignments in My tasks",
+    text: onboardingTexts.myTasks.description,
     attachTo: {
       element: ".tabs #onboarding_my_tasks",
       on: "bottom" as PopperPlacement,
@@ -68,7 +71,7 @@ const getAssignmentsSteps = (currentUser: User | null): StepOptions[] => [
   },
   {
     id: "add-assignment",
-    text: "You can add your first assignment here",
+    text: onboardingTexts.addAssignment.description,
     attachTo: {
       element: ".assignments-page #onboarding_add_assignment",
       on: "left" as PopperPlacement,
@@ -84,7 +87,7 @@ const getAssignmentsSteps = (currentUser: User | null): StepOptions[] => [
   },
   {
     id: "all-assignment-intro",
-    text: "Let's have a closer look at the assignments in the library",
+    text: onboardingTexts.allAssignmentIntro.description,
     attachTo: {
       element: ".onboarding-psy-step",
       on: "top" as PopperPlacement,
@@ -100,7 +103,7 @@ const getAssignmentsSteps = (currentUser: User | null): StepOptions[] => [
   },
   {
     id: "add-favourite",
-    text: "To add an assignment to Favorites, click on the bookmark icon",
+    text: onboardingTexts.addFavourite.description,
     attachTo: {
       element: ".assignment-grid .first-assignment .favorite-button",
       on: "right-start" as PopperPlacement,
@@ -116,7 +119,7 @@ const getAssignmentsSteps = (currentUser: User | null): StepOptions[] => [
   },
   {
     id: "share-assignment",
-    text: "Use this icon to share the assignment with your client",
+    text: onboardingTexts.shareAssignment.description,
     attachTo: {
       element:
         ".assignment-grid .first-assignment .assignment-actions__share-with-client",
@@ -133,7 +136,7 @@ const getAssignmentsSteps = (currentUser: User | null): StepOptions[] => [
   },
   {
     id: "shared-times",
-    text: "This number shows how many times the assignment was shared",
+    text: onboardingTexts.sharedTimes.description,
     attachTo: {
       element:
         ".assignment-grid .first-assignment .assignment-actions__statistics.assignment-actions__statistics_shares",
@@ -150,7 +153,7 @@ const getAssignmentsSteps = (currentUser: User | null): StepOptions[] => [
   },
   {
     id: "assignment-rating",
-    text: "Clients can rate the assignments they get. An average rating is shown here. ",
+    text: onboardingTexts.assignmentRating.description,
     attachTo: {
       element:
         ".assignment-grid .first-assignment .assignment-actions__statistics_grades",
