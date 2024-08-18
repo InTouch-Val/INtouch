@@ -273,27 +273,8 @@ function ClientAssignmentBlocks({
       </div>
     );
   }
-  if (isChangeView && block.type === "image") {
-    return (
-      <div className="block assignment__block">
-        {!block.description && !isViewPsy ? (
-          <h3 className="assignment__block-header">{block.question}</h3>
-        ) : (
-          <div
-            className="block__text"
-            dangerouslySetInnerHTML={{
-              __html: block.description
-                ? !isViewPsy
-                  ? block.description
-                  : decodeStyledText(block.description)
-                : decodeStyledText(getObjectFromEditorState(block.content)),
-            }}
-          />
-        )}
-        <img className="block-image" src={block.image} alt={block.question} />
-      </div>
-    );
-  } else if (block.type === "image") {
+
+  if (block.type === "image") {
     return (
       <div className="block assignment__block">
         {!block.description && !isViewPsy ? (
@@ -314,6 +295,7 @@ function ClientAssignmentBlocks({
       </div>
     );
   }
+
   if (isChangeView && block.type === "range") {
     return (
       <div
