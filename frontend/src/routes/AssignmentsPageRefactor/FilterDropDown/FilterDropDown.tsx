@@ -78,12 +78,10 @@ export default function FilterDropDown() {
         <option value={TypeLanguage.It}>Italian</option>
       </select>
       <select value={sortMethod} onChange={(e) => handleSortMethodChange(e)}>
-        <option value={TypeOrder.AddDate}>Date Created ↑</option>
-        <option value={TypeOrder.DecDate}>Date Created ↓</option>
-        <option value={TypeOrder.Popularity}>Most Assigned ↑</option>
-        <option value={TypeOrder.NoPopularity}>Most Assigned ↓</option>
-        <option value={TypeOrder.AverageGrade}>Top Client Rated ↑</option>
-        <option value={TypeOrder.NoAverageGrade}>Top Client Rated ↓</option>
+        <option value={TypeOrder.AddDate}>Oldest First</option>
+        <option value={TypeOrder.DecDate}>Newest First</option>
+        <option value={TypeOrder.NoPopularity}>Most Shared</option>
+        <option value={TypeOrder.NoAverageGrade}>Top Client Rated</option>
       </select>
     </div>
   );
