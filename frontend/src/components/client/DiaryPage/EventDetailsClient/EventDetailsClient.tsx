@@ -9,7 +9,8 @@ import { ClientDiary } from "../../../../utils/global-types";
 import { useEditorState } from "../../../../utils/hook/useEditorState";
 import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig";
 import { DIARY_MAX_LENGTH } from "../../../../utils/constants";
-import { handleBeforeInput as handleBeforeInputUtil, handlePastedText as handlePastedTextUtil } from "../../../../utils/helperFunction/editorUtils";
+import { handleBeforeInput as handleBeforeInputUtil} from "../../../../utils/helperFunction/editorUtils";
+import useHandlePastedText from "../../../../utils/hook/useHandlePastedText";
 
 interface Props {
   diary: ClientDiary;
@@ -38,15 +39,11 @@ export default function EventDetailsClient({
     []
   );
 
-  const handlePastedText = useCallback(
-    (pastedText, html, editorState) => handlePastedTextUtil(
-      pastedText,
-      html,
-      editorState,
-      DIARY_MAX_LENGTH,
-      (newEditorState) => handleEditorStateChange(newEditorState, setValue, "event_details")
-    ),
-    [DIARY_MAX_LENGTH, handleEditorStateChange, setValue]
+
+  const handlePastedText = useHandlePastedText(
+    editorState,
+    DIARY_MAX_LENGTH,
+    (newEditorState) => handleEditorStateChange(newEditorState, setValue, "event_details")
   );
 
   return (

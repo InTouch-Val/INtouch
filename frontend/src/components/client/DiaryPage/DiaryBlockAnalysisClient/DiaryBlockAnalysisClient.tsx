@@ -9,7 +9,8 @@ import { ClientDiary } from "../../../../utils/global-types";
 import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig";
 import { useEditorState } from "../../../../utils/hook/useEditorState";
 import { DIARY_MAX_LENGTH } from "../../../../utils/constants";
-import { handleBeforeInput as handleBeforeInputUtil, handlePastedText as handlePastedTextUtil } from "../../../../utils/helperFunction/editorUtils";
+import { handleBeforeInput as handleBeforeInputUtil} from "../../../../utils/helperFunction/editorUtils";
+import useHandlePastedText from "../../../../utils/hook/useHandlePastedText";
 
 interface Props {
   diary: ClientDiary;
@@ -33,15 +34,10 @@ export default function DiaryBlockAnalysisClient({
     []
   );
 
-  const handlePastedText = useCallback(
-    (pastedText, html, editorState) => handlePastedTextUtil(
-      pastedText,
-      html,
-      editorState,
-      DIARY_MAX_LENGTH,
-      (newEditorState) => handleEditorStateChange(newEditorState, setValue, "thoughts_analysis")
-    ),
-    [DIARY_MAX_LENGTH, handleEditorStateChange, setValue]
+  const handlePastedText = useHandlePastedText(
+    editorState,
+    DIARY_MAX_LENGTH,
+    (newEditorState) => handleEditorStateChange(newEditorState, setValue, "thoughts_analysis")
   );
 
   const block = getBlockConfig(getValues, "thoughts_analysis");
