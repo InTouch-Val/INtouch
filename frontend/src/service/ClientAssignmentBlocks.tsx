@@ -290,7 +290,7 @@ function ClientAssignmentBlocks({
             }}
           />
         )}
-        <img className="block-image" src={block.img} alt={block.question} />
+        <img className="block-image" src={block.image} alt={block.question} />
       </div>
     );
   } else if (block.type === "image") {

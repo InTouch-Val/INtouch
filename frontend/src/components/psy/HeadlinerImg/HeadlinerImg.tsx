@@ -11,6 +11,8 @@ function HeadlinerImg({
   errorText,
   setErrorText,
   setIsError,
+  updateBlock,
+  block,
 }) {
   const [blockVisible, setBlockVisible] = useState(true);
   const [uploadedImage, setUploadedImage] = useState(
@@ -80,6 +82,17 @@ function HeadlinerImg({
           file: file, // Сохраняем файл изображения
           url: uploadedImage, // Сохраняем URL изображения
         });
+        updateBlock(
+          block.id,
+          block.content,
+          block.choices,
+          null,
+          null,
+          null,
+          null,
+          null,
+          uploadedImage,
+        );
       });
     }
   };
@@ -94,6 +107,17 @@ function HeadlinerImg({
           file: file, // Сохраняем файл изображения
           url: uploadedImage, // Сохраняем URL изображения
         });
+        updateBlock(
+          block.id,
+          block.content,
+          block.choices,
+          null,
+          null,
+          null,
+          null,
+          null,
+          uploadedImage,
+        );
       });
     }
   };
