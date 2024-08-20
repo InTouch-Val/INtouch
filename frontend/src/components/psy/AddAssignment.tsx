@@ -69,7 +69,7 @@ function AddAssignment() {
         searchTerm.length !== 0 &&
         type.length !== 0 &&
         language.length !== 0
-      )
+      ),
     );
   }, [title, description, searchTerm, type, language]);
 
@@ -235,6 +235,7 @@ function AddAssignment() {
       text: description,
       assignment_type: type,
       tags: "ffasd",
+      is_public: false,
       language,
       image_url:
         selectedImage?.urls.small ||
@@ -256,14 +257,14 @@ function AddAssignment() {
 
         if (isDraft || isSaveAsDraft) {
           // Если задание должно быть сохранено как черновик, выполняем GET запрос
-          await API.get(`assignments/${assignmentId}/draft/`);
+          await API.patch(`assignments/${assignmentId}/draft/`);
         }
       } else {
         // Если задание уже существует, выполняем PUT запрос
         response = await API.patch(`assignments/${id}/`, requestData);
         if (isDraft || isSaveAsDraft) {
           // Если задание должно быть перемещено в черновик, выполняем GET запрос
-          await API.get(`assignments/${id}/draft/`);
+          await API.patch(`assignments/${id}/draft/`);
         }
       }
 
@@ -324,7 +325,7 @@ function AddAssignment() {
     blockContainers.forEach((blockContainer, index) => {
       const blockErrorKey = `blocks #${index + 1}`;
       const blockErrorExists = Object.keys(errorMessages).some((key) =>
-        key.startsWith(blockErrorKey)
+        key.startsWith(blockErrorKey),
       );
       if (blockErrorExists) {
         blockContainer.classList.add("error");
@@ -404,7 +405,7 @@ function AddAssignment() {
     newMaxValue,
     newLeftPole,
     newRightPole,
-    newImage
+    newImage,
   ) => {
     setBlocks((prevBlocks) =>
       prevBlocks.map((block) =>
@@ -427,8 +428,8 @@ function AddAssignment() {
               rightPole: newRightPole ?? block.rightPole,
               image: newImage ?? block.image,
             }
-          : block
-      )
+          : block,
+      ),
     );
   };
 
