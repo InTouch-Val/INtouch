@@ -1,4 +1,4 @@
-import { EditorState, Modifier } from "draft-js";
+import { EditorState } from "draft-js";
 
 // Disables further typing if max length is reached
 export const handleBeforeInput = (chars: string, editorState: EditorState, maxLength: number) => {
