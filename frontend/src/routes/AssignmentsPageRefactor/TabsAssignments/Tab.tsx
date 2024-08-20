@@ -39,7 +39,7 @@ export default function TabsAssignments({
   const { isLoading } = useGetAssignmentsQuery({
     limit: 15,
     page,
-    author: activeTab === AssignmentTab.myList ? currentUser.id : undefined,
+    author: activeTab === AssignmentTab.myList ? currentUser?.id : undefined,
     favorite: activeTab === AssignmentTab.favorites && true,
     language: activeLanguage !== TypeLanguage.All ? activeLanguage : undefined,
     assignmentType:
@@ -48,9 +48,9 @@ export default function TabsAssignments({
   });
 
   return (
-    <div className="assignment-grid">
+    <div className="assignment-grid onboarding-psy-step">
       {filteredAssignments && filteredAssignments.length > 0 ? (
-        filteredAssignments.map((assignment) => (
+        filteredAssignments.map((assignment, index) => (
           <React.Fragment key={assignment.id}>
             {isLoading ? (
               <Skeleton type="assignment" user="psy" variant="ps-all-tasks" />
@@ -59,16 +59,17 @@ export default function TabsAssignments({
                 refetch={refetch}
                 assignment={assignment}
                 onFavoriteToggle={toggleFavorite}
-                isFavorite={currentUser.doctor.assignments.find(
+                isFavorite={currentUser?.doctor.assignments.find(
                   (item) => item === assignment.id,
                 )}
-                isAuthor={assignment.author === currentUser.id}
+                isAuthor={assignment.author === currentUser?.id}
                 onDeleteClick={handleDeleteClick}
                 onShareClick={handleShareButton}
                 isShareModal={isShareModal}
                 selectedAssignmentIdForShareModalOnClientPage={
                   selectedAssignmentIdForShareModalOnClientPage
                 }
+                className={index === 0 ? "first-assignment" : ""}
               />
             )}
           </React.Fragment>

@@ -1,5 +1,6 @@
 //@ts-nocheck
 import React, { useCallback, useEffect, useState } from "react";
+import "shepherd.js/dist/css/shepherd.css"; //for onboarding
 import { Outlet, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -64,7 +65,7 @@ function App() {
   useEffect(() => {
     if (location.pathname === "/") {
       if (currentUser?.user_type === "doctor") {
-        navigate("/clients");
+        navigate("/assignments");
       } else if (currentUser?.user_type === "client") {
         navigate("/my-assignments");
       }
@@ -111,18 +112,20 @@ function App() {
               <ul>
                 <li onClick={() => setSideBarOpened(false)}>
                   <NavLink
+                    to="/assignments"
+                    className={({ isActive }) => (isActive ? "active" : "")}
+                    id="onboarding_assignments_menu"
+                  >
+                    <FontAwesomeIcon icon={faList} /> Assignments
+                  </NavLink>
+                </li>
+
+                <li onClick={() => setSideBarOpened(false)}>
+                  <NavLink
                     to="/clients"
                     className={({ isActive }) => (isActive ? "active" : "")}
                   >
                     <FontAwesomeIcon icon={faUser} /> Clients
-                  </NavLink>
-                </li>
-                <li onClick={() => setSideBarOpened(false)}>
-                  <NavLink
-                    to="/assignments"
-                    className={({ isActive }) => (isActive ? "active" : "")}
-                  >
-                    <FontAwesomeIcon icon={faList} /> Assignments
                   </NavLink>
                 </li>
               </ul>

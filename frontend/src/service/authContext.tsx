@@ -1,15 +1,41 @@
-//@ts-nocheck
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { API } from "./axios";
+import {ClientAssignmentCard} from "../utils/global-types";
 
-const AuthContext = createContext(null);
+export interface User {
+  user_type: string;
+  first_name: string;
+  last_name: string;
+  photo: string;
+  id: number;
+}
 
-const useAuth = () => useContext(AuthContext);
+interface AuthContextType {
+  currentUser: User | null;
+  isLoading: boolean;
+  isLoggedIn: boolean;
+  login: (accessToken: string, refreshToken: string) => Promise<void>;
+  logout: () => void;
+  updateUserData: () => Promise<void>;
+  card: ClientAssignmentCard | null;
+  setCurrentCard: (card: ClientAssignmentCard) => void;
+  initAuth: () => Promise<void>;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+const useAuth = (): AuthContextType => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("Error occured");
+  }
+  return context;
+};
 
 function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [card, setCard] = useState(null);
+  const [card, setCard] = useState<ClientAssignmentCard | null>(null);
 
   const isLoggedIn = currentUser != null;
 
@@ -72,7 +98,7 @@ function AuthProvider({ children }) {
     }
   };
 
-  function setCurrentCard(card) {
+  function setCurrentCard(card: ClientAssignmentCard) {
     setCard(card);
   }
 
