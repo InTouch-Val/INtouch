@@ -76,7 +76,7 @@ API.interceptors.request.use(
   },
   (error) => {
     throw error;
-  }
+  },
 );
 
 API.interceptors.response.use(
@@ -102,7 +102,7 @@ API.interceptors.response.use(
     }
 
     throw error;
-  }
+  },
 );
 
 export { API };
