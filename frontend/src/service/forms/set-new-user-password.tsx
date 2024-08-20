@@ -52,7 +52,7 @@ function SetNewUserPassword({ accessToken }) {
     setIsValidCredentials(!newError.password && password === confirmPassword);
 
     // Возвращаем true, если ошибок нет, иначе false
-    return !newError.password
+    return !newError.password;
   };
 
   const handleSubmit = async (e) => {
@@ -60,7 +60,6 @@ function SetNewUserPassword({ accessToken }) {
     setError({ password: "", server: "" });
 
     const isValid = validatePassword();
-
 
     if (isValid) {
       try {
