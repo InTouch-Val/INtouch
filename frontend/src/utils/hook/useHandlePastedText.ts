@@ -4,7 +4,7 @@ import { EditorState, Modifier } from "draft-js";
 const useHandlePastedText = (
   editorState: EditorState,
   maxLength: number,
-  handleEditorStateChange: (newEditorState: EditorState) => void
+  handleEditorStateChange: (newEditorState: EditorState) => void,
 ) => {
   return useCallback(
     (pastedText: string, html: string | undefined) => {
@@ -18,13 +18,13 @@ const useHandlePastedText = (
         const contentStateWithPastedText = Modifier.insertText(
           currentContent,
           editorState.getSelection(),
-          truncatedText
+          truncatedText,
         );
 
         const newEditorState = EditorState.push(
           editorState,
           contentStateWithPastedText,
-          "insert-characters"
+          "insert-characters",
         );
         handleEditorStateChange(newEditorState);
         return "handled";
@@ -32,7 +32,7 @@ const useHandlePastedText = (
 
       return "not-handled";
     },
-    [editorState, maxLength, handleEditorStateChange]
+    [editorState, maxLength, handleEditorStateChange],
   );
 };
 

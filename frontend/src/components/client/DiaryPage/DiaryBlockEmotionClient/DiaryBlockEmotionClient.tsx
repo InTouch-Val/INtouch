@@ -55,14 +55,16 @@ export default function DiaryBlockEmotionClient({
   const value = getValues("emotion_type");
 
   const handleBeforeInput = useCallback(
-    (chars, editorState) => handleBeforeInputUtil(chars, editorState, DIARY_MAX_LENGTH),
-    []
+    (chars, editorState) =>
+      handleBeforeInputUtil(chars, editorState, DIARY_MAX_LENGTH),
+    [],
   );
 
   const handlePastedText = useHandlePastedText(
     editorState,
     DIARY_MAX_LENGTH,
-    (newEditorState) => handleEditorStateChange(newEditorState, setValue, "emotion_type")
+    (newEditorState) =>
+      handleEditorStateChange(newEditorState, setValue, "emotion_type"),
   );
 
   return (

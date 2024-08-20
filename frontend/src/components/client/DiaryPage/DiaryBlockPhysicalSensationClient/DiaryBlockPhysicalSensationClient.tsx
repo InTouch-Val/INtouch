@@ -10,7 +10,7 @@ import { ClientDiary } from "../../../../utils/global-types";
 import { useEditorState } from "../../../../utils/hook/useEditorState";
 import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig";
 import { DIARY_MAX_LENGTH } from "../../../../utils/constants";
-import { handleBeforeInput as handleBeforeInputUtil} from "../../../../utils/helperFunction/editorUtils";
+import { handleBeforeInput as handleBeforeInputUtil } from "../../../../utils/helperFunction/editorUtils";
 import useHandlePastedText from "../../../../utils/hook/useHandlePastedText";
 
 interface Props {
@@ -35,14 +35,16 @@ export default function DiaryBlockPhysicalSensationClient({
   const value = getValues("physical_sensations");
 
   const handleBeforeInput = useCallback(
-    (chars, editorState) => handleBeforeInputUtil(chars, editorState, DIARY_MAX_LENGTH),
-    []
+    (chars, editorState) =>
+      handleBeforeInputUtil(chars, editorState, DIARY_MAX_LENGTH),
+    [],
   );
 
   const handlePastedText = useHandlePastedText(
     editorState,
     DIARY_MAX_LENGTH,
-    (newEditorState) => handleEditorStateChange(newEditorState, setValue, "physical_sensations")
+    (newEditorState) =>
+      handleEditorStateChange(newEditorState, setValue, "physical_sensations"),
   );
 
   return (
