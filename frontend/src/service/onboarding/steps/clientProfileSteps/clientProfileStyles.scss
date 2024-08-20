@@ -1,0 +1,11 @@
+.shepherd-theme-custom.shepherd-element.clientProfile {
+    left: 45% !important;
+  }
+  
+  .shepherd-theme-custom.shepherd-element.clientAssignments {
+    top: 160px !important;
+  }
+  
+  .shepherd-theme-custom.shepherd-element.clientDiary {
+    @extend .clientAssignments;
+  }

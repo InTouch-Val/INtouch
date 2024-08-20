@@ -50,6 +50,7 @@ export default function HeaderAssignment({
               alt="changeView"
               src={eye}
               onClick={changeView}
+              id="constructor-onboarding-preview"
             />
           </div>
         </div>

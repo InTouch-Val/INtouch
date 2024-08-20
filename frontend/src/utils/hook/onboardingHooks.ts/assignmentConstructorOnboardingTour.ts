@@ -1,15 +1,13 @@
 import { useEffect } from "react";
 import Shepherd from "shepherd.js";
 import "shepherd.js/dist/css/shepherd.css";
-import getAssignmentsSteps from "../../../service/onboarding/steps/assignmentsSteps/assignmentsSteps";
-import { useAuth } from "../../../service/authContext";
+import getAssignmentConstructorSteps from "../../../service/onboarding/steps/assignmentConstructorSteps/assignmentConstructorSteps";
 import "../../../service/onboarding/custom-shepherd-styles.scss";
 
-const useAssignmentsOnboardingTour = () => {
-  const { currentUser } = useAuth();
+const useConstructorOnboardingTour = () => {
 
   useEffect(() => {
-    const tourFlag = localStorage.getItem("onboardingTourShown");
+    const tourFlag = localStorage.getItem("constructorOnboardingTourShown");
 
     if (!tourFlag) {
       const tour = new Shepherd.Tour({
@@ -20,17 +18,17 @@ const useAssignmentsOnboardingTour = () => {
         },
       });
 
-      const steps = getAssignmentsSteps(currentUser);
+      const steps = getAssignmentConstructorSteps();
       steps.forEach((step) => tour.addStep(step));
 
       tour.start();
 
       tour.on("complete", () => {
-        localStorage.setItem("onboardingTourShown", "true");
+        localStorage.setItem("constructorOnboardingTourShown", "true");
       });
 
       tour.on("cancel", () => {
-        localStorage.setItem("onboardingTourShown", "true");
+        localStorage.setItem("constructorOnboardingTourShown", "true");
       });
 
       return () => {
@@ -39,15 +37,15 @@ const useAssignmentsOnboardingTour = () => {
         }
       };
     }
-  }, [currentUser]);
+  }, []);
 };
 
 // uncomment for local testing
-// localStorage.removeItem("onboardingTourShown"); 
+// localStorage.removeItem("constructorOnboardingTourShown"); 
 
-//hook for testing in browser. Usage: run "window.launchOnboardingTour()" in console to launch onboarding tour
-window.launchOnboardingTour = () => {
-  localStorage.removeItem("onboardingTourShown");
+//hook for testing in browser. Usage: run "window.launchConstructorOnboardingTour()" in console to launch onboarding tour
+window.launchConstructorOnboardingTour = () => {
+  localStorage.removeItem("constructorOnboardingTourShown");
 
   const tour = new Shepherd.Tour({
     useModalOverlay: true,
@@ -57,10 +55,10 @@ window.launchOnboardingTour = () => {
     },
   });
 
-  const steps = getAssignmentsSteps(window.currentUser);
+  const steps = getAssignmentConstructorSteps();
   steps.forEach((step) => tour.addStep(step));
 
   tour.start();
 };
 
-export default useAssignmentsOnboardingTour;
+export default useConstructorOnboardingTour;

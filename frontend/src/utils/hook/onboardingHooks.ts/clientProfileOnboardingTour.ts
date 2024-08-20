@@ -1,15 +1,13 @@
 import { useEffect } from "react";
 import Shepherd from "shepherd.js";
 import "shepherd.js/dist/css/shepherd.css";
-import getAssignmentsSteps from "../../../service/onboarding/steps/assignmentsSteps/assignmentsSteps";
-import { useAuth } from "../../../service/authContext";
+import getClientProfileSteps from "../../../service/onboarding/steps/clientProfileSteps/clientProfileSteps";
 import "../../../service/onboarding/custom-shepherd-styles.scss";
 
-const useAssignmentsOnboardingTour = () => {
-  const { currentUser } = useAuth();
+const useClientProfileOnboardingTour = () => {
 
   useEffect(() => {
-    const tourFlag = localStorage.getItem("onboardingTourShown");
+    const tourFlag = localStorage.getItem("clientProfileOnboardingTourShown");
 
     if (!tourFlag) {
       const tour = new Shepherd.Tour({
@@ -20,17 +18,17 @@ const useAssignmentsOnboardingTour = () => {
         },
       });
 
-      const steps = getAssignmentsSteps(currentUser);
+      const steps = getClientProfileSteps();
       steps.forEach((step) => tour.addStep(step));
 
       tour.start();
 
       tour.on("complete", () => {
-        localStorage.setItem("onboardingTourShown", "true");
+        localStorage.setItem("clientProfileOnboardingTourShown", "true");
       });
 
       tour.on("cancel", () => {
-        localStorage.setItem("onboardingTourShown", "true");
+        localStorage.setItem("clientProfileOnboardingTourShown", "true");
       });
 
       return () => {
@@ -39,15 +37,15 @@ const useAssignmentsOnboardingTour = () => {
         }
       };
     }
-  }, [currentUser]);
+  }, []);
 };
 
 // uncomment for local testing
-// localStorage.removeItem("onboardingTourShown"); 
+// localStorage.removeItem("clientProfileOnboardingTourShown"); 
 
-//hook for testing in browser. Usage: run "window.launchOnboardingTour()" in console to launch onboarding tour
-window.launchOnboardingTour = () => {
-  localStorage.removeItem("onboardingTourShown");
+//hook for testing in browser. Usage: run "window.launchClientProfileOnboardingTour()" in console to launch onboarding tour
+window.launchClientProfileOnboardingTour = () => {
+  localStorage.removeItem("clientProfileOnboardingTourShown");
 
   const tour = new Shepherd.Tour({
     useModalOverlay: true,
@@ -57,10 +55,10 @@ window.launchOnboardingTour = () => {
     },
   });
 
-  const steps = getAssignmentsSteps(window.currentUser);
+  const steps = getClientProfileSteps();
   steps.forEach((step) => tour.addStep(step));
 
   tour.start();
 };
 
-export default useAssignmentsOnboardingTour;
+export default useClientProfileOnboardingTour;

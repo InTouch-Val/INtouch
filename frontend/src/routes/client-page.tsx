@@ -8,6 +8,7 @@ import "../css/clients.css";
 import Select from "../components/psy/Select/Select";
 import { menuActive, menuDate } from "../utils/constants";
 import Button from "../stories/buttons/Button";
+import useClientsPageOnboardingTour from "../utils/hook/onboardingHooks.ts/clientsPageOnboardingTour";
 
 function ClientPage() {
   const [showModal, setShowModal] = useState(false);
@@ -34,6 +35,7 @@ function ClientPage() {
 
   const [count, setCount] = useState(0);
 
+
   useEffect(() => {
     setCount(filteredClients.length);
   }, []);
@@ -48,7 +50,7 @@ function ClientPage() {
         try {
           await API.get("assignments/").then((response) => {
             const data = response.data.results.filter((assignment) =>
-              currentUser.doctor.assignments.includes(assignment.id),
+              currentUser.doctor.assignments.includes(assignment.id)
             );
             setFavoriteAssignments(data);
           });
@@ -66,7 +68,7 @@ function ClientPage() {
       .sort((a, b) =>
         activityFilterDate.status === "Date up"
           ? new Date(b.date_joined) - new Date(a.date_joined)
-          : new Date(a.date_joined) - new Date(b.date_joined),
+          : new Date(a.date_joined) - new Date(b.date_joined)
       )
       .filter(
         (client) =>
@@ -74,8 +76,13 @@ function ClientPage() {
             .toLowerCase()
             .includes(searchTerm.toLowerCase()) &&
           (activityFilter.status === "All clients" ||
-            client.is_active.toString() === activityFilter.status),
+            client.is_active.toString() === activityFilter.status)
       ) || [];
+
+  const hasClients = !!filteredClients.length;
+
+  useClientsPageOnboardingTour(hasClients);
+
 
   const openModal = (clientId) => {
     handleActionSelect("delete");
@@ -112,7 +119,7 @@ function ClientPage() {
   const handleAssignmentAddToClient = async (assignment) => {
     try {
       const response = await API.get(
-        `assignments/set-client/${assignment}/${selectedClientId}/`,
+        `assignments/set-client/${assignment}/${selectedClientId}/`
       );
       closeModal();
       setMessageToUser(response.data.detail);
@@ -152,6 +159,7 @@ function ClientPage() {
       </div>
       {messageToUser && <p className="success-message">{messageToUser}</p>}
       <div className="clients-list">
+        {hasClients ? (
         <table>
           <thead>
             <tr onClick={(e) => e.stopPropagation()}>
@@ -191,12 +199,14 @@ function ClientPage() {
           <tbody>
             {filteredClients.map((client) => (
               <tr key={client.id}>
-                <td>
+                <td id="clients-name-onboarding">
                   <Link className="link-to-client" to={`/clients/${client.id}`}>
                     {`${client.first_name} ${client.last_name}`}
                   </Link>
                 </td>
-                <td>{client.is_active ? "Active" : "Inactive"}</td>
+                <td id="clients-status-onboarding">
+                  {client.is_active ? "Active" : "Inactive"}
+                </td>
                 <td>{new Date(client.date_joined).toLocaleDateString()}</td>
                 <td className="actions">
                   <button
@@ -288,7 +298,7 @@ function ClientPage() {
                                         className="action-button"
                                         onClick={() =>
                                           handleAssignmentAddToClient(
-                                            assignment.id,
+                                            assignment.id
                                           )
                                         }
                                       >
@@ -307,6 +317,7 @@ function ClientPage() {
                 </td>
               </tr>
             ))}
+
             <tr>
               <td></td>
               <td className="table__show-result">
@@ -317,6 +328,9 @@ function ClientPage() {
             </tr>
           </tbody>
         </table>
+        ) : (
+          <div className="clients-page__no_clients_notify">Click on Add client in the top right corner to send an invitation</div>
+        )}
       </div>
     </div>
   );

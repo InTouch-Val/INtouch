@@ -1,0 +1,18 @@
+{
+    "constructorFillIn": {
+      "description": "To create an assignment, fill in its name and description, select its type and language, and search for a relevant image"
+    },
+    "constructorQuestionTypes": {
+      "description": "Make use of various types of questions to create your own unique assignment"
+    },
+    "constructorPreview": {
+      "description": "Preview the assignment before publishing to see what it is going to look like for your client"
+    },
+    "constructorDraft": {
+      "description": "Save your assignment as a draft to complete it later. Only you can see your drafts"
+    },
+    "constructorPublish": {
+      "description": "Once you Complete & Publish your assignment, it appears in the Library for everyone to use and can't be edited further"
+    }
+  }
+  
