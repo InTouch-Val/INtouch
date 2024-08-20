@@ -76,3 +76,5 @@ export enum BlockType {
   Image = "image",
   Open = "open",
 }
+
+export const DIARY_MAX_LENGTH = 1000;
