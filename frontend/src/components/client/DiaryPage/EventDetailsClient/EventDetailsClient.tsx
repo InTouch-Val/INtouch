@@ -1,5 +1,5 @@
 //@ts-nocheck
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import "../DiaryPage.css";
 import { ToolbarProvider } from "../../../../service/ToolbarContext";
 import { EditorToolbar } from "../../../../service/editors-toolbar";
@@ -8,6 +8,9 @@ import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 import { ClientDiary } from "../../../../utils/global-types";
 import { useEditorState } from "../../../../utils/hook/useEditorState";
 import { getBlockConfig } from "../../../../utils/helperFunction/getBlockConfig";
+import { DIARY_MAX_LENGTH } from "../../../../utils/constants";
+import { handleBeforeInput as handleBeforeInputUtil } from "../../../../utils/helperFunction/editorUtils";
+import useHandlePastedText from "../../../../utils/hook/useHandlePastedText";
 
 interface Props {
   diary: ClientDiary;
@@ -30,6 +33,19 @@ export default function EventDetailsClient({
   const block = getBlockConfig(getValues, "event_details");
 
   const value = getValues("event_details");
+
+  const handleBeforeInput = useCallback(
+    (chars, editorState) =>
+      handleBeforeInputUtil(chars, editorState, DIARY_MAX_LENGTH),
+    [],
+  );
+
+  const handlePastedText = useHandlePastedText(
+    editorState,
+    DIARY_MAX_LENGTH,
+    (newEditorState) =>
+      handleEditorStateChange(newEditorState, setValue, "event_details"),
+  );
 
   return (
     <div
@@ -63,6 +79,8 @@ export default function EventDetailsClient({
               placeholder={"Write your answer here..."}
               block={block}
               isMobileWidth={isMobileWidth}
+              handleBeforeInput={handleBeforeInput}
+              handlePastedText={handlePastedText}
             />
           </ToolbarProvider>
         )}
