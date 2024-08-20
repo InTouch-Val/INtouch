@@ -5,7 +5,6 @@ import getAssignmentConstructorSteps from "../../../service/onboarding/steps/ass
 import "../../../service/onboarding/custom-shepherd-styles.scss";
 
 const useConstructorOnboardingTour = () => {
-
   useEffect(() => {
     const tourFlag = localStorage.getItem("constructorOnboardingTourShown");
 
@@ -41,7 +40,7 @@ const useConstructorOnboardingTour = () => {
 };
 
 // uncomment for local testing
-// localStorage.removeItem("constructorOnboardingTourShown"); 
+// localStorage.removeItem("constructorOnboardingTourShown");
 
 //hook for testing in browser. Usage: run "window.launchConstructorOnboardingTour()" in console to launch onboarding tour
 window.launchConstructorOnboardingTour = () => {

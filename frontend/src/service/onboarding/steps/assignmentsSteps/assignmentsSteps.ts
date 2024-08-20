@@ -3,8 +3,7 @@ import { User } from "../../../authContext";
 import welcomeIcon from "../../assets/welcome-icon.svg";
 import "../../custom-shepherd-styles.scss";
 import "./assignmentsStyles.scss";
-import onboardingTexts from '../../onboardingTextsSteps/psyAssignmentsTexts.json';
-
+import onboardingTexts from "../../onboardingTextsSteps/psyAssignmentsTexts.json";
 
 const getAssignmentsSteps = (currentUser: User | null): StepOptions[] => [
   {

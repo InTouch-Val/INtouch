@@ -5,7 +5,6 @@ import getClientProfileSteps from "../../../service/onboarding/steps/clientProfi
 import "../../../service/onboarding/custom-shepherd-styles.scss";
 
 const useClientProfileOnboardingTour = () => {
-
   useEffect(() => {
     const tourFlag = localStorage.getItem("clientProfileOnboardingTourShown");
 
@@ -41,7 +40,7 @@ const useClientProfileOnboardingTour = () => {
 };
 
 // uncomment for local testing
-// localStorage.removeItem("clientProfileOnboardingTourShown"); 
+// localStorage.removeItem("clientProfileOnboardingTourShown");
 
 //hook for testing in browser. Usage: run "window.launchClientProfileOnboardingTour()" in console to launch onboarding tour
 window.launchClientProfileOnboardingTour = () => {

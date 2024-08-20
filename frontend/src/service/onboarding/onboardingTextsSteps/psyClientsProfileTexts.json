@@ -1,12 +1,11 @@
 {
-    "clientProfile": {
-      "description": "Click on <strong>Edit client</strong> in the top right corner to fill in the client's profile information. This information will be available exclusively to you"
-    },
-    "clientAssignments": {
-      "description": "All the assignments you have shared with the client are listed here. You can see the status of every assignment, and to view in detail the ones the client chooses to share with you upon completion"
-    },
-    "clientDiary": {
-      "description": "When you client chooses to share some of their Diary entries with you, the selected entries will appear in the Diary tab"
-    }
+  "clientProfile": {
+    "description": "Click on <strong>Edit client</strong> in the top right corner to fill in the client's profile information. This information will be available exclusively to you"
+  },
+  "clientAssignments": {
+    "description": "All the assignments you have shared with the client are listed here. You can see the status of every assignment, and to view in detail the ones the client chooses to share with you upon completion"
+  },
+  "clientDiary": {
+    "description": "When you client chooses to share some of their Diary entries with you, the selected entries will appear in the Diary tab"
   }
-  
+}

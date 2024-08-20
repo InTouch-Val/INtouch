@@ -18,7 +18,6 @@ import AssignmentsPageRefactor from "../../routes/AssignmentsPageRefactor/Assign
 import useClientProfileOnboardingTour from "../../utils/hook/onboardingHooks.ts/clientProfileOnboardingTour";
 
 function ClientDetailsPage() {
-
   useClientProfileOnboardingTour();
 
   const { id } = useParams();
@@ -273,7 +272,7 @@ function ClientDetailsPage() {
           <button
             className={activeTab === "diary" ? "active" : ""}
             onClick={switchToDiaryTab}
-             id="client-diary-onboarding"
+            id="client-diary-onboarding"
           >
             Diary
           </button>

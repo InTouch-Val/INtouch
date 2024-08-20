@@ -3,7 +3,6 @@ import "../../custom-shepherd-styles.scss";
 import onboardingTexts from "../../onboardingTextsSteps/psyClientsProfileTexts.json";
 import "./clientProfileStyles.scss";
 
-
 const getClientProfileSteps = () => [
   {
     id: "clientProfile",
@@ -54,7 +53,7 @@ const getClientProfileSteps = () => [
         classes: "shepherd-complete-button",
       },
     ],
-  }
+  },
 ];
 
 export default getClientProfileSteps;

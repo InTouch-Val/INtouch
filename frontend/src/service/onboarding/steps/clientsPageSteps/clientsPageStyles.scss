@@ -1,7 +1,7 @@
 .shepherd-theme-custom.shepherd-element.clientsName {
-    top: 32% !important;
-  }
-  
-  .shepherd-theme-custom.shepherd-element.clientsStatus {
-    @extend .clientsName;
-  }
+  top: 32% !important;
+}
+
+.shepherd-theme-custom.shepherd-element.clientsStatus {
+  @extend .clientsName;
+}

@@ -43,7 +43,7 @@ const useAssignmentsOnboardingTour = () => {
 };
 
 // uncomment for local testing
-// localStorage.removeItem("onboardingTourShown"); 
+// localStorage.removeItem("onboardingTourShown");
 
 //hook for testing in browser. Usage: run "window.launchOnboardingTour()" in console to launch onboarding tour
 window.launchOnboardingTour = () => {
