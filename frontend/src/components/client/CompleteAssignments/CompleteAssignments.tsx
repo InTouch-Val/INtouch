@@ -617,6 +617,7 @@ function CompleteAssignments() {
               isView={isClientsAssignmentsPath}
               inputValidationStates={inputValidationStates}
               showInvalidInputs={showInvalidInputs}
+              isChangeView={false}
             />
           ))}
       </div>

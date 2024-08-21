@@ -12,8 +12,11 @@ export default function HeaderAssignment({
   isFirstEntry,
   changeView,
   isDisabled,
+  isChangeView,
+  title,
 }) {
   const navigate = useNavigate();
+  const disableButton = isDisabled || blocks.length === 0;
 
   function onBack() {
     navigate(-1);
@@ -23,34 +26,51 @@ export default function HeaderAssignment({
     <>
       <header className="headerAssignment">
         <div className="header__wrapper">
-          <h1>Add Assignment</h1>
+          <h1 className={isChangeView ? "header__view" : ""}>
+            {isChangeView ? title : "Add Assignment"}
+          </h1>
           <div className="header__buttons">
-            <img
-              className="header__icon-back"
-              alt="back"
-              src={arrowBack}
-              onClick={onBack}
-            />
-            <img
-              className={
-                blocks.length > 0
-                  ? "header__icon-save"
-                  : "header__icon-save-disabled"
-              }
-              alt="save"
-              src={save}
-              onClick={handleSubmit}
-            />
-            <img
-              className={
-                blocks.length > 0
-                  ? "header__icon-eye"
-                  : "header__icon-eye-disabled"
-              }
-              alt="changeView"
-              src={eye}
-              onClick={changeView}
-            />
+            {!isChangeView ? (
+              <>
+                <button onClick={onBack}>
+                  <img
+                    className="header__icon-back"
+                    alt="back"
+                    src={arrowBack}
+                  />
+                </button>
+                <button onClick={handleSubmit} disabled={disableButton}>
+                  <img
+                    className={
+                      disableButton
+                        ? "header__icon-save-disabled"
+                        : "header__icon-save"
+                    }
+                    alt="save"
+                    src={save}
+                  />
+                </button>
+                <button onClick={changeView} disabled={disableButton}>
+                  <img
+                    className={
+                      disableButton
+                        ? " header__icon-eye-disabled"
+                        : "header__icon-eye"
+                    }
+                    alt="changeView"
+                    src={eye}
+                  />
+                </button>
+              </>
+            ) : (
+              <button onClick={changeView}>
+                <img
+                  className={"header__icon-eye"}
+                  alt="changeView"
+                  src={arrowBack}
+                />
+              </button>
+            )}
           </div>
         </div>
         <span
