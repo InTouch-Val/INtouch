@@ -17,8 +17,17 @@
 }
 
 .error-text {
+  font-size: 12px;
   color: #f00;
   margin: 0;
+}
+.error-container-text {
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
 }
 
 .registration-logo {
@@ -164,7 +173,7 @@ input[type="checkbox"] {
 
 .registration-client {
   width: 620px;
-  max-height: 636px;
+  max-height: 836px;
   flex-direction: column;
   align-items: center;
   background-color: #fff;
@@ -231,7 +240,7 @@ input[type="checkbox"] {
 }
 
 .registration-client__checkbox-box {
-  margin-bottom: 20px;
+  display: flex;
 }
 
 .registration__password-field {
@@ -265,6 +274,10 @@ input[type="checkbox"] {
   font-family: Raleway, Arial, sans-serif;
   font-size: 18px;
   font-weight: 700px;
+}
+.registration__button:disabled {
+  opacity: 0.6;
+  color: #dedada;
 }
 
 .forgot-button {
