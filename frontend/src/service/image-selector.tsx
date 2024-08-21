@@ -28,14 +28,14 @@ function ImageSelector({
   const searchImages = (query) => {
     if (!accessKey) {
       console.error(
-        "Unsplash Access Key is missing. Please add it to .env file."
+        "Unsplash Access Key is missing. Please add it to .env file.",
       );
       return;
     }
 
     axios
       .get(
-        `https://api.unsplash.com/search/photos?query=${query}&client_id=${accessKey}`
+        `https://api.unsplash.com/search/photos?query=${query}&client_id=${accessKey}`,
       )
       .then((response) => {
         setImages(response.data.results);
@@ -64,7 +64,7 @@ function ImageSelector({
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder={`Enter the relevant keyword here and click "Search"`}
-          className={`title-input ${searchTerm.length == 0 && !isFirstEntry ? "error" : ""}`}
+          className={`title-input ${(!selectedImage || searchTerm.length === 0) && !isFirstEntry ? "error" : ""}`}
         />
 
         <Button

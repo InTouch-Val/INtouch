@@ -1,8 +1,5 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { useDeleteAssignmentByUUIDMutation } from "../../store/entities";
+
 import { useNavigate } from "react-router-dom";
 import FilterDropDown from "./FilterDropDown/FilterDropDown";
 import ModalAssignments from "./ModalsAssignments/ModalAssignments";
@@ -13,6 +10,7 @@ import { changeSearchAction } from "../../store/slices";
 import { WithTab } from "./TabsAssignments/Hoc";
 import addAssignment from "../../images/psy-icons/add-assignment-icon.svg";
 import Button from "../../stories/buttons/Button";
+import useAssignmentsOnboardingTour from "../../utils/hook/onboardingHooks.ts/assignmentsOnboardingTour";
 
 interface Props {
   isShareModal?: boolean;
@@ -34,10 +32,9 @@ export default function AssignmentsPageRefactor({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = React.useState(false);
 
-  const [deleteAssignment, _] = useDeleteAssignmentByUUIDMutation();
+  useAssignmentsOnboardingTour();
 
   const handleDeleteClick = (assignmentId: string): void => {
-    deleteAssignment(assignmentId);
     setSelectedAssignmentId(assignmentId);
     setIsDeleteModalOpen(true);
   };
@@ -69,6 +66,7 @@ export default function AssignmentsPageRefactor({
         {!isShareModal && (
           <header>
             <h1>Assignments</h1>
+            <div id="onboarding_add_assignment">
             <Button
               buttonSize="small"
               fontSize="medium"
@@ -77,6 +75,7 @@ export default function AssignmentsPageRefactor({
               onClick={handleAddAssignment}
               icon={addAssignment}
             />
+            </div>
           </header>
         )}
         <AllTabs />

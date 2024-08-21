@@ -24,8 +24,7 @@ export const menuDate = [
 export const minMobWidth = 320;
 export const maxMobWidth = 480;
 
-export const maxTextLegthBig = 1000;
-export const maxTextLegthSmall = 200;
+export const maxTextLegthBig = 3000;
 
 export enum Status {
   Success = "success",
@@ -77,3 +76,5 @@ export enum BlockType {
   Image = "image",
   Open = "open",
 }
+
+export const DIARY_MAX_LENGTH = 1000;

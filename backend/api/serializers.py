@@ -454,7 +454,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
     status = serializers.CharField(required=False)
     tags = serializers.CharField(required=False)
     image_url = serializers.CharField(required=False)
-    is_public = serializers.BooleanField(read_only=True)
+    is_public = serializers.BooleanField()
     is_favorite = serializers.SerializerMethodField()
     average_grade = serializers.FloatField(read_only=True)
 

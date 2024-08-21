@@ -53,8 +53,14 @@ export interface ExtendedRawDraftContentState
   blocks: ExtendedRawDraftContentBlock[];
 }
 
+interface ChoiceReply {
+  reply: string;
+  checked: boolean;
+  id: number;
+}
+
 interface AssignmentClientBlock {
-  choice_replies: any[];
+  choice_replies: ChoiceReply[];
   description: string;
   end_range: number;
   id: number;
@@ -66,11 +72,6 @@ interface AssignmentClientBlock {
   right_pole: string;
   start_range: number;
   type: "open";
-}
-
-interface ChoiceReply {
-  reply: string;
-  checked: boolean;
 }
 
 interface AssignmentConstructor {
@@ -92,3 +93,25 @@ export type Block =
   | AssignmentClientBlock
   | DiaryTextBlockEntry
   | AssignmentConstructor;
+
+export interface ClientAssignmentCard {
+  id: number;
+  title: string;
+  text: string;
+  update_date: string;
+  add_date: string;
+  assignment_root: string | null;
+  assignment_type: string;
+  author: number;
+  author_name: string;
+  blocks: AssignmentClientBlock[];
+  grade: number;
+  image_url: string;
+  language: string;
+  review: string;
+  share: number;
+  status: string;
+  tags: string;
+  visible: boolean;
+  user: number;
+}

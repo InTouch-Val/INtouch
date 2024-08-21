@@ -13,11 +13,12 @@
 }
 
 .terms {
-  color: #656565;
+  margin: 0;
 }
 
 .error-text {
   color: #f00;
+  margin: 0;
 }
 
 .registration-logo {
@@ -103,12 +104,19 @@ input[type="checkbox"] {
   /* Выровняйте checkbox и текст по вертикали */
   font-size: 16px;
   font-weight: 400;
-  line-height: 19.99px;
+  line-height: 20px;
   text-align: left;
-  text-decoration: underline;
+  text-decoration: none;
   color: rgba(101, 101, 101, 1);
   gap: 6px;
   padding: 0 3px 0 3px;
+}
+
+.registration-form label a {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgba(101, 101, 101, 1);
 }
 
 .registration-form h2 {
@@ -216,6 +224,10 @@ input[type="checkbox"] {
   color: rgb(101 101 101 / 100%);
   font-size: 16px;
   font-weight: 400;
+}
+
+.registration-client__checkbox a {
+  color: rgb(101 101 101 / 100%);
 }
 
 .registration-client__checkbox-box {

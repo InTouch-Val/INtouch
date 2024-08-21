@@ -25,7 +25,7 @@ function SetNewUserPassword({ accessToken }) {
 
   const navigate = useNavigate();
 
-  const validatePassword = () => {
+  const validatePassword = (): boolean => {
     let newError = { password: "", server: "" };
     if (!isValidPassword(password)) {
       newError.password =
@@ -50,13 +50,18 @@ function SetNewUserPassword({ accessToken }) {
     }
     setError(newError);
     setIsValidCredentials(!newError.password && password === confirmPassword);
+
+    // Возвращаем true, если ошибок нет, иначе false
+    return !newError.password;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError({ password: "", server: "" });
 
-    if (validatePassword()) {
+    const isValid = validatePassword();
+
+    if (isValid) {
       try {
         const response = await API.post(
           "password/reset/complete/",
@@ -93,7 +98,7 @@ function SetNewUserPassword({ accessToken }) {
 
   return (
     <div className="welcome-container">
-      <form className="registration-form" onSubmit={handleSubmit}>
+      <form className="registration-form" onSubmit={(e) => handleSubmit(e)}>
         <img alt="inTouch logo" src={logo} className="reset-logo" />
         <h1 className="reset-password__heading reset-password__heading_reset">
           Set Your New Password
