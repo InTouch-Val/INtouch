@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { API } from "./axios";
-import {ClientAssignmentCard} from "../utils/global-types";
+import { ClientAssignmentCard } from "../utils/global-types";
 
 export interface User {
   user_type: string;

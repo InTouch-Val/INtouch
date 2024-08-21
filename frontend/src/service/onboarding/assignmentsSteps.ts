@@ -2,8 +2,7 @@ import Shepherd, { StepOptions, PopperPlacement } from "shepherd.js";
 import { User } from "../authContext";
 import welcomeIcon from "./assets/welcome-icon.svg";
 import "./custom-shepherd-styles.scss";
-import onboardingTexts from './onboardingTexts.json';
-
+import onboardingTexts from "./onboardingTexts.json";
 
 const getAssignmentsSteps = (currentUser: User | null): StepOptions[] => [
   {
