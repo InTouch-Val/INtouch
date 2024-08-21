@@ -25,6 +25,7 @@ function ClientAssignmentBlocks({
   inputValidationStates,
   showInvalidInputs,
   isViewPsy,
+  isChangeView,
 }) {
   const [choices, setChoices] = useState(block.choices || []);
   const [choiceRefs, setChoiceRefs] = useState([]);
@@ -294,7 +295,72 @@ function ClientAssignmentBlocks({
       </div>
     );
   }
-  if (block.type === "range") {
+
+  if (isChangeView && block.type === "range") {
+    return (
+      <div
+        className={`block assignment__block ${!isValid() && showInvalidInputs ? "uncompleted" : ""}`}
+      >
+        <div>
+          {!block.description && !isViewPsy ? (
+            <h3 className="assignment__block-header">{block.question}</h3>
+          ) : (
+            <div
+              className="block__text"
+              dangerouslySetInnerHTML={{
+                __html: block.description
+                  ? !isViewPsy
+                    ? block.description
+                    : decodeStyledText(block.description)
+                  : decodeStyledText(getObjectFromEditorState(block.content)),
+              }}
+            />
+          )}
+          <div className="range-display">
+            <span className="range-label">{block.leftPole || "Left Pole"}</span>
+            <div className="range-options range-options-view">
+              {Array.from(
+                { length: block.maxValue - block.minValue + 1 },
+                (_, i) => i + block.minValue,
+              ).map((value) => (
+                <label key={value} className="range-option-view">
+                  {isMobileWidth ? (
+                    <>
+                      <span className="range-option-label">{value}</span>
+                      <input
+                        type="radio"
+                        name={`range-${block.id}`}
+                        value={value}
+                        onChange={handleRangeClick}
+                        defaultChecked={value.toString() === block.reply}
+                        disabled={isView}
+                        className="block-radio__input"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <input
+                        type="radio"
+                        name={`range-${block.id}`}
+                        value={value}
+                        onChange={handleRangeClick}
+                        defaultChecked={value.toString() === block.reply}
+                        disabled={isView}
+                      />
+                      <span className="range-option-label">{value}</span>
+                    </>
+                  )}
+                </label>
+              ))}
+            </div>
+            <span className="range-label">
+              {block.rightPole || "Right Pole"}
+            </span>
+          </div>
+        </div>
+      </div>
+    );
+  } else if (block.type === "range") {
     return (
       <div
         className={`block assignment__block ${!isValid() && showInvalidInputs ? "uncompleted" : ""}`}

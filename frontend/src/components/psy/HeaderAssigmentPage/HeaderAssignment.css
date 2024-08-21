@@ -10,6 +10,11 @@
   justify-content: space-between;
 }
 
+.header__view {
+  color: rgba(65, 125, 136, 1);
+  overflow-wrap: anywhere;
+}
+
 .header__buttons {
   display: flex;
   flex-direction: row;
@@ -28,6 +33,11 @@
   .header__buttons {
     gap: 10px;
   }
+}
+
+.header__buttons button {
+  background: none;
+  border: none;
 }
 
 .header__icon-back {

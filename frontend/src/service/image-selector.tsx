@@ -64,7 +64,7 @@ function ImageSelector({
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder={`Enter the relevant keyword here and click "Search"`}
-          className={`title-input ${searchTerm.length == 0 && !isFirstEntry ? "error" : ""}`}
+          className={`title-input ${(!selectedImage || searchTerm.length === 0) && !isFirstEntry ? "error" : ""}`}
         />
 
         <Button

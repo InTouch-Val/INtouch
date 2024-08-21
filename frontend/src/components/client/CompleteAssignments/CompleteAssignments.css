@@ -299,6 +299,25 @@
   }
 }
 
+.range-options-view {
+  gap: 26px;
+  margin: 0 34px;
+}
+
+.range-option-view input {
+  width: 22px;
+  height: 22px;
+}
+
+.range-option-view {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.range-option-view span {
+  place-self: center;
+}
+
 .block-checkbox__input {
   min-width: 22px;
   height: 22px;
