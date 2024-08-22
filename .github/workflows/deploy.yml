@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - develop
-      - feature/develop_server_deploy
+      - "release-*"
 
 jobs:
   build:
@@ -17,7 +17,7 @@ jobs:
       - name: Determine Docker Tag
         id: vars
         run: |
-          if [[ "${{ github.ref }}" == "refs/heads/feature/develop_server_deploy" ]]; then
+          if [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then
             echo "TAG=test" >> "$GITHUB_ENV"
           elif [[ "${{ github.ref }}" == refs/heads/release-* ]]; then
             echo "TAG=release" >> "$GITHUB_ENV"
@@ -39,7 +39,7 @@ jobs:
         run: docker logout
 
   deploy-test:
-    if: github.ref == 'refs/heads/feature/develop_server_deploy'
+    if: github.ref == 'refs/heads/develop'
     needs: build
     runs-on: ubuntu-latest
     environment: stage
@@ -103,7 +103,7 @@ jobs:
             docker compose up -d --build
 
   deploy-test-frontend:
-    if: github.ref == 'refs/heads/feature/develop_server_deploy'
+    if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
     environment: stage
 
@@ -132,7 +132,7 @@ jobs:
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
 
   deploy-test-storybook:
-    if: github.ref == 'refs/heads/feature/develop_server_deploy'
+    if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
     environment: stage
 
