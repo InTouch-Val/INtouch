@@ -21,6 +21,7 @@ import linearScaleIcon from "../../images/assignment-page/linear-scale.svg";
 import multipleIcon from "../../images/assignment-page/multiple-choice.svg";
 import questionIcon from "../../images/assignment-page/question.svg";
 import singleIcon from "../../images/assignment-page/single-choice.svg";
+import { TypeFilter, TypeLanguage } from "../../utils/constants";
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
@@ -553,13 +554,14 @@ function AddAssignment() {
                   <option hidden disabled value={""}>
                     Type
                   </option>
-                  <option value="lesson">Lesson</option>
-                  <option value="exercise">Exercise</option>
-                  <option value="essay">Essay</option>
-                  <option value="study">Study</option>
-                  <option value="quiz">Quiz</option>
-                  <option value="methology">Methodology</option>
-                  <option value="metaphor">Metaphor</option>
+                  <option value={TypeFilter.Lesson}>Lesson</option>
+                  <option value={TypeFilter.Exercise}>Exercise</option>
+                  <option value={TypeFilter.Essay}>Essay</option>
+                  <option value={TypeFilter.Study}>Study</option>
+                  <option value={TypeFilter.Quiz}>Quiz</option>
+                  <option value={TypeFilter.Methodology}>Methodology</option>
+                  <option value={TypeFilter.Metaphor}>Metaphors</option>
+                  <option value={TypeFilter.Article}>Article</option>
                 </select>
               </div>
               <div className="form-setting">
@@ -574,11 +576,11 @@ function AddAssignment() {
                   <option hidden disabled value={""}>
                     Language
                   </option>
-                  <option value="en">English</option>
-                  <option value="es">Spanish</option>
-                  <option value="fr">French</option>
-                  <option value="de">German</option>
-                  <option value="it">Italian</option>
+                  <option value={TypeLanguage.En}>English</option>
+                  <option value={TypeLanguage.Es}>Spanish</option>
+                  <option value={TypeLanguage.Fr}>French</option>
+                  <option value={TypeLanguage.De}>German</option>
+                  <option value={TypeLanguage.It}>Italian</option>
                 </select>
               </div>
               {/* <div className="form-setting tags-setting">
