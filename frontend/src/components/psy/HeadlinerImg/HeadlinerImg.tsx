@@ -155,7 +155,7 @@ function HeadlinerImg({
           </div>
 
           <div className="headline__browse-container">
-            <Button className="headline__browse-btn">
+            <Button className="headline__browse-btn" onClick={handleClick}>
               <label htmlFor="fileInput" style={{ cursor: "pointer" }}>
                 Browse
               </label>
