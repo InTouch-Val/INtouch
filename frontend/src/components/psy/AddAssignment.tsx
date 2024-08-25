@@ -21,6 +21,10 @@ import linearScaleIcon from "../../images/assignment-page/linear-scale.svg";
 import multipleIcon from "../../images/assignment-page/multiple-choice.svg";
 import questionIcon from "../../images/assignment-page/question.svg";
 import singleIcon from "../../images/assignment-page/single-choice.svg";
+import { TypeFilter, TypeLanguage } from "../../utils/constants";
+import useConstructorOnboardingTour from "../../utils/hook/onboardingHooks/assignmentConstructorOnboardingTour";
+
+
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
@@ -467,54 +471,59 @@ function AddAssignment() {
         isChangeView={isChangeView}
         title={title}
       />
-      <div className="form-title">
-        <label>Enter Assignment Details</label>
-        <input
-          type="text"
-          className={`title-input ${
-            (title.length === 0 || title.length > 50) && !isFirstEntry
-              ? "error"
-              : ""
-          }`}
-          placeholder="Write the name of assignment here..."
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-          id="title"
-        />
-        <span
-          className={`title-span ${(title.length === 0 || title.length > 50) && !isFirstEntry && "error__text_span"}`}
-        >
-          Please enter a valid name (1-50 characters)
-        </span>
-        <input
-          type="text"
-          className={`title-input ${
-            (description.length === 0 || description.length > 300) &&
-            !isFirstEntry
-              ? "error"
-              : ""
-          }`}
-          placeholder="White the description here..."
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-          id="text"
-        />
-        <span
-          className={`title-span ${(description.length === 0 || description.length > 300) && !isFirstEntry ? "error__text_span" : ""}`}
-        >
-          Please enter a valid name (1-300 characters)
-        </span>
-      </div>
+      <section id="onboarding-constructorFillIn">
+      {!isChangeView && (
+        <div className="form-title">
+          <label>Enter Assignment Details</label>
+          <input
+            type="text"
+            className={`title-input ${
+              (title.length === 0 || title.length > 50) && !isFirstEntry
+                ? "error"
+                : ""
+            }`}
+            placeholder="Write the name of assignment here..."
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            id="title"
+          />
+          <span
+            className={`title-span ${(title.length === 0 || title.length > 50) && !isFirstEntry && "error__text_span"}`}
+          >
+            Please enter a valid name (1-50 characters)
+          </span>
+          <textarea
+            type="text"
+            className={`title-input ${
+              (description.length === 0 || description.length > 300) &&
+              !isFirstEntry
+                ? "error"
+                : ""
+            }`}
+            placeholder="White the description here..."
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+            id="text"
+          />
+          <span
+            className={`title-span ${(description.length === 0 || description.length > 300) && !isFirstEntry ? "error__text_span" : ""}`}
+          >
+            Please enter a valid name (1-300 characters)
+          </span>
+        </div>
+      )}
       <div className="add-assignment-body">
-        <ImageSelector
-          onImageSelect={handleImageSelect}
-          selectedImage={selectedImage}
-          isFirstEntry={isFirstEntry}
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-        />
+        {!isChangeView && (
+          <ImageSelector
+            onImageSelect={handleImageSelect}
+            selectedImage={selectedImage}
+            isFirstEntry={isFirstEntry}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+          />
+        )}
         <form
           onSubmit={(e) => handleSubmit(e, false, false)}
           className="form-creator"
@@ -536,54 +545,65 @@ function AddAssignment() {
               )}
             </div>
           ))}
-          <div className="form-settings">
-            <div className="form-setting">
-              <label>Type</label>
-              <select
-                value={type}
-                onChange={(e) => setType(e.target.value)}
-                required
-                className={!type && !isFirstEntry ? "error" : ""}
-                defaultValue={""}
-              >
-                <option hidden disabled value={""}>
-                  Type
-                </option>
-                <option value="lesson">Lesson</option>
-                <option value="exercise">Exercise</option>
-                <option value="essay">Essay</option>
-                <option value="study">Study</option>
-                <option value="quiz">Quiz</option>
-                <option value="methology">Methodology</option>
-                <option value="metaphor">Metaphor</option>
-              </select>
-            </div>
-            <div className="form-setting">
-              <label>Language</label>
-              <select
-                value={language}
-                onChange={(e) => setLanguage(e.target.value)}
-                required
-                className={!language && !isFirstEntry ? "error" : ""}
-                defaultValue={""}
-              >
-                <option hidden disabled value={""}>
-                  Language
-                </option>
-                <option value="en">English</option>
-                <option value="es">Spanish</option>
-                <option value="fr">French</option>
-                <option value="de">German</option>
-                <option value="it">Italian</option>
-              </select>
-            </div>
-            {/* <div className="form-setting tags-setting">
+          {!isChangeView && (
+            <div className="form-settings">
+              <div className="form-setting">
+                <label>Type</label>
+                <select
+                  value={type}
+                  onChange={(e) => setType(e.target.value)}
+                  required
+                  className={!type && !isFirstEntry ? "error" : ""}
+                  defaultValue={""}
+                >
+                  <option hidden disabled value={""}>
+                    Type
+                  </option>
+                  <option value={TypeFilter.Lesson}>Lesson</option>
+                  <option value={TypeFilter.Exercise}>Exercise</option>
+                  <option value={TypeFilter.Essay}>Essay</option>
+                  <option value={TypeFilter.Study}>Study</option>
+                  <option value={TypeFilter.Quiz}>Quiz</option>
+                  <option value={TypeFilter.Methodology}>Methodology</option>
+                  <option value={TypeFilter.Metaphor}>Metaphors</option>
+                  <option value={TypeFilter.Article}>Article</option>
+                </select>
+              </div>
+              <div className="form-setting">
+                <label>Language</label>
+                <select
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                  required
+                  className={!language && !isFirstEntry ? "error" : ""}
+                  defaultValue={""}
+                >
+                  <option hidden disabled value={""}>
+                    Language
+                  </option>
+                  <option value={TypeLanguage.En}>English</option>
+                  <option value={TypeLanguage.Es}>Spanish</option>
+                  <option value={TypeLanguage.Fr}>French</option>
+                  <option value={TypeLanguage.De}>German</option>
+                  <option value={TypeLanguage.It}>Italian</option>
+                </select>
+              </div>
+              {/* <div className="form-setting tags-setting">
               <label>Tags</label>
               <input type="text" value={tags} onChange={(e) => setTags(e.target.value)} />
             </div> */}
-          </div>
+            </div>
+          )}
           {isChangeView ? (
             <>
+              <img
+                className="view__img"
+                src={
+                  selectedImage?.urls.small || selectedImage?.urls.full || ""
+                }
+                alt="assignment-view"
+              />
+              <p className="view__description">{description}</p>
               {Array.from(blocks).map((block, index) => (
                 <ClientAssignmentBlocks
                   key={index}
@@ -591,6 +611,7 @@ function AddAssignment() {
                   updateBlock={updateBlock}
                   isView={true}
                   isViewPsy={true}
+                  isChangeView={isChangeView}
                 />
               ))}
             </>
@@ -613,65 +634,87 @@ function AddAssignment() {
             </>
           )}
         </form>
-        <div className="block-buttons-container">
-          <div className="block-buttons">
-            <button
-              title="Add Open-Question Block"
-              onClick={() => addBlock("open")}
-            >
-              <img src={questionIcon} alt="OpenQuestionIcon" />
-            </button>
-            <button title="Add Text Block" onClick={() => addBlock("text")}>
-              <img src={textParagraphIcon} alt="textParagraphIcon" />
-            </button>
-            <button
-              title="Add Single Choice Block"
-              onClick={() => addBlock("single")}
-            >
-              <img src={singleIcon} alt="singleChoiceIcon" />
-            </button>
-            <button
-              title="Add Multiple Choice Block"
-              onClick={() => addBlock("multiple")}
-            >
-              <img src={multipleIcon} alt="multipleChoiceIcon" />
-            </button>
-            <button
-              title="Add Linear Scale Question Block"
-              onClick={() => addBlock("range")}
-            >
-              <img src={linearScaleIcon} alt="linearScaleIcon" />
-            </button>
-            <button title="Add Image" onClick={() => addBlock("image")}>
-              <img src={imageIcon} alt="imageIcon" />
-            </button>
+        {!isChangeView && (
+          <div className="block-buttons-container" id="onboarding-constructorQuestionTypes">
+            <div className="block-buttons">
+              <button
+                title="Add Open-Question Block"
+                onClick={() => addBlock("open")}
+              >
+                <img src={questionIcon} alt="OpenQuestionIcon" />
+              </button>
+              <button title="Add Text Block" onClick={() => addBlock("text")}>
+                <img src={textParagraphIcon} alt="textParagraphIcon" />
+              </button>
+              <button
+                title="Add Single Choice Block"
+                onClick={() => addBlock("single")}
+              >
+                <img src={singleIcon} alt="singleChoiceIcon" />
+              </button>
+              <button
+                title="Add Multiple Choice Block"
+                onClick={() => addBlock("multiple")}
+              >
+                <img src={multipleIcon} alt="multipleChoiceIcon" />
+              </button>
+              <button
+                title="Add Linear Scale Question Block"
+                onClick={() => addBlock("range")}
+              >
+                <img src={linearScaleIcon} alt="linearScaleIcon" />
+              </button>
+              <button title="Add Image" onClick={() => addBlock("image")}>
+                <img src={imageIcon} alt="imageIcon" />
+              </button>
+            </div>
           </div>
-        </div>
+        )}
         <span
-          className={`error__text error__text_footer ${isDisabled && !isFirstEntry ? "error__text_span" : ""}`}
+          className={`error__text error__text_footer ${isDisabled && !isFirstEntry && !isChangeView ? "error__text_span" : ""}`}
         >
           Please check all fields
         </span>
         <div className="buttons-save-as-draft-and-publish-container">
-          <Button
-            buttonSize="large"
-            fontSize="medium"
-            label="Save as Draft"
-            type="button"
-            onClick={(e) => handleSubmit(e, false, true)}
-            disabled={isError || isDisabled || blocks.length === 0}
-          />
-
-          <Button
-            buttonSize="large"
-            fontSize="small"
-            label="Complete & Publish"
-            type="button"
-            onClick={(e) => handleSubmit(e, false, false)}
-            disabled={isError || isDisabled || blocks.length === 0}
-          />
+          {!isChangeView ? (
+            <>
+            <div id="onboarding-constructorDraft">
+              <Button
+                buttonSize="large"
+                fontSize="medium"
+                label="Save as Draft"
+                type="button"
+                onClick={(e) => handleSubmit(e, false, true)}
+                disabled={isError || isDisabled || blocks.length === 0}
+              />
+              </div>
+              <div id="onboarding-constructorPublish">
+              <Button
+                buttonSize="large"
+                fontSize="small"
+                label="Complete & Publish"
+                type="button"
+                onClick={(e) => handleSubmit(e, false, false)}
+                disabled={isError || isDisabled || blocks.length === 0}
+              />
+              </div>
+            </>
+          ) : (
+            <Button
+              buttonSize="large"
+              fontSize="medium"
+              label="Back"
+              type="button"
+              onClick={() => {
+                setChangeView((prev) => !prev);
+              }}
+            >
+              Back
+            </Button>
+          )}
         </div>
       </div>
+      </section>
     </div>
   );
 }

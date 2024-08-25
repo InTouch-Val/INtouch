@@ -25,7 +25,7 @@ const getAssignmentsSteps = (currentUser: User | null): StepOptions[] => [
     id: "library",
     text: onboardingTexts.library.description,
     attachTo: {
-      element: ".tabs #onboarding_library",
+      element: ".tabs #onboarding-library",
       on: "bottom" as PopperPlacement,
     },
     classes: "library",
@@ -41,7 +41,7 @@ const getAssignmentsSteps = (currentUser: User | null): StepOptions[] => [
     id: "favorites",
     text: onboardingTexts.favorites.description,
     attachTo: {
-      element: ".tabs #onboarding_favorites",
+      element: ".tabs #onboarding-favorites",
       on: "bottom" as PopperPlacement,
     },
     classes: "favorites",
@@ -57,7 +57,7 @@ const getAssignmentsSteps = (currentUser: User | null): StepOptions[] => [
     id: "my-tasks",
     text: onboardingTexts.myTasks.description,
     attachTo: {
-      element: ".tabs #onboarding_my_tasks",
+      element: ".tabs #onboarding-my-tasks",
       on: "bottom" as PopperPlacement,
     },
     classes: "my-tasks",
@@ -73,7 +73,7 @@ const getAssignmentsSteps = (currentUser: User | null): StepOptions[] => [
     id: "add-assignment",
     text: onboardingTexts.addAssignment.description,
     attachTo: {
-      element: ".assignments-page #onboarding_add_assignment",
+      element: ".assignments-page #onboarding_add-assignment",
       on: "left" as PopperPlacement,
     },
     classes: "add-assignment",

@@ -8,7 +8,7 @@ const getAssignmentConstructorSteps = () => [
     id: "constructorFillIn",
     text: onboardingTexts.constructorFillIn.description,
     attachTo: {
-      element: ".assignments-page #constructor-onboarding",
+      element: ".assignments-page #onboarding-constructorFillIn",
       on: "top" as PopperPlacement,
     },
     classes: "constructorFillIn",
@@ -25,7 +25,7 @@ const getAssignmentConstructorSteps = () => [
     id: "constructorQuestionTypes",
     text: onboardingTexts.constructorQuestionTypes.description,
     attachTo: {
-      element: ".assignments-page #constructor-types-onboarding",
+      element: ".assignments-page #onboarding-constructorQuestionTypes",
       on: "top" as PopperPlacement,
     },
     classes: "constructorQuestionTypes",
@@ -42,7 +42,7 @@ const getAssignmentConstructorSteps = () => [
     id: "constructorPreview",
     text: onboardingTexts.constructorPreview.description,
     attachTo: {
-      element: ".headerAssignment #constructor-onboarding-preview",
+      element: ".headerAssignment #onboarding-constructorPreview",
       on: "left" as PopperPlacement,
     },
     classes: "constructorPreview",
@@ -59,7 +59,7 @@ const getAssignmentConstructorSteps = () => [
     id: "constructorDraft",
     text: onboardingTexts.constructorDraft.description,
     attachTo: {
-      element: ".assignments-page #constructor-draft-onboarding",
+      element: ".assignments-page #onboarding-constructorDraft",
       on: "top-start" as PopperPlacement,
     },
     classes: "constructorDraft",
@@ -76,7 +76,7 @@ const getAssignmentConstructorSteps = () => [
     id: "constructorPublish",
     text: onboardingTexts.constructorPublish.description,
     attachTo: {
-      element: ".assignments-page #constructor-publish-onboarding",
+      element: ".assignments-page #onboarding-constructorPublish",
       on: "top-start" as PopperPlacement,
     },
     classes: "constructorPublish",

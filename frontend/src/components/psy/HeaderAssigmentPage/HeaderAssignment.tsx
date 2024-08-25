@@ -50,7 +50,11 @@ export default function HeaderAssignment({
                     src={save}
                   />
                 </button>
-                <button onClick={changeView} disabled={disableButton}  id="constructor-onboarding-preview">
+                <button
+                  onClick={changeView}
+                  disabled={disableButton}
+                  id="onboarding-constructorPreview"
+                >
                   <img
                     className={
                       disableButton

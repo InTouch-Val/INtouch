@@ -15,7 +15,7 @@ import ClientAssignmentTile from "./ClientAssignmentTile";
 import Button from "../../stories/buttons/Button";
 import shareIcon from "../../images/psy-icons/share-assignment-icon.svg";
 import AssignmentsPageRefactor from "../../routes/AssignmentsPageRefactor/AssignmentsPage";
-import useClientProfileOnboardingTour from "../../utils/hook/onboardingHooks.ts/clientProfileOnboardingTour";
+import useClientProfileOnboardingTour from "../../utils/hook/onboardingHooks/clientProfileOnboardingTour";
 
 function ClientDetailsPage() {
   useClientProfileOnboardingTour();

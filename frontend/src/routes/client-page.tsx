@@ -8,7 +8,7 @@ import "../css/clients.css";
 import Select from "../components/psy/Select/Select";
 import { menuActive, menuDate } from "../utils/constants";
 import Button from "../stories/buttons/Button";
-import useClientsPageOnboardingTour from "../utils/hook/onboardingHooks.ts/clientsPageOnboardingTour";
+import useClientsPageOnboardingTour from "../utils/hook/onboardingHooks/clientsPageOnboardingTour";
 
 function ClientPage() {
   const [showModal, setShowModal] = useState(false);
