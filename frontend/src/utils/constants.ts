@@ -67,6 +67,7 @@ export enum TypeFilter {
   Study = "study",
   Quiz = "quiz",
   Methodology = "methodology",
+  Article = "article",
 }
 
 export enum BlockType {

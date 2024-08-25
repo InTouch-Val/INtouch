@@ -449,6 +449,8 @@ function AssignmentBlock({
           errorText={errorText}
           setErrorText={setErrorText}
           setIsError={setIsError}
+          updateBlock={updateBlock}
+          block={block}
         />
       </Block>
     );

@@ -14,6 +14,7 @@ ASSIGNMENT_TYPES = [
     ("quiz", "Quiz"),
     ("methodology", "Methodology"),
     ("metaphor", "Metaphor"),
+    ("article", "Article"),
 ]
 
 LANGUAGES = [
