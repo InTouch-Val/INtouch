@@ -67,14 +67,14 @@ export default function AssignmentsPageRefactor({
           <header>
             <h1>Assignments</h1>
             <div id="onboarding_add_assignment">
-            <Button
-              buttonSize="small"
-              fontSize="medium"
-              label="Add Assignment"
-              type="button"
-              onClick={handleAddAssignment}
-              icon={addAssignment}
-            />
+              <Button
+                buttonSize="small"
+                fontSize="medium"
+                label="Add Assignment"
+                type="button"
+                onClick={handleAddAssignment}
+                icon={addAssignment}
+              />
             </div>
           </header>
         )}
