@@ -30,7 +30,6 @@ export const clientRegistrationSchema = yup.object({
 
   confirmPassword: yup
     .string()
-    .required("Is required field")
     .oneOf([yup.ref("password")], "Passwords must match"),
   acceptTerms: yup
     .boolean()
