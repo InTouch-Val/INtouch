@@ -258,7 +258,7 @@ function AddAssignment() {
       text: description,
       assignment_type: type,
       tags: "ffasd",
-      is_public: false,
+      is_public: isSaveAsDraft ? false : true,
       language,
       image_url: selectedImage?.urls.small || selectedImage?.urls.full || "",
     };
