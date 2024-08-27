@@ -49,12 +49,10 @@ function CompleteAssignments() {
   const [blocks, setBlocks] = useState([]);
   const [textareaValue, setTextareaValue] = useState(""); // State to hold the textarea value
 
-  console.log(blocks)
 
   const handleTextareaChange = (event) => {
     setTextareaValue(event.target.value); // Updates the state when textarea changes
   };
-
 
   const setAssignmentCredentials = useCallback((data) => {
     const restoredBlocks = data.blocks
@@ -66,14 +64,14 @@ function CompleteAssignments() {
             return {
               ...block,
               initialDescription: block.description,
-              description: parsedContent
+              description: parsedContent,
             };
           }
           return block;
         })
       : [];
 
-      console.log(restoredBlocks)
+    console.log(restoredBlocks);
 
     setAssignmentData({
       ...data,
@@ -87,11 +85,9 @@ function CompleteAssignments() {
     setIsSaved(false);
   }, []);
 
-
   useEffect(() => {
     setBlocks(assignmentData.blocks);
   }, [assignmentData]);
-
 
   //tracks if there are any changes in inputs
   const [initialData, setInitialData] = useState(null);

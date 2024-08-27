@@ -5,13 +5,16 @@ const useClientsPageOnboardingTour = (hasClients: boolean) => {
   useOnboardingTour(
     "clientsOnboardingTourShown",
     getClientsPageSteps,
-    hasClients
+    hasClients,
   );
 };
 
 // For manual testing, run in console: window.launchClientsOnboardingTour()
 window.launchClientsOnboardingTour = () => {
-  window.launchOnboardingTour("clientsOnboardingTourShown", getClientsPageSteps);
+  window.launchOnboardingTour(
+    "clientsOnboardingTourShown",
+    getClientsPageSteps,
+  );
 };
 
 export default useClientsPageOnboardingTour;

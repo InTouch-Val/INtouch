@@ -4,13 +4,16 @@ import getAssignmentConstructorSteps from "../../../service/onboarding/steps/ass
 const useConstructorOnboardingTour = () => {
   useOnboardingTour(
     "constructorOnboardingTourShown",
-    getAssignmentConstructorSteps
+    getAssignmentConstructorSteps,
   );
 };
 
 //for manual testing run in console: window.launchConstructorOnboardingTour()
 window.launchConstructorOnboardingTour = () => {
-  window.launchOnboardingTour("constructorOnboardingTourShown", getAssignmentConstructorSteps);
+  window.launchOnboardingTour(
+    "constructorOnboardingTourShown",
+    getAssignmentConstructorSteps,
+  );
 };
 
 export default useConstructorOnboardingTour;
