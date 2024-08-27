@@ -1,36 +1,35 @@
 {
-    "welcome": {
-      "imageAlt": "Welcome Icon",
-      "greeting": "Hi",
-      "greetingFallback": " there",
-      "welcomeMessage": "Welcome to INtouch!"
-    },
-    "library": {
-      "description": "Library contains all published assignments made by you or your colleagues"
-    },
-    "favorites": {
-      "description": "You will find the assignments you bookmarked here in Favorites"
-    },
-    "myTasks": {
-      "description": "You will find your drafts and your published assignments in My tasks"
-    },
-    "addAssignment": {
-      "description": "You can add your first assignment here"
-    },
-    "allAssignmentIntro": {
-      "description": "Let's have a closer look at the assignments in the library"
-    },
-    "addFavourite": {
-      "description": "To add an assignment to Favorites, click on the bookmark icon"
-    },
-    "shareAssignment": {
-      "description": "Use this icon to share the assignment with your client"
-    },
-    "sharedTimes": {
-      "description": "This number shows how many times the assignment was shared"
-    },
-    "assignmentRating": {
-      "description": "Clients can rate the assignments they get. An average rating is shown here."
-    }
+  "welcome": {
+    "imageAlt": "Welcome Icon",
+    "greeting": "Hi",
+    "greetingFallback": " there",
+    "welcomeMessage": "Welcome to INtouch!"
+  },
+  "library": {
+    "description": "Library contains all published assignments made by you or your colleagues"
+  },
+  "favorites": {
+    "description": "You will find the assignments you bookmarked here in Favorites"
+  },
+  "myTasks": {
+    "description": "You will find your drafts and your published assignments in My tasks"
+  },
+  "addAssignment": {
+    "description": "You can add your first assignment here"
+  },
+  "allAssignmentIntro": {
+    "description": "Let's have a closer look at the assignments in the library"
+  },
+  "addFavourite": {
+    "description": "To add an assignment to Favorites, click on the bookmark icon"
+  },
+  "shareAssignment": {
+    "description": "Use this icon to share the assignment with your client"
+  },
+  "sharedTimes": {
+    "description": "This number shows how many times the assignment was shared"
+  },
+  "assignmentRating": {
+    "description": "Clients can rate the assignments they get. An average rating is shown here."
   }
-  
+}
