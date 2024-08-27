@@ -37,7 +37,8 @@
 .shepherd-button-icon {
   width: 22px;
   height: 15px;
-  background: url("./assets/onboaring-next-step-icon.svg") no-repeat center center;
+  background: url("./assets/onboaring-next-step-icon.svg") no-repeat center
+    center;
   background-size: contain;
   border: none;
   cursor: pointer;
@@ -46,7 +47,8 @@
 .shepherd-button-icon:not(:disabled):hover {
   opacity: 0.8;
   background-color: transparent;
-  background: url("./assets/onboaring-next-step-icon.svg") no-repeat center center;
+  background: url("./assets/onboaring-next-step-icon.svg") no-repeat center
+    center;
 }
 
 /* Additional styles for specific steps */
