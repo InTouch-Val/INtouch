@@ -142,7 +142,7 @@ const EditorToolbar = forwardRef(
         } catch (error) {
           console.error("Error converting string to object:", error);
         }
-      } else if (block.reply) {
+      } else if (block.reply === "" || block.reply) {
         newEditorState = parseContent(block.reply);
         setEditorState(newEditorState);
       } else if (block.question) {
