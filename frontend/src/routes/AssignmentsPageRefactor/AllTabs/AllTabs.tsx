@@ -28,7 +28,7 @@ export default function AllTabs(): JSX.Element {
       <button
         className={activeTab === AssignmentTab.myList ? "active" : ""}
         onClick={() => dispatch(changeTabActions(AssignmentTab.myList))}
-        id="boarding-my-tasks"
+        id="onboarding-my-tasks"
       >
         My Tasks
       </button>

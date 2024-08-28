@@ -73,7 +73,7 @@ const getAssignmentsSteps = (currentUser: User | null): StepOptions[] => [
     id: "add-assignment",
     text: onboardingTexts.addAssignment.description,
     attachTo: {
-      element: ".assignments-page #onboarding_add-assignment",
+      element: ".assignments-page #onboarding-add-assignment",
       on: "left" as PopperPlacement,
     },
     classes: "add-assignment",
