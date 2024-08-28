@@ -49,7 +49,6 @@ function CompleteAssignments() {
   const [blocks, setBlocks] = useState([]);
   const [textareaValue, setTextareaValue] = useState(""); // State to hold the textarea value
 
-
   const handleTextareaChange = (event) => {
     setTextareaValue(event.target.value); // Updates the state when textarea changes
   };

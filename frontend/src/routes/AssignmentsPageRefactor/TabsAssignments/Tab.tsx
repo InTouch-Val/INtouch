@@ -52,14 +52,19 @@ export default function TabsAssignments({
   const emptyFavoritesContent = (
     <>
       <span>You will find your favorite assignments here.</span>
-      <span>To add an assignment to Favorites, click on the bookmark icon on the task.</span>
+      <span>
+        To add an assignment to Favorites, click on the bookmark icon on the
+        task.
+      </span>
     </>
   );
 
   const emptyMyTasksContent = (
     <>
       <span>You will see the tasks you created here.</span>
-      <span>To add your first assignment, click on <strong>Add assignment.</strong></span>
+      <span>
+        To add your first assignment, click on <strong>Add assignment.</strong>
+      </span>
     </>
   );
 
@@ -96,7 +101,7 @@ export default function TabsAssignments({
                     assignment={assignment}
                     onFavoriteToggle={toggleFavorite}
                     isFavorite={currentUser?.doctor.assignments.find(
-                      (item) => item === assignment.id
+                      (item) => item === assignment.id,
                     )}
                     isAuthor={assignment.author === currentUser?.id}
                     onDeleteClick={handleDeleteClick}

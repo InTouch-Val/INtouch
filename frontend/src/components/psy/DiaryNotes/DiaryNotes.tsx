@@ -11,7 +11,10 @@ interface DiaryNotesProps {
   onDiaryStatusChange: (hasDiaries: boolean) => void;
 }
 
-export default function DiaryNotes({ clientId, onDiaryStatusChange }: DiaryNotesProps) {
+export default function DiaryNotes({
+  clientId,
+  onDiaryStatusChange,
+}: DiaryNotesProps) {
   const { currentUser } = useAuth();
   const [diarys, setDiarys] = React.useState();
   const [isFetching, setFetching] = React.useState(false);

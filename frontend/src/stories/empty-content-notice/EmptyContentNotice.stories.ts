@@ -15,6 +15,6 @@ type Story = StoryObj<typeof meta>;
 /** Basic Empty Content Notice */
 export const BasicButtonMedium: Story = {
   args: {
-    label: "The client has not shared any entries yet"
+    label: "The client has not shared any entries yet",
   },
 };
