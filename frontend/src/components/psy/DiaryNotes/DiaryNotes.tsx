@@ -6,7 +6,12 @@ import CardDiary from "../CardDiary/CardDiary";
 import { API } from "../../../service/axios";
 import { useObserve } from "../../../utils/hook/useObserve";
 
-export default function DiaryNotes({ clientId }) {
+interface DiaryNotesProps {
+  clientId: number;
+  onDiaryStatusChange: (hasDiaries: boolean) => void;
+}
+
+export default function DiaryNotes({ clientId, onDiaryStatusChange }: DiaryNotesProps) {
   const { currentUser } = useAuth();
   const [diarys, setDiarys] = React.useState();
   const [isFetching, setFetching] = React.useState(false);
@@ -26,7 +31,9 @@ export default function DiaryNotes({ clientId }) {
     const response = API.get(`diary-notes/?limit=${limit}&author=${clientId}`)
       .then((res) => {
         if (res.status == 200) {
-          setDiarys(res.data.results);
+          const result = res.data.results;
+          setDiarys(result);
+          onDiaryStatusChange(result.length > 0);
         }
       })
       .catch((error) => console.log(error))

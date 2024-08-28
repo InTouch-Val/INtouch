@@ -16,6 +16,7 @@ import Button from "../../stories/buttons/Button";
 import shareIcon from "../../images/psy-icons/share-assignment-icon.svg";
 import AssignmentsPageRefactor from "../../routes/AssignmentsPageRefactor/AssignmentsPage";
 import useClientProfileOnboardingTour from "../../utils/hook/onboardingHooks/clientProfileOnboardingTour";
+import EmptyContentNotice from "../../stories/empty-content-notice/EmptyContentNotice";
 
 function ClientDetailsPage() {
   useClientProfileOnboardingTour();
@@ -24,7 +25,7 @@ function ClientDetailsPage() {
   const navigate = useNavigate();
   const { currentUser, updateUserData } = useAuth();
   const client = currentUser?.doctor.clients.find(
-    (client) => client.id === Number(id),
+    (client) => client.id === Number(id)
   );
   const { setCurrentCard, card } = useAuth();
   const [activeTab, setActiveTab] = useState("profile");
@@ -44,6 +45,11 @@ function ClientDetailsPage() {
   const [limit, setLimit] = useState(50);
   const observeElement = useRef(null);
   const [isTotal, setTotal] = useState(false);
+  const [hasDiaries, setHasDiaries] = useState<boolean>(false);
+
+  const handleDiaryStatusChange = (hasDiaries: boolean) => {
+    setHasDiaries(hasDiaries);
+  };
 
   const handleTakeUpdate = useCallback(() => {
     setLimit((prevLimit) => prevLimit + 10);
@@ -69,10 +75,10 @@ function ClientDetailsPage() {
       if (activeTab === "assignments") {
         try {
           const response = await API.get(
-            `assignments-client/?limit=${limit}&offset=0`,
+            `assignments-client/?limit=${limit}&offset=0`
           );
           const data = response.data.results.filter(
-            (assignment) => assignment.user === Number(id),
+            (assignment) => assignment.user === Number(id)
           );
           setClientAssignments(data);
           console.log(response);
@@ -111,6 +117,13 @@ function ClientDetailsPage() {
     setIsEditing(!isEditing);
   };
 
+  const emptyNoticeContent = (
+    <>
+      <span>You will see the assignments you have shared with the client here. </span>
+      <span>Click on <strong>Share assignment</strong> in the top right corner to send the first one.</span>
+    </>
+  );
+
   const handleInputChange = (e) => {
     setEditableClient({
       ...editableClient,
@@ -142,8 +155,8 @@ function ClientDetailsPage() {
   const handleDeleteAssignment = (deletedAssignmentId) => {
     setClientAssignments((currentAssignments) =>
       currentAssignments.filter(
-        (assignment) => assignment.id !== deletedAssignmentId,
-      ),
+        (assignment) => assignment.id !== deletedAssignmentId
+      )
     );
   };
 
@@ -175,7 +188,7 @@ function ClientDetailsPage() {
       }
 
       const res = await API.get(
-        `assignments/set-client/${assignmentId}/${id}/`,
+        `assignments/set-client/${assignmentId}/${id}/`
       );
 
       if (res.status >= 200 && res.status <= 300) {
@@ -196,6 +209,7 @@ function ClientDetailsPage() {
   function openAssignment(card) {
     setCurrentCard(card);
   }
+
 
   return (
     <>
@@ -314,10 +328,10 @@ function ClientDetailsPage() {
           </div>
         )}
         {/*Assignments Tab View */}
-        {activeTab === "assignments" && (
-          <div className="assignments-tab">
-            {clientAssignments.length > 0 ? (
-              clientAssignments.map((assignment) => (
+        {activeTab === "assignments" &&
+          (clientAssignments.length > 0 ? (
+            <div className="assignments-tab">
+              {clientAssignments.map((assignment) => (
                 <ClientAssignmentTile
                   key={assignment.id}
                   assignment={assignment}
@@ -325,18 +339,22 @@ function ClientDetailsPage() {
                   openAssignment={openAssignment}
                   clientId={id}
                 />
-              ))
-            ) : (
-              <div className="nothing-to-show">
-                There is nothing to show yet
-              </div>
-            )}
-          </div>
-        )}
+              ))}
+            </div>
+          ) : (
+            <EmptyContentNotice label={emptyNoticeContent} />
+          ))}
         <div ref={observeElement} />
         {/*Notes Tab View */}
         {activeTab === "notes" && <Notes clientId={client.id} />}
-        {activeTab === "diary" && <DiaryNotes clientId={client.id} />}
+        {activeTab === "diary" && 
+        <>
+
+        {!hasDiaries &&  <EmptyContentNotice label="The client has not shared any entries yet" />}
+      
+        <DiaryNotes clientId={client.id} onDiaryStatusChange={handleDiaryStatusChange} />
+        
+        </>}
         <Modal
           showCancel={false}
           isOpen={isShareModalOpen}
