@@ -387,6 +387,7 @@ function AssignmentsPage({
       {!isShareModal && (
         <header>
           <h1>Assignments</h1>
+          <div id="onboarding-add-assignment">
           <Button
             buttonSize="small"
             fontSize="medium"
@@ -395,6 +396,7 @@ function AssignmentsPage({
             onClick={handleAddAssignment}
             icon={addAssignment}
           />
+          </div>
         </header>
       )}
       <div className="tabs">
