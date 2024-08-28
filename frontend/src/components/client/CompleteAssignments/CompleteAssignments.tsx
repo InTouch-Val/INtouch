@@ -71,8 +71,6 @@ function CompleteAssignments() {
         })
       : [];
 
-    console.log(restoredBlocks);
-
     setAssignmentData({
       ...data,
       blocks: restoredBlocks,
