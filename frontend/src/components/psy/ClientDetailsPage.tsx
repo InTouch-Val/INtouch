@@ -15,8 +15,11 @@ import ClientAssignmentTile from "./ClientAssignmentTile";
 import Button from "../../stories/buttons/Button";
 import shareIcon from "../../images/psy-icons/share-assignment-icon.svg";
 import AssignmentsPageRefactor from "../../routes/AssignmentsPageRefactor/AssignmentsPage";
+import useClientProfileOnboardingTour from "../../utils/hook/onboardingHooks/clientProfileOnboardingTour";
 
 function ClientDetailsPage() {
+  useClientProfileOnboardingTour();
+
   const { id } = useParams();
   const navigate = useNavigate();
   const { currentUser, updateUserData } = useAuth();
@@ -250,6 +253,7 @@ function ClientDetailsPage() {
           <button
             className={activeTab === "profile" ? "active" : ""}
             onClick={switchToProfileTab}
+            id="client-profile-onboarding"
           >
             Profile
           </button>
@@ -257,6 +261,7 @@ function ClientDetailsPage() {
           <button
             className={activeTab === "assignments" ? "active" : ""}
             onClick={switchToAssignmentsTab}
+            id="client-assignments-onboarding"
           >
             Assignments
           </button>
@@ -267,6 +272,7 @@ function ClientDetailsPage() {
           <button
             className={activeTab === "diary" ? "active" : ""}
             onClick={switchToDiaryTab}
+            id="client-diary-onboarding"
           >
             Diary
           </button>
