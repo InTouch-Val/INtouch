@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { API } from "../../../../service/axios";
 import { getDate } from "../../../../utils/helperFunction/getDate";
 import { parseEventDetailsText } from "../../../../utils/helperFunction/parseEventDetailsText";
+import Tumbler from "../../../tumbler/Tumbler";
 
 export default function CardDiaryClient({ card, setFetching, openModal }) {
   const navigate = useNavigate();
@@ -62,15 +63,11 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
         )}
       </div>
       <div onClick={(e) => e.stopPropagation()}>
-        <label className="card__input-label">
-          Share with my therapist
-          <input
-            type="checkbox"
-            className="card__input-checkbox"
-            defaultChecked={active}
-            onClick={handleClickVisible}
-          />
-        </label>
+        <Tumbler
+          active={active}
+          handleClick={handleClickVisible}
+          label={"Share with my therapist"}
+        />
       </div>
     </div>
   );

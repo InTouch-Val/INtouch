@@ -8,6 +8,7 @@ import { useCreateAssignmentMutation } from "../../../store/entities/assignments
 import { StatusFromServer } from "../../psy/ClientAssignmentTile";
 import { clientAssignmentClear } from "../../../store/actions/assignment/assignmentActions";
 import { useAppDispatch } from "../../../store/store";
+import Tumbler from "../../tumbler/Tumbler";
 
 function ClientAssignmentCard({ assignmentData, openAssignment }) {
   const [isShowContextMenu, setIsShowContextMenu] = useState(false);
@@ -37,8 +38,8 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
 
   async function handleShareWithTherapist() {
     try {
-      const res = await API.post(
-        `assignments-client/${assignmentData?.id}/visible/`,
+      const res = await API.patch(
+        `assignments-client/${assignmentData?.id}/visible/`
       );
       if (res.status >= 200 && res.status < 300) {
         console.log(res.data);
@@ -238,15 +239,19 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
             </button>
           </div>
         ) : (
-          // Show the original label when not on mobile width
-          <span>Share with my therapist</span>
+          <Tumbler
+            active={assignmentData?.visible}
+            handleClick={handleShareWithTherapist}
+            label={"Share with my therapist"}
+          />
         )}
-        <input
-          type="checkbox"
-          className="card__input-checkbox"
-          defaultChecked={assignmentData?.visible}
-          onClick={handleShareWithTherapist}
-        />
+        {isMobileWidth && (
+          <Tumbler
+            active={assignmentData?.visible}
+            handleClick={handleShareWithTherapist}
+            label={"Share with my therapist"}
+          />
+        )}
       </label>
     </article>
   );
