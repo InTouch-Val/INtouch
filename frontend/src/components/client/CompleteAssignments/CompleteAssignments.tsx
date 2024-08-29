@@ -173,14 +173,14 @@ function CompleteAssignments() {
     const multipleChoices = blocks.filter((block) => block.type === "multiple");
     if (
       multipleChoices.some(
-        (block) => !block.choice_replies.some((option) => option.checked)
+        (block) => !block.choice_replies.some((option) => option.checked),
       )
     ) {
       allFilled = false;
     }
     multipleChoices?.forEach((block) => {
       newState.multipleInputs[block.id] = block.choice_replies.some(
-        (option) => option.checked
+        (option) => option.checked,
       );
     });
 
@@ -188,14 +188,14 @@ function CompleteAssignments() {
     const singleChoices = blocks.filter((block) => block.type === "single");
     if (
       singleChoices.some(
-        (block) => !block.choice_replies.some((option) => option.checked)
+        (block) => !block.choice_replies.some((option) => option.checked),
       )
     ) {
       allFilled = false;
     }
     singleChoices?.forEach((block) => {
       newState.singleInputs[block.id] = block.choice_replies.some(
-        (option) => option.checked
+        (option) => option.checked,
       );
     });
 
@@ -203,7 +203,7 @@ function CompleteAssignments() {
     const rangeChoices = blocks.filter((block) => block.type === "range");
     if (
       rangeChoices.some(
-        (block) => block.reply === undefined || block.reply.trim() === ""
+        (block) => block.reply === undefined || block.reply.trim() === "",
       )
     ) {
       allFilled = false;
@@ -260,7 +260,7 @@ function CompleteAssignments() {
   async function handleShareWithTherapist() {
     try {
       const res = await API.patch(
-        `assignments-client/${assignmentData.id}/visible/`
+        `assignments-client/${assignmentData.id}/visible/`,
       );
       if (res.status >= 200 && res.status < 300) {
         console.log(res.data);
@@ -312,7 +312,7 @@ function CompleteAssignments() {
       if (res.status >= 200 && res.status < 300) {
         console.log(res.data);
         const resComplete = await API.patch(
-          `assignments-client/${assignmentData.id}/complete/`
+          `assignments-client/${assignmentData.id}/complete/`,
         );
         if (resComplete.status >= 200 && resComplete.status < 300) {
           navigate("/my-assignments");
@@ -356,7 +356,7 @@ function CompleteAssignments() {
       if (res.status >= 200 && res.status < 300) {
         console.log(res.data);
         const resComplete = await API.patch(
-          `assignments-client/${assignmentData.id}/complete/`
+          `assignments-client/${assignmentData.id}/complete/`,
         );
         if (resComplete.status >= 200 && resComplete.status < 300) {
           navigate("/my-assignments");
