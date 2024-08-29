@@ -165,6 +165,7 @@ function AssignmentTile({
   ): void {
     event.stopPropagation();
     onDeleteClick(assignment.id);
+    refetch();
   }
 
   function handleShareClick(
