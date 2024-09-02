@@ -10,6 +10,7 @@ import { menuActive, menuDate } from "../utils/constants";
 import Button from "../stories/buttons/Button";
 import useClientsPageOnboardingTour from "../utils/hook/onboardingHooks/clientsPageOnboardingTour";
 import EmptyContentNotice from "../stories/empty-content-notice/EmptyContentNotice";
+import EmptyContentNoticeTexts from "../utils/notification-texts.json";
 
 function ClientPage() {
   const [showModal, setShowModal] = useState(false);
@@ -331,7 +332,7 @@ function ClientPage() {
             </tbody>
           </table>
         ) : (
-          <EmptyContentNotice label="Click on Add client in the top right corner to send an invitation" />
+          <EmptyContentNotice label={EmptyContentNoticeTexts.noContent.psyAddClient} />
         )}
       </div>
     </div>

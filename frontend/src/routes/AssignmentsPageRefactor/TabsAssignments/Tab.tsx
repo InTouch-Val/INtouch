@@ -12,6 +12,7 @@ import { useGetAssignmentsQuery } from "../../../store/entities";
 import Skeleton from "../../../stories/skeletons/Skeleton";
 import EmptyContentNotice from "../../../stories/empty-content-notice/EmptyContentNotice";
 import styles from "./style.module.css";
+import EmptyContentNoticeTexts from "../../../utils/notification-texts.json";
 
 export interface PropsTabAssignments {
   filteredAssignments: AssignmentsType[];
@@ -51,20 +52,22 @@ export default function TabsAssignments({
 
   const emptyFavoritesContent = (
     <>
-      <span>You will find your favorite assignments here.</span>
+      <span>{EmptyContentNoticeTexts.noContent.psyNoFavouriteAssignments}</span>
       <span>
-        To add an assignment to Favorites, click on the bookmark icon on the
-        task.
+      {EmptyContentNoticeTexts.noContent.psyHowToAddFavourite}
       </span>
     </>
   );
 
   const emptyMyTasksContent = (
     <>
-      <span>You will see the tasks you created here.</span>
-      <span>
-        To add your first assignment, click on <strong>Add assignment.</strong>
-      </span>
+      <span>{EmptyContentNoticeTexts.noContent.psyMyTasks}</span>
+
+      <span
+      dangerouslySetInnerHTML={{
+        __html: EmptyContentNoticeTexts.noContent.psyHowToAddAssignment,
+      }}
+    />
     </>
   );
 
@@ -75,7 +78,7 @@ export default function TabsAssignments({
       case AssignmentTab.myList:
         return emptyMyTasksContent;
       default:
-        return "There is nothing to show yet.";
+        return EmptyContentNoticeTexts.noContent.defaultNoData;
     }
   };
 

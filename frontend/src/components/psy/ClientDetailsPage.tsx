@@ -17,6 +17,7 @@ import shareIcon from "../../images/psy-icons/share-assignment-icon.svg";
 import AssignmentsPageRefactor from "../../routes/AssignmentsPageRefactor/AssignmentsPage";
 import useClientProfileOnboardingTour from "../../utils/hook/onboardingHooks/clientProfileOnboardingTour";
 import EmptyContentNotice from "../../stories/empty-content-notice/EmptyContentNotice";
+import EmptyContentNoticeTexts from "../../utils/notification-texts.json";
 
 function ClientDetailsPage() {
   useClientProfileOnboardingTour();
@@ -120,12 +121,13 @@ function ClientDetailsPage() {
   const emptyNoticeContent = (
     <>
       <span>
-        You will see the assignments you have shared with the client here.{" "}
+        {EmptyContentNoticeTexts.noContent.psySharedAssignments}
       </span>
-      <span>
-        Click on <strong>Share assignment</strong> in the top right corner to
-        send the first one.
-      </span>
+      <span
+      dangerouslySetInnerHTML={{
+        __html: EmptyContentNoticeTexts.noContent.psyHowToShareAssignment,
+      }}
+    />
     </>
   );
 
@@ -354,7 +356,7 @@ function ClientDetailsPage() {
         {activeTab === "diary" && (
           <>
             {!hasDiaries && (
-              <EmptyContentNotice label="The client has not shared any entries yet" />
+              <EmptyContentNotice label={EmptyContentNoticeTexts.noContent.psyNoDiaries} />
             )}
 
             <DiaryNotes
