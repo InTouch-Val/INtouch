@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import Shepherd, { StepOptions }  from "shepherd.js";
+import Shepherd, { StepOptions } from "shepherd.js";
 import "shepherd.js/dist/css/shepherd.css";
 import "../../../service/onboarding/custom-shepherd-styles.scss";
 import useMobileWidth from "../useMobileWidth";
@@ -47,7 +47,10 @@ const useOnboardingTour = (
 };
 
 //hook for testing in browser. Check usage in comments for each page scenario
-window.launchOnboardingTour = (tourKey: string, getSteps: () => StepOptions[]) => {
+window.launchOnboardingTour = (
+  tourKey: string,
+  getSteps: () => StepOptions[],
+) => {
   localStorage.removeItem(tourKey);
 
   const tour = new Shepherd.Tour({

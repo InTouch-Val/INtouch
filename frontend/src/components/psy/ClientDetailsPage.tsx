@@ -16,6 +16,8 @@ import Button from "../../stories/buttons/Button";
 import shareIcon from "../../images/psy-icons/share-assignment-icon.svg";
 import AssignmentsPageRefactor from "../../routes/AssignmentsPageRefactor/AssignmentsPage";
 import useClientProfileOnboardingTour from "../../utils/hook/onboardingHooks/clientProfileOnboardingTour";
+import EmptyContentNotice from "../../stories/empty-content-notice/EmptyContentNotice";
+import EmptyContentNoticeTexts from "../../utils/notification-texts.json";
 
 function ClientDetailsPage() {
   useClientProfileOnboardingTour();
@@ -44,6 +46,11 @@ function ClientDetailsPage() {
   const [limit, setLimit] = useState(50);
   const observeElement = useRef(null);
   const [isTotal, setTotal] = useState(false);
+  const [hasDiaries, setHasDiaries] = useState<boolean>(false);
+
+  const handleDiaryStatusChange = (hasDiaries: boolean) => {
+    setHasDiaries(hasDiaries);
+  };
 
   const handleTakeUpdate = useCallback(() => {
     setLimit((prevLimit) => prevLimit + 10);
@@ -110,6 +117,19 @@ function ClientDetailsPage() {
     }
     setIsEditing(!isEditing);
   };
+
+  const emptyNoticeContent = (
+    <>
+      <span>
+        {EmptyContentNoticeTexts.noContent.psySharedAssignments}
+      </span>
+      <span
+      dangerouslySetInnerHTML={{
+        __html: EmptyContentNoticeTexts.noContent.psyHowToShareAssignment,
+      }}
+    />
+    </>
+  );
 
   const handleInputChange = (e) => {
     setEditableClient({
@@ -314,10 +334,10 @@ function ClientDetailsPage() {
           </div>
         )}
         {/*Assignments Tab View */}
-        {activeTab === "assignments" && (
-          <div className="assignments-tab">
-            {clientAssignments.length > 0 ? (
-              clientAssignments.map((assignment) => (
+        {activeTab === "assignments" &&
+          (clientAssignments.length > 0 ? (
+            <div className="assignments-tab">
+              {clientAssignments.map((assignment) => (
                 <ClientAssignmentTile
                   key={assignment.id}
                   assignment={assignment}
@@ -325,18 +345,26 @@ function ClientDetailsPage() {
                   openAssignment={openAssignment}
                   clientId={id}
                 />
-              ))
-            ) : (
-              <div className="nothing-to-show">
-                There is nothing to show yet
-              </div>
-            )}
-          </div>
-        )}
+              ))}
+            </div>
+          ) : (
+            <EmptyContentNotice label={emptyNoticeContent} />
+          ))}
         <div ref={observeElement} />
         {/*Notes Tab View */}
         {activeTab === "notes" && <Notes clientId={client.id} />}
-        {activeTab === "diary" && <DiaryNotes clientId={client.id} />}
+        {activeTab === "diary" && (
+          <>
+            {!hasDiaries && (
+              <EmptyContentNotice label={EmptyContentNoticeTexts.noContent.psyNoDiaries} />
+            )}
+
+            <DiaryNotes
+              clientId={client.id}
+              onDiaryStatusChange={handleDiaryStatusChange}
+            />
+          </>
+        )}
         <Modal
           showCancel={false}
           isOpen={isShareModalOpen}
