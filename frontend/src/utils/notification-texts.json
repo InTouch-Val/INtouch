@@ -1,0 +1,14 @@
+{
+    "noContent": {
+      "psyNoDiaries": "The client has not shared any entries yet",
+      "psySharedAssignments": "You will see the assignments you have shared with the client here.",
+      "psyHowToShareAssignment": "Click on <strong>Share assignment</strong> in the top right corner to send the first one.",
+      "psyAddClient": "Click on Add client in the top right corner to send an invitation",
+      "psyNoFavouriteAssignments": "You will find your favorite assignments here.",
+      "psyHowToAddFavourite": " To add an assignment to Favorites, click on the bookmark icon on the task.",
+      "psyMyTasks": "You will see the tasks you created here",
+      "psyHowToAddAssignment": "To add your first assignment, click on <strong>Add assignment.</strong>",
+      "defaultNoData": "There is nothing to show yet."
+    }
+  }
+  

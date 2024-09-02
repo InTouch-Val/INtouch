@@ -9,6 +9,8 @@ import Select from "../components/psy/Select/Select";
 import { menuActive, menuDate } from "../utils/constants";
 import Button from "../stories/buttons/Button";
 import useClientsPageOnboardingTour from "../utils/hook/onboardingHooks/clientsPageOnboardingTour";
+import EmptyContentNotice from "../stories/empty-content-notice/EmptyContentNotice";
+import EmptyContentNoticeTexts from "../utils/notification-texts.json";
 
 function ClientPage() {
   const [showModal, setShowModal] = useState(false);
@@ -330,9 +332,7 @@ function ClientPage() {
             </tbody>
           </table>
         ) : (
-          <div className="clients-page__no_clients_notify">
-            Click on Add client in the top right corner to send an invitation
-          </div>
+          <EmptyContentNotice label={EmptyContentNoticeTexts.noContent.psyAddClient} />
         )}
       </div>
     </div>

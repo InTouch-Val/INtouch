@@ -10,6 +10,9 @@ import {
 } from "../../../utils/constants";
 import { useGetAssignmentsQuery } from "../../../store/entities";
 import Skeleton from "../../../stories/skeletons/Skeleton";
+import EmptyContentNotice from "../../../stories/empty-content-notice/EmptyContentNotice";
+import styles from "./style.module.css";
+import EmptyContentNoticeTexts from "../../../utils/notification-texts.json";
 
 export interface PropsTabAssignments {
   filteredAssignments: AssignmentsType[];
@@ -47,40 +50,75 @@ export default function TabsAssignments({
     ordering: activeOrder,
   });
 
+  const emptyFavoritesContent = (
+    <>
+      <span>{EmptyContentNoticeTexts.noContent.psyNoFavouriteAssignments}</span>
+      <span>
+      {EmptyContentNoticeTexts.noContent.psyHowToAddFavourite}
+      </span>
+    </>
+  );
+
+  const emptyMyTasksContent = (
+    <>
+      <span>{EmptyContentNoticeTexts.noContent.psyMyTasks}</span>
+
+      <span
+      dangerouslySetInnerHTML={{
+        __html: EmptyContentNoticeTexts.noContent.psyHowToAddAssignment,
+      }}
+    />
+    </>
+  );
+
+  const getNoAssignmentsMessage = () => {
+    switch (activeTab) {
+      case AssignmentTab.favorites:
+        return emptyFavoritesContent;
+      case AssignmentTab.myList:
+        return emptyMyTasksContent;
+      default:
+        return EmptyContentNoticeTexts.noContent.defaultNoData;
+    }
+  };
+
   return (
-    <div className="assignment-grid onboarding-psy-step">
-      {filteredAssignments && filteredAssignments.length > 0 ? (
-        filteredAssignments.map((assignment, index) => (
-          <React.Fragment key={assignment.id}>
-            {isLoading ? (
-              <Skeleton type="assignment" user="psy" variant="ps-all-tasks" />
-            ) : (
-              <AssignmentTile
-                refetch={refetch}
-                assignment={assignment}
-                onFavoriteToggle={toggleFavorite}
-                isFavorite={currentUser?.doctor.assignments.find(
-                  (item) => item === assignment.id,
-                )}
-                isAuthor={assignment.author === currentUser?.id}
-                onDeleteClick={handleDeleteClick}
-                onShareClick={handleShareButton}
-                isShareModal={isShareModal}
-                selectedAssignmentIdForShareModalOnClientPage={
-                  selectedAssignmentIdForShareModalOnClientPage
-                }
-                className={index === 0 ? "first-assignment" : ""}
-              />
-            )}
-          </React.Fragment>
-        ))
-      ) : isLoading ? (
-        Array.from({ length: 10 }).map((_, index) => (
-          <Skeleton type="assignment" user="psy" variant="ps-all-tasks" />
-        ))
+    <section className={styles.assignments_library_contatiner}>
+      {filteredAssignments.length === 0 && !isLoading ? (
+        <EmptyContentNotice label={getNoAssignmentsMessage()} />
       ) : (
-        <div className="nothing-to-show">There is nothing to show yet</div>
+        <div className="assignment-grid onboarding-psy-step">
+          {isLoading
+            ? Array.from({ length: 10 }).map((_, index) => (
+                <Skeleton
+                  key={index}
+                  type="assignment"
+                  user="psy"
+                  variant="ps-all-tasks"
+                />
+              ))
+            : filteredAssignments.map((assignment, index) => (
+                <React.Fragment key={assignment.id}>
+                  <AssignmentTile
+                    refetch={refetch}
+                    assignment={assignment}
+                    onFavoriteToggle={toggleFavorite}
+                    isFavorite={currentUser?.doctor.assignments.find(
+                      (item) => item === assignment.id,
+                    )}
+                    isAuthor={assignment.author === currentUser?.id}
+                    onDeleteClick={handleDeleteClick}
+                    onShareClick={handleShareButton}
+                    isShareModal={isShareModal}
+                    selectedAssignmentIdForShareModalOnClientPage={
+                      selectedAssignmentIdForShareModalOnClientPage
+                    }
+                    className={index === 0 ? "first-assignment" : ""}
+                  />
+                </React.Fragment>
+              ))}
+        </div>
       )}
-    </div>
+    </section>
   );
 }
