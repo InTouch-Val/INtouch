@@ -1,22 +1,11 @@
-//@ts-nocheck
 import React, { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import "./ClientAssignmentCard.css";
 import { API } from "../../../service/axios";
-import useMobileWidth from "../../../utils/hook/useMobileWidth";
-import { useCreateAssignmentMutation } from "../../../store/entities/assignments/assingmentsApi";
-import { StatusFromServer } from "../../psy/ClientAssignmentTile";
-import { clientAssignmentClear } from "../../../store/actions/assignment/assignmentActions";
-import { useAppDispatch } from "../../../store/store";
 
 function ClientAssignmentCard({ assignmentData, openAssignment }) {
   const [isShowContextMenu, setIsShowContextMenu] = useState(false);
-  const menuReference = useRef(null);
   const buttonReference = useRef(null);
-
-  const dispatch = useAppDispatch();
-
-  const [createAssignment, _] = useCreateAssignmentMutation();
 
   function defineStatusClass() {
     switch (assignmentData?.status) {
@@ -38,7 +27,7 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
   async function handleShareWithTherapist() {
     try {
       const res = await API.post(
-        `assignments-client/${assignmentData?.id}/visible/`,
+        `assignments-client/${assignmentData?.id}/visible/`
       );
       if (res.status >= 200 && res.status < 300) {
         console.log(res.data);
@@ -50,20 +39,6 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
       console.error(error.message);
       setIsShowContextMenu(false);
     }
-  }
-
-  function showContextMenu() {
-    setIsShowContextMenu(!isShowContextMenu);
-
-    // check if the context menu is off-screen after it's shown
-    setTimeout(() => {
-      const menuRectangle = menuReference.current.getBoundingClientRect();
-      const isOffScreen = menuRectangle.right > window.innerWidth;
-
-      if (isOffScreen) {
-        menuReference.current.style.left = "-120px";
-      }
-    }, 0);
   }
 
   function onCardClick() {
@@ -88,40 +63,6 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
   }, [isShowContextMenu]);
 
   //Changing card content and menu
-  const isMobileWidth = useMobileWidth();
-
-  function handleClickDuplicate() {
-    const duplicateAssignmentData = {
-      ...assignmentData,
-      status: StatusFromServer.ToDo,
-    };
-
-    try {
-      const response = createAssignment(duplicateAssignmentData);
-      return response;
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  function handleClickClear() {
-    const clearAssignmentData = {
-      ...assignmentData,
-      status: StatusFromServer.ToDo,
-      blocks: [],
-      title: "",
-      text: "",
-    };
-
-    const assignmentId: string = clearAssignmentData.id;
-
-    try {
-      const response = dispatch(clientAssignmentClear({ assignmentId }));
-      return response;
-    } catch (e) {
-      console.log(e);
-    }
-  }
 
   return (
     <article className="card">
@@ -154,93 +95,10 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
         <h3 className="card__title" title={assignmentData?.title}>
           {assignmentData?.title}
         </h3>
-        <div className="card__action-container">
-          <button
-            ref={buttonReference}
-            className="card__action-button"
-            type="button"
-            aria-label="More actions..."
-            onClick={showContextMenu}
-          />
-
-          {!isMobileWidth ? ( //Show menu only when not mobile width
-            <menu // eslint-disable-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events
-              ref={menuReference}
-              className={`card__action-menu${isShowContextMenu ? "" : " card__action-menu_disabled"}`}
-              onClick={(event) => event.stopPropagation()}
-            >
-              <li className="card__action-menu-item">
-                <NavLink
-                  to={`/my-assignments/${assignmentData?.id}`}
-                  className="card__action-menu-text"
-                >
-                  Edit
-                  <div
-                    className="card__action-menu-icon card__action-menu-icon_type_edit"
-                    aria-label="Edit"
-                  />
-                </NavLink>
-              </li>
-              <li className="card__action-menu-item">
-                <button
-                  type="button"
-                  onClick={handleClickClear}
-                  className="card__action-menu-text"
-                >
-                  Clear
-                  <div
-                    className="card__action-menu-icon card__action-menu-icon_type_clear"
-                    aria-label="Clear"
-                  />
-                </button>
-              </li>
-              <li className="card__action-menu-item">
-                <button
-                  type="button"
-                  onClick={handleClickDuplicate}
-                  className="card__action-menu-text"
-                >
-                  Duplicate
-                  <div
-                    className="card__action-menu-icon card__action-menu-icon_type_duplicate"
-                    aria-label="Duplicate"
-                  />
-                </button>
-              </li>
-            </menu>
-          ) : null}
-        </div>
+        <div className="card__action-container"></div>
       </div>
       <label className="card__input-label">
-        {isMobileWidth ? (
-          // Show menu options when on mobile width
-          <div className="mobile_menu_container">
-            <button
-              type="button"
-              className="card__action-menu-text"
-              onClick={handleClickDuplicate}
-            >
-              <div
-                className="card__action-menu-icon card__action-menu-icon_type_duplicate"
-                aria-label="Duplicate"
-              />
-            </button>
-            <button
-              type="button"
-              className="card__action-menu-text"
-              // disabled={true}
-              onClick={handleClickClear}
-            >
-              <div
-                className="card__action-menu-icon card__action-menu-icon_type_clear"
-                aria-label="Clear"
-              />
-            </button>
-          </div>
-        ) : (
-          // Show the original label when not on mobile width
-          <span>Share with my therapist</span>
-        )}
+        <span>Share with my therapist</span>
         <input
           type="checkbox"
           className="card__input-checkbox"
