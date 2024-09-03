@@ -1,5 +1,5 @@
 .assignments-page {
-  padding: 50px 65px 20px 25px;
+  padding: 70px 65px 20px 25px;
   color: #656565;
 }
 
@@ -21,11 +21,6 @@
   }
 }
 
-.assignments-page h1 {
-  font-size: 36px;
-  font-weight: 500;
-}
-
 @media screen and (min-width: 320px) and (max-width: 480px) {
   .assignments-page h1 {
     margin: 0;
@@ -34,7 +29,6 @@
     font-size: 22px;
     font-weight: 500;
     line-height: 28px;
-    color: #1f304f;
   }
 }
 
@@ -52,6 +46,45 @@
     flex-grow: 1;
     width: auto;
   }
+}
+.assignments-page-header-block {
+  margin-bottom: 45px;
+}
+
+.assignments-page-header-block h1 {
+  margin: 0px;
+  font-size: 36px;
+  font-weight: 500;
+  color: rgba(65, 125, 136, 1);
+  overflow-wrap: anywhere;
+  line-height: 32px;
+}
+
+.assignments-page-header-block div {
+  max-width: 200px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 25px;
+}
+
+.assignments-page-header-block div button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.assignments-page-header-block div button:hover {
+  opacity: 0.7;
+}
+
+.assignments-page-header-block div button img {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  margin: 0;
+  object-fit: contain;
+  height: fit-content;
 }
 
 .search-bar {
@@ -126,15 +159,19 @@
 
 .view__img {
   display: block;
-  width: 375px;
+  max-width: 375px;
+  width: 100%;
   height: 206px;
   margin: 20px auto 45px;
+  object-fit: cover;
 }
 
 .view__description {
   color: rgba(65, 125, 136, 1);
   font-size: 20px;
   white-space: pre-line;
+  line-height: 21px;
+  margin-bottom: 37px;
 }
 
 .form-title {
@@ -160,6 +197,7 @@
   font-weight: 500;
   resize: none;
   scrollbar-width: none;
+  line-height: 21px;
 }
 
 .title-span {
@@ -195,7 +233,7 @@
 
 .form-settings {
   display: flex;
-  gap: 10px;
+  gap: 20px;
   /* Расстояние между элементами */
 }
 
@@ -203,6 +241,7 @@
   display: flex;
   flex: 0.25 0.5;
   flex-direction: column;
+  max-width: 170px;
 }
 
 @media screen and (min-width: 320px) and (max-width: 600px) {
@@ -292,11 +331,16 @@
 }
 
 .assignment-details {
-  font-size: 18px;
+  font-size: 16px;
 }
 
-.assignment-details strong {
-  color: #417d88;
+.assignment-view-body {
+  margin-bottom: 100px;
+}
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .assignment-view-body {
+    margin-bottom: 60px;
+  }
 }
 
 @keyframes slide-in {

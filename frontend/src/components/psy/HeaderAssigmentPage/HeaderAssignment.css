@@ -10,17 +10,25 @@
   justify-content: space-between;
 }
 
+.header__wrapper h1 {
+  margin: 0;
+  padding: 0;
+  line-height: 32px;
+}
+
 .header__view {
   color: rgba(65, 125, 136, 1);
   overflow-wrap: anywhere;
+  font-size: 36px;
+  margin: 0;
 }
 
 .header__buttons {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  gap: 40px;
-  align-items: center;
+  gap: 30px;
+  height: 100%;
 }
 
 @media screen and (min-width: 480px) and (max-width: 600px) {
@@ -42,7 +50,7 @@
 
 .header__icon-back {
   width: 44px;
-  height: 26px;
+  height: fit-content;
   margin: 0;
   cursor: pointer;
   transition: 0.3 ease-in-out;
@@ -111,7 +119,7 @@
   background: rgba(255, 0, 0, 0.1);
   margin-left: auto;
   visibility: hidden;
-  margin-bottom: 8px;
+  margin-bottom: 20px;
   border-radius: 3px;
   padding: 1px 12px;
 }

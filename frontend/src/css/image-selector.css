@@ -21,7 +21,7 @@
 @media screen and (min-width: 320px) and (max-width: 600px) {
   .image-selector form {
     flex-direction: column;
-    gap: 15px;
+    gap: 30px;
   }
 }
 
@@ -54,7 +54,7 @@
 .image-results {
   display: flex;
   flex-wrap: nowrap;
-  padding-bottom: 10px; /* Добавить отступ снизу */
+  padding-bottom: 25px; /* Добавить отступ снизу */
   gap: 10px;
   overflow-x: auto;
 }
@@ -78,4 +78,5 @@
   border-color: #3f7983; /* Цвет границы для выбранного элемента */
   border-radius: 8px;
   box-shadow: 0 0 8px rgb(63 121 131 / 50%); /* Добавить тень для акцента */
+  margin-top: 10px;
 }

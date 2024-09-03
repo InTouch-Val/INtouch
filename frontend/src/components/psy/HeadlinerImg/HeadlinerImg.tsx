@@ -125,7 +125,7 @@ function HeadlinerImg({
   return (
     blockVisible && (
       <div className="headline">
-        <h2 className="headline__add-an-img">Add an image</h2>
+        <p className="headline__add-an-img">Add an image</p>
         <div
           id="customFileInput"
           className={

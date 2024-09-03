@@ -125,6 +125,7 @@ function AssignmentBlock({
                     type="radio"
                     name={`range-${block.id}`}
                     value={value}
+                    disabled
                   />
                   <span className="range-option-label">{value}</span>
                 </label>
