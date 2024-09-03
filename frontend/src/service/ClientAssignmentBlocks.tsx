@@ -29,7 +29,6 @@ function ClientAssignmentBlocks({
 }) {
   const [choices, setChoices] = useState(block.choices || []);
   const [choiceRefs, setChoiceRefs] = useState([]);
-  const [selectedValue, setSelectedValue] = useState(block.reply || "");
   const editorRef = useRef(null);
 
   const [editorState, setEditorState] = useState(() => {

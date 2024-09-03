@@ -22,7 +22,7 @@ export const listEmotionsChips = [
   { title: "Laziness", active: false },
   { title: "Interest", active: false },
   { title: "Pride", active: false },
-  { title: "Hapiness", active: false },
+  { title: "Happiness", active: false },
   { title: "Anger", active: false },
   { title: "Anxiety", active: false },
   { title: "Embarrassment", active: true },
@@ -47,7 +47,7 @@ export const listEmotionsChips = [
   { title: "Acceptance", active: false },
   { title: "Enthusiasm", active: false },
   { title: "Love", active: true },
-  { title: "Dissapointment", active: false },
+  { title: "Disappointment", active: false },
 
   { title: "Confusion", active: false },
   { title: "Satisfaction", active: false },

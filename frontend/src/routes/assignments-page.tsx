@@ -387,14 +387,16 @@ function AssignmentsPage({
       {!isShareModal && (
         <header>
           <h1>Assignments</h1>
-          <Button
-            buttonSize="small"
-            fontSize="medium"
-            label="Add Assignment"
-            type="button"
-            onClick={handleAddAssignment}
-            icon={addAssignment}
-          />
+          <div id="onboarding-add-assignment">
+            <Button
+              buttonSize="small"
+              fontSize="medium"
+              label="Add Assignment"
+              type="button"
+              onClick={handleAddAssignment}
+              icon={addAssignment}
+            />
+          </div>
         </header>
       )}
       <div className="tabs">

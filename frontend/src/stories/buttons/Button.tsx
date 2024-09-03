@@ -19,7 +19,7 @@ const Button = ({
   icon = "",
   onClick = () => {},
   type,
-}) => {
+}: Props) => {
   return (
     <button
       type={type}
