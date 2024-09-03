@@ -1,3 +1,6 @@
+@import "../../scss-styles/mixins.scss";
+@import "../../scss-styles/variables.scss";
+
 .card__input-label {
   display: flex;
   align-items: center;
@@ -32,7 +35,7 @@
   background-color: #417d88;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .card__input-checkbox:checked {
     min-width: 32px;
   }
