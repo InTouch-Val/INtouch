@@ -1,3 +1,6 @@
+@import "../scss-styles/mixins.scss";
+@import "../scss-styles/variables.scss";
+
 /* block.css */
 .block-container {
   width: 100%;
@@ -5,7 +8,7 @@
 
 .block-container > h2 {
   font-size: 24px;
-  color: #417d88;
+  color: $basic-font-color;
 }
 
 .block {
@@ -16,29 +19,28 @@
   border-radius: 8px;
   /* Скругление углов блока */
   margin-bottom: 42px;
-  background-color: #fff;
+  background-color: $basic-background-color;
   /* Фон блока */
   box-shadow: 0 4px 10px rgb(0 0 0 / 10%);
   /* Тень блока */
+  & h1 {
+    font-size: 24px;
+  }
+
+  & h2 {
+    font-size: 20px;
+  }
+
+  & ul {
+    padding-inline-start: 10px;
+  }
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .block {
     border-radius: 6px;
     box-shadow: 0 0 3px 1px #d7e4e773;
   }
-}
-
-.block h1 {
-  font-size: 24px;
-}
-
-.block h2 {
-  font-size: 20px;
-}
-
-.block ul {
-  padding-inline-start: 10px;
 }
 
 .block-title-input,
@@ -102,12 +104,12 @@
   color: rgba(101, 101, 101, 1);
   cursor: pointer;
   padding: 0;
-}
 
-.button img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 }
 
 .button:hover img {
@@ -149,7 +151,7 @@
   padding: 10px;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .range-display {
     display: grid;
     column-gap: 10px;
@@ -233,10 +235,10 @@ input[type="number"] {
 .choice-option input[type="radio"],
 .choice-option input[type="checkbox"] {
   box-shadow: 0px 1px 2px 0px #d7e4e7e5;
-  border: 1px solid #d7e4e7;
+  border: 1px solid $basic-button-color;
   width: 22px;
   height: 22px;
-  accent-color: #d7e4e7;
+  accent-color: $basic-button-color;
   -webkit-appearance: none;
   appearance: none;
   border-radius: 50%;
@@ -246,7 +248,7 @@ input[type="number"] {
   border-radius: 0;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .range-options {
     grid-column: 1/3;
     margin-bottom: 6px;
@@ -266,7 +268,7 @@ input[type="number"] {
   flex-direction: column-reverse;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .range-option {
     margin: 0;
     display: flex;
@@ -290,7 +292,7 @@ input[type="number"] {
   margin: 0 10px;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .range-label {
     grid-row-start: 3;
     margin: 0;
@@ -327,7 +329,7 @@ input[type="number"] {
   align-items: center;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .block-image {
     margin: 0;
     margin-top: 8px;

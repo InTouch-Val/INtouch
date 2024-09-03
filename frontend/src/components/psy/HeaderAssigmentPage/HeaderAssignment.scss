@@ -1,3 +1,5 @@
+@import "../../../scss-styles/mixins.scss";
+
 .headerAssignment {
   display: flex;
   flex-direction: column;
@@ -8,12 +10,12 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-}
 
-.header__wrapper h1 {
-  margin: 0;
-  padding: 0;
-  line-height: 32px;
+  & h1 {
+    margin: 0;
+    padding: 0;
+    line-height: 32px;
+  }
 }
 
 .header__view {
@@ -29,6 +31,12 @@
   justify-content: space-between;
   gap: 30px;
   height: 100%;
+
+  & button {
+    background: none;
+    border: none;
+  }
+  
 }
 
 @media screen and (min-width: 480px) and (max-width: 600px) {
@@ -37,15 +45,10 @@
   }
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .header__buttons {
     gap: 10px;
   }
-}
-
-.header__buttons button {
-  background: none;
-  border: none;
 }
 
 .header__icon-back {
@@ -67,10 +70,10 @@
   cursor: pointer;
   transition: 0.3 ease-in-out;
   border-radius: 0;
-}
 
-.header__icon-save:hover {
-  opacity: 0.7;
+  &:hover {
+    opacity: 0.7;
+  }
 }
 
 .header__icon-save-disabled {
@@ -91,10 +94,10 @@
   object-fit: contain;
   cursor: pointer;
   transition: 0.3 ease-in-out;
-}
 
-.header__icon-eye:hover {
-  opacity: 0.7;
+  &:hover {
+    opacity: 0.7;
+  }
 }
 
 .header__icon-eye-disabled {

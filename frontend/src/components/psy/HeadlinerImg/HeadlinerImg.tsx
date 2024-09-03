@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 import CloudUploadSignal from "../../../images/CloudUploadSignal.svg";
 import IconCopy from "../../../images/IconCopy.svg";
 import Button from "../button/ButtonHeadline";
-import "./HeadlinerImg.css";
+import "./HeadlinerImg.scss";
 
 function HeadlinerImg({
   setSelectedImageForBlock,

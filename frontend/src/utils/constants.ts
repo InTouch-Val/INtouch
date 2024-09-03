@@ -23,6 +23,8 @@ export const menuDate = [
 
 export const minMobWidth = 320;
 export const maxMobWidth = 480;
+export const maxLengthTitle = 50;
+export const maxLengthDescription = 300;
 
 export const maxTextLegthBig = 3000;
 

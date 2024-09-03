@@ -1,3 +1,5 @@
+@import "../../../scss-styles/variables.scss";
+
 .headline {
   position: relative;
   display: flex;
@@ -6,7 +8,7 @@
 }
 
 .headline__add-an-img {
-  color: #417d88;
+  color: $basic-font-color;
   font-size: 16px;
   font-weight: 500;
   line-height: 17px;
@@ -59,7 +61,7 @@
 .headline__img-input-custom {
   width: 100%;
   display: inline-block;
-  color: white;
+  color: $basic-background-color;
   transition: background-color 0.3s ease;
   border-radius: 5px;
   text-align: center;

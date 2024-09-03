@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan, faXmark } from "@fortawesome/free-solid-svg-icons";
-import "../../css/block.css";
+import "../../css/block.scss";
 import HeadlinerImg from "../../components/psy/HeadlinerImg/HeadlinerImg";
 import Block from "./Block/Block";
 

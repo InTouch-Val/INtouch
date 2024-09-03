@@ -12,7 +12,7 @@ import { ImageQuestionBlock } from "./ImageQuestionBlock";
 import { ClientAssignmentBlocks } from "../../service/ClientAssignmentBlocks";
 import decodeStyledText from "../../service/decodeStyledText";
 import HeadlinerImg from "./HeadlinerImg/HeadlinerImg";
-import "../../css/assignments.css";
+import "../../css/assignments.scss";
 import HeaderAssignment from "./HeaderAssigmentPage/HeaderAssignment";
 import Button from "../../stories/buttons/Button";
 import imageIcon from "../../images/assignment-page/image.svg";
@@ -24,7 +24,12 @@ import singleIcon from "../../images/assignment-page/single-choice.svg";
 import arrowBack from "../../images/assignment-page/arrow-back.svg";
 import share from "../../images/assignment-page/share.svg";
 
-import { TypeFilter, TypeLanguage } from "../../utils/constants";
+import {
+  maxLengthDescription,
+  maxLengthTitle,
+  TypeFilter,
+  TypeLanguage,
+} from "../../utils/constants";
 import useConstructorOnboardingTour from "../../utils/hook/onboardingHooks/assignmentConstructorOnboardingTour";
 import ModalAssignments from "../../routes/AssignmentsPageRefactor/ModalsAssignments/ModalAssignments";
 
@@ -69,9 +74,9 @@ function AddAssignment() {
     setIsDisabled(
       !(
         title.length !== 0 &&
-        title.length < 51 &&
+        title.length <= maxLengthTitle &&
         description.length !== 0 &&
-        description.length < 301 &&
+        description.length <= maxLengthDescription &&
         searchTerm.length !== 0 &&
         selectedImage &&
         type.length !== 0 &&
@@ -480,7 +485,8 @@ function AddAssignment() {
             <input
               type="text"
               className={`title-input ${
-                (title.length === 0 || title.length > 50) && !isFirstEntry
+                (title.length === 0 || title.length > maxLengthTitle) &&
+                !isFirstEntry
                   ? "error"
                   : ""
               }`}
@@ -491,14 +497,15 @@ function AddAssignment() {
               id="title"
             />
             <span
-              className={`title-span ${(title.length === 0 || title.length > 50) && !isFirstEntry && "error__text_span"}`}
+              className={`title-span ${(title.length === 0 || title.length > maxLengthTitle) && !isFirstEntry && "error__text_span"}`}
             >
               Please enter a valid name (1-50 characters)
             </span>
             <textarea
               type="text"
               className={`title-input ${
-                (description.length === 0 || description.length > 300) &&
+                (description.length === 0 ||
+                  description.length > maxLengthDescription) &&
                 !isFirstEntry
                   ? "error"
                   : ""
@@ -510,7 +517,7 @@ function AddAssignment() {
               id="text"
             />
             <span
-              className={`title-span ${(description.length === 0 || description.length > 300) && !isFirstEntry ? "error__text_span" : ""}`}
+              className={`title-span ${(description.length === 0 || description.length > maxLengthDescription) && !isFirstEntry ? "error__text_span" : ""}`}
             >
               Please enter a valid name (1-300 characters)
             </span>

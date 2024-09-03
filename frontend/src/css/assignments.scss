@@ -1,90 +1,83 @@
+@import "../scss-styles/mixins.scss";
+@import "../scss-styles/variables.scss";
+
 .assignments-page {
   padding: 70px 65px 20px 25px;
-  color: #656565;
+  color: $additional-font-color;
+
+  & header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  & .tabs button {
+    width: 33%;
+  }
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .assignments-page {
     padding: 50px 28px;
+
+    & header {
+      margin: 0;
+    }
+    & h1 {
+      margin: 0;
+      margin-top: 26px;
+      margin-bottom: 5px;
+      font-size: 22px;
+      font-weight: 500;
+      line-height: 28px;
+    }
+    & .tabs {
+      display: flex;
+      width: 100%;
+
+      & button {
+        flex-grow: 1;
+        width: auto;
+      }
+    }
   }
 }
 
-.assignments-page header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-@media screen and (min-width: 320px) and (max-width: 480px) {
-  .assignments-page header {
-    margin: 0;
-  }
-}
-
-@media screen and (min-width: 320px) and (max-width: 480px) {
-  .assignments-page h1 {
-    margin: 0;
-    margin-top: 26px;
-    margin-bottom: 5px;
-    font-size: 22px;
-    font-weight: 500;
-    line-height: 28px;
-  }
-}
-
-.assignments-page .tabs button {
-  width: 33%;
-}
-
-@media screen and (min-width: 320px) and (max-width: 480px) {
-  .assignments-page .tabs {
-    display: flex;
-    width: 100%;
-  }
-
-  .assignments-page .tabs button {
-    flex-grow: 1;
-    width: auto;
-  }
-}
 .assignments-page-header-block {
   margin-bottom: 45px;
-}
 
-.assignments-page-header-block h1 {
-  margin: 0px;
-  font-size: 36px;
-  font-weight: 500;
-  color: rgba(65, 125, 136, 1);
-  overflow-wrap: anywhere;
-  line-height: 32px;
-}
+  & h1 {
+    margin: 0px;
+    font-size: 36px;
+    font-weight: 500;
+    color: rgba(65, 125, 136, 1);
+    overflow-wrap: anywhere;
+    line-height: 32px;
+  }
+  & div {
+    max-width: 200px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 25px;
 
-.assignments-page-header-block div {
-  max-width: 200px;
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  gap: 25px;
-}
+    & button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
 
-.assignments-page-header-block div button {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-}
-
-.assignments-page-header-block div button:hover {
-  opacity: 0.7;
-}
-
-.assignments-page-header-block div button img {
-  width: 100%;
-  height: 100%;
-  border-radius: 0;
-  margin: 0;
-  object-fit: contain;
-  height: fit-content;
+      &:hover {
+        opacity: 0.7;
+      }
+      & img {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        margin: 0;
+        object-fit: contain;
+        height: fit-content;
+      }
+    }
+  }
 }
 
 .search-bar {
@@ -96,6 +89,15 @@
   justify-content: space-between;
   margin-bottom: 20px;
   /* space below the filters */
+
+  & select {
+    width: 18%;
+    padding: 8px;
+    border: 1px solid #d0d1d6;
+    /* border color */
+    border-radius: 10px;
+    font-size: 14px;
+  }
 }
 
 .block-buttons-container {
@@ -111,20 +113,11 @@
   border-radius: 6px;
   /* Скругление углов */
   margin-top: 20px;
-  background-color: #fff;
+  background-color: $basic-background-color;
   /* Фоновый цвет */
   box-shadow: 0 0 3px 1px #d7e4e773;
   /* Тень блока */
   margin-bottom: 15px;
-}
-
-.filter-dropdowns select {
-  width: 18%;
-  padding: 8px;
-  border: 1px solid #d0d1d6;
-  /* border color */
-  border-radius: 10px;
-  font-size: 14px;
 }
 
 .assignment-grid {
@@ -142,7 +135,7 @@
   }
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .assignment-grid {
     margin: 0;
     margin-top: 25px;
@@ -181,23 +174,22 @@
   border: none;
   border-radius: 6px;
   box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
-  color: #656565;
+  color: $additional-font-color;
   font-size: 20px;
-  background-color: white;
+  background-color: $basic-background-color;
   margin-bottom: 20px;
-}
 
-.form-title label {
-  display: block;
-  color: #656565;
-  margin-bottom: 15px;
-}
-
-.form-title textarea {
-  font-weight: 500;
-  resize: none;
-  scrollbar-width: none;
-  line-height: 21px;
+  & label {
+    display: block;
+    color: $additional-font-color;
+    margin-bottom: 15px;
+  }
+  & textarea {
+    font-weight: 500;
+    resize: none;
+    scrollbar-width: none;
+    line-height: 21px;
+  }
 }
 
 .title-span {
@@ -216,19 +208,18 @@
   border-radius: 6px 6px;
   box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
   font-size: 20px;
-  color: #417d88;
-  background-color: white;
+  color: $basic-font-color;
+  background-color: $basic-background-color;
   font-weight: 700;
-}
 
-.title-input::placeholder {
-  font-weight: 500;
-  color: #e5e5e5;
-}
-
-.title-input:focus {
-  box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
-  outline: none;
+  &::placeholder {
+    font-weight: 500;
+    color: $basic-placeholder-color;
+  }
+  &:focus{
+    box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
+    outline: none;
+  }
 }
 
 .form-settings {
@@ -242,6 +233,24 @@
   flex: 0.25 0.5;
   flex-direction: column;
   max-width: 170px;
+
+  & label {
+    margin-bottom: 5px;
+  }
+
+  & select, & input[type="text"] {
+    padding: 5px 10px;
+    border: 1px solid $basic-button-color;
+    border-radius: 6px;
+    box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
+  }
+  & select:invalid {
+    color: $basic-placeholder-color;
+
+    & option {
+      color: $additional-font-color;
+    }
+  }
 }
 
 @media screen and (min-width: 320px) and (max-width: 600px) {
@@ -255,26 +264,6 @@
   /* Заставляем теги занимать все оставшееся пространство */
 }
 
-.form-setting label {
-  margin-bottom: 5px;
-}
-
-.form-setting select,
-.form-setting input[type="text"] {
-  padding: 5px 10px;
-  border: 1px solid #d7e4e7;
-  border-radius: 6px;
-  box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
-}
-
-.form-setting select:invalid {
-  color: #e5e5e5;
-}
-
-.form-setting select:invalid option {
-  color: #656565;
-}
-
 .form-setting > :last-child {
   margin-left: 0;
 }
@@ -283,17 +272,17 @@
   display: flex;
   gap: 5px;
   /* Расстояние между кнопками */
-}
 
-.block-buttons button {
-  /* Паддинги для кнопок */
-  border: none;
-  border-radius: 4px;
-  /* Скругление углов кнопок */
-  cursor: pointer;
-  transition: background-color 0.3s;
-  /* Плавность перехода цвета */
-  background-color: white;
+  & button {
+    /* Паддинги для кнопок */
+    border: none;
+    border-radius: 4px;
+    /* Скругление углов кнопок */
+    cursor: pointer;
+    transition: background-color 0.3s;
+    /* Плавность перехода цвета */
+    background-color: $basic-background-color;
+  }
 }
 
 .success-message {
@@ -312,7 +301,7 @@
 }
 
 .material-symbols-outlined {
-  color: #656565;
+  color: $additional-font-color;
 }
 
 .nothing-to-show {
@@ -322,7 +311,7 @@
   padding: 20px;
   border-radius: 10px;
   margin-top: 10px;
-  background-color: white;
+  background-color: $basic-background-color;
   box-shadow: 0 4px 8px rgb(0 0 0 / 10%);
   font-size: 28px;
   grid-column: 1 / -1;
@@ -337,7 +326,7 @@
 .assignment-view-body {
   margin-bottom: 100px;
 }
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .assignment-view-body {
     margin-bottom: 60px;
   }
@@ -392,7 +381,7 @@
   flex-grow: 0;
   border-radius: 100px;
   box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
-  background-color: #417d88;
+  background-color: $basic-font-color;
   font-size: 16px;
   font-weight: bold;
   font-stretch: normal;
@@ -400,17 +389,17 @@
   line-height: 0.85;
   letter-spacing: normal;
   text-align: center;
-  color: #fff;
+  color: $basic-background-color;
   cursor: pointer;
-}
 
-.buttons-save-as-draft-and-publish:last-child {
-  font-size: 14px;
-}
+  &:last-child {
+    font-size: 14px;
+  }
 
-.buttons-save-as-draft-and-publish:disabled {
-  background-color: rgba(65, 125, 136, 0.3);
-  cursor: default;
+  &:disabled {
+    background-color: rgba(65, 125, 136, 0.3);
+    cursor: default;
+  }
 }
 
 .answer-input {
@@ -424,27 +413,25 @@
   font-size: 17px;
   resize: none;
   cursor: pointer;
+
+  &::placeholder {
+    font-size: 17px;
+    font-family: Montserrat, Arial, sans-serif;
+  }
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .answer-input {
     width: 100%;
     box-sizing: border-box;
     margin-top: 13px;
-  }
-}
 
-.answer-input::placeholder {
-  font-size: 17px;
-  font-family: Montserrat, Arial, sans-serif;
-}
-
-@media screen and (min-width: 320px) and (max-width: 480px) {
-  .answer-input::placeholder {
-    font-size: 15px;
-    font-weight: 500;
-    line-height: 17px;
-    color: #e5e5e5;
+    &::placeholder {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 17px;
+      color: $basic-placeholder-color;
+    }
   }
 }
 
