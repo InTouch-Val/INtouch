@@ -4,7 +4,6 @@ import "./ClientAssignmentCard.css";
 import { API } from "../../../service/axios";
 
 function ClientAssignmentCard({ assignmentData, openAssignment }) {
-  const [isShowContextMenu, setIsShowContextMenu] = useState(false);
   const buttonReference = useRef(null);
 
   function defineStatusClass() {
@@ -26,43 +25,15 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
 
   async function handleShareWithTherapist() {
     try {
-      const res = await API.post(
-        `assignments-client/${assignmentData?.id}/visible/`
-      );
-      if (res.status >= 200 && res.status < 300) {
-        console.log(res.data);
-        setIsShowContextMenu(false);
-      } else {
-        console.log(`Status: ${res.status}`);
-      }
+      await API.post(`assignments-client/${assignmentData?.id}/visible/`);
     } catch (error) {
       console.error(error.message);
-      setIsShowContextMenu(false);
     }
   }
 
   function onCardClick() {
     openAssignment(assignmentData);
   }
-
-  // close a context menu when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (isShowContextMenu && event.target !== buttonReference.current) {
-        setIsShowContextMenu(false);
-      }
-    }
-
-    if (isShowContextMenu) {
-      window.addEventListener("click", handleClickOutside);
-    }
-
-    return () => {
-      window.removeEventListener("click", handleClickOutside);
-    };
-  }, [isShowContextMenu]);
-
-  //Changing card content and menu
 
   return (
     <article className="card">
