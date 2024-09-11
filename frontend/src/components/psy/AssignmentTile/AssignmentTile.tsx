@@ -29,7 +29,7 @@ interface Props {
   isFavorite: boolean;
   onShareClick: (id: number) => void;
   isAuthor: boolean;
-  onDeleteClick: (id: number) => void;
+  onDeleteClick: (id: number, refetch?: () => void) => void;
   isShareModal: boolean;
   selectedAssignmentIdForShareModalOnClientPage: string | number;
   refetch: () => void;
@@ -49,7 +49,7 @@ function AssignmentTile({
   className = "",
 }: Props) {
   const [isSelected, setIsSelected] = useState(
-    assignment.id === selectedAssignmentIdForShareModalOnClientPage,
+    assignment.id === selectedAssignmentIdForShareModalOnClientPage
   );
 
   const { initAuth } = useAuth();
@@ -60,7 +60,7 @@ function AssignmentTile({
 
   useEffect(() => {
     setIsSelected(
-      assignment.id === selectedAssignmentIdForShareModalOnClientPage,
+      assignment.id === selectedAssignmentIdForShareModalOnClientPage
     );
   }, [selectedAssignmentIdForShareModalOnClientPage]);
 
@@ -98,7 +98,7 @@ function AssignmentTile({
   }, [isDropdownOpen]);
 
   const duplicateAssignmentHandle = async (
-    assignmentId: number,
+    assignmentId: number
   ): Promise<void> => {
     try {
       const assignmentData = assignment;
@@ -153,7 +153,7 @@ function AssignmentTile({
   };
 
   function handleFavoriteClick(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void {
     event.stopPropagation();
     onFavoriteToggle(assignment.id);
@@ -161,22 +161,22 @@ function AssignmentTile({
   }
 
   function handleDeleteClick(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void {
     event.stopPropagation();
-    onDeleteClick(assignment.id);
-    refetch();
+    onDeleteClick(assignment.id, refetch);
+    // refetch();
   }
 
   function handleShareClick(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void {
     event.stopPropagation();
     onShareClick(assignment.id);
   }
 
   function handleGoNavigateEdit(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void {
     event.stopPropagation();
     navigate(`/edit-assignment/${assignment.id}`);

@@ -13,15 +13,23 @@ import Skeleton from "../../../stories/skeletons/Skeleton";
 import EmptyContentNotice from "../../../stories/empty-content-notice/EmptyContentNotice";
 import styles from "./style.module.css";
 import EmptyContentNoticeTexts from "../../../utils/notification-texts.json";
+import ModalAssignments from "../ModalsAssignments/ModalAssignments";
 
 export interface PropsTabAssignments {
   filteredAssignments: AssignmentsType[];
   isShareModal: boolean;
   selectedAssignmentIdForShareModalOnClientPage: string;
   toggleFavorite: (id: number | string) => void;
-  handleDeleteClick: (id: number | string) => void;
+  handleDeleteClick: (id: number | string, refetch?: () => void) => void;
   handleShareButton: (id: number | string) => void;
   refetch: () => void;
+  setIsShareModalOpen: any
+  isShareModalOpen: any
+  setIsDeleteModalOpen: any
+  isDeleteModalOpen: any
+  setSelectedAssignmentId: any
+  selectedAssignmentId: any
+  deleteAssignmentsById: (id: number | string) => void
 }
 
 export default function TabsAssignments({
@@ -32,6 +40,13 @@ export default function TabsAssignments({
   toggleFavorite,
   handleDeleteClick,
   handleShareButton,
+  setIsShareModalOpen,
+  isShareModalOpen,
+  setIsDeleteModalOpen,
+  isDeleteModalOpen,
+  setSelectedAssignmentId,
+  selectedAssignmentId,
+  deleteAssignmentsById
 }: PropsTabAssignments) {
   //@ts-ignore
   const { currentUser } = useAuth();
@@ -53,9 +68,7 @@ export default function TabsAssignments({
   const emptyFavoritesContent = (
     <>
       <span>{EmptyContentNoticeTexts.noContent.psyNoFavouriteAssignments}</span>
-      <span>
-      {EmptyContentNoticeTexts.noContent.psyHowToAddFavourite}
-      </span>
+      <span>{EmptyContentNoticeTexts.noContent.psyHowToAddFavourite}</span>
     </>
   );
 
@@ -64,10 +77,10 @@ export default function TabsAssignments({
       <span>{EmptyContentNoticeTexts.noContent.psyMyTasks}</span>
 
       <span
-      dangerouslySetInnerHTML={{
-        __html: EmptyContentNoticeTexts.noContent.psyHowToAddAssignment,
-      }}
-    />
+        dangerouslySetInnerHTML={{
+          __html: EmptyContentNoticeTexts.noContent.psyHowToAddAssignment,
+        }}
+      />
     </>
   );
 
@@ -100,11 +113,12 @@ export default function TabsAssignments({
             : filteredAssignments.map((assignment, index) => (
                 <React.Fragment key={assignment.id}>
                   <AssignmentTile
+          
                     refetch={refetch}
                     assignment={assignment}
                     onFavoriteToggle={toggleFavorite}
                     isFavorite={currentUser?.doctor.assignments.find(
-                      (item) => item === assignment.id,
+                      (item) => item === assignment.id
                     )}
                     isAuthor={assignment.author === currentUser?.id}
                     onDeleteClick={handleDeleteClick}
@@ -119,6 +133,16 @@ export default function TabsAssignments({
               ))}
         </div>
       )}
+      <ModalAssignments
+              deleteAssignmentsById={deleteAssignmentsById}
+            refetch={refetch}
+        setIsShareModalOpen={setIsShareModalOpen}
+        isShareModalOpen={isShareModalOpen}
+        setIsDeleteModalOpen={setIsDeleteModalOpen}
+        isDeleteModalOpen={isDeleteModalOpen}
+        setSelectedAssignmentId={setSelectedAssignmentId}
+        selectedAssignmentId={selectedAssignmentId}
+      />
     </section>
   );
 }

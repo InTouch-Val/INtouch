@@ -2,6 +2,7 @@ import React from "react";
 import {
   assignmentAdapter,
   assignmentSelector,
+  useDeleteAssignmentByUUIDMutation,
   useGetAssignmentsQuery,
 } from "../../../store/entities";
 import { useAuth } from "../../../service/authContext";
@@ -36,6 +37,8 @@ export const WithTab = (WrappedComponent) => {
 
     const dispatch = useAppDispatch();
 
+    const [deleteAssignmentById, _] = useDeleteAssignmentByUUIDMutation();
+
     const {
       data: listAssignment,
       refetch,
@@ -57,27 +60,32 @@ export const WithTab = (WrappedComponent) => {
       {
         selectFromResult: ({ data, ...originalArgs }) => ({
           data: assignmentSelector.selectAll(
-            data ?? assignmentAdapter.getInitialState(),
+            data ?? assignmentAdapter.getInitialState()
           ),
           ...originalArgs,
         }),
-      },
+      }
     );
 
+    const deleteAssignmentsById = async (assignmentId) => {
+      await deleteAssignmentById(assignmentId);
+      await refetch();
+    };
+
     const toggleFavorite = async (
-      assignmentId: number | string,
+      assignmentId: number | string
     ): Promise<void> => {
       const isFavorite = currentUser.doctor.assignments.find(
-        (item) => item == assignmentId,
+        (item) => item == assignmentId
       );
       dispatch(
         changeAssignmentFavoriteByIdAction({
           isFavorite: isFavorite,
           assignmentId: assignmentId,
-        }),
+        })
       );
-      initAuth();
-      refetch();
+      await initAuth();
+      await refetch();
     };
 
     React.useEffect(() => {
@@ -90,6 +98,7 @@ export const WithTab = (WrappedComponent) => {
       <React.Fragment>
         <WrappedComponent
           {...props}
+          deleteAssignmentsById={deleteAssignmentsById}
           refetch={refetch}
           filteredAssignments={listAssignment}
           toggleFavorite={toggleFavorite}

@@ -50,7 +50,7 @@ export const assignmentApi = createApi({
       }) => ({
         url: `${ASSIGNMENTS_URL}?${limit ? `limit=${limit} ` : ""}&page=${page}${author ? `&author=${author}` : ""}${favorite ? `&favorites=${favorite}` : ""}${language ? `&language=${language}` : ""}${assignmentType ? `&assignment_type=${assignmentType}` : ""}&ordering=${ordering}${search ? `&search=${search}` : ""}`.replace(
           /\s+/g,
-          "",
+          ""
         ), // regex удаляет все пробелы в строке
         method: "GET",
         headers: {
@@ -60,13 +60,13 @@ export const assignmentApi = createApi({
       merge: (currentState, incomingState) => {
         return assignmentAdapter.addMany(
           currentState,
-          assignmentSelector.selectAll(incomingState),
+          assignmentSelector.selectAll(incomingState)
         );
       },
       transformResponse: (response: AssignmentsResponseType) => {
         return assignmentAdapter.addMany(
           assignmentAdapter.getInitialState(),
-          response.results,
+          response.results
         );
       },
       forceRefetch: ({ currentArg, previousArg }) => {
@@ -91,15 +91,15 @@ export const assignmentApi = createApi({
         });
       },
 
-      providesTags: (result, error, args) =>
-        result
-          ? [
-              { type: "Assignments", id: JSON.stringify(args) },
-              { type: "Assignments", id: "PARTIAL-LIST" },
-            ]
-          : error?.status === 401
-            ? ["UNAUTHORIZED"]
-            : ["UNKNOWN_ERROR"],
+      // providesTags: (result, error, args) =>
+      //   result
+      //     ? [
+      //         { type: "Assignments", id: JSON.stringify(args) },
+      //         { type: "Assignments", id: "PARTIAL-LIST" },
+      //       ]
+      //     : error?.status === 401
+      //       ? ["UNAUTHORIZED"]
+      //       : ["UNKNOWN_ERROR"],
     }),
 
     createAssignment: build.mutation<
@@ -182,7 +182,10 @@ export const assignmentApi = createApi({
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       }),
-      invalidatesTags: () => [{ type: "Assignments", id: "PARTIAL-LIST" }],
+      invalidatesTags: () => [
+        { type: "Assignments", id: "PARTIAL-LIST" },
+        // { type: "Assignments", id: uuid },
+      ],
     }),
 
     deleteAssignmentByUUID: build.mutation<string, string>({
@@ -193,7 +196,19 @@ export const assignmentApi = createApi({
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       }),
-      invalidatesTags: () => [{ type: "Assignments", id: "PARTIAL-LIST" }],
+      // transformResponse: (response: AssignmentsResponseType) => {
+      //   const currentAssignments = assignmentAdapter.getInitialState();
+      //   const updatedAssignments = currentAssignments.filter((item) => item.id !== uuid);
+      //   return assignmentAdapter.setAll(updatedAssignments);
+      // },
+      // invalidatesTags: (result, error, args) => {
+      //   return [
+      //     // { type: "Assignments", id: "PARTIAL-LIST" },
+      //     { type: "Assignments", id: null },
+      //     // { type: "Assignments", id: uuid },
+      //     // { type: "Assignments", id: JSON.stringify(args) },
+      //   ];
+      // },
     }),
   }),
 });

@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { Modal } from "../../../service/modal";
 import { useAuth } from "../../../service/authContext";
-import { useDeleteAssignmentByUUIDMutation } from "../../../store/entities";
+import {
+  assignmentApi,
+  useDeleteAssignmentByUUIDMutation,
+  useGetAssignmentsQuery,
+} from "../../../store/entities";
 import { useAppDispatch } from "../../../store/store";
 import { setClientByIdAction } from "../../../store/actions/assignment/assignmentActions";
 
@@ -12,8 +16,9 @@ export default function ModalAssignments({
   isDeleteModalOpen,
   setSelectedAssignmentId,
   selectedAssignmentId,
+  refetch,
+  deleteAssignmentsById
 }): JSX.Element {
-  //@ts-ignore
   const { currentUser } = useAuth();
 
   const [clients, setClients] = useState<any>(currentUser?.doctor?.clients);
@@ -24,6 +29,7 @@ export default function ModalAssignments({
 
   const [deleteAssignmentById, _] = useDeleteAssignmentByUUIDMutation();
   const dispatch = useAppDispatch();
+
 
   const handleModalClose = (): void => {
     setIsShareModalOpen(false);
@@ -50,7 +56,7 @@ export default function ModalAssignments({
       }
 
       const { payload }: any = await dispatch(
-        setClientByIdAction({ assignmentId, selectedClients }),
+        setClientByIdAction({ assignmentId, selectedClients })
       );
 
       const allResponsesSuccessful =
@@ -88,7 +94,9 @@ export default function ModalAssignments({
     const assignmentId = selectedAssignmentId;
 
     try {
-      deleteAssignmentById(assignmentId);
+     await  deleteAssignmentsById(assignmentId)
+      // await deleteAssignmentById(assignmentId);
+      await refetch()
       setSelectedAssignmentId("");
       handleModalClose();
     } catch (error) {

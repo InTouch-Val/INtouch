@@ -11,6 +11,7 @@ import { WithTab } from "./TabsAssignments/Hoc";
 import addAssignment from "../../images/psy-icons/add-assignment-icon.svg";
 import Button from "../../stories/buttons/Button";
 import useAssignmentsOnboardingTour from "../../utils/hook/onboardingHooks/assignmentsOnboardingTour";
+import { assignmentApi, useDeleteAssignmentByUUIDMutation, useGetAssignmentsQuery } from "../../store/entities";
 
 interface Props {
   isShareModal?: boolean;
@@ -32,7 +33,9 @@ export default function AssignmentsPageRefactor({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = React.useState(false);
 
+
   useAssignmentsOnboardingTour();
+
 
   const handleDeleteClick = (assignmentId: string): void => {
     setSelectedAssignmentId(assignmentId);
@@ -94,6 +97,12 @@ export default function AssignmentsPageRefactor({
       </div>
 
       <Tab
+            setIsShareModalOpen={setIsShareModalOpen}
+            isShareModalOpen={isShareModalOpen}
+            setIsDeleteModalOpen={setIsDeleteModalOpen}
+            isDeleteModalOpen={isDeleteModalOpen}
+            setSelectedAssignmentId={setSelectedAssignmentId}
+            selectedAssignmentId={selectedAssignmentId}
         isShareModal={isShareModal}
         handleDeleteClick={handleDeleteClick}
         handleShareButton={handleShareButton}
@@ -102,14 +111,14 @@ export default function AssignmentsPageRefactor({
         }
       />
 
-      <ModalAssignments
+      {/* <ModalAssignments
         setIsShareModalOpen={setIsShareModalOpen}
         isShareModalOpen={isShareModalOpen}
         setIsDeleteModalOpen={setIsDeleteModalOpen}
         isDeleteModalOpen={isDeleteModalOpen}
         setSelectedAssignmentId={setSelectedAssignmentId}
         selectedAssignmentId={selectedAssignmentId}
-      />
+      /> */}
     </>
   );
 }
