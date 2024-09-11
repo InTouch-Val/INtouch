@@ -64,7 +64,7 @@ function AssignmentTile({
     );
   }, [selectedAssignmentIdForShareModalOnClientPage]);
 
-  const displayDate = formatDate(assignment.update_date);
+  const displayDate = formatDate(assignment.add_date);
   const navigate = useNavigate();
 
   function handleOnTileClick(assignmentId: number): void {
@@ -165,6 +165,7 @@ function AssignmentTile({
   ): void {
     event.stopPropagation();
     onDeleteClick(assignment.id);
+    refetch();
   }
 
   function handleShareClick(
