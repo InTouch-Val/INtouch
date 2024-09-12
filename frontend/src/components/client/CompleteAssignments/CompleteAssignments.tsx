@@ -6,8 +6,8 @@ import arrowLeft from "../../../images/arrow-left.svg";
 import arrowBack from "../../../images/arrowBackWhite.svg";
 import sadEmote from "../../../images/sadEmote.svg";
 import smilyEmote from "../../../images/smilyEmote.svg";
-import "../../../css/block.css";
-import "../../../css/assignments.css";
+import "../../../css/block.scss";
+import "../../../css/assignments.scss";
 import { ClientAssignmentBlocks } from "../../../service/ClientAssignmentBlocks";
 import { API } from "../../../service/axios";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -276,7 +276,9 @@ function CompleteAssignments() {
 
   async function handleShareWithTherapist() {
     try {
+
       const res = await API.patch(
+
         `assignments-client/${assignmentData.id}/visible/`,
       );
       if (res.status >= 200 && res.status < 300) {

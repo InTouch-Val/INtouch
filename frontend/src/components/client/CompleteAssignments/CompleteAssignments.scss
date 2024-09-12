@@ -1,9 +1,12 @@
+@import "../../../scss-styles/mixins.scss";
+@import "../../../scss-styles/variables.scss";
+
 .button__type_back {
   width: 91px;
   height: 41px;
   padding: 0;
   border: 0;
-  border: solid #417d88;
+  border: solid $basic-font-color;
   border-radius: 100px;
   margin-top: 22px;
   -webkit-appearance: none;
@@ -12,7 +15,7 @@
   cursor: pointer;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .button__type_back {
     border: none;
     width: auto;
@@ -27,23 +30,23 @@
 
 .button__type_back_greenWhite {
   border: none;
-  background-color: #417d88;
-  color: white;
+  background-color: $basic-font-color;
+  color: $basic-background-color;
   transition:
     background-color 0.1s ease-in-out,
     color 0.1s ease-in-out;
 }
 
 .button__type_skip {
-  color: #417d88;
+  color: $basic-font-color;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .button__type_skip {
     min-height: 50px;
     min-width: 180px;
     border: 1px solid rgba(11 74 86 / 40%);
-    background-color: white;
+    background-color: $basic-background-color;
     color: #1f304f;
     border-radius: 20px;
   }
@@ -76,7 +79,7 @@
   cursor: pointer;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .button__type_save {
     margin: 0;
   }
@@ -88,7 +91,7 @@
   place-content: center center;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .assignment__container_button {
     justify-content: space-between;
     align-items: center;
@@ -105,7 +108,7 @@
   margin-right: 30px;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .assignment-header {
     padding-top: 76px;
     border-bottom: none;
@@ -126,7 +129,7 @@
   line-height: 34px;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .assignment__name {
     font-size: 24px;
     font-weight: 600;
@@ -157,7 +160,7 @@
   text-align: center;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .assignment__progress {
     display: none;
   }
@@ -170,7 +173,7 @@
   margin: 20px auto;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .assignment__image {
     width: auto;
     max-width: calc(100% - 56px);
@@ -191,14 +194,14 @@
   padding-left: 10px;
   margin-top: 15px;
   margin-bottom: 30px;
-  color: #0b4a56;
+  color: $mobile-titles-color;
   font-size: 24px;
   font-weight: 600;
   letter-spacing: -0.32px;
   line-height: 21px;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .aassignment__paragraph {
     font-size: 15px;
     font-weight: 600;
@@ -231,10 +234,9 @@
   font-family: Montserrat, Arial, sans-serif;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .assignment__block {
     margin-right: 28px;
-    margin-left: 28px;
     width: auto;
   }
 }
@@ -250,53 +252,25 @@
   margin-bottom: 20px;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .assignments__block-radio {
     padding: 0;
     margin-top: 12px;
   }
 }
 
-.block-radio__input {
+.block-radio__input,
+.block-checkbox__input {
   width: 22px;
   height: 22px;
   padding: 0;
-  border: 2px solid #d7e4e7;
+  border: 1px solid $basic-choice-button-color;
   border-radius: 50%;
   margin: 0;
   -webkit-appearance: none;
   appearance: none;
-}
-
-@media screen and (min-width: 320px) and (max-width: 480px) {
-  .block-radio__input {
-    border: 1px solid rgba(11 74 86 / 40%);
-  }
-}
-
-@media screen and (min-width: 481px) {
-  .block-radio__input:checked {
-    border: 6px solid #d7e4e7;
-    background-color: #1f304f;
-  }
-}
-
-@media screen and (min-width: 320px) and (max-width: 480px) {
-  .block-radio__input:checked {
-    position: relative;
-    background-color: transparent;
-  }
-
-  .block-radio__input:checked::after {
-    position: absolute;
-    content: "";
-    top: 3.5px;
-    left: 3.5px;
-    background-color: #0b4a56;
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-  }
+  box-shadow: 0px 1px 2px 0px #c2d7dbe5;
+  accent-color: $basic-choice-button-color;
 }
 
 .range-options-view {
@@ -304,9 +278,30 @@
   margin: 0 34px;
 }
 
+@include mobile() {
+  .range-options-view {
+    gap: 0px;
+    margin: 0;
+  }
+}
+
 .range-option-view input {
   width: 22px;
   height: 22px;
+  padding: 0;
+  border: 1px solid $basic-choice-button-color;
+  border-radius: 50%;
+  margin: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  box-shadow: 0px 1px 2px 0px #d7e4e7e5;
+}
+
+@include mobile() {
+  .range-option-view input {
+    width: 15px;
+    height: 15px;
+  }
 }
 
 .range-option-view {
@@ -319,46 +314,26 @@
 }
 
 .block-checkbox__input {
-  min-width: 22px;
-  height: 22px;
-  padding: 0;
-  border: 2px solid #d7e4e7;
-  border-radius: 4px;
-  margin: 0;
-  -webkit-appearance: none;
-  appearance: none;
+  border-radius: 0;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+.block-checkbox__input:checked::after,
+.block-radio__input:checked::after,
+.range-option-view input:checked::after {
+  content: "";
+  width: 12px;
+  height: 12px;
+  font-size: 26px;
+  transition: 500ms;
+  background-color: $additional-font-color;
+  border-radius: 50%;
+  position: absolute;
+  margin: 4px;
+}
+
+@include mobile() {
   .block-checkbox__input {
     border: 1px solid rgba(11 74 86 / 40%);
-  }
-}
-
-@media screen and (min-width: 481px) {
-  .block-checkbox__input:checked {
-    border: 6px solid #d7e4e7;
-    background-color: #1f304f;
-  }
-}
-
-@media screen and (min-width: 320px) and (max-width: 480px) {
-  .block-checkbox__input:checked {
-    border: none;
-    background-color: #0b4a56;
-    position: relative;
-  }
-
-  .block-checkbox__input:checked::after {
-    content: "";
-    position: absolute;
-    left: 8px;
-    top: 3px;
-    width: 5px;
-    height: 10px;
-    border: solid #fff;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
   }
 }
 
@@ -386,7 +361,7 @@
   line-height: 17px;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .assignment__block-note {
     padding: 0;
     margin-top: 6px;
@@ -417,12 +392,12 @@
 .block-radio__label_rate {
   padding: 0;
   padding-bottom: 3px;
-  color: #656565;
+  color: $additional-font-color;
   line-height: 17px;
   text-align: center;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .block-radio__label {
     font-size: 15px;
     font-weight: 400;
@@ -436,20 +411,31 @@
   margin: 0;
   margin-right: 20px;
   margin-left: 20px;
-  color: #656565;
+  color: $additional-font-color;
   font-weight: 400;
   line-height: 17px;
 }
 
 .block__text {
   margin: 0;
-  margin-bottom: 30px;
-  margin-left: 15px;
-  color: #656565;
+  margin-bottom: 20px;
+  margin-left: 5px;
+  color: $additional-font-color;
   color: rgb(11 74 86 / 100%);
   font-weight: 500;
-  letter-spacing: -0.32px;
+  letter-spacing: normal;
   line-height: 21px;
+
+  & p {
+    margin: 0 70px 5px 0;
+  }
+}
+@include mobile() {
+  .block__text {
+    & p {
+      margin: 0 0 5px 0;
+    }
+  }
 }
 
 .block__image {
@@ -474,7 +460,7 @@
 
 .assignment__share-text {
   margin-right: 20px;
-  color: #0b4a56;
+  color: $mobile-titles-color;
   font-size: 22px;
   line-height: 28px;
 }
@@ -511,7 +497,7 @@
   row-gap: 60px;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .assignment__buttons-box {
     flex-direction: column;
     row-gap: 8px;
@@ -532,7 +518,7 @@
   line-height: 17px;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .assignment__button {
     width: auto;
     height: auto;
@@ -552,7 +538,7 @@
   text-align: center;
   padding: 20px 35px 26px;
   margin: 52px auto 26px;
-  background-color: white;
+  background-color: $basic-background-color;
   border-radius: 6px;
   box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
 }
@@ -561,7 +547,7 @@
   display: none;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .rating-container {
     width: auto;
     gap: 5px;
@@ -582,7 +568,7 @@
     margin-bottom: 19px;
     padding: 21px 11px 15px 11px;
     box-sizing: border-box;
-    background-color: white;
+    background-color: $basic-background-color;
     border-radius: 6px;
     box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
   }
@@ -606,7 +592,7 @@
   position: relative;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .radio-label {
     margin: 0;
   }
@@ -629,7 +615,7 @@
   cursor: pointer;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .mood-number {
     font-size: 14px;
     font-weight: 600;
@@ -644,7 +630,7 @@
 }
 
 .mood-display.active {
-  border-color: #0b4a56;
+  border-color: $mobile-titles-color;
   position: relative;
 }
 
@@ -694,11 +680,11 @@
   padding: 20px;
   margin: 0 auto 0;
   box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
-  background-color: white;
+  background-color: $basic-background-color;
   box-sizing: border-box;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .rateTask__comment-container {
     margin-right: 28px;
     margin-left: 28px;
@@ -707,7 +693,7 @@
 
   .mood-display.emoteActive::after {
     transform: translate(-50%, 50%);
-    background-color: #0b4a56;
+    background-color: $mobile-titles-color;
   }
 }
 
@@ -721,7 +707,7 @@
   cursor: pointer;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .rateTask__comment-label {
     font-size: 15px;
     font-weight: 600;
@@ -750,7 +736,7 @@
   -webkit-box-shadow: none;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .rateTask__comment-input {
     margin-top: 13px;
     width: 100%;
@@ -763,12 +749,12 @@
   font-family: Montserrat, Arial, sans-serif;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .rateTask__comment-input::placeholder {
     font-size: 15px;
     font-weight: 500;
     line-height: 17px;
-    color: #e5e5e5;
+    color: $basic-placeholder-color;
   }
 }
 
@@ -789,7 +775,7 @@
   margin-top: 52px;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .assignment__share-label {
     font-size: 15px;
     font-weight: 500;
@@ -815,7 +801,7 @@
   transform: translate(2.22em, 0.2em);
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .assignment__share-checkbox {
     width: 32px;
     height: 17px;
