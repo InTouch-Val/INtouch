@@ -12,7 +12,7 @@ import { ImageQuestionBlock } from "./ImageQuestionBlock";
 import { ClientAssignmentBlocks } from "../../service/ClientAssignmentBlocks";
 import decodeStyledText from "../../service/decodeStyledText";
 import HeadlinerImg from "./HeadlinerImg/HeadlinerImg";
-import "../../css/assignments.css";
+import "../../css/assignments.scss";
 import HeaderAssignment from "./HeaderAssigmentPage/HeaderAssignment";
 import Button from "../../stories/buttons/Button";
 import imageIcon from "../../images/assignment-page/image.svg";
@@ -21,8 +21,17 @@ import linearScaleIcon from "../../images/assignment-page/linear-scale.svg";
 import multipleIcon from "../../images/assignment-page/multiple-choice.svg";
 import questionIcon from "../../images/assignment-page/question.svg";
 import singleIcon from "../../images/assignment-page/single-choice.svg";
-import { TypeFilter, TypeLanguage } from "../../utils/constants";
+import arrowBack from "../../images/assignment-page/arrow-back.svg";
+import share from "../../images/assignment-page/share.svg";
+
+import {
+  maxLengthDescription,
+  maxLengthTitle,
+  TypeFilter,
+  TypeLanguage,
+} from "../../utils/constants";
 import useConstructorOnboardingTour from "../../utils/hook/onboardingHooks/assignmentConstructorOnboardingTour";
+import ModalAssignments from "../../routes/AssignmentsPageRefactor/ModalsAssignments/ModalAssignments";
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
 
@@ -65,9 +74,9 @@ function AddAssignment() {
     setIsDisabled(
       !(
         title.length !== 0 &&
-        title.length < 50 &&
+        title.length <= maxLengthTitle &&
         description.length !== 0 &&
-        description.length < 300 &&
+        description.length <= maxLengthDescription &&
         searchTerm.length !== 0 &&
         selectedImage &&
         type.length !== 0 &&
@@ -238,7 +247,7 @@ function AddAssignment() {
         return {
           type: block.type,
           question: block.question || block.title,
-          ...(selectedImageForBlock && { image: selectedImageForBlock.url }),
+          ...(selectedImageForBlock && { image: block.image }),
           description: block.description,
         };
       }
@@ -476,7 +485,8 @@ function AddAssignment() {
             <input
               type="text"
               className={`title-input ${
-                (title.length === 0 || title.length > 50) && !isFirstEntry
+                (title.length === 0 || title.length > maxLengthTitle) &&
+                !isFirstEntry
                   ? "error"
                   : ""
               }`}
@@ -487,14 +497,15 @@ function AddAssignment() {
               id="title"
             />
             <span
-              className={`title-span ${(title.length === 0 || title.length > 50) && !isFirstEntry && "error__text_span"}`}
+              className={`title-span ${(title.length === 0 || title.length > maxLengthTitle) && !isFirstEntry && "error__text_span"}`}
             >
               Please enter a valid name (1-50 characters)
             </span>
             <textarea
               type="text"
               className={`title-input ${
-                (description.length === 0 || description.length > 300) &&
+                (description.length === 0 ||
+                  description.length > maxLengthDescription) &&
                 !isFirstEntry
                   ? "error"
                   : ""
@@ -506,7 +517,7 @@ function AddAssignment() {
               id="text"
             />
             <span
-              className={`title-span ${(description.length === 0 || description.length > 300) && !isFirstEntry ? "error__text_span" : ""}`}
+              className={`title-span ${(description.length === 0 || description.length > maxLengthDescription) && !isFirstEntry ? "error__text_span" : ""}`}
             >
               Please enter a valid name (1-300 characters)
             </span>
@@ -785,43 +796,36 @@ function ViewAssignment() {
     fetchAssignmentData();
   }, [id, navigate, setAssignmentCredentials]);
 
-  console.log("data", assignmentData);
+  const [selectedAssignmentId, setSelectedAssignmentId] = useState("");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+
+  const handleShareButton = () => {
+    setSelectedAssignmentId(assignmentData.id);
+    setIsShareModalOpen(true);
+  };
 
   return (
     <div className="assignments-page">
-      <header>
+      <header className="assignments-page-header-block">
         <h1>{assignmentData.title}</h1>
-        {currentUser.id === assignmentData.author && (
-          <div>
-            <button className="action-button" onClick={handleToggleModal}>
-              Delete Assignment
-            </button>
-            {!assignmentData.is_public && (
-              <button
-                className="action-button"
-                onClick={() => navigate(`/edit-assignment/${id}`)}
-              >
-                Edit Assignment
-              </button>
-            )}
-          </div>
-        )}
+        <div className="assignments-page-buttons">
+          <button onClick={() => navigate(-1)}>
+            <img alt="back" src={arrowBack} />
+          </button>
+          <button onClick={handleShareButton}>
+            <img alt="share" src={share} />
+          </button>
+        </div>
       </header>
       <div className="assignment-view-body">
         <div className="assignment-details">
-          <p>
-            <strong>Description:</strong> {assignmentData.text}
-          </p>
-          <p>
-            <strong>Author: </strong>
-            {assignmentData.author_name}
-          </p>
-          <p>
-            <strong>Type: </strong> {assignmentData.assignment_type}
-          </p>
-          <p>
-            <strong>Language: </strong> {assignmentData.language}
-          </p>
+          <img
+            className="view__img"
+            src={assignmentData.image_url || ""}
+            alt="assignment-view"
+          />
+          <p className="view__description">{assignmentData.text}</p>
           <div className="assignment-blocks">
             {assignmentData.blocks.length > 0 &&
               assignmentData.blocks.map((block, index) => (
@@ -830,17 +834,39 @@ function ViewAssignment() {
           </div>
         </div>
       </div>
-      <Modal
-        isOpen={showModal}
-        onClose={handleToggleModal}
-        onConfirm={handleDeleteAssignment}
-        confirmText="Delete forever"
-      >
-        <p>
-          Are you sure you want to delete this assignment?{" "}
-          <strong>This action is irrevertable!</strong>
-        </p>
-      </Modal>
+
+      <ModalAssignments
+        setIsShareModalOpen={setIsShareModalOpen}
+        isShareModalOpen={isShareModalOpen}
+        setIsDeleteModalOpen={setIsDeleteModalOpen}
+        isDeleteModalOpen={isDeleteModalOpen}
+        setSelectedAssignmentId={setSelectedAssignmentId}
+        selectedAssignmentId={selectedAssignmentId}
+      />
+      <div className="buttons-save-as-draft-and-publish-container">
+        <>
+          <Button
+            buttonSize="large"
+            fontSize="medium"
+            label="Back"
+            type="button"
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            Back
+          </Button>
+          <Button
+            buttonSize="large"
+            fontSize="medium"
+            label="Share"
+            type="button"
+            onClick={handleShareButton}
+          >
+            Back
+          </Button>
+        </>
+      </div>
     </div>
   );
 }

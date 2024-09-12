@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "../css/image-selector.css";
+import styles from "../css/image-selector.module.scss";
 import Button from "../stories/buttons/Button";
 
 function ImageSelector({
@@ -56,7 +56,7 @@ function ImageSelector({
   };
 
   return (
-    <div className="image-selector">
+    <div className={styles.image_selector}>
       <label>Choose an Image for Your Assignment</label>
       <form onSubmit={handleSearch}>
         <input
@@ -64,7 +64,7 @@ function ImageSelector({
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder={`Enter the relevant keyword here and click "Search"`}
-          className={`title-input ${(!selectedImage || searchTerm.length === 0) && !isFirstEntry ? "error" : ""}`}
+          className={`${styles.title_input} ${(!selectedImage || searchTerm.length === 0) && !isFirstEntry ? "error" : ""}`}
         />
 
         <Button
@@ -74,12 +74,12 @@ function ImageSelector({
           type="submit"
         />
       </form>
-      <div className="image-results">
+      <div className={styles.image_results}>
         {images.length > 0 ? (
           images.map((image) => (
             <div
               key={image.id}
-              className={`image-item ${image.id === selectedImageId || isSelected ? "selected" : ""}`}
+              className={`${styles.image_item} ${image.id === selectedImageId || isSelected ? styles.selected : ""}`}
               onClick={() => handleImageClick(image)}
             >
               <img

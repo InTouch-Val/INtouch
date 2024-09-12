@@ -1,0 +1,86 @@
+@import "../scss-styles/mixins.scss";
+@import "../scss-styles/variables.scss";
+
+.image_selector {
+  padding: 10px 15px 0px;
+  border-radius: 8px;
+  margin-bottom: 15px; /* Добавьте отступ, если необходимо отделить от других элементов */
+  background-color: $basic-background-color;
+  box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
+
+  & label {
+    display: block;
+    margin-bottom: 15px;
+    color: $additional-font-color;
+    font-weight: 400;
+    font-size: 20px;
+  }
+
+  & form {
+    display: flex;
+  }
+
+  & input[type="text"] {
+    flex-grow: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    margin-right: 10px;
+    font-family: inherit;
+    font-size: 20px;
+    color: $additional-font-color;
+    box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
+
+    &::placeholder {
+      color: $basic-placeholder-color;
+      font-size: 20px;
+    }
+  }
+
+  & button {
+    padding: 10px 55px;
+    border: none;
+    border-radius: 100px;
+    background-color: $basic-font-color;
+    color: $basic-background-color;
+    cursor: pointer;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 600px) {
+  .image_selector form {
+    flex-direction: column;
+    gap: 30px;
+  }
+}
+
+.image_results {
+  display: flex;
+  flex-wrap: nowrap;
+  padding-bottom: 25px; /* Добавить отступ снизу */
+  gap: 10px;
+  overflow-x: auto;
+}
+
+.image_item {
+  flex: 0 0 auto;
+  border: 3px solid transparent; /* Изначально граница прозрачная */
+  cursor: pointer;
+  transition: all 0.3s; /* Плавный переход всех свойств */
+
+  & img {
+    display: block;
+    max-width: 100%; /* Максимальная ширина 100% от родительского элемента */
+    max-height: 100px; /* Максимальная высота изображения */
+    border-radius: 4px; /* Слегка закруглённые углы */
+    object-fit: cover; /* Обрезка изображения по контейнеру */
+  }
+
+  &.selected {
+    border-color: #3f7983; /* Цвет границы для выбранного элемента */
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgb(63 121 131 / 50%); /* Добавить тень для акцента */
+    margin-top: 10px;
+  }
+  
+}

@@ -1,26 +1,42 @@
+@import "../scss-styles/mixins.scss";
+@import "../scss-styles/variables.scss";
+
 /* block.css */
 .block-container {
   width: 100%;
 }
 
-.block-container h2 {
-  color: #3f7983;
+.block-container > h2 {
+  font-size: 24px;
+  color: $basic-font-color;
 }
 
 .block {
   width: 100%;
   /* Задаем ширину блока */
   padding: 10px;
+  /* padding: 15px 0px; */
   border-radius: 8px;
   /* Скругление углов блока */
-  margin-bottom: 20px;
-  background-color: #fff;
+  margin-bottom: 42px;
+  background-color: $basic-background-color;
   /* Фон блока */
   box-shadow: 0 4px 10px rgb(0 0 0 / 10%);
   /* Тень блока */
+  & h1 {
+    font-size: 24px;
+  }
+
+  & h2 {
+    font-size: 20px;
+  }
+
+  & ul {
+    padding-inline-start: 10px;
+  }
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .block {
     border-radius: 6px;
     box-shadow: 0 0 3px 1px #d7e4e773;
@@ -31,7 +47,7 @@
 .choice-input {
   width: calc(100% - 30px);
   box-sizing: border-box;
-  padding-left: 15px;
+  margin-left: 15px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
@@ -68,15 +84,14 @@
   /* Центрируем элементы по вертикали */
   justify-content: space-between;
   /* Размещаем элементы на противоположных концах */
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .buttons {
   display: flex;
   justify-content: flex-end;
   gap: 20px;
-  margin-top: 33px;
-  margin-bottom: 37px;
+  margin: 0 10px 33px;
   margin-left: auto;
 }
 
@@ -89,12 +104,12 @@
   color: rgba(101, 101, 101, 1);
   cursor: pointer;
   padding: 0;
-}
 
-.button img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 }
 
 .button:hover img {
@@ -109,17 +124,15 @@
   /* Отступ снизу для каждого варианта */
 }
 
-.choice-option input[type="radio"],
-.choice-option input[type="checkbox"] {
-  height: 22px;
-  width: 22px;
-  border: 1px solid rgba(215, 228, 231, 1);
-  box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.4);
-  margin: 1px;
+.choice-option input[type="text"] {
+  font-family: Montserrat, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(101, 101, 101, 1);
 }
 
 .choice-label {
-  margin-left: 5px;
+  margin-left: 12px;
 }
 
 .choice-option input[type="text"]:disabled {
@@ -138,11 +151,12 @@
   padding: 10px;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .range-display {
     display: grid;
     column-gap: 10px;
     grid-template-columns: 1fr 1fr;
+    row-gap: 5px;
   }
 
   .range-options + .range-label {
@@ -154,8 +168,18 @@
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  padding: 22px 0;
+  padding-bottom: 22px;
   gap: 13px;
+}
+
+.range-inputs input[type="text"] {
+  font-family: Montserrat, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 17px;
+  text-align: left;
+  color: inherit;
+  text-align: center;
 }
 
 .number-input-container {
@@ -188,6 +212,7 @@
   width: 100%;
   text-align: center;
   font-weight: 500;
+  color: inherit;
 }
 
 .number-input-container-input::-webkit-outer-spin-button,
@@ -207,7 +232,24 @@ input[type="number"] {
   justify-content: center;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+.range-options input[type="radio"],
+.choice-option input[type="radio"],
+.choice-option input[type="checkbox"] {
+  box-shadow: 0px 1px 2px 0px #d7e4e7e5;
+  border: 1px solid $basic-choice-button-color;
+  width: 22px;
+  height: 22px;
+  accent-color: $basic-choice-button-color;
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 50%;
+}
+
+.choice-option input[type="checkbox"] {
+  border-radius: 0;
+}
+
+@include mobile() {
   .range-options {
     grid-column: 1/3;
     margin-bottom: 6px;
@@ -223,13 +265,26 @@ input[type="number"] {
 .range-option {
   margin: 0 5px;
   text-align: center;
+  display: flex;
+  flex-direction: column-reverse;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+.range-option input:checked::after {
+  content: "";
+  width: 12px;
+  height: 12px;
+  font-size: 26px;
+  transition: 500ms;
+  background-color: $additional-font-color;
+  border-radius: 50%;
+  position: absolute;
+  margin: 4px;
+}
+
+@include mobile() {
   .range-option {
     margin: 0;
     display: flex;
-    flex-direction: column;
     justify-content: center;
   }
 
@@ -237,26 +292,26 @@ input[type="number"] {
     font-size: 14px;
     font-weight: 500;
     line-height: 19px;
-    color: #1f304f;
   }
 }
 
 .range-option input[type="radio"] {
   margin-right: 5px;
+  width: 22px;
+  height: 22px;
 }
 
 .range-label {
   margin: 0 10px;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .range-label {
     grid-row-start: 3;
     margin: 0;
     font-size: 13px;
     font-weight: 400;
     line-height: 19px;
-    color: #1f304f;
   }
 
   .range-option input[type="radio"] {
@@ -287,9 +342,51 @@ input[type="number"] {
   align-items: center;
 }
 
-@media screen and (min-width: 320px) and (max-width: 480px) {
+@include mobile() {
   .block-image {
     margin: 0;
     margin-top: 8px;
+  }
+}
+
+.open-container {
+  height: 151px;
+  border-radius: 6px;
+  box-shadow: 0px 0px 3px 1px #D7E4E773;
+  margin: 0 11px 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 17px 0 0 10px;
+  box-sizing: border-box;
+
+  & input {
+    color: $basic-placeholder-color;
+    font-family: Montserrat, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 17px;
+    background-color: $basic-background-color;
+    border: none;
+  }
+}
+
+.open-buttons {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+  box-shadow: 0px 1px 3px 0px rgba(220, 220, 220, 1);
+  margin: 0 0 11px 4px;
+
+  & button {
+    color: #888;
+    font-size: 18px;
+    border: 0;
+    padding-top: 5px;
+    vertical-align: bottom;
+    height: 34px;
+    width: 36px;
+    background-color: $basic-background-color;
   }
 }
