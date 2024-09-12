@@ -6,6 +6,9 @@ import { faTrashCan, faXmark } from "@fortawesome/free-solid-svg-icons";
 import "../../css/block.scss";
 import HeadlinerImg from "../../components/psy/HeadlinerImg/HeadlinerImg";
 import Block from "./Block/Block";
+import bold from "../../images/assignment-page/type-bold.svg";
+import italic from "../../images/assignment-page/type-italic.svg";
+import underline from "../../images/assignment-page/type-underline.svg";
 
 function AssignmentBlock({
   block,
@@ -134,6 +137,22 @@ function AssignmentBlock({
             <span className="range-label">
               {block.right_pole || "Right Pole"}
             </span>
+          </div>
+        )}
+        {block.type === "open" && (
+          <div className="open-container">
+            <input placeholder="Write you answer here..." disabled />
+            <div className="open-buttons">
+              <button type="button">
+                <img src={bold} />
+              </button>
+              <button type="button">
+                <img src={italic} />
+              </button>
+              <button type="button">
+                <img src={underline} />
+              </button>
+            </div>
           </div>
         )}
       </div>

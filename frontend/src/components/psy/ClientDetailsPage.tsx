@@ -217,6 +217,8 @@ function ClientDetailsPage() {
     setCurrentCard(card);
   }
 
+  console.log(client.client)
+
   return (
     <>
       <div className="client-detail-page">
@@ -255,7 +257,7 @@ function ClientDetailsPage() {
                 fontSize="small"
                 label="Share assignment"
                 type="button"
-                onClick={client.client.is_active && handleShareBtn()}
+                onClick={handleShareBtn}
                 icon={shareIcon}
               />
             )}
