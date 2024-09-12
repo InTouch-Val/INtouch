@@ -269,6 +269,18 @@ input[type="number"] {
   flex-direction: column-reverse;
 }
 
+.range-option input:checked::after {
+  content: "";
+  width: 12px;
+  height: 12px;
+  font-size: 26px;
+  transition: 500ms;
+  background-color: $additional-font-color;
+  border-radius: 50%;
+  position: absolute;
+  margin: 4px;
+}
+
 @include mobile() {
   .range-option {
     margin: 0;
