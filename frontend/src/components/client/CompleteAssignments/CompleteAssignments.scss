@@ -427,9 +427,14 @@
   line-height: 21px;
 
   & p {
-    margin: 0;
-    max-width: 847px;
-    margin-bottom: 5px;
+    margin: 0 70px 5px 0;
+  }
+}
+@include mobile() {
+  .block__text {
+    & p {
+      margin: 0 0 5px 0;
+    }
   }
 }
 

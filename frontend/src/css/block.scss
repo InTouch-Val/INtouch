@@ -156,6 +156,7 @@
     display: grid;
     column-gap: 10px;
     grid-template-columns: 1fr 1fr;
+    row-gap: 5px;
   }
 
   .range-options + .range-label {
