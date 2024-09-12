@@ -17,7 +17,7 @@
   width: 32px;
   height: 17px;
   padding: 0;
-  border: 1px solid #656565;
+  border: 1px solid  $additional-font-color;
   border-radius: 100px;
   margin: 0;
   -webkit-appearance: none;
@@ -32,7 +32,7 @@
 }
 
 .card__input-checkbox:checked {
-  background-color: #417d88;
+  background-color: $basic-font-color;
 }
 
 @include mobile() {
@@ -46,7 +46,7 @@
   width: 13px;
   height: 13px;
   border-radius: 100%;
-  background-color: #417d88;
+  background-color: $basic-font-color;
   content: "";
   transform: translate(0.1em, 0.08em);
   transition:
@@ -55,6 +55,6 @@
 }
 
 .card__input-checkbox:checked::after {
-  background-color: #fff;
+  background-color: $basic-background-color;
   transform: translate(1.22em, 0.08em);
 }
