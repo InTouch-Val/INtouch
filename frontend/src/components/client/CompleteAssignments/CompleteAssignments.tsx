@@ -6,7 +6,7 @@ import arrowLeft from "../../../images/arrow-left.svg";
 import arrowBack from "../../../images/arrowBackWhite.svg";
 import sadEmote from "../../../images/sadEmote.svg";
 import smilyEmote from "../../../images/smilyEmote.svg";
-import "../../../css/block.css";
+import "../../../css/block.scss";
 import "../../../css/assignments.css";
 import { ClientAssignmentBlocks } from "../../../service/ClientAssignmentBlocks";
 import { API } from "../../../service/axios";

@@ -9,7 +9,7 @@ import {
   ContentState,
   newEditorState,
 } from "draft-js";
-import "../css/block.css";
+import "../css/block.scss";
 import "../css/assignments.css";
 import decodeStyledText from "./decodeStyledText";
 import "../components/client/CompleteAssignments/CompleteAssignments.css";

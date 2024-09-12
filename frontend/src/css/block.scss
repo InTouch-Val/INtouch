@@ -1,3 +1,6 @@
+@import "../scss-styles/mixins.scss";
+@import "../scss-styles/variables.scss";
+
 /* block.css */
 .block-container {
   width: 100%;
@@ -291,5 +294,47 @@ input[type="number"] {
   .block-image {
     margin: 0;
     margin-top: 8px;
+  }
+}
+
+.open-container {
+  height: 151px;
+  border-radius: 6px;
+  box-shadow: 0px 0px 3px 1px #D7E4E773;
+  margin: 0 11px 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 17px 0 0 10px;
+  box-sizing: border-box;
+
+  & input {
+    color: $basic-placeholder-color;
+    font-family: Montserrat, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 17px;
+    background-color: $basic-background-color;
+    border: none;
+  }
+}
+
+.open-buttons {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+  box-shadow: 0px 1px 3px 0px rgba(220, 220, 220, 1);
+  margin: 0 0 11px 4px;
+
+  & button {
+    color: #888;
+    font-size: 18px;
+    border: 0;
+    padding-top: 5px;
+    vertical-align: bottom;
+    height: 34px;
+    width: 36px;
+    background-color: $basic-background-color;
   }
 }
