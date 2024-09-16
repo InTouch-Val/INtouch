@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { API } from "../service/axios";
 import { AssignmentTile } from "../components/psy/AssignmentTile/AssignmentTile";
-import "../css/assignments.css";
+import "../css/assignments.scss";
 import { useAuth } from "../service/authContext";
 import { Modal } from "../service/modal";
 import { useGetAssignmentsQuery } from "../store/entities";
@@ -387,14 +387,16 @@ function AssignmentsPage({
       {!isShareModal && (
         <header>
           <h1>Assignments</h1>
-          <Button
-            buttonSize="small"
-            fontSize="medium"
-            label="Add Assignment"
-            type="button"
-            onClick={handleAddAssignment}
-            icon={addAssignment}
-          />
+          <div id="onboarding-add-assignment">
+            <Button
+              buttonSize="small"
+              fontSize="medium"
+              label="Add Assignment"
+              type="button"
+              onClick={handleAddAssignment}
+              icon={addAssignment}
+            />
+          </div>
         </header>
       )}
       <div className="tabs">

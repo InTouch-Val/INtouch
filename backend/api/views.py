@@ -1063,21 +1063,27 @@ class AssignmentViewSet(viewsets.ModelViewSet):
             return avg_grade_annotation(self.request.user.doctor.assignments)
         return avg_grade_annotation(super().get_queryset())
 
+    def retrieve(self, request, *args, **kwargs):
+        assignment = get_object_or_404(Assignment, pk=kwargs["pk"])
+        self.check_object_permissions(request, assignment)
+        serializer = self.get_serializer(assignment)
+        return Response(serializer.data, status=HTTPStatus.OK)
+
     def destroy(self, request, *args, **kwargs):
-        assignment = self.get_object()
-        if assignment.author != request.user:
-            raise PermissionDenied(
-                "You don't have permission to delete this assignment."
-            )
-        return super().destroy(request, *args, **kwargs)
+        assignment = get_object_or_404(Assignment, id=kwargs["pk"])
+        self.check_object_permissions(request, assignment)
+        assignment.delete()
+        return Response(status=HTTPStatus.NO_CONTENT)
 
     def update(self, request, *args, **kwargs):
-        assignment = self.get_object()
-        if assignment.author != request.user:
-            raise PermissionDenied(
-                "You don't have permission to update this assignment."
-            )
-        return super().update(request, *args, **kwargs)
+        assignment = get_object_or_404(Assignment, id=kwargs["pk"])
+        self.check_object_permissions(request, assignment)
+        serializer = self.get_serializer(
+            assignment, data=request.data, partial=kwargs.pop("partial", False)
+        )
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data, status=HTTPStatus.OK)
 
     @action(detail=True, methods=["PATCH"])
     def draft(self, request, pk):

@@ -12,7 +12,7 @@ import {
   OrderedListButton,
 } from "@draft-js-plugins/buttons";
 import "@draft-js-plugins/static-toolbar/lib/plugin.css";
-import "../css/editorsBar.css";
+import "../css/editorsBar.scss";
 import { useToolbar } from "./ToolbarContext"; // Импортируем хук для использования контекста
 import { EditorState, ContentState, convertFromRaw } from "draft-js";
 import { Modifier } from "draft-js";
@@ -142,7 +142,7 @@ const EditorToolbar = forwardRef(
         } catch (error) {
           console.error("Error converting string to object:", error);
         }
-      } else if (block.reply) {
+      } else if (block.reply === "" || block.reply) {
         newEditorState = parseContent(block.reply);
         setEditorState(newEditorState);
       } else if (block.question) {

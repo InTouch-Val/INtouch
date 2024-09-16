@@ -51,7 +51,7 @@ class Client(models.Model):
 
 
 class Assignment(models.Model):
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=64)
     text = models.TextField(max_length=300)
     update_date = models.DateField(auto_now=True)
     add_date = models.DateTimeField(auto_now_add=True)
@@ -82,7 +82,7 @@ class Assignment(models.Model):
 
 
 class AssignmentClient(models.Model):
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=64)
     text = models.TextField(max_length=300)
     update_date = models.DateField(auto_now=True)
     author = models.ForeignKey(

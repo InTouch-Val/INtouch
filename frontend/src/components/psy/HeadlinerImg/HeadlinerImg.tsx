@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 import CloudUploadSignal from "../../../images/CloudUploadSignal.svg";
 import IconCopy from "../../../images/IconCopy.svg";
 import Button from "../button/ButtonHeadline";
-import "./HeadlinerImg.css";
+import "./HeadlinerImg.scss";
 
 function HeadlinerImg({
   setSelectedImageForBlock,
@@ -125,7 +125,7 @@ function HeadlinerImg({
   return (
     blockVisible && (
       <div className="headline">
-        <h2 className="headline__add-an-img">Add an image</h2>
+        <p className="headline__add-an-img">Add an image</p>
         <div
           id="customFileInput"
           className={
@@ -155,7 +155,7 @@ function HeadlinerImg({
           </div>
 
           <div className="headline__browse-container">
-            <Button className="headline__browse-btn">
+            <Button className="headline__browse-btn" onClick={handleClick}>
               <label htmlFor="fileInput" style={{ cursor: "pointer" }}>
                 Browse
               </label>

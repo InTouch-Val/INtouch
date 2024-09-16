@@ -9,10 +9,10 @@ import {
   ContentState,
   newEditorState,
 } from "draft-js";
-import "../css/block.css";
-import "../css/assignments.css";
+import "../css/block.scss";
+import "../css/assignments.scss";
 import decodeStyledText from "./decodeStyledText";
-import "../components/client/CompleteAssignments/CompleteAssignments.css";
+import "../components/client/CompleteAssignments/CompleteAssignments.scss";
 import useMobileWidth from "../utils/hook/useMobileWidth";
 
 const getObjectFromEditorState = (editorState) => JSON.stringify(editorState);
@@ -29,7 +29,6 @@ function ClientAssignmentBlocks({
 }) {
   const [choices, setChoices] = useState(block.choices || []);
   const [choiceRefs, setChoiceRefs] = useState([]);
-  const [selectedValue, setSelectedValue] = useState(block.reply || "");
   const editorRef = useRef(null);
 
   const [editorState, setEditorState] = useState(() => {

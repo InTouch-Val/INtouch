@@ -1,6 +1,6 @@
 //@ts-nocheck
 import React from "react";
-import "./HeaderAssignment.css";
+import "./HeaderAssignment.scss";
 import arrowBack from "../../../images/assignment-page/arrowBack.svg";
 import save from "../../../images/assignment-page/save.svg";
 import eye from "../../../images/assignment-page/eye.svg";
@@ -50,7 +50,11 @@ export default function HeaderAssignment({
                     src={save}
                   />
                 </button>
-                <button onClick={changeView} disabled={disableButton}>
+                <button
+                  onClick={changeView}
+                  disabled={disableButton}
+                  id="onboarding-constructorPreview"
+                >
                   <img
                     className={
                       disableButton

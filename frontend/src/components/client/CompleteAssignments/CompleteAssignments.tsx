@@ -1,13 +1,13 @@
 //@ts-nocheck
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { useAuth } from "../../../service/authContext";
 import save from "../../../images/save.svg";
 import arrowLeft from "../../../images/arrow-left.svg";
 import arrowBack from "../../../images/arrowBackWhite.svg";
 import sadEmote from "../../../images/sadEmote.svg";
 import smilyEmote from "../../../images/smilyEmote.svg";
-import "../../../css/block.css";
-import "../../../css/assignments.css";
+import "../../../css/block.scss";
+import "../../../css/assignments.scss";
 import { ClientAssignmentBlocks } from "../../../service/ClientAssignmentBlocks";
 import { API } from "../../../service/axios";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -93,10 +93,37 @@ function CompleteAssignments() {
     setInitialData(blocks);
   }, [blocks]);
 
+  const getPlainTextFromReply = (reply) => {
+    if (!reply) return "";
+
+    try {
+      const contentState = convertFromRaw(JSON.parse(reply));
+      return contentState.getPlainText();
+    } catch (error) {
+      console.error("Error parsing block.reply:", error);
+      return "";
+    }
+  };
+
+  const normalizeBlock = (block) => {
+    return {
+      ...block,
+      reply: getPlainTextFromReply(block.reply),
+    };
+  };
+
+  const normalizeInitialData = useMemo(() => {
+    return initialData ? initialData.map(normalizeBlock) : [];
+  }, [initialData]);
+
+  const normalizeAssignmentData = useMemo(() => {
+    return assignmentData.blocks.map(normalizeBlock);
+  }, [assignmentData.blocks]);
+
   const checkIfChangesMade = () => {
-    // Here we compare deep equality of current data and initial data
     return (
-      JSON.stringify(assignmentData.blocks) !== JSON.stringify(initialData)
+      JSON.stringify(normalizeAssignmentData) !==
+      JSON.stringify(normalizeInitialData)
     );
   };
 
@@ -147,16 +174,6 @@ function CompleteAssignments() {
     };
 
     let allFilled = true;
-
-    const getPlainTextFromReply = (reply) => {
-      try {
-        const contentState = convertFromRaw(JSON.parse(reply));
-        return contentState.getPlainText();
-      } catch (error) {
-        console.error("Error parsing block.reply:", error);
-        return "";
-      }
-    };
 
     // Checks 'open' type blocks
     const openReplies = blocks.filter((block) => block.type === "open");

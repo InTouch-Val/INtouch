@@ -64,6 +64,7 @@ export default function FilterDropDown() {
         <option value={TypeFilter.Quiz}>Quiz</option>
         <option value={TypeFilter.Methodology}>Methodology</option>
         <option value={TypeFilter.Metaphor}>Metaphors</option>
+        <option value={TypeFilter.Article}>Article</option>
       </select>
 
       <select

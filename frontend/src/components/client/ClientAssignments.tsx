@@ -6,6 +6,7 @@ import { ClientAssignmentCard } from "./ClientAssignmentCard/ClientAssignmentCar
 import { AuthProvider } from "../../service/authContext";
 import { useObserve } from "../../utils/hook/useObserve";
 import { useGetAssignmentsQuery } from "../../store/entities";
+import { StatusFromServer } from "../psy/ClientAssignmentTile";
 
 function ClientAssignments() {
   const { currentUser } = useAuth();
@@ -28,10 +29,10 @@ function ClientAssignments() {
     const fetchAssignments = async () => {
       try {
         let response = await API.get(
-          `/assignments-client/?limit=${limit}&offset=0`,
+          `/assignments-client/?limit=${limit}&offset=0`
         );
         response = response.data.results.filter(
-          (assignment) => assignment.user === currentUser.id,
+          (assignment) => assignment.user === currentUser.id
         );
         // response = response.data.results;
         setAssignments(response);
@@ -53,7 +54,7 @@ function ClientAssignments() {
     // Filter assignments based on status
     if (currentTab !== "all") {
       updatedAssignments = updatedAssignments.filter(
-        (assignment) => assignment.status === currentTab, // Assuming 'status' field in assignment
+        (assignment) => assignment.status === currentTab // Assuming 'status' field in assignment
       );
     }
 
@@ -63,29 +64,6 @@ function ClientAssignments() {
   function openAssignment(card) {
     setCurrentCard(card);
   }
-
-  //Changing text on the tab
-  const [buttonText, setButtonText] = useState("All Assignments");
-
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      if (width >= 320 && width <= 480) {
-        setButtonText("All");
-      } else {
-        setButtonText("All Assignments");
-      }
-    };
-
-    // Sets the initial state based on the current window size
-    handleResize();
-
-    // Adds event listener
-    window.addEventListener("resize", handleResize);
-
-    // Cleans up event listener
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   return (
     <div className="assignments-page">
@@ -97,7 +75,7 @@ function ClientAssignments() {
           className={currentTab === "all" ? "active" : ""}
           onClick={() => setCurrentTab("all")}
         >
-          {buttonText}
+          To do
         </button>
         <button
           className={currentTab === "in_progress" ? "active" : ""}
@@ -116,13 +94,15 @@ function ClientAssignments() {
         {isLoading ? (
           <div className="nothing-to-show">Loading...</div>
         ) : filteredAssignments.length > 0 ? (
-          filteredAssignments.map((assignment) => (
-            <ClientAssignmentCard
-              key={assignment.id}
-              assignmentData={assignment}
-              openAssignment={openAssignment}
-            />
-          ))
+          filteredAssignments.map((assignment) => {
+            return assignment.status == StatusFromServer.ToDo && (
+              <ClientAssignmentCard
+                key={assignment.id}
+                assignmentData={assignment}
+                openAssignment={openAssignment}
+              />
+            );
+          })
         ) : (
           <div className="nothing-to-show">
             You have no assignments. Contact your doctor

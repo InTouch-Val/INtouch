@@ -1,0 +1,8 @@
+{
+  "clientsName": {
+    "description": "Click on a client's name to see their profile and assignment progress"
+  },
+  "clientsStatus": {
+    "description": "After your client registers via your invitation, their status changes into <strong>Active</strong>"
+  }
+}

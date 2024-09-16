@@ -10,7 +10,7 @@ import { changeSearchAction } from "../../store/slices";
 import { WithTab } from "./TabsAssignments/Hoc";
 import addAssignment from "../../images/psy-icons/add-assignment-icon.svg";
 import Button from "../../stories/buttons/Button";
-import useAssignmentsOnboardingTour from "../../utils/hook/onboardingHooks.ts/assignmentsOnboardingTour";
+import useAssignmentsOnboardingTour from "../../utils/hook/onboardingHooks/assignmentsOnboardingTour";
 
 interface Props {
   isShareModal?: boolean;
@@ -66,15 +66,15 @@ export default function AssignmentsPageRefactor({
         {!isShareModal && (
           <header>
             <h1>Assignments</h1>
-            <div id="onboarding_add_assignment">
-            <Button
-              buttonSize="small"
-              fontSize="medium"
-              label="Add Assignment"
-              type="button"
-              onClick={handleAddAssignment}
-              icon={addAssignment}
-            />
+            <div id="onboarding-add-assignment">
+              <Button
+                buttonSize="small"
+                fontSize="medium"
+                label="Add Assignment"
+                type="button"
+                onClick={handleAddAssignment}
+                icon={addAssignment}
+              />
             </div>
           </header>
         )}
