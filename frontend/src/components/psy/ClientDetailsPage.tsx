@@ -215,8 +215,6 @@ function ClientDetailsPage() {
     setCurrentCard(card);
   }
 
-  console.log(client.client);
-
   return (
     <>
       <div className="client-detail-page">
