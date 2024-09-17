@@ -3,10 +3,9 @@
 import React from "react";
 import "../DiaryPageContent.scss";
 import { listEmotions, listEmotionsChips } from "./constants";
-import {parseEventDetailsText} from "../../../../utils/helperFunction/parseEventDetailsText";
+import { parseEventDetailsText } from "../../../../utils/helperFunction/parseEventDetailsText";
 
 export default function DiaryBlockEmotion({ diary }) {
-
   return (
     <div className="diary__block-event">
       <div className="diary__block-title">Emotion Type</div>
@@ -14,7 +13,11 @@ export default function DiaryBlockEmotion({ diary }) {
         How are you feeling? Describe your emotions or choose from our prompt.
       </div>
       <div className="diary__block-client-reply">
-      <div dangerouslySetInnerHTML={{ __html: parseEventDetailsText(diary.emotion_type) }} />
+        <div
+          dangerouslySetInnerHTML={{
+            __html: parseEventDetailsText(diary.emotion_type),
+          }}
+        />
       </div>
       <div className="diary__emotions-wrapper">
         <div className="diary__emotions">

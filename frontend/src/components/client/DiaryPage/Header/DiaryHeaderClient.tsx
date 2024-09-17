@@ -42,7 +42,7 @@ export default function DiaryHeaderClient({
   };
 
   const navigate = useNavigate();
-  
+
   const handleGoBack = useCallback(() => {
     if (changesMade && !isSaved) {
       handleOpenExitModal();

@@ -13,7 +13,11 @@ export default function DiaryBlockAnalysis({ diary }) {
         thinking?
       </div>
       <div className="diary__block-client-reply">
-      <div dangerouslySetInnerHTML={{ __html: parseEventDetailsText(diary.thoughts_analysis)}} />
+        <div
+          dangerouslySetInnerHTML={{
+            __html: parseEventDetailsText(diary.thoughts_analysis),
+          }}
+        />
       </div>
     </div>
   );

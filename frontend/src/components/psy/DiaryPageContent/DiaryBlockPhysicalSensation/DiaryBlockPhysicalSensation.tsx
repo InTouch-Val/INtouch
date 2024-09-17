@@ -13,7 +13,11 @@ export default function DiaryBlockPhysicalSensation({ diary }) {
         For example, tension, butterflies, etc.
       </div>
       <div className="diary__block-client-reply">
-      <div dangerouslySetInnerHTML={{ __html: parseEventDetailsText(diary.physical_sensations)}} />
+        <div
+          dangerouslySetInnerHTML={{
+            __html: parseEventDetailsText(diary.physical_sensations),
+          }}
+        />
       </div>
     </div>
   );

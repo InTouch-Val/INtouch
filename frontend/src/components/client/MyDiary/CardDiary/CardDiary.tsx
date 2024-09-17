@@ -44,7 +44,11 @@ export default function CardDiaryClient({ card, setFetching, openModal }) {
         />
       </div>
       <div className="diary__card-text">
-      <div dangerouslySetInnerHTML={{ __html: parseEventDetailsText(card.event_details) }} />
+        <div
+          dangerouslySetInnerHTML={{
+            __html: parseEventDetailsText(card.event_details),
+          }}
+        />
       </div>
 
       <div className="diary__card-buttons" onClick={(e) => e.stopPropagation()}>
