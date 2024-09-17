@@ -30,7 +30,7 @@ export default function DiaryBlockEmotionClient({
   showInputsincomplete,
 }: Props) {
   const isMobileWidth = useMobileWidth();
-
+  
   const editorRef = useRef(null);
   const { control, setValue, getValues } = useFormContext();
   const primaryEmotionValue = getValues("primary_emotion");

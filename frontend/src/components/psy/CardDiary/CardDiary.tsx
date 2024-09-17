@@ -25,7 +25,7 @@ export default function CardDiary({ card }) {
         <div className="diary__card-title__date">{date}</div>
       </div>
       <div className="diary__card-text">
-        {parseEventDetailsText(card.event_details)}
+      <div dangerouslySetInnerHTML={{ __html: parseEventDetailsText(card.event_details) }} />
       </div>
 
       <div className="diary__card-buttons" onClick={(e) => e.stopPropagation()}>

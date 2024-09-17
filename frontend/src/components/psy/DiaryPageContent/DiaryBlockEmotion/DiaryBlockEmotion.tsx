@@ -1,19 +1,20 @@
 //@ts-nocheck
 
 import React from "react";
-import "../DiaryPageContent.css";
+import "../DiaryPageContent.scss";
 import { listEmotions, listEmotionsChips } from "./constants";
+import {parseEventDetailsText} from "../../../../utils/helperFunction/parseEventDetailsText";
 
 export default function DiaryBlockEmotion({ diary }) {
+
   return (
     <div className="diary__block-event">
       <div className="diary__block-title">Emotion Type</div>
       <div className="diary__block-question">
         How are you feeling? Describe your emotions or choose from our prompt.
       </div>
-      <div className="diary__block-text">
-        Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum
-        dolor sit amet. Lorem Ipsum dolor sit amet.
+      <div className="diary__block-client-reply">
+      <div dangerouslySetInnerHTML={{ __html: parseEventDetailsText(diary.emotion_type) }} />
       </div>
       <div className="diary__emotions-wrapper">
         <div className="diary__emotions">
