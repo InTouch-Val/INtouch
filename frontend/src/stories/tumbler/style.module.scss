@@ -1,7 +1,9 @@
 @import "../../scss-styles/mixins.scss";
 @import "../../scss-styles/variables.scss";
+@import url("../../vendor/fonts/fonts.css");
 
-.card__input-label {
+
+.card__inputLabel {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -11,9 +13,10 @@
   cursor: pointer;
   font-size: 16px;
   line-height: 1.06;
+  font-family: Montserrat;
 }
 
-.card__input-checkbox {
+.card__inputCheckbox {
   width: 32px;
   height: 17px;
   padding: 0;
@@ -26,22 +29,22 @@
   transition: background-color 0.5s;
 }
 
-.card__input-checkbox:focus-visible {
+.card__inputCheckbox:focus-visible {
   outline: 2px solid #00f;
   outline-offset: 1px;
 }
 
-.card__input-checkbox:checked {
+.card__inputCheckbox:checked {
   background-color: $basic-font-color;
 }
 
 @include mobile() {
-  .card__input-checkbox:checked {
+  .card__inputCheckbox:checked {
     min-width: 32px;
   }
 }
 
-.card__input-checkbox::after {
+.card__inputCheckbox:after {
   display: block;
   width: 13px;
   height: 13px;
@@ -54,7 +57,7 @@
     background-color 0.5s;
 }
 
-.card__input-checkbox:checked::after {
+.card__inputCheckbox:checked::after {
   background-color: $basic-background-color;
   transform: translate(1.22em, 0.08em);
 }

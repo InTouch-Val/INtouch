@@ -1,5 +1,6 @@
 import React from "react";
-import "./style.module.scss";
+import  styles from "./style.module.scss";
+import "./tumbler.css";
 
 interface Props {
   active: boolean;
@@ -10,11 +11,11 @@ interface Props {
 export default function Tumbler({ active, handleClick, label }: Props) {
   return (
     <div onClick={(e) => e.stopPropagation()}>
-      <label className="card__input-label">
+      <label className={styles.card__inputLabel}>
         {label}
         <input
           type="checkbox"
-          className="card__input-checkbox"
+          className={styles.card__inputCheckbox}
           defaultChecked={active}
           onClick={handleClick}
         />

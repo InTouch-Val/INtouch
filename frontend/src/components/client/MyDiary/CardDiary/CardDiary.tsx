@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { API } from "../../../../service/axios";
 import { getDate } from "../../../../utils/helperFunction/getDate";
 import { parseEventDetailsText } from "../../../../utils/helperFunction/parseEventDetailsText";
-import Tumbler from "../../../tumbler/Tumbler";
+import Tumbler from "../../../../stories/tumbler/Tumbler";
 
 export default function CardDiaryClient({ card, setFetching, openModal }) {
   const navigate = useNavigate();

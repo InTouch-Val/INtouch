@@ -2,13 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import "./ClientAssignmentCard.css";
 import { API } from "../../../service/axios";
-import useMobileWidth from "../../../utils/hook/useMobileWidth";
-import { useCreateAssignmentMutation } from "../../../store/entities/assignments/assingmentsApi";
-import { StatusFromServer } from "../../psy/ClientAssignmentTile";
-import { clientAssignmentClear } from "../../../store/actions/assignment/assignmentActions";
-import { useAppDispatch } from "../../../store/store";
-import Tumbler from "../../tumbler/Tumbler";
-
+import Tumbler from "../../../stories/tumbler/Tumbler";
 
 function ClientAssignmentCard({ assignmentData, openAssignment }) {
   const buttonReference = useRef(null);
@@ -32,17 +26,14 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
 
   async function handleShareWithTherapist() {
     try {
-
       const res = await API.patch(
-        `assignments-client/${assignmentData?.id}/visible/`,
+        `assignments-client/${assignmentData?.id}/visible/`
       );
       if (res.status >= 200 && res.status < 300) {
         console.log(res.data);
-        setIsShowContextMenu(false);
       } else {
         console.log(`Status: ${res.status}`);
       }
-
     } catch (error) {
       console.error(error.message);
     }
@@ -86,46 +77,11 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
         <div className="card__action-container"></div>
       </div>
       <label className="card__input-label">
-
-        {isMobileWidth ? (
-          // Show menu options when on mobile width
-          <div className="mobile_menu_container">
-            <button
-              type="button"
-              className="card__action-menu-text"
-              onClick={handleClickDuplicate}
-            >
-              <div
-                className="card__action-menu-icon card__action-menu-icon_type_duplicate"
-                aria-label="Duplicate"
-              />
-            </button>
-            <button
-              type="button"
-              className="card__action-menu-text"
-              // disabled={true}
-              onClick={handleClickClear}
-            >
-              <div
-                className="card__action-menu-icon card__action-menu-icon_type_clear"
-                aria-label="Clear"
-              />
-            </button>
-          </div>
-        ) : (
-          <Tumbler
-            active={assignmentData?.visible}
-            handleClick={handleShareWithTherapist}
-            label={"Share with my therapist"}
-          />
-        )}
-        {isMobileWidth && (
-          <Tumbler
-            active={assignmentData?.visible}
-            handleClick={handleShareWithTherapist}
-            label={"Share with my therapist"}
-          />
-        )}
+        <Tumbler
+          active={assignmentData?.visible}
+          handleClick={handleShareWithTherapist}
+          label={"Share with my therapist"}
+        />
       </label>
     </article>
   );
