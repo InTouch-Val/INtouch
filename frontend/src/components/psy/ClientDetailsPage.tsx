@@ -26,7 +26,7 @@ function ClientDetailsPage() {
   const navigate = useNavigate();
   const { currentUser, updateUserData } = useAuth();
   const client = currentUser?.doctor.clients.find(
-    (client) => client.id === Number(id),
+    (client) => client.id === Number(id)
   );
   const { setCurrentCard, card } = useAuth();
   const [activeTab, setActiveTab] = useState("profile");
@@ -76,10 +76,10 @@ function ClientDetailsPage() {
       if (activeTab === "assignments") {
         try {
           const response = await API.get(
-            `assignments-client/?limit=${limit}&offset=0`,
+            `assignments-client/?limit=${limit}&offset=0`
           );
           const data = response.data.results.filter(
-            (assignment) => assignment.user === Number(id),
+            (assignment) => assignment.user === Number(id)
           );
           setClientAssignments(data);
           console.log(response);
@@ -120,14 +120,12 @@ function ClientDetailsPage() {
 
   const emptyNoticeContent = (
     <>
-      <span>
-        {EmptyContentNoticeTexts.noContent.psySharedAssignments}
-      </span>
+      <span>{EmptyContentNoticeTexts.noContent.psySharedAssignments}</span>
       <span
-      dangerouslySetInnerHTML={{
-        __html: EmptyContentNoticeTexts.noContent.psyHowToShareAssignment,
-      }}
-    />
+        dangerouslySetInnerHTML={{
+          __html: EmptyContentNoticeTexts.noContent.psyHowToShareAssignment,
+        }}
+      />
     </>
   );
 
@@ -162,8 +160,8 @@ function ClientDetailsPage() {
   const handleDeleteAssignment = (deletedAssignmentId) => {
     setClientAssignments((currentAssignments) =>
       currentAssignments.filter(
-        (assignment) => assignment.id !== deletedAssignmentId,
-      ),
+        (assignment) => assignment.id !== deletedAssignmentId
+      )
     );
   };
 
@@ -195,7 +193,7 @@ function ClientDetailsPage() {
       }
 
       const res = await API.get(
-        `assignments/set-client/${assignmentId}/${id}/`,
+        `assignments/set-client/${assignmentId}/${id}/`
       );
 
       if (res.status >= 200 && res.status <= 300) {
@@ -217,7 +215,7 @@ function ClientDetailsPage() {
     setCurrentCard(card);
   }
 
-  console.log(client.client)
+  console.log(client.client);
 
   return (
     <>
@@ -234,13 +232,15 @@ function ClientDetailsPage() {
           </div>
           <div>
             {activeTab === "profile" && (
-              <Button
-                buttonSize="large"
-                fontSize="medium"
-                label={isEditing ? "Save Changes" : "Edit Client"}
-                type="button"
-                onClick={handleEditToggle}
-              />
+              <div id="client-profile-onboarding">
+                <Button
+                  buttonSize="large"
+                  fontSize="medium"
+                  label={isEditing ? "Save Changes" : "Edit Client"}
+                  type="button"
+                  onClick={handleEditToggle}
+                />
+              </div>
             )}
             {activeTab === "profile" && isEditing && (
               <Button
@@ -275,7 +275,6 @@ function ClientDetailsPage() {
           <button
             className={activeTab === "profile" ? "active" : ""}
             onClick={switchToProfileTab}
-            id="client-profile-onboarding"
           >
             Profile
           </button>
@@ -358,7 +357,9 @@ function ClientDetailsPage() {
         {activeTab === "diary" && (
           <>
             {!hasDiaries && (
-              <EmptyContentNotice label={EmptyContentNoticeTexts.noContent.psyNoDiaries} />
+              <EmptyContentNotice
+                label={EmptyContentNoticeTexts.noContent.psyNoDiaries}
+              />
             )}
 
             <DiaryNotes
