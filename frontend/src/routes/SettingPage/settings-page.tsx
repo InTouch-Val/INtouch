@@ -4,7 +4,7 @@ import { useAuth } from "../../service/authContext";
 import "../../css/settings.scss";
 import { ProfileTab } from "./ProfileTab/ProfileTab";
 import { SecurityTab } from "./SecurityTab/SeciurityTab";
-import useMobileWidth from "../../utils/hook/useMobileWidth";
+// import useMobileWidth from "../../utils/hook/useMobileWidth";
 
 // TODO: PopUp windows for users
 
@@ -12,7 +12,7 @@ function SettingsPage() {
   const [activeTab, setActiveTab] = useState("profile");
   const { currentUser } = useAuth();
 
-  const isMobileWidth = useMobileWidth();
+  // const isMobileWidth = useMobileWidth();
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -21,9 +21,9 @@ function SettingsPage() {
   return (
     <div className="settings-page">
       <header>
-        {isMobileWidth ? null : (
+        {/* {isMobileWidth ? null : (
           <img alt="img" src={currentUser.photo || "default-avatar.png"}></img>
-        )}
+        )} */}
         <h2>{`${currentUser.first_name} ${currentUser.last_name}`}</h2>
       </header>
       <div className="tabs">
