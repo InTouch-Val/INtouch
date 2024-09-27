@@ -65,7 +65,7 @@ function AddAssignment() {
     if (
       title.length !== 0 ||
       description.length !== 0 ||
-      searchTerm.length !== 0 ||
+      (searchTerm.length !== 0 && !selectedImage) ||
       type.length !== 0 ||
       language.length !== 0
     ) {
@@ -77,7 +77,6 @@ function AddAssignment() {
         title.length <= maxLengthTitle &&
         description.length !== 0 &&
         description.length <= maxLengthDescription &&
-        searchTerm.length !== 0 &&
         selectedImage &&
         type.length !== 0 &&
         language.length !== 0
@@ -220,8 +219,14 @@ function AddAssignment() {
 
     return errorMessages;
   }
+  const [assignmentId, setAssignmentId] = useState(null);
 
-  const handleSubmit = async (e, isDraft = false, isSaveAsDraft = false) => {
+  const handleSubmit = async (
+    e,
+    isDraft = false,
+    isSaveWithNavigate = false,
+    isPublic = false,
+  ) => {
     e.preventDefault();
 
     const blockInfo = blocks.map((block) => {
@@ -265,7 +270,7 @@ function AddAssignment() {
       text: description,
       assignment_type: type,
       tags: "ffasd",
-      is_public: isSaveAsDraft ? false : true,
+      is_public: isPublic,
       language,
       image_url: selectedImage?.urls.small || selectedImage?.urls.full || "",
     };
@@ -274,48 +279,59 @@ function AddAssignment() {
       console.log(blockInfo);
       let response;
       if (!isEditMode) {
-        // Если задание создается впервые, выполняем POST запрос
-        response = await API.post("assignments/", requestData);
-        if (!response || !response.data || !response.data.id) {
-          throw new Error("Failed to create assignment");
+        if (assignmentId === null) {
+          console.log(assignmentId, "null?");
+          // Если задание создается впервые, выполняем POST запрос
+          response = await API.post("assignments/", requestData);
+          setAssignmentId(response.data.id);
+          console.log(assignmentId, 222);
+          if (!response || !response.data || !response.data.id) {
+            throw new Error("Failed to create assignment");
+          }
+          if (!(!isDraft && isSaveWithNavigate && isPublic)) {
+            // Если задание должно быть перемещено в черновик, выполняем GET запрос
+            await API.patch(`assignments/${response.data.id}/draft/`);
+          } else {
+            response = await API.patch(
+              `assignments/${response.data.id}/`,
+              requestData,
+            );
+          }
+        } else {
+          if (isDraft || isSaveWithNavigate) {
+            response = await API.patch(
+              `assignments/${assignmentId}/`,
+              requestData,
+            );
+            // Если задание должно быть сохранено как черновик, выполняем GET запрос
+            await API.patch(`assignments/${assignmentId}/draft/`);
+          }
         }
         // Получаем ID созданного задания
-        const assignmentId = response.data.id;
-
-        if (isDraft || isSaveAsDraft) {
-          // Если задание должно быть сохранено как черновик, выполняем GET запрос
-          await API.patch(`assignments/${assignmentId}/draft/`);
-        }
       } else {
         // Если задание уже существует, выполняем PUT запрос
         response = await API.patch(`assignments/${id}/`, requestData);
-        if (isDraft || isSaveAsDraft) {
+        if (!(!isDraft && isSaveWithNavigate && isPublic)) {
           // Если задание должно быть перемещено в черновик, выполняем GET запрос
           await API.patch(`assignments/${id}/draft/`);
         }
       }
-
+      console.log(response, 1111);
       if ([200, 201].includes(response.status)) {
         if (isDraft) {
           setSuccessMessageText("Saved succesfully");
           setSuccessMessage(true);
-        } else if (isSaveAsDraft) {
+        }
+        if (isSaveWithNavigate) {
+          setSuccessMessageText("Created succesfully");
+          setSuccessMessage(true);
           setTimeout(() => {
             navigate("/assignments");
           }, 2000);
-
-          setSuccessMessageText("Draft created succesfully");
-          setSuccessMessage(true);
-        } else {
-          setTimeout(() => {
-            navigate("/assignments");
-          }, 2000);
-
-          setSuccessMessageText("Assignment created succesfully");
-          setSuccessMessage(true);
         }
       }
     } catch (error) {
+      console.log(response, 1111);
       const parsedError = parseErrorText(error.request.responseText);
       console.log(parsedError);
       // Преобразование объекта ошибок в строку для обновления состояния
@@ -469,7 +485,7 @@ function AddAssignment() {
       )}
       <HeaderAssignment
         blocks={blocks}
-        handleSubmit={(e) => handleSubmit(e, true, false)}
+        handleSubmit={(e) => handleSubmit(e, true, false, true)}
         isDisabled={isDisabled}
         isFirstEntry={isFirstEntry}
         changeView={() => {
@@ -533,10 +549,7 @@ function AddAssignment() {
               setSearchTerm={setSearchTerm}
             />
           )}
-          <form
-            onSubmit={(e) => handleSubmit(e, false, false)}
-            className="form-creator"
-          >
+          <form className="form-creator">
             {blocks.map((block, index) => (
               <div key={index}>
                 {block.type === "headline" && (
@@ -696,7 +709,7 @@ function AddAssignment() {
                     fontSize="medium"
                     label="Save as Draft"
                     type="button"
-                    onClick={(e) => handleSubmit(e, false, true)}
+                    onClick={(e) => handleSubmit(e, true, true, true)}
                     disabled={isError || isDisabled || blocks.length === 0}
                   />
                 </div>
@@ -706,7 +719,7 @@ function AddAssignment() {
                     fontSize="small"
                     label="Complete & Publish"
                     type="button"
-                    onClick={(e) => handleSubmit(e, false, false)}
+                    onClick={(e) => handleSubmit(e, false, true, true)}
                     disabled={isError || isDisabled || blocks.length === 0}
                   />
                 </div>
