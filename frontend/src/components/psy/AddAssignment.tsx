@@ -225,7 +225,7 @@ function AddAssignment() {
     e,
     isDraft = false,
     isSaveWithNavigate = false,
-    isPublic = false,
+    isSaveAsDraft = false,
   ) => {
     e.preventDefault();
 
@@ -270,60 +270,49 @@ function AddAssignment() {
       text: description,
       assignment_type: type,
       tags: "ffasd",
-      is_public: isPublic,
+      is_public: isSaveAsDraft ? false : true,
       language,
       image_url: selectedImage?.urls.small || selectedImage?.urls.full || "",
     };
 
     try {
-      console.log(blockInfo);
       let response;
       if (!isEditMode) {
         if (assignmentId === null) {
-          console.log(assignmentId, "null?");
           // Если задание создается впервые, выполняем POST запрос
           response = await API.post("assignments/", requestData);
           setAssignmentId(response.data.id);
-          console.log(assignmentId, 222);
           if (!response || !response.data || !response.data.id) {
             throw new Error("Failed to create assignment");
           }
-          if (!(!isDraft && isSaveWithNavigate && isPublic)) {
-            // Если задание должно быть перемещено в черновик, выполняем GET запрос
-            await API.patch(`assignments/${response.data.id}/draft/`);
-          } else {
-            response = await API.patch(
-              `assignments/${response.data.id}/`,
-              requestData,
-            );
-          }
+          response = await API.patch(
+            `assignments/${response.data.id}/`,
+            requestData,
+          );
         } else {
           if (isDraft || isSaveWithNavigate) {
             response = await API.patch(
               `assignments/${assignmentId}/`,
               requestData,
             );
-            // Если задание должно быть сохранено как черновик, выполняем GET запрос
-            await API.patch(`assignments/${assignmentId}/draft/`);
           }
         }
         // Получаем ID созданного задания
       } else {
         // Если задание уже существует, выполняем PUT запрос
         response = await API.patch(`assignments/${id}/`, requestData);
-        if (!(!isDraft && isSaveWithNavigate && isPublic)) {
-          // Если задание должно быть перемещено в черновик, выполняем GET запрос
-          await API.patch(`assignments/${id}/draft/`);
-        }
       }
-      console.log(response, 1111);
       if ([200, 201].includes(response.status)) {
         if (isDraft) {
           setSuccessMessageText("Saved succesfully");
           setSuccessMessage(true);
         }
         if (isSaveWithNavigate) {
-          setSuccessMessageText("Created succesfully");
+          if (isSaveAsDraft) {
+            setSuccessMessageText("Draft created succesfully");
+          } else {
+            setSuccessMessageText("Assignment created succesfully");
+          }
           setSuccessMessage(true);
           setTimeout(() => {
             navigate("/assignments");
@@ -719,7 +708,7 @@ function AddAssignment() {
                     fontSize="small"
                     label="Complete & Publish"
                     type="button"
-                    onClick={(e) => handleSubmit(e, false, true, true)}
+                    onClick={(e) => handleSubmit(e, false, true, false)}
                     disabled={isError || isDisabled || blocks.length === 0}
                   />
                 </div>
