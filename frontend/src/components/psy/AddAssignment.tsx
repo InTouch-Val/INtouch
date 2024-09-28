@@ -56,6 +56,7 @@ function AddAssignment() {
   const [isError, setIsError] = useState(false);
   const [isFirstEntry, setFirstEntry] = useState(true);
   const [isDisabled, setIsDisabled] = useState(true);
+  const [assignmentId, setAssignmentId] = useState(null);
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -219,7 +220,6 @@ function AddAssignment() {
 
     return errorMessages;
   }
-  const [assignmentId, setAssignmentId] = useState(null);
 
   const handleSubmit = async (
     e,
