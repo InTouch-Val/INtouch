@@ -99,7 +99,7 @@ function App() {
             <img
               className="user-avatar"
               src={currentUser?.photo}
-              alt="Something"
+              alt="User's photo"
             />
           )}
           <h3>
