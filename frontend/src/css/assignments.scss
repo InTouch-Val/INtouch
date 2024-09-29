@@ -216,7 +216,7 @@
     font-weight: 500;
     color: $basic-placeholder-color;
   }
-  &:focus{
+  &:focus {
     box-shadow: 0px 0px 3px 1px rgba(215, 228, 231, 0.45);
     outline: none;
   }
@@ -238,7 +238,8 @@
     margin-bottom: 5px;
   }
 
-  & select, & input[type="text"] {
+  & select,
+  & input[type="text"] {
     padding: 5px 10px;
     border: 1px solid $basic-choice-button-color;
     border-radius: 6px;
