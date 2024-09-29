@@ -1,6 +1,6 @@
 import { convertFromRaw, ContentState } from "draft-js";
 
-const DEFAULT_MESSAGE = "Write your answer here...";
+const DEFAULT_MESSAGE = "";
 
 export const parseEventDetailsText = (details: string): string => {
   if (typeof details !== "string") {
