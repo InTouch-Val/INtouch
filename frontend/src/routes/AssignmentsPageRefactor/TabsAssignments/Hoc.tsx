@@ -57,24 +57,24 @@ export const WithTab = (WrappedComponent) => {
       {
         selectFromResult: ({ data, ...originalArgs }) => ({
           data: assignmentSelector.selectAll(
-            data ?? assignmentAdapter.getInitialState()
+            data ?? assignmentAdapter.getInitialState(),
           ),
           ...originalArgs,
         }),
-      }
+      },
     );
 
     const toggleFavorite = async (
-      assignmentId: number | string
+      assignmentId: number | string,
     ): Promise<void> => {
       const isFavorite = currentUser.doctor.assignments.find(
-        (item) => item == assignmentId
+        (item) => item == assignmentId,
       );
       dispatch(
         changeAssignmentFavoriteByIdAction({
           isFavorite: isFavorite,
           assignmentId: assignmentId,
-        })
+        }),
       );
       initAuth();
       refetch();
