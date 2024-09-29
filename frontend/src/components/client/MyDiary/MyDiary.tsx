@@ -8,6 +8,8 @@ import CardDiaryClient from "./CardDiary/CardDiary";
 import { useNavigate } from "react-router-dom";
 import { useObserve } from "../../../utils/hook/useObserve";
 import { useAuth } from "../../../service/authContext";
+import EmptyContentNoticeTexts from "../../../utils/notification-texts.json";
+import EmptyContentNotice from "../../../stories/empty-content-notice/EmptyContentNotice";
 
 export default function MyDiary() {
   const [diarys, setDiarys] = React.useState([]);
@@ -20,6 +22,8 @@ export default function MyDiary() {
   const observeElement = React.useRef(null);
   const navigate = useNavigate();
 
+  console.log("diarys", diarys);
+
   const handleTakeUpdate = React.useCallback(() => {
     setLimit((prev) => prev + 20);
   }, []);
@@ -28,7 +32,7 @@ export default function MyDiary() {
 
   React.useEffect(() => {
     const response = API.get(
-      `diary-notes/?limit=${limit}&offset=0&author=${currentUser.id}`,
+      `diary-notes/?limit=${limit}&offset=0&author=${currentUser.id}`
     )
       .then((res) => {
         if (res.status == 200) {
@@ -83,6 +87,11 @@ export default function MyDiary() {
         </div>
 
         <div className="diary__section">
+          {diarys.length === 0 && (
+            <EmptyContentNotice
+              label={EmptyContentNoticeTexts.noContent.clientNoDiaries}
+            />
+          )}
           <div className="diary__list">
             {isFetching &&
               Array.from(diarys)
