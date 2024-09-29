@@ -22,8 +22,6 @@ export default function MyDiary() {
   const observeElement = React.useRef(null);
   const navigate = useNavigate();
 
-  console.log("diarys", diarys);
-
   const handleTakeUpdate = React.useCallback(() => {
     setLimit((prev) => prev + 20);
   }, []);
@@ -32,7 +30,7 @@ export default function MyDiary() {
 
   React.useEffect(() => {
     const response = API.get(
-      `diary-notes/?limit=${limit}&offset=0&author=${currentUser.id}`
+      `diary-notes/?limit=${limit}&offset=0&author=${currentUser.id}`,
     )
       .then((res) => {
         if (res.status == 200) {
@@ -55,6 +53,8 @@ export default function MyDiary() {
     try {
       const response = await API.delete(`/diary-notes/${idCardDelete}/`);
       closeModal();
+
+      setDiarys((prevDiarys) => prevDiarys.filter((diary) => diary.id !== idCardDelete));
       return response.data;
     } catch (error) {
       console.log(error);
