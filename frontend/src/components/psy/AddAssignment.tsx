@@ -286,12 +286,10 @@ function AddAssignment() {
           }
           setAssignmentId(response.data.id);
         } else {
-          if (isDraft || isSaveWithNavigate) {
-            response = await API.patch(
-              `assignments/${assignmentId}/`,
-              requestData,
-            );
-          }
+          response = await API.patch(
+            `assignments/${assignmentId}/`,
+            requestData,
+          );
         }
         // Получаем ID созданного задания
       } else {
