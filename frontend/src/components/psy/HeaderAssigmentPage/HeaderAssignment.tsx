@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function HeaderAssignment({
   blocks,
-  handleSubmit = () => {},
+  handleSubmit,
   isFirstEntry,
   changeView,
   isDisabled,
