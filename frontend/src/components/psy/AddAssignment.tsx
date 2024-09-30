@@ -281,14 +281,10 @@ function AddAssignment() {
         if (assignmentId === null) {
           // Если задание создается впервые, выполняем POST запрос
           response = await API.post("assignments/", requestData);
-          setAssignmentId(response.data.id);
           if (!response || !response.data || !response.data.id) {
             throw new Error("Failed to create assignment");
           }
-          response = await API.patch(
-            `assignments/${response.data.id}/`,
-            requestData,
-          );
+          setAssignmentId(response.data.id);
         } else {
           if (isDraft || isSaveWithNavigate) {
             response = await API.patch(
