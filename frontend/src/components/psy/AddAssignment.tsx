@@ -284,6 +284,7 @@ function AddAssignment() {
           if (!response || !response.data || !response.data.id) {
             throw new Error("Failed to create assignment");
           }
+          // Получаем ID созданного задания
           setAssignmentId(response.data.id);
         } else {
           response = await API.patch(
@@ -291,7 +292,6 @@ function AddAssignment() {
             requestData,
           );
         }
-        // Получаем ID созданного задания
       } else {
         // Если задание уже существует, выполняем PUT запрос
         response = await API.patch(`assignments/${id}/`, requestData);
@@ -314,7 +314,6 @@ function AddAssignment() {
         }
       }
     } catch (error) {
-      console.log(response, 1111);
       const parsedError = parseErrorText(error.request.responseText);
       console.log(parsedError);
       // Преобразование объекта ошибок в строку для обновления состояния
