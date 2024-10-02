@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
   AssignmentsType,
@@ -50,7 +49,7 @@ export const assignmentApi = createApi({
       }) => ({
         url: `${ASSIGNMENTS_URL}?${limit ? `limit=${limit} ` : ""}&page=${page}${author ? `&author=${author}` : ""}${favorite ? `&favorites=${favorite}` : ""}${language ? `&language=${language}` : ""}${assignmentType ? `&assignment_type=${assignmentType}` : ""}&ordering=${ordering}${search ? `&search=${search}` : ""}`.replace(
           /\s+/g,
-          "",
+          ""
         ), // regex удаляет все пробелы в строке
         method: "GET",
         headers: {
@@ -60,13 +59,13 @@ export const assignmentApi = createApi({
       merge: (currentState, incomingState) => {
         return assignmentAdapter.addMany(
           currentState,
-          assignmentSelector.selectAll(incomingState),
+          assignmentSelector.selectAll(incomingState)
         );
       },
       transformResponse: (response: AssignmentsResponseType) => {
         return assignmentAdapter.addMany(
           assignmentAdapter.getInitialState(),
-          response.results,
+          response.results
         );
       },
       forceRefetch: ({ currentArg, previousArg }) => {
@@ -193,6 +192,27 @@ export const assignmentApi = createApi({
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       }),
+      // async onQueryStarted(uuid, { dispatch, queryFulfilled }) {
+  
+      //   const patchResult = dispatch(
+      //     assignmentApi.util.updateQueryData(
+      //       "getAssignments",
+      //       { page: 1 },
+      //       (draft) => {
+            
+      //         console.log('draft', draft)
+      //         return draft
+      //       }
+      //     )
+      //   );
+
+      //   try {
+ 
+      //     await queryFulfilled; 
+      //   } catch {
+      //     patchResult.undo(); 
+      //   }
+      // },
       invalidatesTags: () => [{ type: "Assignments", id: "PARTIAL-LIST" }],
     }),
   }),

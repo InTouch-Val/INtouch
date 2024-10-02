@@ -7,7 +7,7 @@ import {
 import { useAuth } from "../../../service/authContext";
 import { useAppDispatch, useAppSelector } from "../../../store/store";
 import { changeAssignmentFavoriteByIdAction } from "../../../store/actions/assignment/assignmentActions";
-import { changePageAction } from "../../../store/slices";
+import { changePageAction, setAssignments } from "../../../store/slices";
 import styles from "./style.module.css";
 import { useInView } from "react-intersection-observer";
 import {
@@ -18,7 +18,7 @@ import {
 
 export const WithTab = (WrappedComponent) => {
   return function WithTabComponent(props) {
-    //@ts-ignore
+    const [dataAssignments, setAssignmentData] = React.useState();
     const { currentUser, initAuth } = useAuth();
     const { ref, inView } = useInView({
       threshold: 0.5,
@@ -81,6 +81,12 @@ export const WithTab = (WrappedComponent) => {
     };
 
     React.useEffect(() => {
+      if (isSuccess && listAssignment) {
+        dispatch(setAssignments(listAssignment));
+      }
+    }, [isSuccess, listAssignment, dispatch]);
+
+    React.useEffect(() => {
       if (isSuccess && inView) {
         dispatch(changePageAction(page + 1));
       }
@@ -91,7 +97,7 @@ export const WithTab = (WrappedComponent) => {
         <WrappedComponent
           {...props}
           refetch={refetch}
-          filteredAssignments={listAssignment}
+          // filteredAssignments={assignments}
           toggleFavorite={toggleFavorite}
         />
         <div ref={ref} className={styles.observer_element} />
