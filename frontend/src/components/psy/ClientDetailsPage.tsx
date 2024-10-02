@@ -120,14 +120,12 @@ function ClientDetailsPage() {
 
   const emptyNoticeContent = (
     <>
-      <span>
-        {EmptyContentNoticeTexts.noContent.psySharedAssignments}
-      </span>
+      <span>{EmptyContentNoticeTexts.noContent.psySharedAssignments}</span>
       <span
-      dangerouslySetInnerHTML={{
-        __html: EmptyContentNoticeTexts.noContent.psyHowToShareAssignment,
-      }}
-    />
+        dangerouslySetInnerHTML={{
+          __html: EmptyContentNoticeTexts.noContent.psyHowToShareAssignment,
+        }}
+      />
     </>
   );
 
@@ -216,8 +214,6 @@ function ClientDetailsPage() {
   function openAssignment(card) {
     setCurrentCard(card);
   }
-
-  console.log(client.client)
 
   return (
     <>
@@ -358,7 +354,9 @@ function ClientDetailsPage() {
         {activeTab === "diary" && (
           <>
             {!hasDiaries && (
-              <EmptyContentNotice label={EmptyContentNoticeTexts.noContent.psyNoDiaries} />
+              <EmptyContentNotice
+                label={EmptyContentNoticeTexts.noContent.psyNoDiaries}
+              />
             )}
 
             <DiaryNotes

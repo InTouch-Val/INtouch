@@ -332,7 +332,9 @@ function ClientPage() {
             </tbody>
           </table>
         ) : (
-          <EmptyContentNotice label={EmptyContentNoticeTexts.noContent.psyAddClient} />
+          <EmptyContentNotice
+            label={EmptyContentNoticeTexts.noContent.psyAddClient}
+          />
         )}
       </div>
     </div>
