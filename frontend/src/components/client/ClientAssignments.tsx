@@ -29,10 +29,10 @@ function ClientAssignments() {
     const fetchAssignments = async () => {
       try {
         let response = await API.get(
-          `/assignments-client/?limit=${limit}&offset=0`,
+          `/assignments-client/?limit=${limit}&offset=0`
         );
         response = response.data.results.filter(
-          (assignment) => assignment.user === currentUser.id,
+          (assignment) => assignment.user === currentUser.id
         );
         // response = response.data.results;
         setAssignments(response);
@@ -54,7 +54,9 @@ function ClientAssignments() {
     // Filter assignments based on status
     if (currentTab !== "all") {
       updatedAssignments = updatedAssignments.filter(
-        (assignment) => assignment.status === currentTab, // Assuming 'status' field in assignment
+        (assignment) => {
+          return assignment.status === currentTab;
+        } // Assuming 'status' field in assignment
       );
     }
 
@@ -78,8 +80,8 @@ function ClientAssignments() {
           To do
         </button>
         <button
-          className={currentTab === "in_progress" ? "active" : ""}
-          onClick={() => setCurrentTab("in_progress")}
+          className={currentTab === "in progress" ? "active" : ""}
+          onClick={() => setCurrentTab("in progress")}
         >
           In Progress
         </button>
@@ -96,13 +98,11 @@ function ClientAssignments() {
         ) : filteredAssignments.length > 0 ? (
           filteredAssignments.map((assignment) => {
             return (
-              assignment.status == StatusFromServer.ToDo && (
-                <ClientAssignmentCard
-                  key={assignment.id}
-                  assignmentData={assignment}
-                  openAssignment={openAssignment}
-                />
-              )
+              <ClientAssignmentCard
+                key={assignment.id}
+                assignmentData={assignment}
+                openAssignment={openAssignment}
+              />
             );
           })
         ) : (
