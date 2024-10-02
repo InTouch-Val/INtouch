@@ -340,7 +340,6 @@ function AssignmentsPage({
         console.error("No clients selected for sharing the assignment.");
         return;
       }
-
       const res = await Promise.all(
         selectedClients.map(async (clientId) => {
           const response = await API.post(
