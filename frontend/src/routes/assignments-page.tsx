@@ -343,7 +343,7 @@ function AssignmentsPage({
 
       const res = await Promise.all(
         selectedClients.map(async (clientId) => {
-          const response = await API.get(
+          const response = await API.post(
             `assignments/set-client/${assignmentId}/${clientId}/`,
           );
           return response;

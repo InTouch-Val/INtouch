@@ -192,7 +192,7 @@ function ClientDetailsPage() {
         setErrorText("");
       }
 
-      const res = await API.get(
+      const res = await API.post(
         `assignments/set-client/${assignmentId}/${id}/`,
       );
 
