@@ -9,7 +9,6 @@ import {
   faUser,
   faList,
   faBookMedical,
-  faNoteSticky,
   faXmark,
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
@@ -148,16 +147,6 @@ function App() {
                     className={({ isActive }) => (isActive ? "active" : "")}
                   >
                     <FontAwesomeIcon icon={faBookMedical} /> Diary
-                  </NavLink>
-                </li>
-                <li onClick={() => setSideBarOpened(false)}>
-                  <NavLink
-                    to="/my-notes"
-                    className={({ isActive }) =>
-                      "disabled" + (isActive ? "active" : "")
-                    }
-                  >
-                    <FontAwesomeIcon icon={faNoteSticky} /> Notes
                   </NavLink>
                 </li>
               </ul>
