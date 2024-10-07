@@ -135,8 +135,3 @@ METRICS_FILES_NAMES = {
     "growth": "growth_metrics.csv",
 }
 METRICS_DATE_FORMAT = "%d %B %Y"
-
-EMAIL_TEMPLATE = {
-    USER_TYPES[0]: "registration/welcome_client.html",
-    USER_TYPES[1]: "registration/welcome_doctor.html",
-}
