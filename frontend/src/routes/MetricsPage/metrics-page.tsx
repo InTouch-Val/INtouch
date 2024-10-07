@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./style.css";
 import Button from "../../components/psy/button/ButtonHeadline";
 import { API } from "../../service/axios";
 import MetricsTable from "./MetricsTable/MetricsTable";
+import { useNavigate } from "react-router-dom";
 
 export enum Metrics {
   psy = "therapists",
@@ -22,11 +23,19 @@ export default function MetricsPage() {
   const [startDate, setStartDate] = React.useState(new Date());
   const [endDate, setEndDate] = React.useState(new Date());
   const [selectMetric, setSelectMetric] = React.useState(Metrics.default);
+  const navigate = useNavigate();
 
   const [formattedDate, setFormattedDate] = React.useState<FormattedDate>({
     dateTo: null,
     dateFrom: null,
   });
+
+  // useEffect(() => {
+  //   const isLoggedIn = localStorage.getItem("ismetricsloggedin");
+  //   if (!isLoggedIn) {
+  //     navigate("/metrics-login");
+  //   }
+  // }, [navigate]);
 
   const [metrics, setMetrics] = React.useState<any>();
 
