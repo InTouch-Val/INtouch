@@ -276,9 +276,7 @@ function CompleteAssignments() {
 
   async function handleShareWithTherapist() {
     try {
-
       const res = await API.patch(
-
         `assignments-client/${assignmentData.id}/visible/`,
       );
       if (res.status >= 200 && res.status < 300) {

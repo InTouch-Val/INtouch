@@ -33,14 +33,18 @@ export default function MetricsLoginPage() {
   return (
     <div className="metrics">
       <div className="metrics__title"> Метрики</div>
-      <form onSubmit={handleMetricsLogin} className="metrics__login-form" autoComplete="off">
+      <form
+        onSubmit={handleMetricsLogin}
+        className="metrics__login-form"
+        autoComplete="off"
+      >
         <input
           type="password"
           id="metrics-password"
           name="metrics-password"
           placeholder="Password"
           onChange={(e) => setMetricsCredentials({ password: e.target.value })}
-          autoComplete="new-password" 
+          autoComplete="new-password"
         />
         <Button
           buttonSize="small"
