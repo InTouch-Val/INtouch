@@ -83,11 +83,3 @@
 .metrics__table {
   padding-top: 30px;
 }
-
-.metrics__login-form {
-  display: flex;
-  flex-direction: column;
-  width: 300px;
-  margin: 0 auto;
-  gap: 30px;
-}

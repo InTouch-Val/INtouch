@@ -32,16 +32,11 @@ import MobileEmotionPage from "./components/client/MyDiary/MobileEmotionPage/Mob
 import AssignmentsPageRefactor from "./routes/AssignmentsPageRefactor/AssignmentsPage";
 import { AfterRegistrationConfirmEmail } from "./service/forms/after-registration-email-confirmation";
 import MetricsPage from "./routes/MetricsPage/metrics-page";
-import MetricsLoginPage from "./routes/MetricsPage/metrics-login-page";
 
 const router = createBrowserRouter([
   {
     path: "/metrics",
     element: <MetricsPage />,
-  },
-  {
-    path: "/metrics-login",
-    element: <MetricsLoginPage />,
   },
 
   {

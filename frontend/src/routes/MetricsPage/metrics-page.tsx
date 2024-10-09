@@ -5,6 +5,7 @@ import "./style.css";
 import Button from "../../components/psy/button/ButtonHeadline";
 import { API } from "../../service/axios";
 import MetricsTable from "./MetricsTable/MetricsTable";
+import { useAuth } from "../../service/authContext";
 import { useNavigate } from "react-router-dom";
 
 export enum Metrics {
@@ -20,24 +21,31 @@ interface FormattedDate {
 }
 
 export default function MetricsPage() {
+  const { currentUser } = useAuth();
+
   const [startDate, setStartDate] = React.useState(new Date());
   const [endDate, setEndDate] = React.useState(new Date());
   const [selectMetric, setSelectMetric] = React.useState(Metrics.default);
-  const navigate = useNavigate();
 
   const [formattedDate, setFormattedDate] = React.useState<FormattedDate>({
     dateTo: null,
     dateFrom: null,
   });
 
-  // useEffect(() => {
-  //   const isLoggedIn = localStorage.getItem("ismetricsloggedin");
-  //   if (!isLoggedIn) {
-  //     navigate("/metrics-login");
-  //   }
-  // }, [navigate]);
-
   const [metrics, setMetrics] = React.useState<any>();
+  const navigate = useNavigate();
+  const [isCheckingAuth, setIsCheckingAuth] = React.useState(true); 
+
+  const AUTH_EMAIL = "v.y.maklakova@gmail.com";
+
+  useEffect(() => {
+    const isLoggedIn = currentUser?.email === AUTH_EMAIL;
+    if (!isLoggedIn) {
+      navigate("/");
+    } else {
+      setIsCheckingAuth(false);
+    }
+  }, [currentUser, navigate]);
 
   const handleChangeDateBegin = (date) => {
     const formattedDate = formatDate(date);
@@ -101,6 +109,10 @@ export default function MetricsPage() {
     } catch (e) {
       console.error(e);
     }
+  }
+
+  if (isCheckingAuth) {
+    return <p>loading...</p>;
   }
 
   return (
