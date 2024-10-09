@@ -4,7 +4,7 @@
 .shepherd-theme-custom.shepherd-element {
   border: 1px solid $basic-font-color;
   box-shadow: 0px 4px 4px 0px #00000040;
-  border-radius: 8px;
+  border-radius: 6px;
 
   & .shepherd-text {
     color: #000000;
@@ -23,12 +23,10 @@
   }
 }
 
-
 .shepherd-content {
   background-color: $basic-background-color;
-  border-radius: 8px;
+  border-radius: 6px;
 }
-
 
 .shepherd-modal-overlay-container.shepherd-modal-is-visible {
   opacity: 0.1;
@@ -52,7 +50,8 @@
 .shepherd-button-icon {
   width: 22px;
   height: 15px;
-  background: url("./assets/onboaring-next-step-icon.svg") no-repeat center center;
+  background: url("./assets/onboaring-next-step-icon.svg") no-repeat center
+    center;
   background-size: contain;
   border: none;
   cursor: pointer;
@@ -61,5 +60,6 @@
 .shepherd-button-icon:not(:disabled):hover {
   opacity: 0.8;
   background-color: transparent;
-  background: url("./assets/onboaring-next-step-icon.svg") no-repeat center center;
+  background: url("./assets/onboaring-next-step-icon.svg") no-repeat center
+    center;
 }

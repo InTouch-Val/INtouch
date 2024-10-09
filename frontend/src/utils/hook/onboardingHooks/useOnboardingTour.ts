@@ -14,7 +14,7 @@ const useOnboardingTour = (
     if (condition && !isMobileWidth) {
       const tourFlag = localStorage.getItem(tourKey);
 
-      if (!tourFlag) {
+      if (tourFlag) {
         const tour = new Shepherd.Tour({
           useModalOverlay: true,
           defaultStepOptions: {
