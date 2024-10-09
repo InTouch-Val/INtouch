@@ -83,3 +83,9 @@
 .metrics__table {
   padding-top: 30px;
 }
+
+.metrics__notifications {
+  color: red;
+  font-size: 18px;
+  line-height: 24px;
+}
