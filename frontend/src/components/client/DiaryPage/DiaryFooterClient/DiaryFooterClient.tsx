@@ -30,7 +30,6 @@ export default function DiaryFooterClient({
     getValues,
   } = useFormContext();
 
-
   const [active, setActive] = React.useState(diary ? diary.visible : false);
 
   const primaryEmotionValue = getValues("primary_emotion");
@@ -41,7 +40,6 @@ export default function DiaryFooterClient({
   const watchAllFields = useWatch();
 
   const initialFormState = React.useRef(JSON.stringify(getValues()));
-
 
   const dispatch = useAppDispatch();
   const handleOpenModalSaveIncomplete = () => {
@@ -63,7 +61,6 @@ export default function DiaryFooterClient({
     setChangesMade(currentValues !== initialFormState.current);
     return currentValues !== initialFormState.current;
   }
-
 
   const handleSaveClick = (e: Event) => {
     if (!allFieldsFilled()) {
@@ -135,14 +132,14 @@ export default function DiaryFooterClient({
         </div>
 
         {(!isValid || !hasFormChanged()) && (
-            <span
-              className={`diary__message-valid ${!isHover && "diary__message-valid-hidden"}`}
-            >
-              {isMobileWidth
-                ? "Fill in at least one question to save"
-                : "Please fill in at least one question to save your diary entry"}
-            </span>
-          )}
+          <span
+            className={`diary__message-valid ${!isHover && "diary__message-valid-hidden"}`}
+          >
+            {isMobileWidth
+              ? "Fill in at least one question to save"
+              : "Please fill in at least one question to save your diary entry"}
+          </span>
+        )}
       </div>
     </div>
   );

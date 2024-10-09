@@ -15,7 +15,7 @@ export enum Metrics {
 
 interface FormattedDate {
   dateTo: string | Date | null;
-  dateFrom: string |  null;
+  dateFrom: string | null;
 }
 
 export default function MetricsPage() {
@@ -31,7 +31,6 @@ export default function MetricsPage() {
     return `${day}-${month}-${year}`;
   };
 
-  
   const [formattedDate, setFormattedDate] = React.useState<FormattedDate>({
     dateTo: formatDate(new Date()),
     dateFrom: null,
@@ -79,7 +78,7 @@ export default function MetricsPage() {
 
   async function getMetrics() {
     const response = await API.get(
-      `project-metrics/${selectMetric}/?date_from=${formattedDate.dateFrom}&date_to=${formattedDate.dateTo}`
+      `project-metrics/${selectMetric}/?date_from=${formattedDate.dateFrom}&date_to=${formattedDate.dateTo}`,
     );
 
     setMetrics(response.data);
@@ -89,7 +88,7 @@ export default function MetricsPage() {
     try {
       const response = await API.get(
         `project-metrics/${selectMetric}/download?date_from=${formattedDate.dateFrom}&date_to=${formattedDate.dateTo}`,
-        { responseType: "blob" }
+        { responseType: "blob" },
       );
 
       const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -156,10 +155,13 @@ export default function MetricsPage() {
           </Button>
         </div>
         {/* error-message */}
-        {errorMessage && <div className="metrics__notifications">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="metrics__notifications">{errorMessage}</div>
+        )}
         {Array.isArray(metrics) && metrics.length == 0 && (
           <div className="metrics__notifications">
-           Metrics from {formattedDate.dateFrom} to {formattedDate.dateTo?.toString()} are empty
+            Metrics from {formattedDate.dateFrom} to{" "}
+            {formattedDate.dateTo?.toString()} are empty
           </div>
         )}
 
