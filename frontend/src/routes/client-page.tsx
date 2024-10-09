@@ -118,7 +118,7 @@ function ClientPage() {
 
   const handleAssignmentAddToClient = async (assignment) => {
     try {
-      const response = await API.get(
+      const response = await API.post(
         `assignments/set-client/${assignment}/${selectedClientId}/`,
       );
       closeModal();

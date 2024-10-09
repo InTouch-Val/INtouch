@@ -48,7 +48,6 @@ export default function ModalAssignments({
         console.error("No clients selected for sharing the assignment.");
         return;
       }
-
       const { payload }: any = await dispatch(
         setClientByIdAction({ assignmentId, selectedClients }),
       );
