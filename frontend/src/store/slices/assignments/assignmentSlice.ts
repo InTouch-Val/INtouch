@@ -13,6 +13,7 @@ import {
   AssignmentTab,
   Status,
   TypeFilter,
+  TypeIssue,
   TypeLanguage,
   TypeOrder,
 } from "../../../utils/constants";
@@ -30,7 +31,7 @@ interface AssignmentState {
   activeLanguage: TypeLanguage;
 
   activeFilterType: TypeFilter;
-
+  activeIssue: TypeIssue;
   activeOrder: TypeOrder;
 
   page: number;
@@ -48,6 +49,7 @@ const initialState: AssignmentState = {
   activeTab: AssignmentTab.library,
   activeFilterType: TypeFilter.All,
   activeOrder: TypeOrder.DecDate,
+  activeIssue: TypeIssue.all,
   status: Status.Init,
   message: "default",
   page: 1,
@@ -75,6 +77,11 @@ const assignmentSlice = createSlice({
     },
     changeFilterTypeActions: (state, action) => {
       state.activeFilterType = action.payload;
+      state.isSuccess = false;
+      state.page = 1;
+    },
+    changeIssueActions: (state, action) => {
+      state.activeIssue = action.payload;
       state.isSuccess = false;
       state.page = 1;
     },
@@ -158,6 +165,7 @@ export const {
   changePageAction,
   changeSearchAction,
   changeStatusAction,
+  changeIssueActions
 } = assignmentSlice.actions;
 
 export default assignmentSlice.reducer;

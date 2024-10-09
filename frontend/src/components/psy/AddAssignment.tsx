@@ -28,6 +28,7 @@ import {
   maxLengthDescription,
   maxLengthTitle,
   TypeFilter,
+  TypeIssue,
   TypeLanguage,
 } from "../../utils/constants";
 import useConstructorOnboardingTour from "../../utils/hook/onboardingHooks/assignmentConstructorOnboardingTour";
@@ -41,6 +42,7 @@ function AddAssignment() {
   const [description, setDescription] = useState("");
   const [type, setType] = useState("");
   const [language, setLanguage] = useState("");
+  const [goal, setGoal] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   // const [tags, setTags] = useState('');
 
@@ -81,7 +83,7 @@ function AddAssignment() {
         selectedImage &&
         type.length !== 0 &&
         language.length !== 0
-      ),
+      )
     );
   }, [title, description, searchTerm, type, language, selectedImage]);
 
@@ -98,7 +100,7 @@ function AddAssignment() {
       textarea.style.setProperty("height", "0");
       textarea.style.setProperty(
         "height",
-        constrain(textarea.scrollHeight, minHeight, maxHeight) + "px",
+        constrain(textarea.scrollHeight, minHeight, maxHeight) + "px"
       );
     });
   }
@@ -110,6 +112,7 @@ function AddAssignment() {
       setDescription(response.data.text);
       setType(response.data.assignment_type);
       setLanguage(response.data.language);
+      setGoal(response.data.issue)
       setSelectedImage({ urls: { full: response.data.image_url } });
 
       const fetchedBlocks = response.data.blocks.map((block) => {
@@ -262,6 +265,7 @@ function AddAssignment() {
     const requestData = {
       blocks: blockInfo,
       title,
+      issue: goal,
       text: description,
       assignment_type: type,
       tags: "ffasd",
@@ -352,7 +356,7 @@ function AddAssignment() {
     blockContainers.forEach((blockContainer, index) => {
       const blockErrorKey = `blocks #${index + 1}`;
       const blockErrorExists = Object.keys(errorMessages).some((key) =>
-        key.startsWith(blockErrorKey),
+        key.startsWith(blockErrorKey)
       );
       if (blockErrorExists) {
         blockContainer.classList.add("error");
@@ -432,7 +436,7 @@ function AddAssignment() {
     newMaxValue,
     newLeftPole,
     newRightPole,
-    newImage,
+    newImage
   ) => {
     setBlocks((prevBlocks) =>
       prevBlocks.map((block) =>
@@ -455,12 +459,10 @@ function AddAssignment() {
               rightPole: newRightPole ?? block.rightPole,
               image: newImage ?? block.image,
             }
-          : block,
-      ),
+          : block
+      )
     );
   };
-
-  console.log(blocks);
 
   return (
     <div className="assignments-page">
@@ -595,6 +597,49 @@ function AddAssignment() {
                     <option value={TypeLanguage.Fr}>French</option>
                     <option value={TypeLanguage.De}>German</option>
                     <option value={TypeLanguage.It}>Italian</option>
+                  </select>
+                </div>
+                <div className="form-setting">
+                  <label>Assigment Goal</label>
+                  <select
+                    value={goal}
+                    onChange={(e) => setGoal(e.target.value)}
+                    required
+                    className={!goal && !isFirstEntry ? "error" : ""}
+                    defaultValue={""}
+                  >
+                    <option hidden disabled value={""}>
+                      Assigment Goal
+                    </option>
+                    <option value={TypeIssue.Anxiety}>
+                      {TypeIssue.Anxiety}
+                    </option>
+                    <option value={TypeIssue.Depression}>
+                      {TypeIssue.Depression}
+                    </option>
+                    <option value={TypeIssue.RelationshipIssues}>
+                      {TypeIssue.RelationshipIssues}
+                    </option>
+                    <option value={TypeIssue.Stress}>{TypeIssue.Stress}</option>
+                    <option value={TypeIssue.SelfEsteem}>
+                      {TypeIssue.SelfEsteem}
+                    </option>
+                    <option value={TypeIssue.TraumaAndPTSR}>
+                      {TypeIssue.TraumaAndPTSR}
+                    </option>
+                    <option value={TypeIssue.Addiction}>
+                      {TypeIssue.Addiction}
+                    </option>
+                    <option value={TypeIssue.GriefAndLoss}>
+                      {TypeIssue.GriefAndLoss}
+                    </option>
+                    <option value={TypeIssue.LifeTransitions}>
+                      {TypeIssue.LifeTransitions}
+                    </option>
+                    <option value={TypeIssue.IdentityAndPurpose}>
+                      {TypeIssue.IdentityAndPurpose}
+                    </option>
+                    <option value={TypeIssue.Other}>{TypeIssue.Other}</option>
                   </select>
                 </div>
                 {/* <div className="form-setting tags-setting">
