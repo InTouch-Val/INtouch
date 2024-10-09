@@ -58,6 +58,7 @@ function AddAssignment() {
   const [isError, setIsError] = useState(false);
   const [isFirstEntry, setFirstEntry] = useState(true);
   const [isDisabled, setIsDisabled] = useState(true);
+  const [assignmentId, setAssignmentId] = useState(null);
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -67,7 +68,7 @@ function AddAssignment() {
     if (
       title.length !== 0 ||
       description.length !== 0 ||
-      searchTerm.length !== 0 ||
+      (searchTerm.length !== 0 && !selectedImage) ||
       type.length !== 0 ||
       language.length !== 0
     ) {
@@ -79,7 +80,6 @@ function AddAssignment() {
         title.length <= maxLengthTitle &&
         description.length !== 0 &&
         description.length <= maxLengthDescription &&
-        searchTerm.length !== 0 &&
         selectedImage &&
         type.length !== 0 &&
         language.length !== 0
@@ -224,7 +224,12 @@ function AddAssignment() {
     return errorMessages;
   }
 
-  const handleSubmit = async (e, isDraft = false, isSaveAsDraft = false) => {
+  const handleSubmit = async (
+    e,
+    isDraft = false,
+    isSaveWithNavigate = false,
+    isSaveAsDraft = false,
+  ) => {
     e.preventDefault();
 
     const blockInfo = blocks.map((block) => {
@@ -275,48 +280,41 @@ function AddAssignment() {
     };
 
     try {
-      console.log(blockInfo);
       let response;
       if (!isEditMode) {
-        // Если задание создается впервые, выполняем POST запрос
-        response = await API.post("assignments/", requestData);
-        if (!response || !response.data || !response.data.id) {
-          throw new Error("Failed to create assignment");
-        }
-        // Получаем ID созданного задания
-        const assignmentId = response.data.id;
-
-        if (isDraft || isSaveAsDraft) {
-          // Если задание должно быть сохранено как черновик, выполняем GET запрос
-          await API.patch(`assignments/${assignmentId}/draft/`);
+        if (assignmentId === null) {
+          // Если задание создается впервые, выполняем POST запрос
+          response = await API.post("assignments/", requestData);
+          if (!response || !response.data || !response.data.id) {
+            throw new Error("Failed to create assignment");
+          }
+          // Получаем ID созданного задания
+          setAssignmentId(response.data.id);
+        } else {
+          response = await API.patch(
+            `assignments/${assignmentId}/`,
+            requestData,
+          );
         }
       } else {
         // Если задание уже существует, выполняем PUT запрос
         response = await API.patch(`assignments/${id}/`, requestData);
-        if (isDraft || isSaveAsDraft) {
-          // Если задание должно быть перемещено в черновик, выполняем GET запрос
-          await API.patch(`assignments/${id}/draft/`);
-        }
       }
-
       if ([200, 201].includes(response.status)) {
         if (isDraft) {
           setSuccessMessageText("Saved succesfully");
           setSuccessMessage(true);
-        } else if (isSaveAsDraft) {
+        }
+        if (isSaveWithNavigate) {
+          if (isSaveAsDraft) {
+            setSuccessMessageText("Draft created succesfully");
+          } else {
+            setSuccessMessageText("Assignment created succesfully");
+          }
+          setSuccessMessage(true);
           setTimeout(() => {
             navigate("/assignments");
           }, 2000);
-
-          setSuccessMessageText("Draft created succesfully");
-          setSuccessMessage(true);
-        } else {
-          setTimeout(() => {
-            navigate("/assignments");
-          }, 2000);
-
-          setSuccessMessageText("Assignment created succesfully");
-          setSuccessMessage(true);
         }
       }
     } catch (error) {
@@ -471,7 +469,7 @@ function AddAssignment() {
       )}
       <HeaderAssignment
         blocks={blocks}
-        handleSubmit={(e) => handleSubmit(e, true, false)}
+        handleSubmit={(e) => handleSubmit(e, true, false, true)}
         isDisabled={isDisabled}
         isFirstEntry={isFirstEntry}
         changeView={() => {
@@ -535,10 +533,7 @@ function AddAssignment() {
               setSearchTerm={setSearchTerm}
             />
           )}
-          <form
-            onSubmit={(e) => handleSubmit(e, false, false)}
-            className="form-creator"
-          >
+          <form className="form-creator">
             {blocks.map((block, index) => (
               <div key={index}>
                 {block.type === "headline" && (
@@ -741,7 +736,7 @@ function AddAssignment() {
                     fontSize="medium"
                     label="Save as Draft"
                     type="button"
-                    onClick={(e) => handleSubmit(e, false, true)}
+                    onClick={(e) => handleSubmit(e, true, true, true)}
                     disabled={isError || isDisabled || blocks.length === 0}
                   />
                 </div>
@@ -751,7 +746,7 @@ function AddAssignment() {
                     fontSize="small"
                     label="Complete & Publish"
                     type="button"
-                    onClick={(e) => handleSubmit(e, false, false)}
+                    onClick={(e) => handleSubmit(e, false, true, false)}
                     disabled={isError || isDisabled || blocks.length === 0}
                   />
                 </div>
