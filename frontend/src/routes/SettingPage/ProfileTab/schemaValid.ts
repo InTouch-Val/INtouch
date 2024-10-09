@@ -48,12 +48,12 @@ export const diaryClientValidation = yup
       const isRichTextEmpty = (richText) => {
         try {
           const parsed = JSON.parse(richText);
-          return !parsed.blocks.some(block => block.text.trim() !== "");
+          return !parsed.blocks.some((block) => block.text.trim() !== "");
         } catch (e) {
           return true;
         }
       };
-      
+
       return (
         !isRichTextEmpty(event_details) ||
         !isRichTextEmpty(thoughts_analysis) ||
