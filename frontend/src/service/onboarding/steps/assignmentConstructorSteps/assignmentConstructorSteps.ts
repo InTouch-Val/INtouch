@@ -1,7 +1,6 @@
 import Shepherd, { PopperPlacement } from "shepherd.js";
 import "../../custom-shepherd-styles.scss";
 import onboardingTexts from "../../onboardingTextsSteps/psyAssignmentConstructorTexts.json";
-import "./assignmentConstructorStyles.scss";
 
 const getAssignmentConstructorSteps = () => [
   {
@@ -9,7 +8,7 @@ const getAssignmentConstructorSteps = () => [
     text: onboardingTexts.constructorFillIn.description,
     attachTo: {
       element: ".assignments-page #onboarding-constructorFillIn",
-      on: "top" as PopperPlacement,
+      on: "top-start" as PopperPlacement,
     },
     classes: "constructorFillIn",
     buttons: [

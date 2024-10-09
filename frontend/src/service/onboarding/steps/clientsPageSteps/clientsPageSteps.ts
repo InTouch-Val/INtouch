@@ -1,7 +1,6 @@
 import Shepherd, { PopperPlacement } from "shepherd.js";
 import "../../custom-shepherd-styles.scss";
 import onboardingTexts from "../../onboardingTextsSteps/psyClientsTexts.json";
-import "./clientsPageStyles.scss";
 
 const getClientsPageSteps = () => [
   {

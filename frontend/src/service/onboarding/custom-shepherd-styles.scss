@@ -4,7 +4,7 @@
 .shepherd-theme-custom.shepherd-element {
   border: 1px solid $basic-font-color;
   box-shadow: 0px 4px 4px 0px #00000040;
-  border-radius: 10px;
+  border-radius: 6px;
 
   & .shepherd-text {
     color: #000000;
@@ -12,7 +12,20 @@
     font-weight: 500;
     line-height: 17px;
     text-align: center;
+    position: relative;
+    z-index: 10;
   }
+
+  & .shepherd-arrow {
+    &::before {
+      border: 1px solid $basic-font-color;
+    }
+  }
+}
+
+.shepherd-content {
+  background-color: $basic-background-color;
+  border-radius: 6px;
 }
 
 .shepherd-modal-overlay-container.shepherd-modal-is-visible {
