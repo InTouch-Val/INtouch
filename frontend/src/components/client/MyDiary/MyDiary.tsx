@@ -46,8 +46,7 @@ export default function MyDiary() {
       .finally(() => setFetching(true));
   }, [isFetching, limit]);
 
-  const handleClickDelete = async (event) => {
-    event.stopPropagation();
+  const handleClickDelete = async () => {
     setFetching(false);
     try {
       const response = await API.delete(`/diary-notes/${idCardDelete}/`);

@@ -47,6 +47,7 @@ from api.constants import (
     RANDOM_VALUE_SIZE,
     FIELD_DELETED,
     RANDOM_CHARSET_FOR_DELETING,
+    EMAIL_TEMPLATE,
 )
 from api.tasks import reset_email_update_status
 
@@ -169,7 +170,7 @@ class UserConfirmEmailView(APIView):
             user.is_active = True
             user.save()
             refresh = RefreshToken.for_user(user)
-            html_message = render_to_string("registration/welcome_mail.html")
+            html_message = render_to_string(EMAIL_TEMPLATE[user.user_type])
             send_by_mail(html_message, user.email)
             return Response(
                 {
