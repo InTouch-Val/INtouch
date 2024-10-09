@@ -1,6 +1,6 @@
 import React from "react";
 import DiaryHeader from "./DiaryHeader/DiaryHeader";
-import "./DiaryPageContent.css";
+import "./DiaryPageContent.scss";
 import DiaryEventDetails from "./DiaryEventDetails/DiaryEventDetails";
 import DiaryBlockAnalysis from "./DiaryBlockAnalysis/DiaryBlockAnalysis";
 import DiaryBlockPhysicalSensation from "./DiaryBlockPhysicalSensation/DiaryBlockPhysicalSensation";

@@ -53,9 +53,7 @@ export default function TabsAssignments({
   const emptyFavoritesContent = (
     <>
       <span>{EmptyContentNoticeTexts.noContent.psyNoFavouriteAssignments}</span>
-      <span>
-      {EmptyContentNoticeTexts.noContent.psyHowToAddFavourite}
-      </span>
+      <span>{EmptyContentNoticeTexts.noContent.psyHowToAddFavourite}</span>
     </>
   );
 
@@ -64,10 +62,10 @@ export default function TabsAssignments({
       <span>{EmptyContentNoticeTexts.noContent.psyMyTasks}</span>
 
       <span
-      dangerouslySetInnerHTML={{
-        __html: EmptyContentNoticeTexts.noContent.psyHowToAddAssignment,
-      }}
-    />
+        dangerouslySetInnerHTML={{
+          __html: EmptyContentNoticeTexts.noContent.psyHowToAddAssignment,
+        }}
+      />
     </>
   );
 

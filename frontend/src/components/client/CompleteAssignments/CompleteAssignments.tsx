@@ -20,6 +20,7 @@ import EntryUnsavedExit from "../../modals/Notifications/entryUnsavedExit";
 import useMobileWidth from "../../../utils/hook/useMobileWidth";
 import Button from "../../storybook/Button/Button";
 import { ContentState, convertFromRaw, getPlainText } from "draft-js";
+import Tumbler from "../../tumbler/Tumbler";
 
 function CompleteAssignments() {
   const location = useLocation();
@@ -275,7 +276,7 @@ function CompleteAssignments() {
 
   async function handleShareWithTherapist() {
     try {
-      const res = await API.post(
+      const res = await API.patch(
         `assignments-client/${assignmentData.id}/visible/`,
       );
       if (res.status >= 200 && res.status < 300) {

@@ -1,6 +1,7 @@
 import { convertFromRaw, ContentState } from "draft-js";
+import { stateToHTML } from "draft-js-export-html";
 
-const DEFAULT_MESSAGE = "Write your answer here...";
+const DEFAULT_MESSAGE = "";
 
 export const parseEventDetailsText = (details: string): string => {
   if (typeof details !== "string") {
@@ -13,8 +14,8 @@ export const parseEventDetailsText = (details: string): string => {
 
     if (typeof content === "object" && content !== null) {
       const contentState: ContentState = convertFromRaw(content);
-      const text: string = contentState.getPlainText();
-      return text.trim() ? text : DEFAULT_MESSAGE;
+      const html: string = stateToHTML(contentState);
+      return html.trim() ? html : DEFAULT_MESSAGE;
     }
   } catch (error) {
     console.error("Error parsing details:", error);

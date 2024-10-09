@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import "./ClientAssignmentCard.css";
 import { API } from "../../../service/axios";
+import Tumbler from "../../../stories/tumbler/Tumbler";
 
 function ClientAssignmentCard({ assignmentData, openAssignment }) {
   const buttonReference = useRef(null);
@@ -25,7 +26,14 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
 
   async function handleShareWithTherapist() {
     try {
-      await API.post(`assignments-client/${assignmentData?.id}/visible/`);
+      const res = await API.patch(
+        `assignments-client/${assignmentData?.id}/visible/`,
+      );
+      if (res.status >= 200 && res.status < 300) {
+        console.log(res.data);
+      } else {
+        console.log(`Status: ${res.status}`);
+      }
     } catch (error) {
       console.error(error.message);
     }
@@ -69,12 +77,10 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
         <div className="card__action-container"></div>
       </div>
       <label className="card__input-label">
-        <span>Share with my therapist</span>
-        <input
-          type="checkbox"
-          className="card__input-checkbox"
-          defaultChecked={assignmentData?.visible}
-          onClick={handleShareWithTherapist}
+        <Tumbler
+          active={assignmentData?.visible}
+          handleClick={handleShareWithTherapist}
+          label={"Share with my therapist"}
         />
       </label>
     </article>

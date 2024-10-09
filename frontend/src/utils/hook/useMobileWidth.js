@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { maxMobWidth, minMobWidth } from "../constants";
+import { maxMobWidth, minMobWidth } from "../constants.ts";
 
 function useMobileWidth() {
   const [isMobileWidth, setIsMobileWidth] = useState(false);

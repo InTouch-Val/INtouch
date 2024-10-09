@@ -1,0 +1,62 @@
+@import "../../scss-styles/mixins.scss";
+@import "../../scss-styles/variables.scss";
+@import url("../../vendor/fonts/fonts.css");
+
+.card__inputLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  color: $additional-font-color;
+  column-gap: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1.06;
+  font-family: Montserrat;
+}
+
+.card__inputCheckbox {
+  width: 32px;
+  height: 17px;
+  padding: 0;
+  border: 1px solid $additional-font-color;
+  border-radius: 100px;
+  margin: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  transition: background-color 0.5s;
+}
+
+.card__inputCheckbox:focus-visible {
+  outline: 2px solid #00f;
+  outline-offset: 1px;
+}
+
+.card__inputCheckbox:checked {
+  background-color: $basic-font-color;
+}
+
+@include mobile() {
+  .card__inputCheckbox:checked {
+    min-width: 32px;
+  }
+}
+
+.card__inputCheckbox:after {
+  display: block;
+  width: 13px;
+  height: 13px;
+  border-radius: 100%;
+  background-color: $basic-font-color;
+  content: "";
+  transform: translate(0.1em, 0.08em);
+  transition:
+    transform 0.5s,
+    background-color 0.5s;
+}
+
+.card__inputCheckbox:checked::after {
+  background-color: $basic-background-color;
+  transform: translate(1.22em, 0.08em);
+}
