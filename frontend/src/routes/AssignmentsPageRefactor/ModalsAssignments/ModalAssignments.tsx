@@ -4,6 +4,7 @@ import { useAuth } from "../../../service/authContext";
 import { useDeleteAssignmentByUUIDMutation } from "../../../store/entities";
 import { useAppDispatch } from "../../../store/store";
 import { setClientByIdAction } from "../../../store/actions/assignment/assignmentActions";
+import { deleteAssignments } from "../../../store/slices";
 
 export default function ModalAssignments({
   setIsShareModalOpen,
@@ -50,7 +51,7 @@ export default function ModalAssignments({
       }
 
       const { payload }: any = await dispatch(
-        setClientByIdAction({ assignmentId, selectedClients }),
+        setClientByIdAction({ assignmentId, selectedClients })
       );
 
       const allResponsesSuccessful =
@@ -90,6 +91,7 @@ export default function ModalAssignments({
     try {
       deleteAssignmentById(assignmentId);
       setSelectedAssignmentId("");
+      dispatch(deleteAssignments({ id: assignmentId }));
       handleModalClose();
     } catch (error) {
       console.error("Error delete assignment:", error);
