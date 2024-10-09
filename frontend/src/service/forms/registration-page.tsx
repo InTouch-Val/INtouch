@@ -286,6 +286,7 @@ function RegistrationForm() {
       !formData.email ||
       !formData.firstName ||
       !formData.lastName ||
+      !formData.acceptPolicy ||
       !formData.password;
 
     const acceptPolicyNotAccepted = !formData.acceptPolicy && isShowTermsError;
