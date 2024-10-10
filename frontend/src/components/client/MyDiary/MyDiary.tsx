@@ -54,7 +54,9 @@ export default function MyDiary() {
       const response = await API.delete(`/diary-notes/${idCardDelete}/`);
       closeModal();
 
-      setDiarys((prevDiarys) => prevDiarys.filter((diary) => diary.id !== idCardDelete));
+      setDiarys((prevDiarys) =>
+        prevDiarys.filter((diary) => diary.id !== idCardDelete),
+      );
       return response.data;
     } catch (error) {
       console.log(error);

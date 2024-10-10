@@ -48,10 +48,11 @@ export const SecurityTab = () => {
       setTimeout(() => {
         setShowSuccessAlert(false);
       }, 2000);
-
     } catch (e) {
       console.error("response.data.message", e.response.data.new_password);
-      setMessage("Error updating password: " + e.response.data.new_password.join(' '));
+      setMessage(
+        "Error updating password: " + e.response.data.new_password.join(" "),
+      );
       setShowErrorAlert(true);
 
       setTimeout(() => {
@@ -146,8 +147,12 @@ export const SecurityTab = () => {
               type="submit"
             />
           </form>
-          {showSuccessAlert && message && <div className="success-message">{message}</div>}
-          {showErrorAlert && message && <div className="error-message">{message}</div>}
+          {showSuccessAlert && message && (
+            <div className="success-message">{message}</div>
+          )}
+          {showErrorAlert && message && (
+            <div className="error-message">{message}</div>
+          )}
         </div>
       </div>
       <div className="danger-zone">
