@@ -165,7 +165,7 @@ export const {
   changePageAction,
   changeSearchAction,
   changeStatusAction,
-  changeIssueActions
+  changeIssueActions,
 } = assignmentSlice.actions;
 
 export default assignmentSlice.reducer;

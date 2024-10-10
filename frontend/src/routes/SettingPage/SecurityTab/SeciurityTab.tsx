@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { useState, createRef } from "react";
+import { useState, createRef, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../service/authContext";
 import { API } from "../../../service/axios";
@@ -20,8 +20,11 @@ export const SecurityTab = () => {
   });
   const [message, setMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const timeoutRef = useRef(null);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -40,13 +43,32 @@ export const SecurityTab = () => {
 
     try {
       const response = await API.post(`user/update/password/`, userPassword);
-      console.log(response.data);
       setMessage(response.data.message);
+      setShowSuccessAlert(true);
+
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => {
+        setShowSuccessAlert(false);
+      }, 2000);
     } catch (e) {
-      console.error(e);
-      setMessage("Error updating password: " + e.data?.message);
+      console.error("response.data.message", e.response.data.new_password);
+      setMessage(
+        "Error updating password: " + e.response.data.new_password.join(" "),
+      );
+      setShowErrorAlert(true);
+
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => {
+        setShowErrorAlert(false);
+      }, 2000);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   const handleDeleteProfile = async () => {
     try {
@@ -134,7 +156,12 @@ export const SecurityTab = () => {
               type="submit"
             />
           </form>
-          {message && <div className="success-message">{message}</div>}
+          {showSuccessAlert && message && (
+            <div className="success-message">{message}</div>
+          )}
+          {showErrorAlert && message && (
+            <div className="error-message">{message}</div>
+          )}
         </div>
       </div>
       <div className="danger-zone">
