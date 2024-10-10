@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { useState, createRef } from "react";
+import { useState, createRef, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../service/authContext";
 import { API } from "../../../service/axios";
@@ -24,6 +24,7 @@ export const SecurityTab = () => {
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const timeoutRef = useRef(null);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -45,7 +46,8 @@ export const SecurityTab = () => {
       setMessage(response.data.message);
       setShowSuccessAlert(true);
 
-      setTimeout(() => {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => {
         setShowSuccessAlert(false);
       }, 2000);
     } catch (e) {
@@ -55,11 +57,18 @@ export const SecurityTab = () => {
       );
       setShowErrorAlert(true);
 
-      setTimeout(() => {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => {
         setShowErrorAlert(false);
       }, 2000);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   const handleDeleteProfile = async () => {
     try {
