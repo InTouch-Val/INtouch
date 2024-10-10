@@ -81,7 +81,7 @@
 .diary__section {
   margin-top: 18px;
   background-color: #fbfbfb;
-  width: 935px;
+  width: auto;
 }
 
 @media screen and (min-width: 320px) and (max-width: 480px) {
