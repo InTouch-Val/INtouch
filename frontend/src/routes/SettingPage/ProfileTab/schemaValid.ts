@@ -29,6 +29,8 @@ export const diaryClientValidation = yup
     thoughts_analysis: yup.string(),
     physical_sensations: yup.string(),
     emotion_type: yup.string(),
+    primary_emotion: yup.string(),
+    clarifying_emotion: yup.array(),
   })
   .test(
     "at-least-one-field",
@@ -39,12 +41,26 @@ export const diaryClientValidation = yup
         thoughts_analysis,
         physical_sensations,
         emotion_type,
+        primary_emotion,
+        clarifying_emotion,
       } = value;
+
+      const isRichTextEmpty = (richText) => {
+        try {
+          const parsed = JSON.parse(richText);
+          return !parsed.blocks.some(block => block.text.trim() !== "");
+        } catch (e) {
+          return true;
+        }
+      };
+      
       return (
-        !!event_details ||
-        !!thoughts_analysis ||
-        !!physical_sensations ||
-        !!emotion_type
+        !isRichTextEmpty(event_details) ||
+        !isRichTextEmpty(thoughts_analysis) ||
+        !isRichTextEmpty(physical_sensations) ||
+        !isRichTextEmpty(emotion_type) ||
+        primary_emotion.trim() !== "" ||
+        (Array.isArray(clarifying_emotion) && clarifying_emotion.length > 0)
       );
     },
   );

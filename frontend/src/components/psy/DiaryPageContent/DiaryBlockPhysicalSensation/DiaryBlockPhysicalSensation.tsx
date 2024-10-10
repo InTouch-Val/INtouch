@@ -1,7 +1,7 @@
 //@ts-nocheck
 
 import React from "react";
-import "../DiaryPageContent.css";
+import "../DiaryPageContent.scss";
 import { parseEventDetailsText } from "../../../../utils/helperFunction/parseEventDetailsText";
 
 export default function DiaryBlockPhysicalSensation({ diary }) {
@@ -12,8 +12,12 @@ export default function DiaryBlockPhysicalSensation({ diary }) {
         Describe any physical sensations or changes you noticed in your body.
         For example, tension, butterflies, etc.
       </div>
-      <div className="diary__block-text-sensation">
-        {parseEventDetailsText(diary.physical_sensations)}
+      <div className="diary__block-client-reply">
+        <div
+          dangerouslySetInnerHTML={{
+            __html: parseEventDetailsText(diary.physical_sensations),
+          }}
+        />
       </div>
     </div>
   );

@@ -45,6 +45,11 @@
   color: #656565;
 }
 
+.diary__block-client-reply {
+  @extend .diary__block-text;
+  font-style: normal;
+}
+
 .diary__block-description {
   font-family: "Montserrat";
   font-size: 16px;

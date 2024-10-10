@@ -13,6 +13,7 @@ import { useInView } from "react-intersection-observer";
 import {
   AssignmentTab,
   TypeFilter,
+  TypeIssue,
   TypeLanguage,
 } from "../../../utils/constants";
 
@@ -32,6 +33,7 @@ export const WithTab = (WrappedComponent) => {
       page,
       status,
       assignments,
+      activeIssue
     } = useAppSelector((state) => state.assignment);
 
     const dispatch = useAppDispatch();
@@ -52,6 +54,7 @@ export const WithTab = (WrappedComponent) => {
         assignmentType:
           activeFilterType !== TypeFilter.All ? activeFilterType : undefined,
         ordering: activeOrder,
+        issue: activeIssue !== TypeIssue.all ? activeIssue : undefined,
         search: searchTerm,
       },
       {

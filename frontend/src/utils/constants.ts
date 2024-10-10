@@ -50,6 +50,22 @@ export enum AssignmentTab {
   myList = "my-list",
 }
 
+export enum TypeIssue {
+  all = 'all',
+  Anxiety = 'Anxiety',
+  Depression = 'Depression',
+  RelationshipIssues = 'Relationship lssues',
+  Stress = 'Stress',
+  SelfEsteem = "Self-Esteem",
+  TraumaAndPTSR = 'Trauma and PTSR',
+  Addiction = 'Addiction',
+  GriefAndLoss = 'Grief and Loss ',
+  LifeTransitions = 'Life Transitions',
+  IdentityAndPurpose = 'Identity and Purpose',
+  Other = 'Other'
+
+}
+
 export enum TypeOrder {
   All = "all",
   AddDate = "add_date",

@@ -4,13 +4,14 @@ import {
   changeLanguageActions,
   changeFilterTypeActions,
   changeSortActions,
+  changeIssueActions,
 } from "../../../store/slices";
-import { TypeFilter, TypeLanguage, TypeOrder } from "../../../utils/constants";
+import { TypeFilter, TypeIssue, TypeLanguage, TypeOrder } from "../../../utils/constants";
 
 export default function FilterDropDown() {
   const dispatch = useAppDispatch();
 
-  const { activeLanguage, activeFilterType, activeOrder } = useAppSelector(
+  const { activeLanguage, activeFilterType, activeOrder, activeIssue } = useAppSelector(
     (state) => state.assignment,
   );
 
@@ -77,6 +78,23 @@ export default function FilterDropDown() {
         <option value={TypeLanguage.Fr}>French</option>
         <option value={TypeLanguage.De}>German</option>
         <option value={TypeLanguage.It}>Italian</option>
+      </select>
+      <select
+        value={activeIssue}
+        onChange={(e) => dispatch(changeIssueActions(e.target.value))}
+      >
+        <option value={TypeIssue.all}>All Issue</option>
+        <option value={TypeIssue.Anxiety}>{TypeIssue.Anxiety}</option>
+        <option value={TypeIssue.Depression}>{TypeIssue.Depression}</option>
+        <option value={TypeIssue.RelationshipIssues}>{TypeIssue.RelationshipIssues}</option>
+        <option value={TypeIssue.Stress}>{TypeIssue.Stress}</option>
+        <option value={TypeIssue.SelfEsteem}>{TypeIssue.SelfEsteem}</option>
+        <option value={TypeIssue.TraumaAndPTSR}>{TypeIssue.TraumaAndPTSR}</option>
+        <option value={TypeIssue.Addiction}>{TypeIssue.Addiction}</option>
+        <option value={TypeIssue.GriefAndLoss}>{TypeIssue.GriefAndLoss}</option>
+        <option value={TypeIssue.LifeTransitions}>{TypeIssue.LifeTransitions}</option>
+        <option value={TypeIssue.IdentityAndPurpose}>{TypeIssue.IdentityAndPurpose}</option>
+        <option value={TypeIssue.Other}>{TypeIssue.Other}</option>
       </select>
       <select value={sortMethod} onChange={(e) => handleSortMethodChange(e)}>
         <option value={TypeOrder.AddDate}>Oldest First</option>
