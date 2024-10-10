@@ -1,7 +1,7 @@
 //@ts-nocheck
 
 import React from "react";
-import "../DiaryPageContent.css";
+import "../DiaryPageContent.scss";
 import { parseEventDetailsText } from "../../../../utils/helperFunction/parseEventDetailsText";
 
 export default function DiaryBlockAnalysis({ diary }) {
@@ -12,8 +12,12 @@ export default function DiaryBlockAnalysis({ diary }) {
         Reflect on your thoughts related to the situation. What were you
         thinking?
       </div>
-      <div className="diary__block-description">
-        {parseEventDetailsText(diary.thoughts_analysis)}
+      <div className="diary__block-client-reply">
+        <div
+          dangerouslySetInnerHTML={{
+            __html: parseEventDetailsText(diary.thoughts_analysis),
+          }}
+        />
       </div>
     </div>
   );

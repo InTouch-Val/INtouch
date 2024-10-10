@@ -28,6 +28,7 @@ import {
   maxLengthDescription,
   maxLengthTitle,
   TypeFilter,
+  TypeIssue,
   TypeLanguage,
 } from "../../utils/constants";
 import useConstructorOnboardingTour from "../../utils/hook/onboardingHooks/assignmentConstructorOnboardingTour";
@@ -41,6 +42,7 @@ function AddAssignment() {
   const [description, setDescription] = useState("");
   const [type, setType] = useState("");
   const [language, setLanguage] = useState("");
+  const [goal, setGoal] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   // const [tags, setTags] = useState('');
 
@@ -56,6 +58,7 @@ function AddAssignment() {
   const [isError, setIsError] = useState(false);
   const [isFirstEntry, setFirstEntry] = useState(true);
   const [isDisabled, setIsDisabled] = useState(true);
+  const [assignmentId, setAssignmentId] = useState(null);
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -65,7 +68,7 @@ function AddAssignment() {
     if (
       title.length !== 0 ||
       description.length !== 0 ||
-      searchTerm.length !== 0 ||
+      (searchTerm.length !== 0 && !selectedImage) ||
       type.length !== 0 ||
       language.length !== 0
     ) {
@@ -77,11 +80,10 @@ function AddAssignment() {
         title.length <= maxLengthTitle &&
         description.length !== 0 &&
         description.length <= maxLengthDescription &&
-        searchTerm.length !== 0 &&
         selectedImage &&
         type.length !== 0 &&
         language.length !== 0
-      ),
+      )
     );
   }, [title, description, searchTerm, type, language, selectedImage]);
 
@@ -98,7 +100,7 @@ function AddAssignment() {
       textarea.style.setProperty("height", "0");
       textarea.style.setProperty(
         "height",
-        constrain(textarea.scrollHeight, minHeight, maxHeight) + "px",
+        constrain(textarea.scrollHeight, minHeight, maxHeight) + "px"
       );
     });
   }
@@ -110,6 +112,7 @@ function AddAssignment() {
       setDescription(response.data.text);
       setType(response.data.assignment_type);
       setLanguage(response.data.language);
+      setGoal(response.data.issue)
       setSelectedImage({ urls: { full: response.data.image_url } });
 
       const fetchedBlocks = response.data.blocks.map((block) => {
@@ -221,7 +224,12 @@ function AddAssignment() {
     return errorMessages;
   }
 
-  const handleSubmit = async (e, isDraft = false, isSaveAsDraft = false) => {
+  const handleSubmit = async (
+    e,
+    isDraft = false,
+    isSaveWithNavigate = false,
+    isSaveAsDraft = false,
+  ) => {
     e.preventDefault();
 
     const blockInfo = blocks.map((block) => {
@@ -262,6 +270,7 @@ function AddAssignment() {
     const requestData = {
       blocks: blockInfo,
       title,
+      issue: goal,
       text: description,
       assignment_type: type,
       tags: "ffasd",
@@ -271,48 +280,41 @@ function AddAssignment() {
     };
 
     try {
-      console.log(blockInfo);
       let response;
       if (!isEditMode) {
-        // Если задание создается впервые, выполняем POST запрос
-        response = await API.post("assignments/", requestData);
-        if (!response || !response.data || !response.data.id) {
-          throw new Error("Failed to create assignment");
-        }
-        // Получаем ID созданного задания
-        const assignmentId = response.data.id;
-
-        if (isDraft || isSaveAsDraft) {
-          // Если задание должно быть сохранено как черновик, выполняем GET запрос
-          await API.patch(`assignments/${assignmentId}/draft/`);
+        if (assignmentId === null) {
+          // Если задание создается впервые, выполняем POST запрос
+          response = await API.post("assignments/", requestData);
+          if (!response || !response.data || !response.data.id) {
+            throw new Error("Failed to create assignment");
+          }
+          // Получаем ID созданного задания
+          setAssignmentId(response.data.id);
+        } else {
+          response = await API.patch(
+            `assignments/${assignmentId}/`,
+            requestData,
+          );
         }
       } else {
         // Если задание уже существует, выполняем PUT запрос
         response = await API.patch(`assignments/${id}/`, requestData);
-        if (isDraft || isSaveAsDraft) {
-          // Если задание должно быть перемещено в черновик, выполняем GET запрос
-          await API.patch(`assignments/${id}/draft/`);
-        }
       }
-
       if ([200, 201].includes(response.status)) {
         if (isDraft) {
           setSuccessMessageText("Saved succesfully");
           setSuccessMessage(true);
-        } else if (isSaveAsDraft) {
+        }
+        if (isSaveWithNavigate) {
+          if (isSaveAsDraft) {
+            setSuccessMessageText("Draft created succesfully");
+          } else {
+            setSuccessMessageText("Assignment created succesfully");
+          }
+          setSuccessMessage(true);
           setTimeout(() => {
             navigate("/assignments");
           }, 2000);
-
-          setSuccessMessageText("Draft created succesfully");
-          setSuccessMessage(true);
-        } else {
-          setTimeout(() => {
-            navigate("/assignments");
-          }, 2000);
-
-          setSuccessMessageText("Assignment created succesfully");
-          setSuccessMessage(true);
         }
       }
     } catch (error) {
@@ -352,7 +354,7 @@ function AddAssignment() {
     blockContainers.forEach((blockContainer, index) => {
       const blockErrorKey = `blocks #${index + 1}`;
       const blockErrorExists = Object.keys(errorMessages).some((key) =>
-        key.startsWith(blockErrorKey),
+        key.startsWith(blockErrorKey)
       );
       if (blockErrorExists) {
         blockContainer.classList.add("error");
@@ -432,7 +434,7 @@ function AddAssignment() {
     newMaxValue,
     newLeftPole,
     newRightPole,
-    newImage,
+    newImage
   ) => {
     setBlocks((prevBlocks) =>
       prevBlocks.map((block) =>
@@ -455,12 +457,10 @@ function AddAssignment() {
               rightPole: newRightPole ?? block.rightPole,
               image: newImage ?? block.image,
             }
-          : block,
-      ),
+          : block
+      )
     );
   };
-
-  console.log(blocks);
 
   return (
     <div className="assignments-page">
@@ -469,7 +469,7 @@ function AddAssignment() {
       )}
       <HeaderAssignment
         blocks={blocks}
-        handleSubmit={(e) => handleSubmit(e, true, false)}
+        handleSubmit={(e) => handleSubmit(e, true, false, true)}
         isDisabled={isDisabled}
         isFirstEntry={isFirstEntry}
         changeView={() => {
@@ -533,10 +533,7 @@ function AddAssignment() {
               setSearchTerm={setSearchTerm}
             />
           )}
-          <form
-            onSubmit={(e) => handleSubmit(e, false, false)}
-            className="form-creator"
-          >
+          <form className="form-creator">
             {blocks.map((block, index) => (
               <div key={index}>
                 {block.type === "headline" && (
@@ -595,6 +592,49 @@ function AddAssignment() {
                     <option value={TypeLanguage.Fr}>French</option>
                     <option value={TypeLanguage.De}>German</option>
                     <option value={TypeLanguage.It}>Italian</option>
+                  </select>
+                </div>
+                <div className="form-setting">
+                  <label>Assigment Goal</label>
+                  <select
+                    value={goal}
+                    onChange={(e) => setGoal(e.target.value)}
+                    required
+                    className={!goal && !isFirstEntry ? "error" : ""}
+                    defaultValue={""}
+                  >
+                    <option hidden disabled value={""}>
+                      Assigment Goal
+                    </option>
+                    <option value={TypeIssue.Anxiety}>
+                      {TypeIssue.Anxiety}
+                    </option>
+                    <option value={TypeIssue.Depression}>
+                      {TypeIssue.Depression}
+                    </option>
+                    <option value={TypeIssue.RelationshipIssues}>
+                      {TypeIssue.RelationshipIssues}
+                    </option>
+                    <option value={TypeIssue.Stress}>{TypeIssue.Stress}</option>
+                    <option value={TypeIssue.SelfEsteem}>
+                      {TypeIssue.SelfEsteem}
+                    </option>
+                    <option value={TypeIssue.TraumaAndPTSR}>
+                      {TypeIssue.TraumaAndPTSR}
+                    </option>
+                    <option value={TypeIssue.Addiction}>
+                      {TypeIssue.Addiction}
+                    </option>
+                    <option value={TypeIssue.GriefAndLoss}>
+                      {TypeIssue.GriefAndLoss}
+                    </option>
+                    <option value={TypeIssue.LifeTransitions}>
+                      {TypeIssue.LifeTransitions}
+                    </option>
+                    <option value={TypeIssue.IdentityAndPurpose}>
+                      {TypeIssue.IdentityAndPurpose}
+                    </option>
+                    <option value={TypeIssue.Other}>{TypeIssue.Other}</option>
                   </select>
                 </div>
                 {/* <div className="form-setting tags-setting">
@@ -696,7 +736,7 @@ function AddAssignment() {
                     fontSize="medium"
                     label="Save as Draft"
                     type="button"
-                    onClick={(e) => handleSubmit(e, false, true)}
+                    onClick={(e) => handleSubmit(e, true, true, true)}
                     disabled={isError || isDisabled || blocks.length === 0}
                   />
                 </div>
@@ -706,7 +746,7 @@ function AddAssignment() {
                     fontSize="small"
                     label="Complete & Publish"
                     type="button"
-                    onClick={(e) => handleSubmit(e, false, false)}
+                    onClick={(e) => handleSubmit(e, false, true, false)}
                     disabled={isError || isDisabled || blocks.length === 0}
                   />
                 </div>
