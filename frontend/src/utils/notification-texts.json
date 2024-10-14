@@ -8,6 +8,9 @@
     "psyHowToAddFavourite": " To add an assignment to Favorites, click on the bookmark icon on the task.",
     "psyMyTasks": "You will see the tasks you created here",
     "psyHowToAddAssignment": "To add your first assignment, click on <strong>Add assignment.</strong>",
-    "defaultNoData": "There is nothing to show yet."
+    "clientNoAssignments": "You do not have any assignments to do yet. You may ask your psychologist for one or start with Diary",
+    "clientNoDiaries": "To add your first entry, click on Add entry button above",
+    "defaultNoData": "There is nothing to show yet.",
+    "loadingNotice": "Loading..."
   }
 }

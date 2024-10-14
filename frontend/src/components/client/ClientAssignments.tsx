@@ -7,6 +7,8 @@ import { AuthProvider } from "../../service/authContext";
 import { useObserve } from "../../utils/hook/useObserve";
 import { useGetAssignmentsQuery } from "../../store/entities";
 import { StatusFromServer } from "../psy/ClientAssignmentTile";
+import EmptyContentNotice from "../../stories/empty-content-notice/EmptyContentNotice";
+import EmptyContentNoticeTexts from "../../utils/notification-texts.json";
 
 function ClientAssignments() {
   const { currentUser } = useAuth();
@@ -54,7 +56,9 @@ function ClientAssignments() {
     // Filter assignments based on status
     if (currentTab !== "all") {
       updatedAssignments = updatedAssignments.filter(
-        (assignment) => assignment.status === currentTab, // Assuming 'status' field in assignment
+        (assignment) => {
+          return assignment.status === currentTab;
+        }, // Assuming 'status' field in assignment
       );
     }
 
@@ -78,8 +82,8 @@ function ClientAssignments() {
           To do
         </button>
         <button
-          className={currentTab === "in_progress" ? "active" : ""}
-          onClick={() => setCurrentTab("in_progress")}
+          className={currentTab === "in progress" ? "active" : ""}
+          onClick={() => setCurrentTab("in progress")}
         >
           In Progress
         </button>
@@ -90,26 +94,26 @@ function ClientAssignments() {
           Done
         </button>
       </div>
+      {filteredAssignments.length === 0 && !isLoading && (
+        <EmptyContentNotice
+          label={EmptyContentNoticeTexts.noContent.clientNoAssignments}
+        />
+      )}
+      {isLoading && (
+        <EmptyContentNotice
+          label={EmptyContentNoticeTexts.noContent.loadingNotice}
+        />
+      )}
       <div className="assignment-grid">
-        {isLoading ? (
-          <div className="nothing-to-show">Loading...</div>
-        ) : filteredAssignments.length > 0 ? (
-          filteredAssignments.map((assignment) => {
-            return (
-              assignment.status == StatusFromServer.ToDo && (
-                <ClientAssignmentCard
-                  key={assignment.id}
-                  assignmentData={assignment}
-                  openAssignment={openAssignment}
-                />
-              )
-            );
-          })
-        ) : (
-          <div className="nothing-to-show">
-            You have no assignments. Contact your doctor
-          </div>
-        )}
+        {!isLoading &&
+          filteredAssignments.length > 0 &&
+          filteredAssignments.map((assignment) => (
+            <ClientAssignmentCard
+              key={assignment.id}
+              assignmentData={assignment}
+              openAssignment={openAssignment}
+            />
+          ))}
         <div className="assignment__observeElement" ref={observeElement} />
       </div>
     </div>

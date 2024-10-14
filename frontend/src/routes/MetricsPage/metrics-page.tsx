@@ -16,12 +16,12 @@ export enum Metrics {
 }
 
 interface FormattedDate {
-  dateTo: string | null;
+  dateTo: string | Date | null;
   dateFrom: string | null;
 }
 
-const AUTH_EMAIL = "v.y.maklakova@gmail.com";
 
+const AUTH_EMAIL = "v.y.maklakova@gmail.com";
 export const metricsPageLoader = async () => {
   try {
     const response = await API.get("get-user/");
@@ -38,11 +38,20 @@ export const metricsPageLoader = async () => {
 
 export function MetricsPage() {
   const [startDate, setStartDate] = React.useState(new Date());
+
   const [endDate, setEndDate] = React.useState(new Date());
   const [selectMetric, setSelectMetric] = React.useState(Metrics.default);
+  const [errorMessage, setErrorMessage] = React.useState("");
+  const formatDate = (date: Date) => {
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+
+    return `${day}-${month}-${year}`;
+  };
 
   const [formattedDate, setFormattedDate] = React.useState<FormattedDate>({
-    dateTo: null,
+    dateTo: formatDate(new Date()),
     dateFrom: null,
   });
 
@@ -52,6 +61,12 @@ export function MetricsPage() {
     const formattedDate = formatDate(date);
     setStartDate(date);
     setMetrics("");
+
+    if (endDate && date >= endDate) {
+      setErrorMessage("The end date cannot be earlier than the start date.");
+    } else {
+      setErrorMessage("");
+    }
 
     setFormattedDate((prev) => ({
       ...prev,
@@ -64,18 +79,15 @@ export function MetricsPage() {
     setEndDate(date);
     setMetrics("");
 
+    if (startDate && date < startDate) {
+      setErrorMessage("The end date cannot be earlier than the start date.");
+    } else {
+      setErrorMessage("");
+    }
     setFormattedDate((prev) => ({
       ...prev,
       dateTo: formattedDate,
     }));
-  };
-
-  const formatDate = (date: Date) => {
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-
-    return `${day}-${month}-${year}`;
   };
 
   function handleSelectMetric(typeMetrics: Metrics) {
@@ -122,12 +134,20 @@ export function MetricsPage() {
         <div className="metrics__wrapperInputs">
           <div className="metrics__beginInput">
             <div className="metrics__text">Период с </div>
-            <DatePicker selected={startDate} onChange={handleChangeDateBegin} />
+            <DatePicker
+              selected={startDate}
+              onChange={handleChangeDateBegin}
+              maxDate={new Date()}
+            />
           </div>
 
           <div className="metrics__endInput">
             <div className="metrics__text">по </div>
-            <DatePicker selected={endDate} onChange={handleChangeDateEnd} />
+            <DatePicker
+              selected={endDate}
+              onChange={handleChangeDateEnd}
+              maxDate={new Date()}
+            />
           </div>
         </div>
 
@@ -153,6 +173,16 @@ export function MetricsPage() {
             Аналитика клиентов{" "}
           </Button>
         </div>
+        {/* error-message */}
+        {errorMessage && (
+          <div className="metrics__notifications">{errorMessage}</div>
+        )}
+        {Array.isArray(metrics) && metrics.length == 0 && (
+          <div className="metrics__notifications">
+            Metrics from {formattedDate.dateFrom} to{" "}
+            {formattedDate.dateTo?.toString()} are empty
+          </div>
+        )}
 
         <div className="metrics__wrapperButtons">
           <Button
