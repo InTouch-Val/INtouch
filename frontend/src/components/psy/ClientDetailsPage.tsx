@@ -224,13 +224,15 @@ function ClientDetailsPage() {
           </div>
           <div>
             {activeTab === "profile" && (
-              <Button
-                buttonSize="large"
-                fontSize="medium"
-                label={isEditing ? "Save Changes" : "Edit Client"}
-                type="button"
-                onClick={handleEditToggle}
-              />
+              <div id="client-profile-onboarding">
+                <Button
+                  buttonSize="large"
+                  fontSize="medium"
+                  label={isEditing ? "Save Changes" : "Edit Client"}
+                  type="button"
+                  onClick={handleEditToggle}
+                />
+              </div>
             )}
             {activeTab === "profile" && isEditing && (
               <Button
@@ -265,7 +267,6 @@ function ClientDetailsPage() {
           <button
             className={activeTab === "profile" ? "active" : ""}
             onClick={switchToProfileTab}
-            id="client-profile-onboarding"
           >
             Profile
           </button>
