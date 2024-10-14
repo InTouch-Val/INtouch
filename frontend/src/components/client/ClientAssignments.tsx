@@ -31,10 +31,10 @@ function ClientAssignments() {
     const fetchAssignments = async () => {
       try {
         let response = await API.get(
-          `/assignments-client/?limit=${limit}&offset=0`
+          `/assignments-client/?limit=${limit}&offset=0`,
         );
         response = response.data.results.filter(
-          (assignment) => assignment.user === currentUser.id
+          (assignment) => assignment.user === currentUser.id,
         );
         // response = response.data.results;
         setAssignments(response);
@@ -58,7 +58,7 @@ function ClientAssignments() {
       updatedAssignments = updatedAssignments.filter(
         (assignment) => {
           return assignment.status === currentTab;
-        } // Assuming 'status' field in assignment
+        }, // Assuming 'status' field in assignment
       );
     }
 
@@ -107,15 +107,13 @@ function ClientAssignments() {
       <div className="assignment-grid">
         {!isLoading &&
           filteredAssignments.length > 0 &&
-          filteredAssignments
-            .filter((assignment) => assignment.status === StatusFromServer.ToDo)
-            .map((assignment) => (
-              <ClientAssignmentCard
-                key={assignment.id}
-                assignmentData={assignment}
-                openAssignment={openAssignment}
-              />
-            ))}
+          filteredAssignments.map((assignment) => (
+            <ClientAssignmentCard
+              key={assignment.id}
+              assignmentData={assignment}
+              openAssignment={openAssignment}
+            />
+          ))}
         <div className="assignment__observeElement" ref={observeElement} />
       </div>
     </div>
