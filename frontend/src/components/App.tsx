@@ -9,7 +9,6 @@ import {
   faUser,
   faList,
   faBookMedical,
-  faNoteSticky,
   faXmark,
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
@@ -95,11 +94,13 @@ function App() {
           )}
         </span>
         <div className="user-profile">
-          <img
-            className="user-avatar"
-            src={currentUser?.photo}
-            alt="Something"
-          />
+          {isDoctor && (
+            <img
+              className="user-avatar"
+              src={currentUser?.photo}
+              alt="User's photo"
+            />
+          )}
           <h3>
             {currentUser
               ? `${currentUser.first_name} ${currentUser.last_name}`
@@ -146,16 +147,6 @@ function App() {
                     className={({ isActive }) => (isActive ? "active" : "")}
                   >
                     <FontAwesomeIcon icon={faBookMedical} /> Diary
-                  </NavLink>
-                </li>
-                <li onClick={() => setSideBarOpened(false)}>
-                  <NavLink
-                    to="/my-notes"
-                    className={({ isActive }) =>
-                      "disabled" + (isActive ? "active" : "")
-                    }
-                  >
-                    <FontAwesomeIcon icon={faNoteSticky} /> Notes
                   </NavLink>
                 </li>
               </ul>
