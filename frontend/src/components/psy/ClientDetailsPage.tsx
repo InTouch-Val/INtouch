@@ -195,7 +195,7 @@ function ClientDetailsPage() {
         setErrorText("");
       }
   
-      const { payload }: any = await dispatch(
+      const { payload } = await dispatch(
         setClientByIdAction({
           assignmentId: assignmentId,
           selectedClients: [id!],
