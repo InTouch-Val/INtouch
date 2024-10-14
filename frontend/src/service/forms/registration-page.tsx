@@ -41,7 +41,7 @@ function RegistrationForm() {
 
   const handleCredentialsBlur = (
     field: "email" | "password" | "name" | "second",
-    value: string,
+    value: string
   ): void => {
     let newError = { ...validationError };
 
@@ -128,7 +128,7 @@ function RegistrationForm() {
           !validationError.name &&
           !validationError.password &&
           !validationError.second &&
-          !validationError.terms,
+          !validationError.terms
       );
     }
   }, [validationError]);
@@ -271,7 +271,7 @@ function RegistrationForm() {
         });
       } else if (error.response?.status >= 500) {
         setError(
-          "Some error occurs from the server, we’re fixing it. Sorry for inconvenience ",
+          "Some error occurs from the server, we’re fixing it. Sorry for inconvenience "
         );
       } else {
         setError("Account isn’t activated");
@@ -386,11 +386,19 @@ function RegistrationForm() {
             />
             <p className={`${isShowTermsError ? "error-text" : "terms"}`}>
               I agree to the{" "}
-              <a href="https://intouch.care/terms-conditions" target="_blank">
+              <a
+                href="https://intouch.care/terms-conditions"
+                target="_blank"
+                className={`${isShowTermsError ? "error-text-label-register" : ""}`}
+              >
                 Terms and Conditions
               </a>{" "}
               and{" "}
-              <a href="https://intouch.care/privacypolicy" target="_blank">
+              <a
+                href="https://intouch.care/privacypolicy"
+                target="_blank"
+                className={`${isShowTermsError ? "error-text-label-register" : ""}`}
+              >
                 Privacy Policy
               </a>
             </p>

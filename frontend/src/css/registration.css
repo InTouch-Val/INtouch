@@ -121,6 +121,10 @@ input[type="checkbox"] {
   padding: 0 3px 0 3px;
 }
 
+.error-text-label-register {
+  color: red !important;
+}
+
 .registration-form label a {
   font-size: 16px;
   font-weight: 400;
