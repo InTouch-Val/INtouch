@@ -33,7 +33,7 @@ export const WithTab = (WrappedComponent) => {
       page,
       status,
       assignments,
-      activeIssue
+      activeIssue,
     } = useAppSelector((state) => state.assignment);
 
     const dispatch = useAppDispatch();
