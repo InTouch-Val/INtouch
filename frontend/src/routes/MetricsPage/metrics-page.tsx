@@ -97,7 +97,7 @@ export function MetricsPage() {
 
   async function getMetrics() {
     const response = await API.get(
-      `project-metrics/${selectMetric}/?date_from=${formattedDate.dateFrom}&date_to=${formattedDate.dateTo}`
+      `project-metrics/${selectMetric}/?date_from=${formattedDate.dateFrom}&date_to=${formattedDate.dateTo}`,
     );
 
     setMetrics(response.data);
@@ -107,7 +107,7 @@ export function MetricsPage() {
     try {
       const response = await API.get(
         `project-metrics/${selectMetric}/download?date_from=${formattedDate.dateFrom}&date_to=${formattedDate.dateTo}`,
-        { responseType: "blob" }
+        { responseType: "blob" },
       );
 
       const url = window.URL.createObjectURL(new Blob([response.data]));

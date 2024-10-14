@@ -131,15 +131,16 @@ export default function DiaryFooterClient({
           </Button>
         </div>
 
-        {(!isValid || !hasFormChanged()) && (
-          <span
-            className={`diary__message-valid ${!isHover && "diary__message-valid-hidden"}`}
-          >
-            {isMobileWidth
-              ? "Fill in at least one question to save"
-              : "Please fill in at least one question to save your diary entry"}
-          </span>
-        )}
+        {!isValid ||
+          (!hasFormChanged() && (
+            <span
+              className={`diary__message-valid ${!isHover && "diary__message-valid-hidden"}`}
+            >
+              {isMobileWidth
+                ? "Fill in at least one question to save"
+                : "Please fill in at least one question to save your diary entry"}
+            </span>
+          ))}
       </div>
     </div>
   );
