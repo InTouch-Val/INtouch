@@ -5,6 +5,8 @@ import "./style.css";
 import Button from "../../components/psy/button/ButtonHeadline";
 import { API } from "../../service/axios";
 import MetricsTable from "./MetricsTable/MetricsTable";
+import { useAuth } from "../../service/authContext";
+import { redirect, useNavigate } from "react-router-dom";
 
 export enum Metrics {
   psy = "therapists",
@@ -18,8 +20,25 @@ interface FormattedDate {
   dateFrom: string | null;
 }
 
-export default function MetricsPage() {
-  const [startDate, setStartDate] = React.useState(null);
+
+const AUTH_EMAIL = "v.y.maklakova@gmail.com";
+export const metricsPageLoader = async () => {
+  try {
+    const response = await API.get("get-user/");
+    let currentUser = response.data[0];
+
+    if (currentUser?.email !== AUTH_EMAIL) {
+      return redirect("/");
+    }
+    return null;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export function MetricsPage() {
+  const [startDate, setStartDate] = React.useState(new Date());
+
   const [endDate, setEndDate] = React.useState(new Date());
   const [selectMetric, setSelectMetric] = React.useState(Metrics.default);
   const [errorMessage, setErrorMessage] = React.useState("");
@@ -78,7 +97,7 @@ export default function MetricsPage() {
 
   async function getMetrics() {
     const response = await API.get(
-      `project-metrics/${selectMetric}/?date_from=${formattedDate.dateFrom}&date_to=${formattedDate.dateTo}`,
+      `project-metrics/${selectMetric}/?date_from=${formattedDate.dateFrom}&date_to=${formattedDate.dateTo}`
     );
 
     setMetrics(response.data);
@@ -88,7 +107,7 @@ export default function MetricsPage() {
     try {
       const response = await API.get(
         `project-metrics/${selectMetric}/download?date_from=${formattedDate.dateFrom}&date_to=${formattedDate.dateTo}`,
-        { responseType: "blob" },
+        { responseType: "blob" }
       );
 
       const url = window.URL.createObjectURL(new Blob([response.data]));
