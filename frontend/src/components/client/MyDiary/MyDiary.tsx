@@ -8,6 +8,8 @@ import CardDiaryClient from "./CardDiary/CardDiary";
 import { useNavigate } from "react-router-dom";
 import { useObserve } from "../../../utils/hook/useObserve";
 import { useAuth } from "../../../service/authContext";
+import EmptyContentNoticeTexts from "../../../utils/notification-texts.json";
+import EmptyContentNotice from "../../../stories/empty-content-notice/EmptyContentNotice";
 
 export default function MyDiary() {
   const [diarys, setDiarys] = React.useState([]);
@@ -51,6 +53,8 @@ export default function MyDiary() {
     try {
       const response = await API.delete(`/diary-notes/${idCardDelete}/`);
       closeModal();
+
+      setDiarys((prevDiarys) => prevDiarys.filter((diary) => diary.id !== idCardDelete));
       return response.data;
     } catch (error) {
       console.log(error);
@@ -83,6 +87,11 @@ export default function MyDiary() {
         </div>
 
         <div className="diary__section">
+          {diarys.length === 0 && (
+            <EmptyContentNotice
+              label={EmptyContentNoticeTexts.noContent.clientNoDiaries}
+            />
+          )}
           <div className="diary__list">
             {isFetching &&
               Array.from(diarys)
