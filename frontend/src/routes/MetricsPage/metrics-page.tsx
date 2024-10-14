@@ -20,8 +20,8 @@ interface FormattedDate {
   dateFrom: string | null;
 }
 
-
 const AUTH_EMAIL = "v.y.maklakova@gmail.com";
+
 export const metricsPageLoader = async () => {
   try {
     const response = await API.get("get-user/");
