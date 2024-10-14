@@ -2,6 +2,7 @@
 @import "../../scss-styles/variables.scss";
 @import url("../../vendor/fonts/fonts.css");
 
+
 .card__inputLabel {
   display: flex;
   align-items: center;
@@ -19,7 +20,7 @@
   width: 32px;
   height: 17px;
   padding: 0;
-  border: 1px solid $additional-font-color;
+  border: 1px solid  $additional-font-color;
   border-radius: 100px;
   margin: 0;
   -webkit-appearance: none;

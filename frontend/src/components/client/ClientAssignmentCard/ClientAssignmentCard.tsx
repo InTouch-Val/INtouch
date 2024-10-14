@@ -27,7 +27,7 @@ function ClientAssignmentCard({ assignmentData, openAssignment }) {
   async function handleShareWithTherapist() {
     try {
       const res = await API.patch(
-        `assignments-client/${assignmentData?.id}/visible/`,
+        `assignments-client/${assignmentData?.id}/visible/`
       );
       if (res.status >= 200 && res.status < 300) {
         console.log(res.data);
