@@ -18,6 +18,8 @@ import AssignmentsPageRefactor from "../../routes/AssignmentsPageRefactor/Assign
 import useClientProfileOnboardingTour from "../../utils/hook/onboardingHooks/clientProfileOnboardingTour";
 import EmptyContentNotice from "../../stories/empty-content-notice/EmptyContentNotice";
 import EmptyContentNoticeTexts from "../../utils/notification-texts.json";
+import { useAppDispatch } from "../../store/store";
+import { setClientByIdAction } from "../../store/actions/assignment/assignmentActions";
 
 function ClientDetailsPage() {
   useClientProfileOnboardingTour();
@@ -25,8 +27,9 @@ function ClientDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { currentUser, updateUserData } = useAuth();
+  const dispatch = useAppDispatch();
   const client = currentUser?.doctor.clients.find(
-    (client) => client.id === Number(id),
+    (client) => client.id === Number(id)
   );
   const { setCurrentCard, card } = useAuth();
   const [activeTab, setActiveTab] = useState("profile");
@@ -76,10 +79,10 @@ function ClientDetailsPage() {
       if (activeTab === "assignments") {
         try {
           const response = await API.get(
-            `assignments-client/?limit=${limit}&offset=0`,
+            `assignments-client/?limit=${limit}&offset=0`
           );
           const data = response.data.results.filter(
-            (assignment) => assignment.user === Number(id),
+            (assignment) => assignment.user === Number(id)
           );
           setClientAssignments(data);
           console.log(response);
@@ -160,8 +163,8 @@ function ClientDetailsPage() {
   const handleDeleteAssignment = (deletedAssignmentId) => {
     setClientAssignments((currentAssignments) =>
       currentAssignments.filter(
-        (assignment) => assignment.id !== deletedAssignmentId,
-      ),
+        (assignment) => assignment.id !== deletedAssignmentId
+      )
     );
   };
 
@@ -191,12 +194,15 @@ function ClientDetailsPage() {
         setIfError(false);
         setErrorText("");
       }
-
-      const res = await API.get(
-        `assignments/set-client/${assignmentId}/${id}/`,
+  
+      const { payload } = await dispatch(
+        setClientByIdAction({
+          assignmentId: assignmentId,
+          selectedClients: [id!],
+        })
       );
 
-      if (res.status >= 200 && res.status <= 300) {
+      if (payload.status >= 200 && payload.status <= 300) {
         setIfError(false);
         setErrorText("");
         setIsShareModalOpen(false);
