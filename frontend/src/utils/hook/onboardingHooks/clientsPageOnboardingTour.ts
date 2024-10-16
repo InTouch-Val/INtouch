@@ -2,6 +2,8 @@ import useOnboardingTour from "./useOnboardingTour";
 import getClientsPageSteps from "../../../service/onboarding/steps/clientsPageSteps/clientsPageSteps";
 
 const useClientsPageOnboardingTour = (hasClients: boolean) => {
+
+  
   useOnboardingTour(
     "clientsOnboardingTourShown",
     getClientsPageSteps,
