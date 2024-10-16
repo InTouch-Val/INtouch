@@ -9,10 +9,10 @@ const useOnboardingTour = (
   condition: boolean = true,
 ) => {
   useEffect(() => {
-    if (!condition) {
+    if (condition) {
       const tourFlag = localStorage.getItem(tourKey);
 
-      if (tourFlag) {
+      if (!tourFlag) {
         const tour = new Shepherd.Tour({
           useModalOverlay: true,
           defaultStepOptions: {
