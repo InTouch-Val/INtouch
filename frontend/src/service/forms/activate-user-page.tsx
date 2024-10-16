@@ -17,12 +17,8 @@ function ActivateUserPage() {
         if (response.data) {
           if (window.location.pathname.includes("/activate-client/")) {
             localStorage.setItem("refreshToken", response.data.refresh_token);
-            navigate(`/client-registration`, {
-              state: { accessToken: response.data.access_token },
-            });
-          } else {
-            login(response.data.access_token, response.data.refresh_token);
-            navigate("/");
+            localStorage.setItem("accessToken", response.data.access_token);
+            navigate(`/client-registration`);
           }
         }
       })
@@ -30,7 +26,7 @@ function ActivateUserPage() {
         console.error("Error activating your account", error);
         setActivationStatus("failed");
       });
-  }, [userId, userToken, navigate, login]);
+  }, []);
 
   return (
     <div>
