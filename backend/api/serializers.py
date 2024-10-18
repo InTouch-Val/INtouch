@@ -9,14 +9,17 @@ from django.template.loader import render_to_string
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from api.tasks import remove_unverified_user
+# from api.tasks import remove_unverified_user
 from api.utils import current_site, send_by_mail
 from api.constants import (
-    TIME_DELETE_NON_ACTIVE_USER,
+    # TIME_DELETE_NON_ACTIVE_USER,
     USER_TYPES,
     DIARY_FIELDS_TO_CHECK,
     METRICS_DATE_FORMAT,
 )
+
+# TO-DO LIST:
+# Fix deletion of the unverified users
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -160,9 +163,9 @@ class UserSerializer(serializers.ModelSerializer):
             {"url": activation_url, "domen": current_site, "name": user.first_name},
         )
         send_by_mail(html_message, user.email)
-        remove_unverified_user.send_with_options(
-            args=(user.pk,), delay=TIME_DELETE_NON_ACTIVE_USER
-        )
+        # remove_unverified_user.send_with_options(
+        #     args=(user.pk,), delay=TIME_DELETE_NON_ACTIVE_USER
+        # )
         return user
 
 
@@ -303,9 +306,9 @@ class AddClientSerializer(serializers.ModelSerializer):
             },
         )
         send_by_mail(html_message, user.email)
-        remove_unverified_user.send_with_options(
-            args=(user.pk,), delay=TIME_DELETE_NON_ACTIVE_USER
-        )
+        # remove_unverified_user.send_with_options(
+        #     args=(user.pk,), delay=TIME_DELETE_NON_ACTIVE_USER
+        # )
         return user
 
 
