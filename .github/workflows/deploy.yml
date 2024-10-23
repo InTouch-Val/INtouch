@@ -71,7 +71,7 @@ jobs:
             docker compose up -d --build
 
       - name: Check if all containers are running
-        run: cd /opt/app/backend && healthcheck.sh api 120
+        run: cd /opt/app/frontend && healthcheck.sh api 120
 
   deploy-prod:
     if: startsWith(github.ref, 'refs/heads/release-')
@@ -106,7 +106,7 @@ jobs:
             docker compose up -d --build
 
       - name: Check if all containers are running
-        run: cd /opt/app/backend && healthcheck.sh api 120
+        run: cd /opt/app/frontend && healthcheck.sh api 120
 
   deploy-test-frontend:
     if: github.ref == 'refs/heads/develop'
