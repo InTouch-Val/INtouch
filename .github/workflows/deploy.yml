@@ -70,7 +70,7 @@ jobs:
             docker image rm ivansitnikov1/repo:test
             docker compose up -d --build
             chmod +x ./healthcheck.sh
-            ./healthcheck.sh api 120
+            ./healthcheck.sh app 120
 
       - name: Check if all containers are running
         run: cd /opt/app/frontend && healthcheck.sh api 120
@@ -107,7 +107,7 @@ jobs:
             docker image rm ivansitnikov1/repo:release
             docker compose up -d --build
             chmod +x ./healthcheck.sh
-            ./healthcheck.sh api 120
+            ./healthcheck.sh app 120
 
   deploy-test-frontend:
     if: github.ref == 'refs/heads/develop'

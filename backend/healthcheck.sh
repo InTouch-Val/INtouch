@@ -13,7 +13,7 @@ echo "Timeout: $timeout sec";
 
 try=0;
 is_healthy="false";
-while [ $is_healthy != "true" ];
+while [ -n $is_healthy ] && [ $is_healthy != "true" ];
 do
   try=$(($try + 1));
   printf "■";
