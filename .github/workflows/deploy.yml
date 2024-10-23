@@ -51,7 +51,7 @@ jobs:
       - name: Copy to test server
         uses: burnett01/rsync-deployments@6.0.0
         with:
-          switches: -avzr --delete
+          switches: -avzrp --delete
           remote_path: /opt/app/
           path: |
             ./backend/docker-compose.yml
