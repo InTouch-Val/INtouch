@@ -36,6 +36,8 @@ services:
       - "/opt/intouch_static:/app/static/"
     env_file:
       - .env
+    environment:
+      - CSRF_TRUSTED_ORIGINS=${{ secrets.CSRF_TRUSTED_ORIGINS }}
     depends_on:
       app-postgres:
           condition: service_healthy
