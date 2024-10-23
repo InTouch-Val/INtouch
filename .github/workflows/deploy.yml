@@ -75,15 +75,33 @@ jobs:
 
       - name: Check if all containers are running
         run: |
+          # Получаем список всех запущенных контейнеров
           CONTAINERS=$(docker ps -q)
-          RUNNING_CONTAINERS=$(docker inspect -f '{{.State.Running}}' $CONTAINERS)
 
-          for state in $RUNNING_CONTAINERS; do
-            if [ "$state" != "true" ]; then
-              echo "One or more containers are not running. Failing the job."
+          # Проверяем, есть ли контейнеры
+          if [ -z "$CONTAINERS" ]; then
+            echo "No containers are running. Failing the job."
+            exit 1
+          fi
+
+          # Проверяем, что количество контейнеров равно 3
+          CONTAINER_COUNT=$(echo "$CONTAINERS" | wc -l)
+
+          if [ "$CONTAINER_COUNT" -ne 3 ]; then
+            echo "Expected 3 containers, but found $CONTAINER_COUNT. Failing the job."
+            exit 1
+          fi
+
+          # Проходим по каждому контейнеру и проверяем его состояние
+          for container in $CONTAINERS; do
+            RUNNING=$(docker inspect -f '{{.State.Running}}' $container)
+            if [ "$RUNNING" != "true" ]; then
+              echo "Container $container is not running. Failing the job."
               exit 1
             fi
           done
+
+          echo "All containers are running successfully."
         shell: bash
 
   deploy-prod:
@@ -123,15 +141,33 @@ jobs:
 
       - name: Check if all containers are running
         run: |
+          # Получаем список всех запущенных контейнеров
           CONTAINERS=$(docker ps -q)
-          RUNNING_CONTAINERS=$(docker inspect -f '{{.State.Running}}' $CONTAINERS)
 
-          for state in $RUNNING_CONTAINERS; do
-            if [ "$state" != "true" ]; then
-              echo "One or more containers are not running. Failing the job."
+          # Проверяем, есть ли контейнеры
+          if [ -z "$CONTAINERS" ]; then
+            echo "No containers are running. Failing the job."
+            exit 1
+          fi
+
+          # Проверяем, что количество контейнеров равно 3
+          CONTAINER_COUNT=$(echo "$CONTAINERS" | wc -l)
+
+          if [ "$CONTAINER_COUNT" -ne 3 ]; then
+            echo "Expected 3 containers, but found $CONTAINER_COUNT. Failing the job."
+            exit 1
+          fi
+
+          # Проходим по каждому контейнеру и проверяем его состояние
+          for container in $CONTAINERS; do
+            RUNNING=$(docker inspect -f '{{.State.Running}}' $container)
+            if [ "$RUNNING" != "true" ]; then
+              echo "Container $container is not running. Failing the job."
               exit 1
             fi
           done
+
+          echo "All containers are running successfully."
         shell: bash
 
   deploy-test-frontend:
