@@ -75,7 +75,7 @@ jobs:
         shell: bash
 
       - name: Wait for containers to start
-        run: sleep 20
+        run: sleep 100
 
       - name: Check if all containers are running
         run: |
@@ -141,7 +141,7 @@ jobs:
             docker compose up -d --build
 
       - name: Wait for containers to start
-        run: sleep 20
+        run: sleep 100
 
       - name: List all containers
         run: docker ps -a
