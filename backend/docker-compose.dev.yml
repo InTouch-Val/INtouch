@@ -25,6 +25,7 @@ services:
       - "6379:6379"
 
   app:
+    container_name: app
     build:
       context: ../backend
       dockerfile: Dockerfile

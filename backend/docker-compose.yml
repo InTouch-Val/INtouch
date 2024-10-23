@@ -26,6 +26,7 @@ services:
       - "6379:6379"
 
   app:
+    container_name: app
     image: ${BACKEND_IMAGE}
     ports:
       - "8000:8000"
