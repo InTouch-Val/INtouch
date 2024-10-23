@@ -178,9 +178,6 @@ jobs:
           echo "All containers are running successfully."
         shell: bash
 
-          echo "All containers are running successfully."
-        shell: bash
-
   deploy-test-frontend:
     if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
