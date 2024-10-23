@@ -53,7 +53,9 @@ jobs:
         with:
           switches: -avzr --delete
           remote_path: /opt/app/
-          path: ./backend/docker-compose.yml
+          path: |
+            ./backend/docker-compose.yml
+            ./backend/healthcheck.sh
           remote_host: ${{ secrets.REMOTE_HOST }}
           remote_user: ${{ secrets.REMOTE_USER }}
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -69,6 +71,8 @@ jobs:
             docker compose down
             docker image rm ivansitnikov1/repo:test
             docker compose up -d --build
+            chmod +x ./healthcheck.sh
+            ./healthcheck.sh api 120
 
       - name: Check if all containers are running
         run: cd /opt/app/frontend && healthcheck.sh api 120
@@ -88,7 +92,9 @@ jobs:
         with:
           switches: -avzr --delete
           remote_path: /opt/app/
-          path: ./backend/docker-compose.yml
+          path: |
+            ./backend/docker-compose.yml
+            ./backend/healthcheck.sh
           remote_host: ${{ secrets.REMOTE_HOST }}
           remote_user: ${{ secrets.REMOTE_USER }}
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -104,9 +110,8 @@ jobs:
             docker compose down
             docker image rm ivansitnikov1/repo:release
             docker compose up -d --build
-
-      - name: Check if all containers are running
-        run: cd /opt/app/frontend && healthcheck.sh api 120
+            chmod +x ./healthcheck.sh
+            ./healthcheck.sh api 120
 
   deploy-test-frontend:
     if: github.ref == 'refs/heads/develop'
