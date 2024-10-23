@@ -42,7 +42,7 @@ function ClientRegistrationPage() {
       .catch((error) => {
         console.error("Error fetching user data", error);
       });
-  }, [accessToken]);
+  }, []);
 
   const handleTogglePassword = (e) => {
     e.preventDefault();
