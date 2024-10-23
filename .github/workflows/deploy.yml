@@ -70,6 +70,10 @@ jobs:
             docker image rm ivansitnikov1/repo:test
             docker compose up -d --build
 
+      - name: List all containers
+        run: docker ps -a
+        shell: bash
+
       - name: Wait for containers to start
         run: sleep 20
 
@@ -85,7 +89,7 @@ jobs:
           fi
 
           # Проверяем, что количество контейнеров равно 3
-          CONTAINER_COUNT=$(echo "$CONTAINERS" | wc -l)
+          CONTAINER_COUNT=$(echo "$CONTAINERS" | wc -l | tr -d '[:space:]')
 
           if [ "$CONTAINER_COUNT" -ne 3 ]; then
             echo "Expected 3 containers, but found $CONTAINER_COUNT. Failing the job."
@@ -94,7 +98,7 @@ jobs:
 
           # Проходим по каждому контейнеру и проверяем его состояние
           for container in $CONTAINERS; do
-            RUNNING=$(docker inspect -f '{{.State.Running}}' $container)
+            RUNNING=$(docker inspect -f '{{.State.Running}}' "$container")
             if [ "$RUNNING" != "true" ]; then
               echo "Container $container is not running. Failing the job."
               exit 1
@@ -139,6 +143,10 @@ jobs:
       - name: Wait for containers to start
         run: sleep 20
 
+      - name: List all containers
+        run: docker ps -a
+        shell: bash
+
       - name: Check if all containers are running
         run: |
           # Получаем список всех запущенных контейнеров
@@ -151,7 +159,7 @@ jobs:
           fi
 
           # Проверяем, что количество контейнеров равно 3
-          CONTAINER_COUNT=$(echo "$CONTAINERS" | wc -l)
+          CONTAINER_COUNT=$(echo "$CONTAINERS" | wc -l | tr -d '[:space:]')
 
           if [ "$CONTAINER_COUNT" -ne 3 ]; then
             echo "Expected 3 containers, but found $CONTAINER_COUNT. Failing the job."
@@ -160,12 +168,15 @@ jobs:
 
           # Проходим по каждому контейнеру и проверяем его состояние
           for container in $CONTAINERS; do
-            RUNNING=$(docker inspect -f '{{.State.Running}}' $container)
+            RUNNING=$(docker inspect -f '{{.State.Running}}' "$container")
             if [ "$RUNNING" != "true" ]; then
               echo "Container $container is not running. Failing the job."
               exit 1
             fi
           done
+
+          echo "All containers are running successfully."
+        shell: bash
 
           echo "All containers are running successfully."
         shell: bash
