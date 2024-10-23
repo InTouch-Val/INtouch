@@ -89,9 +89,9 @@ export default function ModalAssignments({
     const assignmentId = selectedAssignmentId;
 
     try {
-      deleteAssignmentById(assignmentId);
+      await deleteAssignmentById(assignmentId).unwrap();
       setSelectedAssignmentId("");
-      dispatch(deleteAssignments({ id: assignmentId }));
+      await dispatch(deleteAssignments({ id: assignmentId }));
       handleModalClose();
     } catch (error) {
       console.error("Error delete assignment:", error);

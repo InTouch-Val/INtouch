@@ -213,7 +213,10 @@ export const assignmentApi = createApi({
       //     patchResult.undo(); 
       //   }
       // },
-      invalidatesTags: () => [{ type: "Assignments", id: "PARTIAL-LIST" }],
+      invalidatesTags: (result, error, uuid) => [
+        { type: "Assignments", id: uuid }, 
+        { type: "Assignments", id: "PARTIAL-LIST" },
+      ],
     }),
   }),
 });
