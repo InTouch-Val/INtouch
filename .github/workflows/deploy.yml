@@ -39,7 +39,7 @@ jobs:
         run: docker logout
 
   deploy-test:
-    if: github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/feat/update_github_actions'
     needs: build
     runs-on: ubuntu-latest
     environment: stage
@@ -75,7 +75,11 @@ jobs:
         shell: bash
 
       - name: Wait for containers to start
-        run: sleep 20
+        run: sleep 100
+
+      - name: List all containers 2
+        run: docker ps -a
+        shell: bash
 
       - name: Check if all containers are running
         run: |
@@ -141,7 +145,7 @@ jobs:
             docker compose up -d --build
 
       - name: Wait for containers to start
-        run: sleep 20
+        run: sleep 100
 
       - name: List all containers
         run: docker ps -a
