@@ -71,7 +71,7 @@ jobs:
             docker compose up -d --build
 
       - name: Wait for containers to start
-        run: sleep 10
+        run: sleep 20
 
       - name: Check if all containers are running
         run: |
@@ -137,7 +137,7 @@ jobs:
             docker compose up -d --build
 
       - name: Wait for containers to start
-        run: sleep 10
+        run: sleep 20
 
       - name: Check if all containers are running
         run: |
