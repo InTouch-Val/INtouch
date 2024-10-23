@@ -39,7 +39,7 @@ jobs:
         run: docker logout
 
   deploy-test:
-    if: github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/feat/update_github_actions'
     needs: build
     runs-on: ubuntu-latest
     environment: stage
