@@ -51,11 +51,9 @@ jobs:
       - name: Copy to test server
         uses: burnett01/rsync-deployments@6.0.0
         with:
-          switches: -avzrp --delete
+          switches: -avzr --delete
           remote_path: /opt/app/
-          path: |
-            ./backend/docker-compose.yml
-            ./backend/healthcheck.sh
+          path: ./backend/docker-compose.yml
           remote_host: ${{ secrets.REMOTE_HOST }}
           remote_user: ${{ secrets.REMOTE_USER }}
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -92,9 +90,7 @@ jobs:
         with:
           switches: -avzr --delete
           remote_path: /opt/app/
-          path: |
-            ./backend/docker-compose.yml
-            ./backend/healthcheck.sh
+          path: ./backend/docker-compose.yml
           remote_host: ${{ secrets.REMOTE_HOST }}
           remote_user: ${{ secrets.REMOTE_USER }}
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
