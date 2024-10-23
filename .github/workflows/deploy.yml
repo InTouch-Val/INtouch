@@ -77,6 +77,10 @@ jobs:
       - name: Wait for containers to start
         run: sleep 100
 
+      - name: List all containers 2
+        run: docker ps -a
+        shell: bash
+
       - name: Check if all containers are running
         run: |
           # Получаем список всех запущенных контейнеров
