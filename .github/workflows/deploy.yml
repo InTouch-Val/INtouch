@@ -70,6 +70,22 @@ jobs:
             docker image rm ivansitnikov1/repo:test
             docker compose up -d --build
 
+      - name: Wait for containers to start
+        run: sleep 10
+
+      - name: Check if all containers are running
+        run: |
+          CONTAINERS=$(docker ps -q)
+          RUNNING_CONTAINERS=$(docker inspect -f '{{.State.Running}}' $CONTAINERS)
+
+          for state in $RUNNING_CONTAINERS; do
+            if [ "$state" != "true" ]; then
+              echo "One or more containers are not running. Failing the job."
+              exit 1
+            fi
+          done
+        shell: bash
+
   deploy-prod:
     if: startsWith(github.ref, 'refs/heads/release-')
     needs: build
@@ -101,6 +117,22 @@ jobs:
             docker compose down
             docker image rm ivansitnikov1/repo:release
             docker compose up -d --build
+
+      - name: Wait for containers to start
+        run: sleep 10
+
+      - name: Check if all containers are running
+        run: |
+          CONTAINERS=$(docker ps -q)
+          RUNNING_CONTAINERS=$(docker inspect -f '{{.State.Running}}' $CONTAINERS)
+
+          for state in $RUNNING_CONTAINERS; do
+            if [ "$state" != "true" ]; then
+              echo "One or more containers are not running. Failing the job."
+              exit 1
+            fi
+          done
+        shell: bash
 
   deploy-test-frontend:
     if: github.ref == 'refs/heads/develop'
