@@ -75,7 +75,7 @@ export default function DiaryHeaderClient({
   //   }
   // }, [form]);
 
-  console.log(isValid, "isValid")
+  console.log(isValid, "isValid");
 
   return (
     <>
