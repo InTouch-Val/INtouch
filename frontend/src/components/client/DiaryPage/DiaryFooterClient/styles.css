@@ -158,6 +158,13 @@
   overflow: hidden;
 }
 
+.diary__message-valid--create-diary {
+  position: absolute;
+  bottom: 10px;
+  top: auto;
+  right: 0;
+}
+
 @media screen and (min-width: 320px) and (max-width: 480px) {
   .diary__message-valid {
     border: none;

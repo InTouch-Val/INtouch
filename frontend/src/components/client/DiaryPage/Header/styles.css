@@ -5,6 +5,7 @@
   align-items: center;
   height: 52px;
   width: 100%;
+  position: relative;
 }
 
 @media screen and (min-width: 320px) and (max-width: 480px) {

@@ -34,6 +34,7 @@ export default function DiaryHeaderClient({
   isSaved,
 }: Props) {
   const isMobileWidth = useMobileWidth();
+  const [isHover, setHover] = React.useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -61,19 +62,6 @@ export default function DiaryHeaderClient({
   } = useFormContext();
 
   const form = useWatch({ control });
-
-  // React.useEffect(() => {
-  //   if (
-  //     form.emotion_type != "" ||
-  //     form.event_details != "" ||
-  //     form.thoughts_analysis != "" ||
-  //     form.physical_sensations != ""
-  //   ) {
-  //     setValid(true);
-  //   } else {
-  //     setValid(false);
-  //   }
-  // }, [form]);
 
   console.log(isValid, "isValid");
 
@@ -123,9 +111,19 @@ export default function DiaryHeaderClient({
                 src={save}
                 about="save"
                 className="diary__img-save--unactive"
+                onMouseLeave={(e) => setHover(false)}
+                onMouseEnter={(e) => setHover(true)}
               />
             ))}
         </div>
+
+        {(!isValid) && (
+          <span
+            className={`diary__message-valid diary__message-valid--create-diary ${!isHover && "diary__message-valid-hidden"}`}
+          >
+            Please fill in at least one question to save your diary entry
+          </span>
+        )}
       </div>
 
       <div className="diary__dear-message">
