@@ -51,22 +51,31 @@ export default function DiaryHeaderClient({
 
   const { currentUser } = useAuth();
   const { handleSubmit, control } = useFormContext();
-  const [isValid, setValid] = React.useState(false);
+  // const [isValid, setValid] = React.useState(false);
+
+  const {
+    setValue,
+    formState: { isValid },
+    trigger,
+    getValues,
+  } = useFormContext();
 
   const form = useWatch({ control });
 
-  React.useEffect(() => {
-    if (
-      form.emotion_type != "" ||
-      form.event_details != "" ||
-      form.thoughts_analysis != "" ||
-      form.physical_sensations != ""
-    ) {
-      setValid(true);
-    } else {
-      setValid(false);
-    }
-  }, [form]);
+  // React.useEffect(() => {
+  //   if (
+  //     form.emotion_type != "" ||
+  //     form.event_details != "" ||
+  //     form.thoughts_analysis != "" ||
+  //     form.physical_sensations != ""
+  //   ) {
+  //     setValid(true);
+  //   } else {
+  //     setValid(false);
+  //   }
+  // }, [form]);
+
+  console.log(isValid, "isValid")
 
   return (
     <>
@@ -113,7 +122,7 @@ export default function DiaryHeaderClient({
               <img
                 src={save}
                 about="save"
-                className="diary__img-back-unactive"
+                className="diary__img-save--unactive"
               />
             ))}
         </div>

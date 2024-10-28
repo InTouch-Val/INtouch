@@ -81,6 +81,10 @@
   opacity: 0.8;
 }
 
+.diary__img-save--unactive {
+  opacity: 0.5;
+}
+
 .buttons__container {
   display: flex;
   flex-direction: row;
