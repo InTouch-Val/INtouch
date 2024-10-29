@@ -1,0 +1,42 @@
+version: "3.5"
+
+volumes:
+  intouch_data:
+  media:
+  static:
+
+
+services:
+
+  app-postgres:
+    image: postgres:15-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - intouch_data:/var/lib/postgresql/data
+    env_file: backend/.env
+
+
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+
+  backend:
+    build: ./backend/
+    env_file: backend/.env
+    volumes:
+      - media:/app/media/
+      - static:/backend_static
+    depends_on:
+      - app-postgres
+
+  nginx:
+    build: ./nginx/
+    volumes:
+      - static:/staticfiles/
+    ports:
+      - 8000:80
+    depends_on:
+      - backend
+
