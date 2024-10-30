@@ -10,14 +10,12 @@ function ActivateUserPage() {
   const navigate = useNavigate();
   const [activationStatus, setActivationStatus] = useState("pending"); // New state for activation status
   const [showModal, setShowModal] = useState(false);
-  const [doctor, setDoctor] = useState(false);
   const [answer, setAnswer] = useState(false);
-  const { currentUser, login } = useAuth();
+  const { login } = useAuth();
 
   useEffect(() => {
     if (window.location.pathname.includes("/activate-client/")) {
       if (localStorage.getItem("accessToken")) {
-        setDoctor(currentUser?.user_type === "doctor");
         setShowModal(true);
       } else {
         setAnswer(true);
@@ -64,8 +62,8 @@ function ActivateUserPage() {
             <div className="modal-div">
               <p>
                 It seems that you are trying to create another account. <br />
-                Would you like to continue as a client or stay logged into your
-                psychologist account?
+                Would you like to log into the new one or stay logged into the
+                existing account?
               </p>
               <div className="container__button">
                 <button
@@ -75,10 +73,10 @@ function ActivateUserPage() {
                     setAnswer(true);
                   }}
                 >
-                  Continue as {doctor ? "Client" : "Different Client"}
+                  New account
                 </button>
                 <button className="action-button" onClick={() => navigate("/")}>
-                  Stay as {doctor ? "Psychologist" : "Client"}
+                  Existing account
                 </button>
               </div>
             </div>
