@@ -14,12 +14,8 @@ function ActivateUserPage() {
   const { login } = useAuth();
 
   useEffect(() => {
-    if (window.location.pathname.includes("/activate-client/")) {
-      if (localStorage.getItem("accessToken")) {
-        setShowModal(true);
-      } else {
-        setAnswer(true);
-      }
+    if (localStorage.getItem("accessToken")) {
+      setShowModal(true);
     } else {
       setAnswer(true);
     }
