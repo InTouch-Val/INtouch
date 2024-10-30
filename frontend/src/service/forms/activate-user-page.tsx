@@ -3,17 +3,25 @@ import { useParams, useNavigate } from "react-router-dom";
 import { API } from "../axios";
 import "../../css/app.scss";
 import "../../css/activateUser.scss";
+import { useAuth } from "../authContext";
 
 function ActivateUserPage() {
   let { userId, userToken } = useParams();
   const navigate = useNavigate();
   const [activationStatus, setActivationStatus] = useState("pending"); // New state for activation status
   const [showModal, setShowModal] = useState(false);
+  const [doctor, setDoctor] = useState(false);
   const [answer, setAnswer] = useState(false);
+  const { currentUser, login } = useAuth();
 
   useEffect(() => {
-    if (localStorage.getItem("accessToken")) {
-      setShowModal(true);
+    if (window.location.pathname.includes("/activate-client/")) {
+      if (localStorage.getItem("accessToken")) {
+        setDoctor(currentUser?.user_type === "doctor");
+        setShowModal(true);
+      } else {
+        setAnswer(true);
+      }
     } else {
       setAnswer(true);
     }
@@ -28,6 +36,10 @@ function ActivateUserPage() {
               localStorage.setItem("refreshToken", response.data.refresh_token);
               localStorage.setItem("accessToken", response.data.access_token);
               navigate(`/client-registration`);
+            }
+            if (window.location.pathname.includes("/activate/")) {
+              login(response.data.access_token, response.data.refresh_token);
+              navigate("/");
             }
           }
         })
@@ -63,10 +75,10 @@ function ActivateUserPage() {
                     setAnswer(true);
                   }}
                 >
-                  Continue as Client
+                  Continue as {doctor ? "Client" : "Different Client"}
                 </button>
                 <button className="action-button" onClick={() => navigate("/")}>
-                  Stay as Psychologist
+                  Stay as {doctor ? "Psychologist" : "Client"}
                 </button>
               </div>
             </div>
