@@ -2,16 +2,14 @@ import { useEffect } from "react";
 import Shepherd, { StepOptions } from "shepherd.js";
 import "shepherd.js/dist/css/shepherd.css";
 import "../../../service/onboarding/custom-shepherd-styles.scss";
-import useMobileWidth from "../useMobileWidth";
 
 const useOnboardingTour = (
   tourKey: string, // The key for localStorage
   getSteps: () => StepOptions[],
   condition: boolean = true,
 ) => {
-  const isMobileWidth = useMobileWidth();
   useEffect(() => {
-    if (condition && !isMobileWidth) {
+    if (condition) {
       const tourFlag = localStorage.getItem(tourKey);
 
       if (!tourFlag) {
@@ -43,7 +41,7 @@ const useOnboardingTour = (
         };
       }
     }
-  }, [tourKey, getSteps, condition, isMobileWidth]);
+  }, [tourKey, getSteps, condition]);
 };
 
 //hook for testing in browser. Check usage in comments for each page scenario
