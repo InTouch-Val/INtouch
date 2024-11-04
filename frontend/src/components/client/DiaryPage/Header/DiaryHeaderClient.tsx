@@ -117,7 +117,7 @@ export default function DiaryHeaderClient({
             ))}
         </div>
 
-        {(!isValid) && (
+        {!isValid && (
           <span
             className={`diary__message-valid diary__message-valid--create-diary ${!isHover && "diary__message-valid-hidden"}`}
           >
