@@ -16,6 +16,7 @@ type ParamsAssignments = {
   ordering?: string;
   page: number;
   search?: string;
+  issue?: string;
 };
 
 const ASSIGNMENTS_URL = "assignments";
@@ -46,8 +47,9 @@ export const assignmentApi = createApi({
         assignmentType,
         ordering = "date_asc",
         search,
+        issue,
       }) => ({
-        url: `${ASSIGNMENTS_URL}?${limit ? `limit=${limit} ` : ""}&page=${page}${author ? `&author=${author}` : ""}${favorite ? `&favorites=${favorite}` : ""}${language ? `&language=${language}` : ""}${assignmentType ? `&assignment_type=${assignmentType}` : ""}&ordering=${ordering}${search ? `&search=${search}` : ""}`.replace(
+        url: `${ASSIGNMENTS_URL}?${limit ? `limit=${limit} ` : ""}&page=${page}${author ? `&author=${author}` : ""}${favorite ? `&favorites=${favorite}` : ""}${language ? `&language=${language}` : ""}${issue ? `&issue=${issue.toLowerCase().replace(/\s/g, "-")}` : ""}${assignmentType ? `&assignment_type=${assignmentType}` : ""}&ordering=${ordering}${search ? `&search=${search}` : ""}`.replace(
           /\s+/g,
           ""
         ), // regex удаляет все пробелы в строке
@@ -76,6 +78,7 @@ export const assignmentApi = createApi({
           currentArg?.language !== previousArg?.language ||
           currentArg?.assignmentType !== previousArg?.assignmentType ||
           currentArg?.ordering !== previousArg?.ordering ||
+          currentArg?.issue !== previousArg?.issue ||
           currentArg?.search !== previousArg?.search
         );
       },
@@ -85,6 +88,7 @@ export const assignmentApi = createApi({
           ordering: queryArgs.ordering,
           search: queryArgs.search,
           author: queryArgs.author,
+          issue: queryArgs.issue,
           assignmentType: queryArgs.assignmentType,
           favorite: queryArgs.favorite,
         });

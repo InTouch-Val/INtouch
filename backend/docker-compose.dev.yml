@@ -25,6 +25,7 @@ services:
       - "6379:6379"
 
   app:
+    container_name: app
     build:
       context: ../backend
       dockerfile: Dockerfile
@@ -35,6 +36,8 @@ services:
       - "/opt/intouch_static:/app/static/"
     env_file:
       - .env
+    environment:
+      - CSRF_TRUSTED_ORIGINS=${CSRF_TRUSTED_ORIGINS}
     depends_on:
       app-postgres:
           condition: service_healthy
