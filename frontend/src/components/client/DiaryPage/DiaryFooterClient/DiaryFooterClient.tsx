@@ -6,7 +6,7 @@ import { useFormContext, useWatch } from "react-hook-form";
 import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 import { openModalSaveIncomplete } from "../../../../store/slices/modals/modalsSlice";
 import { useAppDispatch } from "../../../../store/store";
-
+import FloatingAlert from "../../../../stories/floating-alert/FloatingAlert";
 import { API } from "../../../../service/axios";
 import { ClientDiary } from "../../../../utils/global-types";
 
@@ -29,6 +29,10 @@ export default function DiaryFooterClient({
     trigger,
     getValues,
   } = useFormContext();
+
+  const desktopEmptyDiaryAlert =
+    "Please fill in at least one question to save your diary entry";
+  const mobileEmptyDiaryAlert = "Fill in at least one question to save";
 
   const [active, setActive] = React.useState(diary ? diary.visible : false);
 
@@ -121,7 +125,10 @@ export default function DiaryFooterClient({
         onMouseLeave={(e) => setHover(false)}
         onMouseEnter={(e) => setHover(true)}
       >
-        <div onClick={handleSaveClick}>
+        <span
+          onClick={handleSaveClick}
+          className="diary__footer-button-container"
+        >
           <Button
             type="submit"
             className="diary__footer-button"
@@ -129,16 +136,17 @@ export default function DiaryFooterClient({
           >
             Save
           </Button>
-        </div>
+        </span>
 
         {(!isValid || !hasFormChanged()) && (
-          <span
-            className={`diary__message-valid ${!isHover && "diary__message-valid-hidden"}`}
-          >
-            {isMobileWidth
-              ? "Fill in at least one question to save"
-              : "Please fill in at least one question to save your diary entry"}
-          </span>
+          <div className="diary__message-valid">
+            <FloatingAlert
+              label={
+                isMobileWidth ? mobileEmptyDiaryAlert : desktopEmptyDiaryAlert
+              }
+              visible={isHover ? true : false}
+            />
+          </div>
         )}
       </div>
     </div>

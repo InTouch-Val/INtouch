@@ -12,6 +12,7 @@ import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 import { useAppDispatch } from "../../../../store/store";
 import { openModalExitUnsaved } from "../../../../store/slices/modals/modalsSlice";
 import { ClientDiary } from "../../../../utils/global-types";
+import FloatingAlert from "../../../../stories/floating-alert/FloatingAlert";
 
 const options = {
   weekday: "long",
@@ -52,7 +53,6 @@ export default function DiaryHeaderClient({
 
   const { currentUser } = useAuth();
   const { handleSubmit, control } = useFormContext();
-  // const [isValid, setValid] = React.useState(false);
 
   const {
     setValue,
@@ -62,8 +62,6 @@ export default function DiaryHeaderClient({
   } = useFormContext();
 
   const form = useWatch({ control });
-
-  console.log(isValid, "isValid");
 
   return (
     <>
@@ -118,11 +116,10 @@ export default function DiaryHeaderClient({
         </div>
 
         {!isValid && (
-          <span
-            className={`diary__message-valid diary__message-valid--create-diary ${!isHover && "diary__message-valid-hidden"}`}
-          >
-            Please fill in at least one question to save your diary entry
-          </span>
+          <div className="diary__message-valid--create-diary"> 
+            <FloatingAlert label="Please fill in at least one question to save your diary entry" 
+            visible={isHover ? true : false}/>
+          </div>
         )}
       </div>
 

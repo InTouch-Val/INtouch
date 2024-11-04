@@ -1,0 +1,24 @@
+@import url("../../vendor/fonts/fonts.css");
+@import "../../scss-styles/variables.scss";
+
+.floating_alert {
+    width: auto;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid $basic-font-color;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-family: Montserrat;
+    font-size: 16px;
+    font-weight: 500;
+    max-height: 100px; 
+    transition: all ease-in-out 0.3s;
+
+    &_hidden {
+        opacity: 0;
+        max-height: 0;
+        border: 1px solid transparent;
+    }
+}

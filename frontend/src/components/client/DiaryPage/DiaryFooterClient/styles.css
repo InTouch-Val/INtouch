@@ -48,6 +48,12 @@
   position: relative;
 }
 
+.diary__footer-button-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 @media screen and (min-width: 320px) and (max-width: 480px) {
   .diary__footer-button-wrapper span {
     font-size: 14px;
@@ -145,17 +151,7 @@
 
 .diary__message-valid {
   position: absolute;
-  width: 476px;
-  height: 35px;
   top: 55px;
-  padding: 2px 6px 2px 6px;
-  border-radius: 6px;
-  border: 1px solid #417d88;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: all ease-in-out 0.3s;
-  overflow: hidden;
 }
 
 .diary__message-valid--create-diary {
