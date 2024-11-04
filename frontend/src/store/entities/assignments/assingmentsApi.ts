@@ -192,27 +192,6 @@ export const assignmentApi = createApi({
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       }),
-      // async onQueryStarted(uuid, { dispatch, queryFulfilled }) {
-  
-      //   const patchResult = dispatch(
-      //     assignmentApi.util.updateQueryData(
-      //       "getAssignments",
-      //       { page: 1 },
-      //       (draft) => {
-            
-      //         console.log('draft', draft)
-      //         return draft
-      //       }
-      //     )
-      //   );
-
-      //   try {
- 
-      //     await queryFulfilled; 
-      //   } catch {
-      //     patchResult.undo(); 
-      //   }
-      // },
       invalidatesTags: (result, error, uuid) => [
         { type: "Assignments", id: uuid }, 
         { type: "Assignments", id: "PARTIAL-LIST" },
