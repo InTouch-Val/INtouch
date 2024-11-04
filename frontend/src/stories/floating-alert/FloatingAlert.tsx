@@ -6,12 +6,12 @@ type Props = {
   visible: boolean;
 };
 
-const FloatingAlert = ({ label,visible }: Props) => {
+const FloatingAlert = ({ label, visible }: Props) => {
   return (
-    <div className={`${styles.floating_alert} ${!visible ? styles.floating_alert_hidden : ""}`}>
-      <span>
-      {label}
-      </span>
+    <div
+      className={`${styles.floating_alert} ${!visible ? styles.floating_alert_hidden : ""}`}
+    >
+      <span>{label}</span>
     </div>
   );
 };

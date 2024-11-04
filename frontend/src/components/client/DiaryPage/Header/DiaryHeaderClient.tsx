@@ -116,9 +116,11 @@ export default function DiaryHeaderClient({
         </div>
 
         {!isValid && (
-          <div className="diary__message-valid--create-diary"> 
-            <FloatingAlert label="Please fill in at least one question to save your diary entry" 
-            visible={isHover ? true : false}/>
+          <div className="diary__message-valid--create-diary">
+            <FloatingAlert
+              label="Please fill in at least one question to save your diary entry"
+              visible={isHover ? true : false}
+            />
           </div>
         )}
       </div>
