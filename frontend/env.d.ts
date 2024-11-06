@@ -1,5 +1,4 @@
 interface ImportMetaEnv {
-  BASE_URL: string;
   VITE_BASE_URL: string;
 }
 
