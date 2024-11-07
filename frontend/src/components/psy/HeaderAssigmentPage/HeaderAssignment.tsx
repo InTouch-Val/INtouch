@@ -9,14 +9,12 @@ import { useNavigate } from "react-router-dom";
 export default function HeaderAssignment({
   blocks,
   handleSubmit,
-  isFirstEntry,
   changeView,
   isDisabled,
   isChangeView,
   title,
 }) {
   const navigate = useNavigate();
-  const disableButton = isDisabled || blocks.length === 0;
 
   function onBack() {
     navigate(-1);
@@ -39,10 +37,10 @@ export default function HeaderAssignment({
                     src={arrowBack}
                   />
                 </button>
-                <button onClick={handleSubmit} disabled={disableButton}>
+                <button onClick={handleSubmit} disabled={isDisabled}>
                   <img
                     className={
-                      disableButton
+                      isDisabled
                         ? "header__icon-save-disabled"
                         : "header__icon-save"
                     }
@@ -52,12 +50,12 @@ export default function HeaderAssignment({
                 </button>
                 <button
                   onClick={changeView}
-                  disabled={disableButton}
+                  disabled={isDisabled}
                   id="onboarding-constructorPreview"
                 >
                   <img
                     className={
-                      disableButton
+                      isDisabled
                         ? " header__icon-eye-disabled"
                         : "header__icon-eye"
                     }
@@ -79,7 +77,7 @@ export default function HeaderAssignment({
         </div>
         <span
           id="errorText"
-          className={`error__text error__text_header ${isDisabled && !isFirstEntry ? "error__text_span" : ""}`}
+          className={`error__text error__text_header ${isDisabled ? "error__text_span" : ""}`}
         >
           Please check all fields
         </span>

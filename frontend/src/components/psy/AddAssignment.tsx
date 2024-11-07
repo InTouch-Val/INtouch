@@ -56,8 +56,7 @@ function AddAssignment() {
   });
   const [isChangeView, setChangeView] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [isFirstEntry, setFirstEntry] = useState(true);
-  const [isDisabled, setIsDisabled] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(false);
   const [assignmentId, setAssignmentId] = useState(null);
 
   const navigate = useNavigate();
@@ -65,15 +64,30 @@ function AddAssignment() {
   const isEditMode = id != undefined;
 
   useEffect(() => {
-    if (
-      title.length !== 0 ||
-      description.length !== 0 ||
-      (searchTerm.length !== 0 && !selectedImage) ||
-      type.length !== 0 ||
-      language.length !== 0
-    ) {
-      setFirstEntry(false);
+    if (isDisabled) {
+      setIsDisabled(
+        !(
+          title.length !== 0 &&
+          title.length <= maxLengthTitle &&
+          description.length !== 0 &&
+          description.length <= maxLengthDescription &&
+          selectedImage &&
+          type.length !== 0 &&
+          language.length !== 0
+        ),
+      );
     }
+  }, [
+    title,
+    description,
+    searchTerm,
+    type,
+    language,
+    selectedImage,
+    isDisabled,
+  ]);
+
+  const isValidation = () => {
     setIsDisabled(
       !(
         title.length !== 0 &&
@@ -85,7 +99,7 @@ function AddAssignment() {
         language.length !== 0
       ),
     );
-  }, [title, description, searchTerm, type, language, selectedImage]);
+  };
 
   const textarea = document.querySelector<HTMLTextAreaElement>("textarea");
   const minHeight = 60;
@@ -232,6 +246,7 @@ function AddAssignment() {
   ) => {
     e.preventDefault();
 
+    isValidation();
     const blockInfo = blocks.map((block) => {
       if (block.type === "text" || block.type === "open") {
         return {
@@ -471,7 +486,6 @@ function AddAssignment() {
         blocks={blocks}
         handleSubmit={(e) => handleSubmit(e, true, false, true)}
         isDisabled={isDisabled}
-        isFirstEntry={isFirstEntry}
         changeView={() => {
           setChangeView((prev) => !prev);
         }}
@@ -486,7 +500,7 @@ function AddAssignment() {
               type="text"
               className={`title-input ${
                 (title.length === 0 || title.length > maxLengthTitle) &&
-                !isFirstEntry
+                isDisabled
                   ? "error"
                   : ""
               }`}
@@ -497,7 +511,7 @@ function AddAssignment() {
               id="title"
             />
             <span
-              className={`title-span ${(title.length === 0 || title.length > maxLengthTitle) && !isFirstEntry && "error__text_span"}`}
+              className={`title-span ${(title.length === 0 || title.length > maxLengthTitle) && isDisabled && "error__text_span"}`}
             >
               Please enter a valid name (1-50 characters)
             </span>
@@ -506,7 +520,7 @@ function AddAssignment() {
               className={`title-input ${
                 (description.length === 0 ||
                   description.length > maxLengthDescription) &&
-                !isFirstEntry
+                isDisabled
                   ? "error"
                   : ""
               }`}
@@ -517,7 +531,7 @@ function AddAssignment() {
               id="text"
             />
             <span
-              className={`title-span ${(description.length === 0 || description.length > maxLengthDescription) && !isFirstEntry ? "error__text_span" : ""}`}
+              className={`title-span ${(description.length === 0 || description.length > maxLengthDescription) && isDisabled ? "error__text_span" : ""}`}
             >
               Please enter a valid name (1-300 characters)
             </span>
@@ -528,7 +542,7 @@ function AddAssignment() {
             <ImageSelector
               onImageSelect={handleImageSelect}
               selectedImage={selectedImage}
-              isFirstEntry={isFirstEntry}
+              isDisabled={isDisabled}
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
             />
@@ -559,7 +573,7 @@ function AddAssignment() {
                     value={type}
                     onChange={(e) => setType(e.target.value)}
                     required
-                    className={!type && !isFirstEntry ? "error" : ""}
+                    className={!type && isDisabled ? "error" : ""}
                     defaultValue={""}
                   >
                     <option hidden disabled value={""}>
@@ -581,7 +595,7 @@ function AddAssignment() {
                     value={language}
                     onChange={(e) => setLanguage(e.target.value)}
                     required
-                    className={!language && !isFirstEntry ? "error" : ""}
+                    className={!language && isDisabled ? "error" : ""}
                     defaultValue={""}
                   >
                     <option hidden disabled value={""}>
@@ -600,7 +614,7 @@ function AddAssignment() {
                     value={goal}
                     onChange={(e) => setGoal(e.target.value)}
                     required
-                    className={!goal && !isFirstEntry ? "error" : ""}
+                    className={!goal && isDisabled ? "error" : ""}
                     defaultValue={""}
                   >
                     <option hidden disabled value={""}>
@@ -723,7 +737,7 @@ function AddAssignment() {
             </div>
           )}
           <span
-            className={`error__text error__text_footer ${isDisabled && !isFirstEntry && !isChangeView ? "error__text_span" : ""}`}
+            className={`error__text error__text_footer ${isDisabled && !isChangeView ? "error__text_span" : ""}`}
           >
             Please check all fields
           </span>
@@ -737,7 +751,7 @@ function AddAssignment() {
                     label="Save as Draft"
                     type="button"
                     onClick={(e) => handleSubmit(e, true, true, true)}
-                    disabled={isError || isDisabled || blocks.length === 0}
+                    disabled={isDisabled}
                   />
                 </div>
                 <div id="onboarding-constructorPublish">
@@ -747,7 +761,7 @@ function AddAssignment() {
                     label="Complete & Publish"
                     type="button"
                     onClick={(e) => handleSubmit(e, false, true, false)}
-                    disabled={isError || isDisabled || blocks.length === 0}
+                    disabled={isDisabled}
                   />
                 </div>
               </>
