@@ -5,7 +5,7 @@ import "../../custom-shepherd-styles.scss";
 import "./assignmentsStyles.scss";
 import onboardingTexts from "../../onboardingTextsSteps/psyAssignmentsTexts.json";
 
-const getAssignmentsSteps = (currentUser: User | null, isMobileWidth: boolean = false): StepOptions[] => [
+const getAssignmentsSteps = (currentUser: User | null): StepOptions[] => [
   {
     id: "welcome",
     text: `
@@ -74,7 +74,7 @@ const getAssignmentsSteps = (currentUser: User | null, isMobileWidth: boolean = 
     text: onboardingTexts.addAssignment.description,
     attachTo: {
       element: ".assignments-page #onboarding-add-assignment",
-      on: isMobileWidth ? "bottom-end" : "left" as PopperPlacement,
+      on: "left" as PopperPlacement,
     },
     classes: "add-assignment",
     buttons: [
@@ -106,7 +106,7 @@ const getAssignmentsSteps = (currentUser: User | null, isMobileWidth: boolean = 
     text: onboardingTexts.addFavourite.description,
     attachTo: {
       element: ".assignment-grid .first-assignment .favorite-button",
-      on: isMobileWidth ? "bottom-end" : "right-start" as PopperPlacement,
+      on: "right-start" as PopperPlacement,
     },
     classes: "add-favourite",
     buttons: [
