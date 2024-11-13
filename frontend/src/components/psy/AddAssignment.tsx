@@ -73,7 +73,8 @@ function AddAssignment() {
           description.length <= maxLengthDescription &&
           selectedImage &&
           type.length !== 0 &&
-          language.length !== 0
+          language.length !== 0 &&
+          blocks.length !== 0
         ),
       );
     }
@@ -85,6 +86,7 @@ function AddAssignment() {
     language,
     selectedImage,
     isDisabled,
+    blocks,
   ]);
 
   const isValidation = () => {
