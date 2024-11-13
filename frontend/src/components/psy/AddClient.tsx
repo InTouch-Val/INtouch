@@ -6,6 +6,7 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../service/authContext";
 import { API } from "../../service/axios";
 import "../../css/add-client.css";
+import Notifications from "../../stories/notifications/Notifications";
 
 function AddClient() {
   const [clientData, setClientData] = useState({
@@ -108,9 +109,12 @@ function AddClient() {
           placeholder="Client's Email"
           required
         />
-        {error && <div className="error-message">{error}</div>}
+        {error && <Notifications status="error" messageText={error} />}
         {success && (
-          <div className="success-message">Client created succesfully!</div>
+          <Notifications
+            status="success"
+            messageText="Client created succesfully!"
+          />
         )}
         <button type="submit">Add Client</button>
       </form>

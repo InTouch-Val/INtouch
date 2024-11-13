@@ -286,21 +286,6 @@
   }
 }
 
-.success-message {
-  position: fixed;
-  z-index: 1000;
-  top: 20px;
-  right: 20px;
-  padding: 10px;
-  border: 1px solid #c3e6cb;
-  border-radius: 5px;
-  animation:
-    slide-in 0.5s ease forwards,
-    fade-out 0.5s 1.5s forwards;
-  background-color: #d4edda;
-  color: #155724;
-}
-
 .material-symbols-outlined {
   color: $additional-font-color;
 }

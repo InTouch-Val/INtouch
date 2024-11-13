@@ -8,6 +8,7 @@ import eyeIcon from "../../images/icons/eye.svg";
 import eyeSlashIcon from "../../images/icons/eyeSlash.svg";
 import logo from "../../images/LogoBig.svg";
 import Button from "../../stories/buttons/Button";
+import Notifications from "../../stories/notifications/Notifications";
 
 function RegistrationForm() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -41,7 +42,7 @@ function RegistrationForm() {
 
   const handleCredentialsBlur = (
     field: "email" | "password" | "name" | "second",
-    value: string,
+    value: string
   ): void => {
     let newError = { ...validationError };
 
@@ -128,7 +129,7 @@ function RegistrationForm() {
           !validationError.name &&
           !validationError.password &&
           !validationError.second &&
-          !validationError.terms,
+          !validationError.terms
       );
     }
   }, [validationError]);
@@ -271,7 +272,7 @@ function RegistrationForm() {
         });
       } else if (error.response?.status >= 500) {
         setError(
-          "Some error occurs from the server, we’re fixing it. Sorry for inconvenience ",
+          "Some error occurs from the server, we’re fixing it. Sorry for inconvenience "
         );
       } else {
         setError("Account isn’t activated");
@@ -423,9 +424,9 @@ function RegistrationForm() {
         <p>
           Already have an account? <Link to={"/login"}>Log in</Link>
         </p>
-        {error && <p className="error-message">{error}</p>}
+        {error && <Notifications status="error" messageText={error} />}
         {successMessage && (
-          <div className="success-message">{successMessageText}</div>
+          <Notifications status="success" messageText={successMessageText} />
         )}
       </form>
     </div>

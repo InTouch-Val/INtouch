@@ -6,6 +6,7 @@ import { useAuth } from "../service/authContext";
 import { API } from "../service/axios";
 import "../css/settings.scss";
 import Button from "../stories/buttons/Button";
+import Notifications from "../stories/notifications/Notifications";
 
 // TODO: PopUp windows for users
 
@@ -54,7 +55,7 @@ function ProfileTab() {
   });
   const [selectedFile, setSelectedFile] = useState([]);
   const [previewImage, setPreviewImage] = useState(
-    currentUser.photo || "default-avatar.png",
+    currentUser.photo || "default-avatar.png"
   );
   const fileInputRef = createRef();
 
@@ -93,7 +94,7 @@ function ProfileTab() {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        },
+        }
       ).then(() => updateUserData());
 
       console.log(response);
@@ -255,7 +256,7 @@ const SecurityTab = () => {
               Save Changes
             </button>
           </form>
-          {message && <div className="success-message">{message}</div>}
+          {message && <Notifications status="success" messageText={message} />}
         </div>
       </div>
       <div className="danger-zone">

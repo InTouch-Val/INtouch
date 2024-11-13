@@ -10,6 +10,7 @@ import useMobileWidth from "../../../utils/hook/useMobileWidth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../../stories/buttons/Button";
+import Notifications from "../../../stories/notifications/Notifications";
 
 export function ProfileTab() {
   const isMobileWidth = useMobileWidth();
@@ -30,7 +31,7 @@ export function ProfileTab() {
   const [statusMessageText, setStatusMessageText] = React.useState("");
   const [selectedFile, setSelectedFile] = React.useState([]);
   const [previewImage, setPreviewImage] = React.useState(
-    currentUser.photo || "default-avatar.png",
+    currentUser.photo || "default-avatar.png"
   );
   const fileInputRef = React.createRef();
 
@@ -47,7 +48,7 @@ export function ProfileTab() {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        },
+        }
       ).then(() => updateUserData());
       setStatusMessageText("Changes saved successfully");
 
@@ -66,7 +67,7 @@ export function ProfileTab() {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        },
+        }
       ).then(() => updateUserData());
 
       console.log(response);
@@ -90,7 +91,7 @@ export function ProfileTab() {
   return (
     <>
       {statusMessageText != "" && (
-        <div className="success-message">{statusMessageText}</div>
+        <Notifications status="success" messageText={statusMessageText} />
       )}
       <div className="settings-profile-tab">
         {currentUser.user_type == "doctor" && (

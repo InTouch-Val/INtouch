@@ -8,6 +8,7 @@ import useMobileWidth from "../../../utils/hook/useMobileWidth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../../stories/buttons/Button";
+import Notifications from "../../../stories/notifications/Notifications";
 
 export const SecurityTab = () => {
   const isMobileWidth = useMobileWidth();
@@ -157,10 +158,11 @@ export const SecurityTab = () => {
             />
           </form>
           {showSuccessAlert && message && (
-            <div className="success-message">{message}</div>
+            <Notifications status="success" messageText={message} />
+       
           )}
           {showErrorAlert && message && (
-            <div className="error-message">{message}</div>
+         <Notifications status="error" messageText={message} />
           )}
         </div>
       </div>

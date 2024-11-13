@@ -23,6 +23,7 @@ import questionIcon from "../../images/assignment-page/question.svg";
 import singleIcon from "../../images/assignment-page/single-choice.svg";
 import arrowBack from "../../images/assignment-page/arrow-back.svg";
 import share from "../../images/assignment-page/share.svg";
+import Notifications from "../../stories/notifications/Notifications";
 
 import {
   maxLengthDescription,
@@ -465,7 +466,8 @@ function AddAssignment() {
   return (
     <div className="assignments-page">
       {successMessage && (
-        <div className="success-message">{successMessageText}</div>
+         <Notifications status="success" messageText={successMessageText} />
+  
       )}
       <HeaderAssignment
         blocks={blocks}

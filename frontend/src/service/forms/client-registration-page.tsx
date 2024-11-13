@@ -11,6 +11,7 @@ import React from "react";
 import { clientRegistrationSchema } from "../../utils/validationSchem/client-registartion-schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Button from "../../stories/buttons/Button";
+import Notifications from "../../stories/notifications/Notifications";
 
 function ClientRegistrationPage() {
   const [firstName, setFirstName] = useState("");
@@ -70,14 +71,14 @@ function ClientRegistrationPage() {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
-        },
+        }
       );
       if (response.status === 200) {
         setError("Updated Sueccessfully");
         setTimeout(() => {
           login(
             localStorage.getItem("accessToken") as string,
-            localStorage.getItem("refreshToken") as string,
+            localStorage.getItem("refreshToken") as string
           );
           navigate("/");
         }, 1500);
@@ -86,7 +87,7 @@ function ClientRegistrationPage() {
       console.error("Error updating client:", error);
       setError(
         error.response?.data?.message ||
-          "An error occurred during the client update.",
+          "An error occurred during the client update."
       );
     }
   };
@@ -213,7 +214,7 @@ function ClientRegistrationPage() {
                 {methods.formState.errors["acceptTerms"]?.message || ""}
               </span>
             )}
-            {error && <div className="error-message">{error}</div>}
+            {error && <Notifications status="error" messageText={error} />}
           </div>
 
           <div className="form-buttons client-setPassword-button">
