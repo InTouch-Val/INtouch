@@ -168,7 +168,6 @@ function LoginPage() {
         >
           Forgot password?
         </button>
- 
 
         <div className="form-buttons">
           <Button
