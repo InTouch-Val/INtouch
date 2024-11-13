@@ -151,13 +151,6 @@ function LoginPage() {
             </button>
           </div>
         </div>
-        <button
-          type="button"
-          className="forgot-button"
-          onClick={(e) => handleForgotPassword(e)}
-        >
-          Forgot password?
-        </button>
         <div className="error__text error__text_login">
           {error.email && <div>{error.email}</div>}
           {error.password && <div>{error.password}</div>}
@@ -168,6 +161,14 @@ function LoginPage() {
             </div>
           )}
         </div>
+        <button
+          type="button"
+          className="forgot-button"
+          onClick={(e) => handleForgotPassword(e)}
+        >
+          Forgot password?
+        </button>
+ 
 
         <div className="form-buttons">
           <Button
