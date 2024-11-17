@@ -5,7 +5,6 @@ volumes:
   media:
   static:
 
-
 services:
 
   app-postgres:
@@ -30,13 +29,21 @@ services:
       - static:/backend_static
     depends_on:
       - app-postgres
+  
+  frontend:
+    build: ./frontend/
+    command: cp -r /app/build/. /frontend_static/
+    volumes:
+      - static:/frontend_static
 
   nginx:
     build: ./nginx/
     volumes:
       - static:/staticfiles/
+      - media:/media/
     ports:
       - 8000:80
     depends_on:
       - backend
+      - frontend
 
