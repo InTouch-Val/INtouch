@@ -94,13 +94,13 @@ function App() {
           )}
         </span>
         <div className="user-profile">
-          {isDoctor && (
+          {/* {isDoctor && (
             <img
               className="user-avatar"
               src={currentUser?.photo}
               alt="User's photo"
             />
-          )}
+          )} */}
           <h3>
             {currentUser
               ? `${currentUser.first_name} ${currentUser.last_name}`
