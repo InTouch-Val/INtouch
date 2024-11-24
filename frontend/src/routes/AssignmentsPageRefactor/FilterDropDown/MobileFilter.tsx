@@ -23,7 +23,9 @@ export default function MobileFilter() {
 
   return (
     <>
-      {openSelect && <div className="overlayFilter" onClick={handleOverlayClick} /> }
+      {openSelect && (
+        <div className="overlayFilter" onClick={handleOverlayClick} />
+      )}
       <div className={"filters-wrapper"}>
         <div className={"filter__sortBox"}>
           <img src={iconSort} alt="iconSort" className={"filter__icon"} />

@@ -66,7 +66,10 @@ export default function AssignmentsPageRefactor({
         {!isShareModal && (
           <header>
             <h1>Assignments</h1>
-            <div id="onboarding-add-assignment" className={'assignments-page__buttonWrapper'}>
+            <div
+              id="onboarding-add-assignment"
+              className={"assignments-page__buttonWrapper"}
+            >
               <Button
                 buttonSize="small"
                 fontSize="medium"
