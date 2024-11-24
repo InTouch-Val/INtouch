@@ -22,17 +22,15 @@ function ClientRegistrationPage() {
   const [confirmPasswordShown, setConfirmPasswordShown] = useState(false);
 
   const { login } = useAuth();
-  const location = useLocation();
   const navigate = useNavigate();
-  const { accessToken } = location.state || {};
+  const accessToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
     if (!accessToken) {
       navigate("/login");
       return;
     }
-
-    API.get(`/get-user`, {
+    API.get(`get-user/`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     })
       .then((response) => {
@@ -44,7 +42,7 @@ function ClientRegistrationPage() {
       .catch((error) => {
         console.error("Error fetching user data", error);
       });
-  }, [accessToken, navigate]);
+  }, []);
 
   const handleTogglePassword = (e) => {
     e.preventDefault();

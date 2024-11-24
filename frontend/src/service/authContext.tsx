@@ -8,6 +8,8 @@ export interface User {
   last_name: string;
   photo: string;
   id: number;
+  email: string;
+  accept_policy: boolean;
 }
 
 interface AuthContextType {
