@@ -13,11 +13,25 @@
   & .tabs button {
     width: 33%;
   }
+
+
 }
 
 @include mobile() {
   .assignments-page {
     padding: 50px 28px;
+
+  &__buttonWrapper {
+    position: fixed;
+    bottom: 45px;
+    width: 304px;
+    height: 46px;
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    z-index: 1000;
+    justify-content: center;
+  }
 
     & header {
       margin: 0;

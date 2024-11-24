@@ -12,9 +12,15 @@ import {
   TypeLanguage,
   TypeOrder,
 } from "../../../utils/constants";
+import './filter.scss'
+import useMobileWidth from "../../../utils/hook/useMobileWidth";
+import MobileFilter from "./MobileFilter";
 
 export default function FilterDropDown() {
   const dispatch = useAppDispatch();
+  const isMobile = useMobileWidth()
+
+  console.log('isMobile', isMobile)
 
   const { activeLanguage, activeFilterType, activeOrder, activeIssue } =
     useAppSelector((state) => state.assignment);
@@ -55,7 +61,12 @@ export default function FilterDropDown() {
     }
   };
 
+  if(isMobile) {
+    return <MobileFilter />
+  }
+
   return (
+
     <div className="filter-dropdowns">
       <select
         value={activeFilterType}
