@@ -1,14 +1,16 @@
 import useOnboardingTour from "./useOnboardingTour";
 import getAssignmentsSteps from "../../../service/onboarding/steps/assignmentsSteps/assignmentsSteps";
 import { useAuth } from "../../../service/authContext";
-import useMobileWidth from "../useMobileWidth";
 
 const useAssignmentsOnboardingTour = () => {
   const { currentUser } = useAuth();
-  const isMobileWidth = useMobileWidth();
 
   useOnboardingTour("onboardingTourShown", () =>
+<<<<<<< HEAD
     getAssignmentsSteps(currentUser, isMobileWidth),
+=======
+    getAssignmentsSteps(currentUser),
+>>>>>>> master
   );
 };
 

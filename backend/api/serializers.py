@@ -1,10 +1,12 @@
 import uuid
+import base64
 
 from api.models import *
 from drf_extra_fields.fields import Base64ImageField
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from django.core.files.base import ContentFile
 from django.template.loader import render_to_string
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
@@ -20,6 +22,17 @@ from api.constants import (
 
 # TO-DO LIST:
 # Fix deletion of the unverified users
+
+
+
+class Base64ImageDecodeField(serializers.ImageField):
+    """Field type to decode images in API."""
+    def to_internal_value(self, data):
+        if isinstance(data, str) and data.startswith('data:image'):
+            format, imgstr = data.split(';base64,')
+            ext = format.split('/')[-1]
+            data = ContentFile(base64.b64decode(imgstr), name='temp' + ext)
+        return super().to_internal_value(data)
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -243,6 +256,7 @@ class UpdateEmailSerializer(serializers.Serializer):
 
 class UpdateUserSerializer(serializers.ModelSerializer):
     """Редактирование данных в профиле пользователя"""
+    photo = Base64ImageDecodeField(required=False, allow_null=True)
 
     class Meta:
         model = User
