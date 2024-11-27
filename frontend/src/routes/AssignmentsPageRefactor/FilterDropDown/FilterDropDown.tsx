@@ -62,7 +62,7 @@ export default function FilterDropDown() {
   };
 
   if (isMobile) {
-    return <MobileFilter />;
+    return <MobileFilter sortMethod={sortMethod} handleSortMethodChange={handleSortMethodChange}/>;
   }
 
   return (

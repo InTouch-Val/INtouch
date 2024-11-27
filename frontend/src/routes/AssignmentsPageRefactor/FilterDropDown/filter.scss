@@ -98,3 +98,41 @@
   // background-color: rgba(0, 0, 0, 0.5);
   // z-index: 100;
 }
+
+.filter__activeList {
+  margin-top: 23px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.filter__activeChip {
+  border: 1px solid rgba(217, 217, 217, 1);
+  border-radius: 15px;
+  padding: 4px 12px;
+  background-color: rgba(113, 157, 166, 1);
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.filter__activeChipText {
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 21px;
+  color: rgba(255, 255, 255, 1);
+}
+
+.filter__activeChipClose {
+  height: 12px;
+  width: 12px;
+  cursor: pointer;
+}
