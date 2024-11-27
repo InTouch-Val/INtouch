@@ -1,5 +1,5 @@
 //@ts-nocheck
-import React, { forwardRef, useEffect } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import Editor from "@draft-js-plugins/editor";
 import { Separator } from "@draft-js-plugins/static-toolbar";
 import {
@@ -40,11 +40,16 @@ const EditorToolbar = forwardRef(
     const { Toolbar } = toolbarPlugin;
     const plugins = [toolbarPlugin];
     const textErrMaxTextLegthBig = ` Please enter 1-${maxTextLegthBig} characters`;
+    const [isFocused, setIsFocused] = useState(false);
 
     const focusEditor = () => {
       if (ref.current) {
         ref.current.focus();
       }
+    };
+
+    const handleFocus = () => {
+      setIsFocused(true);
     };
 
     const effectiveErrorText = errorText || "";
@@ -224,6 +229,7 @@ const EditorToolbar = forwardRef(
     };
 
     const handleBlur = () => {
+      setIsFocused(false);
       const contentState = editorState.getCurrentContent();
       const text = contentState.getPlainText();
 
@@ -239,6 +245,7 @@ const EditorToolbar = forwardRef(
       >
         <Editor
           editorState={editorState}
+          onFocus={handleFocus} 
           onChange={onChange}
           plugins={plugins}
           placeholder={placeholder}
@@ -248,7 +255,7 @@ const EditorToolbar = forwardRef(
           handleBeforeInput={handleBeforeInput || defaultHandleBeforeInput}
           handlePastedText={handlePastedText}
         />
-        {!isMobileWidth && (
+        {(!isMobileWidth || isFocused) && (
           <Toolbar>
             {(externalProps) => (
               <>

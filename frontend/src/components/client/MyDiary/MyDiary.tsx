@@ -40,8 +40,6 @@ export default function MyDiary() {
             setDiarys(res.data.results);
             setTotal(false);
           }
-
-          console.log(diarys);
         }
       })
       .catch((error) => console.log(error))
