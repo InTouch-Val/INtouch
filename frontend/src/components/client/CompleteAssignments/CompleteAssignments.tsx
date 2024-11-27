@@ -556,9 +556,9 @@ function CompleteAssignments() {
               Client`s Rating:
             </h1>
             <div className="rating-container">
-              {Array.from({ length: 11 }, (_, index) => index).map((num) => (
+              {Array.from({ length: 12 }, (_, index) => index).map((num) => (
                 <label key={num} className="radio-label">
-                  {num !== 0 && num !== 10 && (
+                  {num !== 0 && num !== 11 && (
                     <div className="mood-number">{num}</div>
                   )}
                   <input
@@ -571,9 +571,9 @@ function CompleteAssignments() {
                     disabled
                   />
                   <div
-                    className={`mood-display ${assignmentData.grade === num && (num === 0 || num === 10) ? "emoteActive" : assignmentData.grade === num ? "active" : ""}`}
+                    className={`mood-display ${assignmentData.grade === num && (num === 0 || num === 11) ? "emoteActive" : assignmentData.grade === num ? "active" : ""}`}
                     style={
-                      num === 0 || num === 10
+                      num === 0 || num === 11
                         ? { border: "none" }
                         : { display: "flex" }
                     }
@@ -587,7 +587,7 @@ function CompleteAssignments() {
                     ) : (
                       ""
                     )}
-                    {num === 10 ? (
+                    {num === 11 ? (
                       <img
                         src={smilyEmote}
                         alt="Весёлый смайлик"
