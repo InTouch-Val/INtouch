@@ -2,21 +2,25 @@ FROM node:20 AS build
 
 WORKDIR /app
 
-COPY package.json package.json
+# Установка зависимостей
+COPY package.json package-lock.json ./
 RUN npm install
+
 COPY . .
 
-ARG VITE_APP_UNSPLASH_ACCESS_KEY
-ARG VITE_BASE_URL
-ENV VITE_APP_UNSPLASH_ACCESS_KEY=${VITE_APP_UNSPLASH_ACCESS_KEY}
-ENV VITE_BASE_URL=${VITE_BASE_URL}
-
+# Сборка проекта. Собранные файлы будут сохранены в папке /app/dist
 RUN npm run build
 
-FROM nginx:alpine AS production
+FROM alpine:latest AS export-static
 
-COPY --from=build /app/dist /usr/share/nginx/html
+WORKDIR /app
 
-EXPOSE 80
+# Создание папки /app/build 
+RUN mkdir -p /app/build
 
-CMD ["nginx", "-g", "daemon off;"]
+# Копирование файлов из /app/dist (на стадии сборки) в /app/build
+COPY --from=build /app/dist/* /app/build/
+
+# Завершение работы контейнера
+CMD ["echo", "Static files copied to /app/build"]
+
