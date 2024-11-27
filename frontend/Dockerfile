@@ -19,7 +19,7 @@ WORKDIR /app
 RUN mkdir -p /app/build
 
 # Копирование файлов из /frontend/dist (на стадии сборки) в /app/build
-COPY --from=build /app/frontend/dist/* /app/build/
+COPY --from=build /app/frontend/dist/. /app/build/
 
 # Завершение работы контейнера
 CMD ["echo", "Static files copied to /app/build"]
