@@ -78,7 +78,18 @@ export function ProfileTab() {
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setSelectedFile(file);
+      if (!file.type.startsWith('image/')) {
+        console.error("Выберите изображение");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const base64String = event.target.result; 
+        setSelectedFile(base64String)
+      };
+
+      reader.readAsDataURL(file);
       setPreviewImage(URL.createObjectURL(file));
     }
   };
