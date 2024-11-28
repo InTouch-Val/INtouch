@@ -21,7 +21,7 @@ type ParamsAssignments = {
 };
 
 const ASSIGNMENTS_URL = "assignments";
-const BASE_URL = "https://app.intouch.care/api/v1/";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const assignmentAdapter = createEntityAdapter({
   selectId: (item: AssignmentsType) => item.id,
