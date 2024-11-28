@@ -112,6 +112,7 @@ function AssignmentTile({
           title: `${assignmentData.title} + COPY`,
           text: assignmentData.text,
           assignment_type: assignmentData.assignment_type,
+          is_public: false,
           tags: assignmentData.tags,
           language: assignmentData.language,
           image_url:
@@ -165,7 +166,6 @@ function AssignmentTile({
   ): void {
     event.stopPropagation();
     onDeleteClick(assignment.id);
-    refetch();
   }
 
   function handleShareClick(

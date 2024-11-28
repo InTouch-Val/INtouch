@@ -41,7 +41,7 @@ interface AssignmentState {
 }
 
 const initialState: AssignmentState = {
-  assignments: null,
+  assignments: [],
   duplicateAssignment: null,
   assignmentsFavorites: null,
   setClientId: null,
@@ -62,7 +62,11 @@ const assignmentSlice = createSlice({
   initialState: initialState,
   reducers: {
     setAssignments: (state, action) => {
-      state.assignments = action.payload;
+      if (Array.isArray(action.payload)) {
+        state.assignments = action.payload;
+        state.isSuccess = true;
+      }
+
       state.isSuccess = false;
     },
     changeTabActions: (state, action) => {
@@ -108,6 +112,15 @@ const assignmentSlice = createSlice({
     changeStatusAction: (state, action) => {
       state.isSuccess = action.payload;
     },
+    deleteAssignments: (state, action) => {
+
+      const assignments = state.assignments;
+      state.assignments =
+        assignments &&
+        assignments.filter((assignment) => {
+          return assignment.id !== action.payload.id;
+        });
+    },
   },
   extraReducers: (builder: ActionReducerMapBuilder<AssignmentState>) => {
     builder
@@ -115,7 +128,7 @@ const assignmentSlice = createSlice({
         changeAssignmentFavoriteByIdAction.fulfilled,
         (state, action) => {
           state.status = Status.Success;
-        },
+        }
       )
       .addCase(changeAssignmentFavoriteByIdAction.pending, (state, action) => {
         state.status = Status.Loading;
@@ -165,6 +178,7 @@ export const {
   changePageAction,
   changeSearchAction,
   changeStatusAction,
+  deleteAssignments,
   changeIssueActions,
 } = assignmentSlice.actions;
 

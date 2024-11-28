@@ -15,7 +15,7 @@ import styles from "./style.module.css";
 import EmptyContentNoticeTexts from "../../../utils/notification-texts.json";
 
 export interface PropsTabAssignments {
-  filteredAssignments: AssignmentsType[];
+  filteredAssignments?: AssignmentsType[];
   isShareModal: boolean;
   selectedAssignmentIdForShareModalOnClientPage: string;
   toggleFavorite: (id: number | string) => void;
@@ -36,8 +36,14 @@ export default function TabsAssignments({
   //@ts-ignore
   const { currentUser } = useAuth();
 
-  const { activeTab, activeLanguage, activeFilterType, activeOrder, page } =
-    useAppSelector((state) => state.assignment);
+  const {
+    activeTab,
+    activeLanguage,
+    activeFilterType,
+    activeOrder,
+    page,
+    assignments,
+  } = useAppSelector((state) => state.assignment);
 
   const { isLoading } = useGetAssignmentsQuery({
     limit: 15,
@@ -80,43 +86,47 @@ export default function TabsAssignments({
     }
   };
 
+  console.log(assignments)
+
   return (
-    <section className={styles.assignments_library_contatiner}>
-      {filteredAssignments.length === 0 && !isLoading ? (
-        <EmptyContentNotice label={getNoAssignmentsMessage()} />
-      ) : (
-        <div className="assignment-grid onboarding-psy-step">
-          {isLoading
-            ? Array.from({ length: 10 }).map((_, index) => (
-                <Skeleton
-                  key={index}
-                  type="assignment"
-                  user="psy"
-                  variant="ps-all-tasks"
-                />
-              ))
-            : filteredAssignments.map((assignment, index) => (
-                <React.Fragment key={assignment.id}>
-                  <AssignmentTile
-                    refetch={refetch}
-                    assignment={assignment}
-                    onFavoriteToggle={toggleFavorite}
-                    isFavorite={currentUser?.doctor.assignments.find(
-                      (item) => item === assignment.id,
-                    )}
-                    isAuthor={assignment.author === currentUser?.id}
-                    onDeleteClick={handleDeleteClick}
-                    onShareClick={handleShareButton}
-                    isShareModal={isShareModal}
-                    selectedAssignmentIdForShareModalOnClientPage={
-                      selectedAssignmentIdForShareModalOnClientPage
-                    }
-                    className={index === 0 ? "first-assignment" : ""}
+    assignments && (
+      <section className={styles.assignments_library_contatiner}>
+        {assignments.length === 0 && !isLoading ? (
+          <EmptyContentNotice label={getNoAssignmentsMessage()} />
+        ) : (
+          <div className="assignment-grid onboarding-psy-step">
+            {isLoading
+              ? Array.from({ length: 10 }).map((_, index) => (
+                  <Skeleton
+                    key={index}
+                    type="assignment"
+                    user="psy"
+                    variant="ps-all-tasks"
                   />
-                </React.Fragment>
-              ))}
-        </div>
-      )}
-    </section>
+                ))
+              : assignments.map((assignment, index) => (
+                  <React.Fragment key={assignment.id}>
+                    <AssignmentTile
+                      refetch={refetch}
+                      assignment={assignment}
+                      onFavoriteToggle={toggleFavorite}
+                      isFavorite={currentUser?.doctor.assignments.find(
+                        (item) => item === assignment.id
+                      )}
+                      isAuthor={assignment.author === currentUser?.id}
+                      onDeleteClick={handleDeleteClick}
+                      onShareClick={handleShareButton}
+                      isShareModal={isShareModal}
+                      selectedAssignmentIdForShareModalOnClientPage={
+                        selectedAssignmentIdForShareModalOnClientPage
+                      }
+                      className={index === 0 ? "first-assignment" : ""}
+                    />
+                  </React.Fragment>
+                ))}
+          </div>
+        )}
+      </section>
+    )
   );
 }
