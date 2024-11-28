@@ -29,9 +29,9 @@ export function ProfileTab() {
   });
   const [statusMessageText, setStatusMessageText] = React.useState("");
   const [selectedFile, setSelectedFile] = React.useState([]);
-  // const [previewImage, setPreviewImage] = React.useState(
-  //   currentUser.photo || "default-avatar.png",
-  // );
+  const [previewImage, setPreviewImage] = React.useState(
+    currentUser.photo || "default-avatar.png",
+  );
   const fileInputRef = React.createRef();
 
   const onSubmit = async (data) => {
@@ -75,17 +75,30 @@ export function ProfileTab() {
     }
   };
 
-  // const handleFileSelect = (e) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     setSelectedFile(file);
-  //     setPreviewImage(URL.createObjectURL(file));
-  //   }
-  // };
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        console.error("Выберите изображение");
+        return;
+      }
 
-  // const handleChooseFileClick = () => {
-  //   fileInputRef.current.click();
-  // };
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const base64String = event.target.result; 
+        setSelectedFile(base64String)
+      };
+
+      reader.readAsDataURL(file);
+      setPreviewImage(URL.createObjectURL(file));
+    }
+   
+    
+  };
+
+  const handleChooseFileClick = () => {
+    fileInputRef.current.click();
+  };
 
   return (
     <>
@@ -93,7 +106,7 @@ export function ProfileTab() {
         <div className="success-message">{statusMessageText}</div>
       )}
       <div className="settings-profile-tab">
-        {/* {currentUser.user_type == "doctor" && (
+         {currentUser.user_type == "doctor" && (
           <div className="left-column">
             <img src={previewImage} alt="Profile" className="avatar" />
             <input
@@ -111,7 +124,7 @@ export function ProfileTab() {
               onClick={handleChooseFileClick}
             />
           </div>
-        )} */}
+        )}
         <div className="right-column">
           <form onSubmit={handleSubmit(onSubmit)}>
             <Controller
