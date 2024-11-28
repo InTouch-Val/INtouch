@@ -54,7 +54,7 @@ function ActivateUserPage() {
       )}
       {showModal && (
         <div className="modal-overlay">
-          <div className="modal">
+          <div className="modal modal-window">
             <div className="modal-div">
               <p>
                 It seems that you are trying to create another account. <br />
