@@ -171,6 +171,7 @@
   width: 375px;
   height: 206px;
   margin: 20px auto;
+  object-fit: cover;
 }
 
 @include mobile() {
