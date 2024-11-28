@@ -27,32 +27,33 @@ export default function FilterDropDown() {
 
   const [sortMethod, setSortMethod] = React.useState(activeOrder);
 
-  const handleSortMethodChange = (e): void => {
-    setSortMethod(e.target.value);
+  const handleSortMethodChange = (value: TypeOrder): void => {
+    debugger;
+    setSortMethod(value);
 
-    switch (e.target.value) {
+    switch (value) {
       case TypeOrder.AddDate: {
-        dispatch(changeSortActions(e.target.value));
+        dispatch(changeSortActions(value));
         break;
       }
       case TypeOrder.DecDate: {
-        dispatch(changeSortActions(e.target.value));
+        dispatch(changeSortActions(value));
         break;
       }
       case TypeOrder.Popularity: {
-        dispatch(changeSortActions(e.target.value));
+        dispatch(changeSortActions(value));
         break;
       }
       case TypeOrder.NoPopularity: {
-        dispatch(changeSortActions(e.target.value));
+        dispatch(changeSortActions(value));
         break;
       }
       case TypeOrder.AverageGrade: {
-        dispatch(changeSortActions(e.target.value));
+        dispatch(changeSortActions(value));
         break;
       }
       case TypeOrder.NoAverageGrade: {
-        dispatch(changeSortActions(e.target.value));
+        dispatch(changeSortActions(value));
         break;
       }
       default: {
@@ -62,7 +63,12 @@ export default function FilterDropDown() {
   };
 
   if (isMobile) {
-    return <MobileFilter sortMethod={sortMethod} handleSortMethodChange={handleSortMethodChange}/>;
+    return (
+      <MobileFilter
+        sortMethod={sortMethod}
+        handleSortMethodChange={handleSortMethodChange}
+      />
+    );
   }
 
   return (
@@ -118,7 +124,7 @@ export default function FilterDropDown() {
         </option>
         <option value={TypeIssue.Other}>{TypeIssue.Other}</option>
       </select>
-      <select value={sortMethod} onChange={(e) => handleSortMethodChange(e)}>
+      <select value={sortMethod} onChange={(e) => handleSortMethodChange(e.target.value as TypeOrder)}>
         <option value={TypeOrder.AddDate}>Oldest First</option>
         <option value={TypeOrder.DecDate}>Newest First</option>
         <option value={TypeOrder.NoPopularity}>Most Shared</option>

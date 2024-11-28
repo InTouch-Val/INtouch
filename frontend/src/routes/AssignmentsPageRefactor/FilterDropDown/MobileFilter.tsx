@@ -3,6 +3,7 @@ import "./filter.scss";
 import closeMini from "../../../images/icons/closeMini.svg";
 import iconFilter from "../../../images/assignment-page/fine-tune.svg";
 import iconSort from "../../../images/assignment-page/sort.svg";
+import IconOk from "../../../images/icons/iconOk.svg";
 import {
   TypeFilter,
   TypeIssue,
@@ -20,29 +21,29 @@ import {
 
 interface Props {
   sortMethod: TypeOrder;
-  handleSortMethodChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleSortMethodChange: (e: TypeOrder) => void;
 }
 
 const options = [
   {
     value: TypeOrder.AddDate,
     label: "Oldest First",
-    icon: "path/to/icon1.png",
+    icon: IconOk,
   },
   {
     value: TypeOrder.DecDate,
     label: "Newest First",
-    icon: "path/to/icon2.png",
+    icon: IconOk,
   },
   {
     value: TypeOrder.NoPopularity,
     label: "Most Shared",
-    icon: "path/to/icon3.png",
+    icon: IconOk,
   },
   {
     value: TypeOrder.NoAverageGrade,
     label: "Top Client Rated",
-    icon: "path/to/icon4.png",
+    icon: IconOk,
   },
 ];
 
@@ -56,21 +57,19 @@ export default function MobileFilter({
     useAppSelector((state) => state.assignment);
 
   const [openSelect, setOpenSelect] = React.useState(false);
-  const [selectedValueOrder, setSelectedValueOrder] = React.useState(
-    TypeOrder.All
-  );
+  const [openSelectSort, setOpenSelectSort] = React.useState(false);
 
-  const handleSelectChangeFilter = (value) => {
-    setSelectedValueOrder(value);
-    setOpenSelect(false);
-  };
 
   const handleOverlayClick = () => {
     if (openSelect) {
       setOpenSelect(false);
       console.log("click", openSelect);
     }
+    if (openSelectSort) {
+      setOpenSelectSort(false);
+    }
   };
+
 
   const handleCloseModal = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -81,31 +80,47 @@ export default function MobileFilter({
 
   return (
     <>
-      {openSelect && (
+      {openSelectSort && (
         <div className="overlayFilter" onClick={handleOverlayClick} />
       )}
       <div className={"filters-wrapper"}>
-        <div className={"filter__sortBox"}>
-          <select
-            value={sortMethod}
-            onChange={(e) => handleSortMethodChange(e)}
-          >
-            <option value={TypeOrder.AddDate}>Oldest First</option>
-            <option value={TypeOrder.DecDate}>Newest First</option>
-            <option value={TypeOrder.NoPopularity}>Most Shared</option>
-            <option value={TypeOrder.NoAverageGrade}>Top Client Rated</option>
-          </select>
+        <div
+          className={"filter__sortBox"}
+          onClick={(e) => {
+            e.stopPropagation();
+            setOpenSelectSort(true);
+          }}
+        >
+          {activeOrder != TypeOrder.DecDate ? (
+            activeOrder
+          ) : (
+            <img src={iconSort} alt="iconFilter" className={"filter__icon"} />
+          )}
+          {openSelectSort && (
+            <ul className="filter__dropdown">
+              {options.map((option) => (
+                <li
+                  key={option.value}
+                  className={"filter__option"}
+                  onClick={() => handleSortMethodChange(option.value)}
+                >
+                  <div className="filter__optionImageWrapper">
+                    {sortMethod === option.value && (
+                      <img src={option.icon} alt="" />
+                    )}
+                  </div>
+                  <div className="filter__optionLabel">{option.label} </div>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         <div
           className={"filter__filterBox"}
           onClick={(e) => handleCloseModal(e)}
         >
-          {selectedValueOrder != TypeOrder.All ? (
-            selectedValueOrder
-          ) : (
-            <img src={iconFilter} alt="iconFilter" className={"filter__icon"} />
-          )}
+          <img src={iconFilter} alt="iconFilter" className={"filter__icon"} />
           {openSelect && (
             <Modal>
               <ModalFilterMobile handleCloseModal={handleCloseModal} />

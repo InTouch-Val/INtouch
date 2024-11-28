@@ -69,7 +69,8 @@
   position: absolute;
   background-color: white;
   border: 1px solid #ccc;
-  z-index: 1000 !important;
+  z-index: 10000;
+  padding-left: 0;
 }
 
 .filter__dropdown ul {
@@ -80,23 +81,30 @@
 
 .filter__dropdown li {
   padding: 8px;
+  list-style-type: none;
   cursor: pointer;
-  z-index: 1000 !important;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 5px;
+  padding-left: 10px;
 }
 
+.filter__optionImageWrapper {
+  width: 12px;
+}
 .filter__dropdown li:hover {
   background-color: #f0f0f0;
-  z-index: 1000 !important;
 }
 
 .overlayFilter {
-  position: fixed; /* Фиксированное позиционирование */
+  position: fixed; 
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   // background-color: rgba(0, 0, 0, 0.5);
-  // z-index: 100;
+  z-index: 999;
 }
 
 .filter__activeList {
