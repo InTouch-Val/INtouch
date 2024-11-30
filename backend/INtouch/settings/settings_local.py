@@ -72,28 +72,24 @@ TEMPLATES = [
 WSGI_APPLICATION = "INtouch.wsgi.application"
 
 
-if os.getenv("SQLITE") == "True":
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
+# if os.getenv("SQLITE") == "True":
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+# else:
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": os.getenv("DB_ENGINE"),
-            "HOST": (
-                "localhost"
-                if os.getenv("LOCAL_HOST_DB") == "True"
-                else os.getenv("DB_HOST")
-            ),
-            "PORT": os.getenv("DB_PORT"),
-            "NAME": os.getenv("POSTGRES_DB"),
-            "USER": os.getenv("POSTGRES_USER"),
-            "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-        }
-    }
+}
 
 
 AUTH_PASSWORD_VALIDATORS = [
