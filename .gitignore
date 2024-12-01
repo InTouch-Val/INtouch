@@ -46,3 +46,6 @@ sent_emails/
 
 # Logging data
 .data/
+
+#Dump
+dump.sql

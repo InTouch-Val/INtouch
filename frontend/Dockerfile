@@ -1,37 +1,28 @@
-# FROM node:20 AS build
+FROM node:20 AS build
 
-# WORKDIR /app
-
-# COPY package.json package.json
-# RUN npm install
-# COPY . .
-
-# ARG VITE_APP_UNSPLASH_ACCESS_KEY
-# ARG VITE_BASE_URL
-# ENV VITE_APP_UNSPLASH_ACCESS_KEY=${VITE_APP_UNSPLASH_ACCESS_KEY}
-# ENV VITE_BASE_URL=${VITE_BASE_URL}
-
-# RUN npm run build
-
-# FROM nginx:alpine AS production
-
-# COPY --from=build /app/dist /usr/share/nginx/html
-
-# EXPOSE 80
-
-# CMD ["nginx", "-g", "daemon off;"]
-
-#Мои изменения
-FROM node:20
 WORKDIR /app
 
-COPY package.json package.json
-# Насколько я знаю мы еще должны тут копирнуть зависимости и из package-lock.json
+# Копируем только package.json
+COPY package.json ./
+
+# Установка зависимостей. package-lock.json будет создан на этом этапе
 RUN npm install
 
-
+# Копируются все файлы, включая package-lock.json
 COPY . .
-RUN npm run build
-RUN npm install --global http-server
 
-CMD ["npx", "-y", "http-server", "-p", "8000", "/app/build"]
+# Сборка проекта. Папка dist будет создана в /frontend
+RUN npm run build
+
+FROM alpine:latest AS export-static
+
+WORKDIR /app/frontend
+
+# Создание папки /app/build 
+RUN mkdir -p /app/build
+
+# Копирование файлов из /app/frontend/dist (на стадии сборки) в /app/build
+COPY --from=build /app/frontend/dist/. /app/build/
+
+# Завершение работы контейнера
+CMD ["echo", "Static files copied to /app/build"]

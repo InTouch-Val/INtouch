@@ -71,23 +71,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "INtouch.wsgi.application"
 
-
-# if os.getenv("SQLITE") == "True":
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
-# else:
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
+        'NAME': 'django_app',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'HOST': 'app-postgres',
+        'PORT': 5432,
     }
 }
 
