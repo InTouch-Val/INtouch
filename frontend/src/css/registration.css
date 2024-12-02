@@ -135,6 +135,11 @@ input[type="checkbox"] {
   text-align: center;
 }
 
+.registration-form .error-text-label-register {
+  color: red;
+  font-size: 16px;
+}
+
 .registration-form button:hover {
   cursor: pointer;
 }
