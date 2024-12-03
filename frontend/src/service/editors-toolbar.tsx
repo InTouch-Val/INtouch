@@ -245,7 +245,7 @@ const EditorToolbar = forwardRef(
       >
         <Editor
           editorState={editorState}
-          onFocus={handleFocus} 
+          onFocus={handleFocus}
           onChange={onChange}
           plugins={plugins}
           placeholder={placeholder}
