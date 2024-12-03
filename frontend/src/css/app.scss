@@ -79,7 +79,7 @@ button {
 .user-profile {
   display: flex;
   align-items: center;
-  justify-content: center;
+  // justify-content: center;
 }
 
 @media screen and (min-width: 320px) and (max-width: 480px) {
@@ -91,6 +91,7 @@ button {
 
 .user-profile h3 {
   color: #656565;
+  margin-left: 56px;
 }
 
 @media screen and (min-width: 320px) and (max-width: 480px) {

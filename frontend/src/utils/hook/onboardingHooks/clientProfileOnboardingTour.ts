@@ -3,10 +3,11 @@ import getClientProfileSteps from "../../../service/onboarding/steps/clientProfi
 import useMobileWidth from "../useMobileWidth";
 
 const useClientProfileOnboardingTour = () => {
-
   const isMobileWidth = useMobileWidth();
 
-  useOnboardingTour("clientProfileOnboardingTourShown", () => getClientProfileSteps(isMobileWidth));
+  useOnboardingTour("clientProfileOnboardingTourShown", () =>
+    getClientProfileSteps(isMobileWidth),
+  );
 };
 
 // For manual testing, run in console: window.launchClientProfileOnboardingTour()

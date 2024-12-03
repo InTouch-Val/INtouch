@@ -16,8 +16,9 @@ button.buttonComponent {
   cursor: pointer;
 }
 
-.disabled {
-  opacity: 0.3;
+button.buttonComponent.disabled {
+  color: rgba(11, 74, 86, 0.4);
+  background-color: rgba(235, 244, 241, 1);
 }
 
 button.smallFont {

@@ -6,16 +6,15 @@ const useConstructorOnboardingTour = () => {
   const isMobileWidth = useMobileWidth();
 
   useOnboardingTour("constructorOnboardingTourShown", () =>
-    getAssignmentConstructorSteps(isMobileWidth)
+    getAssignmentConstructorSteps(isMobileWidth),
   );
 };
-
 
 //for manual testing run in console: window.launchConstructorOnboardingTour()
 window.launchConstructorOnboardingTour = () => {
   window.launchOnboardingTour(
     "constructorOnboardingTourShown",
-    getAssignmentConstructorSteps
+    getAssignmentConstructorSteps,
   );
 };
 
