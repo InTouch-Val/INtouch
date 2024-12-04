@@ -1,4 +1,4 @@
-import Shepherd, { PopperPlacement } from "shepherd.js";
+import Shepherd, { PopperPlacement, StepOptions } from "shepherd.js";
 import "../../custom-shepherd-styles.scss";
 import onboardingTexts from "../../onboardingTextsSteps/psyClientsProfileTexts.json";
 

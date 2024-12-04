@@ -1,5 +1,6 @@
 import useOnboardingTour from "./useOnboardingTour";
 import getAssignmentConstructorSteps from "../../../service/onboarding/steps/assignmentConstructorSteps/assignmentConstructorSteps";
+import useMobileWidth from "../useMobileWidth";
 
 const useConstructorOnboardingTour = () => {
   const isMobileWidth = useMobileWidth();
