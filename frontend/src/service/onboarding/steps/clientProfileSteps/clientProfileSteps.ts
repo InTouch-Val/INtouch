@@ -1,16 +1,24 @@
-import Shepherd, { PopperPlacement, StepOptions } from "shepherd.js";
+import Shepherd, { PopperPlacement } from "shepherd.js";
 import "../../custom-shepherd-styles.scss";
 import onboardingTexts from "../../onboardingTextsSteps/psyClientsProfileTexts.json";
 
+<<<<<<< HEAD
 const getClientProfileSteps = (
   isMobileWidth: boolean = false,
 ): StepOptions[] => [
+=======
+const getClientProfileSteps = () => [
+>>>>>>> 964b4b468a904674618da8015bccc1d1f5cea286
   {
     id: "clientProfile",
     text: onboardingTexts.clientProfile.description,
     attachTo: {
       element: ".client-detail-page #client-profile-onboarding",
+<<<<<<< HEAD
       on: isMobileWidth ? "bottom-end" : ("right" as PopperPlacement),
+=======
+      on: "right" as PopperPlacement,
+>>>>>>> 964b4b468a904674618da8015bccc1d1f5cea286
     },
     classes: "clientProfile",
     buttons: [
