@@ -255,7 +255,7 @@ function RegistrationForm() {
         },
         withCredentials: true,
       });
-      setSuccessMessage("Account is activated");
+      setSuccessMessage(true);
       navigate("/email-confirmation", { state: { emailData: formData.email } });
     } catch (error) {
       console.error("Registration error:", error);
@@ -426,7 +426,7 @@ function RegistrationForm() {
         </p>
         {error && <Notifications status="error" messageText={error} />}
         {successMessage && (
-          <Notifications status="success" messageText={successMessageText} />
+          <Notifications status="success" messageText={"Account is activated"} />
         )}
       </form>
     </div>
