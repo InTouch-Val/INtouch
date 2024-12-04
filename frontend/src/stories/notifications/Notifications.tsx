@@ -1,4 +1,5 @@
 import React from "react";
+import "./notifications.css";
 
 interface Props {
   messageText: string;

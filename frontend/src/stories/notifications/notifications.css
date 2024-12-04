@@ -14,9 +14,11 @@
     fade-out 1 2s forwards;
   background-color: #d4edda;
   color: #155724;
+  white-space: nowrap;
 }
 
 .error-message {
+  white-space: nowrap;
   font-family: Montserrat;
   border: 1px solid #f5c6cb;
   background-color: #f8d7da;
