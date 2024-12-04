@@ -40,7 +40,7 @@ interface AssignmentState {
   setClientId: AssignmentsResponseType | null | any;
 }
 
-const initialState: AssignmentState = {
+export const initialStateAssignment: AssignmentState = {
   assignments: null,
   duplicateAssignment: null,
   assignmentsFavorites: null,
@@ -59,7 +59,7 @@ const initialState: AssignmentState = {
 
 const assignmentSlice = createSlice({
   name: "assignment",
-  initialState: initialState,
+  initialState: initialStateAssignment,
   reducers: {
     setAssignments: (state, action) => {
       state.assignments = action.payload;
@@ -168,4 +168,5 @@ export const {
   changeIssueActions,
 } = assignmentSlice.actions;
 
+export const assignmentReducer = assignmentSlice.reducer;
 export default assignmentSlice.reducer;

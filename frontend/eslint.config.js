@@ -14,7 +14,12 @@ const compat = new FlatCompat({
 });
 
 export default [
-  ...compat.extends("airbnb", "plugin:react/jsx-runtime", "airbnb/hooks"),
+  ...compat.extends(
+    "airbnb",
+    "plugin:react/jsx-runtime",
+    "airbnb/hooks",
+    "plugin:jest/recommended",
+  ),
   eslintPluginUnicorn.configs["flat/recommended"],
   eslintConfigPrettier,
   {
@@ -32,6 +37,7 @@ export default [
     linterOptions: {
       reportUnusedDisableDirectives: true,
     },
+    plugins: ["jest"],
     rules: {
       "react/prop-types": 0,
       "import/prefer-default-export": "off",
