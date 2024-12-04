@@ -9,6 +9,7 @@ DJANGO_SUPERUSER_USERNAME="admin" \
   python manage.py createsuperuser --noinput
 
 python manage.py collectstatic --noinput
+cp -r /app/INtouch/static/. /backend_static/static/
 
 gunicorn -b 0.0.0.0:8000 INtouch.wsgi --daemon
 python manage.py rundramatiq
