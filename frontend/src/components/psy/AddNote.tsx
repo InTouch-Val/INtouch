@@ -10,7 +10,7 @@ import Notifications from "../../stories/notifications/Notifications";
 function AddNote() {
   const { id } = useParams();
   const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
+    EditorState.createEmpty(),
   );
   const [title, setTitle] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);

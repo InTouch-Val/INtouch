@@ -71,14 +71,14 @@ function ClientRegistrationPage() {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
-        }
+        },
       );
       if (response.status === 200) {
         setError("Updated Sueccessfully");
         setTimeout(() => {
           login(
             localStorage.getItem("accessToken") as string,
-            localStorage.getItem("refreshToken") as string
+            localStorage.getItem("refreshToken") as string,
           );
           navigate("/");
         }, 1500);
@@ -87,7 +87,7 @@ function ClientRegistrationPage() {
       console.error("Error updating client:", error);
       setError(
         error.response?.data?.message ||
-          "An error occurred during the client update."
+          "An error occurred during the client update.",
       );
     }
   };

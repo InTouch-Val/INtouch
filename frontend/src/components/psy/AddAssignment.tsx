@@ -466,8 +466,7 @@ function AddAssignment() {
   return (
     <div className="assignments-page">
       {successMessage && (
-         <Notifications status="success" messageText={successMessageText} />
-  
+        <Notifications status="success" messageText={successMessageText} />
       )}
       <HeaderAssignment
         blocks={blocks}

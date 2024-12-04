@@ -31,7 +31,7 @@ export function ProfileTab() {
   const [statusMessageText, setStatusMessageText] = React.useState("");
   const [selectedFile, setSelectedFile] = React.useState([]);
   const [previewImage, setPreviewImage] = React.useState(
-    currentUser.photo || "default-avatar.png"
+    currentUser.photo || "default-avatar.png",
   );
   const fileInputRef = React.createRef();
 
@@ -48,7 +48,7 @@ export function ProfileTab() {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       ).then(() => updateUserData());
       setStatusMessageText("Changes saved successfully");
 
@@ -67,7 +67,7 @@ export function ProfileTab() {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       ).then(() => updateUserData());
 
       console.log(response);

@@ -159,10 +159,9 @@ export const SecurityTab = () => {
           </form>
           {showSuccessAlert && message && (
             <Notifications status="success" messageText={message} />
-       
           )}
           {showErrorAlert && message && (
-         <Notifications status="error" messageText={message} />
+            <Notifications status="error" messageText={message} />
           )}
         </div>
       </div>

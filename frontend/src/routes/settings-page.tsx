@@ -55,7 +55,7 @@ function ProfileTab() {
   });
   const [selectedFile, setSelectedFile] = useState([]);
   const [previewImage, setPreviewImage] = useState(
-    currentUser.photo || "default-avatar.png"
+    currentUser.photo || "default-avatar.png",
   );
   const fileInputRef = createRef();
 
@@ -94,7 +94,7 @@ function ProfileTab() {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       ).then(() => updateUserData());
 
       console.log(response);

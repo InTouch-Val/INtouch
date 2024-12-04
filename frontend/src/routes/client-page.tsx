@@ -52,7 +52,7 @@ function ClientPage() {
         try {
           await API.get("assignments/").then((response) => {
             const data = response.data.results.filter((assignment) =>
-              currentUser.doctor.assignments.includes(assignment.id)
+              currentUser.doctor.assignments.includes(assignment.id),
             );
             setFavoriteAssignments(data);
           });
@@ -70,7 +70,7 @@ function ClientPage() {
       .sort((a, b) =>
         activityFilterDate.status === "Date up"
           ? new Date(b.date_joined) - new Date(a.date_joined)
-          : new Date(a.date_joined) - new Date(b.date_joined)
+          : new Date(a.date_joined) - new Date(b.date_joined),
       )
       .filter(
         (client) =>
@@ -78,7 +78,7 @@ function ClientPage() {
             .toLowerCase()
             .includes(searchTerm.toLowerCase()) &&
           (activityFilter.status === "All clients" ||
-            client.is_active.toString() === activityFilter.status)
+            client.is_active.toString() === activityFilter.status),
       ) || [];
 
   const hasClients = !!filteredClients.length;
@@ -120,7 +120,7 @@ function ClientPage() {
   const handleAssignmentAddToClient = async (assignment) => {
     try {
       const response = await API.post(
-        `assignments/set-client/${assignment}/${selectedClientId}/`
+        `assignments/set-client/${assignment}/${selectedClientId}/`,
       );
       closeModal();
       setMessageToUser(response.data.detail);
@@ -304,7 +304,7 @@ function ClientPage() {
                                           className="action-button"
                                           onClick={() =>
                                             handleAssignmentAddToClient(
-                                              assignment.id
+                                              assignment.id,
                                             )
                                           }
                                         >
