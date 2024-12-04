@@ -5,14 +5,10 @@ import "../../custom-shepherd-styles.scss";
 import "./assignmentsStyles.scss";
 import onboardingTexts from "../../onboardingTextsSteps/psyAssignmentsTexts.json";
 
-<<<<<<< HEAD
 const getAssignmentsSteps = (
   currentUser: User | null,
   isMobileWidth: boolean = false,
 ): StepOptions[] => [
-=======
-const getAssignmentsSteps = (currentUser: User | null): StepOptions[] => [
->>>>>>> 964b4b468a904674618da8015bccc1d1f5cea286
   {
     id: "welcome",
     text: `
@@ -81,11 +77,7 @@ const getAssignmentsSteps = (currentUser: User | null): StepOptions[] => [
     text: onboardingTexts.addAssignment.description,
     attachTo: {
       element: ".assignments-page #onboarding-add-assignment",
-<<<<<<< HEAD
       on: isMobileWidth ? "bottom-end" : ("left" as PopperPlacement),
-=======
-      on: "left" as PopperPlacement,
->>>>>>> 964b4b468a904674618da8015bccc1d1f5cea286
     },
     classes: "add-assignment",
     buttons: [
@@ -117,11 +109,7 @@ const getAssignmentsSteps = (currentUser: User | null): StepOptions[] => [
     text: onboardingTexts.addFavourite.description,
     attachTo: {
       element: ".assignment-grid .first-assignment .favorite-button",
-<<<<<<< HEAD
       on: isMobileWidth ? "bottom-end" : ("right-start" as PopperPlacement),
-=======
-      on: "right-start" as PopperPlacement,
->>>>>>> 964b4b468a904674618da8015bccc1d1f5cea286
     },
     classes: "add-favourite",
     buttons: [

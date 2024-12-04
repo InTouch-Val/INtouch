@@ -1,14 +1,10 @@
-import Shepherd, { PopperPlacement } from "shepherd.js";
+import Shepherd, { PopperPlacement, StepOptions } from "shepherd.js";
 import "../../custom-shepherd-styles.scss";
 import onboardingTexts from "../../onboardingTextsSteps/psyAssignmentConstructorTexts.json";
 
-<<<<<<< HEAD
 const getAssignmentConstructorSteps = (
   isMobileWidth: boolean = false,
 ): StepOptions[] => [
-=======
-const getAssignmentConstructorSteps = () => [
->>>>>>> 964b4b468a904674618da8015bccc1d1f5cea286
   {
     id: "constructorFillIn",
     text: onboardingTexts.constructorFillIn.description,
@@ -48,11 +44,7 @@ const getAssignmentConstructorSteps = () => [
     text: onboardingTexts.constructorPreview.description,
     attachTo: {
       element: ".headerAssignment #onboarding-constructorPreview",
-<<<<<<< HEAD
       on: isMobileWidth ? "bottom" : ("left" as PopperPlacement),
-=======
-      on: "left" as PopperPlacement,
->>>>>>> 964b4b468a904674618da8015bccc1d1f5cea286
     },
     classes: "constructorPreview",
     buttons: [
