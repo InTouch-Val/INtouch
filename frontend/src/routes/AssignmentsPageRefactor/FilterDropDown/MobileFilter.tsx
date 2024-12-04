@@ -75,7 +75,7 @@ export default function MobileFilter({
   };
 
   const handleCloseModal = (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     e.stopPropagation();
     setOpenSelect((prev) => !prev);

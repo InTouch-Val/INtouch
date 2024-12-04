@@ -123,7 +123,10 @@ export default function FilterDropDown() {
         </option>
         <option value={TypeIssue.Other}>{TypeIssue.Other}</option>
       </select>
-      <select value={sortMethod} onChange={(e) => handleSortMethodChange(e.target.value as TypeOrder)}>
+      <select
+        value={sortMethod}
+        onChange={(e) => handleSortMethodChange(e.target.value as TypeOrder)}
+      >
         <option value={TypeOrder.AddDate}>Oldest First</option>
         <option value={TypeOrder.DecDate}>Newest First</option>
         <option value={TypeOrder.NoPopularity}>Most Shared</option>
