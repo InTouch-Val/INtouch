@@ -11,6 +11,7 @@ import Button from "../stories/buttons/Button";
 import useClientsPageOnboardingTour from "../utils/hook/onboardingHooks/clientsPageOnboardingTour";
 import EmptyContentNotice from "../stories/empty-content-notice/EmptyContentNotice";
 import EmptyContentNoticeTexts from "../utils/notification-texts.json";
+import Notifications from "../stories/notifications/Notifications";
 
 function ClientPage() {
   const [showModal, setShowModal] = useState(false);
@@ -157,7 +158,9 @@ function ClientPage() {
           />
         </form>
       </div>
-      {messageToUser && <p className="success-message">{messageToUser}</p>}
+      {messageToUser && (
+        <Notifications status={"success"} messageText={messageToUser} />
+      )}
       <div className="clients-list">
         {hasClients ? (
           <table>

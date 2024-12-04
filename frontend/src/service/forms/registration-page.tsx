@@ -8,6 +8,7 @@ import eyeIcon from "../../images/icons/eye.svg";
 import eyeSlashIcon from "../../images/icons/eyeSlash.svg";
 import logo from "../../images/LogoBig.svg";
 import Button from "../../stories/buttons/Button";
+import Notifications from "../../stories/notifications/Notifications";
 
 function RegistrationForm() {
   const [successMessage, setSuccessMessage] = useState(false);
@@ -254,7 +255,7 @@ function RegistrationForm() {
         },
         withCredentials: true,
       });
-      setSuccessMessage("Account is activated");
+      setSuccessMessage(true);
       navigate("/email-confirmation", { state: { emailData: formData.email } });
     } catch (error) {
       console.error("Registration error:", error);
@@ -423,9 +424,12 @@ function RegistrationForm() {
         <p>
           Already have an account? <Link to={"/login"}>Log in</Link>
         </p>
-        {error && <p className="error-message">{error}</p>}
+        {error && <Notifications status="error" messageText={error} />}
         {successMessage && (
-          <div className="success-message">{successMessageText}</div>
+          <Notifications
+            status="success"
+            messageText={"Account is activated"}
+          />
         )}
       </form>
     </div>
