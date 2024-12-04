@@ -232,37 +232,6 @@
   border: 2px solid #2c3742;
 }
 
-.success-message {
-  position: fixed;
-  z-index: 1000;
-  top: 20px;
-  right: 20px;
-  padding: 10px;
-  border: 1px solid #c3e6cb;
-  border-radius: 5px;
-  animation:
-    slide-in 0.5s ease forwards,
-    fade-out 0.5s 1.5s forwards;
-  background-color: #d4edda;
-  color: #155724;
-}
-
-.error-message {
-  border: 1px solid #f5c6cb;
-  background-color: #f8d7da;
-  color: #721c24;
-  position: fixed;
-  z-index: 1000;
-  top: 20px;
-  right: 20px;
-  padding: 10px;
-  border: 1px solid #c3e6cb;
-  border-radius: 5px;
-  animation:
-    slide-in 0.5s ease forwards,
-    fade-out 0.5s 1.5s forwards;
-}
-
 @media screen and (min-width: 320px) and (max-width: 480px) {
   .diary__emotions-list--mobile,
   .diary__emotions-names-list--mobile {
