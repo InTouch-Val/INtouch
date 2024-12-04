@@ -82,7 +82,6 @@
 .filter__dropdown li {
   padding: 8px;
   list-style-type: none;
-  cursor: pointer;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -93,9 +92,7 @@
 .filter__optionImageWrapper {
   width: 12px;
 }
-.filter__dropdown li:hover {
-  background-color: #f0f0f0;
-}
+
 
 .overlayFilter {
   position: fixed; 

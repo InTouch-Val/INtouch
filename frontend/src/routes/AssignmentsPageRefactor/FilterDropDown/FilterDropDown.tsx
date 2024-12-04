@@ -28,7 +28,6 @@ export default function FilterDropDown() {
   const [sortMethod, setSortMethod] = React.useState(activeOrder);
 
   const handleSortMethodChange = (value: TypeOrder): void => {
-    debugger;
     setSortMethod(value);
 
     switch (value) {
