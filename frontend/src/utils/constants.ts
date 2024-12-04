@@ -51,7 +51,7 @@ export enum AssignmentTab {
 }
 
 export enum TypeIssue {
-  all = "all",
+  all = "All",
   Anxiety = "Anxiety",
   Depression = "Depression",
   RelationshipIssues = "Relationship lssues",

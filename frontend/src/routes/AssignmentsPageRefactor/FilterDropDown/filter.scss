@@ -1,0 +1,142 @@
+@import "../../../scss-styles/mixins.scss";
+@import "../../../scss-styles/variables.scss";
+
+.filter-dropdowns {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  /* space below the filters */
+
+  & select {
+    width: 18%;
+    padding: 8px;
+    border: 1px solid #d0d1d6;
+    /* border color */
+    border-radius: 10px;
+    font-size: 14px;
+  }
+}
+
+.filters-wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.filter__sortBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 140px;
+  height: 30px;
+  padding: 4px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 1);
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.filter__filterBox {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 140px;
+  height: 30px;
+  padding: 4px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 1);
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.filter__icon {
+  display: flex;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+}
+
+.filter__dropdown {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  z-index: 10000;
+  padding-left: 0;
+}
+
+.filter__dropdown ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.filter__dropdown li {
+  padding: 8px;
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 5px;
+  padding-left: 10px;
+}
+
+.filter__optionImageWrapper {
+  width: 12px;
+}
+
+.overlayFilter {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  // background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.filter__activeList {
+  margin-top: 23px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.filter__activeChip {
+  border: 1px solid rgba(217, 217, 217, 1);
+  border-radius: 15px;
+  padding: 4px 12px;
+  background-color: rgba(113, 157, 166, 1);
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.filter__activeChipText {
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 21px;
+  color: rgba(255, 255, 255, 1);
+}
+
+.filter__activeChipClose {
+  height: 12px;
+  width: 12px;
+  cursor: pointer;
+}
