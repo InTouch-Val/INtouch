@@ -426,7 +426,10 @@ function RegistrationForm() {
         </p>
         {error && <Notifications status="error" messageText={error} />}
         {successMessage && (
-          <Notifications status="success" messageText={"Account is activated"} />
+          <Notifications
+            status="success"
+            messageText={"Account is activated"}
+          />
         )}
       </form>
     </div>
