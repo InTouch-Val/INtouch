@@ -6,6 +6,7 @@ import { useAuth } from "../service/authContext";
 import { API } from "../service/axios";
 import "../css/settings.scss";
 import Button from "../stories/buttons/Button";
+import Notifications from "../stories/notifications/Notifications";
 
 // TODO: PopUp windows for users
 
@@ -255,7 +256,7 @@ const SecurityTab = () => {
               Save Changes
             </button>
           </form>
-          {message && <div className="success-message">{message}</div>}
+          {message && <Notifications status="success" messageText={message} />}
         </div>
       </div>
       <div className="danger-zone">
