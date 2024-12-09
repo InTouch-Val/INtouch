@@ -56,23 +56,27 @@ export function ProfileTab() {
       console.error("Error updating profile:" + error);
     }
 
-    try {
-      const response = await API.post(
-        `user/update/email/`,
-        {
-          new_email: data.email,
-        },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
+    if(currentUser.email != data.email) {
+      try {
+        const response = await API.post(
+          `user/update/email/`,
+          {
+            new_email: data.email,
           },
-        },
-      ).then(() => updateUserData());
-
-      console.log(response);
-    } catch (error) {
-      console.error("Error updating profile:" + error);
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          },
+        ).then(() => updateUserData());
+  
+        console.log(response);
+      } catch (error) {
+        console.error("Error updating profile:" + error);
+      }
     }
+
+
   };
 
   const handleFileSelect = (e) => {
