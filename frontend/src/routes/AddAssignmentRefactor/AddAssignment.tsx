@@ -47,6 +47,7 @@ import {
   setError,
   clearErrors,
 } from "../../store/slices/add-assignment/errorsSlice";
+import Notifications from "../../stories/notifications/Notifications";
 
 function AddAssignment() {
   const dispatch = useAppDispatch();
@@ -375,7 +376,7 @@ function AddAssignment() {
   return (
     <div className="assignments-page">
       {successMessage && (
-        <div className="success-message">{successMessageText}</div>
+        <Notifications status={"success"} messageText={successMessageText} />
       )}
       <HeaderAssignment
         blocks={blocks}
