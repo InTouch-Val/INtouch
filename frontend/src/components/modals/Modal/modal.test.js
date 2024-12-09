@@ -16,6 +16,5 @@ describe("Modal", () => {
 
     // Также можно проверить содержимое модального окна
     expect(modalElement).toHaveTextContent("Test Content");
-    document.body.removeChild(modalRoot);
   });
 });
