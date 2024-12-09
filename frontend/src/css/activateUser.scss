@@ -1,7 +1,7 @@
 @import "../scss-styles/mixins.scss";
 @import "../scss-styles/variables.scss";
 
-.modal-overlay > div {
+.modal-overlay > .modal-window {
   max-width: 611px;
   box-sizing: border-box;
 }
