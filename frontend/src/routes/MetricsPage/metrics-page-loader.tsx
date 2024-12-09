@@ -12,4 +12,3 @@ const metricsPageLoader = async () => {
 };
 
 export default metricsPageLoader;
-
