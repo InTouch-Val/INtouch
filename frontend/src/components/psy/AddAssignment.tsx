@@ -594,7 +594,9 @@ function AddAssignment() {
                     <option value={TypeLanguage.It}>Italian</option>
                   </select>
                 </div>
-                <div className="form-setting">
+
+                {/* Раскомемнтировать как будет готово на беке */}
+                {/* <div className="form-setting">
                   <label>Assigment Goal</label>
                   <select
                     value={goal}
@@ -636,7 +638,7 @@ function AddAssignment() {
                     </option>
                     <option value={TypeIssue.Other}>{TypeIssue.Other}</option>
                   </select>
-                </div>
+                </div> */}
                 {/* <div className="form-setting tags-setting">
               <label>Tags</label>
               <input type="text" value={tags} onChange={(e) => setTags(e.target.value)} />
