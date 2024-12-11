@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://app.intouch.care/api/v1/",
+  baseURL: import.meta.env.VITE_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },

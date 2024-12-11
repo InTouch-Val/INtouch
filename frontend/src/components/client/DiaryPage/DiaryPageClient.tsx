@@ -27,6 +27,7 @@ import { diaryClientValidation } from "../../../routes/SettingPage/ProfileTab/sc
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ClientDiary } from "../../../utils/global-types";
 import { ClientDiaryEntry } from "../../../utils/global-types";
+import Notifications from "../../../stories/notifications/Notifications";
 
 export default function DiaryPageContentClient({
   diary,
@@ -60,7 +61,7 @@ export default function DiaryPageContentClient({
         type === "create" ? [] : diary?.clarifying_emotion || [],
       visible: false,
     },
-    mode: "all",
+    mode: "all"
   });
 
   const [showEmotionsPage, setShowEmotionsPage] = useState(false);
@@ -156,15 +157,10 @@ export default function DiaryPageContentClient({
     <form className="diaryPage" onSubmit={methods.handleSubmit(onSubmit)}>
       <FormProvider {...methods}>
         {statusMessageText.status != null && (
-          <div
-            className={
-              statusMessageText.status == "success"
-                ? `success-message`
-                : "error-message"
-            }
-          >
-            {statusMessageText.text}
-          </div>
+          <Notifications
+            status={statusMessageText.status}
+            messageText={statusMessageText.text}
+          />
         )}
 
         {!showEmotionsPage ? (

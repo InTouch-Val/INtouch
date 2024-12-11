@@ -10,6 +10,7 @@ import useMobileWidth from "../../../utils/hook/useMobileWidth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import Button from "../../../stories/buttons/Button";
+import Notifications from "../../../stories/notifications/Notifications";
 
 export function ProfileTab() {
   const isMobileWidth = useMobileWidth();
@@ -29,9 +30,9 @@ export function ProfileTab() {
   });
   const [statusMessageText, setStatusMessageText] = React.useState("");
   const [selectedFile, setSelectedFile] = React.useState([]);
-  // const [previewImage, setPreviewImage] = React.useState(
-  //   currentUser.photo || "default-avatar.png",
-  // );
+  const [previewImage, setPreviewImage] = React.useState(
+    currentUser.photo || "default-avatar.png",
+  );
   const fileInputRef = React.createRef();
 
   const onSubmit = async (data) => {
@@ -56,44 +57,61 @@ export function ProfileTab() {
       console.error("Error updating profile:" + error);
     }
 
-    try {
-      const response = await API.post(
-        `user/update/email/`,
-        {
-          new_email: data.email,
-        },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
+    if(currentUser.email != data.email) {
+      try {
+        const response = await API.post(
+          `user/update/email/`,
+          {
+            new_email: data.email,
           },
-        },
-      ).then(() => updateUserData());
-
-      console.log(response);
-    } catch (error) {
-      console.error("Error updating profile:" + error);
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          },
+        ).then(() => updateUserData());
+  
+        console.log(response);
+      } catch (error) {
+        console.error("Error updating profile:" + error);
+      }
     }
+
+
   };
 
-  // const handleFileSelect = (e) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     setSelectedFile(file);
-  //     setPreviewImage(URL.createObjectURL(file));
-  //   }
-  // };
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        console.error("Выберите изображение");
+        return;
+      }
 
-  // const handleChooseFileClick = () => {
-  //   fileInputRef.current.click();
-  // };
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const base64String = event.target.result; 
+        setSelectedFile(base64String)
+      };
+
+      reader.readAsDataURL(file);
+      setPreviewImage(URL.createObjectURL(file));
+    }
+   
+    
+  };
+
+  const handleChooseFileClick = () => {
+    fileInputRef.current.click();
+  };
 
   return (
     <>
       {statusMessageText != "" && (
-        <div className="success-message">{statusMessageText}</div>
+        <Notifications status="success" messageText={statusMessageText} />
       )}
       <div className="settings-profile-tab">
-        {/* {currentUser.user_type == "doctor" && (
+         {currentUser.user_type == "doctor" && (
           <div className="left-column">
             <img src={previewImage} alt="Profile" className="avatar" />
             <input
@@ -111,7 +129,7 @@ export function ProfileTab() {
               onClick={handleChooseFileClick}
             />
           </div>
-        )} */}
+        )}
         <div className="right-column">
           <form onSubmit={handleSubmit(onSubmit)}>
             <Controller
