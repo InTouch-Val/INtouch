@@ -111,6 +111,7 @@ class UserSerializer(serializers.ModelSerializer):
             and hasattr(request, "user")
             and request.user.is_authenticated
             and request.user.user_type != USER_TYPES[0]
+            and obj.client.deleted is False
         ):
             try:
                 return ClientSerializer(obj.client).data

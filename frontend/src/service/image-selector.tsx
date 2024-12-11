@@ -9,7 +9,7 @@ function ImageSelector({
   selectedImage,
   searchTerm,
   setSearchTerm,
-  isFirstEntry,
+  isDisabled,
 }) {
   const [images, setImages] = useState(selectedImage ? [selectedImage] : []);
   const [isSearchDone, setIsSearchDone] = useState(false);
@@ -64,7 +64,7 @@ function ImageSelector({
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder={`Enter the relevant keyword here and click "Search"`}
-          className={`${styles.title_input} ${!selectedImage && searchTerm.length === 0 && !isFirstEntry ? "error" : ""}`}
+          className={`${styles.title_input} ${!selectedImage && isDisabled ? "error" : ""}`}
         />
 
         <Button

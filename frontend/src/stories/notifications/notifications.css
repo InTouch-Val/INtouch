@@ -1,0 +1,39 @@
+@import url("../../vendor/fonts/fonts.css");
+
+.success-message {
+  font-family: Montserrat;
+  position: fixed;
+  z-index: 1000;
+  top: 20px;
+  right: 20px;
+  padding: 14px;
+  border: 1px solid #c3e6cb;
+  border-radius: 5px;
+  animation:
+    slide-in 1s ease forwards,
+    fade-out 1 2s forwards;
+  background-color: #d4edda;
+  color: #155724;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.error-message {
+  white-space: nowrap;
+  text-align: center;
+
+  font-family: Montserrat;
+  border: 1px solid #f5c6cb;
+  background-color: #f8d7da;
+  color: #721c24;
+  position: fixed;
+  z-index: 1000;
+  top: 20px;
+  right: 20px;
+  padding: 14px;
+  border: 1px solid #c3e6cb;
+  border-radius: 5px;
+  animation:
+    slide-in 1s ease forwards,
+    fade-out 1 2s forwards;
+}

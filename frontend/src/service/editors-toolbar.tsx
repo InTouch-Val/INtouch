@@ -1,5 +1,5 @@
 //@ts-nocheck
-import React, { forwardRef, useEffect } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import Editor from "@draft-js-plugins/editor";
 import { Separator } from "@draft-js-plugins/static-toolbar";
 import {
@@ -40,12 +40,36 @@ const EditorToolbar = forwardRef(
     const { Toolbar } = toolbarPlugin;
     const plugins = [toolbarPlugin];
     const textErrMaxTextLegthBig = ` Please enter 1-${maxTextLegthBig} characters`;
+    const [isMobileKeyboardOpen, setIsMobileKeyboardOpen] = useState(false);
+    const [initialWindowHeight, setInitialWindowHeight] = useState(window.innerHeight); //нужно для проверки высота экрана с открытой моб клавиатурой
 
     const focusEditor = () => {
       if (ref.current) {
         ref.current.focus();
       }
     };
+
+    const handleFocus = () => {
+      setIsMobileKeyboardOpen(true);
+    };
+
+        // Отслеживаем изменение высоты экрана (для определения состояния моб клавиатуры)
+        useEffect(() => {
+          const handleResize = () => {
+              const currentHeight = window.innerHeight;
+              if (currentHeight < initialWindowHeight * 0.8) {
+                  setIsMobileKeyboardOpen(true);
+              } else {
+                  setIsMobileKeyboardOpen(false);
+              }
+          };
+  
+          window.addEventListener("resize", handleResize);
+  
+          return () => {
+              window.removeEventListener("resize", handleResize);
+          };
+      }, [initialWindowHeight]);
 
     const effectiveErrorText = errorText || "";
 
@@ -224,6 +248,7 @@ const EditorToolbar = forwardRef(
     };
 
     const handleBlur = () => {
+      setIsMobileKeyboardOpen(false);
       const contentState = editorState.getCurrentContent();
       const text = contentState.getPlainText();
 
@@ -239,6 +264,7 @@ const EditorToolbar = forwardRef(
       >
         <Editor
           editorState={editorState}
+          onFocus={handleFocus}
           onChange={onChange}
           plugins={plugins}
           placeholder={placeholder}
@@ -248,7 +274,7 @@ const EditorToolbar = forwardRef(
           handleBeforeInput={handleBeforeInput || defaultHandleBeforeInput}
           handlePastedText={handlePastedText}
         />
-        {!isMobileWidth && (
+        {(!isMobileWidth || isMobileKeyboardOpen) && (
           <Toolbar>
             {(externalProps) => (
               <>

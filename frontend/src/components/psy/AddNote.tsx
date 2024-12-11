@@ -5,6 +5,7 @@ import { EditorState } from "draft-js";
 import { EditorToolbar } from "../../service/editors-toolbar";
 import { API } from "../../service/axios";
 import "../../css/note.css";
+import Notifications from "../../stories/notifications/Notifications";
 
 function AddNote() {
   const { id } = useParams();
@@ -38,7 +39,10 @@ function AddNote() {
     <div className="add-note-container">
       <h2>Add Note</h2>
       {isSuccess && (
-        <div className="success-message">Note created successfully!</div>
+        <Notifications
+          status={"success"}
+          messageText="Note created successfully!"
+        />
       )}
       <input
         type="text"

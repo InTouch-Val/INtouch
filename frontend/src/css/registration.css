@@ -8,6 +8,13 @@
   background-image: url("https://i122.fastpic.org/big/2023/1025/d2/e4e7924e98bda72edc75d27bf95bcad2.png");
 }
 
+@media screen and (min-width: 320px) and (max-width: 480px) {
+  .registration-page {
+    background-color: rgba(255, 255, 255, 1);
+    background-image: none;
+  }
+}
+
 .registration-form img {
   object-fit: cover;
 }
@@ -135,6 +142,11 @@ input[type="checkbox"] {
   text-align: center;
 }
 
+.registration-form .error-text-label-register {
+  color: red;
+  font-size: 16px;
+}
+
 .registration-form button:hover {
   cursor: pointer;
 }
@@ -170,13 +182,8 @@ input[type="checkbox"] {
 @media (width <=600px) {
   .registration-form {
     width: 80%;
+    box-shadow: none;
     /* Adjust for smaller screens */
-  }
-
-  .input-fields.login input,
-  .password-field input {
-    width: 100%;
-    /* Full width on small screens */
   }
 }
 
@@ -286,6 +293,7 @@ input[type="checkbox"] {
 }
 .registration__button:disabled {
   opacity: 0.6;
+
   color: #dedada;
 }
 
@@ -296,6 +304,7 @@ input[type="checkbox"] {
   font-family: Montserrat;
   font-size: 16px;
   font-weight: 400;
+  padding-bottom: 28px;
   line-height: 19.99px;
   text-align: left;
   color: rgba(101, 101, 101, 1);

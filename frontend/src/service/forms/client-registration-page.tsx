@@ -11,6 +11,7 @@ import React from "react";
 import { clientRegistrationSchema } from "../../utils/validationSchem/client-registartion-schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Button from "../../stories/buttons/Button";
+import Notifications from "../../stories/notifications/Notifications";
 
 function ClientRegistrationPage() {
   const [firstName, setFirstName] = useState("");
@@ -42,7 +43,7 @@ function ClientRegistrationPage() {
       .catch((error) => {
         console.error("Error fetching user data", error);
       });
-  }, [accessToken]);
+  }, []);
 
   const handleTogglePassword = (e) => {
     e.preventDefault();
@@ -213,7 +214,7 @@ function ClientRegistrationPage() {
                 {methods.formState.errors["acceptTerms"]?.message || ""}
               </span>
             )}
-            {error && <div className="error-message">{error}</div>}
+            {error && <Notifications status="error" messageText={error} />}
           </div>
 
           <div className="form-buttons client-setPassword-button">

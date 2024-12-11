@@ -83,7 +83,9 @@ export default function FilterDropDown() {
         <option value={TypeLanguage.De}>German</option>
         <option value={TypeLanguage.It}>Italian</option>
       </select>
-      <select
+
+      {/* Раскомемнтировать как на беке будет готово */}
+      {/* <select
         value={activeIssue}
         onChange={(e) => dispatch(changeIssueActions(e.target.value))}
       >
@@ -107,7 +109,7 @@ export default function FilterDropDown() {
           {TypeIssue.IdentityAndPurpose}
         </option>
         <option value={TypeIssue.Other}>{TypeIssue.Other}</option>
-      </select>
+      </select> */}
       <select value={sortMethod} onChange={(e) => handleSortMethodChange(e)}>
         <option value={TypeOrder.AddDate}>Oldest First</option>
         <option value={TypeOrder.DecDate}>Newest First</option>

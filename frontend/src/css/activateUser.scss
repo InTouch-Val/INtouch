@@ -1,0 +1,42 @@
+@import "../scss-styles/mixins.scss";
+@import "../scss-styles/variables.scss";
+
+.modal-overlay > .modal-window {
+  max-width: 611px;
+  box-sizing: border-box;
+}
+
+.modal-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  & > p {
+    font-family: "Montserrat";
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 28px;
+    text-align: center;
+    margin: 0;
+  }
+}
+
+.container__button {
+  display: flex;
+  gap: 50px;
+  width: 100%;
+  place-content: center;
+  margin: 22px 0 20px;
+  & > button {
+    font-family: "Montserrat";
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 17px;
+    text-align: left;
+    max-width: 164px;
+    padding: 12px 0 11px;
+    text-align: center;
+    width: 100%;
+    margin: 0;
+  }
+}
