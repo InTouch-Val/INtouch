@@ -52,13 +52,11 @@ export default function DiaryHeaderClient({
   }, [changesMade, isSaved, handleOpenExitModal, navigate]);
 
   const { currentUser } = useAuth();
-  const { handleSubmit, control } = useFormContext();
 
   const {
-    setValue,
     formState: { isValid },
-    trigger,
-    getValues,
+    handleSubmit,
+    control
   } = useFormContext();
 
   const form = useWatch({ control });
