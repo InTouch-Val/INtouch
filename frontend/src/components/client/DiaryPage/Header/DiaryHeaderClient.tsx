@@ -12,6 +12,7 @@ import useMobileWidth from "../../../../utils/hook/useMobileWidth";
 import { useAppDispatch } from "../../../../store/store";
 import { openModalExitUnsaved } from "../../../../store/slices/modals/modalsSlice";
 import { ClientDiary } from "../../../../utils/global-types";
+import FloatingAlert from "../../../../stories/floating-alert/FloatingAlert";
 
 const options = {
   weekday: "long",
@@ -34,6 +35,7 @@ export default function DiaryHeaderClient({
   isSaved,
 }: Props) {
   const isMobileWidth = useMobileWidth();
+  const [isHover, setHover] = React.useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -50,23 +52,14 @@ export default function DiaryHeaderClient({
   }, [changesMade, isSaved, handleOpenExitModal, navigate]);
 
   const { currentUser } = useAuth();
-  const { handleSubmit, control } = useFormContext();
-  const [isValid, setValid] = React.useState(false);
+
+  const {
+    formState: { isValid },
+    handleSubmit,
+    control,
+  } = useFormContext();
 
   const form = useWatch({ control });
-
-  React.useEffect(() => {
-    if (
-      form.emotion_type != "" ||
-      form.event_details != "" ||
-      form.thoughts_analysis != "" ||
-      form.physical_sensations != ""
-    ) {
-      setValid(true);
-    } else {
-      setValid(false);
-    }
-  }, [form]);
 
   return (
     <>
@@ -113,10 +106,21 @@ export default function DiaryHeaderClient({
               <img
                 src={save}
                 about="save"
-                className="diary__img-back-unactive"
+                className="diary__img-save--unactive"
+                onMouseLeave={(e) => setHover(false)}
+                onMouseEnter={(e) => setHover(true)}
               />
             ))}
         </div>
+
+        {!isValid && (
+          <div className="diary__message-valid--create-diary">
+            <FloatingAlert
+              label="Please fill in at least one question to save your diary entry"
+              visible={isHover ? true : false}
+            />
+          </div>
+        )}
       </div>
 
       <div className="diary__dear-message">

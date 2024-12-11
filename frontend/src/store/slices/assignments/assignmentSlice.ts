@@ -40,7 +40,6 @@ interface AssignmentState {
   setClientId: AssignmentsResponseType | null | any;
 }
 
-
 const initialState: AssignmentState = {
   assignments: [],
   duplicateAssignment: null,
@@ -114,7 +113,6 @@ const assignmentSlice = createSlice({
       state.isSuccess = action.payload;
     },
     deleteAssignments: (state, action) => {
-
       const assignments = state.assignments;
       state.assignments =
         assignments &&
@@ -129,7 +127,7 @@ const assignmentSlice = createSlice({
         changeAssignmentFavoriteByIdAction.fulfilled,
         (state, action) => {
           state.status = Status.Success;
-        }
+        },
       )
       .addCase(changeAssignmentFavoriteByIdAction.pending, (state, action) => {
         state.status = Status.Loading;

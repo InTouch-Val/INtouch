@@ -86,7 +86,7 @@ export default function TabsAssignments({
     }
   };
 
-  console.log(assignments)
+  console.log(assignments);
 
   return (
     assignments && (
@@ -111,7 +111,7 @@ export default function TabsAssignments({
                       assignment={assignment}
                       onFavoriteToggle={toggleFavorite}
                       isFavorite={currentUser?.doctor.assignments.find(
-                        (item) => item === assignment.id
+                        (item) => item === assignment.id,
                       )}
                       isAuthor={assignment.author === currentUser?.id}
                       onDeleteClick={handleDeleteClick}
