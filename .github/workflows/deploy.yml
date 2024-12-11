@@ -125,6 +125,7 @@ jobs:
         run: npm run build
         env:
           VITE_APP_UNSPLASH_ACCESS_KEY: ${{ secrets.VITE_APP_UNSPLASH_ACCESS_KEY }}
+          VITE_BASE_URL: ${{ secrets.VITE_BASE_URL }}
 
       - name: Deploy to server
         uses: burnett01/rsync-deployments@6.0.0
@@ -181,6 +182,7 @@ jobs:
         run: npm run build
         env:
           VITE_APP_UNSPLASH_ACCESS_KEY: ${{ secrets.VITE_APP_UNSPLASH_ACCESS_KEY }}
+          VITE_BASE_URL: ${{ secrets.VITE_BASE_URL }}
 
       - name: Deploy to server
         uses: burnett01/rsync-deployments@6.0.0
