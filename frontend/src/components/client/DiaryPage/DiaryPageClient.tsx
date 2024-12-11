@@ -61,7 +61,7 @@ export default function DiaryPageContentClient({
         type === "create" ? [] : diary?.clarifying_emotion || [],
       visible: false,
     },
-    mode: "all"
+    mode: "all",
   });
 
   const [showEmotionsPage, setShowEmotionsPage] = useState(false);

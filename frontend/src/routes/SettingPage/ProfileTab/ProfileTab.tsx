@@ -57,7 +57,7 @@ export function ProfileTab() {
       console.error("Error updating profile:" + error);
     }
 
-    if(currentUser.email != data.email) {
+    if (currentUser.email != data.email) {
       try {
         const response = await API.post(
           `user/update/email/`,
@@ -70,35 +70,31 @@ export function ProfileTab() {
             },
           },
         ).then(() => updateUserData());
-  
+
         console.log(response);
       } catch (error) {
         console.error("Error updating profile:" + error);
       }
     }
-
-
   };
 
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (!file.type.startsWith('image/')) {
+      if (!file.type.startsWith("image/")) {
         console.error("Выберите изображение");
         return;
       }
 
       const reader = new FileReader();
       reader.onload = (event) => {
-        const base64String = event.target.result; 
-        setSelectedFile(base64String)
+        const base64String = event.target.result;
+        setSelectedFile(base64String);
       };
 
       reader.readAsDataURL(file);
       setPreviewImage(URL.createObjectURL(file));
     }
-   
-    
   };
 
   const handleChooseFileClick = () => {
@@ -111,7 +107,7 @@ export function ProfileTab() {
         <Notifications status="success" messageText={statusMessageText} />
       )}
       <div className="settings-profile-tab">
-         {currentUser.user_type == "doctor" && (
+        {currentUser.user_type == "doctor" && (
           <div className="left-column">
             <img src={previewImage} alt="Profile" className="avatar" />
             <input

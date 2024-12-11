@@ -56,7 +56,7 @@ export default function DiaryHeaderClient({
   const {
     formState: { isValid },
     handleSubmit,
-    control
+    control,
   } = useFormContext();
 
   const form = useWatch({ control });
