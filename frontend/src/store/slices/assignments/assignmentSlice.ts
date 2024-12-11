@@ -60,7 +60,7 @@ const initialState: AssignmentState = {
 
 const assignmentSlice = createSlice({
   name: "assignment",
-  initialState: initialStateAssignment,
+  initialState: initialState,
   reducers: {
     setAssignments: (state, action) => {
       if (Array.isArray(action.payload)) {
