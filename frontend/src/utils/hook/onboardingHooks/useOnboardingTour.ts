@@ -1,20 +1,20 @@
-import { useEffect } from "react";
-import Shepherd, { StepOptions } from "shepherd.js";
+import { useEffect, useRef } from "react";
+import Shepherd, { StepOptions, Tour } from "shepherd.js";
 import "shepherd.js/dist/css/shepherd.css";
 import "../../../service/onboarding/custom-shepherd-styles.scss";
-import useMobileWidth from "../useMobileWidth";
 
 const useOnboardingTour = (
   tourKey: string, // The key for localStorage
   getSteps: () => StepOptions[],
   condition: boolean = true,
 ) => {
-  const isMobileWidth = useMobileWidth();
+  const tourRef = useRef<Tour | null>(null);
+
   useEffect(() => {
-    if (condition && !isMobileWidth) {
+    if (condition) {
       const tourFlag = localStorage.getItem(tourKey);
 
-      if (!tourFlag) {
+      if (!tourFlag && !tourRef.current) {
         const tour = new Shepherd.Tour({
           useModalOverlay: true,
           defaultStepOptions: {
@@ -26,24 +26,23 @@ const useOnboardingTour = (
         const steps = getSteps();
         steps.forEach((step) => tour.addStep(step));
 
+        tourRef.current = tour;
+
         tour.start();
 
         tour.on("complete", () => {
           localStorage.setItem(tourKey, "true");
         });
-
-        tour.on("cancel", () => {
-          localStorage.setItem(tourKey, "true");
-        });
-
-        return () => {
-          if (tour) {
-            tour.complete();
-          }
-        };
       }
+
+      return () => {
+        if (tourRef.current) {
+          tourRef.current.cancel();
+          tourRef.current = null;
+        }
+      };
     }
-  }, [tourKey, getSteps, condition, isMobileWidth]);
+  }, [tourKey, getSteps, condition]);
 };
 
 //hook for testing in browser. Check usage in comments for each page scenario
@@ -66,5 +65,4 @@ window.launchOnboardingTour = (
 
   tour.start();
 };
-
 export default useOnboardingTour;
