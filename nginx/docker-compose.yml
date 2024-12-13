@@ -1,0 +1,99 @@
+# version: "3.5"
+
+# volumes:
+#   intouch_data:
+#   media_value:
+#   static_value:
+
+# services:
+
+#   app-postgres:
+#     image: postgres:15-alpine
+#     container_name: app-postgres
+#     ports:
+#       - 5432:5432
+#     volumes:
+#       - intouch_data:/var/lib/postgresql/data
+#     env_file: ../backend/.env
+
+
+#   # redis:
+#   #   image: redis:latest
+#   #   ports:
+#   #     - 6379:6379
+
+#   backend:
+#     build: ../backend/
+#     env_file: ../backend/.env
+#     volumes:
+#       - media_value:/app/media/
+#       - static_value:/app/static/
+#     depends_on:
+#       - app-postgres
+  
+#   frontend:
+#     build: ../frontend/
+#     volumes:
+#       - ../frontend:/app/build/
+
+#   nginx:
+#     build: .
+#     volumes:
+#       - ../frontend/build:/usr/share/nginx/html/
+#       - static_value:/var/html/static/
+#       - media_value:/var/html/media/
+#     ports:
+#       - 80:80
+#     depends_on:
+#       - backend
+#       - frontend
+
+
+version: "3.5"
+
+volumes:
+  intouch_data:
+  media_value:
+  static_value:
+
+services:
+
+  app-postgres:
+    image: postgres:15-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - intouch_data:/var/lib/postgresql/data
+    env_file: ../backend/.env
+
+
+  # redis:
+  #   image: redis:latest
+  #   ports:
+  #     - 6379:6379
+
+  backend:
+    build: ../backend/
+    env_file: ../backend/.env
+    volumes:
+      - media_value:/app/media/
+      - static_value:/backend_static
+    depends_on:
+      - app-postgres
+  
+  frontend:
+    build: ../frontend/
+    command: cp -r /app/build/. /frontend_static/
+    volumes:
+      - static_value:/frontend_static
+
+  nginx:
+    build: .
+    volumes:
+      - static_value:/staticfiles/
+      - media_value:/media/
+    ports:
+      - 8000:80
+    depends_on:
+      - backend
+      - frontend
