@@ -168,10 +168,9 @@
 
 .assignment__image {
   display: block;
-  width: 375px;
-  height: 206px;
-  margin: 20px auto;
-  object-fit: cover;
+  max-width: 375px;
+  max-height: 280px;
+  margin: 20px auto 45px;
 }
 
 @include mobile() {
