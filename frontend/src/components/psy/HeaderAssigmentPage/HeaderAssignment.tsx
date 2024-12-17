@@ -13,6 +13,7 @@ export default function HeaderAssignment({
   isDisabled,
   isChangeView,
   title,
+  isFirstEntry,
 }) {
   const navigate = useNavigate();
 
@@ -37,16 +38,8 @@ export default function HeaderAssignment({
                     src={arrowBack}
                   />
                 </button>
-                <button onClick={handleSubmit} disabled={isDisabled}>
-                  <img
-                    className={
-                      isDisabled
-                        ? "header__icon-save-disabled"
-                        : "header__icon-save"
-                    }
-                    alt="save"
-                    src={save}
-                  />
+                <button onClick={handleSubmit}>
+                  <img className={"header__icon-save"} alt="save" src={save} />
                 </button>
                 <button
                   onClick={changeView}
@@ -77,7 +70,7 @@ export default function HeaderAssignment({
         </div>
         <span
           id="errorText"
-          className={`error__text error__text_header ${isDisabled ? "error__text_span" : ""}`}
+          className={`error__text error__text_header ${isDisabled && !isFirstEntry ? "error__text_span" : ""}`}
         >
           Please check all fields
         </span>
