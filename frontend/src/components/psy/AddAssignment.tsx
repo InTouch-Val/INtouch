@@ -58,7 +58,6 @@ function AddAssignment() {
   const [isChangeView, setChangeView] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [isValid, setIsValid] = useState(false);
   const [isFirstEntry, setIsFirstEntry] = useState(true);
   const [assignmentId, setAssignmentId] = useState(null);
 
