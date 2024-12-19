@@ -78,7 +78,12 @@ function CompleteAssignments() {
   }, []);
 
   useEffect(() => {
-    setAssignmentCredentials(card);
+    if (card !== null) {
+      setAssignmentCredentials(card);
+      localStorage.setItem("card", JSON.stringify(card));
+    } else {
+      setAssignmentCredentials(JSON.parse(localStorage.getItem("card")));
+    }
     setInitialData(false);
     setIsSaved(false);
   }, []);
