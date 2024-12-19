@@ -58,6 +58,7 @@ function AddAssignment() {
   const [isChangeView, setChangeView] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [isFirstEntry, setIsFirstEntry] = useState(true);
   const [assignmentId, setAssignmentId] = useState(null);
 
   const navigate = useNavigate();
@@ -65,20 +66,18 @@ function AddAssignment() {
   const isEditMode = id != undefined;
 
   useEffect(() => {
-    if (isDisabled) {
-      setIsDisabled(
-        !(
-          title.length !== 0 &&
-          title.length <= maxLengthTitle &&
-          description.length !== 0 &&
-          description.length <= maxLengthDescription &&
-          selectedImage &&
-          type.length !== 0 &&
-          language.length !== 0 &&
-          blocks.length !== 0
-        ),
-      );
-    }
+    setIsDisabled(
+      !(
+        title.length !== 0 &&
+        title.length <= maxLengthTitle &&
+        description.length !== 0 &&
+        description.length <= maxLengthDescription &&
+        !!selectedImage &&
+        type.length !== 0 &&
+        language.length !== 0 &&
+        blocks.length !== 0
+      ),
+    );
   }, [
     title,
     description,
@@ -89,20 +88,6 @@ function AddAssignment() {
     isDisabled,
     blocks,
   ]);
-
-  const isValidation = () => {
-    setIsDisabled(
-      !(
-        title.length !== 0 &&
-        title.length <= maxLengthTitle &&
-        description.length !== 0 &&
-        description.length <= maxLengthDescription &&
-        selectedImage &&
-        type.length !== 0 &&
-        language.length !== 0
-      ),
-    );
-  };
 
   const textarea = document.querySelector<HTMLTextAreaElement>("textarea");
   const minHeight = 60;
@@ -248,103 +233,106 @@ function AddAssignment() {
     isSaveAsDraft = false,
   ) => {
     e.preventDefault();
+    setIsFirstEntry(false);
 
-    isValidation();
-    const blockInfo = blocks.map((block) => {
-      if (block.type === "text" || block.type === "open") {
+    if (!isDisabled) {
+      const blockInfo = blocks.map((block) => {
+        if (block.type === "text" || block.type === "open") {
+          return {
+            type: block.type,
+            question: block.question || block.title,
+            description: block.description,
+          };
+        }
+        if (block.type === "range") {
+          return {
+            type: block.type,
+            question: block.question || block.title,
+            start_range: block.minValue,
+            end_range: block.maxValue,
+            left_pole: block.leftPole || "Left Pole",
+            right_pole: block.rightPole || "Right Pole",
+            description: block.description,
+          };
+        }
+        if (block.type === "image") {
+          return {
+            type: block.type,
+            question: block.question || block.title,
+            ...(selectedImageForBlock && { image: block.image }),
+            description: block.description,
+          };
+        }
         return {
           type: block.type,
           question: block.question || block.title,
+          choice_replies: block.choice_replies,
           description: block.description,
         };
-      }
-      if (block.type === "range") {
-        return {
-          type: block.type,
-          question: block.question || block.title,
-          start_range: block.minValue,
-          end_range: block.maxValue,
-          left_pole: block.leftPole || "Left Pole",
-          right_pole: block.rightPole || "Right Pole",
-          description: block.description,
-        };
-      }
-      if (block.type === "image") {
-        return {
-          type: block.type,
-          question: block.question || block.title,
-          ...(selectedImageForBlock && { image: block.image }),
-          description: block.description,
-        };
-      }
-      return {
-        type: block.type,
-        question: block.question || block.title,
-        choice_replies: block.choice_replies,
-        description: block.description,
+      });
+
+      const requestData = {
+        blocks: blockInfo,
+        title,
+        issue: goal,
+        text: description,
+        assignment_type: type,
+        tags: "ffasd",
+        is_public: isSaveAsDraft ? false : true,
+        language,
+        image_url: selectedImage?.urls.small || selectedImage?.urls.full || "",
       };
-    });
 
-    const requestData = {
-      blocks: blockInfo,
-      title,
-      issue: goal,
-      text: description,
-      assignment_type: type,
-      tags: "ffasd",
-      is_public: isSaveAsDraft ? false : true,
-      language,
-      image_url: selectedImage?.urls.small || selectedImage?.urls.full || "",
-    };
-
-    try {
-      let response;
-      if (!isEditMode) {
-        if (assignmentId === null) {
-          // Если задание создается впервые, выполняем POST запрос
-          response = await API.post("assignments/", requestData);
-          if (!response || !response.data || !response.data.id) {
-            throw new Error("Failed to create assignment");
-          }
-          // Получаем ID созданного задания
-          setAssignmentId(response.data.id);
-        } else {
-          response = await API.patch(
-            `assignments/${assignmentId}/`,
-            requestData,
-          );
-        }
-      } else {
-        // Если задание уже существует, выполняем PUT запрос
-        response = await API.patch(`assignments/${id}/`, requestData);
-      }
-      if ([200, 201].includes(response.status)) {
-        if (isDraft) {
-          setSuccessMessageText("Saved succesfully");
-          setSuccessMessage(true);
-        }
-        if (isSaveWithNavigate) {
-          if (isSaveAsDraft) {
-            setSuccessMessageText("Draft created succesfully");
+      try {
+        let response;
+        if (!isEditMode) {
+          if (assignmentId === null) {
+            // Если задание создается впервые, выполняем POST запрос
+            response = await API.post("assignments/", requestData);
+            if (!response || !response.data || !response.data.id) {
+              throw new Error("Failed to create assignment");
+            }
+            // Получаем ID созданного задания
+            setAssignmentId(response.data.id);
           } else {
-            setSuccessMessageText("Assignment created succesfully");
+            response = await API.patch(
+              `assignments/${assignmentId}/`,
+              requestData,
+            );
           }
-          setSuccessMessage(true);
-          setTimeout(() => {
-            navigate("/assignments");
-          }, 2000);
+        } else {
+          // Если задание уже существует, выполняем PUT запрос
+          response = await API.patch(`assignments/${id}/`, requestData);
         }
+        if ([200, 201].includes(response.status)) {
+          if (isDraft) {
+            setSuccessMessageText("Saved succesfully");
+            setSuccessMessage(true);
+          }
+          if (isSaveWithNavigate) {
+            if (isSaveAsDraft) {
+              setSuccessMessageText("Draft created succesfully");
+            } else {
+              setSuccessMessageText("Assignment created succesfully");
+            }
+            setSuccessMessage(true);
+            setTimeout(() => {
+              navigate("/assignments");
+            }, 2000);
+          }
+        }
+      } catch (error) {
+        const parsedError = parseErrorText(error.request.responseText);
+        console.log(parsedError);
+        // Преобразование объекта ошибок в строку для обновления состояния
+
+        const errorTextString = Object.entries(parsedError)
+          .map(([key, message]) => `${key}: ${message}`)
+          .join(", ");
+        console.error("Error creating assignment", error);
+        setIsError(true);
+        displayErrorMessages(parsedError);
       }
-    } catch (error) {
-      const parsedError = parseErrorText(error.request.responseText);
-      console.log(parsedError);
-      // Преобразование объекта ошибок в строку для обновления состояния
-      const errorTextString = Object.entries(parsedError)
-        .map(([key, message]) => `${key}: ${message}`)
-        .join(", ");
-      console.error("Error creating assignment", error);
-      setIsError(true);
-      displayErrorMessages(parsedError);
     }
   };
 
@@ -492,6 +480,7 @@ function AddAssignment() {
         changeView={() => {
           setChangeView((prev) => !prev);
         }}
+        isFirstEntry={isFirstEntry}
         isChangeView={isChangeView}
         title={title}
       />
@@ -503,6 +492,7 @@ function AddAssignment() {
               type="text"
               className={`title-input ${
                 (title.length === 0 || title.length > maxLengthTitle) &&
+                !isFirstEntry &&
                 isDisabled
                   ? "error"
                   : ""
@@ -514,7 +504,7 @@ function AddAssignment() {
               id="title"
             />
             <span
-              className={`title-span ${(title.length === 0 || title.length > maxLengthTitle) && isDisabled && "error__text_span"}`}
+              className={`title-span ${(title.length === 0 || title.length > maxLengthTitle) && !isFirstEntry && isDisabled && "error__text_span"}`}
             >
               Please enter a valid name (1-50 characters)
             </span>
@@ -523,7 +513,8 @@ function AddAssignment() {
               className={`title-input ${
                 (description.length === 0 ||
                   description.length > maxLengthDescription) &&
-                isDisabled
+                isDisabled &&
+                !isFirstEntry
                   ? "error"
                   : ""
               }`}
@@ -534,7 +525,7 @@ function AddAssignment() {
               id="text"
             />
             <span
-              className={`title-span ${(description.length === 0 || description.length > maxLengthDescription) && isDisabled ? "error__text_span" : ""}`}
+              className={`title-span ${(description.length === 0 || description.length > maxLengthDescription) && !isFirstEntry && isDisabled ? "error__text_span" : ""}`}
             >
               Please enter a valid name (1-300 characters)
             </span>
@@ -545,7 +536,7 @@ function AddAssignment() {
             <ImageSelector
               onImageSelect={handleImageSelect}
               selectedImage={selectedImage}
-              isDisabled={isDisabled}
+              isDisabled={isDisabled && !isFirstEntry}
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
             />
@@ -576,7 +567,9 @@ function AddAssignment() {
                     value={type}
                     onChange={(e) => setType(e.target.value)}
                     required
-                    className={!type && isDisabled ? "error" : ""}
+                    className={
+                      !type && isDisabled && !isFirstEntry ? "error" : ""
+                    }
                     defaultValue={""}
                   >
                     <option hidden disabled value={""}>
@@ -598,7 +591,9 @@ function AddAssignment() {
                     value={language}
                     onChange={(e) => setLanguage(e.target.value)}
                     required
-                    className={!language && isDisabled ? "error" : ""}
+                    className={
+                      !language && isDisabled && !isFirstEntry ? "error" : ""
+                    }
                     defaultValue={""}
                   >
                     <option hidden disabled value={""}>
@@ -742,7 +737,7 @@ function AddAssignment() {
             </div>
           )}
           <span
-            className={`error__text error__text_footer ${isDisabled && !isChangeView ? "error__text_span" : ""}`}
+            className={`error__text error__text_footer ${isDisabled && !isChangeView && !isFirstEntry ? "error__text_span" : ""}`}
           >
             Please check all fields
           </span>
@@ -756,7 +751,6 @@ function AddAssignment() {
                     label="Save as Draft"
                     type="button"
                     onClick={(e) => handleSubmit(e, true, true, true)}
-                    disabled={isDisabled}
                   />
                 </div>
                 <div id="onboarding-constructorPublish">
@@ -766,7 +760,6 @@ function AddAssignment() {
                     label="Complete & Publish"
                     type="button"
                     onClick={(e) => handleSubmit(e, false, true, false)}
-                    disabled={isDisabled}
                   />
                 </div>
               </>
